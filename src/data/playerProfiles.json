@@ -18934,162 +18934,456 @@
     "id": "ohbigz",
     "name": "OhBIGzシ",
     "displayName": "OhBIGzシ 🇹🇭",
-    "profileAvatar": "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80",
-    "tagline": "Thai RTA Contender (Fighter 3) • Lucksack Verified",
-    "server": "Asia",
+    "profileAvatar": "/avatars/ohbigz.png",
+    "tagline": "Thai RTA Contender • Kovarci & Giana LD5 Specialist",
+    "server": "ASIA",
     "country": "TH",
     "flag": "🇹🇭",
     "guild": "Siam Infinity",
     "rankCategory": "fighter",
-    "rankCategoryThai": "ระดับ Fighter (F1-F3)",
+    "rankCategoryThai": "ระดับ Fighter 3 (สาย LD5)",
     "rankTier": "Fighter 3 ★★★",
     "rankBadge": "F3",
     "score": 1349,
-    "worldRank": 61200,
-    "matchesRecorded": 384,
-    "wins": 198,
-    "losses": 186,
-    "winRate": 51.6,
-    "firstPickPreference": 46.2,
-    "archetype": "Fran & Verdehile Turn Engine",
-    "archetypeThai": "เร่งเกจสวนกลับ & ล้างดีบัฟกางปีก",
-    "archetypeDescription": "ใช้ Verdehile รูน Revenge 3 เซ็ต สวนกลับดันเกจให้ Fran และ Loren ล็อคเป้าสังหาร",
+    "peakScore": 1357,
+    "worldRank": 1907,
+    "matchesRecorded": 382,
+    "wins": 207,
+    "losses": 175,
+    "winRate": 54.2,
+    "firstPickPreference": 52.0,
+    "archetype": "Kovarci & Giana LD5 CC Bomb",
+    "archetypeThai": "หุ่นเชิดแสง Kovarci & Giana โอราเคิลมืดคุมเกมระเบิด",
+    "archetypeDescription": "เชี่ยวชาญการใช้มอนสเตอร์ LD5 ระดับก็อดเทียร์ Kovarci (หุ่นเชิดแสง) รูดเกจและป่วนทีมศัตรู ผสานพลังกับ Giana (โอราเคิลมืด) ล้างบัฟสตั้น และ Seara วางระเบิดสังหาร",
     "signatureMonsters": [
       {
-        "name": "Fran",
+        "name": "Kovarci",
         "element": "light",
-        "pickShare": 84.5,
-        "winRate": 53.0,
-        "matches": 324,
-        "monsterId": 19114,
-        "thaiName": "Fran",
-        "stars": 3,
-        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0028_4_0.png"
-      },
-      {
-        "name": "Verdehile",
-        "element": "fire",
-        "pickShare": 78.0,
-        "winRate": 52.4,
-        "matches": 299,
-        "monsterId": 14712,
-        "thaiName": "แวร์เดฮิล (แวมไฟ)",
-        "stars": 4,
-        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0016_1_2.png"
-      },
-      {
-        "name": "Loren",
-        "element": "light",
-        "pickShare": 71.2,
-        "winRate": 51.8,
-        "matches": 273,
-        "monsterId": 19314,
-        "thaiName": "Loren",
-        "stars": 3,
-        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0032_3_4.png"
-      },
-      {
-        "name": "Riley",
-        "element: ": "wind",
-        "pickShare": 65.0,
-        "winRate": 50.5,
-        "matches": 249,
-        "monsterId": 99999,
-        "thaiName": "Riley",
-        "element": "water",
+        "pickShare": 99.2,
+        "winRate": 54.0,
+        "matches": 379,
+        "monsterId": 27214,
+        "thaiName": "Kovarci",
         "stars": 5,
-        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0076_1_3.png"
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0106_1_4.png"
       },
       {
-        "name": "Theomars",
+        "name": "Seara",
+        "element": "wind",
+        "pickShare": 73.8,
+        "winRate": 55.0,
+        "matches": 282,
+        "monsterId": 15713,
+        "thaiName": "เซอาร่า",
+        "stars": 5,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0022_2_1.png"
+      },
+      {
+        "name": "Giana",
+        "element": "dark",
+        "pickShare": 68.6,
+        "winRate": 55.0,
+        "matches": 262,
+        "monsterId": 15715,
+        "thaiName": "เกียนา",
+        "stars": 5,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0022_4_1.png"
+      },
+      {
+        "name": "Haegang",
         "element": "water",
-        "pickShare": 54.0,
+        "pickShare": 36.6,
         "winRate": 52.0,
-        "matches": 207,
-        "monsterId": 19211,
-        "thaiName": "Theomars",
+        "matches": 140,
+        "monsterId": 23711,
+        "thaiName": "Haegang",
         "stars": 5,
-        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0032_0_2.png"
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0056_1_1.png"
       },
       {
-        "name": "Eshir",
-        "element": "light",
-        "pickShare": 48.5,
-        "winRate": 49.8,
-        "matches": 186,
-        "monsterId": 14034,
-        "thaiName": "เอเชียร์ 2A",
-        "stars": 3,
-        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0053_3_1.png"
+        "name": "Shizuka",
+        "element": "water",
+        "pickShare": 24.1,
+        "winRate": 59.0,
+        "matches": 92,
+        "monsterId": 25011,
+        "thaiName": "Shizuka",
+        "stars": 5,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0072_1_1.png"
+      },
+      {
+        "name": "Woosa",
+        "element": "water",
+        "pickShare": 22.2,
+        "winRate": 53.0,
+        "matches": 85,
+        "monsterId": 18611,
+        "thaiName": "วูซ่า (ผู้เฒ่าน้ำ)",
+        "stars": 5,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0031_0_1.png"
       }
     ],
     "recentMatches": [
       {
-        "id": "rep-ohb-1",
-        "date": "2026-09-17 23:14",
+        "id": "rep-ohb-real-1",
+        "date": "4 days ago (2026-09-14)",
         "result": "WIN",
-        "scoreChange": "+11",
+        "scoreChange": "+14",
         "duration": "2:10",
-        "firstPick": true,
+        "firstPick": false,
         "picks": [
           {
-            "name": "Fran",
+            "name": "Kovarci",
             "element": "light",
             "isLeader": true,
             "isBanned": false
           },
           {
-            "name": "Verdehile",
-            "element": "fire",
+            "name": "Giana",
+            "element": "dark",
             "isLeader": false,
             "isBanned": false
           },
           {
-            "name": "Loren",
+            "name": "Fran",
             "element": "light",
             "isLeader": false,
             "isBanned": true
           },
           {
-            "name": "Riley",
-            "element": "wind",
+            "name": "Nora",
+            "element": "fire",
             "isLeader": false,
             "isBanned": false
           },
           {
-            "name": "Theomars",
+            "name": "Woosa",
             "element": "water",
             "isLeader": false,
             "isBanned": false
           }
         ],
         "opponent": {
-          "name": "OhhYessBabyy",
-          "country": "VN",
-          "flag": "🇻🇳",
-          "server": "Asia",
+          "name": "Shao/Ganu",
+          "country": "GLOBAL",
+          "flag": "🌐",
+          "server": "ASIA",
           "rankTier": "Fighter 3 ★★★",
-          "score": 1343,
+          "score": 1304,
           "picks": [
             {
-              "name": "Oliver",
-              "element": "wind",
+              "name": "Qitian Dasheng",
+              "element": "light",
               "isLeader": true,
-              "isBanned": true,
-              "monsterId": 25313,
-              "thaiName": "โอลิเวอร์",
+              "isBanned": false,
+              "monsterId": 16814,
+              "thaiName": "Qitian Dasheng",
               "stars": 5,
-              "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0076_1_3.png"
+              "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0025_3_4.png"
             },
             {
-              "name": "Racuni",
-              "element": "fire",
+              "name": "Eleanor",
+              "element": "light",
               "isLeader": false,
               "isBanned": false,
-              "monsterId": 21012,
-              "thaiName": "Racuni",
-              "stars": 3,
-              "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0041_1_2.png"
+              "monsterId": 21514,
+              "thaiName": "Eleanor",
+              "stars": 5,
+              "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0043_3_4.png"
+            },
+            {
+              "name": "Mi Ying",
+              "element": "dark",
+              "isLeader": false,
+              "isBanned": false,
+              "monsterId": 21215,
+              "thaiName": "Mi Ying",
+              "stars": 5,
+              "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0041_4_4.png"
+            },
+            {
+              "name": "Shizuka",
+              "element": "water",
+              "isLeader": false,
+              "isBanned": false,
+              "monsterId": 25011,
+              "thaiName": "Shizuka",
+              "stars": 5,
+              "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0072_1_1.png"
+            },
+            {
+              "name": "Zeratu",
+              "element": "dark",
+              "isLeader": false,
+              "isBanned": true,
+              "monsterId": 14615,
+              "thaiName": "Zeratu",
+              "stars": 5,
+              "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0017_4_2.png"
+            }
+          ]
+        },
+        "playerPicks": [
+          {
+            "name": "Kovarci",
+            "element": "light",
+            "isLeader": true,
+            "isBanned": false,
+            "monsterId": 27214,
+            "thaiName": "Kovarci",
+            "stars": 5,
+            "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0106_1_4.png"
+          },
+          {
+            "name": "Giana",
+            "element": "dark",
+            "isLeader": false,
+            "isBanned": false,
+            "monsterId": 15715,
+            "thaiName": "เกียนา",
+            "stars": 5,
+            "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0022_4_1.png"
+          },
+          {
+            "name": "Fran",
+            "element": "light",
+            "isLeader": false,
+            "isBanned": true,
+            "monsterId": 19114,
+            "thaiName": "Fran",
+            "stars": 3,
+            "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0028_4_0.png"
+          },
+          {
+            "name": "Nora",
+            "element": "fire",
+            "isLeader": false,
+            "isBanned": false,
+            "monsterId": 25612,
+            "thaiName": "Nora",
+            "stars": 5,
+            "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0078_1_2.png"
+          },
+          {
+            "name": "Woosa",
+            "element": "water",
+            "isLeader": false,
+            "isBanned": false,
+            "monsterId": 18611,
+            "thaiName": "วูซ่า (ผู้เฒ่าน้ำ)",
+            "stars": 5,
+            "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0031_0_1.png"
+          }
+        ]
+      },
+      {
+        "id": "rep-ohb-real-2",
+        "date": "4 days ago (2026-09-14)",
+        "result": "WIN",
+        "scoreChange": "+12",
+        "duration": "1:55",
+        "firstPick": true,
+        "picks": [
+          {
+            "name": "Woosa",
+            "element": "water",
+            "isLeader": false,
+            "isBanned": true
+          },
+          {
+            "name": "Seara",
+            "element": "wind",
+            "isLeader": true,
+            "isBanned": false
+          },
+          {
+            "name": "Giana",
+            "element": "dark",
+            "isLeader": false,
+            "isBanned": false
+          },
+          {
+            "name": "Shizuka",
+            "element": "water",
+            "isLeader": false,
+            "isBanned": false
+          },
+          {
+            "name": "Smicer",
+            "element": "wind",
+            "isLeader": false,
+            "isBanned": false
+          }
+        ],
+        "opponent": {
+          "name": "花翎",
+          "country": "CN",
+          "flag": "🇨🇳",
+          "server": "ASIA",
+          "rankTier": "Fighter 3 ★★★",
+          "score": 1330,
+          "picks": [
+            {
+              "name": "Leo",
+              "element": "wind",
+              "isLeader": false,
+              "isBanned": false,
+              "monsterId": 16613,
+              "thaiName": "Leo",
+              "stars": 5,
+              "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0025_2_0.png"
+            },
+            {
+              "name": "Feng Yan",
+              "element": "wind",
+              "isLeader": false,
+              "isBanned": false,
+              "monsterId": 21213,
+              "thaiName": "เฟิงเหยียน (แพนด้าลม)",
+              "stars": 5,
+              "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0041_2_4.png"
+            },
+            {
+              "name": "Eleanor",
+              "element": "light",
+              "isLeader": false,
+              "isBanned": true,
+              "monsterId": 21514,
+              "thaiName": "Eleanor",
+              "stars": 5,
+              "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0043_3_4.png"
+            },
+            {
+              "name": "Abellio",
+              "element": "water",
+              "isLeader": false,
+              "isBanned": false,
+              "monsterId": 22211,
+              "thaiName": "Abellio",
+              "stars": 5,
+              "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0046_0_2.png"
+            },
+            {
+              "name": "Riley",
+              "element": "wind",
+              "isLeader": true,
+              "isBanned": false,
+              "monsterId": 25613,
+              "thaiName": "ไรลีย์ (โทเท็มลม)",
+              "stars": 5,
+              "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0078_1_3.png"
+            }
+          ]
+        },
+        "playerPicks": [
+          {
+            "name": "Woosa",
+            "element": "water",
+            "isLeader": false,
+            "isBanned": true,
+            "monsterId": 18611,
+            "thaiName": "วูซ่า (ผู้เฒ่าน้ำ)",
+            "stars": 5,
+            "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0031_0_1.png"
+          },
+          {
+            "name": "Seara",
+            "element": "wind",
+            "isLeader": true,
+            "isBanned": false,
+            "monsterId": 15713,
+            "thaiName": "เซอาร่า",
+            "stars": 5,
+            "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0022_2_1.png"
+          },
+          {
+            "name": "Giana",
+            "element": "dark",
+            "isLeader": false,
+            "isBanned": false,
+            "monsterId": 15715,
+            "thaiName": "เกียนา",
+            "stars": 5,
+            "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0022_4_1.png"
+          },
+          {
+            "name": "Shizuka",
+            "element": "water",
+            "isLeader": false,
+            "isBanned": false,
+            "monsterId": 25011,
+            "thaiName": "Shizuka",
+            "stars": 5,
+            "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0072_1_1.png"
+          },
+          {
+            "name": "Smicer",
+            "element": "wind",
+            "isLeader": false,
+            "isBanned": false,
+            "monsterId": 27213,
+            "thaiName": "Smicer",
+            "stars": 5,
+            "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0106_1_3.png"
+          }
+        ]
+      },
+      {
+        "id": "rep-ohb-real-3",
+        "date": "4 days ago (2026-09-14)",
+        "result": "LOSS",
+        "scoreChange": "-10",
+        "duration": "2:40",
+        "firstPick": false,
+        "picks": [
+          {
+            "name": "Kovarci",
+            "element": "light",
+            "isLeader": true,
+            "isBanned": false
+          },
+          {
+            "name": "Giana",
+            "element": "dark",
+            "isLeader": false,
+            "isBanned": false
+          },
+          {
+            "name": "Shizuka",
+            "element": "water",
+            "isLeader": false,
+            "isBanned": false
+          },
+          {
+            "name": "Seara",
+            "element": "wind",
+            "isLeader": false,
+            "isBanned": true
+          },
+          {
+            "name": "Haegang",
+            "element": "water",
+            "isLeader": false,
+            "isBanned": false
+          }
+        ],
+        "opponent": {
+          "name": "CD][RaZzZ",
+          "country": "GLOBAL",
+          "flag": "🌐",
+          "server": "ASIA",
+          "rankTier": "Fighter 3 ★★★",
+          "score": 1365,
+          "picks": [
+            {
+              "name": "Vanessa",
+              "element": "fire",
+              "isLeader": true,
+              "isBanned": false,
+              "monsterId": 13812,
+              "thaiName": "Vanessa",
+              "stars": 5,
+              "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0014_1_2.png"
             },
             {
               "name": "Miles",
@@ -19102,6 +19396,16 @@
               "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0076_1_1.png"
             },
             {
+              "name": "Racuni",
+              "element": "fire",
+              "isLeader": false,
+              "isBanned": true,
+              "monsterId": 21012,
+              "thaiName": "Racuni",
+              "stars": 3,
+              "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0041_1_2.png"
+            },
+            {
               "name": "Chandra",
               "element": "water",
               "isLeader": false,
@@ -19112,67 +19416,371 @@
               "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0027_0_1.png"
             },
             {
-              "name": "Fran",
-              "element": "light",
+              "name": "Ethna",
+              "element": "wind",
               "isLeader": false,
               "isBanned": false,
-              "monsterId": 19114,
-              "thaiName": "Fran",
-              "stars": 3,
-              "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0028_4_0.png"
+              "monsterId": 17913,
+              "thaiName": "Ethna",
+              "stars": 5,
+              "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0023_2_1.png"
             }
           ]
         },
         "playerPicks": [
           {
-            "name": "Fran",
+            "name": "Kovarci",
             "element": "light",
             "isLeader": true,
             "isBanned": false,
-            "monsterId": 19114,
-            "thaiName": "Fran",
-            "stars": 3,
-            "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0028_4_0.png"
-          },
-          {
-            "name": "Verdehile",
-            "element": "fire",
-            "isLeader": false,
-            "isBanned": false,
-            "monsterId": 14712,
-            "thaiName": "แวร์เดฮิล (แวมไฟ)",
-            "stars": 4,
-            "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0016_1_2.png"
-          },
-          {
-            "name": "Loren",
-            "element": "light",
-            "isLeader": false,
-            "isBanned": true,
-            "monsterId": 19314,
-            "thaiName": "Loren",
-            "stars": 3,
-            "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0032_3_4.png"
-          },
-          {
-            "name": "Riley",
-            "element": "wind",
-            "isLeader": false,
-            "isBanned": false,
-            "monsterId": 25613,
-            "thaiName": "ไรลีย์ (โทเท็มลม)",
+            "monsterId": 27214,
+            "thaiName": "Kovarci",
             "stars": 5,
-            "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0078_1_3.png"
+            "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0106_1_4.png"
           },
           {
-            "name": "Theomars",
+            "name": "Giana",
+            "element": "dark",
+            "isLeader": false,
+            "isBanned": false,
+            "monsterId": 15715,
+            "thaiName": "เกียนา",
+            "stars": 5,
+            "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0022_4_1.png"
+          },
+          {
+            "name": "Shizuka",
             "element": "water",
             "isLeader": false,
             "isBanned": false,
-            "monsterId": 19211,
-            "thaiName": "Theomars",
+            "monsterId": 25011,
+            "thaiName": "Shizuka",
             "stars": 5,
-            "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0032_0_2.png"
+            "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0072_1_1.png"
+          },
+          {
+            "name": "Seara",
+            "element": "wind",
+            "isLeader": false,
+            "isBanned": true,
+            "monsterId": 15713,
+            "thaiName": "เซอาร่า",
+            "stars": 5,
+            "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0022_2_1.png"
+          },
+          {
+            "name": "Haegang",
+            "element": "water",
+            "isLeader": false,
+            "isBanned": false,
+            "monsterId": 23711,
+            "thaiName": "Haegang",
+            "stars": 5,
+            "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0056_1_1.png"
+          }
+        ]
+      },
+      {
+        "id": "rep-ohb-real-4",
+        "date": "4 days ago (2026-09-14)",
+        "result": "WIN",
+        "scoreChange": "+13",
+        "duration": "2:05",
+        "firstPick": false,
+        "picks": [
+          {
+            "name": "Kovarci",
+            "element": "light",
+            "isLeader": true,
+            "isBanned": true
+          },
+          {
+            "name": "Giana",
+            "element": "dark",
+            "isLeader": false,
+            "isBanned": false
+          },
+          {
+            "name": "Seara",
+            "element": "wind",
+            "isLeader": false,
+            "isBanned": false
+          },
+          {
+            "name": "Nora",
+            "element": "fire",
+            "isLeader": false,
+            "isBanned": false
+          },
+          {
+            "name": "Woosa",
+            "element": "water",
+            "isLeader": false,
+            "isBanned": false
+          }
+        ],
+        "opponent": {
+          "name": "DJさいです...",
+          "country": "JP",
+          "flag": "🇯🇵",
+          "server": "ASIA",
+          "rankTier": "Fighter 3 ★★★",
+          "score": 1375,
+          "picks": [
+            {
+              "name": "Oliver",
+              "element": "wind",
+              "isLeader": true,
+              "isBanned": false,
+              "monsterId": 25313,
+              "thaiName": "โอลิเวอร์",
+              "stars": 5,
+              "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0076_1_3.png"
+            },
+            {
+              "name": "Moore",
+              "element": "water",
+              "isLeader": false,
+              "isBanned": false,
+              "monsterId": 24511,
+              "thaiName": "Moore",
+              "stars": 5,
+              "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0066_1_1_swgtC2NC.png"
+            },
+            {
+              "name": "Sonia",
+              "element": "wind",
+              "isLeader": false,
+              "isBanned": true,
+              "monsterId": 26113,
+              "thaiName": "Sonia",
+              "stars": 5,
+              "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0087_1_3.png"
+            },
+            {
+              "name": "Miles",
+              "element": "water",
+              "isLeader": false,
+              "isBanned": false,
+              "monsterId": 25311,
+              "thaiName": "ไมล์ส",
+              "stars": 5,
+              "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0076_1_1.png"
+            },
+            {
+              "name": "Racuni",
+              "element": "fire",
+              "isLeader": false,
+              "isBanned": false,
+              "monsterId": 21012,
+              "thaiName": "Racuni",
+              "stars": 3,
+              "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0041_1_2.png"
+            }
+          ]
+        },
+        "playerPicks": [
+          {
+            "name": "Kovarci",
+            "element": "light",
+            "isLeader": true,
+            "isBanned": true,
+            "monsterId": 27214,
+            "thaiName": "Kovarci",
+            "stars": 5,
+            "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0106_1_4.png"
+          },
+          {
+            "name": "Giana",
+            "element": "dark",
+            "isLeader": false,
+            "isBanned": false,
+            "monsterId": 15715,
+            "thaiName": "เกียนา",
+            "stars": 5,
+            "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0022_4_1.png"
+          },
+          {
+            "name": "Seara",
+            "element": "wind",
+            "isLeader": false,
+            "isBanned": false,
+            "monsterId": 15713,
+            "thaiName": "เซอาร่า",
+            "stars": 5,
+            "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0022_2_1.png"
+          },
+          {
+            "name": "Nora",
+            "element": "fire",
+            "isLeader": false,
+            "isBanned": false,
+            "monsterId": 25612,
+            "thaiName": "Nora",
+            "stars": 5,
+            "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0078_1_2.png"
+          },
+          {
+            "name": "Woosa",
+            "element": "water",
+            "isLeader": false,
+            "isBanned": false,
+            "monsterId": 18611,
+            "thaiName": "วูซ่า (ผู้เฒ่าน้ำ)",
+            "stars": 5,
+            "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0031_0_1.png"
+          }
+        ]
+      },
+      {
+        "id": "rep-ohb-real-5",
+        "date": "4 days ago (2026-09-14)",
+        "result": "WIN",
+        "scoreChange": "+12",
+        "duration": "2:25",
+        "firstPick": true,
+        "picks": [
+          {
+            "name": "Woosa",
+            "element": "water",
+            "isLeader": false,
+            "isBanned": false
+          },
+          {
+            "name": "Seara",
+            "element": "wind",
+            "isLeader": true,
+            "isBanned": false
+          },
+          {
+            "name": "Haegang",
+            "element": "water",
+            "isLeader": false,
+            "isBanned": false
+          },
+          {
+            "name": "Giana",
+            "element": "dark",
+            "isLeader": false,
+            "isBanned": true
+          },
+          {
+            "name": "Kovarci",
+            "element": "light",
+            "isLeader": false,
+            "isBanned": false
+          }
+        ],
+        "opponent": {
+          "name": "Yurnero",
+          "country": "GLOBAL",
+          "flag": "🌐",
+          "server": "ASIA",
+          "rankTier": "Fighter 3 ★★★",
+          "score": 1323,
+          "picks": [
+            {
+              "name": "Josephine",
+              "element": "water",
+              "isLeader": true,
+              "isBanned": false,
+              "monsterId": 21811,
+              "thaiName": "Josephine",
+              "stars": 5,
+              "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0044_0_4.png"
+            },
+            {
+              "name": "Miles",
+              "element": "water",
+              "isLeader": false,
+              "isBanned": false,
+              "monsterId": 25311,
+              "thaiName": "ไมล์ส",
+              "stars": 5,
+              "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0076_1_1.png"
+            },
+            {
+              "name": "Racuni",
+              "element": "fire",
+              "isLeader": false,
+              "isBanned": false,
+              "monsterId": 21012,
+              "thaiName": "Racuni",
+              "stars": 3,
+              "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0041_1_2.png"
+            },
+            {
+              "name": "Chandra",
+              "element": "water",
+              "isLeader": false,
+              "isBanned": true,
+              "monsterId": 17411,
+              "thaiName": "จันทรา",
+              "stars": 5,
+              "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0027_0_1.png"
+            },
+            {
+              "name": "Ethna",
+              "element": "wind",
+              "isLeader": false,
+              "isBanned": false,
+              "monsterId": 17913,
+              "thaiName": "Ethna",
+              "stars": 5,
+              "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0023_2_1.png"
+            }
+          ]
+        },
+        "playerPicks": [
+          {
+            "name": "Woosa",
+            "element": "water",
+            "isLeader": false,
+            "isBanned": false,
+            "monsterId": 18611,
+            "thaiName": "วูซ่า (ผู้เฒ่าน้ำ)",
+            "stars": 5,
+            "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0031_0_1.png"
+          },
+          {
+            "name": "Seara",
+            "element": "wind",
+            "isLeader": true,
+            "isBanned": false,
+            "monsterId": 15713,
+            "thaiName": "เซอาร่า",
+            "stars": 5,
+            "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0022_2_1.png"
+          },
+          {
+            "name": "Haegang",
+            "element": "water",
+            "isLeader": false,
+            "isBanned": false,
+            "monsterId": 23711,
+            "thaiName": "Haegang",
+            "stars": 5,
+            "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0056_1_1.png"
+          },
+          {
+            "name": "Giana",
+            "element": "dark",
+            "isLeader": false,
+            "isBanned": true,
+            "monsterId": 15715,
+            "thaiName": "เกียนา",
+            "stars": 5,
+            "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0022_4_1.png"
+          },
+          {
+            "name": "Kovarci",
+            "element": "light",
+            "isLeader": false,
+            "isBanned": false,
+            "monsterId": 27214,
+            "thaiName": "Kovarci",
+            "stars": 5,
+            "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0106_1_4.png"
           }
         ]
       }
