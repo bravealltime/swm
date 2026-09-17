@@ -176,6 +176,54 @@ export function baseAwakenedId(masterId) {
   return stage === 1 ? id : id - stage * 10 + 10;
 }
 
+/**
+ * Non-summonable / Free / Fusion / Ancient Coin / Craftable LD 5★
+ * (มอนสเตอร์แสง-มืด 5 ดาวแท้ที่เปิดไม่ได้จากคัมภีร์สุ่ม เช่น ฟิวชั่น, เหรียญโบราณ, คราฟท์)
+ */
+export const NON_SUMMONABLE_LD5_NAMES = new Set([
+  'veromos',
+  'dark ifrit',
+  'jeanne',
+  'light paladin',
+  'elsharion',
+  'light ifrit',
+  'eirgar',
+  'dark vampire lord',
+  'altaïr',
+  'altair',
+  'frederic',
+  'frederic / altair',
+  'light assassin',
+  'light mercenary',
+  'light homunculus(support)',
+  'light homunculus',
+  'dark homunculus(support)',
+  'dark homunculus',
+]);
+
+export const NON_SUMMONABLE_LD5_IDS = new Set([
+  19215, 19205, // Veromos, Dark Ifrit
+  21814, 21804, // Jeanne, Light Paladin
+  19214, 19204, // Elsharion, Light Ifrit
+  23015, 23005, // Eirgar, Dark Vampire Lord
+  27314, 27304, // Altaïr
+  27814, 27804, // Frederic / Altair
+  1000214,      // Light Homunculus (Support)
+  1000215,      // Dark Homunculus (Support)
+]);
+
+export function isNonSummonableLd5(unitOrMonster) {
+  if (!unitOrMonster) return false;
+  const mId = Number(unitOrMonster.masterId || unitOrMonster.com2usId || String(unitOrMonster.id || '').replace(/\D/g, ''));
+  if (mId && (NON_SUMMONABLE_LD5_IDS.has(mId) || NON_SUMMONABLE_LD5_IDS.has(baseAwakenedId(mId)))) {
+    return true;
+  }
+  const name = String(unitOrMonster.name || '').toLowerCase().trim();
+  if (NON_SUMMONABLE_LD5_NAMES.has(name)) return true;
+  if (name.includes('homunculus') && (unitOrMonster.element === 'light' || unitOrMonster.element === 'dark')) return true;
+  return false;
+}
+
 export function parseSwexExport(json) {
   if (!json || typeof json !== 'object') throw new Error('ไฟล์ไม่ใช่ JSON ที่อ่านได้');
   const units = Array.isArray(json.unit_list) ? json.unit_list : null;
@@ -313,6 +361,11 @@ export function getDemoGuardianBox() {
     { masterId: 18612, stars: 6, level: 40, element: 'fire', baseSpd: 103, spd: 291, hp: 34000, atk: 1300, def: 1450, cr: 40, cd: 70, acc: 85, res: 30, runes: 6, sets: ['Despair', 'Will'], runeEff: 101.8 },
     { masterId: 21111, stars: 6, level: 40, element: 'water', baseSpd: 98, spd: 263, hp: 22000, atk: 2350, def: 1100, cr: 95, cd: 175, acc: 40, res: 20, runes: 6, sets: ['Despair', 'Nemesis'], runeEff: 100.7 },
     { masterId: 21213, stars: 6, level: 40, element: 'wind', baseSpd: 96, spd: 236, hp: 32000, atk: 1100, def: 2700, cr: 30, cd: 65, acc: 35, res: 60, runes: 6, sets: ['Violent', 'Will'], runeEff: 101.3 },
+    // Fusion & Ancient Coin LD 5★ (สำหรับทดสอบระบบกรองซ่อน LD ฟรี/ฟิวชั่น)
+    { masterId: 19215, stars: 6, level: 40, element: 'dark', baseSpd: 100, spd: 266, hp: 36000, atk: 1200, def: 1550, cr: 45, cd: 70, acc: 65, res: 40, runes: 6, sets: ['Violent', 'Nemesis'], runeEff: 101.5 },
+    { masterId: 21814, stars: 6, level: 40, element: 'light', baseSpd: 100, spd: 278, hp: 44000, atk: 1050, def: 1600, cr: 30, cd: 65, acc: 85, res: 40, runes: 6, sets: ['Violent', 'Will'], runeEff: 102.3 },
+    { masterId: 19214, stars: 6, level: 40, element: 'light', baseSpd: 100, spd: 262, hp: 34000, atk: 1950, def: 1300, cr: 85, cd: 145, acc: 55, res: 25, runes: 6, sets: ['Swift', 'Will'], runeEff: 100.1 },
+    { masterId: 23015, stars: 6, level: 40, element: 'dark', baseSpd: 101, spd: 238, hp: 31000, atk: 2200, def: 1200, cr: 95, cd: 150, acc: 35, res: 20, runes: 6, sets: ['Fight', 'Fight', 'Will'], runeEff: 98.9 },
     // Essential 3★/4★
     { masterId: 19114, stars: 6, level: 40, element: 'light', baseSpd: 103, spd: 285, hp: 33000, atk: 1700, def: 1350, cr: 40, cd: 65, acc: 35, res: 45, runes: 6, sets: ['Violent', 'Will'], runeEff: 99.4 },
     { masterId: 19314, stars: 6, level: 40, element: 'light', baseSpd: 102, spd: 282, hp: 36000, atk: 1200, def: 1450, cr: 35, cd: 65, acc: 85, res: 35, runes: 6, sets: ['Swift', 'Will'], runeEff: 98.9 },

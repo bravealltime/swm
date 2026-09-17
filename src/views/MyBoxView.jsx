@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect, useRef } from 'react';
 import {
   Upload, Package, Shield, Flame, Trash2, RefreshCw, Search, Lock, ChevronRight, Star, CheckCircle2, XCircle,
   Compass, LayoutDashboard, Gauge, Gem, Zap, Castle, X, AlertTriangle, Sparkles, FolderSync, FolderOpen, Pause,
-  Download, Trophy, Award, Check, Layers, Sliders, Crown, Eye
+  Download, Trophy, Award, Check, Layers, Sliders, Crown, Eye, EyeOff
 } from 'lucide-react';
 import MonsterAvatar from '../components/MonsterAvatar';
 import RuneIcon from '../components/RuneIcon';
@@ -10,7 +10,7 @@ import ArtifactIcon from '../components/ArtifactIcon';
 import allMonstersData from '../data/allMonsters.json';
 import guardianMeta from '../data/swrtGuardianMeta.json';
 import { buildMonsterIndex, flagFromCountry } from '../data/swrtPlayerAdapter';
-import { parseSwexExport, ownedIdSet, loadBox, saveBox, clearBox, baseAwakenedId, BOX_VERSION, RUNE_SETS, STAT_NAMES, getArtifactsFromBox, ARTIFACT_EFFECT_NAMES, loadDemoBox } from '../utils/swexImport';
+import { parseSwexExport, ownedIdSet, loadBox, saveBox, clearBox, baseAwakenedId, BOX_VERSION, RUNE_SETS, STAT_NAMES, getArtifactsFromBox, ARTIFACT_EFFECT_NAMES, loadDemoBox, isNonSummonableLd5 } from '../utils/swexImport';
 import { supportsFolderWatch, loadDirHandle, clearDirHandle, pickSwexFolder, ensurePermission, findNewestExport } from '../utils/swexWatcher';
 import { exportAllDataAsJSON, importDataFromJSON } from '../services/storageService';
 
@@ -623,17 +623,19 @@ function BoxGrid({ box, onNavigate }) {
   const [minStars, setMinStars] = useState(5);
   const [query, setQuery] = useState('');
   const [sort, setSort] = useState('spd');
+  const [hideFreeLd, setHideFreeLd] = useState(false);
 
   const rows = useMemo(() => {
     const q = query.trim().toLowerCase();
     const list = box.units
       .map((u) => ({ ...u, info: monsterOf(u.masterId) || monsterOf(baseAwakenedId(u.masterId)) }))
       .filter((u) => (element === 'all' || u.element === element) && u.stars >= minStars)
+      .filter((u) => !(hideFreeLd && (isNonSummonableLd5(u) || (u.info && isNonSummonableLd5(u.info)))))
       .filter((u) => !q || (u.info?.name || '').toLowerCase().includes(q) || (u.info?.thaiName || '').includes(q));
     if (sort === 'obtained') return list.sort((a, b) => ((b.obtained || '') > (a.obtained || '') ? 1 : -1));
     const key = sort === 'stars' ? null : sort;
     return list.sort((a, b) => (key ? (b[key] || 0) - (a[key] || 0) : b.stars - a.stars || b.level - a.level || b.spd - a.spd));
-  }, [box, element, minStars, query, sort]);
+  }, [box, element, minStars, query, sort, hideFreeLd]);
 
   const chip = (active, color = 'bg-emerald-600') => `px-2.5 py-1.5 rounded-lg font-bold cursor-pointer ${active ? `${color} text-white` : 'bg-white/[0.04] text-slate-300 hover:text-white'}`;
 
@@ -646,6 +648,19 @@ function BoxGrid({ box, onNavigate }) {
           {SORTS.map(([id, label]) => <button key={id} onClick={() => setSort(id)} className={chip(sort === id, 'bg-cyan-600')}>{label}</button>)}
           <span className="text-slate-600 mx-1">|</span>
           {[6, 5, 4, 1].map((n) => <button key={n} onClick={() => setMinStars(n)} className={chip(minStars === n, 'bg-amber-500 !text-slate-950')}>{n === 1 ? 'ทุกดาว' : `${n}★ ขึ้นไป`}</button>)}
+          <span className="text-slate-600 mx-1">|</span>
+          <button
+            onClick={() => setHideFreeLd(!hideFreeLd)}
+            className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 border ${
+              hideFreeLd
+                ? 'bg-purple-600/30 text-purple-300 border-purple-500/40 shadow-sm'
+                : 'bg-white/[0.04] text-slate-400 hover:text-white border-white/5'
+            }`}
+            title="ซ่อนมอนสเตอร์แสง-มืดที่เปิดไม่ได้จากคัมภีร์ (Veromos, Jeanne, Elsharion, Eirgar, Homunculus)"
+          >
+            {hideFreeLd ? <EyeOff className="w-3.5 h-3.5 text-purple-300" /> : <Eye className="w-3.5 h-3.5" />}
+            <span>{hideFreeLd ? 'ซ่อน LD ฟรี/ฟิวชั่น' : 'ซ่อน LD ฟรี'}</span>
+          </button>
         </div>
         <div className="relative lg:ml-auto lg:w-64">
           <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
@@ -1359,6 +1374,24 @@ function PokedexCollection({ box, onNavigate, onLoadDemo }) {
     return Array.from(map.values());
   }, []);
 
+  // Option to hide non-summonable LDs (Veromos, Jeanne, Elsharion, Eirgar, Altair, Homunculus)
+  const [hideNonSummonLd, setHideNonSummonLd] = useState(() => {
+    try {
+      const saved = localStorage.getItem('swm:hide-non-summon-ld');
+      return saved !== null ? saved === 'true' : true;
+    } catch {
+      return true;
+    }
+  });
+
+  const toggleHideNonSummonLd = () => {
+    setHideNonSummonLd((prev) => {
+      const next = !prev;
+      try { localStorage.setItem('swm:hide-non-summon-ld', String(next)); } catch {}
+      return next;
+    });
+  };
+
   // Owned Natural 5★ Light/Dark monsters with rich data
   const ownedLd5s = useMemo(() => {
     return units
@@ -1368,12 +1401,14 @@ function PokedexCollection({ box, onNavigate, onLoadDemo }) {
         const isLd = ele === 'light' || ele === 'dark';
         const isNat5 = (info?.stars === 5 || info?.natural_stars === 5 || u.naturalStars === 5) && !info?.name?.includes('(Homunculus)');
         if (isLd && isNat5) {
+          const isNonSummon = isNonSummonableLd5(u) || (info && isNonSummonableLd5(info));
           return {
             ...u,
             name: info?.name || u.name || 'Unknown',
             thaiName: info?.thaiName || u.thaiName || '',
             avatarUrl: info?.avatarUrl || info?.imageUrl || u.avatarUrl || '',
             element: ele,
+            isNonSummon,
             info,
           };
         }
@@ -1382,14 +1417,24 @@ function PokedexCollection({ box, onNavigate, onLoadDemo }) {
       .filter(Boolean);
   }, [units]);
 
-  const [ldShelfTab, setLdShelfTab] = useState(() => (ownedLd5s.length > 0 ? 'owned' : 'hall-of-fame'));
+  const pureOwnedLd5s = useMemo(() => ownedLd5s.filter((u) => !u.isNonSummon), [ownedLd5s]);
+  const freeOwnedLd5s = useMemo(() => ownedLd5s.filter((u) => u.isNonSummon), [ownedLd5s]);
+  const displayedLd5s = hideNonSummonLd ? pureOwnedLd5s : ownedLd5s;
+
+  const [ldShelfTab, setLdShelfTab] = useState(() => (displayedLd5s.length > 0 ? 'owned' : 'hall-of-fame'));
 
   // Sync shelf tab when box changes
   useEffect(() => {
-    if (ownedLd5s.length > 0) {
+    if (displayedLd5s.length > 0) {
       setLdShelfTab('owned');
     }
-  }, [ownedLd5s.length]);
+  }, [displayedLd5s.length]);
+
+  // Active catalog respecting hideNonSummonLd
+  const activeCatalog = useMemo(() => {
+    if (!hideNonSummonLd) return nat5Catalog;
+    return nat5Catalog.filter((m) => !isNonSummonableLd5(m));
+  }, [nat5Catalog, hideNonSummonLd]);
 
   // Breakdown by element
   const statsByElement = useMemo(() => {
@@ -1401,7 +1446,7 @@ function PokedexCollection({ box, onNavigate, onLoadDemo }) {
       dark: { owned: 0, total: 0 },
     };
 
-    for (const m of nat5Catalog) {
+    for (const m of activeCatalog) {
       const ele = (m.element || 'fire').toLowerCase();
       if (counts[ele]) {
         counts[ele].total++;
@@ -1411,12 +1456,12 @@ function PokedexCollection({ box, onNavigate, onLoadDemo }) {
       }
     }
     return counts;
-  }, [nat5Catalog, checkIsOwned]);
+  }, [activeCatalog, checkIsOwned]);
 
   const totalOwned = useMemo(() => {
     return Object.values(statsByElement).reduce((s, c) => s + c.owned, 0);
   }, [statsByElement]);
-  const totalNat5 = nat5Catalog.length;
+  const totalNat5 = activeCatalog.length;
   const overallPct = totalNat5 > 0 ? Math.round((totalOwned / totalNat5) * 100) : 0;
 
   // Hall of Fame monsters with ownership matching
@@ -1449,7 +1494,7 @@ function PokedexCollection({ box, onNavigate, onLoadDemo }) {
 
   // Catalog filtered and sorted
   const filteredMonsters = useMemo(() => {
-    let list = nat5Catalog.filter((m) => {
+    let list = activeCatalog.filter((m) => {
       // Element filter
       if (eleFilter !== 'all' && (m.element || '').toLowerCase() !== eleFilter) return false;
 
@@ -1488,7 +1533,7 @@ function PokedexCollection({ box, onNavigate, onLoadDemo }) {
     }
 
     return list;
-  }, [nat5Catalog, eleFilter, ownershipFilter, searchQuery, sortMode, checkIsOwned]);
+  }, [activeCatalog, eleFilter, ownershipFilter, searchQuery, sortMode, checkIsOwned]);
 
   return (
     <div className="space-y-6">
@@ -1558,17 +1603,22 @@ function PokedexCollection({ box, onNavigate, onLoadDemo }) {
 
         <div className="relative z-10 space-y-5">
           {/* Header & Mode Switcher */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/[0.08] pb-4">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-white/[0.08] pb-4">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-2xl bg-gradient-to-tr from-yellow-500/20 to-purple-500/20 border border-yellow-500/40 text-yellow-300 shadow">
+              <div className="p-2.5 rounded-2xl bg-gradient-to-tr from-yellow-500/20 to-purple-500/20 border border-yellow-500/40 text-yellow-300 shadow shrink-0">
                 <Crown className="w-6 h-6 text-yellow-300" />
               </div>
               <div>
-                <h3 className="text-lg sm:text-xl font-black text-white flex items-center gap-2">
+                <h3 className="text-lg sm:text-xl font-black text-white flex items-center gap-2 flex-wrap">
                   <span>ตู้เกียรติยศ LD 5★ (แสง-มืดแท้ระดับตำนาน)</span>
-                  <span className="px-2.5 py-0.5 rounded-full bg-yellow-500/20 text-yellow-300 text-xs font-bold border border-yellow-500/30">
-                    {ownedLd5s.length} ตัวในไอดี
+                  <span className="px-2.5 py-0.5 rounded-full bg-yellow-500/20 text-yellow-300 text-xs font-bold border border-yellow-500/30 font-mono">
+                    {displayedLd5s.length} ตัวในไอดี
                   </span>
+                  {hideNonSummonLd && freeOwnedLd5s.length > 0 && (
+                    <span className="text-[11px] text-slate-400 font-normal">
+                      (ซ่อนตัวฟิวชั่น/แจกฟรี {freeOwnedLd5s.length} ตัว: {freeOwnedLd5s.map((u) => u.name).join(', ')})
+                    </span>
+                  )}
                 </h3>
                 <p className="text-xs text-slate-400 mt-0.5">
                   มอนสเตอร์ระดับสมบัติล้ำค่าที่สุดในเกม Summoners War
@@ -1576,46 +1626,70 @@ function PokedexCollection({ box, onNavigate, onLoadDemo }) {
               </div>
             </div>
 
-            {/* Mode Toggle Buttons */}
-            <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-white/[0.04] border border-white/10 self-start sm:self-auto">
+            {/* Controls: Hide Filter Toggle + Mode Buttons */}
+            <div className="flex flex-wrap items-center gap-2">
+              {/* Toggle to Hide Non-Summonable LDs */}
               <button
-                onClick={() => setLdShelfTab('owned')}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
-                  ldShelfTab === 'owned'
-                    ? 'bg-gradient-to-r from-amber-600 to-yellow-600 text-white shadow-md'
-                    : 'text-slate-400 hover:text-white'
+                onClick={toggleHideNonSummonLd}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer border ${
+                  hideNonSummonLd
+                    ? 'bg-amber-500/15 text-amber-300 border-amber-500/40 hover:bg-amber-500/25 shadow-sm'
+                    : 'bg-white/[0.04] text-slate-400 border-white/10 hover:text-white'
                 }`}
+                title="ซ่อนมอนสเตอร์แสง-มืดที่ไม่ได้เปิดได้เองจากคัมภีร์ เช่น ตัวผสม/ฟิวชั่น (Veromos, Jeanne), เหรียญโบราณ (Elsharion, Eirgar, Altaïr), และโฮมุนครุส"
               >
-                <Sparkles className="w-3.5 h-3.5 text-yellow-300" />
-                <span>มอนสเตอร์ในไอดีของฉัน ({ownedLd5s.length})</span>
+                {hideNonSummonLd ? <EyeOff className="w-3.5 h-3.5 text-amber-400" /> : <Eye className="w-3.5 h-3.5" />}
+                <span>{hideNonSummonLd ? 'ซ่อนแสงมืดที่ไม่ได้เปิดได้เอง' : 'แสดงแสงมืดทั้งหมด (รวมฟิวชั่น)'}</span>
+                {freeOwnedLd5s.length > 0 && hideNonSummonLd && (
+                  <span className="px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-mono">
+                    -{freeOwnedLd5s.length}
+                  </span>
+                )}
               </button>
-              <button
-                onClick={() => setLdShelfTab('hall-of-fame')}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
-                  ldShelfTab === 'hall-of-fame'
-                    ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md'
-                    : 'text-slate-400 hover:text-white'
-                }`}
-              >
-                <Crown className="w-3.5 h-3.5 text-purple-300" />
-                <span>ทำเนียบ 40 ตัวท็อปเมต้าโลก</span>
-              </button>
+
+              {/* Mode Toggle Buttons */}
+              <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-white/[0.04] border border-white/10 self-start sm:self-auto">
+                <button
+                  onClick={() => setLdShelfTab('owned')}
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+                    ldShelfTab === 'owned'
+                      ? 'bg-gradient-to-r from-amber-600 to-yellow-600 text-white shadow-md'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-yellow-300" />
+                  <span>มอนสเตอร์ในไอดีของฉัน ({displayedLd5s.length})</span>
+                </button>
+                <button
+                  onClick={() => setLdShelfTab('hall-of-fame')}
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+                    ldShelfTab === 'hall-of-fame'
+                      ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  <Crown className="w-3.5 h-3.5 text-purple-300" />
+                  <span>ทำเนียบ 40 ตัวท็อปเมต้าโลก</span>
+                </button>
+              </div>
             </div>
           </div>
 
           {/* VIEW A: OWNED LD 5★ TROPHY SHELF */}
           {ldShelfTab === 'owned' && (
             <div>
-              {ownedLd5s.length > 0 ? (
+              {displayedLd5s.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3.5">
-                  {ownedLd5s.map((u, idx) => {
+                  {displayedLd5s.map((u, idx) => {
                     const isLight = u.element === 'light';
                     return (
                       <div
                         key={idx}
                         onClick={() => onNavigate('where2use', { initialMonster: u.name })}
                         className={`relative group p-4 rounded-2xl border transition-all cursor-pointer hover:scale-[1.02] shadow-xl ${
-                          isLight
+                          u.isNonSummon
+                            ? 'border-slate-600/40 bg-gradient-to-b from-slate-900/60 via-[#0a0f19] to-black shadow-slate-500/10 hover:border-slate-400'
+                            : isLight
                             ? 'border-yellow-400/40 bg-gradient-to-b from-yellow-950/30 via-[#0a0f19] to-black shadow-yellow-500/10 hover:border-yellow-400/70'
                             : 'border-purple-500/40 bg-gradient-to-b from-purple-950/30 via-[#0a0f19] to-black shadow-purple-500/10 hover:border-purple-400/70'
                         }`}
@@ -1623,13 +1697,15 @@ function PokedexCollection({ box, onNavigate, onLoadDemo }) {
                         {/* Pedestal Top Accent */}
                         <div className="flex items-center justify-between mb-3">
                           <span
-                            className={`text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full border ${
-                              isLight
+                            className={`text-[10px] font-black uppercase px-2 py-0.5 rounded-full border ${
+                              u.isNonSummon
+                                ? 'bg-slate-500/20 text-slate-300 border-slate-500/40'
+                                : isLight
                                 ? 'bg-yellow-400/20 text-yellow-200 border-yellow-400/40'
                                 : 'bg-purple-500/20 text-purple-300 border-purple-500/40'
                             }`}
                           >
-                            {isLight ? '☀️ Light 5★' : '🌙 Dark 5★'}
+                            {u.isNonSummon ? '🔨 ผสม / แจกฟรี' : isLight ? '☀️ Light 5★ (Gacha)' : '🌙 Dark 5★ (Gacha)'}
                           </span>
                           <span className="text-[11px] font-mono font-bold text-amber-300">
                             +{u.spd - u.baseSpd} SPD
@@ -1643,7 +1719,11 @@ function PokedexCollection({ box, onNavigate, onLoadDemo }) {
                               monster={u.info || u}
                               size={68}
                               className={`rounded-2xl border-2 shadow-2xl ${
-                                isLight ? 'border-yellow-400/60' : 'border-purple-400/60'
+                                u.isNonSummon
+                                  ? 'border-slate-500/60'
+                                  : isLight
+                                  ? 'border-yellow-400/60'
+                                  : 'border-purple-400/60'
                               }`}
                             />
                             <span className="absolute -top-1.5 -right-1.5 p-1 rounded-full bg-emerald-500 text-white shadow">
@@ -1675,6 +1755,37 @@ function PokedexCollection({ box, onNavigate, onLoadDemo }) {
                       </div>
                     );
                   })}
+                </div>
+              ) : hideNonSummonLd && freeOwnedLd5s.length > 0 ? (
+                /* Empty state when user only has non-summonable LDs and has hidden them */
+                <div className="py-10 sm:py-14 text-center space-y-4 rounded-2xl bg-white/[0.02] border border-white/5 p-6">
+                  <div className="w-14 h-14 mx-auto rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                    <Trophy className="w-7 h-7" />
+                  </div>
+                  <div className="space-y-1">
+                    <h4 className="text-base font-bold text-white">
+                      ยังไม่พบมอนสเตอร์แสง-มืด 5 ดาวแท้ (เปิดได้เองจากคัมภีร์) ในไอดีนี้
+                    </h4>
+                    <p className="text-xs text-slate-400 max-w-md mx-auto">
+                      ขณะนี้เปิดโหมด <span className="text-amber-300 font-semibold">"ซ่อนแสงมืดที่ไม่ได้เปิดได้เอง"</span> อยู่ โดยไอดีของคุณมีมอนสเตอร์ LD 5★ จากฟิวชั่น/แจกฟรี <span className="text-white font-bold">{freeOwnedLd5s.length} ตัว</span> ({freeOwnedLd5s.map((u) => u.name).join(', ')})
+                    </p>
+                  </div>
+                  <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
+                    <button
+                      onClick={toggleHideNonSummonLd}
+                      className="px-4 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-all"
+                    >
+                      <Eye className="w-4 h-4 text-amber-300" />
+                      <span>คลิกเพื่อแสดงตัวฟิวชั่น/แจกฟรี ({freeOwnedLd5s.length} ตัว)</span>
+                    </button>
+                    <button
+                      onClick={() => setLdShelfTab('hall-of-fame')}
+                      className="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-lg shadow-purple-600/20 transition-all"
+                    >
+                      <Crown className="w-4 h-4 text-yellow-300" />
+                      <span>เปิดดูทำเนียบ 40 มอนสเตอร์ LD 5★ เมต้าสูงสุดระดับโลก</span>
+                    </button>
+                  </div>
                 </div>
               ) : (
                 <div className="py-10 sm:py-14 text-center space-y-4 rounded-2xl bg-white/[0.02] border border-white/5 p-6">
@@ -1947,6 +2058,20 @@ function PokedexCollection({ box, onNavigate, onLoadDemo }) {
                 {label}
               </button>
             ))}
+
+            {/* Hide Non-Summonable LD Filter Toggle */}
+            <button
+              onClick={toggleHideNonSummonLd}
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 border ${
+                hideNonSummonLd
+                  ? 'bg-amber-500/20 text-amber-300 border-amber-500/40 shadow-sm'
+                  : 'bg-white/[0.04] text-slate-400 hover:text-white border-white/5'
+              }`}
+              title="ซ่อนมอนสเตอร์แสง-มืดที่ไม่ได้เปิดได้เองจากคัมภีร์ เช่น Veromos, Jeanne, Elsharion, Eirgar, Altaïr"
+            >
+              {hideNonSummonLd ? <EyeOff className="w-3.5 h-3.5 text-amber-400" /> : <Eye className="w-3.5 h-3.5" />}
+              <span>{hideNonSummonLd ? 'ซ่อน LD ฟรี/ฟิวชั่น' : 'แสดง LD ฟรี/ฟิวชั่น'}</span>
+            </button>
 
             {/* Sort Mode */}
             <select

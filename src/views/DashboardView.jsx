@@ -36,7 +36,7 @@ import { PROMO_CODES } from '../data/promoCodes';
 import { LEADERBOARDS } from '../data/leaderboards';
 import { getR2AvatarUrl } from '../services/r2Service';
 import { useLocalStorage } from '../hooks/useLocalStorage';
-import { loadBox, saveBox, parseSwexExport, getArtifactsFromBox, loadDemoBox, getMonsterCatalogInfo } from '../utils/swexImport';
+import { loadBox, saveBox, parseSwexExport, getArtifactsFromBox, loadDemoBox, getMonsterCatalogInfo, isNonSummonableLd5 } from '../utils/swexImport';
 import { loadUserBoxFromDB, saveUserBoxToDB } from '../services/storageService';
 
 const POPULAR_PRESETS = [
@@ -145,9 +145,11 @@ export default function DashboardView({ onNavigate }) {
     const fastestName = fastestUnit ? (fastestUnit.name || getMonsterCatalogInfo(fastestUnit.masterId)?.name || '') : '';
     const artifacts = getArtifactsFromBox(userBox);
 
-    // Calculate Nat 5 & LD5 counts
+    // Calculate Nat 5 & LD5 counts (แยกตัวเปิดได้เอง vs ฟิวชั่น/แจกฟรี)
     let nat5Count = 0;
     let ld5Count = 0;
+    let pureLd5Count = 0;
+    let freeLd5Count = 0;
     units.forEach((u) => {
       const info = getMonsterCatalogInfo(u.masterId);
       const ele = (u.element || info?.element || '').toLowerCase();
@@ -155,7 +157,14 @@ export default function DashboardView({ onNavigate }) {
       const isNat5 = (info?.stars === 5 || info?.natural_stars === 5 || u.naturalStars === 5) && !info?.name?.includes('(Homunculus)');
       if (isNat5) {
         nat5Count++;
-        if (isLd) ld5Count++;
+        if (isLd) {
+          ld5Count++;
+          if (isNonSummonableLd5(u) || (info && isNonSummonableLd5(info))) {
+            freeLd5Count++;
+          } else {
+            pureLd5Count++;
+          }
+        }
       }
     });
 
@@ -183,6 +192,8 @@ export default function DashboardView({ onNavigate }) {
       topFastest,
       nat5Count,
       ld5Count,
+      pureLd5Count,
+      freeLd5Count,
       isDemo: !!userBox.isDemo,
     };
   }, [userBox]);
@@ -356,7 +367,19 @@ export default function DashboardView({ onNavigate }) {
                   <Trophy className="w-3 h-3 text-amber-400" /> ตู้สะสม Nat 5
                 </div>
                 <div className="text-lg font-black text-amber-300 mt-0.5">{userProfileStats.nat5Count} <span className="text-xs text-slate-400">/ 455</span></div>
-                <div className="text-[10px] text-yellow-400 font-semibold">{userProfileStats.ld5Count} ตัว LD 5★</div>
+                <div
+                  className="text-[10px] text-yellow-400 font-semibold truncate"
+                  title={
+                    userProfileStats.freeLd5Count > 0
+                      ? `เปิดได้เอง ${userProfileStats.pureLd5Count} ตัว + ฟิวชั่น/แจกฟรี ${userProfileStats.freeLd5Count} ตัว`
+                      : 'มอนสเตอร์ LD 5★ เปิดได้เองจากคัมภีร์'
+                  }
+                >
+                  {userProfileStats.pureLd5Count} ตัว LD กาชา
+                  {userProfileStats.freeLd5Count > 0 && (
+                    <span className="text-slate-400 font-normal"> (+{userProfileStats.freeLd5Count})</span>
+                  )}
+                </div>
               </div>
 
               <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/5 text-center min-w-[95px]">
