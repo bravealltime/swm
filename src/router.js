@@ -9,6 +9,8 @@ const VIEW_ALIASES = {
   'siege-calc': 'siege-calculator',
   optimizer: 'artifact',
   'war-room': 'guild-war-room',
+  summon: 'summon-simulator',
+  'deck-builder': 'siege-planner',
 };
 
 export const VIEW_TITLES = {
@@ -20,6 +22,7 @@ export const VIEW_TITLES = {
   'game-guides': 'คู่มือกลยุทธ์',
   'siege-calculator': 'คำนวณคะแนน Siege',
   'siege-tournament': 'ทัวร์นาเมนต์ Siege',
+  'siege-planner': 'จัด 10 ทีมบุก Siege (Deck Builder)',
   'player-tracker': 'ค้นหาสถิติผู้เล่น',
   'draft-explorer': 'จำลองดราฟต์ 5v5',
   'rta-synergies': 'คอมโบ RTA',
@@ -36,6 +39,7 @@ export const VIEW_TITLES = {
   speed: 'จูนสปีด',
   rune: 'คำนวณรูน',
   artifact: 'ดาเมจเสริมอาร์ติแฟกต์',
+  'summon-simulator': 'ตู้จำลองเปิดคัมภีร์ (Summon Simulator)',
   recruit: 'กิลด์รับสมัคร',
   aegislink: 'AegisLink',
   'my-box': 'กล่องมอนสเตอร์ของฉัน',

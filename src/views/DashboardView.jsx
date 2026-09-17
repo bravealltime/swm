@@ -29,7 +29,8 @@ import {
   Layers,
   UserCheck,
   Upload,
-  RefreshCw
+  RefreshCw,
+  Share2
 } from 'lucide-react';
 import MonsterAvatar from '../components/MonsterAvatar';
 import { PROMO_CODES } from '../data/promoCodes';
@@ -38,6 +39,7 @@ import { getR2AvatarUrl } from '../services/r2Service';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { loadBox, saveBox, parseSwexExport, getArtifactsFromBox, loadDemoBox, getMonsterCatalogInfo, isNonSummonableLd5 } from '../utils/swexImport';
 import { loadUserBoxFromDB, saveUserBoxToDB } from '../services/storageService';
+import { exportProfileCard } from '../utils/cardExporter';
 
 const POPULAR_PRESETS = [
   { label: 'Seara + Orion + Perna', defKey: 'Seara,Orion,Perna', monsters: ['Seara', 'Orion', 'Perna'] },
@@ -170,7 +172,15 @@ export default function DashboardView({ onNavigate }) {
 
     let sumEff = 0;
     let countEff = 0;
+    const ld5List = [];
     units.forEach((u) => {
+      const info = getMonsterCatalogInfo(u.masterId);
+      const ele = (u.element || info?.element || '').toLowerCase();
+      const isLd = ele === 'light' || ele === 'dark';
+      const isNat5 = (info?.stars === 5 || info?.natural_stars === 5 || u.naturalStars === 5) && !info?.name?.includes('(Homunculus)');
+      if (isNat5 && isLd && !isNonSummonableLd5(u) && (!info || !isNonSummonableLd5(info))) {
+        ld5List.push({ name: u.name || info?.name || 'LD 5★', element: ele, spd: u.spd, sets: u.sets });
+      }
       if (u.runeEff) {
         sumEff += Number(u.runeEff);
         countEff++;
@@ -178,6 +188,9 @@ export default function DashboardView({ onNavigate }) {
     });
     const avgRuneEff = countEff > 0 ? (sumEff / countEff).toFixed(1) : '85.4';
     const topFastest = [...units].sort((a, b) => b.spd - a.spd).slice(0, 4);
+
+    const runes = userBox.runes || [];
+    const quadSpdCount = runes.filter(r => (r.subs || []).some(s => s[0] === 8 && s[1] >= 20)).length;
 
     return {
       name: userBox.wizard?.name || userBox.wizard?.wizard_name || 'ผู้เรียกมอนสเตอร์ของคุณ',
@@ -194,6 +207,8 @@ export default function DashboardView({ onNavigate }) {
       ld5Count,
       pureLd5Count,
       freeLd5Count,
+      ld5List,
+      quadSpdCount,
       isDemo: !!userBox.isDemo,
     };
   }, [userBox]);
@@ -397,6 +412,25 @@ export default function DashboardView({ onNavigate }) {
 
             {/* Right: Quick Navigation Hub */}
             <div className="flex flex-wrap lg:flex-col gap-2 shrink-0">
+              <button
+                onClick={() => {
+                  exportProfileCard({
+                    wizard: userBox.wizard,
+                    stats: {
+                      total6Star: userProfileStats.sixStarUnits,
+                      ld5Count: userProfileStats.pureLd5Count,
+                      avgEff: userProfileStats.avgRuneEff,
+                      quadSpdCount: userProfileStats.quadSpdCount,
+                    },
+                    topLd5: userProfileStats.ld5List || [],
+                  });
+                }}
+                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white text-xs font-bold shadow-lg shadow-cyan-600/20 transition-all cursor-pointer"
+                title="บันทึกรูป Passport Card เป็นไฟล์ PNG สำหรับแชร์โซเชียล"
+              >
+                <Share2 className="w-4 h-4" />
+                <span>บันทึกการ์ดโปรไฟล์ (PNG)</span>
+              </button>
               <button
                 onClick={() => onNavigate('my-box')}
                 className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold shadow-lg shadow-blue-600/20 transition-all cursor-pointer"

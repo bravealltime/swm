@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect, useRef } from 'react';
 import {
   Upload, Package, Shield, Flame, Trash2, RefreshCw, Search, Lock, ChevronRight, Star, CheckCircle2, XCircle,
   Compass, LayoutDashboard, Gauge, Gem, Zap, Castle, X, AlertTriangle, Sparkles, FolderSync, FolderOpen, Pause,
-  Download, Trophy, Award, Check, Layers, Sliders, Crown, Eye, EyeOff
+  Download, Trophy, Award, Check, Layers, Sliders, Crown, Eye, EyeOff, Share2
 } from 'lucide-react';
 import MonsterAvatar from '../components/MonsterAvatar';
 import RuneIcon from '../components/RuneIcon';
@@ -13,6 +13,7 @@ import { buildMonsterIndex, flagFromCountry } from '../data/swrtPlayerAdapter';
 import { parseSwexExport, ownedIdSet, loadBox, saveBox, clearBox, baseAwakenedId, BOX_VERSION, RUNE_SETS, STAT_NAMES, getArtifactsFromBox, ARTIFACT_EFFECT_NAMES, loadDemoBox, isNonSummonableLd5 } from '../utils/swexImport';
 import { supportsFolderWatch, loadDirHandle, clearDirHandle, pickSwexFolder, ensurePermission, findNewestExport } from '../utils/swexWatcher';
 import { exportAllDataAsJSON, importDataFromJSON } from '../services/storageService';
+import { exportLdShowcaseCard } from '../utils/cardExporter';
 
 const WATCH_INTERVAL_MS = 20 * 1000;
 
@@ -40,7 +41,7 @@ const TABS = [
   { id: 'box', label: 'มอนสเตอร์', icon: Package, color: 'bg-cyan-600 shadow-cyan-600/25' },
   { id: 'pokedex', label: 'ตู้สะสม Nat 5 & ทำเนียบ LD5', icon: Trophy, color: 'bg-amber-600 shadow-amber-600/25' },
   { id: 'artifacts', label: 'ค้นหาอาร์ติแฟกต์', icon: Layers, color: 'bg-teal-600 shadow-teal-600/25' },
-  { id: 'efficiency', label: 'สแกนรูนเทพ & Quads', icon: Sparkles, color: 'bg-violet-600 shadow-violet-600/25' },
+  { id: 'efficiency', label: 'สแกนหินขัด & หินแปลง (Grind/Gem)', icon: Sparkles, color: 'bg-violet-600 shadow-violet-600/25' },
   { id: 'defense', label: 'สร้างทีมรับ Siege', icon: Castle, color: 'bg-indigo-600 shadow-indigo-600/25' },
   { id: 'teams', label: 'ทีมที่สร้างได้', icon: Shield, color: 'bg-blue-600 shadow-blue-600/25' },
   { id: 'meta', label: 'เมต้า Guardian', icon: Flame, color: 'bg-rose-600 shadow-rose-600/25' },
@@ -1080,8 +1081,16 @@ function Runes({ box }) {
 function RuneCard({ rune }) {
   const info = rune.unit ? monsterOf(rune.unit) : null;
   const effColor = rune.eff >= 80 ? 'text-emerald-300' : rune.eff >= 60 ? 'text-amber-300' : 'text-slate-300';
+
+  // Grind & Gem Opportunity Scanners
+  const ungrindedSpd = rune.subs?.find((s) => s[0] === 8 && s[1] >= 18 && (s[2] || 0) === 0);
+  const ungrindedPct = rune.subs?.find((s) => [2, 4, 6].includes(s[0]) && s[1] >= 20 && (s[2] || 0) === 0);
+  const gemCandidate = rune.stars === 6 && (rune.eff >= 75 || rune.subs?.some(s => (s[0] === 8 && s[1] >= 14) || (s[0] === 9 && s[1] >= 15))) 
+    ? rune.subs?.find((s) => [1, 3, 5].includes(s[0]) && s[3] === 0)
+    : null;
+
   return (
-    <div className="p-3 rounded-xl bg-[#0a0f18] border border-slate-800 flex items-start gap-3">
+    <div className="p-3 rounded-xl bg-[#0a0f18] border border-slate-800 flex items-start gap-3 hover:border-slate-700 transition">
       <div className="shrink-0 flex flex-col items-center gap-1">
         <RuneIcon rune={rune} size={54} />
         <span className="text-[10px] text-amber-400 leading-none tracking-tighter">{'★'.repeat(Math.min(6, rune.stars || 0))}</span>
@@ -1095,7 +1104,27 @@ function RuneCard({ rune }) {
         <div className="text-[11px] text-slate-400 font-mono truncate">
           {rune.subs.map((s, i) => <span key={i}>{i ? ' / ' : ''}{STAT_NAMES[s[0]] || s[0]} {s[1]}{s[2] ? <span className="text-emerald-400">+{s[2]}</span> : ''}{[2, 4, 6, 9, 10, 11, 12].includes(s[0]) ? '%' : ''}</span>)}
         </div>
-        <div className="text-[11px] text-slate-500 mt-0.5 flex items-center gap-1">
+
+        {/* Smart Grind & Gem Action Chips */}
+        <div className="flex flex-wrap items-center gap-1.5 mt-1.5">
+          {ungrindedSpd && (
+            <span className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+              ⚡ ขัด SPD ได้ +4~5
+            </span>
+          )}
+          {ungrindedPct && (
+            <span className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+              🛡️ ขัด % ได้ +7~10%
+            </span>
+          )}
+          {gemCandidate && (
+            <span className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-pink-500/20 text-pink-300 border border-pink-500/30" title="สามารถใช้หินแปลงออปเปลี่ยน Flat ให้เป็น % เพื่อเพิ่มประสิทธิภาพได้">
+              💎 แนะนำแปลง {STAT_NAMES[gemCandidate[0]]} ด้วย Gem
+            </span>
+          )}
+        </div>
+
+        <div className="text-[11px] text-slate-500 mt-1 flex items-center gap-1">
           {info ? <><MonsterAvatar monster={info} size="xs" showStars={false} /> <span className="truncate">{info.name}</span></> : <span>ในคลัง</span>}
         </div>
       </div>
@@ -1108,16 +1137,19 @@ function RuneCard({ rune }) {
 // ---------------------------------------------------------------------------
 
 function RuneEfficiencyAndQuads({ box }) {
-  const [filter, setFilter] = useState('all-quads'); // 'all-quads', 'quad-spd', 'quad-stats', 'ungrinded', 'top-eff'
+  const [filter, setFilter] = useState('ungrinded-spd'); // 'ungrinded-spd', 'ungrinded-pct', 'gem-candidates', 'all-quads', 'quad-spd', 'all-ungrinded', 'top-eff'
   const runes = box?.runes || [];
 
-  // Analyze runes for Quad Rolls and Missing Grinds
+  // Grind & Gem Scanner Analysis
   const analysis = useMemo(() => {
     let sumEff = 0;
     let effCount = 0;
     let count100 = 0;
     let count90 = 0;
 
+    const ungrindedSpd = [];
+    const ungrindedPct = [];
+    const gemCandidates = [];
     const quadSpd = [];
     const quadStats = [];
     const ungrinded = [];
@@ -1135,24 +1167,48 @@ function RuneEfficiencyAndQuads({ box }) {
       let hasQuadSpd = false;
       let hasQuadOther = false;
       let hasMissingGrind = false;
+      let hasHighUngrindedSpd = false;
+      let hasHighUngrindedPct = false;
+      let hasFlatGemCandidate = false;
+
+      const hasGoodSub = (r.subs || []).some(s => (s[0] === 8 && s[1] >= 14) || (s[0] === 9 && s[1] >= 15));
 
       for (const s of r.subs || []) {
         const statId = s[0];
         const baseVal = s[1] || 0;
         const grindVal = s[2] || 0;
+        const isEnchanted = s[3] === 1;
 
-        // Quad Roll heuristics: 4 rolls into same stat
-        if (statId === 8 && baseVal >= 20) hasQuadSpd = true; // SPD >= 20
-        if ([2, 4, 6].includes(statId) && baseVal >= 28) hasQuadOther = true; // HP%, ATK%, DEF% >= 28%
-        if (statId === 9 && baseVal >= 22) hasQuadOther = true; // CR >= 22%
-        if (statId === 10 && baseVal >= 25) hasQuadOther = true; // CD >= 25%
+        // Quad Roll heuristics
+        if (statId === 8 && baseVal >= 20) hasQuadSpd = true;
+        if ([2, 4, 6].includes(statId) && baseVal >= 28) hasQuadOther = true;
+        if (statId === 9 && baseVal >= 22) hasQuadOther = true;
+        if (statId === 10 && baseVal >= 25) hasQuadOther = true;
 
-        // Check if 6★ Hero/Legend has ungrinded grindable substats
+        // High Roll Ungrinded SPD (SPD >= 18 and grindVal === 0)
+        if (statId === 8 && baseVal >= 18 && grindVal === 0) {
+          hasHighUngrindedSpd = true;
+        }
+
+        // High Roll Ungrinded % Stats (HP%, ATK%, DEF% >= 20% and grindVal === 0)
+        if ([2, 4, 6].includes(statId) && baseVal >= 20 && grindVal === 0) {
+          hasHighUngrindedPct = true;
+        }
+
+        // Gem Conversion Candidate: Flat HP (1), Flat ATK (3), Flat DEF (5) on 6★ high-eff runes
+        if (r.stars === 6 && [1, 3, 5].includes(statId) && !isEnchanted && (eff >= 74 || hasGoodSub)) {
+          hasFlatGemCandidate = true;
+        }
+
+        // Generic ungrinded
         if (r.stars === 6 && [1, 2, 3, 4, 5, 6, 8].includes(statId) && grindVal === 0 && r.lvl >= 12) {
           hasMissingGrind = true;
         }
       }
 
+      if (hasHighUngrindedSpd) ungrindedSpd.push(r);
+      if (hasHighUngrindedPct) ungrindedPct.push(r);
+      if (hasFlatGemCandidate) gemCandidates.push(r);
       if (hasQuadSpd) quadSpd.push(r);
       if (hasQuadOther) quadStats.push(r);
       if (hasMissingGrind) ungrinded.push(r);
@@ -1163,6 +1219,9 @@ function RuneEfficiencyAndQuads({ box }) {
       total6Star: effCount,
       count100,
       count90,
+      ungrindedSpd: ungrindedSpd.sort((a, b) => (b.eff || 0) - (a.eff || 0)),
+      ungrindedPct: ungrindedPct.sort((a, b) => (b.eff || 0) - (a.eff || 0)),
+      gemCandidates: gemCandidates.sort((a, b) => (b.eff || 0) - (a.eff || 0)),
       quadSpd: quadSpd.sort((a, b) => (b.eff || 0) - (a.eff || 0)),
       quadStats: quadStats.sort((a, b) => (b.eff || 0) - (a.eff || 0)),
       ungrinded: ungrinded.sort((a, b) => (b.eff || 0) - (a.eff || 0)),
@@ -1171,11 +1230,13 @@ function RuneEfficiencyAndQuads({ box }) {
   }, [runes]);
 
   const displayedRunes = useMemo(() => {
+    if (filter === 'ungrinded-spd') return analysis.ungrindedSpd;
+    if (filter === 'ungrinded-pct') return analysis.ungrindedPct;
+    if (filter === 'gem-candidates') return analysis.gemCandidates;
     if (filter === 'quad-spd') return analysis.quadSpd;
-    if (filter === 'quad-stats') return analysis.quadStats;
-    if (filter === 'ungrinded') return analysis.ungrinded;
+    if (filter === 'all-ungrinded') return analysis.ungrinded;
     if (filter === 'top-eff') return analysis.topEff;
-    // 'all-quads' default: combine unique quad runes
+    // 'all-quads'
     const map = new Map();
     [...analysis.quadSpd, ...analysis.quadStats].forEach((r) => map.set(r.id, r));
     return Array.from(map.values()).sort((a, b) => (b.eff || 0) - (a.eff || 0));
@@ -1185,25 +1246,25 @@ function RuneEfficiencyAndQuads({ box }) {
     <div className="space-y-6">
       {/* Metric Cards Banner */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className={`${card} p-4 text-center border-purple-500/20 bg-purple-950/20`}>
-          <div className="text-[11px] font-bold text-purple-300 uppercase tracking-wider">ประสิทธิภาพเฉลี่ย (6★)</div>
-          <div className="text-2xl font-black text-white mt-1">{analysis.avgEff}%</div>
-          <div className="text-[10px] text-slate-400 mt-0.5">จากรูน 6 ดาว {analysis.total6Star.toLocaleString()} ชิ้น</div>
+        <div className={`${card} p-4 text-center border-cyan-500/30 bg-cyan-950/20`}>
+          <div className="text-[11px] font-bold text-cyan-300 uppercase tracking-wider">⚡ SPD ≥ 18 ยังไม่ขัด</div>
+          <div className="text-2xl font-black text-white mt-1">{analysis.ungrindedSpd.length} <span className="text-xs text-cyan-400">ชิ้น</span></div>
+          <div className="text-[10px] text-slate-400 mt-0.5">ขัดหินตำนานได้ถึง +22~+25</div>
         </div>
-        <div className={`${card} p-4 text-center border-emerald-500/20 bg-emerald-950/20`}>
-          <div className="text-[11px] font-bold text-emerald-300 uppercase tracking-wider">รูนเทพ (≥100% Eff)</div>
-          <div className="text-2xl font-black text-white mt-1">{analysis.count100} <span className="text-xs text-emerald-400">ชิ้น</span></div>
-          <div className="text-[10px] text-slate-400 mt-0.5">ค่าสเตตัสระดับสมบูรณ์แบบ</div>
+        <div className={`${card} p-4 text-center border-amber-500/30 bg-amber-950/20`}>
+          <div className="text-[11px] font-bold text-amber-300 uppercase tracking-wider">🛡️ % สเตตัส ≥ 20% ยังไม่ขัด</div>
+          <div className="text-2xl font-black text-white mt-1">{analysis.ungrindedPct.length} <span className="text-xs text-amber-400">ชิ้น</span></div>
+          <div className="text-[10px] text-slate-400 mt-0.5">HP%/ATK%/DEF% โรลสูงขาดหินขัด</div>
         </div>
-        <div className={`${card} p-4 text-center border-cyan-500/20 bg-cyan-950/20`}>
-          <div className="text-[11px] font-bold text-cyan-300 uppercase tracking-wider">Quad SPD (+20 ถึง +30)</div>
-          <div className="text-2xl font-black text-white mt-1">{analysis.quadSpd.length} <span className="text-xs text-cyan-400">ชิ้น</span></div>
-          <div className="text-[10px] text-slate-400 mt-0.5">สปีดลง 4 ครั้ง รูนทำความเร็ว</div>
+        <div className={`${card} p-4 text-center border-pink-500/30 bg-pink-950/20`}>
+          <div className="text-[11px] font-bold text-pink-300 uppercase tracking-wider">💎 ช่องเหมาะใส่หินแปลงออป</div>
+          <div className="text-2xl font-black text-white mt-1">{analysis.gemCandidates.length} <span className="text-xs text-pink-400">ชิ้น</span></div>
+          <div className="text-[10px] text-slate-400 mt-0.5">แปลง Flat Stat เป็น % เพิ่มประสิทธิภาพ</div>
         </div>
-        <div className={`${card} p-4 text-center border-amber-500/20 bg-amber-950/20`}>
-          <div className="text-[11px] font-bold text-amber-300 uppercase tracking-wider">รูน 6★ ยังขาดหินขัด</div>
-          <div className="text-2xl font-black text-white mt-1">{analysis.ungrinded.length} <span className="text-xs text-amber-400">ชิ้น</span></div>
-          <div className="text-[10px] text-slate-400 mt-0.5">สามารถขัดหินเพิ่มพลังได้ทันที</div>
+        <div className={`${card} p-4 text-center border-purple-500/30 bg-purple-950/20`}>
+          <div className="text-[11px] font-bold text-purple-300 uppercase tracking-wider">Quad Rolls ทั้งหมด</div>
+          <div className="text-2xl font-black text-white mt-1">{analysis.quadSpd.length + analysis.quadStats.length} <span className="text-xs text-purple-400">ชิ้น</span></div>
+          <div className="text-[10px] text-slate-400 mt-0.5">สปีด 4 เด้ง {analysis.quadSpd.length} ชิ้น</div>
         </div>
       </div>
 
@@ -1211,44 +1272,52 @@ function RuneEfficiencyAndQuads({ box }) {
       <div className={`${card} p-4 space-y-4`}>
         <div className="flex flex-wrap items-center gap-2">
           <button
+            onClick={() => setFilter('ungrinded-spd')}
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+              filter === 'ungrinded-spd' ? 'bg-cyan-600 text-white shadow-lg shadow-cyan-600/25' : 'text-slate-300 hover:bg-white/5'
+            }`}
+          >
+            ⚡ สปีดสูงยังไม่ขัด (SPD ≥ 18) ({analysis.ungrindedSpd.length})
+          </button>
+          <button
+            onClick={() => setFilter('ungrinded-pct')}
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+              filter === 'ungrinded-pct' ? 'bg-amber-600 text-white shadow-lg shadow-amber-600/25' : 'text-slate-300 hover:bg-white/5'
+            }`}
+          >
+            🛡️ % สูงยังไม่ขัด (≥ 20%) ({analysis.ungrindedPct.length})
+          </button>
+          <button
+            onClick={() => setFilter('gem-candidates')}
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+              filter === 'gem-candidates' ? 'bg-pink-600 text-white shadow-lg shadow-pink-600/25' : 'text-slate-300 hover:bg-white/5'
+            }`}
+          >
+            💎 เหมาะใส่หินแปลงออป (Flat to %) ({analysis.gemCandidates.length})
+          </button>
+          <button
             onClick={() => setFilter('all-quads')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
               filter === 'all-quads' ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/25' : 'text-slate-300 hover:bg-white/5'
             }`}
           >
-            ⚡ รูน Quad Rolls ทั้งหมด ({analysis.quadSpd.length + analysis.quadStats.length})
+            ⚡ Quad Rolls ({analysis.quadSpd.length + analysis.quadStats.length})
           </button>
           <button
-            onClick={() => setFilter('quad-spd')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-              filter === 'quad-spd' ? 'bg-cyan-600 text-white shadow-lg shadow-cyan-600/25' : 'text-slate-300 hover:bg-white/5'
+            onClick={() => setFilter('all-ungrinded')}
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+              filter === 'all-ungrinded' ? 'bg-slate-700 text-white shadow-lg' : 'text-slate-300 hover:bg-white/5'
             }`}
           >
-            💨 เฉพาะ Quad SPD ≥ +20 ({analysis.quadSpd.length})
-          </button>
-          <button
-            onClick={() => setFilter('quad-stats')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-              filter === 'quad-stats' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/25' : 'text-slate-300 hover:bg-white/5'
-            }`}
-          >
-            🛡️ Quad เลือด/โจมตี/คริ ≥ 28%+ ({analysis.quadStats.length})
-          </button>
-          <button
-            onClick={() => setFilter('ungrinded')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-              filter === 'ungrinded' ? 'bg-amber-600 text-white shadow-lg shadow-amber-600/25' : 'text-slate-300 hover:bg-white/5'
-            }`}
-          >
-            💎 ขาดหินขัด (Un-grinded) ({analysis.ungrinded.length})
+            🔧 รูนทั้งหมดที่ขาดหินขัด ({analysis.ungrinded.length})
           </button>
           <button
             onClick={() => setFilter('top-eff')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
               filter === 'top-eff' ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/25' : 'text-slate-300 hover:bg-white/5'
             }`}
           >
-            🏆 รูนคะแนนสูงสุด Top 30
+            🏆 Top 30 ประสิทธิภาพ
           </button>
         </div>
 
@@ -1628,6 +1697,16 @@ function PokedexCollection({ box, onNavigate, onLoadDemo }) {
 
             {/* Controls: Hide Filter Toggle + Mode Buttons */}
             <div className="flex flex-wrap items-center gap-2">
+              {/* Export LD5 Showcase Card PNG */}
+              <button
+                onClick={() => exportLdShowcaseCard({ wizardName: box?.wizard?.name || 'Summoner', ld5List: displayedLd5s })}
+                className="px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer border bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white shadow-lg shadow-purple-600/20"
+                title="บันทึกรูปการ์ดตู้สะสม LD 5★ เป็นไฟล์ PNG สำหรับแชร์โซเชียล"
+              >
+                <Share2 className="w-3.5 h-3.5" />
+                <span>บันทึกรูปตู้สะสม LD (PNG)</span>
+              </button>
+
               {/* Toggle to Hide Non-Summonable LDs */}
               <button
                 onClick={toggleHideNonSummonLd}

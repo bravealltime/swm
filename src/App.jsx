@@ -36,6 +36,8 @@ const VIEWS = {
   aegislink: lazy(() => import('./views/PluginCompanionView')),
   'my-box': lazy(() => import('./views/MyBoxView')),
   rta: lazy(() => import('./views/RtaAnalyticsView')),
+  'summon-simulator': lazy(() => import('./views/SummonSimulatorView')),
+  'siege-planner': lazy(() => import('./views/SiegePlannerView')),
   'guild-war-room': lazy(() => import('./views/GuildWarRoomView')),
 };
 

@@ -19,6 +19,9 @@ import ALL_MDC_DATA from '../data/allMdcData.json';
 import { MONSTERS } from '../data/monsters';
 import DUNGEON_DATA from '../data/dungeonRealStats.json';
 import RTA_META from '../data/swrtMetaMonsters.json';
+import { getMonsterBuild } from '../data/monsterBuilds';
+import { loadBox, baseAwakenedId } from '../utils/swexImport';
+import { loadUserBoxFromDB } from '../services/storageService';
 
 // Popular monsters for quick 1-click select
 const QUICK_PRESETS = [
@@ -29,7 +32,51 @@ const QUICK_PRESETS = [
 export default function WhereToUseView({ onNavigate, initialMonster = 'Byungchul' }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedMonsterName, setSelectedMonsterName] = useState(initialMonster);
-  const [activeTab, setActiveTab] = useState('all'); // 'all', 'defense', 'offense', 'pve', 'rta'
+  const [activeTab, setActiveTab] = useState('all'); // 'all', 'benchmarks', 'defense', 'offense', 'pve', 'rta'
+  const [userBox, setUserBox] = useState(() => loadBox());
+
+  React.useEffect(() => {
+    if (!userBox) {
+      loadUserBoxFromDB().then((dbBox) => {
+        if (dbBox) setUserBox(dbBox);
+      });
+    }
+  }, [userBox]);
+
+  const monsterBuild = useMemo(() => getMonsterBuild(selectedMonster.name), [selectedMonster]);
+
+  // Check if player owns this monster in their SWEX box
+  const ownedUnit = useMemo(() => {
+    if (!userBox?.units) return null;
+    const target = selectedMonster.name.toLowerCase();
+    return userBox.units.find(u => 
+      u.name?.toLowerCase() === target ||
+      (selectedMonster.thaiName && u.thaiName?.toLowerCase() === selectedMonster.thaiName.toLowerCase()) ||
+      u.masterId === selectedMonster.id ||
+      baseAwakenedId(u.masterId) === selectedMonster.id
+    );
+  }, [userBox, selectedMonster]);
+
+  // Calculate readiness score against Guardian 1-3 benchmarks
+  const readinessScore = useMemo(() => {
+    if (!ownedUnit || !monsterBuild?.benchmarks) return null;
+    const b = monsterBuild.benchmarks;
+    const stats = [
+      { current: ownedUnit.hp || 0, target: b.hp },
+      { current: ownedUnit.spd || 0, target: b.spd },
+      { current: ownedUnit.def || 0, target: b.def },
+      { current: ownedUnit.atk || 0, target: b.atk },
+      { current: ownedUnit.cr || 0, target: b.cr },
+      { current: ownedUnit.cd || 0, target: b.cd },
+      { current: ownedUnit.res || 0, target: b.res },
+      { current: ownedUnit.acc || 0, target: b.acc },
+    ];
+    const totalRatio = stats.reduce((acc, s) => {
+      if (!s.target) return acc + 1;
+      return acc + Math.min(1.15, s.current / s.target);
+    }, 0);
+    return Math.round((totalRatio / stats.length) * 100);
+  }, [ownedUnit, monsterBuild]);
 
   // Find monster object from monsters database
   const selectedMonster = useMemo(() => {
@@ -301,6 +348,14 @@ export default function WhereToUseView({ onNavigate, initialMonster = 'Byungchul
           ดูภาพรวมทั้งหมด ({defenseMatches.length + counterMatches.length + dungeonMatches.length} จุดใช้งาน)
         </button>
         <button
+          onClick={() => setActiveTab('benchmarks')}
+          className={`px-4 py-2 rounded-lg text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
+            activeTab === 'benchmarks' ? 'bg-amber-600 text-white shadow-sm' : 'text-slate-400 hover:text-white'
+          }`}
+        >
+          🏆 สถิติรูน Guardian (Benchmarks)
+        </button>
+        <button
           onClick={() => setActiveTab('defense')}
           className={`px-4 py-2 rounded-lg text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
             activeTab === 'defense' ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-400 hover:text-white'
@@ -337,6 +392,175 @@ export default function WhereToUseView({ onNavigate, initialMonster = 'Byungchul
       </div>
 
       {/* Content Sections */}
+
+      {/* 0. Guardian Rune & Stat Benchmarks Section */}
+      {(activeTab === 'all' || activeTab === 'benchmarks') && monsterBuild && (
+        <div className="p-5 sm:p-6 rounded-2xl bg-gradient-to-br from-[#101724] via-[#131c2c] to-[#0c121c] border border-amber-500/30 shadow-xl space-y-5">
+          {/* Header */}
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-4 border-b border-amber-500/20">
+            <div>
+              <div className="flex items-center gap-2">
+                <div className="p-2 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/30">
+                  <Trophy className="w-5 h-5" />
+                </div>
+                <h3 className="text-lg font-black text-white flex items-center gap-2">
+                  สถิติ & บิลด์รูนระดับการ์เดียน (Guardian 1-3 Benchmarks)
+                  <span className="px-2 py-0.5 text-[10px] font-bold uppercase rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                    G1-G3 Target
+                  </span>
+                </h3>
+              </div>
+              <p className="text-xs text-slate-400 mt-1">
+                ค่าสถิติเป้าหมายที่ผู้เล่นระดับการ์เดียนนิยมทำ เปรียบเทียบกับมอนสเตอร์ในไอดีของคุณ
+              </p>
+            </div>
+
+            {/* Readiness Score Badge */}
+            {ownedUnit ? (
+              <div className="bg-emerald-950/40 border border-emerald-500/40 px-3.5 py-2 rounded-xl flex items-center gap-3">
+                <div>
+                  <div className="text-[10px] text-emerald-400 font-bold uppercase">ความพร้อมระดับ Guardian</div>
+                  <div className="text-lg font-black text-white font-mono">
+                    {readinessScore}% {readinessScore >= 90 ? '🌟 G1-G3 Ready' : readinessScore >= 75 ? '⚡ ใช้งานได้ดี' : '🛠️ ต้องขัดรูนเพิ่ม'}
+                  </div>
+                </div>
+                <div className="w-10 h-10 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 font-black text-xs font-mono">
+                  {readinessScore}%
+                </div>
+              </div>
+            ) : (
+              <div className="bg-slate-900/60 border border-slate-800 px-3 py-1.5 rounded-xl text-xs text-slate-400">
+                ยังไม่มี {selectedMonster.name} ในกล่อง SWEX ของคุณ
+              </div>
+            )}
+          </div>
+
+          {/* Recommended Sets, Slots & Artifacts */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+            <div className="bg-[#0a0f18] p-3.5 rounded-xl border border-[#1d2b3f]">
+              <div className="text-slate-400 font-bold mb-2 flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-amber-400" /> เซ็ตรูนยอดนิยม:
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                {monsterBuild.sets?.map((set, i) => (
+                  <span key={i} className="px-2 py-1 bg-amber-500/10 text-amber-300 border border-amber-500/20 rounded-md font-bold">
+                    {set}
+                  </span>
+                ))}
+              </div>
+              {ownedUnit && (
+                <div className="mt-2 text-[11px] text-slate-400 pt-2 border-t border-slate-800/80">
+                  เซ็ตที่ใส่อยู่: <strong className="text-emerald-400">{ownedUnit.sets?.join(' / ') || 'ไม่ครบเซ็ต'}</strong>
+                </div>
+              )}
+            </div>
+
+            <div className="bg-[#0a0f18] p-3.5 rounded-xl border border-[#1d2b3f]">
+              <div className="text-slate-400 font-bold mb-2 flex items-center gap-1.5">
+                <Layers className="w-3.5 h-3.5 text-blue-400" /> ออปชั่นหลัก ช่อง 2 / 4 / 6:
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                {monsterBuild.slots246?.map((slot, i) => (
+                  <span key={i} className="px-2 py-1 bg-blue-500/10 text-blue-300 border border-blue-500/20 rounded-md font-bold">
+                    {slot}
+                  </span>
+                ))}
+              </div>
+              {ownedUnit && (
+                <div className="mt-2 text-[11px] text-slate-400 pt-2 border-t border-slate-800/80">
+                  ประสิทธิภาพรูน: <strong className="text-cyan-400">{ownedUnit.runeEff || 0}%</strong>
+                </div>
+              )}
+            </div>
+
+            <div className="bg-[#0a0f18] p-3.5 rounded-xl border border-[#1d2b3f]">
+              <div className="text-slate-400 font-bold mb-2 flex items-center gap-1.5">
+                <Flame className="w-3.5 h-3.5 text-rose-400" /> อาร์ติแฟกต์ที่แนะนำ:
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                {monsterBuild.artifacts?.map((art, i) => (
+                  <span key={i} className="px-2 py-1 bg-rose-500/10 text-rose-300 border border-rose-500/20 rounded-md font-medium text-[11px]">
+                    {art}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* 8 Stats Benchmark Grid with User Comparison */}
+          <div>
+            <div className="text-xs font-bold text-slate-300 mb-2.5 flex items-center justify-between">
+              <span>สเตตัสเป้าหมาย Guardian (G1-G3 Target) เทียบกับไอดีของคุณ:</span>
+              {ownedUnit && (
+                <span className="text-[11px] text-emerald-400 font-mono">
+                  ข้อมูลจากมอนสเตอร์เลเวล {ownedUnit.level}★{ownedUnit.stars}
+                </span>
+              )}
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {[
+                { label: 'HP (พลังชีวิต)', key: 'hp', target: monsterBuild.benchmarks?.hp, current: ownedUnit?.hp, unit: '' },
+                { label: 'SPD (ความเร็วรวม)', key: 'spd', target: monsterBuild.benchmarks?.spd, current: ownedUnit?.spd, unit: '' },
+                { label: 'DEF (พลังป้องกัน)', key: 'def', target: monsterBuild.benchmarks?.def, current: ownedUnit?.def, unit: '' },
+                { label: 'ATK (พลังโจมตี)', key: 'atk', target: monsterBuild.benchmarks?.atk, current: ownedUnit?.atk, unit: '' },
+                { label: 'CR (อัตราคริ)', key: 'cr', target: monsterBuild.benchmarks?.cr, current: ownedUnit?.cr, unit: '%' },
+                { label: 'CD (แรงคริ)', key: 'cd', target: monsterBuild.benchmarks?.cd, current: ownedUnit?.cd, unit: '%' },
+                { label: 'RES (ต้านทาน)', key: 'res', target: monsterBuild.benchmarks?.res, current: ownedUnit?.res, unit: '%' },
+                { label: 'ACC (ความแม่น)', key: 'acc', target: monsterBuild.benchmarks?.acc, current: ownedUnit?.acc, unit: '%' }
+              ].map(item => {
+                const pct = item.current && item.target ? Math.round((item.current / item.target) * 100) : 0;
+                const isMet = pct >= 100;
+
+                return (
+                  <div key={item.key} className="bg-[#0a0f18] p-3 rounded-xl border border-[#1d2b3f] flex flex-col justify-between">
+                    <div>
+                      <div className="text-[11px] text-slate-400 font-medium">{item.label}</div>
+                      <div className="text-sm font-bold text-white font-mono mt-1 flex items-baseline justify-between">
+                        <span className="text-amber-400">เป้า: {item.target?.toLocaleString()}{item.unit}</span>
+                        {item.current !== undefined && (
+                          <span className={`text-xs ${isMet ? 'text-emerald-400' : 'text-slate-300'}`}>
+                            {item.current?.toLocaleString()}{item.unit}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    {ownedUnit && item.target && (
+                      <div className="mt-2">
+                        <div className="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
+                          <div 
+                            className={`h-full rounded-full transition-all ${isMet ? 'bg-emerald-400' : pct >= 80 ? 'bg-amber-400' : 'bg-rose-400'}`}
+                            style={{ width: `${Math.min(100, pct)}%` }}
+                          />
+                        </div>
+                        <div className="flex items-center justify-between text-[10px] mt-1">
+                          <span className={isMet ? 'text-emerald-400 font-bold' : 'text-slate-400'}>
+                            {isMet ? '✨ ผ่านเกณฑ์' : `${pct}% ของเป้า`}
+                          </span>
+                          <span className="text-slate-500 font-mono">
+                            {isMet ? '+' + (item.current - item.target) : '-' + (item.target - item.current)}
+                          </span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Expert Pro Tip */}
+          {monsterBuild.tips && (
+            <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-3 flex items-start gap-2.5 text-xs text-amber-200">
+              <Zap className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+              <div>
+                <strong className="text-amber-300">เคล็ดลับการปั้นมอนสเตอร์ตัวนี้:</strong> {monsterBuild.tips}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* 1. Defenses Section */}
       {(activeTab === 'all' || activeTab === 'defense') && (

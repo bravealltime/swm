@@ -11,6 +11,7 @@ export const NAVIGATION_CATEGORIES = [
       { id: 'defense-trending', label: 'ทีมตั้งรับยอดนิยมทั่วโลก', icon: 'TrendingUp' },
       { id: 'monster-defense-trending', label: 'Tier List มอนสเตอร์ตั้งรับ', icon: 'Shield' },
       { id: 'monster-offense-trending', label: 'Tier List มอนสเตอร์ตัวบุก', icon: 'Swords' },
+      { id: 'siege-planner', label: 'จัด 10 ทีมบุก Siege (Deck Builder)', icon: 'Swords', badge: 'ใหม่' },
       { id: 'siege-calculator', label: 'เครื่องคำนวณคะแนน Siege', icon: 'Calculator' },
       { id: 'siege-tournament', label: 'ทัวร์นาเมนต์ Siege ชิงแชมป์โลก', icon: 'Trophy' },
       { id: '3mdc-stats', label: 'ศูนย์สถิติและรายงาน 3MDC', icon: 'BarChart3' },
@@ -37,6 +38,7 @@ export const NAVIGATION_CATEGORIES = [
     id: 'tools-dungeons',
     title: 'เครื่องมือช่วยเล่น & ดันเจี้ยน',
     items: [
+      { id: 'summon-simulator', label: 'ตู้จำลองเปิดคัมภีร์ (Summon Simulator)', icon: 'Sparkles', badge: 'LD 5★' },
       { id: 'tier-list-maker', label: 'สร้าง Tier List ของคุณเอง', icon: 'Trophy' },
       { id: 'artifact-optimizer', label: 'ดาเมจเสริมอาร์ติแฟกต์', icon: 'Flame', badge: 'Hot' },
       { id: 'speed-calculator', label: 'สปีดทิก & จูนความเร็วกันแซง', icon: 'Gauge' },

@@ -87,6 +87,8 @@ export default function Sidebar({
   const resolveView = (itemId) => {
     if (itemId === 'guardian-ladder' || itemId === 'guardian-meta') return 'guardian';
     if (itemId === 'my-box') return 'my-box';
+    if (itemId === 'summon-simulator') return 'summon-simulator';
+    if (itemId === 'siege-planner') return 'siege-planner';
     if (itemId === 'where2use') return 'where2use';
     if (itemId === '3mdc-stats') return '3mdc-stats';
     if (itemId === 'game-guides') return 'game-guides';
@@ -206,6 +208,8 @@ export default function Sidebar({
                       const isActive =
                         (item.id === '3mdc-search' && currentView === '3mdc') ||
                         (item.id === 'where2use' && currentView === 'where2use') ||
+                        (item.id === 'summon-simulator' && currentView === 'summon-simulator') ||
+                        (item.id === 'siege-planner' && currentView === 'siege-planner') ||
                         (item.id === '3mdc-stats' && currentView === '3mdc-stats') ||
                         (item.id === 'game-guides' && currentView === 'game-guides') ||
                         ((item.id === 'guardian-ladder' || item.id === 'guardian-meta') && currentView === 'guardian') ||
