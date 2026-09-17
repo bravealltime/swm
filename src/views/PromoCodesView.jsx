@@ -14,6 +14,7 @@ import {
   Info
 } from 'lucide-react';
 import { PROMO_CODES } from '../data/promoCodes';
+import { useLocalSet } from '../hooks/useLocalStorage';
 
 export default function PromoCodesView() {
   const [codes, setCodes] = useState(PROMO_CODES);
@@ -22,6 +23,9 @@ export default function PromoCodesView() {
   const [newCodeInput, setNewCodeInput] = useState('');
   const [newRewardInput, setNewRewardInput] = useState('');
   const [toastMessage, setToastMessage] = useState(null);
+  // Which codes this device has already redeemed (persisted locally)
+  const redeemed = useLocalSet('swm:redeemed-codes');
+  const pendingCodes = codes.filter((c) => !redeemed.has(c.code));
 
   const showToast = (msg) => {
     setToastMessage(msg);
@@ -33,6 +37,12 @@ export default function PromoCodesView() {
     setCopiedCode(code);
     showToast(`คัดลอกโค้ด "${code}" เรียบร้อยแล้ว!`);
     setTimeout(() => setCopiedCode(null), 2500);
+  };
+
+  const handleCopyAllPending = () => {
+    if (!pendingCodes.length) return;
+    navigator.clipboard.writeText(pendingCodes.map((c) => c.code).join(String.fromCharCode(10)));
+    showToast(`คัดลอก ${pendingCodes.length} โค้ดที่ยังไม่ได้รับแล้ว (คั่นบรรทัด)`);
   };
 
   const handleVote = (codeId, type) => {
@@ -121,6 +131,16 @@ export default function PromoCodesView() {
             <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-mono font-black border border-emerald-500/30">
               {codes.length} โค้ด
             </span>
+            {redeemed.list.length > 0 && (
+              <span className="text-xs text-slate-400">รับแล้ว {codes.length - pendingCodes.length} • เหลือ {pendingCodes.length}</span>
+            )}
+            <button
+              onClick={handleCopyAllPending}
+              disabled={!pendingCodes.length}
+              className="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#182333] text-slate-200 hover:bg-[#24334a] disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1.5 cursor-pointer"
+            >
+              <Copy className="w-3.5 h-3.5" /> คัดลอกที่ยังไม่ได้รับทั้งหมด
+            </button>
           </div>
           <span className="text-xs text-slate-400 flex items-center gap-1.5">
             <Clock className="w-4 h-4 text-emerald-400" />
@@ -132,12 +152,21 @@ export default function PromoCodesView() {
           {codes.map((item) => (
             <div 
               key={item.id}
-              className="p-5 hover:bg-white/[0.03] transition-colors flex flex-col md:flex-row md:items-center justify-between gap-4"
+              className={`p-5 hover:bg-white/[0.03] transition-colors flex flex-col md:flex-row md:items-center justify-between gap-4 ${redeemed.has(item.code) ? 'opacity-60' : ''}`}
             >
               {/* Code & Copy */}
               <div className="space-y-1 min-w-[240px]">
-                <div className="flex items-center gap-2.5">
-                  <span className="font-mono text-lg sm:text-xl font-black text-emerald-400 tracking-wider">
+                <div className="flex items-center gap-2.5 flex-wrap">
+                  <label className="flex items-center gap-1.5 text-xs text-slate-300 cursor-pointer select-none" title="ติ๊กเมื่อรับของแล้ว (จำเฉพาะเครื่องนี้)">
+                    <input
+                      type="checkbox"
+                      checked={redeemed.has(item.code)}
+                      onChange={() => redeemed.toggle(item.code)}
+                      className="w-4 h-4 rounded border-slate-600 bg-slate-900 accent-emerald-500 cursor-pointer"
+                    />
+                    <span className={redeemed.has(item.code) ? 'text-emerald-400 font-bold' : ''}>{redeemed.has(item.code) ? 'รับแล้ว' : 'ยังไม่ได้รับ'}</span>
+                  </label>
+                  <span className={`font-mono text-lg sm:text-xl font-black tracking-wider ${redeemed.has(item.code) ? 'text-slate-400 line-through decoration-slate-500' : 'text-emerald-400'}`}>
                     {item.code}
                   </span>
                   <button

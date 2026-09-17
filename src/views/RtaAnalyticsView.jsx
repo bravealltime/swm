@@ -23,6 +23,7 @@ import MonsterAvatar from '../components/MonsterAvatar';
 import tierData from '../data/swrtTierList.json';
 import metaData from '../data/swrtMetaMonsters.json';
 import cutoffData from '../data/swrtRankCutoffs.json';
+import { fetchLiveCutoffs } from '../services/swrtLive';
 import replaysData from '../data/swrtRecentReplays.json';
 import highdataMap from '../data/swrtMonsterHighdata.json';
 
@@ -126,8 +127,20 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
     });
   }, [replaySearch]);
 
-  const nowLine = cutoffData.now || {};
-  const historyLine = cutoffData.history || [];
+  // Live cutoffs from SWRT when the tab is opened; bundled snapshot until then / on failure
+  const [liveCutoffs, setLiveCutoffs] = useState(null);
+  const [liveStatus, setLiveStatus] = useState('idle'); // 'idle' (fetching) | 'live' | 'offline'
+  React.useEffect(() => {
+    if (activeTab !== 'cutoffs' || liveCutoffs) return;
+    const controller = new AbortController();
+    fetchLiveCutoffs({ signal: controller.signal })
+      .then((data) => { setLiveCutoffs(data); setLiveStatus('live'); })
+      .catch(() => { if (!controller.signal.aborted) setLiveStatus('offline'); });
+    return () => controller.abort();
+  }, [activeTab, liveCutoffs]);
+
+  const nowLine = liveCutoffs?.now || cutoffData.now || {};
+  const historyLine = liveCutoffs?.history || cutoffData.history || [];
 
   return (
     <div className="space-y-6 max-w-[1780px] 2xl:max-w-[1880px] mx-auto pb-16 animate-in fade-in duration-300">
@@ -769,8 +782,15 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
                 <Target className="w-5 h-5 text-amber-400" />
                 <span>เกณฑ์คะแนนตัดแรงค์ปัจจุบัน (Live RTA Rank Thresholds)</span>
               </h2>
-              <span className="text-xs text-slate-400 font-mono">
-                อัปเดตล่าสุด: {nowLine.nowTime || 'เรียลไทม์'}
+              <span className="text-xs font-mono flex items-center gap-2">
+                {liveStatus === 'live' && (
+                  <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/40 text-emerald-300 font-bold">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" /> LIVE
+                  </span>
+                )}
+                {liveStatus === 'idle' && <span className="text-slate-400">กำลังดึงข้อมูลสด...</span>}
+                {liveStatus === 'offline' && <span className="text-amber-300/90">ใช้ข้อมูลที่บันทึกไว้ (SWRT ไม่ตอบสนอง)</span>}
+                <span className="text-slate-400">อัปเดต: {nowLine.nowTime || '-'}</span>
               </span>
             </div>
 
@@ -779,8 +799,8 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
                 { rank: 'G3 (Guardian 3)', score: nowLine.g3?.score || 1501, cutRank: nowLine.g3?.rank || 300, color: 'border-amber-500/50 text-amber-400' },
                 { rank: 'G2 (Guardian 2)', score: nowLine.g2?.score || 1403, cutRank: nowLine.g2?.rank || 1000, color: 'border-purple-500/50 text-purple-400' },
                 { rank: 'G1 (Guardian 1)', score: nowLine.g1?.score || 1321, cutRank: nowLine.g1?.rank || 3000, color: 'border-rose-500/50 text-rose-400' },
-                { rank: 'P3 (Special 3)', score: nowLine.s3?.score || 1279, cutRank: nowLine.s3?.rank || 5000, color: 'border-cyan-500/50 text-cyan-400' },
-                { rank: 'P2 (Special 2)', score: nowLine.s2?.score || 1205, cutRank: nowLine.s2?.rank || 7500, color: 'border-emerald-500/50 text-emerald-400' }
+                { rank: 'C3 (Conqueror 3)', score: nowLine.s3?.score || 1279, cutRank: nowLine.s3?.rank || 5000, color: 'border-cyan-500/50 text-cyan-400' },
+                { rank: 'C2 (Conqueror 2)', score: nowLine.s2?.score || 1205, cutRank: nowLine.s2?.rank || 7500, color: 'border-emerald-500/50 text-emerald-400' }
               ].map((tier, idx) => (
                 <div key={idx} className={`p-4 rounded-2xl bg-[#101724] border ${tier.color} space-y-1 shadow-lg`}>
                   <div className="text-xs font-bold uppercase tracking-wider">{tier.rank}</div>

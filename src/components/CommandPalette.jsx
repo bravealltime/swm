@@ -1,7 +1,16 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { Search, X, Gift, Shield, Gauge, BookOpen, ArrowRight, Trophy, SearchX } from 'lucide-react';
+import { Search, X, Gift, Shield, Gauge, BookOpen, ArrowRight, Trophy, SearchX, User } from 'lucide-react';
 import { MONSTERS } from '../data/monsters';
 import { PROMO_CODES } from '../data/promoCodes';
+import playersIndex from '../data/swrtPlayersIndex.json';
+import curatedProfiles from '../data/playerProfiles.json';
+import { tierFromLevel, flagFromCountry } from '../data/swrtPlayerAdapter';
+
+// One flat, pre-lowercased list so each keystroke is a cheap scan
+const PLAYERS = [
+  ...curatedProfiles.map((p) => ({ name: p.name, lower: p.name.toLowerCase(), flag: p.flag, badge: p.rankBadge, score: p.score, note: p.displayName !== p.name ? p.displayName : 'Lucksack' })),
+  ...(playersIndex.players || []).map((p) => ({ name: p.n, lower: p.n.toLowerCase(), flag: flagFromCountry(p.c), badge: tierFromLevel(p.lv).rankBadge, score: p.s, note: `${p.m} แมตช์` })),
+];
 
 const QUICK_TOOLS = [
   { id: 'where2use', name: 'ใช้มอนสเตอร์ตัวนี้ที่ไหนดี? (Where to Use)', desc: 'ตรวจสอบการใช้งานในทีมรับ, ทีมบุก, ดันเจี้ยน และ RTA', icon: Shield, view: 'where2use' },
@@ -38,11 +47,22 @@ export default function CommandPalette({ onClose, onNavigate }) {
       run: () => onNavigate('catalog', { search: m.name || m.nameEn }),
     }));
 
+    const players = !q ? [] : (() => {
+      const starts = [];
+      const contains = [];
+      for (const p of PLAYERS) {
+        if (p.lower.startsWith(q)) starts.push(p);
+        else if (p.lower.includes(q)) contains.push(p);
+        if (starts.length >= 5) break;
+      }
+      return [...starts, ...contains].slice(0, 5);
+    })().map((p) => ({ kind: 'player', key: `player-${p.name}`, data: p, run: () => onNavigate('player-tracker', { initialPlayer: p.name }) }));
+
     const codes = PROMO_CODES.filter((c) =>
       !q || c.code.toLowerCase().includes(q) || c.rewards.some((r) => r.name.toLowerCase().includes(q))
     ).slice(0, 3).map((c) => ({ kind: 'code', key: `code-${c.id}`, data: c, run: () => onNavigate('codes') }));
 
-    return [...tools, ...monsters, ...codes];
+    return [...tools, ...players, ...monsters, ...codes];
   }, [q, onNavigate]);
 
   // Keep the highlighted row visible while arrowing through a long list
@@ -66,6 +86,7 @@ export default function CommandPalette({ onClose, onNavigate }) {
 
   const sections = [
     { kind: 'tool', title: 'เครื่องมือหลัก (Tools)' },
+    { kind: 'player', title: 'ผู้เล่น RTA (Players)' },
     { kind: 'monster', title: 'มอนสเตอร์ (Monsters)' },
     { kind: 'code', title: 'โค้ดแจกไอเทม (Codes)' },
   ];
@@ -97,7 +118,7 @@ export default function CommandPalette({ onClose, onNavigate }) {
             aria-controls="command-palette-results"
             aria-autocomplete="list"
             className="w-full bg-transparent border-none text-slate-100 placeholder-slate-500 focus:outline-none text-base"
-            placeholder="ค้นหามอนสเตอร์, โค้ดเกม, เครื่องมือ, หรือทีมแก้ทาง..."
+            placeholder="ค้นหาผู้เล่น RTA, มอนสเตอร์, โค้ดเกม หรือเครื่องมือ..."
             value={query}
             onChange={(e) => { setQuery(e.target.value); setActiveIndex(0); }}
             autoFocus
@@ -152,6 +173,25 @@ export default function CommandPalette({ onClose, onNavigate }) {
                             </div>
                           </div>
                           <ArrowRight className={`w-4 h-4 text-slate-400 transition-opacity ${active ? 'opacity-100' : 'opacity-0'}`} />
+                        </button>
+                      );
+                    }
+
+                    if (item.kind === 'player') {
+                      const p = item.data;
+                      return (
+                        <button key={item.key} {...common} className={`${rowClass(index)} justify-between`}>
+                          <div className="flex items-center gap-3 min-w-0">
+                            <div className="p-2 rounded-lg bg-rose-600/20 text-rose-300"><User className="w-4 h-4" /></div>
+                            <div className="min-w-0">
+                              <div className="text-sm font-bold text-slate-200 truncate">{p.flag} {p.name}</div>
+                              <div className="text-xs text-slate-400 truncate">{p.note}</div>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2 shrink-0 text-xs font-mono">
+                            <span className="px-1.5 py-0.5 rounded font-black bg-rose-500/15 text-rose-300 border border-rose-500/30">{p.badge}</span>
+                            <span className="text-amber-300 font-bold">{p.score}</span>
+                          </div>
                         </button>
                       );
                     }

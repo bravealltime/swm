@@ -1,0 +1,51 @@
+name: Update SWRT data
+
+# Refreshes every dataset that comes from swranking.com's public endpoints and commits the
+# result. Vercel redeploys on the push. Runs at 03:00 Asia/Bangkok; can also be started by hand.
+on:
+  schedule:
+    - cron: '0 20 * * *'
+  workflow_dispatch:
+    inputs:
+      pages:
+        description: 'Guardian replay pages to scan (100 replays each)'
+        default: '30'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-swrt-data
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # Tier list, pick/win/ban, rank cutoffs (also rewrites the replay file, which the next step redoes properly)
+      - name: Tier list, meta stats, rank cutoffs
+        run: node scripts/extract_swrt_data.cjs
+
+      - name: Recent Guardian replays (60, de-duplicated)
+        run: node scripts/fetch_more_replays.cjs
+
+      - name: Guardian player index, match shards, replay meta
+        run: node scripts/fetch_swrt_players.cjs --pages=${{ github.event.inputs.pages || '30' }} --top=100
+
+      - name: Commit refreshed data
+        run: |
+          git config user.name "swm-data-bot"
+          git config user.email "swm-data-bot@users.noreply.github.com"
+          git add src/data public/data
+          if git diff --cached --quiet; then
+            echo "No data changes"; exit 0
+          fi
+          git commit -m "data: refresh SWRT datasets ($(date -u +%Y-%m-%d))"
+          git push

@@ -20,6 +20,7 @@ const VIEWS = {
   'draft-explorer': lazy(() => import('./views/DraftExplorerView')),
   'rta-synergies': lazy(() => import('./views/RtaSynergiesView')),
   'meta-dashboard': lazy(() => import('./views/MetaDashboardView')),
+  guardian: lazy(() => import('./views/GuardianView')),
   'tier-list-maker': lazy(() => import('./views/TierListMakerView')),
   trending: lazy(() => import('./views/TrendingAnalyticsView')),
   dungeons: lazy(() => import('./views/DungeonStatsView')),
@@ -33,6 +34,7 @@ const VIEWS = {
   artifact: lazy(() => import('./views/ArtifactOptimizerView')),
   recruit: lazy(() => import('./views/GuildRecruitView')),
   aegislink: lazy(() => import('./views/PluginCompanionView')),
+  'my-box': lazy(() => import('./views/MyBoxView')),
   rta: lazy(() => import('./views/RtaAnalyticsView')),
 };
 
@@ -47,7 +49,7 @@ function ViewLoading() {
   );
 }
 
-const RTA_VIEWS = ['rta', 'player-tracker', 'draft-explorer', 'rta-synergies', 'meta-dashboard'];
+const RTA_VIEWS = ['rta', 'player-tracker', 'draft-explorer', 'rta-synergies', 'meta-dashboard', 'guardian'];
 
 export default function App() {
   const [route, setRoute] = useState(() => parseLocation());

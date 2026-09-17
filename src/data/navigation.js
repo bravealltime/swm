@@ -20,6 +20,8 @@ export const NAVIGATION_CATEGORIES = [
     title: 'เวิลด์อารีน่า & จัดอันดับ (RTA)',
     items: [
       { id: 'player-tracker', label: 'ค้นหาสถิติผู้เล่น (Player Tracker)', icon: 'Search' },
+      { id: 'guardian-ladder', label: 'อันดับผู้เล่น Guardian (คนไทย & ทั่วโลก)', icon: 'Award', badge: 'จริง' },
+      { id: 'guardian-meta', label: 'เมต้า & คอมโบจากรีเพลย์ Guardian', icon: 'Flame', badge: 'จริง' },
       { id: 'draft-explorer', label: 'จำลองดราฟต์ 5v5', icon: 'Swords' },
       { id: 'rta-synergies', label: 'คอมโบดูโอ้ & ทริโอ้ (Synergies)', icon: 'Users', badge: 'ใหม่' },
       { id: 'meta-dashboard', label: 'เมต้าแดชบอร์ด & การกระจายแรงค์', icon: 'BarChart3' },
@@ -49,6 +51,7 @@ export const NAVIGATION_CATEGORIES = [
     id: 'community-account',
     title: 'ชุมชน & เชื่อมต่อไอดี (SWEX)',
     items: [
+      { id: 'my-box', label: 'กล่องมอนสเตอร์ของฉัน (นำเข้า SWEX)', icon: 'Layers', badge: 'ใหม่' },
       { id: 'guild-recruiting', label: 'ประกาศรับสมัครกิลด์', icon: 'UserPlus' },
       { id: 'aegislink', label: 'AegisLink ปลั๊กอินส่งข้อมูลสด', icon: 'Cpu', badge: 'SWEX' },
       { id: 'faq-guides', label: 'คู่มือ & คำถามพบบ่อย (FAQ)', icon: 'HelpCircle' },

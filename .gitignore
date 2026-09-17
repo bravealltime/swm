@@ -23,3 +23,6 @@ swgt_raw/
 *.njsproj
 *.sln
 *.sw?
+
+# SWRT dataset builder scratch
+.cache/

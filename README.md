@@ -35,3 +35,27 @@
 - **Deployment:** Vercel (Auto-deployment via GitHub CI/CD)
 - **Data Engine:** Pre-compiled Client Datasets for 0ms Latency Instant Search
 
+
+---
+
+## 📡 แหล่งข้อมูล RTA (SWRT) และการอัปเดต
+
+ข้อมูล RTA ดึงจาก endpoint **สาธารณะ** ของ [swranking.com](https://www.swranking.com) (`https://m.swranking.com/api`) เท่านั้น — ไม่ใช้บัญชี/token และไม่แตะ endpoint ค้นหาผู้เล่นที่ต้อง login (`/player/list`, `/player/detail`, `/player/searchPlayer`)
+
+| ข้อมูล | Endpoint | ไฟล์ | สคริปต์ |
+|---|---|---|---|
+| Tier list, Pick/Win/Ban, รีเพลย์ล่าสุด, คะแนนตัดแรงค์ | `monsterBase/getMonsterLevel`, `monster/statistical`, `player/replayallist`, `player/nowline` | `swrtTierList.json`, `swrtMetaMonsters.json`, `swrtRecentReplays.json`, `swrtRankCutoffs.json` | `node scripts/extract_swrt_data.cjs` |
+| โปรไฟล์ผู้เล่น Guardian (สร้างจากรีเพลย์สาธารณะ + ผู้เล่นท็อปต่อมอนสเตอร์) | `player/replayallist?level=1`, `monster/topPlayer` | `swrtPlayersIndex.json` (ค้นหา, อยู่ใน bundle) + `public/data/swrt-matches/*.json` (รีเพลย์ 32 shard โหลดเฉพาะคนที่เปิดดู) | `npm run players:fetch` (~50 นาที, บันทึกทีละหน้า หยุดกลางคันได้, `--rebuild` สร้างไฟล์ใหม่จาก `.cache/` โดยไม่ต้องดึงซ้ำ) |
+| คะแนนตัดแรงค์แบบสด | `player/nowline` (CORS เปิด) | ดึงตอนเปิดแท็บ Rank Cutoffs, cache 10 นาที, fallback เป็น JSON | `src/services/swrtLive.js` |
+
+## 🧰 แสดงข้อมูลของตัวเอง (กล่องมอนสเตอร์ของฉัน)
+
+หน้า `/my-box` รับไฟล์ JSON ที่ export จาก [SWEX](https://github.com/Xzandro/sw-exporter) (เมนู Profile → ไฟล์ `ชื่อไอดี-เลขไอดี.json`)
+ลากไฟล์วางในหน้าเว็บ → ระบบอ่าน `wizard_info` + `unit_list` ในเบราว์เซอร์ เก็บเฉพาะรายชื่อมอนสเตอร์/ดาว/เลเวล/สเตตัส ลง `localStorage` (`swm:mybox`)
+ไม่มีการอัปโหลดขึ้นเซิร์ฟเวอร์ และไม่ต้องแก้ไฟล์ในโปรเจกต์ จากนั้นเว็บจะบอกว่า
+
+- สูตรแก้ทาง 3MDC สูตรไหนที่คุณมีมอนสเตอร์ครบ (เทียบ `com2usId` กับ `allMdcData.json`)
+- มอนเมต้า Guardian 40 ตัวที่ถูกเลือกบ่อยสุด คุณมี/ขาดตัวไหน (จาก `swrtGuardianMeta.json`)
+- ทีม Abyss Hard ยอดนิยมที่คุณมีสมาชิกครบ
+
+ถ้าต้องการให้โปรไฟล์ของคุณอยู่ในหน้า Player Tracker แบบถาวร (ไม่ใช่เฉพาะเครื่องตัวเอง) ให้เพิ่ม record ใน `src/data/playerProfiles.json` ตาม schema ของรายการที่มีอยู่ แล้ว commit — หรือถ้าเล่นถึง Guardian ระบบจะเก็บจากรีเพลย์สาธารณะของ SWRT ให้เองในรอบอัปเดตถัดไป

@@ -85,6 +85,8 @@ export default function Sidebar({
   }, [isOpen, onClose]);
 
   const resolveView = (itemId) => {
+    if (itemId === 'guardian-ladder' || itemId === 'guardian-meta') return 'guardian';
+    if (itemId === 'my-box') return 'my-box';
     if (itemId === 'where2use') return 'where2use';
     if (itemId === '3mdc-stats') return '3mdc-stats';
     if (itemId === 'game-guides') return 'game-guides';
@@ -206,6 +208,8 @@ export default function Sidebar({
                         (item.id === 'where2use' && currentView === 'where2use') ||
                         (item.id === '3mdc-stats' && currentView === '3mdc-stats') ||
                         (item.id === 'game-guides' && currentView === 'game-guides') ||
+                        ((item.id === 'guardian-ladder' || item.id === 'guardian-meta') && currentView === 'guardian') ||
+                        (item.id === 'my-box' && currentView === 'my-box') ||
                         (item.id === 'siege-calculator' && currentView === 'siege-calculator') ||
                         ((item.id === 'defense-trending' || item.id === 'monster-defense-trending' || item.id === 'monster-offense-trending') && currentView === 'trending') ||
                         (item.id.includes('rta') && currentView === 'rta') ||

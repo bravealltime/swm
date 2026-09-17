@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { buildUrl } from '../router';
 import {
   Search,
@@ -32,7 +32,22 @@ import {
 import MonsterAvatar from '../components/MonsterAvatar';
 import playerProfiles from '../data/playerProfiles.json';
 import allMonstersData from '../data/allMonsters.json';
+import swrtPlayersDataset from '../data/swrtPlayersIndex.json';
+import { buildSwrtProfiles, buildMonsterIndex, loadRecentMatches, SMALL_SAMPLE } from '../data/swrtPlayerAdapter';
+
+// Curated Lucksack profiles first, then every player seen in the SWRT public Guardian
+// replay feed. A curated entry wins when the same name appears in both.
+const SWRT_PROFILES = buildSwrtProfiles(swrtPlayersDataset, allMonstersData);
+const CURATED_NAMES = new Set(playerProfiles.map((p) => p.name.toLowerCase()));
+const ALL_PROFILES = [
+  ...playerProfiles,
+  ...SWRT_PROFILES.filter((p) => !CURATED_NAMES.has(p.name.toLowerCase())),
+];
+const DATASET_META = swrtPlayersDataset.meta || {};
+const ALL_PROFILE_IDS = new Set(ALL_PROFILES.map((p) => p.id));
+const MONSTER_INDEX = buildMonsterIndex(allMonstersData);
 import { getR2AvatarUrl } from '../services/r2Service';
+import { useLocalSet, useRecentList } from '../hooks/useLocalStorage';
 
 const RANK_FILTERS = [
   { id: 'all', label: 'ทุกระดับแรงค์ (All Ranks)', icon: Globe },
@@ -50,106 +65,76 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
   const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'matches'
   const [rankCategoryFilter, setRankCategoryFilter] = useState('all'); // 'all' | 'legend' | 'guardian' | 'conqueror' | 'fighter'
   const [copiedLink, setCopiedLink] = useState(false);
-  const [customRankTier, setCustomRankTier] = useState('fighter'); // 'fighter' | 'conqueror' | 'guardian'
 
-  // Look up active player
+  // Look up active player by id or exact name. Unknown names get an honest "not found"
+  // panel instead of an invented profile.
   const activePlayer = useMemo(() => {
-    const found = playerProfiles.find(p => p.id.toLowerCase() === selectedPlayerId.toLowerCase() || p.name.toLowerCase() === selectedPlayerId.toLowerCase());
-    if (found) return found;
+    const q = selectedPlayerId.toLowerCase();
+    return ALL_PROFILES.find(p => p.id.toLowerCase() === q) || ALL_PROFILES.find(p => p.name.toLowerCase() === q) || null;
+  }, [selectedPlayerId]);
 
-    // Fallback dynamic profile if user searched an arbitrary name
-    const cleanName = selectedPlayerId;
-    const isFighter = customRankTier === 'fighter';
-    const isConq = customRankTier === 'conqueror';
+  // Closest names for the not-found panel
+  const nearMatches = useMemo(() => {
+    if (activePlayer) return [];
+    const q = selectedPlayerId.toLowerCase().trim();
+    const head = q.slice(0, 3);
+    return ALL_PROFILES
+      .filter(p => p.name.toLowerCase().includes(q) || (head.length >= 2 && p.name.toLowerCase().startsWith(head)))
+      .slice(0, 8);
+  }, [activePlayer, selectedPlayerId]);
 
-    // Tailored signature pool based on custom user-selected tier
-    const fighterF2PSignatures = [
-      { name: 'Fran', element: 'light', pickShare: 86.4, winRate: 52.4, matches: 168 },
-      { name: 'Loren', element: 'light', pickShare: 79.5, winRate: 51.0, matches: 154 },
-      { name: 'Verdehile', element: 'fire', pickShare: 72.8, winRate: 53.5, matches: 141 },
-      { name: 'Riley', element: 'wind', pickShare: 64.0, winRate: 50.8, matches: 124 },
-      { name: 'Eshir', element: 'light', pickShare: 52.4, winRate: 49.5, matches: 102 },
-      { name: 'Theomars', element: 'water', pickShare: 45.0, winRate: 48.0, matches: 87 }
-    ];
+  // SWRT profiles keep their matches in sharded files; fetch on demand
+  const [loadedMatches, setLoadedMatches] = useState({}); // profileId -> matches[]
+  const needsFetch = !!activePlayer && activePlayer.source === 'swrt' && !(activePlayer.id in loadedMatches);
+  const matchesLoading = needsFetch;
+  useEffect(() => {
+    if (!needsFetch) return;
+    let alive = true;
+    const { id, swrtId } = activePlayer;
+    loadRecentMatches(swrtId, MONSTER_INDEX, DATASET_META.shards || 32)
+      .then((matches) => { if (alive) setLoadedMatches((prev) => ({ ...prev, [id]: matches })); })
+      .catch(() => { if (alive) setLoadedMatches((prev) => ({ ...prev, [id]: [] })); });
+    return () => { alive = false; };
+  }, [needsFetch, activePlayer]);
 
-    const conqSignatures = [
-      { name: 'Oliver', element: 'wind', pickShare: 75.0, winRate: 58.2, matches: 195 },
-      { name: 'Miles', element: 'water', pickShare: 69.4, winRate: 56.5, matches: 180 },
-      { name: 'Racuni', element: 'fire', pickShare: 62.0, winRate: 55.0, matches: 161 },
-      { name: 'Chandra', element: 'water', pickShare: 54.8, winRate: 54.2, matches: 142 },
-      { name: 'Vanessa', element: 'fire', pickShare: 48.0, winRate: 53.8, matches: 125 },
-      { name: 'Sonia', element: 'wind', pickShare: 42.5, winRate: 55.0, matches: 110 }
-    ];
-
-    const baseSig = isFighter ? fighterF2PSignatures : isConq ? conqSignatures : playerProfiles[0].signatureMonsters;
-
-    return {
-      id: 'custom-' + cleanName.toLowerCase(),
-      name: cleanName,
-      displayName: cleanName,
-      profileAvatar: `https://api.dicebear.com/7.x/adventurer/svg?seed=${encodeURIComponent(cleanName)}`,
-      tagline: isFighter
-        ? 'Summoners War RTA Fighter (F2P / Everyday Summoner)'
-        : isConq
-        ? 'Summoners War RTA Conqueror Contender'
-        : 'Summoners War RTA High Guardian Player',
-      server: 'Global',
-      country: 'GLOBAL',
-      flag: '🌐',
-      guild: 'Independent Summoner',
-      rankCategory: customRankTier,
-      rankCategoryThai: isFighter ? 'ระดับ Fighter (F1-F3)' : isConq ? 'ระดับ Conqueror (C1-C3)' : 'ระดับ Guardian (G1-G3)',
-      rankTier: isFighter ? 'Fighter 3 ★★★ (สถิติประเมิน)' : isConq ? 'Conqueror 2 ★★ (สถิติประเมิน)' : 'Guardian 1 ★ (สถิติประเมิน)',
-      rankBadge: isFighter ? 'F3' : isConq ? 'C2' : 'G1',
-      score: isFighter ? 1349 : isConq ? 1540 : 1850,
-      worldRank: isFighter ? 61200 : isConq ? 14200 : 4250,
-      matchesRecorded: isFighter ? 195 : 280,
-      wins: isFighter ? 101 : 154,
-      losses: isFighter ? 94 : 126,
-      winRate: isFighter ? 51.8 : 55.0,
-      firstPickPreference: isFighter ? 44.0 : 52.0,
-      archetype: isFighter ? 'Fran & Loren F2P Core' : isConq ? 'Oliver & Miles Turn Cycle' : 'Flexible Meta Counter',
-      archetypeThai: isFighter ? 'มอนสเตอร์สายฟรีจัดเต็ม ล็อคเกจและกางปีก' : 'สปีดคอนโทรลวนเทิร์นเร็ว',
-      archetypeDescription: isFighter
-        ? 'จัดทีมด้วยมอนสเตอร์สายฟรีและ 4 ดาวที่ทุกคนหาได้ (Fran, Loren, Verdehile, Riley) เน้นการวนเกจสู้กับทีมหลากสไตล์'
-        : 'ปรับเปลี่ยนมอนสเตอร์ตามคู่แข่ง ใช้ความเร็วและการวนสกิลเป็นหัวใจหลัก',
-      signatureMonsters: baseSig.map((s, idx) => {
-        const foundM = Object.values(allMonstersData).find(m => m.name.toLowerCase() === s.name.toLowerCase());
-        return {
-          ...s,
-          thaiName: foundM?.thaiName || s.name,
-          avatarUrl: foundM?.avatarUrl || foundM?.imageUrl || 'https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0076_1_3.png',
-          stars: foundM?.stars || 5
-        };
-      }),
-      recentMatches: (isFighter ? playerProfiles.find(p => p.id === 'ohbigz')?.recentMatches : playerProfiles[0].recentMatches) || []
-    };
-  }, [selectedPlayerId, customRankTier]);
+  const recentMatches = useMemo(() => {
+    if (!activePlayer) return [];
+    return activePlayer.recentMatches ?? loadedMatches[activePlayer.id] ?? [];
+  }, [activePlayer, loadedMatches]);
 
   // Filtered player pool for quick shortcuts and autocomplete based on rankCategoryFilter
   const filteredPlayerList = useMemo(() => {
-    if (rankCategoryFilter === 'all') return playerProfiles;
-    return playerProfiles.filter(p => p.rankCategory === rankCategoryFilter);
+    const pool = rankCategoryFilter === 'all' ? ALL_PROFILES : ALL_PROFILES.filter(p => p.rankCategory === rankCategoryFilter);
+    // curated profiles first, then the strongest SWRT players
+    return [...pool].sort((a, b) => (a.source === 'swrt') - (b.source === 'swrt') || b.score - a.score);
   }, [rankCategoryFilter]);
 
   // Autocomplete search suggestions (Fuzzy match like Lucksack)
   const searchSuggestions = useMemo(() => {
     if (!searchQuery.trim()) return [];
     const q = searchQuery.toLowerCase().trim();
-    return playerProfiles.filter(p => {
+    const starts = [];
+    const contains = [];
+    for (const p of ALL_PROFILES) {
       const name = p.name.toLowerCase();
-      const id = p.id.toLowerCase();
-      const disp = (p.displayName || '').toLowerCase();
-      const g = (p.guild || '').toLowerCase();
-      const s = (p.server || '').toLowerCase();
-      return name.includes(q) || id.includes(q) || disp.includes(q) || g.includes(q) || s.includes(q);
-    }).slice(0, 10);
+      if (name.startsWith(q)) starts.push(p);
+      else if (name.includes(q) || p.id.toLowerCase().includes(q) || (p.displayName || '').toLowerCase().includes(q) || (p.guild || '').toLowerCase().includes(q)) contains.push(p);
+      if (starts.length >= 10) break;
+    }
+    return [...starts, ...contains].slice(0, 10);
   }, [searchQuery]);
+
+  // Per-device favourites and recent searches (names, so they survive dataset rebuilds)
+  const favorites = useLocalSet('swm:fav-players');
+  const [recentSearches, pushRecent, clearRecent] = useRecentList('swm:recent-players', 8);
 
   const handleSelectPlayer = (playerId) => {
     setSelectedPlayerId(playerId);
     setSearchQuery('');
     setIsSearchFocused(false);
+    const q = String(playerId).toLowerCase();
+    const found = ALL_PROFILES.find(p => p.id.toLowerCase() === q) || ALL_PROFILES.find(p => p.name.toLowerCase() === q);
+    if (found) pushRecent(found.name);
   };
 
   const handleSearchSubmit = (e) => {
@@ -164,18 +149,34 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
   };
 
   const copyShareLink = () => {
+    if (!activePlayer) return;
     navigator.clipboard.writeText(window.location.origin + buildUrl('player-tracker', { initialPlayer: activePlayer.name }));
     setCopiedLink(true);
     setTimeout(() => setCopiedLink(false), 2000);
   };
 
   // Filtered recent matches
+  // Opponents that exist in the dataset become links; count repeat meetings within the loaded matches
+  const opponentProfileId = (match) => {
+    const sid = match.opponent?.swrtId;
+    if (sid && ALL_PROFILE_IDS.has(`swrt-${sid}`)) return `swrt-${sid}`;
+    const byName = match.opponent?.name && ALL_PROFILES.find((p) => p.name.toLowerCase() === match.opponent.name.toLowerCase());
+    return byName ? byName.id : null;
+  };
+  const meetings = useMemo(() => {
+    const counts = {};
+    for (const m of recentMatches) {
+      const key = m.opponent?.swrtId || m.opponent?.name;
+      if (key) counts[key] = (counts[key] || 0) + 1;
+    }
+    return counts;
+  }, [recentMatches]);
+
   const filteredMatches = useMemo(() => {
-    if (!activePlayer.recentMatches) return [];
-    if (matchFilter === 'win') return activePlayer.recentMatches.filter(m => m.result === 'WIN');
-    if (matchFilter === 'loss') return activePlayer.recentMatches.filter(m => m.result === 'LOSS');
-    return activePlayer.recentMatches;
-  }, [activePlayer, matchFilter]);
+    if (matchFilter === 'win') return recentMatches.filter(m => m.result === 'WIN');
+    if (matchFilter === 'loss') return recentMatches.filter(m => m.result === 'LOSS');
+    return recentMatches;
+  }, [recentMatches, matchFilter]);
 
   // Rank badge styling helper
   const getBadgeStyle = (category, badge) => {
@@ -212,11 +213,12 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
               <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight flex items-center gap-3 flex-wrap">
                 ค้นหาสถิติผู้เล่น <span className="bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">Player Tracker</span>
                 <span className="text-xs font-semibold px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
-                  Lucksack.gg Real Data
+                  {ALL_PROFILES.length.toLocaleString()} ผู้เล่นจริง
                 </span>
               </h1>
               <p className="text-xs sm:text-sm text-slate-400 mt-1">
-                ระบบค้นหาสถิติผู้เล่น RTA พร้อมรูปโปรไฟล์จริง สถิติดราฟต์ 5v5 และมอนสเตอร์คู่ใจทุกระดับแรงค์
+                โปรไฟล์จาก Lucksack.gg และรีเพลย์ Guardian สาธารณะของ SWRT ({(DATASET_META.replaysScanned || 0).toLocaleString()} แมตช์
+                {DATASET_META.fetchedAt ? `, อัปเดต ${DATASET_META.fetchedAt.slice(0, 10)}` : ''}) — สถิติดราฟต์ 5v5 และมอนสเตอร์คู่ใจ
               </p>
             </div>
           </div>
@@ -352,12 +354,38 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
                 ))
               ) : (
                 <div className="p-4 text-center text-xs text-slate-400">
-                  ไม่พบผู้เล่นที่ตรงเป๊ะ กด <span className="text-blue-400 font-bold">"ค้นหา"</span> เพื่อดูสถิติประเมินของชื่อ "{searchQuery}"
+                  ไม่พบ "{searchQuery}" ในชุดข้อมูล — ครอบคลุมโปรไฟล์ Lucksack และผู้เล่นที่ปรากฏในรีเพลย์ Guardian ของ SWRT
                 </div>
               )}
             </div>
           )}
         </form>
+
+        {(favorites.list.length > 0 || recentSearches.length > 0) && (
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 pt-1 text-xs">
+            {favorites.list.length > 0 && (
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <span className="text-slate-400 font-semibold flex items-center gap-1"><Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" /> ติดตาม:</span>
+                {favorites.list.map((name) => (
+                  <button key={name} onClick={() => handleSelectPlayer(name)} className="px-2.5 py-1 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-200 border border-amber-500/30 font-medium cursor-pointer">
+                    {name}
+                  </button>
+                ))}
+              </div>
+            )}
+            {recentSearches.length > 0 && (
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <span className="text-slate-400 font-semibold">ล่าสุด:</span>
+                {recentSearches.map((name) => (
+                  <button key={name} onClick={() => handleSelectPlayer(name)} className="px-2.5 py-1 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] text-slate-300 border border-white/10 cursor-pointer">
+                    {name}
+                  </button>
+                ))}
+                <button onClick={clearRecent} className="text-slate-500 hover:text-slate-300 cursor-pointer" title="ล้างประวัติ">✕</button>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Quick Shortcuts for Selected Rank Tier */}
         <div className="flex items-center gap-2 flex-wrap pt-1">
@@ -395,52 +423,40 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
         </div>
       </div>
 
+      {!activePlayer ? (
+        <div className="rounded-3xl border border-amber-500/30 bg-amber-500/5 p-8 text-center space-y-4" role="status">
+          <Search className="w-10 h-10 text-amber-400 mx-auto" />
+          <h2 className="text-lg font-bold text-white">ไม่พบผู้เล่น “{selectedPlayerId}” ในชุดข้อมูล</h2>
+          <p className="text-sm text-slate-400 max-w-2xl mx-auto leading-relaxed">
+            ชุดข้อมูลครอบคลุมโปรไฟล์ Lucksack.gg และผู้เล่นที่ปรากฏในรีเพลย์ Guardian สาธารณะของ SWRT
+            {DATASET_META.replaysScanned ? ` (${DATASET_META.replaysScanned.toLocaleString()} แมตช์ล่าสุด)` : ''} —
+            ผู้เล่นระดับต่ำกว่า Guardian หรือที่ไม่ได้เล่นช่วงนี้จะยังไม่มีข้อมูล
+          </p>
+          {nearMatches.length > 0 && (
+            <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
+              <span className="text-xs text-slate-400">ชื่อใกล้เคียง:</span>
+              {nearMatches.map((p) => (
+                <button
+                  key={p.id}
+                  onClick={() => handleSelectPlayer(p.id)}
+                  className="px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800/80 hover:bg-slate-700 text-slate-200 border border-slate-700 cursor-pointer"
+                >
+                  {p.name} <span className="text-slate-400">{p.flag} {p.rankBadge}</span>
+                </button>
+              ))}
+            </div>
+          )}
+          <button
+            onClick={() => handleSelectPlayer('lest')}
+            className="text-xs font-bold text-blue-400 hover:text-blue-300 cursor-pointer"
+          >
+            กลับไปดูผู้เล่นแนะนำ
+          </button>
+        </div>
+      ) : (
+      <>
       {/* 3. Player Profile Overview Hero Card with Real Profile Picture */}
       <div className="rounded-3xl border border-white/[0.08] bg-[#0a0f19]/90 backdrop-blur-xl p-6 sm:p-8 shadow-2xl relative z-10 overflow-hidden">
-        {/* If Custom user-searched profile, show interactive Rank Estimator Switcher */}
-        {activePlayer.id.startsWith('custom-') && (
-          <div className="mb-4 p-3.5 bg-blue-600/10 border border-blue-500/30 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-            <div className="flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
-              <div className="text-xs text-slate-200">
-                สถิตินี้ถูกประเมินขึ้นสำหรับไอดี <strong className="text-white">"{activePlayer.name}"</strong> — คุณสามารถปรับระดับแรงค์จริงเพื่อดูสถิติและมอนสเตอร์ที่เหมาะสมได้:
-              </div>
-            </div>
-            <div className="flex items-center gap-1.5 shrink-0">
-              <button
-                onClick={() => setCustomRankTier('fighter')}
-                className={`px-2.5 py-1 rounded text-xs font-bold transition-all cursor-pointer ${
-                  customRankTier === 'fighter'
-                    ? 'bg-sky-600 text-white shadow-xs'
-                    : 'bg-slate-800 text-slate-400 hover:text-white'
-                }`}
-              >
-                ⭐ Fighter (สายฟรี)
-              </button>
-              <button
-                onClick={() => setCustomRankTier('conqueror')}
-                className={`px-2.5 py-1 rounded text-xs font-bold transition-all cursor-pointer ${
-                  customRankTier === 'conqueror'
-                    ? 'bg-amber-600 text-white shadow-xs'
-                    : 'bg-slate-800 text-slate-400 hover:text-white'
-                }`}
-              >
-                ⭐⭐ Conqueror
-              </button>
-              <button
-                onClick={() => setCustomRankTier('guardian')}
-                className={`px-2.5 py-1 rounded text-xs font-bold transition-all cursor-pointer ${
-                  customRankTier === 'guardian'
-                    ? 'bg-rose-600 text-white shadow-xs'
-                    : 'bg-slate-800 text-slate-400 hover:text-white'
-                }`}
-              >
-                ⭐⭐⭐ Guardian
-              </button>
-            </div>
-          </div>
-        )}
-
         <div className="flex flex-col xl:flex-row gap-6 justify-between items-start xl:items-center">
           {/* Left: Player Profile Picture, Name, Guild, Rank */}
           <div className="flex items-start sm:items-center gap-5">
@@ -461,6 +477,18 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
             <div className="space-y-1.5">
               <div className="flex items-center gap-2 flex-wrap">
                 <span className="text-2xl sm:text-3xl font-black text-white">{activePlayer.name}</span>
+                <button
+                  onClick={() => favorites.toggle(activePlayer.name)}
+                  aria-pressed={favorites.has(activePlayer.name)}
+                  aria-label={favorites.has(activePlayer.name) ? 'เลิกติดตามผู้เล่นนี้' : 'ติดตามผู้เล่นนี้'}
+                  className={`p-1.5 rounded-lg border transition-colors cursor-pointer ${
+                    favorites.has(activePlayer.name)
+                      ? 'bg-amber-500/15 border-amber-500/40 text-amber-400'
+                      : 'bg-white/[0.04] border-white/10 text-slate-400 hover:text-amber-300'
+                  }`}
+                >
+                  <Star className={`w-4 h-4 ${favorites.has(activePlayer.name) ? 'fill-amber-400' : ''}`} />
+                </button>
                 <span className="text-2xl">{activePlayer.flag}</span>
                 <span className="text-xs px-2.5 py-0.5 rounded-full bg-slate-800 border border-slate-700 text-slate-300 font-semibold">
                   เซิร์ฟเวอร์ {activePlayer.server}
@@ -487,6 +515,10 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
                 <span className="text-xs text-slate-400 font-semibold">
                   อันดับโลก: <strong className="text-blue-400">#{activePlayer.worldRank.toLocaleString()}</strong>
                 </span>
+                <span className="text-xs text-slate-400">•</span>
+                <span className={`text-xs font-semibold ${activePlayer.source === 'swrt' ? 'text-cyan-300/90' : 'text-emerald-300/90'}`}>
+                  {activePlayer.source === 'swrt' ? 'ที่มา: รีเพลย์สาธารณะ SWRT' : 'ที่มา: Lucksack.gg snapshot'}
+                </span>
               </div>
             </div>
           </div>
@@ -496,10 +528,19 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
             {/* Win Rate */}
             <div className="p-3.5 bg-[#0a0f18] rounded-xl border border-slate-800 text-center min-w-[110px]">
               <div className="text-xs text-slate-400 mb-1 font-medium">Win Rate รวม</div>
-              <div className="text-2xl font-black text-emerald-400 font-mono">{activePlayer.winRate}%</div>
-              <div className="w-full bg-slate-800 h-1.5 rounded-full mt-2 overflow-hidden">
-                <div className="bg-emerald-500 h-full rounded-full" style={{ width: `${activePlayer.winRate}%` }} />
-              </div>
+              {activePlayer.matchesRecorded < SMALL_SAMPLE ? (
+                <>
+                  <div className="text-2xl font-black text-slate-400 font-mono" title={`${activePlayer.winRate}% จาก ${activePlayer.matchesRecorded} แมตช์`}>—</div>
+                  <div className="text-[11px] text-amber-300/90 mt-1.5">ตัวอย่างน้อย ({activePlayer.matchesRecorded} แมตช์) ยังสรุปไม่ได้</div>
+                </>
+              ) : (
+                <>
+                  <div className="text-2xl font-black text-emerald-400 font-mono">{activePlayer.winRate}%</div>
+                  <div className="w-full bg-slate-800 h-1.5 rounded-full mt-2 overflow-hidden">
+                    <div className="bg-emerald-500 h-full rounded-full" style={{ width: `${activePlayer.winRate}%` }} />
+                  </div>
+                </>
+              )}
             </div>
 
             {/* Matches & Record */}
@@ -559,7 +600,7 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
               : 'bg-slate-800/60 hover:bg-slate-800 text-slate-400 hover:text-slate-200'
           }`}
         >
-          <Clock className="w-4 h-4" /> ประวัติการแข่งย้อนหลัง ({activePlayer.recentMatches?.length || 0} แมตช์)
+          <Clock className="w-4 h-4" /> ประวัติการแข่งย้อนหลัง ({recentMatches.length} แมตช์)
         </button>
       </div>
 
@@ -654,9 +695,11 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
 
             {/* Matches list */}
             <div className="space-y-3">
-              {activePlayer.recentMatches && activePlayer.recentMatches.length > 0 ? (
-                activePlayer.recentMatches.slice(0, 3).map((match) => (
-                  <MatchCard key={match.id} match={match} playerName={activePlayer.name} />
+              {matchesLoading ? (
+                <div className="py-6 text-center text-xs text-slate-400" role="status">กำลังโหลดรีเพลย์...</div>
+              ) : recentMatches.length > 0 ? (
+                recentMatches.slice(0, 3).map((match) => (
+                  <MatchCard key={match.id} match={match} playerName={activePlayer.name} onOpenPlayer={handleSelectPlayer} opponentProfileId={opponentProfileId(match)} meetings={meetings[match.opponent?.swrtId || match.opponent?.name]} />
                 ))
               ) : (
                 <div className="py-6 text-center text-xs text-slate-400">
@@ -685,7 +728,7 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
                     : 'bg-slate-800 text-slate-400 hover:text-white'
                 }`}
               >
-                ทั้งหมด ({activePlayer.recentMatches?.length || 0})
+                ทั้งหมด ({recentMatches.length})
               </button>
               <button
                 onClick={() => setMatchFilter('win')}
@@ -716,9 +759,11 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
 
           {/* Matches List */}
           <div className="space-y-4">
-            {filteredMatches.length > 0 ? (
+            {matchesLoading ? (
+              <div className="p-12 text-center bg-[#0f172a] rounded-2xl border border-slate-800 text-slate-400" role="status">กำลังโหลดรีเพลย์...</div>
+            ) : filteredMatches.length > 0 ? (
               filteredMatches.map((match) => (
-                <MatchCard key={match.id} match={match} playerName={activePlayer.name} />
+                <MatchCard key={match.id} match={match} playerName={activePlayer.name} onOpenPlayer={handleSelectPlayer} opponentProfileId={opponentProfileId(match)} meetings={meetings[match.opponent?.swrtId || match.opponent?.name]} />
               ))
             ) : (
               <div className="p-12 text-center bg-[#0f172a] rounded-2xl border border-slate-800 text-slate-400">
@@ -728,12 +773,14 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
           </div>
         </div>
       )}
+      </>
+      )}
     </div>
   );
 }
 
 // 5. Reusable Match Card Component with 5v5 Pick & Ban Visualization
-function MatchCard({ match, playerName }) {
+function MatchCard({ match, playerName, onOpenPlayer, opponentProfileId, meetings }) {
   const isWin = match.result === 'WIN';
 
   return (
@@ -756,9 +803,11 @@ function MatchCard({ match, playerName }) {
           </span>
 
           {/* Score Delta */}
-          <span className={`text-xs font-mono font-bold ${isWin ? 'text-emerald-400' : 'text-rose-400'}`}>
-            {match.scoreChange} pts
-          </span>
+          {match.scoreChange && (
+            <span className={`text-xs font-mono font-bold ${isWin ? 'text-emerald-400' : 'text-rose-400'}`}>
+              {match.scoreChange} pts
+            </span>
+          )}
 
           {match.firstPick && (
             <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-300 border border-amber-500/30">
@@ -769,11 +818,15 @@ function MatchCard({ match, playerName }) {
 
         <div className="text-xs text-slate-400 flex items-center gap-2">
           <span>{match.date}</span>
-          <span>•</span>
-          <span className="flex items-center gap-1 font-mono">
-            <Clock className="w-3.5 h-3.5 text-slate-400" />
-            {match.duration || '2:15'}
-          </span>
+          {match.duration && (
+            <>
+              <span>•</span>
+              <span className="flex items-center gap-1 font-mono">
+                <Clock className="w-3.5 h-3.5 text-slate-400" />
+                {match.duration}
+              </span>
+            </>
+          )}
         </div>
       </div>
 
@@ -807,9 +860,24 @@ function MatchCard({ match, playerName }) {
         <div className="lg:col-span-5 space-y-2">
           <div className="flex items-center justify-between text-xs">
             <span className="text-xs text-slate-400">คู่แข่ง</span>
-            <span className="font-bold text-slate-200 flex items-center gap-1.5">
-              {match.opponent?.flag} {match.opponent?.name}
+            <span className="font-bold text-slate-200 flex items-center gap-1.5 flex-wrap justify-end">
+              {opponentProfileId ? (
+                <button
+                  onClick={() => onOpenPlayer(opponentProfileId)}
+                  className="flex items-center gap-1 text-slate-100 hover:text-rose-300 underline decoration-dotted underline-offset-2 cursor-pointer"
+                  title="เปิดโปรไฟล์คู่แข่ง"
+                >
+                  {match.opponent?.flag} {match.opponent?.name}
+                </button>
+              ) : (
+                <span>{match.opponent?.flag} {match.opponent?.name}</span>
+              )}
               <span className="text-xs text-slate-400 font-normal">({match.opponent?.score} pts)</span>
+              {meetings > 1 && (
+                <span className="text-[11px] font-semibold px-1.5 py-0.5 rounded bg-purple-500/10 text-purple-300 border border-purple-500/30">
+                  เจอกัน {meetings} ครั้ง
+                </span>
+              )}
             </span>
           </div>
 

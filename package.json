@@ -9,7 +9,9 @@
     "lint": "oxlint",
     "preview": "vite preview",
     "r2:sync": "node scripts/syncToR2.js",
-    "r2:dry-run": "node scripts/syncToR2.js --dry-run"
+    "r2:dry-run": "node scripts/syncToR2.js --dry-run",
+    "players:fetch": "node scripts/fetch_swrt_players.cjs",
+    "players:quick": "node scripts/fetch_swrt_players.cjs --quick"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1134.0",

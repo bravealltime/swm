@@ -30,6 +30,7 @@ import MonsterAvatar from '../components/MonsterAvatar';
 import { PROMO_CODES } from '../data/promoCodes';
 import { LEADERBOARDS } from '../data/leaderboards';
 import { getR2AvatarUrl } from '../services/r2Service';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 
 const POPULAR_PRESETS = [
   { label: 'Seara + Orion + Perna', defKey: 'Seara,Orion,Perna', monsters: ['Seara', 'Orion', 'Perna'] },
@@ -53,10 +54,21 @@ export default function DashboardView({ onNavigate }) {
   // fetched after first paint instead of being part of the home-page bundle.
   const [mdcData, setMdcData] = useState(null);
   const [topRtaPlayers, setTopRtaPlayers] = useState([]);
+  const [thaiGuardians, setThaiGuardians] = useState(null); // { players, total, fetchedAt }
+  const [followedPlayers] = useLocalStorage('swm:fav-players', []);
   useEffect(() => {
     let alive = true;
     import('../data/allMdcData.json').then((m) => { if (alive) setMdcData(m.default); });
     import('../data/playerProfiles.json').then((m) => { if (alive) setTopRtaPlayers(m.default.slice(0, 4)); });
+    Promise.all([import('../data/swrtPlayersIndex.json'), import('../data/swrtPlayerAdapter')]).then(([idx, adapter]) => {
+      if (!alive) return;
+      const th = (idx.default.players || []).filter((p) => p.c === 'TH' && p.m > 0).sort((a, b) => b.s - a.s);
+      setThaiGuardians({
+        total: th.length,
+        fetchedAt: idx.default.meta?.fetchedAt,
+        players: th.slice(0, 5).map((p) => ({ ...p, tier: adapter.tierFromLevel(p.lv) })),
+      });
+    });
     return () => { alive = false; };
   }, []);
 
@@ -329,6 +341,57 @@ export default function DashboardView({ onNavigate }) {
             </div>
           </div>
 
+          {followedPlayers.length > 0 && (
+            <div className="flex items-center gap-2 flex-wrap text-xs">
+              <span className="text-amber-300 font-bold">⭐ ที่คุณติดตาม:</span>
+              {followedPlayers.map((name) => (
+                <button key={name} onClick={() => onNavigate('player-tracker', { initialPlayer: name })} className="px-2.5 py-1 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-200 border border-amber-500/30 cursor-pointer">
+                  {name}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {/* Thai Guardians from the public replay feed */}
+          <div className="rounded-2xl border border-rose-500/20 bg-rose-500/[0.04] p-4 space-y-3">
+            <div className="flex items-center justify-between gap-2">
+              <div>
+                <h3 className="text-sm font-black text-white">🇹🇭 Guardian คนไทยจากรีเพลย์จริง</h3>
+                <p className="text-[11px] text-slate-400">
+                  {thaiGuardians ? `${thaiGuardians.total} คนใน Guardian ตอนนี้ • SWRT ${thaiGuardians.fetchedAt?.slice(0, 10) || ''}` : 'กำลังโหลด...'}
+                </p>
+              </div>
+              <button
+                onClick={() => onNavigate('guardian')}
+                className="text-xs font-bold text-rose-300 hover:text-rose-200 flex items-center gap-1 cursor-pointer shrink-0"
+              >
+                ดูอันดับทั้งหมด <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+            {thaiGuardians && thaiGuardians.players.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-5 gap-2">
+                {thaiGuardians.players.map((p, i) => (
+                  <button
+                    key={p.id}
+                    onClick={() => onNavigate('player-tracker', { initialPlayer: p.n })}
+                    className="flex sm:flex-col items-center sm:items-start gap-2 p-2.5 rounded-xl bg-[#090e18] border border-white/[0.06] hover:border-rose-500/40 text-left cursor-pointer"
+                  >
+                    <span className="text-xs font-mono text-slate-400">#{i + 1}</span>
+                    <span className="text-xs font-bold text-white truncate w-full">{p.n}</span>
+                    <span className="flex items-center gap-1.5 text-[11px]">
+                      <span className="px-1 py-0.5 rounded font-black bg-rose-500/15 text-rose-300 border border-rose-500/30">{p.tier.rankBadge}</span>
+                      <span className="font-mono text-amber-300">{p.s.toLocaleString()}</span>
+                    </span>
+                  </button>
+                ))}
+              </div>
+            ) : thaiGuardians ? (
+              <div className="text-xs text-slate-400">ยังไม่พบผู้เล่นไทยในรีเพลย์ที่สแกน</div>
+            ) : (
+              <div className="h-16 rounded-xl bg-white/[0.02] animate-pulse" aria-busy="true" />
+            )}
+          </div>
+
           {/* Bottom Actions */}
           <div className="flex flex-wrap items-center gap-3 pt-4 border-t border-white/[0.06]">
             <button
@@ -336,7 +399,7 @@ export default function DashboardView({ onNavigate }) {
               className="flex-1 sm:flex-initial px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 transition-all cursor-pointer"
             >
               <Search className="w-4 h-4" />
-              <span>ค้นหาสถิติผู้เล่น RTA ทุกคน (39+ โปรไฟล์จริง)</span>
+              <span>ค้นหาสถิติผู้เล่น RTA (Lucksack + รีเพลย์ SWRT)</span>
             </button>
             <button
               onClick={() => onNavigate('rta')}

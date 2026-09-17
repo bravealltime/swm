@@ -1,4 +1,4 @@
-﻿const fs = require('fs');
+const fs = require('fs');
 const path = require('path');
 
 const localMonsters = JSON.parse(fs.readFileSync(path.resolve('src/data/allMonsters.json'), 'utf8'));
@@ -36,15 +36,21 @@ function formatPlayer(p) {
 
 async function getMoreReplays() {
   const allReplays = [];
+  // The API paginates with pageNum/pageSize (page/limit are ignored and always return page 1);
+  // level=1 keeps the feed to Guardian matches.
+  const seen = new Set();
   for (let page = 1; page <= 6; page++) {
     try {
       const res = await fetch('https://m.swranking.com/api/player/replayallist', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'User-Agent': 'Mozilla/5.0' },
-        body: JSON.stringify({ page, limit: 10 })
+        body: JSON.stringify({ pageNum: page, pageSize: 10, level: 1 })
       });
       const data = await res.json();
       for (const r of (data.data?.list || [])) {
+        const id = r.replayId || r.battleKey;
+        if (seen.has(id)) continue;
+        seen.add(id);
         allReplays.push({
           id: r.replayId || r.battleKey,
           date: r.createDate,

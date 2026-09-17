@@ -18,6 +18,7 @@ import {
   Award,
   Home,
   Wrench,
+  Package,
 } from 'lucide-react';
 import SwmLogo from './SwmLogo';
 import { buildUrl } from '../router';
@@ -25,12 +26,14 @@ import { buildUrl } from '../router';
 const NAV_ITEMS = [
   { id: 'dashboard', label: 'หน้าแรก', icon: Home },
   { id: '3mdc', label: '3MDC Siege', icon: Shield, group: ['3mdc', 'where2use', '3mdc-stats'] },
-  { id: 'rta', label: 'RTA Analytics', icon: Trophy, group: ['rta', 'meta-dashboard', 'rta-synergies'] },
+  { id: 'rta', label: 'RTA Analytics', icon: Trophy, group: ['rta', 'meta-dashboard', 'rta-synergies', 'guardian'] },
   { id: 'player-tracker', label: 'ค้นหาผู้เล่น', icon: Search },
   { id: 'draft-explorer', label: 'จำลองดราฟต์ 5v5', icon: Swords },
 ];
 
 const TOOL_ITEMS = [
+  { id: 'guardian', label: 'อันดับ Guardian คนไทย & เมต้าจริง', desc: 'จากรีเพลย์ Guardian สาธารณะ SWRT', icon: Trophy },
+  { id: 'my-box', label: 'กล่องมอนสเตอร์ของฉัน', desc: 'นำเข้า SWEX → ทีมที่สร้างได้', icon: Package },
   { id: 'artifact', label: 'ดาเมจเสริมอาร์ติแฟกต์', desc: 'True Damage Optimizer', icon: Sparkles },
   { id: 'speed', label: 'จูนสปีดเทิร์น (Speed Tuner)', desc: 'Tick & Speed Tuning', icon: Gauge },
   { id: 'tier-list-maker', label: 'สร้าง Tier List RTA/Siege', desc: 'Drag & Drop Builder', icon: Award },

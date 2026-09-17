@@ -22,6 +22,7 @@ export const VIEW_TITLES = {
   'draft-explorer': 'จำลองดราฟต์ 5v5',
   'rta-synergies': 'คอมโบ RTA',
   'meta-dashboard': 'เมต้าแดชบอร์ด',
+  guardian: 'อันดับ Guardian & เมต้าจากรีเพลย์จริง',
   'tier-list-maker': 'สร้าง Tier List',
   trending: 'สถิติเทรนด์ทั่วโลก',
   dungeons: 'ทีมฟาร์มดันเจี้ยน',
@@ -35,6 +36,7 @@ export const VIEW_TITLES = {
   artifact: 'ดาเมจเสริมอาร์ติแฟกต์',
   recruit: 'กิลด์รับสมัคร',
   aegislink: 'AegisLink',
+  'my-box': 'กล่องมอนสเตอร์ของฉัน',
   rta: 'วิเคราะห์ RTA',
 };
 
