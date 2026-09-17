@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { 
   Shield, 
   Gift, 
@@ -43,7 +43,6 @@ export default function DashboardView({ onNavigate }) {
   const [copiedCode, setCopiedCode] = useState(null);
   const [selectedServer, setSelectedServer] = useState('asia');
   const [battleServer, setBattleServer] = useState('Global');
-  const [battleIdx, setBattleIdx] = useState(0);
 
   const handleCopy = (code) => {
     navigator.clipboard.writeText(code);
@@ -51,12 +50,34 @@ export default function DashboardView({ onNavigate }) {
     setTimeout(() => setCopiedCode(null), 2500);
   };
 
+  // Decode HTML entities
+  const cleanGuildName = (name) => {
+    if (!name) return '';
+    return name
+      .replace(/&Lambda;/g, 'Λ')
+      .replace(/&atilde;/g, 'ã')
+      .replace(/&oslash;/g, 'ø')
+      .replace(/&amp;/g, '&')
+      .replace(/&#3495;/g, '⍏')
+      .replace(/&#24801;/g, '悪')
+      .replace(/&#39764;/g, '魔');
+  };
+
+  // Group raw guilds into 3-guild matches
+  const siegeMatches = useMemo(() => {
+    const raw = (latestSiegeBattles[battleServer] && latestSiegeBattles[battleServer][0]?.guilds) || [];
+    const groups = [];
+    for (let i = 0; i < raw.length; i += 3) {
+      groups.push({
+        matchId: Math.floor(i / 3) + 1,
+        guilds: raw.slice(i, i + 3)
+      });
+    }
+    return groups;
+  }, [battleServer]);
+
   // Top defenses from 3MDC data
   const metaDefenses = ALL_MDC_DATA.slice(0, 8);
-
-  // Active battles from live feed
-  const currentBattles = latestSiegeBattles[battleServer] || [];
-  const activeBattle = currentBattles[battleIdx % Math.max(1, currentBattles.length)];
 
   // Leaderboard data
   const topGuilds = LEADERBOARDS[selectedServer]?.slice(0, 5) || [];
@@ -446,66 +467,106 @@ export default function DashboardView({ onNavigate }) {
           <div className="p-4 sm:p-6 space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
-                <h3 className="text-base font-bold text-white">ผลการแข่งขัน Siege Battle แบบเรียลไทม์</h3>
-                <p className="text-xs text-slate-400 mt-0.5">ฟีดผลคะแนนสดจากเซิร์ฟเวอร์ Global, Europe, Asia, และ Japan/Korea</p>
+                <h3 className="text-base font-bold text-white flex items-center gap-2">
+                  <Swords className="w-4 h-4 text-rose-400" />
+                  ผลการแข่งขัน Siege Battle แบบเรียลไทม์ (Live Match Feed)
+                </h3>
+                <p className="text-xs text-slate-400 mt-0.5">
+                  ฟีดคะแนนสดส่งตรงจากเซิร์ฟเวอร์ SWGT อัปเดตอันดับ แต้ม และสปีดคะแนนต่อนาที
+                </p>
               </div>
 
               {/* Server selector */}
               <div className="flex items-center gap-1.5 p-1 rounded-xl bg-[#0a0f18] border border-[#1b283d] self-start sm:self-auto">
-                {['Global', 'Asia', 'Europe', 'JapanKorea'].map((srv) => (
+                {[
+                  { id: 'Global', label: 'Global 🌐' },
+                  { id: 'Asia', label: 'Asia 🌏' },
+                  { id: 'Europe', label: 'Europe 🇪🇺' },
+                  { id: 'JPKR', label: 'JP/KR 🇯🇵' }
+                ].map((srv) => (
                   <button
-                    key={srv}
-                    onClick={() => { setBattleServer(srv); setBattleIdx(0); }}
-                    className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                      battleServer === srv
-                        ? 'bg-rose-600 text-white shadow-sm'
-                        : 'text-slate-400 hover:text-white'
+                    key={srv.id}
+                    onClick={() => setBattleServer(srv.id)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                      battleServer === srv.id
+                        ? 'bg-rose-600 text-white shadow-md shadow-rose-600/30'
+                        : 'text-slate-400 hover:text-white hover:bg-[#152030]'
                     }`}
                   >
-                    {srv}
+                    {srv.label}
                   </button>
                 ))}
               </div>
             </div>
 
-            {currentBattles.length > 0 ? (
+            {siegeMatches.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {currentBattles.map((battle, bIdx) => (
+                {siegeMatches.map((match) => (
                   <div
-                    key={bIdx}
-                    className="p-4 rounded-xl bg-[#0a0f18] border border-[#1b283d] space-y-3 shadow-md"
+                    key={match.matchId}
+                    className="p-4 rounded-xl bg-[#0a0f18] border border-[#1b283d] hover:border-rose-500/40 transition-all space-y-3 shadow-md"
                   >
                     <div className="flex items-center justify-between text-xs pb-2 border-b border-[#172233]">
-                      <span className="font-bold text-slate-300">กลุ่มการรบ #{bIdx + 1} ({battle.server})</span>
-                      <span className="text-[10px] text-slate-500 font-mono">{battle.timestamp}</span>
+                      <span className="font-bold text-slate-300 flex items-center gap-1.5">
+                        <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
+                        กลุ่มการรบ #{match.matchId} ({battleServer})
+                      </span>
+                      <span className="text-[10px] text-emerald-400 font-mono font-bold bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                        ● LIVE FEED
+                      </span>
                     </div>
 
                     <div className="space-y-2">
-                      {battle.guilds.map((g, gIdx) => (
-                        <div key={gIdx} className="flex items-center justify-between text-xs">
-                          <div className="flex items-center gap-2 truncate">
-                            <span className={`w-5 h-5 rounded-full flex items-center justify-center font-black text-[10px] ${
-                              gIdx === 0 ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : 'bg-slate-800 text-slate-400'
-                            }`}>
-                              #{gIdx + 1}
-                            </span>
-                            <span className="font-bold text-white truncate">{g.name}</span>
+                      {match.guilds.map((g, gIdx) => {
+                        const isWinner = g.score === '20,000';
+                        return (
+                          <div 
+                            key={gIdx} 
+                            className={`p-2.5 rounded-lg flex items-center justify-between text-xs transition-colors ${
+                              isWinner 
+                                ? 'bg-amber-500/10 border border-amber-500/30' 
+                                : 'bg-[#0e1624] border border-[#172233]'
+                            }`}
+                          >
+                            <div className="flex items-center gap-2 truncate pr-2">
+                              <span className={`w-5 h-5 rounded-full flex items-center justify-center font-black text-[10px] shrink-0 ${
+                                gIdx === 0 
+                                  ? 'bg-amber-500 text-slate-950 font-black' 
+                                  : gIdx === 1 
+                                  ? 'bg-slate-300 text-slate-900 font-black' 
+                                  : 'bg-amber-800 text-amber-100 font-bold'
+                              }`}>
+                                #{gIdx + 1}
+                              </span>
+                              <span className="font-bold text-white truncate">
+                                {cleanGuildName(g.name)}
+                              </span>
+                              <span className="text-[10px] text-slate-400 font-mono">
+                                ({g.rank})
+                              </span>
+                            </div>
+
+                            <div className="text-right shrink-0">
+                              <div className="font-mono font-black text-white text-xs">
+                                {g.score} แต้ม
+                                {isWinner && <span className="ml-1 text-amber-400">👑</span>}
+                              </div>
+                              <div className="text-[10px] text-cyan-400 font-mono">
+                                {g.speed}
+                              </div>
+                            </div>
                           </div>
-                          <div className="text-right shrink-0">
-                            <span className="font-mono font-bold text-cyan-400">{g.points.toLocaleString()}</span>
-                            <span className="text-[10px] text-slate-500 ml-1">({g.pointsPerMin}/min)</span>
-                          </div>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
 
                     <div className="pt-2 border-t border-[#172233] flex items-center justify-between text-[11px] text-slate-400">
-                      <span>สถานะ: <strong className="text-emerald-400">จบการแข่งขัน</strong></span>
+                      <span>สถานะ: <strong className="text-emerald-400">จบการแข่งขัน (20,000 แต้ม)</strong></span>
                       <button
                         onClick={() => onNavigate('siege-calculator')}
-                        className="text-xs text-cyan-400 hover:text-cyan-300 font-bold"
+                        className="text-xs text-cyan-400 hover:text-cyan-300 font-bold flex items-center gap-1 cursor-pointer"
                       >
-                        คำนวณแต้มต่อ →
+                        คำนวณแต้มต่อ <ArrowRight className="w-3 h-3" />
                       </button>
                     </div>
                   </div>
