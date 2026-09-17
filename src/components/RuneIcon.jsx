@@ -22,10 +22,13 @@ export default function RuneIcon({ rune, size = 56, showLevel = true, className 
       <img src={`${CDN}bg_${quality}.png`} alt="" className="absolute inset-0 w-full h-full rounded-full" loading="lazy" />
       <img src={`${CDN}rune${slot}.png`} alt="" className="absolute inset-0 w-full h-full" loading="lazy" />
       {setName && (
-        <img src={`${CDN}${setName}.png`} alt={RUNE_SETS[rune.set]} className="absolute" style={{ width: size * 0.42, height: size * 0.42, right: -size * 0.02, bottom: -size * 0.02 }} loading="lazy" />
+        // set symbol sits in the middle of the rune, the way the game draws it
+        <img src={`${CDN}${setName}.png`} alt={RUNE_SETS[rune.set]} className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]" style={{ width: size * 0.5, height: size * 0.5 }} loading="lazy" />
       )}
       {showLevel && rune.lvl > 0 && (
-        <span className="absolute -top-1 -left-1 px-1 rounded bg-slate-950/90 border border-white/20 text-[10px] font-black text-white font-mono leading-tight">+{rune.lvl}</span>
+        <span className={`absolute -top-1 -left-1 px-1 rounded border text-[10px] font-black font-mono leading-tight ${
+          rune.lvl >= 15 ? 'bg-amber-400 border-amber-200 text-slate-950 shadow-[0_0_8px_rgba(251,191,36,0.8)]' : rune.lvl >= 12 ? 'bg-slate-950/90 border-amber-400/60 text-amber-200' : 'bg-slate-950/90 border-white/20 text-white'
+        }`}>+{rune.lvl}</span>
       )}
       {rune.ancient ? <span className="absolute -top-1 -right-1 px-1 rounded bg-amber-500 text-slate-950 text-[9px] font-black leading-tight">A</span> : null}
     </div>
