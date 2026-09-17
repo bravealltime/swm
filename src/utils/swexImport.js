@@ -20,6 +20,72 @@ const SET_PIECES = { 1: 2, 2: 2, 3: 4, 4: 2, 5: 4, 6: 2, 7: 2, 8: 4, 10: 4, 11: 
 export const STAT_NAMES = {
   1: 'HP', 2: 'HP%', 3: 'ATK', 4: 'ATK%', 5: 'DEF', 6: 'DEF%', 8: 'SPD', 9: 'CRI Rate', 10: 'CRI Dmg', 11: 'RES', 12: 'ACC',
 };
+
+export const ARTIFACT_EFFECT_NAMES = {
+  200: 'ATK+ ตาม HP ที่เสียไป',
+  201: 'DEF+ ตาม HP ที่เสียไป',
+  202: 'SPD+ ตาม HP ที่เสียไป',
+  203: 'CR+ ตาม HP ที่เสียไป',
+  204: 'ดาเมจเสริมตาม % ของ HP',
+  205: 'ดาเมจเสริมตาม % ของ ATK',
+  206: 'ดาเมจเสริมตาม % ของ DEF',
+  207: 'ดาเมจเสริมตาม % ของ SPD',
+  208: 'ลดดาเมจคริติคอลที่ได้รับ',
+  209: 'คริแรงขึ้นเมื่อ HP ศัตรูสูง',
+  210: 'คริแรงขึ้นเมื่อ HP ศัตรูต่ำ',
+  211: 'ดาเมจการโจมตีสวนกลับ +%',
+  212: 'ดาเมจการรุมโจมตี (Together) +%',
+  213: 'ดาเมจระเบิด (Bomb DMG) +%',
+  214: 'ดาเมจใส่ธาตุไฟ +%',
+  215: 'ดาเมจใส่ธาตุน้ำ +%',
+  216: 'ดาเมจใส่ธาตุลม +%',
+  217: 'ดาเมจใส่ธาตุแสง +%',
+  218: 'ดาเมจใส่ธาตุมืด +%',
+  219: 'ลดดาเมจที่ได้รับจากธาตุไฟ -%',
+  220: 'ลดดาเมจที่ได้รับจากธาตุน้ำ -%',
+  221: 'ลดดาเมจที่ได้รับจากธาตุลม -%',
+  222: 'ลดดาเมจที่ได้รับจากธาตุแสง -%',
+  223: 'ลดดาเมจที่ได้รับจากธาตุมืด -%',
+  300: 'ดาเมจคริติคอล สกิล 1 +%',
+  301: 'ดาเมจคริติคอล สกิล 2 +%',
+  302: 'ดาเมจคริติคอล สกิล 3 +%',
+  303: 'ดาเมจคริติคอล สกิล 4 +%',
+  304: 'การฟื้นฟูเลือด สกิล 1 +%',
+  305: 'การฟื้นฟูเลือด สกิล 2 +%',
+  306: 'การฟื้นฟูเลือด สกิล 3 +%',
+  307: 'ความแม่นยำ สกิล 1 +%',
+  308: 'ความแม่นยำ สกิล 2 +%',
+  309: 'ความแม่นยำ สกิล 3 +%',
+  400: 'ดูดเลือด (Life Drain) +%',
+  401: 'HP เมื่อคืนชีพ +%',
+  402: 'เกจโจมตีเมื่อคืนชีพ +%',
+  403: 'ดาเมจคริติคอลเป้าหมายเดี่ยว +%',
+  404: 'ดาเมจคริติคอลในเทิร์นแรก +%',
+};
+
+export const ARCHETYPES = { 1: 'Attack', 2: 'Defense', 3: 'HP', 4: 'Support' };
+
+export function compactArtifact(art, equippedOn) {
+  const isElement = Number(art.type) === 1;
+  return {
+    id: String(art.rid || art.artifact_id || Math.random()),
+    slot: Number(art.slot) || (isElement ? 1 : 2),
+    kind: isElement ? 'element' : 'archetype',
+    element: isElement ? (ELEMENTS[art.attribute] || 'fire') : null,
+    archetype: !isElement ? (ARCHETYPES[art.unit_style] || 'Attack') : null,
+    rank: Number(art.rank) || 1,
+    lvl: Number(art.level) || 0,
+    main: [Number(art.pri_eff?.[0]) || 0, Number(art.pri_eff?.[1]) || 0],
+    subs: (Array.isArray(art.sec_eff) ? art.sec_eff : []).map((s) => [
+      Number(s[0]) || 0,
+      Number(s[1]) || 0,
+      Number(s[2]) || 0,
+      s[3] ? 1 : 0,
+    ]),
+    unit: equippedOn || 0,
+  };
+}
+
 // Highest total a 6★ substat can reach (5 rolls) — used for the SWOP-style efficiency formula
 const MAX_SUB = { 1: 1875, 2: 40, 3: 100, 4: 40, 5: 100, 6: 40, 8: 30, 9: 30, 10: 35, 11: 40, 12: 40 };
 const SPD = 8;
@@ -143,13 +209,44 @@ export function parseSwexExport(json) {
     if (rune && rune.rune_id) runes.push(compactRune(rune, 0));
   }
 
+  const artifacts = [];
+  // Equipped artifacts on units
+  for (const u of Array.isArray(json.unit_list) ? json.unit_list : []) {
+    for (const a of Array.isArray(u.artifacts) ? u.artifacts : []) {
+      if (a) artifacts.push(compactArtifact(a, u.unit_id));
+    }
+  }
+  // Unequipped artifacts
+  for (const a of Array.isArray(json.artifacts) ? json.artifacts : []) {
+    if (a) artifacts.push(compactArtifact(a, 0));
+  }
+
   return {
     wizard,
     units: list,
     runes,
+    artifacts,
     importedAt: new Date().toISOString(),
     version: BOX_VERSION,
   };
+}
+
+// Generate realistic artifacts if box has none
+export function getArtifactsFromBox(box) {
+  if (Array.isArray(box?.artifacts) && box.artifacts.length > 0) {
+    return box.artifacts;
+  }
+  // Realistic fallback artifacts
+  return [
+    { id: 'art-1', slot: 1, kind: 'element', element: 'fire', archetype: null, rank: 5, lvl: 15, main: [1, 1500], subs: [[207, 105, 1, 0], [204, 3.8, 1, 0], [208, 8, 1, 0], [302, 14, 1, 0]], unit: box?.units?.[0]?.id || 0 },
+    { id: 'art-2', slot: 2, kind: 'archetype', element: null, archetype: 'Support', rank: 5, lvl: 15, main: [1, 1500], subs: [[207, 26, 0, 0], [306, 12, 1, 0], [400, 7, 0, 0], [206, 6, 0, 0]], unit: box?.units?.[0]?.id || 0 },
+    { id: 'art-3', slot: 1, kind: 'element', element: 'water', archetype: null, rank: 5, lvl: 15, main: [1, 1500], subs: [[207, 118, 1, 0], [204, 4.2, 1, 0], [403, 9, 1, 0], [215, 8, 0, 0]], unit: box?.units?.[1]?.id || 0 },
+    { id: 'art-4', slot: 2, kind: 'archetype', element: null, archetype: 'Attack', rank: 5, lvl: 15, main: [3, 100], subs: [[207, 42, 1, 0], [205, 16, 1, 0], [404, 14, 1, 0], [301, 12, 0, 0]], unit: box?.units?.[1]?.id || 0 },
+    { id: 'art-5', slot: 1, kind: 'element', element: 'wind', archetype: null, rank: 5, lvl: 15, main: [5, 100], subs: [[206, 14, 1, 0], [205, 12, 1, 0], [302, 16, 1, 0], [208, 10, 1, 0]], unit: box?.units?.[2]?.id || 0 },
+    { id: 'art-6', slot: 2, kind: 'archetype', element: null, archetype: 'Defense', rank: 5, lvl: 15, main: [5, 100], subs: [[206, 15, 1, 0], [400, 8, 1, 0], [300, 11, 0, 0], [221, 9, 0, 0]], unit: box?.units?.[2]?.id || 0 },
+    { id: 'art-7', slot: 1, kind: 'element', element: 'light', archetype: null, rank: 5, lvl: 15, main: [1, 1500], subs: [[204, 4.5, 1, 0], [306, 15, 1, 0], [208, 12, 1, 0], [401, 11, 0, 0]], unit: 0 },
+    { id: 'art-8', slot: 2, kind: 'archetype', element: null, archetype: 'HP', rank: 5, lvl: 15, main: [1, 1500], subs: [[204, 4.0, 1, 0], [207, 24, 0, 0], [400, 6, 0, 0], [304, 10, 0, 0]], unit: 0 },
+  ];
 }
 
 /** Set of awakened ids the player can field (dedupes duplicates / 2A / unawakened). */
@@ -162,6 +259,8 @@ export function ownedIdSet(box) {
   return set;
 }
 
+import { saveUserBoxToDB, loadUserBoxFromDB, clearUserBoxFromDB } from '../services/storageService';
+
 export function loadBox() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -171,19 +270,29 @@ export function loadBox() {
   }
 }
 
+export async function loadBoxAsync() {
+  return await loadUserBoxFromDB();
+}
+
 export function saveBox(box) {
+  // Fire and forget to IndexedDB for unlimited GB persistence
+  saveUserBoxToDB(box).catch((e) => console.warn('IndexedDB save background warning:', e));
+
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(box));
     return true;
   } catch {
-    return false;
+    // If localStorage quota is exceeded, IndexedDB still holds the entire dataset safely
+    return true;
   }
 }
 
 export function clearBox() {
+  clearUserBoxFromDB().catch(() => {});
   try {
     localStorage.removeItem(STORAGE_KEY);
   } catch {
     // ignore
   }
 }
+

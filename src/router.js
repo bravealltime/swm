@@ -8,10 +8,12 @@ export const DEFAULT_VIEW = 'dashboard';
 const VIEW_ALIASES = {
   'siege-calc': 'siege-calculator',
   optimizer: 'artifact',
+  'war-room': 'guild-war-room',
 };
 
 export const VIEW_TITLES = {
   dashboard: 'หน้าแรก',
+  'guild-war-room': 'ศูนย์บัญชาการกิลด์สด (War Room)',
   '3mdc': 'ค้นหาทีมแก้ทาง 3MDC',
   where2use: 'มอนสเตอร์นี้ใช้ที่ไหน',
   '3mdc-stats': 'สถิติ 3MDC',

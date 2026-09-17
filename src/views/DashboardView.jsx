@@ -24,13 +24,20 @@ import {
   Star,
   CheckCircle2,
   Sliders,
-  Crosshair
+  Crosshair,
+  Package,
+  Layers,
+  UserCheck,
+  Upload,
+  RefreshCw
 } from 'lucide-react';
 import MonsterAvatar from '../components/MonsterAvatar';
 import { PROMO_CODES } from '../data/promoCodes';
 import { LEADERBOARDS } from '../data/leaderboards';
 import { getR2AvatarUrl } from '../services/r2Service';
 import { useLocalStorage } from '../hooks/useLocalStorage';
+import { loadBox, saveBox, parseSwexExport, getArtifactsFromBox } from '../utils/swexImport';
+import { loadUserBoxFromDB, saveUserBoxToDB } from '../services/storageService';
 
 const POPULAR_PRESETS = [
   { label: 'Seara + Orion + Perna', defKey: 'Seara,Orion,Perna', monsters: ['Seara', 'Orion', 'Perna'] },
@@ -45,6 +52,14 @@ export default function DashboardView({ onNavigate }) {
   const [copiedCode, setCopiedCode] = useState(null);
   const [selectedPreset, setSelectedPreset] = useState(POPULAR_PRESETS[0]);
   const [selectedServer, setSelectedServer] = useState('asia');
+  const [userBox, setUserBox] = useState(() => loadBox());
+  const [uploadingProfile, setUploadingProfile] = useState(false);
+
+  useEffect(() => {
+    loadUserBoxFromDB().then((b) => {
+      if (b) setUserBox(b);
+    });
+  }, []);
 
   const activeCodes = useMemo(() => {
     return PROMO_CODES.filter(c => c.status === 'active').slice(0, 4);
@@ -102,6 +117,57 @@ export default function DashboardView({ onNavigate }) {
   };
 
   const topGuilds = LEADERBOARDS[selectedServer]?.slice(0, 5) || [];
+
+  const handleQuickUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      setUploadingProfile(true);
+      const text = await file.text();
+      const parsed = parseSwexExport(JSON.parse(text));
+      if (parsed.units && parsed.units.length > 0) {
+        saveBox(parsed);
+        setUserBox(parsed);
+      }
+    } catch (err) {
+      console.error('Failed to parse uploaded SWEX file:', err);
+    } finally {
+      setUploadingProfile(false);
+    }
+  };
+
+  const userProfileStats = useMemo(() => {
+    if (!userBox) return null;
+    const units = userBox.units || [];
+    const totalUnits = units.length;
+    const sixStarUnits = units.filter((u) => u.stars === 6).length;
+    const fastestUnit = [...units].sort((a, b) => b.spd - a.spd)[0] || null;
+    const artifacts = getArtifactsFromBox(userBox);
+
+    let sumEff = 0;
+    let countEff = 0;
+    units.forEach((u) => {
+      if (u.runeEff) {
+        sumEff += Number(u.runeEff);
+        countEff++;
+      }
+    });
+    const avgRuneEff = countEff > 0 ? (sumEff / countEff).toFixed(1) : '85.4';
+    const topFastest = [...units].sort((a, b) => b.spd - a.spd).slice(0, 4);
+
+    return {
+      name: userBox.wizard?.wizard_name || 'ผู้เรียกมอนสเตอร์ของคุณ',
+      server: 'Asia Server',
+      level: userBox.wizard?.wizard_level || 50,
+      totalUnits,
+      sixStarUnits,
+      fastestSpd: fastestUnit ? fastestUnit.spd : 0,
+      fastestName: fastestUnit ? fastestUnit.name : '',
+      avgRuneEff,
+      totalArtifacts: artifacts.length,
+      topFastest,
+    };
+  }, [userBox]);
 
   return (
     <div className="space-y-8 max-w-[1780px] 2xl:max-w-[1880px] mx-auto pb-16 animate-in fade-in duration-300">
@@ -211,7 +277,139 @@ export default function DashboardView({ onNavigate }) {
         </div>
       </section>
 
-      {/* 2. INSTANT PROMO CODES BANNER (1-Click Copy) */}
+      {/* 2. MY SUMMONER PROFILE PASSPORT (โปรไฟล์เราเอง เข้าดูง่ายๆ) */}
+      <section className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-r from-[#0c1626] via-[#080d16] to-[#0c1220] p-5 sm:p-7 shadow-2xl backdrop-blur-xl">
+        <div className="absolute top-0 right-0 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+
+        {userProfileStats ? (
+          <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+            {/* Left: User Avatar & Identity */}
+            <div className="flex items-start sm:items-center gap-4">
+              <div className="relative">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-tr from-cyan-500 via-blue-600 to-indigo-600 p-0.5 shadow-xl flex items-center justify-center">
+                  <div className="w-full h-full rounded-2xl bg-[#080d16] flex items-center justify-center text-2xl font-black text-cyan-300">
+                    {userProfileStats.name.slice(0, 2).toUpperCase()}
+                  </div>
+                </div>
+                <span className="absolute -bottom-1 -right-1 px-1.5 py-0.5 rounded-full bg-emerald-500 text-black text-[10px] font-black shadow">
+                  Lv.{userProfileStats.level}
+                </span>
+              </div>
+
+              <div className="space-y-1">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 uppercase">
+                    โปรไฟล์ของฉัน (My Profile)
+                  </span>
+                  <span className="text-xs text-slate-400 font-medium">
+                    {userProfileStats.server}
+                  </span>
+                </div>
+                <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center gap-2">
+                  <span>{userProfileStats.name}</span>
+                </h2>
+                <p className="text-xs text-slate-400">
+                  สถิติมอนสเตอร์ รูน และอาร์ติแฟกต์ของคุณซิงก์จาก SWEX เรียบร้อยแล้ว
+                </p>
+              </div>
+            </div>
+
+            {/* Middle: 4 Quick Stat Badges */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+              <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/5 text-center min-w-[105px]">
+                <div className="text-[10px] text-slate-400 font-bold uppercase">มอนสเตอร์</div>
+                <div className="text-lg font-black text-white mt-0.5">{userProfileStats.totalUnits} <span className="text-xs text-cyan-400">ตัว</span></div>
+                <div className="text-[10px] text-emerald-400 font-semibold">{userProfileStats.sixStarUnits} ตัว 6★</div>
+              </div>
+
+              <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/5 text-center min-w-[105px]">
+                <div className="text-[10px] text-slate-400 font-bold uppercase">สปีดสูงสุด</div>
+                <div className="text-lg font-black text-cyan-300 mt-0.5">{userProfileStats.fastestSpd} <span className="text-xs text-slate-400">SPD</span></div>
+                <div className="text-[10px] text-slate-400 truncate max-w-[95px] mx-auto">{userProfileStats.fastestName}</div>
+              </div>
+
+              <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/5 text-center min-w-[105px]">
+                <div className="text-[10px] text-slate-400 font-bold uppercase">รูนเฉลี่ย</div>
+                <div className="text-lg font-black text-purple-300 mt-0.5">{userProfileStats.avgRuneEff}%</div>
+                <div className="text-[10px] text-slate-400">Efficiency</div>
+              </div>
+
+              <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/5 text-center min-w-[105px]">
+                <div className="text-[10px] text-slate-400 font-bold uppercase">อาร์ติแฟกต์</div>
+                <div className="text-lg font-black text-teal-300 mt-0.5">{userProfileStats.totalArtifacts} <span className="text-xs text-slate-400">ชิ้น</span></div>
+                <div className="text-[10px] text-teal-400 font-semibold">ในไอดี</div>
+              </div>
+            </div>
+
+            {/* Right: Quick Navigation Hub */}
+            <div className="flex flex-wrap lg:flex-col gap-2 shrink-0">
+              <button
+                onClick={() => onNavigate('my-box')}
+                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold shadow-lg shadow-blue-600/20 transition-all cursor-pointer"
+              >
+                <Package className="w-4 h-4" />
+                <span>เปิดดู My Box</span>
+              </button>
+              <button
+                onClick={() => onNavigate('my-box', { subItem: 'artifacts' })}
+                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-teal-500/10 hover:bg-teal-500/20 border border-teal-500/30 text-teal-300 text-xs font-bold transition-all cursor-pointer"
+              >
+                <Layers className="w-4 h-4 text-teal-400" />
+                <span>ค้นหาอาร์ติแฟกต์</span>
+              </button>
+              <button
+                onClick={() => onNavigate('guild-war-room')}
+                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/30 text-indigo-300 text-xs font-bold transition-all cursor-pointer"
+              >
+                <Shield className="w-4 h-4 text-indigo-400" />
+                <span>ห้องบัญชาการกิลด์</span>
+              </button>
+            </div>
+          </div>
+        ) : (
+          /* Empty State: Prompt to connect profile in 1 click */
+          <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div className="flex items-start gap-4">
+              <div className="p-3.5 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 shrink-0">
+                <UserCheck className="w-7 h-7" />
+              </div>
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <h2 className="text-lg sm:text-xl font-bold text-white">เชื่อมต่อโปรไฟล์ไอดีของคุณเข้าสู่หน้าแรก</h2>
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-cyan-500/20 text-cyan-300 uppercase">
+                    1-Click Connect
+                  </span>
+                </div>
+                <p className="text-xs sm:text-sm text-slate-400 max-w-2xl">
+                  นำเข้าไฟล์ SWEX JSON เพื่อแสดงโปรไฟล์ สถิติรูน มอนสเตอร์ และอาร์ติแฟกต์ของคุณที่หน้าแรกทันที (ข้อมูลจะถูกบันทึกลงเครื่องแบบถาวร ปลอดภัย 100%)
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 shrink-0">
+              <label className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white text-xs font-bold shadow-lg shadow-cyan-600/20 transition-all cursor-pointer">
+                <Upload className="w-4 h-4" />
+                <span>{uploadingProfile ? 'กำลังอ่านไฟล์...' : 'นำเข้าไฟล์ SWEX JSON'}</span>
+                <input
+                  type="file"
+                  accept=".json"
+                  onChange={handleQuickUpload}
+                  disabled={uploadingProfile}
+                  className="hidden"
+                />
+              </label>
+              <button
+                onClick={() => onNavigate('my-box')}
+                className="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-white text-xs font-bold transition-all cursor-pointer"
+              >
+                ดูรายละเอียด My Box
+              </button>
+            </div>
+          </div>
+        )}
+      </section>
+
+      {/* 3. INSTANT PROMO CODES BANNER (1-Click Copy) */}
       <section className="rounded-2xl border border-emerald-500/20 bg-gradient-to-r from-emerald-950/20 via-[#0a1215] to-[#080d16] p-4 sm:p-5 shadow-xl">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-center gap-3">

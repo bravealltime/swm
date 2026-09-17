@@ -5,6 +5,7 @@ export const NAVIGATION_CATEGORIES = [
     id: 'guild-siege',
     title: 'กิลด์วอร์ & ศึกยึดเกาะ (Siege)',
     items: [
+      { id: 'guild-war-room', label: 'ศูนย์บัญชาการกิลด์สด (War Room)', icon: 'Shield', badge: 'สด' },
       { id: '3mdc-search', label: 'ค้นหาทีมแก้ทาง 3MDC', icon: 'Crosshair', badge: 'หลัก' },
       { id: 'where2use', label: 'มอนสเตอร์นี้ใช้ที่ไหน? (Where to Use)', icon: 'Compass' },
       { id: 'defense-trending', label: 'ทีมตั้งรับยอดนิยมทั่วโลก', icon: 'TrendingUp' },

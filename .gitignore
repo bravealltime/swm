@@ -26,3 +26,4 @@ swgt_raw/
 
 # SWRT dataset builder scratch
 .cache/
+.claude/

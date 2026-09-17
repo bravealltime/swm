@@ -36,6 +36,7 @@ const VIEWS = {
   aegislink: lazy(() => import('./views/PluginCompanionView')),
   'my-box': lazy(() => import('./views/MyBoxView')),
   rta: lazy(() => import('./views/RtaAnalyticsView')),
+  'guild-war-room': lazy(() => import('./views/GuildWarRoomView')),
 };
 
 const CommandPalette = lazy(() => import('./components/CommandPalette'));

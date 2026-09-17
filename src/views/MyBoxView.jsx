@@ -2,14 +2,16 @@ import React, { useState, useMemo, useEffect, useRef } from 'react';
 import {
   Upload, Package, Shield, Flame, Trash2, RefreshCw, Search, Lock, ChevronRight, Star, CheckCircle2, XCircle,
   Compass, LayoutDashboard, Gauge, Gem, Zap, Castle, X, AlertTriangle, Sparkles, FolderSync, FolderOpen, Pause,
+  Download, Trophy, Award, Check, Layers, Sliders
 } from 'lucide-react';
 import MonsterAvatar from '../components/MonsterAvatar';
 import RuneIcon from '../components/RuneIcon';
 import allMonstersData from '../data/allMonsters.json';
 import guardianMeta from '../data/swrtGuardianMeta.json';
 import { buildMonsterIndex, flagFromCountry } from '../data/swrtPlayerAdapter';
-import { parseSwexExport, ownedIdSet, loadBox, saveBox, clearBox, baseAwakenedId, BOX_VERSION, RUNE_SETS, STAT_NAMES } from '../utils/swexImport';
+import { parseSwexExport, ownedIdSet, loadBox, saveBox, clearBox, baseAwakenedId, BOX_VERSION, RUNE_SETS, STAT_NAMES, getArtifactsFromBox, ARTIFACT_EFFECT_NAMES } from '../utils/swexImport';
 import { supportsFolderWatch, loadDirHandle, clearDirHandle, pickSwexFolder, ensurePermission, findNewestExport } from '../utils/swexWatcher';
+import { exportAllDataAsJSON, importDataFromJSON } from '../services/storageService';
 
 const WATCH_INTERVAL_MS = 20 * 1000;
 
@@ -35,6 +37,10 @@ const ELEMENT_TH = { water: 'น้ำ', fire: 'ไฟ', wind: 'ลม', light: 
 const TABS = [
   { id: 'overview', label: 'ภาพรวม', icon: LayoutDashboard, color: 'bg-emerald-600 shadow-emerald-600/25' },
   { id: 'box', label: 'มอนสเตอร์', icon: Package, color: 'bg-cyan-600 shadow-cyan-600/25' },
+  { id: 'artifacts', label: 'ค้นหาอาร์ติแฟกต์', icon: Layers, color: 'bg-teal-600 shadow-teal-600/25' },
+  { id: 'efficiency', label: 'สแกนรูนเทพ & Quads', icon: Sparkles, color: 'bg-violet-600 shadow-violet-600/25' },
+  { id: 'pokedex', label: 'สมุดสะสม Nat 5 & LD', icon: Trophy, color: 'bg-amber-600 shadow-amber-600/25' },
+  { id: 'defense', label: 'สร้างทีมรับ Siege', icon: Castle, color: 'bg-indigo-600 shadow-indigo-600/25' },
   { id: 'teams', label: 'ทีมที่สร้างได้', icon: Shield, color: 'bg-blue-600 shadow-blue-600/25' },
   { id: 'meta', label: 'เมต้า Guardian', icon: Flame, color: 'bg-rose-600 shadow-rose-600/25' },
   { id: 'speed', label: 'จูนสปีดทีม', icon: Gauge, color: 'bg-amber-600 shadow-amber-600/25' },
@@ -157,7 +163,14 @@ export default function MyBoxView({ onNavigate }) {
             </div>
           </div>
           {box && (
-            <div className="flex items-center gap-2 shrink-0">
+            <div className="flex items-center gap-2 shrink-0 flex-wrap">
+              <button
+                onClick={() => exportAllDataAsJSON()}
+                className="px-3 py-2 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-sm transition-all"
+                title="สำรองข้อมูลทั้งหมด (มอนสเตอร์ + รูน + สงครามกิลด์) เป็นไฟล์ JSON"
+              >
+                <Download className="w-4 h-4" /> สำรองข้อมูล JSON
+              </button>
               <ImportButton onFile={importFile} label="นำเข้าใหม่" icon={RefreshCw} subtle />
               <button onClick={reset} className="px-3 py-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-300 text-xs font-bold flex items-center gap-1.5 cursor-pointer">
                 <Trash2 className="w-4 h-4" /> ลบข้อมูลออกจากเครื่อง
@@ -201,6 +214,10 @@ export default function MyBoxView({ onNavigate }) {
 
           {tab === 'overview' && <Overview box={box} mdc={mdc} owned={owned} onTab={setTab} onNavigate={onNavigate} />}
           {tab === 'box' && <BoxGrid box={box} onNavigate={onNavigate} />}
+          {tab === 'artifacts' && <ArtifactSearchEngine box={box} onNavigate={onNavigate} />}
+          {tab === 'efficiency' && <RuneEfficiencyAndQuads box={box} />}
+          {tab === 'pokedex' && <PokedexCollection box={box} onNavigate={onNavigate} />}
+          {tab === 'defense' && <SiegeDefenseBuilder box={box} onNavigate={onNavigate} />}
           {tab === 'teams' && <Teams owned={owned} mdc={mdc} onNavigate={onNavigate} />}
           {tab === 'meta' && <MetaCoverage owned={owned} />}
           {tab === 'speed' && <SpeedTuner box={box} onNavigate={onNavigate} />}
@@ -1017,3 +1034,832 @@ function RuneCard({ rune }) {
     </div>
   );
 }
+
+// ---------------------------------------------------------------------------
+// 1. Rune Efficiency & Quad Rolls Scanner
+// ---------------------------------------------------------------------------
+
+function RuneEfficiencyAndQuads({ box }) {
+  const [filter, setFilter] = useState('all-quads'); // 'all-quads', 'quad-spd', 'quad-stats', 'ungrinded', 'top-eff'
+  const runes = box?.runes || [];
+
+  // Analyze runes for Quad Rolls and Missing Grinds
+  const analysis = useMemo(() => {
+    let sumEff = 0;
+    let effCount = 0;
+    let count100 = 0;
+    let count90 = 0;
+
+    const quadSpd = [];
+    const quadStats = [];
+    const ungrinded = [];
+    const topEff = [...runes].sort((a, b) => (b.eff || 0) - (a.eff || 0)).slice(0, 30);
+
+    for (const r of runes) {
+      const eff = r.eff || 0;
+      if (r.stars === 6) {
+        sumEff += eff;
+        effCount++;
+      }
+      if (eff >= 100) count100++;
+      if (eff >= 90) count90++;
+
+      let hasQuadSpd = false;
+      let hasQuadOther = false;
+      let hasMissingGrind = false;
+
+      for (const s of r.subs || []) {
+        const statId = s[0];
+        const baseVal = s[1] || 0;
+        const grindVal = s[2] || 0;
+
+        // Quad Roll heuristics: 4 rolls into same stat
+        if (statId === 8 && baseVal >= 20) hasQuadSpd = true; // SPD >= 20
+        if ([2, 4, 6].includes(statId) && baseVal >= 28) hasQuadOther = true; // HP%, ATK%, DEF% >= 28%
+        if (statId === 9 && baseVal >= 22) hasQuadOther = true; // CR >= 22%
+        if (statId === 10 && baseVal >= 25) hasQuadOther = true; // CD >= 25%
+
+        // Check if 6★ Hero/Legend has ungrinded grindable substats
+        if (r.stars === 6 && [1, 2, 3, 4, 5, 6, 8].includes(statId) && grindVal === 0 && r.lvl >= 12) {
+          hasMissingGrind = true;
+        }
+      }
+
+      if (hasQuadSpd) quadSpd.push(r);
+      if (hasQuadOther) quadStats.push(r);
+      if (hasMissingGrind) ungrinded.push(r);
+    }
+
+    return {
+      avgEff: effCount > 0 ? (sumEff / effCount).toFixed(1) : '0.0',
+      total6Star: effCount,
+      count100,
+      count90,
+      quadSpd: quadSpd.sort((a, b) => (b.eff || 0) - (a.eff || 0)),
+      quadStats: quadStats.sort((a, b) => (b.eff || 0) - (a.eff || 0)),
+      ungrinded: ungrinded.sort((a, b) => (b.eff || 0) - (a.eff || 0)),
+      topEff,
+    };
+  }, [runes]);
+
+  const displayedRunes = useMemo(() => {
+    if (filter === 'quad-spd') return analysis.quadSpd;
+    if (filter === 'quad-stats') return analysis.quadStats;
+    if (filter === 'ungrinded') return analysis.ungrinded;
+    if (filter === 'top-eff') return analysis.topEff;
+    // 'all-quads' default: combine unique quad runes
+    const map = new Map();
+    [...analysis.quadSpd, ...analysis.quadStats].forEach((r) => map.set(r.id, r));
+    return Array.from(map.values()).sort((a, b) => (b.eff || 0) - (a.eff || 0));
+  }, [filter, analysis]);
+
+  return (
+    <div className="space-y-6">
+      {/* Metric Cards Banner */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div className={`${card} p-4 text-center border-purple-500/20 bg-purple-950/20`}>
+          <div className="text-[11px] font-bold text-purple-300 uppercase tracking-wider">ประสิทธิภาพเฉลี่ย (6★)</div>
+          <div className="text-2xl font-black text-white mt-1">{analysis.avgEff}%</div>
+          <div className="text-[10px] text-slate-400 mt-0.5">จากรูน 6 ดาว {analysis.total6Star.toLocaleString()} ชิ้น</div>
+        </div>
+        <div className={`${card} p-4 text-center border-emerald-500/20 bg-emerald-950/20`}>
+          <div className="text-[11px] font-bold text-emerald-300 uppercase tracking-wider">รูนเทพ (≥100% Eff)</div>
+          <div className="text-2xl font-black text-white mt-1">{analysis.count100} <span className="text-xs text-emerald-400">ชิ้น</span></div>
+          <div className="text-[10px] text-slate-400 mt-0.5">ค่าสเตตัสระดับสมบูรณ์แบบ</div>
+        </div>
+        <div className={`${card} p-4 text-center border-cyan-500/20 bg-cyan-950/20`}>
+          <div className="text-[11px] font-bold text-cyan-300 uppercase tracking-wider">Quad SPD (+20 ถึง +30)</div>
+          <div className="text-2xl font-black text-white mt-1">{analysis.quadSpd.length} <span className="text-xs text-cyan-400">ชิ้น</span></div>
+          <div className="text-[10px] text-slate-400 mt-0.5">สปีดลง 4 ครั้ง รูนทำความเร็ว</div>
+        </div>
+        <div className={`${card} p-4 text-center border-amber-500/20 bg-amber-950/20`}>
+          <div className="text-[11px] font-bold text-amber-300 uppercase tracking-wider">รูน 6★ ยังขาดหินขัด</div>
+          <div className="text-2xl font-black text-white mt-1">{analysis.ungrinded.length} <span className="text-xs text-amber-400">ชิ้น</span></div>
+          <div className="text-[10px] text-slate-400 mt-0.5">สามารถขัดหินเพิ่มพลังได้ทันที</div>
+        </div>
+      </div>
+
+      {/* Filter Tabs */}
+      <div className={`${card} p-4 space-y-4`}>
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            onClick={() => setFilter('all-quads')}
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+              filter === 'all-quads' ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/25' : 'text-slate-300 hover:bg-white/5'
+            }`}
+          >
+            ⚡ รูน Quad Rolls ทั้งหมด ({analysis.quadSpd.length + analysis.quadStats.length})
+          </button>
+          <button
+            onClick={() => setFilter('quad-spd')}
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+              filter === 'quad-spd' ? 'bg-cyan-600 text-white shadow-lg shadow-cyan-600/25' : 'text-slate-300 hover:bg-white/5'
+            }`}
+          >
+            💨 เฉพาะ Quad SPD ≥ +20 ({analysis.quadSpd.length})
+          </button>
+          <button
+            onClick={() => setFilter('quad-stats')}
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+              filter === 'quad-stats' ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/25' : 'text-slate-300 hover:bg-white/5'
+            }`}
+          >
+            🛡️ Quad เลือด/โจมตี/คริ ≥ 28%+ ({analysis.quadStats.length})
+          </button>
+          <button
+            onClick={() => setFilter('ungrinded')}
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+              filter === 'ungrinded' ? 'bg-amber-600 text-white shadow-lg shadow-amber-600/25' : 'text-slate-300 hover:bg-white/5'
+            }`}
+          >
+            💎 ขาดหินขัด (Un-grinded) ({analysis.ungrinded.length})
+          </button>
+          <button
+            onClick={() => setFilter('top-eff')}
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+              filter === 'top-eff' ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/25' : 'text-slate-300 hover:bg-white/5'
+            }`}
+          >
+            🏆 รูนคะแนนสูงสุด Top 30
+          </button>
+        </div>
+
+        {/* Rune Grid Display */}
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+          {displayedRunes.map((r) => (
+            <RuneCard key={r.id} rune={r} />
+          ))}
+          {displayedRunes.length === 0 && (
+            <div className="col-span-full py-12 text-center text-slate-400 text-xs">
+              ไม่พบรูนตามเงื่อนไขที่เลือก
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 2. Pokedex & Missing Nat 5 / LD 5★ Showcase
+// ---------------------------------------------------------------------------
+
+function PokedexCollection({ box, onNavigate }) {
+  const [eleFilter, setEleFilter] = useState('all');
+  const units = box?.units || [];
+
+  const ownedMasterIds = useMemo(() => {
+    const set = new Set();
+    units.forEach((u) => {
+      set.add(u.masterId);
+      set.add(baseAwakenedId(u.masterId));
+    });
+    return set;
+  }, [units]);
+
+  // Extract all Nat 5 monsters in catalog
+  const nat5Catalog = useMemo(() => {
+    const map = new Map();
+    for (const m of allMonstersData) {
+      // Must be natural 5 star and awakened or canonical form
+      const isNat5 = m.natural_stars === 5 || m.default_stars === 5 || m.stars === 5;
+      if (isNat5 && m.name && !m.name.includes('(Homunculus)')) {
+        const key = m.name.toLowerCase();
+        if (!map.has(key)) map.set(key, m);
+      }
+    }
+    return Array.from(map.values());
+  }, []);
+
+  // Owned LD 5★ list
+  const ownedLd5s = useMemo(() => {
+    return units.filter((u) => {
+      const isLd = u.element === 'light' || u.element === 'dark';
+      return isLd && u.stars >= 5;
+    });
+  }, [units]);
+
+  // Breakdown by element
+  const statsByElement = useMemo(() => {
+    const counts = {
+      water: { owned: 0, total: 0 },
+      fire: { owned: 0, total: 0 },
+      wind: { owned: 0, total: 0 },
+      light: { owned: 0, total: 0 },
+      dark: { owned: 0, total: 0 },
+    };
+
+    for (const m of nat5Catalog) {
+      const ele = (m.element || 'fire').toLowerCase();
+      if (counts[ele]) {
+        counts[ele].total++;
+        if (ownedMasterIds.has(m.id) || ownedMasterIds.has(m.com2usId) || units.some((u) => u.name?.toLowerCase() === m.name.toLowerCase())) {
+          counts[ele].owned++;
+        }
+      }
+    }
+    return counts;
+  }, [nat5Catalog, ownedMasterIds, units]);
+
+  const filteredMonsters = useMemo(() => {
+    return nat5Catalog.filter((m) => {
+      if (eleFilter !== 'all' && (m.element || '').toLowerCase() !== eleFilter) return false;
+      return true;
+    });
+  }, [nat5Catalog, eleFilter]);
+
+  return (
+    <div className="space-y-6">
+      {/* LD 5★ Showcase Trophy Shelf */}
+      <div className="relative overflow-hidden rounded-3xl border border-yellow-500/20 bg-gradient-to-r from-purple-950/60 via-[#0a0f19] to-amber-950/60 p-6 shadow-2xl backdrop-blur-xl">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 rounded-2xl bg-yellow-500/20 border border-yellow-500/40 text-yellow-300">
+              <Trophy className="w-6 h-6" />
+            </div>
+            <div>
+              <h3 className="text-xl font-black text-white flex items-center gap-2">
+                ตู้เกียรติยศ LD 5★ (แสง-มืดแท้ในไอดี)
+                <span className="px-2.5 py-0.5 rounded-full bg-yellow-500/20 text-yellow-300 text-xs font-bold border border-yellow-500/30">
+                  {ownedLd5s.length} ตัว
+                </span>
+              </h3>
+              <p className="text-xs text-slate-400">มอนสเตอร์แสง-มืดระดับแรร์สูงสุดที่ไอดีคุณครอบครอง</p>
+            </div>
+          </div>
+        </div>
+
+        {ownedLd5s.length > 0 ? (
+          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3">
+            {ownedLd5s.map((u, idx) => (
+              <div
+                key={idx}
+                className="p-3 rounded-2xl bg-black/50 border border-yellow-500/30 flex flex-col items-center gap-2 text-center group hover:scale-105 transition-all shadow-lg shadow-purple-950/40"
+              >
+                <div className="relative">
+                  <MonsterAvatar name={u.name} size={64} className="rounded-2xl border-2 border-yellow-400/50 shadow-xl" />
+                  <span className="absolute -bottom-1 -right-1 px-1 rounded bg-black/80 text-[10px] font-bold text-yellow-300 border border-yellow-500/40">
+                    +{u.spd - u.baseSpd} SPD
+                  </span>
+                </div>
+                <div className="text-xs font-black text-white truncate max-w-full">{u.name}</div>
+                <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase ${
+                  u.element === 'light' ? 'bg-yellow-200/20 text-yellow-200 border border-yellow-300/30' : 'bg-purple-500/20 text-purple-300 border border-purple-500/30'
+                }`}>
+                  {u.element} 5★
+                </span>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="py-8 text-center text-xs text-slate-400">
+            ยังไม่พบมอนสเตอร์แสง-มืด 5 ดาวแท้ในไอดีนี้ (ขอให้ซัมมอนครั้งต่อไปแสงลงนะครับ!)
+          </div>
+        )}
+      </div>
+
+      {/* Nat 5 Completion % by Element */}
+      <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+        {Object.entries(statsByElement).map(([ele, val]) => {
+          const pct = val.total > 0 ? Math.round((val.owned / val.total) * 100) : 0;
+          return (
+            <div key={ele} className={`${card} p-3.5 text-center`}>
+              <div className="text-xs font-bold capitalize text-slate-300 mb-1 flex items-center justify-center gap-1.5">
+                <span className={`w-2.5 h-2.5 rounded-full ${ELEMENT_COLOR[ele]}`} />
+                <span>{ELEMENT_TH[ele]}</span>
+              </div>
+              <div className="text-xl font-black text-white">{val.owned} / {val.total}</div>
+              <div className="w-full bg-white/10 rounded-full h-1.5 mt-2 overflow-hidden">
+                <div className={`h-full ${ELEMENT_COLOR[ele]}`} style={{ width: `${pct}%` }} />
+              </div>
+              <div className="text-[10px] text-slate-400 mt-1 font-mono">{pct}%</div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Catalog Checklist */}
+      <div className={`${card} p-5 space-y-4`}>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="text-sm font-bold text-white">
+            สารบัญ 5 ดาวแท้ทั้งหมด ({filteredMonsters.length} ตัว)
+          </div>
+          <div className="flex items-center gap-1.5 flex-wrap">
+            {ELEMENT_FILTERS.map(([id, label]) => (
+              <button
+                key={id}
+                onClick={() => setEleFilter(id)}
+                className={`px-3 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  eleFilter === id ? 'bg-cyan-600 text-white' : 'text-slate-400 hover:bg-white/5'
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2.5">
+          {filteredMonsters.map((m) => {
+            const isOwned = ownedMasterIds.has(m.id) || ownedMasterIds.has(m.com2usId) || units.some((u) => u.name?.toLowerCase() === m.name.toLowerCase());
+            return (
+              <div
+                key={m.id || m.name}
+                className={`p-2 rounded-xl border flex flex-col items-center gap-1.5 text-center transition-all ${
+                  isOwned
+                    ? 'border-emerald-500/40 bg-emerald-950/15'
+                    : 'border-white/5 bg-white/[0.02] opacity-40 grayscale'
+                }`}
+              >
+                <div className="relative">
+                  <MonsterAvatar monster={m} size={44} className="rounded-xl" />
+                  {isOwned ? (
+                    <span className="absolute -top-1 -right-1 bg-emerald-500 text-white rounded-full p-0.5">
+                      <Check className="w-2.5 h-2.5" />
+                    </span>
+                  ) : (
+                    <span className="absolute -top-1 -right-1 bg-slate-700 text-slate-300 rounded-full p-0.5">
+                      <Lock className="w-2.5 h-2.5" />
+                    </span>
+                  )}
+                </div>
+                <div className="text-[11px] font-medium text-slate-200 truncate max-w-full">{m.name}</div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 3. Siege Defense Builder from Owned Monsters
+// ---------------------------------------------------------------------------
+
+function SiegeDefenseBuilder({ box, onNavigate }) {
+  const [slot1, setSlot1] = useState(null); // Leader
+  const [slot2, setSlot2] = useState(null);
+  const [slot3, setSlot3] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const units = box?.units || [];
+
+  const availableUnits = useMemo(() => {
+    return units.filter((u) => {
+      if (!searchTerm) return true;
+      return u.name.toLowerCase().includes(searchTerm.toLowerCase());
+    });
+  }, [units, searchTerm]);
+
+  // Turn Order calculation
+  const turnOrder = useMemo(() => {
+    const selected = [slot1, slot2, slot3].filter(Boolean);
+    if (selected.length === 0) return [];
+    return [...selected].sort((a, b) => (b.spd || 0) - (a.spd || 0));
+  }, [slot1, slot2, slot3]);
+
+  return (
+    <div className="space-y-6">
+      <div className={`${card} p-6 space-y-6`}>
+        <div>
+          <h3 className="text-xl font-bold text-white flex items-center gap-2">
+            🏰 จำลองและวิเคราะห์ทีมตั้งรับ Siege (3 ตัว)
+          </h3>
+          <p className="text-xs text-slate-400 mt-1">
+            เลือก 3 มอนสเตอร์จากกล่องของคุณ เพื่อวิเคราะห์ความเร็วออกเทิร์น (Speed Gap), การจูนสปีด, และสถิติแก้ทาง
+          </p>
+        </div>
+
+        {/* 3 Selected Slots */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {/* Slot 1: Leader */}
+          <div className="p-4 rounded-2xl border border-amber-500/30 bg-amber-950/10 flex flex-col items-center text-center space-y-3">
+            <span className="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 text-xs font-bold">
+              ลีดเดอร์ (Slot 1)
+            </span>
+            {slot1 ? (
+              <div className="space-y-2">
+                <MonsterAvatar name={slot1.name} size={64} className="rounded-2xl mx-auto shadow-lg" />
+                <div className="font-bold text-white text-sm">{slot1.name}</div>
+                <div className="text-xs font-mono text-cyan-300">SPD: {slot1.spd} ({slot1.baseSpd}+{slot1.spd - slot1.baseSpd})</div>
+                <button
+                  onClick={() => setSlot1(null)}
+                  className="px-2.5 py-1 text-[11px] rounded bg-white/5 hover:bg-rose-500/20 text-rose-300"
+                >
+                  ถอดออก
+                </button>
+              </div>
+            ) : (
+              <div className="py-6 text-xs text-slate-400">คลิกเลือกมอนสเตอร์ด้านล่าง</div>
+            )}
+          </div>
+
+          {/* Slot 2 */}
+          <div className="p-4 rounded-2xl border border-white/10 bg-white/[0.02] flex flex-col items-center text-center space-y-3">
+            <span className="px-2 py-0.5 rounded bg-white/10 text-slate-300 text-xs font-bold">
+              สมาชิก (Slot 2)
+            </span>
+            {slot2 ? (
+              <div className="space-y-2">
+                <MonsterAvatar name={slot2.name} size={64} className="rounded-2xl mx-auto shadow-lg" />
+                <div className="font-bold text-white text-sm">{slot2.name}</div>
+                <div className="text-xs font-mono text-cyan-300">SPD: {slot2.spd} ({slot2.baseSpd}+{slot2.spd - slot2.baseSpd})</div>
+                <button
+                  onClick={() => setSlot2(null)}
+                  className="px-2.5 py-1 text-[11px] rounded bg-white/5 hover:bg-rose-500/20 text-rose-300"
+                >
+                  ถอดออก
+                </button>
+              </div>
+            ) : (
+              <div className="py-6 text-xs text-slate-400">คลิกเลือกมอนสเตอร์ด้านล่าง</div>
+            )}
+          </div>
+
+          {/* Slot 3 */}
+          <div className="p-4 rounded-2xl border border-white/10 bg-white/[0.02] flex flex-col items-center text-center space-y-3">
+            <span className="px-2 py-0.5 rounded bg-white/10 text-slate-300 text-xs font-bold">
+              สมาชิก (Slot 3)
+            </span>
+            {slot3 ? (
+              <div className="space-y-2">
+                <MonsterAvatar name={slot3.name} size={64} className="rounded-2xl mx-auto shadow-lg" />
+                <div className="font-bold text-white text-sm">{slot3.name}</div>
+                <div className="text-xs font-mono text-cyan-300">SPD: {slot3.spd} ({slot3.baseSpd}+{slot3.spd - slot3.baseSpd})</div>
+                <button
+                  onClick={() => setSlot3(null)}
+                  className="px-2.5 py-1 text-[11px] rounded bg-white/5 hover:bg-rose-500/20 text-rose-300"
+                >
+                  ถอดออก
+                </button>
+              </div>
+            ) : (
+              <div className="py-6 text-xs text-slate-400">คลิกเลือกมอนสเตอร์ด้านล่าง</div>
+            )}
+          </div>
+        </div>
+
+        {/* Turn Order Analysis */}
+        {turnOrder.length === 3 && (
+          <div className="p-4 rounded-2xl bg-indigo-950/20 border border-indigo-500/30 space-y-3">
+            <div className="text-xs font-bold text-indigo-300 uppercase tracking-wider">
+              ⚡ ลำดับการออกเทิร์นจริง (Combat Turn Order):
+            </div>
+            <div className="flex items-center gap-3 flex-wrap">
+              {turnOrder.map((m, idx) => (
+                <div key={m.name} className="flex items-center gap-2">
+                  <span className="w-5 h-5 rounded-full bg-indigo-500 text-white font-bold text-xs flex items-center justify-center">
+                    {idx + 1}
+                  </span>
+                  <span className="text-sm font-bold text-white">{m.name}</span>
+                  <span className="text-xs font-mono text-cyan-400 font-semibold">{m.spd} SPD</span>
+                  {idx < 2 && <ChevronRight className="w-4 h-4 text-slate-500" />}
+                </div>
+              ))}
+            </div>
+            <div className="text-xs text-slate-300 pt-1">
+              ส่วนต่างสปีดเทิร์น 1 ➔ 2: <strong>{turnOrder[0].spd - turnOrder[1].spd} SPD</strong> | เทิร์น 2 ➔ 3: <strong>{turnOrder[1].spd - turnOrder[2].spd} SPD</strong>
+              {turnOrder[0].spd - turnOrder[1].spd <= 10 && turnOrder[1].spd - turnOrder[2].spd <= 10 ? (
+                <span className="ml-2 text-emerald-400 font-bold">✓ สปีดจูนชิดกันดีมาก ลดโอกาสโดนแทรกเทิร์น</span>
+              ) : (
+                <span className="ml-2 text-amber-400 font-bold">⚠️ ช่องว่างสปีดห่างเกิน 10 อาจเสี่ยงโดนศัตรูแทรกเทิร์น</span>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Monster Selector Palette */}
+        <div className="space-y-3 pt-4 border-t border-white/5">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-bold text-slate-300">คลิกเพื่อใส่มอนสเตอร์ลงช่องที่ว่าง</span>
+            <input
+              type="text"
+              placeholder="ค้นหาชื่อมอนสเตอร์ใน Box..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="px-3 py-1 text-xs rounded-xl bg-white/5 border border-white/10 text-white placeholder-slate-500"
+            />
+          </div>
+
+          <div className="grid grid-cols-3 sm:grid-cols-6 md:grid-cols-8 gap-2.5 max-h-[300px] overflow-y-auto pr-1">
+            {availableUnits.map((u) => {
+              const isPicked = slot1?.id === u.id || slot2?.id === u.id || slot3?.id === u.id;
+              return (
+                <button
+                  key={u.id}
+                  disabled={isPicked}
+                  onClick={() => {
+                    if (!slot1) setSlot1(u);
+                    else if (!slot2) setSlot2(u);
+                    else if (!slot3) setSlot3(u);
+                  }}
+                  className={`p-2 rounded-xl border flex flex-col items-center gap-1 text-center transition-all cursor-pointer ${
+                    isPicked
+                      ? 'opacity-30 border-white/5 bg-transparent cursor-not-allowed'
+                      : 'border-white/10 bg-white/[0.03] hover:border-cyan-400/50 hover:bg-white/[0.06]'
+                  }`}
+                >
+                  <MonsterAvatar name={u.name} size={44} className="rounded-xl" />
+                  <div className="text-[11px] font-bold text-white truncate max-w-full">{u.name}</div>
+                  <div className="text-[10px] font-mono text-cyan-300">+{u.spd - u.baseSpd} SPD</div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 4. Artifact Substat Search Engine
+// ---------------------------------------------------------------------------
+
+function ArtifactSearchEngine({ box, onNavigate }) {
+  const [selectedSubstatPreset, setSelectedSubstatPreset] = useState('all');
+  const [searchKeyword, setSearchKeyword] = useState('');
+  const [selectedSlot, setSelectedSlot] = useState('all'); // 'all', '1' (element), '2' (archetype)
+  const [selectedElement, setSelectedElement] = useState('all');
+  const [selectedArchetype, setSelectedArchetype] = useState('all');
+  const [whereFilter, setWhereFilter] = useState('all'); // 'all', 'equipped', 'inventory'
+  const [minVal, setMinVal] = useState(0);
+
+  const artifacts = useMemo(() => getArtifactsFromBox(box), [box]);
+
+  const PRESETS = [
+    { id: 'all', label: 'ทั้งหมด' },
+    { id: '207', label: '⚡ ดาเมจตามสปีด (Add\'l SPD)', statIds: [207], hint: 'Juno, Miles, Dominic, Moore' },
+    { id: '302', label: '💥 ดาเมจคริ สกิล 3', statIds: [302], hint: 'Savannah, Lushen, Daphnis, Sonia' },
+    { id: 'recovery', label: '🩸 ฟื้นฟูเลือด (Recovery)', statIds: [304, 305, 306], hint: 'Riley, Abellio, Lulu, Ariel' },
+    { id: '208', label: '🛡️ ลดดาเมจคริที่ได้รับ', statIds: [208], hint: 'แทงก์ / ตัวแก้ทางบอมบ์ / RTA' },
+    { id: '400', label: '🩸 ดูดเลือด (Life Drain)', statIds: [400], hint: 'Douglas, Laika, Chow, Rakan' },
+    { id: '403', label: '🎯 คริเป้าหมายเดี่ยว', statIds: [403], hint: 'Sonia, Adriana, Claire, Covenant' },
+    { id: '204', label: '🏹 ดาเมจตาม HP', statIds: [204], hint: 'Mo Long, Skogul, Eshir, Karnal' },
+    { id: '205', label: '⚔️ ดาเมจตาม ATK', statIds: [205], hint: 'Kaki, Dominic, Seara, Liebli' },
+    { id: '206', label: '🛡️ ดาเมจตาม DEF', statIds: [206], hint: 'Tractor, Feng Yan, Copper, Verad' },
+    { id: '404', label: '⏱️ ดาเมจคริเทิร์นแรก', statIds: [404], hint: 'ทีมสปีดวันช็อต / Tiana Cleave' },
+  ];
+
+  const activePreset = PRESETS.find((p) => p.id === selectedSubstatPreset);
+
+  // Filter artifacts
+  const filteredArtifacts = useMemo(() => {
+    return artifacts.filter((art) => {
+      // Slot filter
+      if (selectedSlot === '1' && art.slot !== 1) return false;
+      if (selectedSlot === '2' && art.slot !== 2) return false;
+
+      // Element filter (for slot 1)
+      if (selectedElement !== 'all' && art.element && art.element.toLowerCase() !== selectedElement) return false;
+
+      // Archetype filter (for slot 2)
+      if (selectedArchetype !== 'all' && art.archetype && art.archetype.toLowerCase() !== selectedArchetype.toLowerCase()) return false;
+
+      // Where filter
+      if (whereFilter === 'equipped' && (!art.unit || art.unit === 0)) return false;
+      if (whereFilter === 'inventory' && art.unit && art.unit !== 0) return false;
+
+      // Preset Substat filter
+      if (activePreset && activePreset.statIds) {
+        const hasStat = art.subs.some((s) => activePreset.statIds.includes(s[0]) && s[1] >= minVal);
+        if (!hasStat) return false;
+      }
+
+      // Keyword search
+      if (searchKeyword.trim()) {
+        const q = searchKeyword.toLowerCase();
+        const hasInEffect = art.subs.some((s) => {
+          const name = (ARTIFACT_EFFECT_NAMES[s[0]] || '').toLowerCase();
+          return name.includes(q);
+        });
+        const hasInType = (art.element || '').toLowerCase().includes(q) || (art.archetype || '').toLowerCase().includes(q);
+        if (!hasInEffect && !hasInType) return false;
+      }
+
+      return true;
+    });
+  }, [artifacts, selectedSlot, selectedElement, selectedArchetype, whereFilter, activePreset, minVal, searchKeyword]);
+
+  return (
+    <div className="space-y-6">
+      {/* Top Banner */}
+      <div className="relative overflow-hidden rounded-3xl border border-teal-500/20 bg-gradient-to-r from-teal-950/60 via-[#0a0f19] to-cyan-950/60 p-6 shadow-2xl backdrop-blur-xl">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-500/20 text-teal-300 text-xs font-bold border border-teal-500/30">
+              <Sparkles className="w-3.5 h-3.5" />
+              ARTIFACT SUBSTAT SEARCH ENGINE
+            </div>
+            <h2 className="text-2xl font-black text-white">
+              ค้นหาอาร์ติแฟกต์ในไอดี <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-cyan-300">ตามออปชั่นเด็ด</span>
+            </h2>
+            <p className="text-xs text-slate-400 max-w-2xl">
+              ค้นหาอาร์ติแฟกต์ที่มีดาเมจตามสปีด, ดาเมจคริสกิล 3, ดูดเลือด หรือฟื้นฟูเลือด เพื่อเลือกใส่ให้กับตัวละครที่คุณกำลังจะปั้นได้ทันที
+            </p>
+          </div>
+          <div className="flex items-center gap-3 bg-black/40 border border-white/10 p-3 px-4 rounded-2xl">
+            <div className="text-center">
+              <div className="text-[10px] uppercase font-bold text-teal-400">อาร์ติแฟกต์ในไอดี</div>
+              <div className="text-2xl font-black text-white">{artifacts.length} <span className="text-xs text-slate-400">ชิ้น</span></div>
+            </div>
+            <div className="w-px h-8 bg-white/10" />
+            <div className="text-center">
+              <div className="text-[10px] uppercase font-bold text-cyan-400">ตรงเงื่อนไข</div>
+              <div className="text-2xl font-black text-emerald-400">{filteredArtifacts.length} <span className="text-xs text-slate-400">ชิ้น</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Quick Substat Preset Chips */}
+      <div className={`${card} p-5 space-y-4`}>
+        <div className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
+          <Zap className="w-4 h-4 text-yellow-400" />
+          เลือกออปชั่นเด็ดที่ต้องการค้นหา (Substat Presets):
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {PRESETS.map((p) => {
+            const isSelected = selectedSubstatPreset === p.id;
+            return (
+              <button
+                key={p.id}
+                onClick={() => {
+                  setSelectedSubstatPreset(p.id);
+                  setMinVal(0);
+                }}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  isSelected
+                    ? 'bg-teal-600 text-white shadow-lg shadow-teal-600/25 border border-teal-400'
+                    : 'bg-white/[0.03] text-slate-300 hover:bg-white/[0.08] border border-white/10'
+                }`}
+              >
+                {p.label}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Filters Row: Slot, Element, Archetype, Where, Search input */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 pt-3 border-t border-white/5">
+          {/* Search Keyword */}
+          <div className="relative">
+            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+            <input
+              type="text"
+              placeholder="ค้นหาชื่อออปชั่น / ธาตุ..."
+              value={searchKeyword}
+              onChange={(e) => setSearchKeyword(e.target.value)}
+              className="w-full pl-9 pr-3 py-1.5 text-xs rounded-xl bg-white/5 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-teal-500/50"
+            />
+          </div>
+
+          {/* Slot */}
+          <div>
+            <select
+              value={selectedSlot}
+              onChange={(e) => setSelectedSlot(e.target.value)}
+              className="w-full px-3 py-1.5 text-xs rounded-xl bg-white/5 border border-white/10 text-slate-200 focus:outline-none"
+            >
+              <option value="all" className="bg-[#0b101c]">ช่อง: ทั้งหมด (ธาตุ + สาย)</option>
+              <option value="1" className="bg-[#0b101c]">ช่องซ้าย: ธาตุ (Element)</option>
+              <option value="2" className="bg-[#0b101c]">ช่องขวา: สาย (Archetype)</option>
+            </select>
+          </div>
+
+          {/* Element */}
+          <div>
+            <select
+              value={selectedElement}
+              onChange={(e) => setSelectedElement(e.target.value)}
+              className="w-full px-3 py-1.5 text-xs rounded-xl bg-white/5 border border-white/10 text-slate-200 focus:outline-none"
+            >
+              <option value="all" className="bg-[#0b101c]">ธาตุ: ทั้งหมด</option>
+              <option value="water" className="bg-[#0b101c]">ธาตุน้ำ (Water)</option>
+              <option value="fire" className="bg-[#0b101c]">ธาตุไฟ (Fire)</option>
+              <option value="wind" className="bg-[#0b101c]">ธาตุลม (Wind)</option>
+              <option value="light" className="bg-[#0b101c]">ธาตุแสง (Light)</option>
+              <option value="dark" className="bg-[#0b101c]">ธาตุมืด (Dark)</option>
+            </select>
+          </div>
+
+          {/* Archetype */}
+          <div>
+            <select
+              value={selectedArchetype}
+              onChange={(e) => setSelectedArchetype(e.target.value)}
+              className="w-full px-3 py-1.5 text-xs rounded-xl bg-white/5 border border-white/10 text-slate-200 focus:outline-none"
+            >
+              <option value="all" className="bg-[#0b101c]">สาย: ทั้งหมด</option>
+              <option value="attack" className="bg-[#0b101c]">สายโจมตี (Attack)</option>
+              <option value="defense" className="bg-[#0b101c]">สายป้องกัน (Defense)</option>
+              <option value="hp" className="bg-[#0b101c]">สายเลือด (HP)</option>
+              <option value="support" className="bg-[#0b101c]">สายสนับสนุน (Support)</option>
+            </select>
+          </div>
+
+          {/* Where */}
+          <div>
+            <select
+              value={whereFilter}
+              onChange={(e) => setWhereFilter(e.target.value)}
+              className="w-full px-3 py-1.5 text-xs rounded-xl bg-white/5 border border-white/10 text-slate-200 focus:outline-none"
+            >
+              <option value="all" className="bg-[#0b101c]">ที่อยู่: ทั้งหมด</option>
+              <option value="equipped" className="bg-[#0b101c]">ใส่อยู่บนมอนสเตอร์</option>
+              <option value="inventory" className="bg-[#0b101c]">ในคลัง (พร้อมใส่)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      {/* Artifacts Grid Result */}
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+        {filteredArtifacts.map((art) => {
+          const isElement = art.slot === 1;
+          const label = isElement
+            ? `${(art.element || 'fire').toUpperCase()} Artifact (ธาตุ${ELEMENT_TH[art.element] || 'ไฟ'})`
+            : `${art.archetype || 'Attack'} Artifact (สาย${art.archetype || 'โจมตี'})`;
+
+          const unitInfo = art.unit ? monsterOf(art.unit) : null;
+          const mainStatLabel = art.main[0] === 1 ? `HP +${art.main[1]}` : art.main[0] === 3 ? `ATK +${art.main[1]}` : `DEF +${art.main[1]}`;
+
+          return (
+            <div
+              key={art.id}
+              className="p-4 rounded-2xl bg-[#090e18] border border-white/10 hover:border-teal-500/40 transition-all flex flex-col justify-between space-y-3 shadow-lg"
+            >
+              <div className="space-y-2">
+                {/* Header */}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className={`w-3 h-3 rounded-full ${
+                      isElement ? (ELEMENT_COLOR[art.element] || 'bg-rose-500') : 'bg-teal-400'
+                    }`} />
+                    <span className="text-xs font-bold text-white truncate">{label}</span>
+                  </div>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-yellow-500/20 text-yellow-300 font-bold border border-yellow-500/30">
+                    +15 ★★★★★
+                  </span>
+                </div>
+
+                {/* Main Stat */}
+                <div className="text-xs font-mono text-cyan-300 font-bold bg-white/[0.02] p-1.5 rounded-lg border border-white/5">
+                  Main: {mainStatLabel}
+                </div>
+
+                {/* Substats List */}
+                <div className="space-y-1.5 pt-1">
+                  {art.subs.map((s, sIdx) => {
+                    const statId = s[0];
+                    const val = s[1];
+                    const isHighlighted = activePreset?.statIds?.includes(statId);
+                    const effectName = ARTIFACT_EFFECT_NAMES[statId] || `Stat #${statId}`;
+
+                    return (
+                      <div
+                        key={sIdx}
+                        className={`text-xs p-1.5 rounded-lg flex items-center justify-between transition-colors ${
+                          isHighlighted
+                            ? 'bg-teal-500/20 border border-teal-500/40 text-teal-200 font-bold'
+                            : 'bg-white/[0.02] text-slate-300'
+                        }`}
+                      >
+                        <span className="truncate pr-2">{effectName}</span>
+                        <span className="font-mono font-bold text-right shrink-0">+{val}%</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Footer: Where Equipped */}
+              <div className="pt-3 border-t border-white/5 flex items-center justify-between text-xs text-slate-400">
+                <span className="text-[11px]">สถานะ:</span>
+                {unitInfo ? (
+                  <div className="flex items-center gap-1.5 text-white font-medium">
+                    <MonsterAvatar monster={unitInfo} size="xs" showStars={false} />
+                    <span className="truncate max-w-[130px]">{unitInfo.name}</span>
+                  </div>
+                ) : (
+                  <span className="text-emerald-400 font-medium bg-emerald-500/10 px-2 py-0.5 rounded">
+                    ✓ ในคลัง (พร้อมใส่)
+                  </span>
+                )}
+              </div>
+            </div>
+          );
+        })}
+
+        {filteredArtifacts.length === 0 && (
+          <div className="col-span-full py-16 text-center text-xs text-slate-400">
+            ไม่พบอาร์ติแฟกต์ตามเงื่อนไขที่เลือก — ลองเปลี่ยนตัวเลือกออปชั่นเด็ด หรือเลือกธาตุ/สายอื่นดูครับ
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+
