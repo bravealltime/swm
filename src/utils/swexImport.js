@@ -3,7 +3,7 @@
 // in localStorage under STORAGE_KEY.
 
 export const STORAGE_KEY = 'swm:mybox';
-export const BOX_VERSION = 3;
+export const BOX_VERSION = 4;
 
 const ELEMENTS = { 1: 'water', 2: 'fire', 3: 'wind', 4: 'light', 5: 'dark' };
 
@@ -45,6 +45,8 @@ function compactRune(rune, equippedOn) {
     stars: stars > 10 ? stars - 10 : stars,
     ancient: stars > 10 ? 1 : 0,
     lvl: Number(rune.upgrade_curr) || 0,
+    q: Number(rune.rank) || 0,          // current quality 1 common … 5 legend
+    q0: Number(rune.extra) || 0,        // original quality when dropped
     main: [Number(rune.pri_eff?.[0]) || 0, Number(rune.pri_eff?.[1]) || 0],
     innate: rune.prefix_eff?.[0] ? [Number(rune.prefix_eff[0]), Number(rune.prefix_eff[1]) || 0] : null,
     subs: (Array.isArray(rune.sec_eff) ? rune.sec_eff : []).map((s) => [Number(s[0]) || 0, Number(s[1]) || 0, Number(s[3]) || 0, s[2] ? 1 : 0]),
@@ -131,6 +133,7 @@ export function parseSwexExport(json) {
         runes: r.runes.length,
         sets: r.sets.slice(0, 3),
         runeEff: r.avgEff,
+        obtained: typeof u.create_time === 'string' ? u.create_time.slice(0, 16) : '',
       };
     })
     .sort((a, b) => b.stars - a.stars || b.level - a.level || b.spd - a.spd);

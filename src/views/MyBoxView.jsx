@@ -4,6 +4,7 @@ import {
   Compass, LayoutDashboard, Gauge, Gem, Zap, Castle, X, AlertTriangle, Sparkles, FolderSync, FolderOpen, Pause,
 } from 'lucide-react';
 import MonsterAvatar from '../components/MonsterAvatar';
+import RuneIcon from '../components/RuneIcon';
 import allMonstersData from '../data/allMonsters.json';
 import guardianMeta from '../data/swrtGuardianMeta.json';
 import { buildMonsterIndex, flagFromCountry } from '../data/swrtPlayerAdapter';
@@ -41,6 +42,19 @@ const TABS = [
 ];
 
 const card = 'rounded-2xl border border-white/[0.08] bg-[#0a0f19]/80';
+
+// "2026-09-10 21:04" -> "8 วันที่แล้ว"
+function agoLabel(stamp) {
+  if (!stamp) return '';
+  const t = new Date(stamp.replace(' ', 'T'));
+  if (Number.isNaN(t.getTime())) return stamp;
+  const days = Math.floor((Date.now() - t.getTime()) / 86400000);
+  if (days <= 0) return 'วันนี้';
+  if (days === 1) return 'เมื่อวาน';
+  if (days < 30) return `${days} วันที่แล้ว`;
+  if (days < 365) return `${Math.floor(days / 30)} เดือนที่แล้ว`;
+  return `${Math.floor(days / 365)} ปีที่แล้ว`;
+}
 
 export default function MyBoxView({ onNavigate }) {
   const [box, setBox] = useState(() => loadBox());
@@ -406,9 +420,33 @@ function Overview({ box, mdc, owned, onTab, onNavigate }) {
   const metaHave = metaTop.filter((m) => owned.has(Number(m.id))).length;
   const avgEff = box.runes?.length ? (box.runes.reduce((s, r) => s + r.eff, 0) / box.runes.length).toFixed(1) : null;
   const nat5Total = Object.values(elements).reduce((a, b) => a + b, 0) || 1;
+  const latestNat5 = useMemo(() => withInfo
+    .filter((u) => u.info && (u.info.stars || 0) >= 5 && u.obtained)
+    .sort((a, b) => (b.obtained > a.obtained ? 1 : -1))
+    .slice(0, 8), [withInfo]);
 
   return (
     <div className="space-y-4">
+      {latestNat5.length > 0 && (
+        <div className={`${card} p-4`}>
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-sm font-bold text-white flex items-center gap-2"><Star className="w-4 h-4 text-amber-400 fill-amber-400" /> เนเชอรัล 5★ ที่ได้รับล่าสุด</h3>
+            <span className="text-[11px] text-slate-400">ล่าสุด {agoLabel(latestNat5[0].obtained)}</span>
+          </div>
+          <div className="flex gap-3 overflow-x-auto pb-1">
+            {latestNat5.map((u, i) => (
+              <button key={`${u.masterId}-${u.obtained}-${i}`} onClick={() => onNavigate('where2use', { initialMonster: u.info.name })}
+                className={`shrink-0 w-28 p-2.5 rounded-2xl border text-center cursor-pointer transition-colors ${i === 0 ? 'bg-amber-500/[0.08] border-amber-500/40 hover:border-amber-400' : 'bg-[#0a0f18] border-slate-800 hover:border-white/20'}`}>
+                <div className="flex justify-center"><MonsterAvatar monster={u.info} size="md" showStars={false} /></div>
+                <div className="text-xs font-bold text-white truncate mt-1.5">{u.info.name}</div>
+                <div className="text-[11px] text-slate-400 truncate">{u.info.thaiName !== u.info.name ? u.info.thaiName : ELEMENT_TH[u.element]}</div>
+                <div className={`text-[11px] font-mono mt-0.5 ${i === 0 ? 'text-amber-300' : 'text-slate-500'}`}>{agoLabel(u.obtained)}</div>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         <Tile label="สูตรแก้ทาง 3MDC ที่สร้างได้" value={mdc ? `${mdc.buildableTotal.toLocaleString()}` : '…'} sub={mdc ? `แก้หอได้ ${mdc.covered}/${mdc.defenses.length} ทีม` : 'กำลังคำนวณ'} color="text-blue-300" onClick={() => onTab('teams')} />
         <Tile label="มอนเมต้า Guardian ที่มี" value={`${metaHave}/${metaTop.length}`} sub="จาก 40 ตัวที่ถูกเลือกบ่อยสุด" color="text-rose-300" onClick={() => onTab('meta')} />
@@ -508,7 +546,7 @@ function NextSummons({ list }) {
 // ---------------------------------------------------------------------------
 // Box grid
 
-const SORTS = [['spd', 'SPD'], ['runeEff', 'รูน %'], ['hp', 'HP'], ['atk', 'ATK'], ['def', 'DEF'], ['stars', 'ดาว/เลเวล']];
+const SORTS = [['spd', 'SPD'], ['runeEff', 'รูน %'], ['hp', 'HP'], ['atk', 'ATK'], ['def', 'DEF'], ['stars', 'ดาว/เลเวล'], ['obtained', 'ได้มาล่าสุด']];
 
 function BoxGrid({ box, onNavigate }) {
   const [element, setElement] = useState('all');
@@ -522,6 +560,7 @@ function BoxGrid({ box, onNavigate }) {
       .map((u) => ({ ...u, info: monsterOf(u.masterId) || monsterOf(baseAwakenedId(u.masterId)) }))
       .filter((u) => (element === 'all' || u.element === element) && u.stars >= minStars)
       .filter((u) => !q || (u.info?.name || '').toLowerCase().includes(q) || (u.info?.thaiName || '').includes(q));
+    if (sort === 'obtained') return list.sort((a, b) => ((b.obtained || '') > (a.obtained || '') ? 1 : -1));
     const key = sort === 'stars' ? null : sort;
     return list.sort((a, b) => (key ? (b[key] || 0) - (a[key] || 0) : b.stars - a.stars || b.level - a.level || b.spd - a.spd));
   }, [box, element, minStars, query, sort]);
@@ -557,6 +596,7 @@ function BoxGrid({ box, onNavigate }) {
               <div className="text-[11px] font-mono text-cyan-300" title={u.baseSpd ? `พื้นฐาน ${u.baseSpd}` : ''}>
                 SPD {u.spd}{u.sets?.length ? <span className="text-slate-400"> · {u.sets.join('/')}</span> : u.runes ? <span className="text-slate-400"> · {u.runes} รูน</span> : null}
               </div>
+              {sort === 'obtained' && u.obtained && <div className="text-[11px] text-amber-300/90">{agoLabel(u.obtained)}</div>}
             </div>
           </button>
         ))}
@@ -957,13 +997,13 @@ function RuneCard({ rune }) {
   const effColor = rune.eff >= 80 ? 'text-emerald-300' : rune.eff >= 60 ? 'text-amber-300' : 'text-slate-300';
   return (
     <div className="p-3 rounded-xl bg-[#0a0f18] border border-slate-800 flex items-start gap-3">
-      <div className="shrink-0 w-11 h-11 rounded-lg bg-purple-500/10 border border-purple-500/30 flex flex-col items-center justify-center">
-        <span className="text-[10px] font-black text-purple-300 leading-none">{rune.slot}</span>
-        <span className="text-[9px] text-slate-400 leading-none mt-0.5">{rune.ancient ? 'A' : ''}{rune.stars}★</span>
+      <div className="shrink-0 flex flex-col items-center gap-1">
+        <RuneIcon rune={rune} size={54} />
+        <span className="text-[10px] text-amber-400 leading-none tracking-tighter">{'★'.repeat(Math.min(6, rune.stars || 0))}</span>
       </div>
       <div className="min-w-0 flex-1">
         <div className="flex items-center justify-between gap-2">
-          <span className="text-xs font-bold text-white truncate">{RUNE_SETS[rune.set] || `Set ${rune.set}`} +{rune.lvl}</span>
+          <span className="text-xs font-bold text-white truncate">{RUNE_SETS[rune.set] || `Set ${rune.set}`} <span className="text-slate-400 font-normal">ช่อง {rune.slot}</span></span>
           <span className={`font-mono text-sm font-black ${effColor}`}>{rune.eff}%</span>
         </div>
         <div className="text-[11px] text-cyan-300 font-mono">{statLabel(rune.main[0], rune.main[1])}{rune.innate ? <span className="text-slate-400"> · {statLabel(rune.innate[0], rune.innate[1])}</span> : null}</div>
