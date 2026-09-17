@@ -22,74 +22,110 @@ import {
   RefreshCw,
   Share2,
   Copy,
-  Info
+  Info,
+  Crown,
+  Star
 } from 'lucide-react';
 import MonsterAvatar from '../components/MonsterAvatar';
 import playerProfiles from '../data/playerProfiles.json';
 import allMonstersData from '../data/allMonsters.json';
 
-const PRO_SHORTCUTS = [
-  { id: 'lest', label: 'Lest (แชมป์โลก 2 สมัย)', flag: '🇨🇳' },
-  { id: 'diligent', label: 'Diligent (แชมป์ SWC)', flag: '🇦🇺' },
-  { id: 'pinkroid', label: 'Pinkroid (ยอดฝีมือยุโรป)', flag: '🇫🇷' },
-  { id: 'lookpee', label: 'ลูกพี่ (การ์เดียนไทย 🇹🇭)', flag: '🇹🇭' },
-  { id: 'braveheart', label: 'Braveheart (สายบรูเซอร์)', flag: '🇺🇸' },
-  { id: 'obabo', label: 'Obabo (เจ้าพ่อดีบัฟ)', flag: '🇸🇪' },
-  { id: 'mrchung', label: 'Mr.Chung (แชมป์โลก 2020)', flag: '🇭🇰' },
-  { id: 'thompsin', label: 'Thompsin (จอมวางแผน)', flag: '🇺🇸' },
+const RANK_FILTERS = [
+  { id: 'all', label: 'ทุกระดับแรงค์ (All Ranks)', icon: Globe },
+  { id: 'legend', label: '👑 Legend (แชมป์โลก)', icon: Crown, color: 'text-amber-400 border-amber-500/40 bg-amber-500/10' },
+  { id: 'guardian', label: '⭐⭐⭐ Guardian (G1-G3)', icon: Trophy, color: 'text-rose-400 border-rose-500/40 bg-rose-500/10' },
+  { id: 'conqueror', label: '⭐⭐ Conqueror (C1-C3)', icon: Award, color: 'text-yellow-400 border-yellow-500/40 bg-yellow-500/10' },
+  { id: 'fighter', label: '⭐ Fighter (F1-F3 สายฟรี)', icon: Shield, color: 'text-sky-400 border-sky-500/40 bg-sky-500/10' }
 ];
 
 export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
-  // Currently selected player
   const [selectedPlayerId, setSelectedPlayerId] = useState(initialPlayer || 'lest');
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [matchFilter, setMatchFilter] = useState('all'); // 'all' | 'win' | 'loss'
-  const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'matches' | 'monsters'
+  const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'matches'
+  const [rankCategoryFilter, setRankCategoryFilter] = useState('all'); // 'all' | 'legend' | 'guardian' | 'conqueror' | 'fighter'
   const [copiedLink, setCopiedLink] = useState(false);
+  const [customRankTier, setCustomRankTier] = useState('fighter'); // 'fighter' | 'conqueror' | 'guardian'
 
-  // Active player data lookup
+  // Look up active player
   const activePlayer = useMemo(() => {
     const found = playerProfiles.find(p => p.id.toLowerCase() === selectedPlayerId.toLowerCase() || p.name.toLowerCase() === selectedPlayerId.toLowerCase());
     if (found) return found;
 
     // Fallback dynamic profile if user searched an arbitrary name
     const cleanName = selectedPlayerId;
+    const isFighter = customRankTier === 'fighter';
+    const isConq = customRankTier === 'conqueror';
+
+    // Tailored signature pool based on custom user-selected tier
+    const fighterF2PSignatures = [
+      { name: 'Fran', element: 'light', pickShare: 86.4, winRate: 52.4, matches: 168 },
+      { name: 'Loren', element: 'light', pickShare: 79.5, winRate: 51.0, matches: 154 },
+      { name: 'Verdehile', element: 'fire', pickShare: 72.8, winRate: 53.5, matches: 141 },
+      { name: 'Riley', element: 'wind', pickShare: 64.0, winRate: 50.8, matches: 124 },
+      { name: 'Eshir', element: 'light', pickShare: 52.4, winRate: 49.5, matches: 102 },
+      { name: 'Theomars', element: 'water', pickShare: 45.0, winRate: 48.0, matches: 87 }
+    ];
+
+    const conqSignatures = [
+      { name: 'Oliver', element: 'wind', pickShare: 75.0, winRate: 58.2, matches: 195 },
+      { name: 'Miles', element: 'water', pickShare: 69.4, winRate: 56.5, matches: 180 },
+      { name: 'Racuni', element: 'fire', pickShare: 62.0, winRate: 55.0, matches: 161 },
+      { name: 'Chandra', element: 'water', pickShare: 54.8, winRate: 54.2, matches: 142 },
+      { name: 'Vanessa', element: 'fire', pickShare: 48.0, winRate: 53.8, matches: 125 },
+      { name: 'Sonia', element: 'wind', pickShare: 42.5, winRate: 55.0, matches: 110 }
+    ];
+
+    const baseSig = isFighter ? fighterF2PSignatures : isConq ? conqSignatures : playerProfiles[0].signatureMonsters;
+
     return {
       id: 'custom-' + cleanName.toLowerCase(),
       name: cleanName,
       displayName: cleanName,
-      tagline: 'Summoners War RTA Contender (Season 38)',
+      tagline: isFighter
+        ? 'Summoners War RTA Fighter (F2P / Everyday Summoner)'
+        : isConq
+        ? 'Summoners War RTA Conqueror Contender'
+        : 'Summoners War RTA High Guardian Player',
       server: 'Global',
       country: 'GLOBAL',
       flag: '🌐',
       guild: 'Independent Summoner',
-      rankTier: 'Guardian 1 ★ (ประเมินสถิติ)',
-      rankBadge: 'G1',
-      score: 1850,
-      worldRank: 4250,
-      matchesRecorded: 120,
-      wins: 74,
-      losses: 46,
-      winRate: 61.7,
-      firstPickPreference: 52.0,
-      archetype: 'Flexible Counter Draft',
-      archetypeThai: 'ดราฟต์แก้ทางยืดหยุ่นตามเมต้า',
-      archetypeDescription: 'ผู้เล่นที่ปรับเปลี่ยนทรงทีมตามสถานการณ์ เน้นการดักทางมอนสเตอร์ตัวสำคัญของฝ่ายตรงข้าม',
-      signatureMonsters: playerProfiles[0].signatureMonsters.map((m, idx) => ({
-        ...m,
-        pickShare: Math.max(30, 80 - idx * 10),
-        winRate: Math.max(50, 68 - idx * 3),
-        matches: Math.max(20, 90 - idx * 12)
-      })),
-      recentMatches: playerProfiles[0].recentMatches.map((m, idx) => ({
-        ...m,
-        id: 'cust-' + idx,
-        result: idx % 3 === 0 ? 'LOSS' : 'WIN',
-        scoreChange: idx % 3 === 0 ? '-10' : '+12'
-      }))
+      rankCategory: customRankTier,
+      rankCategoryThai: isFighter ? 'ระดับ Fighter (F1-F3)' : isConq ? 'ระดับ Conqueror (C1-C3)' : 'ระดับ Guardian (G1-G3)',
+      rankTier: isFighter ? 'Fighter 3 ★★★ (สถิติประเมิน)' : isConq ? 'Conqueror 2 ★★ (สถิติประเมิน)' : 'Guardian 1 ★ (สถิติประเมิน)',
+      rankBadge: isFighter ? 'F3' : isConq ? 'C2' : 'G1',
+      score: isFighter ? 1320 : isConq ? 1540 : 1850,
+      worldRank: isFighter ? 68500 : isConq ? 14200 : 4250,
+      matchesRecorded: isFighter ? 195 : 280,
+      wins: isFighter ? 101 : 154,
+      losses: isFighter ? 94 : 126,
+      winRate: isFighter ? 51.8 : 55.0,
+      firstPickPreference: isFighter ? 44.0 : 52.0,
+      archetype: isFighter ? 'Fran & Loren F2P Core' : isConq ? 'Oliver & Miles Turn Cycle' : 'Flexible Meta Counter',
+      archetypeThai: isFighter ? 'มอนสเตอร์สายฟรีจัดเต็ม ล็อคเกจและกางปีก' : 'สปีดคอนโทรลวนเทิร์นเร็ว',
+      archetypeDescription: isFighter
+        ? 'จัดทีมด้วยมอนสเตอร์สายฟรีและ 4 ดาวที่ทุกคนหาได้ (Fran, Loren, Verdehile, Riley) เน้นการวนเกจสู้กับทีมหลากสไตล์'
+        : 'ปรับเปลี่ยนมอนสเตอร์ตามคู่แข่ง ใช้ความเร็วและการวนสกิลเป็นหัวใจหลัก',
+      signatureMonsters: baseSig.map((s, idx) => {
+        const foundM = Object.values(allMonstersData).find(m => m.name.toLowerCase() === s.name.toLowerCase());
+        return {
+          ...s,
+          thaiName: foundM?.thaiName || s.name,
+          avatarUrl: foundM?.avatarUrl || foundM?.imageUrl || 'https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0076_1_3.png',
+          stars: foundM?.stars || 5
+        };
+      }),
+      recentMatches: (isFighter ? playerProfiles.find(p => p.id === 'f2p_warrior_th')?.recentMatches : playerProfiles[0].recentMatches) || []
     };
-  }, [selectedPlayerId]);
+  }, [selectedPlayerId, customRankTier]);
+
+  // Filtered player pool for quick shortcuts and autocomplete based on rankCategoryFilter
+  const filteredPlayerList = useMemo(() => {
+    if (rankCategoryFilter === 'all') return playerProfiles;
+    return playerProfiles.filter(p => p.rankCategory === rankCategoryFilter);
+  }, [rankCategoryFilter]);
 
   // Autocomplete search suggestions
   const searchSuggestions = useMemo(() => {
@@ -99,8 +135,9 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
       p.name.toLowerCase().includes(q) ||
       (p.displayName && p.displayName.toLowerCase().includes(q)) ||
       (p.guild && p.guild.toLowerCase().includes(q)) ||
-      (p.server && p.server.toLowerCase().includes(q))
-    ).slice(0, 6);
+      (p.server && p.server.toLowerCase().includes(q)) ||
+      (p.rankTier && p.rankTier.toLowerCase().includes(q))
+    ).slice(0, 8);
   }, [searchQuery]);
 
   const handleSelectPlayer = (playerId) => {
@@ -134,10 +171,24 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
     return activePlayer.recentMatches;
   }, [activePlayer, matchFilter]);
 
+  // Rank badge styling helper
+  const getBadgeStyle = (category, badge) => {
+    if (category === 'legend' || badge === 'Legend') {
+      return 'bg-gradient-to-r from-amber-500 to-yellow-300 text-slate-950 font-black border-amber-300';
+    }
+    if (category === 'guardian' || badge?.startsWith('G')) {
+      return 'bg-gradient-to-r from-rose-600 to-rose-400 text-white font-black border-rose-300';
+    }
+    if (category === 'conqueror' || badge?.startsWith('C')) {
+      return 'bg-gradient-to-r from-yellow-600 to-amber-400 text-slate-950 font-black border-yellow-300';
+    }
+    return 'bg-gradient-to-r from-sky-600 to-blue-500 text-white font-black border-sky-300';
+  };
+
   return (
     <div className="space-y-6 max-w-[1720px] mx-auto pb-12">
-      {/* 1. Header & Title */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-linear-to-r from-[#0c1424] via-[#111c33] to-[#0c1424] p-6 rounded-2xl border border-blue-900/40 shadow-xl relative overflow-hidden">
+      {/* 1. Header & Title Banner */}
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-gradient-to-r from-[#0c1424] via-[#111c33] to-[#0c1424] p-6 rounded-2xl border border-blue-900/40 shadow-xl relative overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
         <div className="relative z-10">
           <div className="flex items-center gap-3 mb-2">
@@ -145,14 +196,14 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
               <Search className="w-6 h-6" />
             </div>
             <div>
-              <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-2">
+              <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-2 flex-wrap">
                 ค้นหาสถิติผู้เล่น <span className="text-blue-400">Player Tracker</span>
-                <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/40">
-                  RTA S38
+                <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                  ครอบคลุม Fighter ถึง Legend
                 </span>
               </h1>
               <p className="text-sm text-slate-400">
-                เจาะลึกสถิติแรงค์ RTA มอนสเตอร์คู่ใจ และประวัติการดราฟต์แข่งย้อนหลังของโปรเพลเยอร์ระดับโลก
+                เจาะลึกสถิติ RTA ทุกระดับฝีมือ: ตั้งแต่สายฟรี Fighter 1-3, ผู้เล่น Conqueror 1-3 ไปจนถึงการ์เดียนและแชมป์โลก
               </p>
             </div>
           </div>
@@ -170,8 +221,33 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
         </div>
       </div>
 
-      {/* 2. Intelligent Live Search Bar & Shortcuts */}
+      {/* 2. Rank Tier Category Selector & Intelligent Search Bar */}
       <div className="bg-[#0f172a]/90 backdrop-blur-md rounded-2xl border border-slate-800 p-4 sm:p-5 shadow-lg space-y-4">
+        {/* Rank Category Filter Pills */}
+        <div className="flex items-center gap-2 overflow-x-auto pb-1">
+          <span className="text-xs font-bold text-slate-400 shrink-0 flex items-center gap-1 mr-1">
+            <Filter className="w-3.5 h-3.5 text-blue-400" /> ระดับแรงค์:
+          </span>
+          {RANK_FILTERS.map((rf) => {
+            const isSelected = rankCategoryFilter === rf.id;
+            const Icon = rf.icon;
+            return (
+              <button
+                key={rf.id}
+                onClick={() => setRankCategoryFilter(rf.id)}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 flex items-center gap-1.5 cursor-pointer ${
+                  isSelected
+                    ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30 border border-blue-400'
+                    : 'bg-slate-800/70 hover:bg-slate-700 text-slate-300 border border-slate-700 hover:border-slate-600'
+                }`}
+              >
+                <Icon className="w-3.5 h-3.5" />
+                <span>{rf.label}</span>
+              </button>
+            );
+          })}
+        </div>
+
         {/* Search input field */}
         <form onSubmit={handleSearchSubmit} className="relative">
           <div className="relative flex items-center">
@@ -181,7 +257,7 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onFocus={() => setIsSearchFocused(true)}
-              placeholder="พิมพ์ชื่อในเกม (เช่น Lest, Diligent, Pinkroid, ลูกพี่, Braveheart หรือชื่อไอดีใดๆ)..."
+              placeholder="พิมพ์ชื่อในเกม (เช่น Lest, DragonKing_TH, F2P_Warrior, ลูกพี่, หรือพิมพ์ชื่อตัวเอง/เพื่อน)..."
               className="w-full pl-12 pr-28 py-3.5 bg-[#0a0f18] text-slate-100 placeholder-slate-500 rounded-xl border border-slate-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-hidden text-sm transition-all shadow-inner"
             />
             <button
@@ -194,7 +270,7 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
 
           {/* Autocomplete Dropdown */}
           {isSearchFocused && searchQuery.trim() && (
-            <div className="absolute top-full left-0 right-0 mt-2 bg-[#0c1322] border border-slate-700 rounded-xl shadow-2xl z-50 overflow-hidden divide-y divide-slate-800">
+            <div className="absolute top-full left-0 right-0 mt-2 bg-[#0c1322] border border-slate-700 rounded-xl shadow-2xl z-50 overflow-hidden divide-y divide-slate-800 max-h-96 overflow-y-auto">
               {searchSuggestions.length > 0 ? (
                 searchSuggestions.map((sug) => (
                   <button
@@ -209,6 +285,9 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
                         <div className="text-sm font-bold text-white flex items-center gap-2">
                           {sug.name}
                           <span className="text-xs font-normal text-slate-400">({sug.server})</span>
+                          <span className={`text-[10px] px-1.5 py-0.2 rounded font-black border ${getBadgeStyle(sug.rankCategory, sug.rankBadge)}`}>
+                            {sug.rankBadge || 'RTA'}
+                          </span>
                         </div>
                         <div className="text-xs text-slate-400">{sug.guild} • {sug.archetype}</div>
                       </div>
@@ -228,12 +307,13 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
           )}
         </form>
 
-        {/* Quick Pro Player Badges */}
+        {/* Quick Shortcuts for Selected Rank Tier */}
         <div className="flex items-center gap-2 flex-wrap pt-1">
           <span className="text-xs font-semibold text-slate-400 flex items-center gap-1">
-            <Sparkles className="w-3.5 h-3.5 text-amber-400" /> ทางลัดโปรเพลเยอร์:
+            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+            {rankCategoryFilter === 'all' ? 'ผู้เล่นเด่นทุกระดับ:' : `ผู้เล่นใน ${RANK_FILTERS.find(r => r.id === rankCategoryFilter)?.label}:`}
           </span>
-          {PRO_SHORTCUTS.map((p) => {
+          {filteredPlayerList.slice(0, 10).map((p) => {
             const isSelected = selectedPlayerId.toLowerCase() === p.id.toLowerCase();
             return (
               <button
@@ -246,7 +326,10 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
                 }`}
               >
                 <span>{p.flag}</span>
-                <span>{p.label}</span>
+                <span>{p.displayName || p.name}</span>
+                <span className={`text-[9px] px-1 py-0.2 rounded font-black border ${getBadgeStyle(p.rankCategory, p.rankBadge)}`}>
+                  {p.rankBadge || 'RTA'}
+                </span>
               </button>
             );
           })}
@@ -255,15 +338,59 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
 
       {/* 3. Player Profile Overview Hero Card */}
       <div className="bg-[#0f172a] rounded-2xl border border-slate-800 p-6 shadow-xl relative overflow-hidden">
+        {/* If Custom user-searched profile, show interactive Rank Estimator Switcher */}
+        {activePlayer.id.startsWith('custom-') && (
+          <div className="mb-4 p-3.5 bg-blue-950/30 border border-blue-500/30 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
+              <div className="text-xs text-slate-200">
+                สถิตินี้ถูกประเมินขึ้นสำหรับไอดี <strong className="text-white">"{activePlayer.name}"</strong> — คุณสามารถปรับระดับแรงค์จริงของคุณเพื่อดูสถิติและมอนสเตอร์ที่เหมาะสมได้:
+              </div>
+            </div>
+            <div className="flex items-center gap-1.5 shrink-0">
+              <button
+                onClick={() => setCustomRankTier('fighter')}
+                className={`px-2.5 py-1 rounded text-xs font-bold transition-all cursor-pointer ${
+                  customRankTier === 'fighter'
+                    ? 'bg-sky-600 text-white shadow-xs'
+                    : 'bg-slate-800 text-slate-400 hover:text-white'
+                }`}
+              >
+                ⭐ Fighter (สายฟรี)
+              </button>
+              <button
+                onClick={() => setCustomRankTier('conqueror')}
+                className={`px-2.5 py-1 rounded text-xs font-bold transition-all cursor-pointer ${
+                  customRankTier === 'conqueror'
+                    ? 'bg-amber-600 text-white shadow-xs'
+                    : 'bg-slate-800 text-slate-400 hover:text-white'
+                }`}
+              >
+                ⭐⭐ Conqueror
+              </button>
+              <button
+                onClick={() => setCustomRankTier('guardian')}
+                className={`px-2.5 py-1 rounded text-xs font-bold transition-all cursor-pointer ${
+                  customRankTier === 'guardian'
+                    ? 'bg-rose-600 text-white shadow-xs'
+                    : 'bg-slate-800 text-slate-400 hover:text-white'
+                }`}
+              >
+                ⭐⭐⭐ Guardian
+              </button>
+            </div>
+          </div>
+        )}
+
         <div className="flex flex-col xl:flex-row gap-6 justify-between items-start xl:items-center">
           {/* Left: Player Avatar, Name, Guild, Rank */}
           <div className="flex items-start sm:items-center gap-5">
             <div className="relative">
-              <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-linear-to-br from-blue-600 to-indigo-800 border-2 border-blue-400/50 flex items-center justify-center text-3xl sm:text-4xl font-black text-white shadow-lg shadow-blue-500/20">
+              <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-800 border-2 border-blue-400/50 flex items-center justify-center text-3xl sm:text-4xl font-black text-white shadow-lg shadow-blue-500/20">
                 {activePlayer.name.slice(0, 2).toUpperCase()}
               </div>
-              <div className="absolute -bottom-2 -right-2 px-2 py-0.5 rounded-md bg-amber-500 text-slate-950 text-[11px] font-black shadow-md border border-amber-300">
-                {activePlayer.rankBadge || 'G3'}
+              <div className={`absolute -bottom-2 -right-2 px-2 py-0.5 rounded-md text-[11px] font-black shadow-md border ${getBadgeStyle(activePlayer.rankCategory, activePlayer.rankBadge)}`}>
+                {activePlayer.rankBadge || 'RTA'}
               </div>
             </div>
 
@@ -276,6 +403,9 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
                 </span>
                 <span className="text-xs px-2.5 py-0.5 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-300 font-medium">
                   {activePlayer.guild}
+                </span>
+                <span className="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-300 font-bold">
+                  {activePlayer.rankCategoryThai}
                 </span>
               </div>
               <p className="text-xs sm:text-sm text-slate-400 font-medium">{activePlayer.tagline}</p>
@@ -379,7 +509,7 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
                   มอนสเตอร์คู่ใจที่หยิบบ่อยที่สุด (Signature Monster Pool)
                 </h2>
                 <p className="text-xs text-slate-400">
-                  วิเคราะห์จากอัตราการหยิบ (Pick Share %) และ Win Rate เฉพาะตัวของ {activePlayer.name}
+                  วิเคราะห์จากอัตราการหยิบ (Pick Share %) และ Win Rate เฉพาะตัวของ {activePlayer.name} ({activePlayer.rankTier})
                 </p>
               </div>
               <span className="text-xs font-semibold px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-slate-300">
@@ -537,14 +667,14 @@ function MatchCard({ match, playerName }) {
   return (
     <div className={`p-4 sm:p-5 rounded-2xl border transition-all ${
       isWin
-        ? 'bg-linear-to-r from-emerald-950/20 via-[#0f172a] to-[#0f172a] border-emerald-900/40 hover:border-emerald-700/50'
-        : 'bg-linear-to-r from-rose-950/20 via-[#0f172a] to-[#0f172a] border-rose-900/40 hover:border-rose-700/50'
+        ? 'bg-gradient-to-r from-emerald-950/20 via-[#0f172a] to-[#0f172a] border-emerald-900/40 hover:border-emerald-700/50'
+        : 'bg-gradient-to-r from-rose-950/20 via-[#0f172a] to-[#0f172a] border-rose-900/40 hover:border-rose-700/50'
     }`}>
       {/* Top Match Info Header */}
       <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-800/80">
         <div className="flex items-center gap-2.5">
           {/* Result Tag */}
-          <span className={`px-3 py-1 rounded-lg text-xs font-black flex items-center gap-1.5 shadow-sm ${
+          <span className={`px-3 py-1 rounded-lg text-xs font-black flex items-center gap-1.5 shadow-xs ${
             isWin
               ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
               : 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
@@ -632,7 +762,7 @@ function DraftSlot({ monster }) {
 
       {/* Leader Crown Badge */}
       {monster.isLeader && (
-        <div className="absolute -top-1.5 -left-1.5 px-1 rounded-sm bg-amber-500 text-slate-950 text-[9px] font-black shadow-xs z-10">
+        <div className="absolute -top-1.5 -left-1.5 px-1 rounded-xs bg-amber-500 text-slate-950 text-[9px] font-black shadow-xs z-10">
           LEAD
         </div>
       )}
