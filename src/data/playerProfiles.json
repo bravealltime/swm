@@ -699,7 +699,8 @@
       }
     ],
     "rankCategory": "legend",
-    "rankCategoryThai": "ระดับ Legend (แชมป์โลก)"
+    "rankCategoryThai": "ระดับ Legend (แชมป์โลก)",
+    "profileAvatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80"
   },
   {
     "id": "diligent",
@@ -1097,7 +1098,8 @@
       }
     ],
     "rankCategory": "guardian",
-    "rankCategoryThai": "ระดับ Guardian (G1-G3)"
+    "rankCategoryThai": "ระดับ Guardian (G1-G3)",
+    "profileAvatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80"
   },
   {
     "id": "pinkroid",
@@ -1343,7 +1345,8 @@
       }
     ],
     "rankCategory": "guardian",
-    "rankCategoryThai": "ระดับ Guardian (G1-G3)"
+    "rankCategoryThai": "ระดับ Guardian (G1-G3)",
+    "profileAvatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80"
   },
   {
     "id": "lookpee",
@@ -1741,7 +1744,8 @@
       }
     ],
     "rankCategory": "guardian",
-    "rankCategoryThai": "ระดับ Guardian (G1-G3)"
+    "rankCategoryThai": "ระดับ Guardian (G1-G3)",
+    "profileAvatar": "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=150&auto=format&fit=crop&q=80"
   },
   {
     "id": "braveheart",
@@ -1987,7 +1991,8 @@
       }
     ],
     "rankCategory": "guardian",
-    "rankCategoryThai": "ระดับ Guardian (G1-G3)"
+    "rankCategoryThai": "ระดับ Guardian (G1-G3)",
+    "profileAvatar": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80"
   },
   {
     "id": "obabo",
@@ -2234,7 +2239,8 @@
       }
     ],
     "rankCategory": "guardian",
-    "rankCategoryThai": "ระดับ Guardian (G1-G3)"
+    "rankCategoryThai": "ระดับ Guardian (G1-G3)",
+    "profileAvatar": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80"
   },
   {
     "id": "mrchung",
@@ -2480,7 +2486,8 @@
       }
     ],
     "rankCategory": "guardian",
-    "rankCategoryThai": "ระดับ Guardian (G1-G3)"
+    "rankCategoryThai": "ระดับ Guardian (G1-G3)",
+    "profileAvatar": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&auto=format&fit=crop&q=80"
   },
   {
     "id": "thompsin",
@@ -2726,7 +2733,8 @@
       }
     ],
     "rankCategory": "guardian",
-    "rankCategoryThai": "ระดับ Guardian (G1-G3)"
+    "rankCategoryThai": "ระดับ Guardian (G1-G3)",
+    "profileAvatar": "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=150&auto=format&fit=crop&q=80"
   },
   {
     "id": "sparkyshum",
@@ -3453,7 +3461,8 @@
       }
     ],
     "rankCategory": "conqueror",
-    "rankCategoryThai": "ระดับ Conqueror (C1-C3)"
+    "rankCategoryThai": "ระดับ Conqueror (C1-C3)",
+    "profileAvatar": "https://api.dicebear.com/7.x/adventurer/svg?seed=SparkyShum"
   },
   {
     "id": "al_h_",
@@ -4180,7 +4189,8 @@
       }
     ],
     "rankCategory": "conqueror",
-    "rankCategoryThai": "ระดับ Conqueror (C1-C3)"
+    "rankCategoryThai": "ระดับ Conqueror (C1-C3)",
+    "profileAvatar": "https://api.dicebear.com/7.x/adventurer/svg?seed=Alթhⱥ"
   },
   {
     "id": "carmack75",
@@ -4907,7 +4917,8 @@
       }
     ],
     "rankCategory": "conqueror",
-    "rankCategoryThai": "ระดับ Conqueror (C1-C3)"
+    "rankCategoryThai": "ระดับ Conqueror (C1-C3)",
+    "profileAvatar": "https://api.dicebear.com/7.x/adventurer/svg?seed=Carmack75"
   },
   {
     "id": "ncharmed",
@@ -5634,7 +5645,8 @@
       }
     ],
     "rankCategory": "conqueror",
-    "rankCategoryThai": "ระดับ Conqueror (C1-C3)"
+    "rankCategoryThai": "ระดับ Conqueror (C1-C3)",
+    "profileAvatar": "https://api.dicebear.com/7.x/adventurer/svg?seed=Ncharmed"
   },
   {
     "id": "______",
@@ -6361,7 +6373,8 @@
       }
     ],
     "rankCategory": "conqueror",
-    "rankCategoryThai": "ระดับ Conqueror (C1-C3)"
+    "rankCategoryThai": "ระดับ Conqueror (C1-C3)",
+    "profileAvatar": "https://api.dicebear.com/7.x/adventurer/svg?seed=ʜᴀᴍᴍᴇʀ"
   },
   {
     "id": "paultjepils_",
@@ -7088,7 +7101,8 @@
       }
     ],
     "rankCategory": "conqueror",
-    "rankCategoryThai": "ระดับ Conqueror (C1-C3)"
+    "rankCategoryThai": "ระดับ Conqueror (C1-C3)",
+    "profileAvatar": "https://api.dicebear.com/7.x/adventurer/svg?seed=PaultjePils"
   },
   {
     "id": "valcrieur",
@@ -7815,7 +7829,8 @@
       }
     ],
     "rankCategory": "conqueror",
-    "rankCategoryThai": "ระดับ Conqueror (C1-C3)"
+    "rankCategoryThai": "ระดับ Conqueror (C1-C3)",
+    "profileAvatar": "https://api.dicebear.com/7.x/adventurer/svg?seed=Valcrieur"
   },
   {
     "id": "paul_haaland_",
@@ -8542,7 +8557,8 @@
       }
     ],
     "rankCategory": "conqueror",
-    "rankCategoryThai": "ระดับ Conqueror (C1-C3)"
+    "rankCategoryThai": "ระดับ Conqueror (C1-C3)",
+    "profileAvatar": "https://api.dicebear.com/7.x/adventurer/svg?seed=PaulHaaland"
   },
   {
     "id": "__manu_",
@@ -9269,7 +9285,8 @@
       }
     ],
     "rankCategory": "conqueror",
-    "rankCategoryThai": "ระดับ Conqueror (C1-C3)"
+    "rankCategoryThai": "ระดับ Conqueror (C1-C3)",
+    "profileAvatar": "https://api.dicebear.com/7.x/adventurer/svg?seed=期限Manu"
   },
   {
     "id": "__",
@@ -9996,7 +10013,8 @@
       }
     ],
     "rankCategory": "conqueror",
-    "rankCategoryThai": "ระดับ Conqueror (C1-C3)"
+    "rankCategoryThai": "ระดับ Conqueror (C1-C3)",
+    "profileAvatar": "https://api.dicebear.com/7.x/adventurer/svg?seed=록담"
   },
   {
     "id": "xandersaur",
@@ -10723,7 +10741,8 @@
       }
     ],
     "rankCategory": "conqueror",
-    "rankCategoryThai": "ระดับ Conqueror (C1-C3)"
+    "rankCategoryThai": "ระดับ Conqueror (C1-C3)",
+    "profileAvatar": "https://api.dicebear.com/7.x/adventurer/svg?seed=XanderSaur"
   },
   {
     "id": "_un_ee_",
@@ -11450,7 +11469,8 @@
       }
     ],
     "rankCategory": "conqueror",
-    "rankCategoryThai": "ระดับ Conqueror (C1-C3)"
+    "rankCategoryThai": "ระดับ Conqueror (C1-C3)",
+    "profileAvatar": "https://api.dicebear.com/7.x/adventurer/svg?seed=ᗩunȶee"
   },
   {
     "id": "___",
@@ -12177,7 +12197,8 @@
       }
     ],
     "rankCategory": "conqueror",
-    "rankCategoryThai": "ระดับ Conqueror (C1-C3)"
+    "rankCategoryThai": "ระดับ Conqueror (C1-C3)",
+    "profileAvatar": "https://api.dicebear.com/7.x/adventurer/svg?seed=쾌무뜨"
   },
   {
     "id": "_______",
@@ -12904,7 +12925,8 @@
       }
     ],
     "rankCategory": "conqueror",
-    "rankCategoryThai": "ระดับ Conqueror (C1-C3)"
+    "rankCategoryThai": "ระดับ Conqueror (C1-C3)",
+    "profileAvatar": "https://api.dicebear.com/7.x/adventurer/svg?seed=月月不會再儲值"
   },
   {
     "id": "killage",
@@ -13631,7 +13653,8 @@
       }
     ],
     "rankCategory": "conqueror",
-    "rankCategoryThai": "ระดับ Conqueror (C1-C3)"
+    "rankCategoryThai": "ระดับ Conqueror (C1-C3)",
+    "profileAvatar": "https://api.dicebear.com/7.x/adventurer/svg?seed=killage"
   },
   {
     "id": "_zerbeer_",
@@ -14358,7 +14381,8 @@
       }
     ],
     "rankCategory": "conqueror",
-    "rankCategoryThai": "ระดับ Conqueror (C1-C3)"
+    "rankCategoryThai": "ระดับ Conqueror (C1-C3)",
+    "profileAvatar": "https://api.dicebear.com/7.x/adventurer/svg?seed=<ZerBeeR>"
   },
   {
     "id": "ikk_s",
@@ -15085,7 +15109,8 @@
       }
     ],
     "rankCategory": "conqueror",
-    "rankCategoryThai": "ระดับ Conqueror (C1-C3)"
+    "rankCategoryThai": "ระดับ Conqueror (C1-C3)",
+    "profileAvatar": "https://api.dicebear.com/7.x/adventurer/svg?seed=Ikkɪs"
   },
   {
     "id": "______",
@@ -15812,7 +15837,8 @@
       }
     ],
     "rankCategory": "conqueror",
-    "rankCategoryThai": "ระดับ Conqueror (C1-C3)"
+    "rankCategoryThai": "ระดับ Conqueror (C1-C3)",
+    "profileAvatar": "https://api.dicebear.com/7.x/adventurer/svg?seed=明知山小老虎"
   },
   {
     "id": "__",
@@ -16539,7 +16565,8 @@
       }
     ],
     "rankCategory": "conqueror",
-    "rankCategoryThai": "ระดับ Conqueror (C1-C3)"
+    "rankCategoryThai": "ระดับ Conqueror (C1-C3)",
+    "profileAvatar": "https://api.dicebear.com/7.x/adventurer/svg?seed=악어"
   },
   {
     "id": "akimahen",
@@ -17266,7 +17293,8 @@
       }
     ],
     "rankCategory": "conqueror",
-    "rankCategoryThai": "ระดับ Conqueror (C1-C3)"
+    "rankCategoryThai": "ระดับ Conqueror (C1-C3)",
+    "profileAvatar": "https://api.dicebear.com/7.x/adventurer/svg?seed=akimahen"
   },
   {
     "id": "dragonking_th",
@@ -17512,7 +17540,8 @@
           }
         ]
       }
-    ]
+    ],
+    "profileAvatar": "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80"
   },
   {
     "id": "eurostriker_fr",
@@ -17758,7 +17787,8 @@
           }
         ]
       }
-    ]
+    ],
+    "profileAvatar": "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80"
   },
   {
     "id": "f2p_warrior_th",
@@ -18156,7 +18186,8 @@
           }
         ]
       }
-    ]
+    ],
+    "profileAvatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80"
   },
   {
     "id": "verde_rev_king",
@@ -18402,7 +18433,8 @@
           }
         ]
       }
-    ]
+    ],
+    "profileAvatar": "https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=150&auto=format&fit=crop&q=80"
   },
   {
     "id": "siamnovice_th",
@@ -18648,7 +18680,8 @@
           }
         ]
       }
-    ]
+    ],
+    "profileAvatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80"
   },
   {
     "id": "lushen_oneshot",
@@ -18894,6 +18927,784 @@
           }
         ]
       }
+    ],
+    "profileAvatar": "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150&auto=format&fit=crop&q=80"
+  },
+  {
+    "id": "ohbigz",
+    "name": "OhBIGzシ",
+    "displayName": "OhBIGzシ 🇹🇭",
+    "profileAvatar": "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80",
+    "tagline": "Thai RTA Contender (Fighter 3) • Lucksack Verified",
+    "server": "Asia",
+    "country": "TH",
+    "flag": "🇹🇭",
+    "guild": "Siam Infinity",
+    "rankCategory": "fighter",
+    "rankCategoryThai": "ระดับ Fighter (F1-F3)",
+    "rankTier": "Fighter 3 ★★★",
+    "rankBadge": "F3",
+    "score": 1349,
+    "worldRank": 61200,
+    "matchesRecorded": 384,
+    "wins": 198,
+    "losses": 186,
+    "winRate": 51.6,
+    "firstPickPreference": 46.2,
+    "archetype": "Fran & Verdehile Turn Engine",
+    "archetypeThai": "เร่งเกจสวนกลับ & ล้างดีบัฟกางปีก",
+    "archetypeDescription": "ใช้ Verdehile รูน Revenge 3 เซ็ต สวนกลับดันเกจให้ Fran และ Loren ล็อคเป้าสังหาร",
+    "signatureMonsters": [
+      {
+        "name": "Fran",
+        "element": "light",
+        "pickShare": 84.5,
+        "winRate": 53.0,
+        "matches": 324,
+        "monsterId": 19114,
+        "thaiName": "Fran",
+        "stars": 3,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0028_4_0.png"
+      },
+      {
+        "name": "Verdehile",
+        "element": "fire",
+        "pickShare": 78.0,
+        "winRate": 52.4,
+        "matches": 299,
+        "monsterId": 14712,
+        "thaiName": "แวร์เดฮิล (แวมไฟ)",
+        "stars": 4,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0016_1_2.png"
+      },
+      {
+        "name": "Loren",
+        "element": "light",
+        "pickShare": 71.2,
+        "winRate": 51.8,
+        "matches": 273,
+        "monsterId": 19314,
+        "thaiName": "Loren",
+        "stars": 3,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0032_3_4.png"
+      },
+      {
+        "name": "Riley",
+        "element: ": "wind",
+        "pickShare": 65.0,
+        "winRate": 50.5,
+        "matches": 249,
+        "monsterId": 99999,
+        "thaiName": "Riley",
+        "element": "water",
+        "stars": 5,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0076_1_3.png"
+      },
+      {
+        "name": "Theomars",
+        "element": "water",
+        "pickShare": 54.0,
+        "winRate": 52.0,
+        "matches": 207,
+        "monsterId": 19211,
+        "thaiName": "Theomars",
+        "stars": 5,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0032_0_2.png"
+      },
+      {
+        "name": "Eshir",
+        "element": "light",
+        "pickShare": 48.5,
+        "winRate": 49.8,
+        "matches": 186,
+        "monsterId": 14034,
+        "thaiName": "เอเชียร์ 2A",
+        "stars": 3,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0053_3_1.png"
+      }
+    ],
+    "recentMatches": [
+      {
+        "id": "rep-ohb-1",
+        "date": "2026-09-17 23:14",
+        "result": "WIN",
+        "scoreChange": "+11",
+        "duration": "2:10",
+        "firstPick": true,
+        "picks": [
+          {
+            "name": "Fran",
+            "element": "light",
+            "isLeader": true,
+            "isBanned": false
+          },
+          {
+            "name": "Verdehile",
+            "element": "fire",
+            "isLeader": false,
+            "isBanned": false
+          },
+          {
+            "name": "Loren",
+            "element": "light",
+            "isLeader": false,
+            "isBanned": true
+          },
+          {
+            "name": "Riley",
+            "element": "wind",
+            "isLeader": false,
+            "isBanned": false
+          },
+          {
+            "name": "Theomars",
+            "element": "water",
+            "isLeader": false,
+            "isBanned": false
+          }
+        ],
+        "opponent": {
+          "name": "OhhYessBabyy",
+          "country": "VN",
+          "flag": "🇻🇳",
+          "server": "Asia",
+          "rankTier": "Fighter 3 ★★★",
+          "score": 1343,
+          "picks": [
+            {
+              "name": "Oliver",
+              "element": "wind",
+              "isLeader": true,
+              "isBanned": true,
+              "monsterId": 25313,
+              "thaiName": "โอลิเวอร์",
+              "stars": 5,
+              "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0076_1_3.png"
+            },
+            {
+              "name": "Racuni",
+              "element": "fire",
+              "isLeader": false,
+              "isBanned": false,
+              "monsterId": 21012,
+              "thaiName": "Racuni",
+              "stars": 3,
+              "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0041_1_2.png"
+            },
+            {
+              "name": "Miles",
+              "element": "water",
+              "isLeader": false,
+              "isBanned": false,
+              "monsterId": 25311,
+              "thaiName": "ไมล์ส",
+              "stars": 5,
+              "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0076_1_1.png"
+            },
+            {
+              "name": "Chandra",
+              "element": "water",
+              "isLeader": false,
+              "isBanned": false,
+              "monsterId": 17411,
+              "thaiName": "จันทรา",
+              "stars": 5,
+              "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0027_0_1.png"
+            },
+            {
+              "name": "Fran",
+              "element": "light",
+              "isLeader": false,
+              "isBanned": false,
+              "monsterId": 19114,
+              "thaiName": "Fran",
+              "stars": 3,
+              "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0028_4_0.png"
+            }
+          ]
+        },
+        "playerPicks": [
+          {
+            "name": "Fran",
+            "element": "light",
+            "isLeader": true,
+            "isBanned": false,
+            "monsterId": 19114,
+            "thaiName": "Fran",
+            "stars": 3,
+            "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0028_4_0.png"
+          },
+          {
+            "name": "Verdehile",
+            "element": "fire",
+            "isLeader": false,
+            "isBanned": false,
+            "monsterId": 14712,
+            "thaiName": "แวร์เดฮิล (แวมไฟ)",
+            "stars": 4,
+            "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0016_1_2.png"
+          },
+          {
+            "name": "Loren",
+            "element": "light",
+            "isLeader": false,
+            "isBanned": true,
+            "monsterId": 19314,
+            "thaiName": "Loren",
+            "stars": 3,
+            "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0032_3_4.png"
+          },
+          {
+            "name": "Riley",
+            "element": "wind",
+            "isLeader": false,
+            "isBanned": false,
+            "monsterId": 25613,
+            "thaiName": "ไรลีย์ (โทเท็มลม)",
+            "stars": 5,
+            "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0078_1_3.png"
+          },
+          {
+            "name": "Theomars",
+            "element": "water",
+            "isLeader": false,
+            "isBanned": false,
+            "monsterId": 19211,
+            "thaiName": "Theomars",
+            "stars": 5,
+            "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0032_0_2.png"
+          }
+        ]
+      }
     ]
+  },
+  {
+    "id": "ohhyessbabyy",
+    "name": "OhhYessBabyy",
+    "displayName": "OhhYessBabyy 🇻🇳",
+    "profileAvatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80",
+    "tagline": "Vietnam RTA Fighter (F3) • Lucksack Verified",
+    "server": "Asia",
+    "country": "VN",
+    "flag": "🇻🇳",
+    "guild": "Saigon Dragons",
+    "rankCategory": "fighter",
+    "rankCategoryThai": "ระดับ Fighter (F1-F3)",
+    "rankTier": "Fighter 3 ★★★",
+    "rankBadge": "F3",
+    "score": 1343,
+    "worldRank": 63400,
+    "matchesRecorded": 312,
+    "wins": 160,
+    "losses": 152,
+    "winRate": 51.3,
+    "firstPickPreference": 48.0,
+    "archetype": "Oliver & Miles Hybrid",
+    "archetypeThai": "สปีดคอนโทรลผสมตัวบัฟฟาร์ม",
+    "archetypeDescription": "เล่นลูกผสมระหว่าง Oliver แกนกลางความเร็ว และ Miles เสริมความเสถียร",
+    "signatureMonsters": [
+      {
+        "name": "Oliver",
+        "element": "wind",
+        "pickShare": 82.0,
+        "winRate": 54.0,
+        "matches": 255,
+        "monsterId": 25313,
+        "thaiName": "โอลิเวอร์",
+        "stars": 5,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0076_1_3.png"
+      },
+      {
+        "name": "Miles",
+        "element": "water",
+        "pickShare": 74.5,
+        "winRate": 52.8,
+        "matches": 232,
+        "monsterId": 25311,
+        "thaiName": "ไมล์ส",
+        "stars": 5,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0076_1_1.png"
+      },
+      {
+        "name": "Racuni",
+        "element": "fire",
+        "pickShare": 68.0,
+        "winRate": 51.2,
+        "matches": 212,
+        "monsterId": 21012,
+        "thaiName": "Racuni",
+        "stars": 3,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0041_1_2.png"
+      },
+      {
+        "name": "Fran",
+        "element": "light",
+        "pickShare": 60.5,
+        "winRate": 50.0,
+        "matches": 188,
+        "monsterId": 19114,
+        "thaiName": "Fran",
+        "stars": 3,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0028_4_0.png"
+      },
+      {
+        "name": "Chandra",
+        "element": "water",
+        "pickShare": 52.0,
+        "winRate": 51.5,
+        "matches": 162,
+        "monsterId": 17411,
+        "thaiName": "จันทรา",
+        "stars": 5,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0027_0_1.png"
+      },
+      {
+        "name": "Loren",
+        "element": "light",
+        "pickShare": 45.0,
+        "winRate": 49.0,
+        "matches": 140,
+        "monsterId": 19314,
+        "thaiName": "Loren",
+        "stars": 3,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0032_3_4.png"
+      }
+    ],
+    "recentMatches": [
+      {
+        "id": "rep-ohb-2",
+        "date": "2026-09-17 21:50",
+        "result": "WIN",
+        "scoreChange": "+12",
+        "duration": "1:50",
+        "firstPick": true,
+        "picks": [
+          {
+            "name": "Oliver",
+            "element": "wind",
+            "isLeader": true,
+            "isBanned": false
+          },
+          {
+            "name": "Miles",
+            "element": "water",
+            "isLeader": false,
+            "isBanned": false
+          },
+          {
+            "name": "Racuni",
+            "element": "fire",
+            "isLeader": false,
+            "isBanned": true
+          },
+          {
+            "name": "Fran",
+            "element": "light",
+            "isLeader": false,
+            "isBanned": false
+          },
+          {
+            "name": "Chandra",
+            "element": "water",
+            "isLeader": false,
+            "isBanned": false
+          }
+        ],
+        "opponent": {
+          "name": "oh~baby",
+          "country": "CN",
+          "flag": "🇨🇳",
+          "server": "Asia",
+          "rankTier": "Fighter 1 ★",
+          "score": 1111,
+          "picks": [
+            {
+              "name": "Draco",
+              "element": "fire",
+              "isLeader": true,
+              "isBanned": false,
+              "monsterId": 18012,
+              "thaiName": "Draco",
+              "stars": 4,
+              "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0028_1_4.png"
+            },
+            {
+              "name": "Lushen",
+              "element": "wind",
+              "isLeader": false,
+              "isBanned": true,
+              "monsterId": 13413,
+              "thaiName": "ลูเชน (โจ๊กเกอร์ลม)",
+              "stars": 4,
+              "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0011_2_2.png"
+            },
+            {
+              "name": "Loren",
+              "element": "light",
+              "isLeader": false,
+              "isBanned": false,
+              "monsterId": 19314,
+              "thaiName": "Loren",
+              "stars": 3,
+              "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0032_3_4.png"
+            },
+            {
+              "name": "Fran",
+              "element": "light",
+              "isLeader": false,
+              "isBanned": false,
+              "monsterId": 19114,
+              "thaiName": "Fran",
+              "stars": 3,
+              "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0028_4_0.png"
+            },
+            {
+              "name": "Theomars",
+              "element": "water",
+              "isLeader": false,
+              "isBanned": false,
+              "monsterId": 19211,
+              "thaiName": "Theomars",
+              "stars": 5,
+              "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0032_0_2.png"
+            }
+          ]
+        },
+        "playerPicks": [
+          {
+            "name": "Oliver",
+            "element": "wind",
+            "isLeader": true,
+            "isBanned": false,
+            "monsterId": 25313,
+            "thaiName": "โอลิเวอร์",
+            "stars": 5,
+            "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0076_1_3.png"
+          },
+          {
+            "name": "Miles",
+            "element": "water",
+            "isLeader": false,
+            "isBanned": false,
+            "monsterId": 25311,
+            "thaiName": "ไมล์ส",
+            "stars": 5,
+            "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0076_1_1.png"
+          },
+          {
+            "name": "Racuni",
+            "element": "fire",
+            "isLeader": false,
+            "isBanned": true,
+            "monsterId": 21012,
+            "thaiName": "Racuni",
+            "stars": 3,
+            "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0041_1_2.png"
+          },
+          {
+            "name": "Fran",
+            "element": "light",
+            "isLeader": false,
+            "isBanned": false,
+            "monsterId": 19114,
+            "thaiName": "Fran",
+            "stars": 3,
+            "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0028_4_0.png"
+          },
+          {
+            "name": "Chandra",
+            "element": "water",
+            "isLeader": false,
+            "isBanned": false,
+            "monsterId": 17411,
+            "thaiName": "จันทรา",
+            "stars": 5,
+            "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0027_0_1.png"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "oh_baby",
+    "name": "oh~baby",
+    "displayName": "oh~baby 🇨🇳",
+    "profileAvatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80",
+    "tagline": "China Fighter 1 • Lucksack Verified",
+    "server": "Global",
+    "country": "CN",
+    "flag": "🇨🇳",
+    "guild": "Panda Masters",
+    "rankCategory": "fighter",
+    "rankCategoryThai": "ระดับ Fighter (F1-F3)",
+    "rankTier": "Fighter 1 ★",
+    "rankBadge": "F1",
+    "score": 1111,
+    "worldRank": 142000,
+    "matchesRecorded": 210,
+    "wins": 102,
+    "losses": 108,
+    "winRate": 48.6,
+    "firstPickPreference": 42.0,
+    "archetype": "Fast Booster Lushen Cleave",
+    "archetypeThai": "สปีดบูสต์ดราโค่ ปาการ์ดคลีฟเร็ว",
+    "archetypeDescription": "เน้นการจบไวด้วย Draco และ Lushen",
+    "signatureMonsters": [
+      {
+        "name": "Draco",
+        "element": "fire",
+        "pickShare": 88.0,
+        "winRate": 49.5,
+        "matches": 185,
+        "monsterId": 18012,
+        "thaiName": "Draco",
+        "stars": 4,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0028_1_4.png"
+      },
+      {
+        "name": "Lushen",
+        "element": "wind",
+        "pickShare": 85.0,
+        "winRate": 50.0,
+        "matches": 178,
+        "monsterId": 13413,
+        "thaiName": "ลูเชน (โจ๊กเกอร์ลม)",
+        "stars": 4,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0011_2_2.png"
+      },
+      {
+        "name": "Fran",
+        "element": "light",
+        "pickShare": 72.0,
+        "winRate": 48.0,
+        "matches": 151,
+        "monsterId": 19114,
+        "thaiName": "Fran",
+        "stars": 3,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0028_4_0.png"
+      },
+      {
+        "name": "Loren",
+        "element": "light",
+        "pickShare": 64.0,
+        "winRate": 47.5,
+        "matches": 134,
+        "monsterId": 19314,
+        "thaiName": "Loren",
+        "stars": 3,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0032_3_4.png"
+      },
+      {
+        "name": "Theomars",
+        "element": "water",
+        "pickShare": 51.0,
+        "winRate": 48.2,
+        "matches": 107,
+        "monsterId": 19211,
+        "thaiName": "Theomars",
+        "stars": 5,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0032_0_2.png"
+      },
+      {
+        "name": "Garo",
+        "element": "fire",
+        "pickShare": 44.0,
+        "winRate": 46.8,
+        "matches": 92,
+        "monsterId": 13512,
+        "thaiName": "Garo",
+        "stars": 4,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0013_1_3.png"
+      }
+    ],
+    "recentMatches": []
+  },
+  {
+    "id": "obitothebroken",
+    "name": "ObitoTheBroken",
+    "displayName": "ObitoTheBroken 🇫🇷",
+    "profileAvatar": "https://images.unsplash.com/photo-1566492031773-4f4e44671857?w=150&auto=format&fit=crop&q=80",
+    "tagline": "French Challenger / Fighter • Lucksack Verified",
+    "server": "Europe",
+    "country": "FR",
+    "flag": "🇫🇷",
+    "guild": "Akatsuki EU",
+    "rankCategory": "fighter",
+    "rankCategoryThai": "ระดับ Fighter (F1-F3)",
+    "rankTier": "Challenger 3 ★★★",
+    "rankBadge": "CH3",
+    "score": 1045,
+    "worldRank": 165000,
+    "matchesRecorded": 180,
+    "wins": 86,
+    "losses": 94,
+    "winRate": 47.8,
+    "firstPickPreference": 40.0,
+    "archetype": "Fran & Loren F2P Core",
+    "archetypeThai": "ชุดมอนสเตอร์ตั้งต้นสายฟรี",
+    "archetypeDescription": "เน้นมอนสเตอร์เก็บแต้มรายวัน Fran, Loren, Verdehile",
+    "signatureMonsters": [
+      {
+        "name": "Fran",
+        "element": "light",
+        "pickShare": 89.0,
+        "winRate": 49.0,
+        "matches": 160,
+        "monsterId": 19114,
+        "thaiName": "Fran",
+        "stars": 3,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0028_4_0.png"
+      },
+      {
+        "name": "Loren",
+        "element": "light",
+        "pickShare": 84.0,
+        "winRate": 48.5,
+        "matches": 151,
+        "monsterId": 19314,
+        "thaiName": "Loren",
+        "stars": 3,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0032_3_4.png"
+      },
+      {
+        "name": "Verdehile",
+        "element": "fire",
+        "pickShare": 76.0,
+        "winRate": 48.0,
+        "matches": 137,
+        "monsterId": 14712,
+        "thaiName": "แวร์เดฮิล (แวมไฟ)",
+        "stars": 4,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0016_1_2.png"
+      },
+      {
+        "name": "Riley",
+        "element": "wind",
+        "pickShare": 68.0,
+        "winRate": 47.0,
+        "matches": 122,
+        "monsterId": 25613,
+        "thaiName": "ไรลีย์ (โทเท็มลม)",
+        "stars": 5,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0078_1_3.png"
+      },
+      {
+        "name": "Vigor",
+        "element": "water",
+        "pickShare": 55.0,
+        "winRate": 46.5,
+        "matches": 99,
+        "monsterId": 14031,
+        "thaiName": "วิกอร์ 2A",
+        "stars": 3,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0053_0_1.png"
+      },
+      {
+        "name": "Theomars",
+        "element": "water",
+        "pickShare": 48.0,
+        "winRate": 46.0,
+        "matches": 86,
+        "monsterId": 19211,
+        "thaiName": "Theomars",
+        "stars": 5,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0032_0_2.png"
+      }
+    ],
+    "recentMatches": []
+  },
+  {
+    "id": "phobos",
+    "name": "PHOBOS",
+    "displayName": "PHOBOS 🇵🇱",
+    "profileAvatar": "https://images.unsplash.com/photo-1511367461989-f85a21fda167?w=150&auto=format&fit=crop&q=80",
+    "tagline": "Poland Challenger • Lucksack Verified",
+    "server": "Europe",
+    "country": "PL",
+    "flag": "🇵🇱",
+    "guild": "Warsaw Warriors",
+    "rankCategory": "fighter",
+    "rankCategoryThai": "ระดับ Fighter (F1-F3)",
+    "rankTier": "Challenger 3 ★★★",
+    "rankBadge": "CH3",
+    "score": 1034,
+    "worldRank": 171000,
+    "matchesRecorded": 170,
+    "wins": 81,
+    "losses": 89,
+    "winRate": 47.6,
+    "firstPickPreference": 38.5,
+    "archetype": "Turn 2 Bruiser F2P",
+    "archetypeThai": "บรูเซอร์สายฟรี ยืนชนทนดาเมจ",
+    "archetypeDescription": "เล่นทนรับการบุกของศัตรูด้วย Riley และ Vigor 2A",
+    "signatureMonsters": [
+      {
+        "name": "Riley",
+        "element": "wind",
+        "pickShare": 87.0,
+        "winRate": 48.5,
+        "matches": 148,
+        "monsterId": 25613,
+        "thaiName": "ไรลีย์ (โทเท็มลม)",
+        "stars": 5,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0078_1_3.png"
+      },
+      {
+        "name": "Vigor",
+        "element": "water",
+        "pickShare": 80.0,
+        "winRate": 48.0,
+        "matches": 136,
+        "monsterId": 14031,
+        "thaiName": "วิกอร์ 2A",
+        "stars": 3,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0053_0_1.png"
+      },
+      {
+        "name": "Fran",
+        "element": "light",
+        "pickShare": 72.0,
+        "winRate": 47.0,
+        "matches": 122,
+        "monsterId": 19114,
+        "thaiName": "Fran",
+        "stars": 3,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0028_4_0.png"
+      },
+      {
+        "name": "Theomars",
+        "element": "water",
+        "pickShare": 65.0,
+        "winRate": 46.5,
+        "matches": 110,
+        "monsterId": 19211,
+        "thaiName": "Theomars",
+        "stars": 5,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0032_0_2.png"
+      },
+      {
+        "name": "Tesarion",
+        "element": "fire",
+        "pickShare": 54.0,
+        "winRate": 46.0,
+        "matches": 92,
+        "monsterId": 19212,
+        "thaiName": "Tesarion",
+        "stars": 5,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0032_1_2.png"
+      },
+      {
+        "name": "Khmun",
+        "element": "fire",
+        "pickShare": 46.0,
+        "winRate": 45.5,
+        "matches": 78,
+        "monsterId": 20412,
+        "thaiName": "คมุน",
+        "stars": 4,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0038_1_1.png"
+      }
+    ],
+    "recentMatches": []
   }
 ]

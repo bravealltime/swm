@@ -24,7 +24,8 @@ import {
   Copy,
   Info,
   Crown,
-  Star
+  Star,
+  User
 } from 'lucide-react';
 import MonsterAvatar from '../components/MonsterAvatar';
 import playerProfiles from '../data/playerProfiles.json';
@@ -35,7 +36,7 @@ const RANK_FILTERS = [
   { id: 'legend', label: '👑 Legend (แชมป์โลก)', icon: Crown, color: 'text-amber-400 border-amber-500/40 bg-amber-500/10' },
   { id: 'guardian', label: '⭐⭐⭐ Guardian (G1-G3)', icon: Trophy, color: 'text-rose-400 border-rose-500/40 bg-rose-500/10' },
   { id: 'conqueror', label: '⭐⭐ Conqueror (C1-C3)', icon: Award, color: 'text-yellow-400 border-yellow-500/40 bg-yellow-500/10' },
-  { id: 'fighter', label: '⭐ Fighter (F1-F3 สายฟรี)', icon: Shield, color: 'text-sky-400 border-sky-500/40 bg-sky-500/10' }
+  { id: 'fighter', label: '⭐ Fighter & ทั่วไป (F1-F3)', icon: Shield, color: 'text-sky-400 border-sky-500/40 bg-sky-500/10' }
 ];
 
 export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
@@ -83,6 +84,7 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
       id: 'custom-' + cleanName.toLowerCase(),
       name: cleanName,
       displayName: cleanName,
+      profileAvatar: `https://api.dicebear.com/7.x/adventurer/svg?seed=${encodeURIComponent(cleanName)}`,
       tagline: isFighter
         ? 'Summoners War RTA Fighter (F2P / Everyday Summoner)'
         : isConq
@@ -96,8 +98,8 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
       rankCategoryThai: isFighter ? 'ระดับ Fighter (F1-F3)' : isConq ? 'ระดับ Conqueror (C1-C3)' : 'ระดับ Guardian (G1-G3)',
       rankTier: isFighter ? 'Fighter 3 ★★★ (สถิติประเมิน)' : isConq ? 'Conqueror 2 ★★ (สถิติประเมิน)' : 'Guardian 1 ★ (สถิติประเมิน)',
       rankBadge: isFighter ? 'F3' : isConq ? 'C2' : 'G1',
-      score: isFighter ? 1320 : isConq ? 1540 : 1850,
-      worldRank: isFighter ? 68500 : isConq ? 14200 : 4250,
+      score: isFighter ? 1349 : isConq ? 1540 : 1850,
+      worldRank: isFighter ? 61200 : isConq ? 14200 : 4250,
       matchesRecorded: isFighter ? 195 : 280,
       wins: isFighter ? 101 : 154,
       losses: isFighter ? 94 : 126,
@@ -117,7 +119,7 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
           stars: foundM?.stars || 5
         };
       }),
-      recentMatches: (isFighter ? playerProfiles.find(p => p.id === 'f2p_warrior_th')?.recentMatches : playerProfiles[0].recentMatches) || []
+      recentMatches: (isFighter ? playerProfiles.find(p => p.id === 'ohbigz')?.recentMatches : playerProfiles[0].recentMatches) || []
     };
   }, [selectedPlayerId, customRankTier]);
 
@@ -127,17 +129,18 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
     return playerProfiles.filter(p => p.rankCategory === rankCategoryFilter);
   }, [rankCategoryFilter]);
 
-  // Autocomplete search suggestions
+  // Autocomplete search suggestions (Fuzzy match like Lucksack)
   const searchSuggestions = useMemo(() => {
     if (!searchQuery.trim()) return [];
     const q = searchQuery.toLowerCase().trim();
-    return playerProfiles.filter(p =>
-      p.name.toLowerCase().includes(q) ||
-      (p.displayName && p.displayName.toLowerCase().includes(q)) ||
-      (p.guild && p.guild.toLowerCase().includes(q)) ||
-      (p.server && p.server.toLowerCase().includes(q)) ||
-      (p.rankTier && p.rankTier.toLowerCase().includes(q))
-    ).slice(0, 8);
+    return playerProfiles.filter(p => {
+      const name = p.name.toLowerCase();
+      const id = p.id.toLowerCase();
+      const disp = (p.displayName || '').toLowerCase();
+      const g = (p.guild || '').toLowerCase();
+      const s = (p.server || '').toLowerCase();
+      return name.includes(q) || id.includes(q) || disp.includes(q) || g.includes(q) || s.includes(q);
+    }).slice(0, 10);
   }, [searchQuery]);
 
   const handleSelectPlayer = (playerId) => {
@@ -185,6 +188,13 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
     return 'bg-gradient-to-r from-sky-600 to-blue-500 text-white font-black border-sky-300';
   };
 
+  // Star rating color (Lucksack style)
+  const getScoreStarColor = (score) => {
+    if (score >= 2000) return 'text-amber-400 fill-amber-400';
+    if (score >= 1300) return 'text-rose-500 fill-rose-500';
+    return 'text-sky-400 fill-sky-400';
+  };
+
   return (
     <div className="space-y-6 max-w-[1720px] mx-auto pb-12">
       {/* 1. Header & Title Banner */}
@@ -199,11 +209,11 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
               <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-2 flex-wrap">
                 ค้นหาสถิติผู้เล่น <span className="text-blue-400">Player Tracker</span>
                 <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
-                  ครอบคลุม Fighter ถึง Legend
+                  ดึงรูปโปรไฟล์ & สถิติแบบ Lucksack.gg
                 </span>
               </h1>
               <p className="text-sm text-slate-400">
-                เจาะลึกสถิติ RTA ทุกระดับฝีมือ: ตั้งแต่สายฟรี Fighter 1-3, ผู้เล่น Conqueror 1-3 ไปจนถึงการ์เดียนและแชมป์โลก
+                ระบบค้นหาสถิติผู้เล่น RTA พร้อมรูปโปรไฟล์จริง สถิติดราฟต์ 5v5 และมอนสเตอร์คู่ใจทุกระดับแรงค์
               </p>
             </div>
           </div>
@@ -221,7 +231,7 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
         </div>
       </div>
 
-      {/* 2. Rank Tier Category Selector & Intelligent Search Bar */}
+      {/* 2. Search Area & Autocomplete Modal */}
       <div className="bg-[#0f172a]/90 backdrop-blur-md rounded-2xl border border-slate-800 p-4 sm:p-5 shadow-lg space-y-4">
         {/* Rank Category Filter Pills */}
         <div className="flex items-center gap-2 overflow-x-auto pb-1">
@@ -248,7 +258,7 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
           })}
         </div>
 
-        {/* Search input field */}
+        {/* Search input field with Lucksack style Dropdown */}
         <form onSubmit={handleSearchSubmit} className="relative">
           <div className="relative flex items-center">
             <Search className="absolute left-4 w-5 h-5 text-slate-400" />
@@ -257,7 +267,7 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onFocus={() => setIsSearchFocused(true)}
-              placeholder="พิมพ์ชื่อในเกม (เช่น Lest, DragonKing_TH, F2P_Warrior, ลูกพี่, หรือพิมพ์ชื่อตัวเอง/เพื่อน)..."
+              placeholder="พิมพ์ชื่อในเกม (ลองพิมพ์ 'ohb', 'oh', 'Lest', 'DragonKing', 'ลูกพี่')..."
               className="w-full pl-12 pr-28 py-3.5 bg-[#0a0f18] text-slate-100 placeholder-slate-500 rounded-xl border border-slate-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-hidden text-sm transition-all shadow-inner"
             />
             <button
@@ -268,33 +278,51 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
             </button>
           </div>
 
-          {/* Autocomplete Dropdown */}
+          {/* Autocomplete Dropdown (Lucksack Styled Match List) */}
           {isSearchFocused && searchQuery.trim() && (
-            <div className="absolute top-full left-0 right-0 mt-2 bg-[#0c1322] border border-slate-700 rounded-xl shadow-2xl z-50 overflow-hidden divide-y divide-slate-800 max-h-96 overflow-y-auto">
+            <div className="absolute top-full left-0 right-0 mt-2 bg-[#0c1322] border border-slate-700 rounded-2xl shadow-2xl z-50 overflow-hidden divide-y divide-slate-800/80 max-h-96 overflow-y-auto">
+              <div className="px-4 py-2 text-[11px] font-bold text-slate-400 bg-[#080e1a] flex items-center justify-between">
+                <span>Players ({searchSuggestions.length} matches)</span>
+                <span className="text-slate-500">คลิกเพื่อเปิดโปรไฟล์</span>
+              </div>
               {searchSuggestions.length > 0 ? (
                 searchSuggestions.map((sug) => (
                   <button
                     key={sug.id}
                     type="button"
                     onClick={() => handleSelectPlayer(sug.id)}
-                    className="w-full px-4 py-3 text-left hover:bg-blue-600/10 flex items-center justify-between transition-colors cursor-pointer"
+                    className="w-full px-4 py-3 text-left hover:bg-blue-600/15 flex items-center justify-between transition-colors cursor-pointer group"
                   >
-                    <div className="flex items-center gap-3">
-                      <span className="text-xl">{sug.flag}</span>
-                      <div>
-                        <div className="text-sm font-bold text-white flex items-center gap-2">
-                          {sug.name}
-                          <span className="text-xs font-normal text-slate-400">({sug.server})</span>
-                          <span className={`text-[10px] px-1.5 py-0.2 rounded font-black border ${getBadgeStyle(sug.rankCategory, sug.rankBadge)}`}>
-                            {sug.rankBadge || 'RTA'}
-                          </span>
+                    {/* Left: Avatar + Name + Flag */}
+                    <div className="flex items-center gap-3 min-w-0">
+                      <img
+                        src={sug.profileAvatar}
+                        alt={sug.name}
+                        className="w-10 h-10 rounded-full object-cover border-2 border-slate-700 group-hover:border-blue-400 transition-colors shrink-0 bg-slate-800"
+                        onError={(e) => {
+                          e.target.src = `https://api.dicebear.com/7.x/adventurer/svg?seed=${encodeURIComponent(sug.name)}`;
+                        }}
+                      />
+                      <div className="min-w-0">
+                        <div className="text-sm font-bold text-white group-hover:text-blue-300 transition-colors flex items-center gap-1.5 truncate">
+                          <span>{sug.name}</span>
+                          <span className="text-base">{sug.flag}</span>
                         </div>
-                        <div className="text-xs text-slate-400">{sug.guild} • {sug.archetype}</div>
+                        <div className="text-xs text-slate-400 truncate">
+                          {sug.guild || 'No Guild'} • {sug.archetype || 'Balanced RTA'}
+                        </div>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <div className="text-xs font-bold text-amber-400">{sug.rankTier}</div>
-                      <div className="text-[11px] text-slate-400">{sug.score} pts • WR {sug.winRate}%</div>
+
+                    {/* Right: Star + Score (Lucksack Style) */}
+                    <div className="flex items-center gap-2 shrink-0">
+                      <div className="flex items-center gap-1 font-mono font-black text-sm">
+                        <Star className={`w-3.5 h-3.5 ${getScoreStarColor(sug.score)}`} />
+                        <span className="text-slate-100">{sug.score}</span>
+                      </div>
+                      <span className={`text-[9px] px-1.5 py-0.5 rounded font-black border uppercase ${getBadgeStyle(sug.rankCategory, sug.rankBadge)}`}>
+                        {sug.rankBadge || 'RTA'}
+                      </span>
                     </div>
                   </button>
                 ))
@@ -311,7 +339,7 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
         <div className="flex items-center gap-2 flex-wrap pt-1">
           <span className="text-xs font-semibold text-slate-400 flex items-center gap-1">
             <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-            {rankCategoryFilter === 'all' ? 'ผู้เล่นเด่นทุกระดับ:' : `ผู้เล่นใน ${RANK_FILTERS.find(r => r.id === rankCategoryFilter)?.label}:`}
+            {rankCategoryFilter === 'all' ? 'ผู้เล่นยอดนิยม:' : `ผู้เล่นใน ${RANK_FILTERS.find(r => r.id === rankCategoryFilter)?.label}:`}
           </span>
           {filteredPlayerList.slice(0, 10).map((p) => {
             const isSelected = selectedPlayerId.toLowerCase() === p.id.toLowerCase();
@@ -319,13 +347,20 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
               <button
                 key={p.id}
                 onClick={() => handleSelectPlayer(p.id)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-all cursor-pointer ${
+                className={`px-3 py-1.5 rounded-xl text-xs font-medium flex items-center gap-2 transition-all cursor-pointer ${
                   isSelected
                     ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30 border border-blue-400'
                     : 'bg-slate-800/80 hover:bg-slate-700 text-slate-300 border border-slate-700 hover:border-slate-600'
                 }`}
               >
-                <span>{p.flag}</span>
+                <img
+                  src={p.profileAvatar}
+                  alt={p.name}
+                  className="w-5 h-5 rounded-full object-cover shrink-0 border border-slate-600"
+                  onError={(e) => {
+                    e.target.src = `https://api.dicebear.com/7.x/adventurer/svg?seed=${encodeURIComponent(p.name)}`;
+                  }}
+                />
                 <span>{p.displayName || p.name}</span>
                 <span className={`text-[9px] px-1 py-0.2 rounded font-black border ${getBadgeStyle(p.rankCategory, p.rankBadge)}`}>
                   {p.rankBadge || 'RTA'}
@@ -336,7 +371,7 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
         </div>
       </div>
 
-      {/* 3. Player Profile Overview Hero Card */}
+      {/* 3. Player Profile Overview Hero Card with Real Profile Picture */}
       <div className="bg-[#0f172a] rounded-2xl border border-slate-800 p-6 shadow-xl relative overflow-hidden">
         {/* If Custom user-searched profile, show interactive Rank Estimator Switcher */}
         {activePlayer.id.startsWith('custom-') && (
@@ -344,7 +379,7 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
             <div className="flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
               <div className="text-xs text-slate-200">
-                สถิตินี้ถูกประเมินขึ้นสำหรับไอดี <strong className="text-white">"{activePlayer.name}"</strong> — คุณสามารถปรับระดับแรงค์จริงของคุณเพื่อดูสถิติและมอนสเตอร์ที่เหมาะสมได้:
+                สถิตินี้ถูกประเมินขึ้นสำหรับไอดี <strong className="text-white">"{activePlayer.name}"</strong> — คุณสามารถปรับระดับแรงค์จริงเพื่อดูสถิติและมอนสเตอร์ที่เหมาะสมได้:
               </div>
             </div>
             <div className="flex items-center gap-1.5 shrink-0">
@@ -383,12 +418,17 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
         )}
 
         <div className="flex flex-col xl:flex-row gap-6 justify-between items-start xl:items-center">
-          {/* Left: Player Avatar, Name, Guild, Rank */}
+          {/* Left: Player Profile Picture, Name, Guild, Rank */}
           <div className="flex items-start sm:items-center gap-5">
-            <div className="relative">
-              <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-800 border-2 border-blue-400/50 flex items-center justify-center text-3xl sm:text-4xl font-black text-white shadow-lg shadow-blue-500/20">
-                {activePlayer.name.slice(0, 2).toUpperCase()}
-              </div>
+            <div className="relative shrink-0">
+              <img
+                src={activePlayer.profileAvatar}
+                alt={activePlayer.name}
+                className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover border-2 border-blue-400/50 shadow-xl shadow-blue-500/20 bg-slate-900"
+                onError={(e) => {
+                  e.target.src = `https://api.dicebear.com/7.x/adventurer/svg?seed=${encodeURIComponent(activePlayer.name)}`;
+                }}
+              />
               <div className={`absolute -bottom-2 -right-2 px-2 py-0.5 rounded-md text-[11px] font-black shadow-md border ${getBadgeStyle(activePlayer.rankCategory, activePlayer.rankBadge)}`}>
                 {activePlayer.rankBadge || 'RTA'}
               </div>
@@ -414,8 +454,10 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
                   <Trophy className="w-3.5 h-3.5" />
                   {activePlayer.rankTier}
                 </span>
-                <span className="text-xs text-slate-400 font-semibold">
-                  คะแนน: <strong className="text-white font-mono">{activePlayer.score.toLocaleString()}</strong> pts
+                <span className="text-xs text-slate-400 font-semibold flex items-center gap-1">
+                  คะแนน:
+                  <Star className={`w-3.5 h-3.5 ${getScoreStarColor(activePlayer.score)}`} />
+                  <strong className="text-white font-mono">{activePlayer.score.toLocaleString()}</strong> pts
                 </span>
                 <span className="text-xs text-slate-500">•</span>
                 <span className="text-xs text-slate-400 font-semibold">
@@ -588,9 +630,15 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
 
             {/* Matches list */}
             <div className="space-y-3">
-              {activePlayer.recentMatches.slice(0, 3).map((match) => (
-                <MatchCard key={match.id} match={match} playerName={activePlayer.name} />
-              ))}
+              {activePlayer.recentMatches && activePlayer.recentMatches.length > 0 ? (
+                activePlayer.recentMatches.slice(0, 3).map((match) => (
+                  <MatchCard key={match.id} match={match} playerName={activePlayer.name} />
+                ))
+              ) : (
+                <div className="py-6 text-center text-xs text-slate-400">
+                  ไม่มีประวัติแมตช์ที่บันทึกไว้สำหรับผู้เล่นนี้
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -613,7 +661,7 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
                     : 'bg-slate-800 text-slate-400 hover:text-white'
                 }`}
               >
-                ทั้งหมด ({activePlayer.recentMatches.length})
+                ทั้งหมด ({activePlayer.recentMatches?.length || 0})
               </button>
               <button
                 onClick={() => setMatchFilter('win')}
@@ -718,7 +766,7 @@ function MatchCard({ match, playerName }) {
           </div>
 
           <div className="flex items-center gap-2 overflow-x-auto pb-1">
-            {match.playerPicks.map((p, idx) => (
+            {match.playerPicks && match.playerPicks.map((p, idx) => (
               <DraftSlot key={idx} monster={p} />
             ))}
           </div>
@@ -736,13 +784,13 @@ function MatchCard({ match, playerName }) {
           <div className="flex items-center justify-between text-xs">
             <span className="text-[11px] text-slate-400">คู่แข่ง</span>
             <span className="font-bold text-slate-200 flex items-center gap-1.5">
-              {match.opponent.flag} {match.opponent.name}
-              <span className="text-xs text-slate-400 font-normal">({match.opponent.score} pts)</span>
+              {match.opponent?.flag} {match.opponent?.name}
+              <span className="text-xs text-slate-400 font-normal">({match.opponent?.score} pts)</span>
             </span>
           </div>
 
           <div className="flex items-center gap-2 overflow-x-auto pb-1 justify-start lg:justify-end">
-            {match.opponent.picks.map((p, idx) => (
+            {match.opponent?.picks && match.opponent.picks.map((p, idx) => (
               <DraftSlot key={idx} monster={p} />
             ))}
           </div>
