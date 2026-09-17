@@ -25,7 +25,8 @@ import {
   Info,
   Crown,
   Star,
-  User
+  User,
+  X
 } from 'lucide-react';
 import MonsterAvatar from '../components/MonsterAvatar';
 import playerProfiles from '../data/playerProfiles.json';
@@ -232,9 +233,17 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
       </div>
 
       {/* 2. Search Area & Autocomplete Modal */}
-      <div className="bg-[#0f172a]/90 backdrop-blur-md rounded-2xl border border-slate-800 p-4 sm:p-5 shadow-lg space-y-4">
+      <div className="relative z-50 bg-[#0f172a]/95 backdrop-blur-md rounded-2xl border border-slate-800 p-4 sm:p-5 shadow-xl space-y-4">
+        {/* Backdrop overlay to click outside and dismiss dropdown */}
+        {isSearchFocused && searchQuery.trim() && (
+          <div
+            className="fixed inset-0 bg-black/60 backdrop-blur-xs z-40"
+            onClick={() => setIsSearchFocused(false)}
+          />
+        )}
+
         {/* Rank Category Filter Pills */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-1">
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 relative z-50">
           <span className="text-xs font-bold text-slate-400 shrink-0 flex items-center gap-1 mr-1">
             <Filter className="w-3.5 h-3.5 text-blue-400" /> ระดับแรงค์:
           </span>
@@ -259,7 +268,7 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
         </div>
 
         {/* Search input field with Lucksack style Dropdown */}
-        <form onSubmit={handleSearchSubmit} className="relative">
+        <form onSubmit={handleSearchSubmit} className="relative z-50">
           <div className="relative flex items-center">
             <Search className="absolute left-4 w-5 h-5 text-slate-400" />
             <input
@@ -270,6 +279,19 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
               placeholder="พิมพ์ชื่อในเกม (ลองพิมพ์ 'ohb', 'oh', 'Lest', 'DragonKing', 'ลูกพี่')..."
               className="w-full pl-12 pr-28 py-3.5 bg-[#0a0f18] text-slate-100 placeholder-slate-500 rounded-xl border border-slate-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-hidden text-sm transition-all shadow-inner"
             />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchQuery('');
+                  setIsSearchFocused(false);
+                }}
+                className="absolute right-20 text-slate-400 hover:text-white p-1 rounded-md hover:bg-slate-800 cursor-pointer"
+                title="ล้างข้อความ"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
             <button
               type="submit"
               className="absolute right-2.5 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all shadow-md hover:shadow-blue-500/25 cursor-pointer"
@@ -280,8 +302,8 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
 
           {/* Autocomplete Dropdown (Lucksack Styled Match List) */}
           {isSearchFocused && searchQuery.trim() && (
-            <div className="absolute top-full left-0 right-0 mt-2 bg-[#0c1322] border border-slate-700 rounded-2xl shadow-2xl z-50 overflow-hidden divide-y divide-slate-800/80 max-h-96 overflow-y-auto">
-              <div className="px-4 py-2 text-[11px] font-bold text-slate-400 bg-[#080e1a] flex items-center justify-between">
+            <div className="absolute top-full left-0 right-0 mt-2 bg-[#0c1322] border border-blue-500/40 rounded-2xl shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9)] z-50 overflow-hidden divide-y divide-slate-800/80 max-h-96 overflow-y-auto ring-1 ring-blue-500/30">
+              <div className="px-4 py-2.5 text-[11px] font-bold text-slate-300 bg-[#080e1a] border-b border-slate-800 flex items-center justify-between">
                 <span>Players ({searchSuggestions.length} matches)</span>
                 <span className="text-slate-500">คลิกเพื่อเปิดโปรไฟล์</span>
               </div>
@@ -372,7 +394,7 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
       </div>
 
       {/* 3. Player Profile Overview Hero Card with Real Profile Picture */}
-      <div className="bg-[#0f172a] rounded-2xl border border-slate-800 p-6 shadow-xl relative overflow-hidden">
+      <div className="bg-[#0f172a] rounded-2xl border border-slate-800 p-6 shadow-xl relative z-10 overflow-hidden">
         {/* If Custom user-searched profile, show interactive Rank Estimator Switcher */}
         {activePlayer.id.startsWith('custom-') && (
           <div className="mb-4 p-3.5 bg-blue-950/30 border border-blue-500/30 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
