@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import MonsterAvatar from '../components/MonsterAvatar';
 import RuneIcon from '../components/RuneIcon';
+import ArtifactIcon from '../components/ArtifactIcon';
 import allMonstersData from '../data/allMonsters.json';
 import guardianMeta from '../data/swrtGuardianMeta.json';
 import { buildMonsterIndex, flagFromCountry } from '../data/swrtPlayerAdapter';
@@ -1791,22 +1792,20 @@ function ArtifactSearchEngine({ box, onNavigate }) {
               className="p-4 rounded-2xl bg-[#090e18] border border-white/10 hover:border-teal-500/40 transition-all flex flex-col justify-between space-y-3 shadow-lg"
             >
               <div className="space-y-2">
-                {/* Header */}
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className={`w-3 h-3 rounded-full ${
-                      isElement ? (ELEMENT_COLOR[art.element] || 'bg-rose-500') : 'bg-teal-400'
-                    }`} />
-                    <span className="text-xs font-bold text-white truncate">{label}</span>
+                {/* Header with SWGT Artifact Icon */}
+                <div className="flex items-center gap-3">
+                  <ArtifactIcon artifact={art} size={52} />
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold text-white truncate">{label}</span>
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30">
+                        +15 ★★★★★
+                      </span>
+                    </div>
+                    <div className="text-xs font-mono text-cyan-300 font-bold mt-1 bg-white/[0.02] px-2 py-0.5 rounded border border-white/5 inline-block">
+                      Main: {mainStatLabel}
+                    </div>
                   </div>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-yellow-500/20 text-yellow-300 font-bold border border-yellow-500/30">
-                    +15 ★★★★★
-                  </span>
-                </div>
-
-                {/* Main Stat */}
-                <div className="text-xs font-mono text-cyan-300 font-bold bg-white/[0.02] p-1.5 rounded-lg border border-white/5">
-                  Main: {mainStatLabel}
                 </div>
 
                 {/* Substats List */}

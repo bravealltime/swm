@@ -22,6 +22,7 @@ import {
   Eye, 
   HelpCircle 
 } from 'lucide-react';
+import ArtifactIcon from '../components/ArtifactIcon';
 
 // Curated Top Meta Monsters that scale massively with Additional Damage Artifacts
 const POPULAR_OPTIMIZER_MONSTERS = [
@@ -653,17 +654,33 @@ export default function ArtifactOptimizerView({ onNavigate }) {
 
               <div className="grid grid-cols-2 gap-2.5 mt-3">
                 <div className="bg-[#152030] border border-[#22334a] p-2.5 rounded-lg text-center">
-                  <div className="w-10 h-10 rounded-lg mx-auto bg-orange-600/30 border border-orange-500 flex items-center justify-center text-orange-400 font-bold mb-1">
-                    🎯
-                  </div>
+                  <ArtifactIcon
+                    artifact={{
+                      slot: 1,
+                      kind: 'element',
+                      element: currentMonster.element.toLowerCase(),
+                      rank: 5,
+                      lvl: 15,
+                    }}
+                    size={46}
+                    className="mx-auto mb-1.5"
+                  />
                   <div className="text-xs font-bold text-white truncate">{currentMonster.currentArtifacts.left.main}</div>
                   <div className="text-[11px] text-slate-400 font-mono">Eff: {currentMonster.currentArtifacts.left.eff}</div>
                 </div>
 
                 <div className="bg-[#152030] border border-[#22334a] p-2.5 rounded-lg text-center">
-                  <div className="w-10 h-10 rounded-lg mx-auto bg-orange-600/30 border border-orange-500 flex items-center justify-center text-orange-400 font-bold mb-1">
-                    🛡️
-                  </div>
+                  <ArtifactIcon
+                    artifact={{
+                      slot: 2,
+                      kind: 'archetype',
+                      archetype: currentMonster.archetype,
+                      rank: 5,
+                      lvl: 15,
+                    }}
+                    size={46}
+                    className="mx-auto mb-1.5"
+                  />
                   <div className="text-xs font-bold text-white truncate">{currentMonster.currentArtifacts.right.main}</div>
                   <div className="text-[11px] text-slate-400 font-mono">Eff: {currentMonster.currentArtifacts.right.eff}</div>
                 </div>
