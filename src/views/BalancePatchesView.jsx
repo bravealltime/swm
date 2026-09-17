@@ -1,6 +1,9 @@
 import React, { useState, useMemo } from 'react';
 import patchesArchive from '../data/balancePatches.json';
 import patchDetailsData from '../data/balancePatchDetails.json';
+import { MONSTERS } from '../data/monsters';
+import { parsePatchCard, getChangeTypeThai } from '../utils/patchTranslator';
+import { Sparkles, Globe, Languages } from 'lucide-react';
 
 // Element metadata
 const ELEMENT_CONFIG = {
@@ -24,6 +27,7 @@ export default function BalancePatchesView({ onNavigate }) {
   const [selectedImpact, setSelectedImpact] = useState('all'); // 'all' | 'buff' | 'nerf' | 'adjustment'
   const [selectedElement, setSelectedElement] = useState('all');
   const [selectedSlot, setSelectedSlot] = useState('all');
+  const [langMode, setLangMode] = useState('thai'); // 'thai' | 'en'
 
   // Archive search
   const [archiveSearch, setArchiveSearch] = useState('');
@@ -276,13 +280,39 @@ export default function BalancePatchesView({ onNavigate }) {
                     onClick={() => setSelectedImpact(tab.id)}
                     className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                       selectedImpact === tab.id
-                        ? 'bg-indigo-600 text-white'
+                        ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
                         : 'bg-[#162232] text-slate-400 hover:text-white'
                     }`}
                   >
                     {tab.label}
                   </button>
                 ))}
+              </div>
+
+              {/* Language Mode Switcher */}
+              <div className="flex items-center gap-1 bg-[#101826] p-1 rounded-xl border border-[#1d2c42]">
+                <button
+                  onClick={() => setLangMode('thai')}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                    langMode === 'thai'
+                      ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  <Languages className="w-3.5 h-3.5" />
+                  <span>🇹🇭 แปลไทยเข้าใจง่าย</span>
+                </button>
+                <button
+                  onClick={() => setLangMode('en')}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                    langMode === 'en'
+                      ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  <Globe className="w-3.5 h-3.5" />
+                  <span>🌐 ภาษาอังกฤษทางการ</span>
+                </button>
               </div>
             </div>
 
@@ -388,6 +418,12 @@ export default function BalancePatchesView({ onNavigate }) {
                   icon: '✨'
                 };
                 const impactMeta = IMPACT_CONFIG[card.impact] || IMPACT_CONFIG.adjustment;
+                const thaiChangeType = getChangeTypeThai(card.changeType);
+                const monsterObj = MONSTERS.find(m => 
+                  m.name.toLowerCase() === card.monsterName.toLowerCase() ||
+                  (card.monsterName.toLowerCase().includes(m.name.toLowerCase()) && m.name.length > 3)
+                );
+                const parsed = parsePatchCard(card.preview, card.officialText);
 
                 return (
                   <div
@@ -426,6 +462,11 @@ export default function BalancePatchesView({ onNavigate }) {
                           <div className="min-w-0">
                             <h3 className="text-white font-bold text-sm truncate leading-tight group-hover:text-blue-400 transition-colors">
                               {card.monsterName}
+                              {monsterObj?.thaiName && monsterObj.thaiName !== card.monsterName && (
+                                <span className="text-xs text-slate-400 font-normal ml-1.5">
+                                  ({monsterObj.thaiName})
+                                </span>
+                              )}
                             </h3>
                             <div className="flex items-center gap-1.5 mt-1 text-[11px]">
                               <span
@@ -446,8 +487,8 @@ export default function BalancePatchesView({ onNavigate }) {
                           <span className={`px-2 py-0.5 rounded text-[10px] font-bold tracking-wide border uppercase ${impactMeta.bg}`}>
                             {impactMeta.badge}
                           </span>
-                          <span className="px-2 py-0.5 bg-[#162232] text-slate-300 border border-[#233147] rounded text-[10px] font-medium">
-                            {card.changeTypeTh}
+                          <span className="px-2 py-0.5 bg-[#162232] text-cyan-300 border border-[#233147] rounded text-[10px] font-medium">
+                            {thaiChangeType}
                           </span>
                         </div>
                       </div>
@@ -487,7 +528,7 @@ export default function BalancePatchesView({ onNavigate }) {
                       {/* Value Changes Box (Before ➔ After) */}
                       {card.valueChanges && card.valueChanges.length > 0 && (
                         <div className="mt-2.5 bg-[#152233] border border-[#22354e] rounded-lg p-2 flex flex-wrap items-center gap-2">
-                          <span className="text-[11px] text-slate-400 font-medium">ค่าที่เปลี่ยน:</span>
+                          <span className="text-[11px] text-slate-400 font-medium">ตัวเลขที่เปลี่ยน:</span>
                           {card.valueChanges.map((vc, idx) => (
                             <div key={idx} className="flex items-center gap-1.5 font-mono text-xs">
                               <span className="px-2 py-0.5 bg-rose-500/15 text-rose-300 border border-rose-500/30 rounded font-semibold line-through">
@@ -502,10 +543,51 @@ export default function BalancePatchesView({ onNavigate }) {
                         </div>
                       )}
 
-                      {/* Detailed Description */}
-                      <div className="mt-3 text-xs text-slate-200 leading-relaxed bg-[#0b1019] p-3 rounded-lg border border-[#162030] whitespace-pre-line font-normal">
-                        {card.preview || card.officialText}
-                      </div>
+                      {/* Detailed Description Block */}
+                      {langMode === 'thai' ? (
+                        parsed.isSplit ? (
+                          <div className="mt-3 space-y-2">
+                            {/* Before box */}
+                            <div className="p-2.5 rounded-lg bg-rose-950/20 border border-rose-500/30 text-xs">
+                              <div className="flex items-center gap-1.5 text-[10px] font-bold text-rose-400 uppercase tracking-wider mb-1">
+                                <span className="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
+                                <span>เดิม (ก่อนปรับปรุง):</span>
+                              </div>
+                              <div className="text-slate-300 font-sans leading-relaxed">
+                                {parsed.before}
+                              </div>
+                            </div>
+
+                            {/* After box */}
+                            <div className="p-2.5 rounded-lg bg-emerald-950/25 border border-emerald-500/40 text-xs shadow-sm">
+                              <div className="flex items-center gap-1.5 text-[10px] font-bold text-emerald-400 uppercase tracking-wider mb-1">
+                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                                <span>ใหม่ (หลังปรับปรุง):</span>
+                              </div>
+                              <div className="text-emerald-200 font-sans font-medium leading-relaxed">
+                                {parsed.after}
+                              </div>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="mt-3 p-3 rounded-lg bg-[#0b1019] border border-[#162030] text-xs leading-relaxed font-sans space-y-1">
+                            <div className="flex items-center gap-1.5 text-[10px] font-bold text-indigo-400 uppercase tracking-wider">
+                              <Sparkles className="w-3 h-3 text-indigo-400" />
+                              <span>สรุปการปรับปรุง (ภาษาไทย):</span>
+                            </div>
+                            <div className="text-slate-200 leading-relaxed font-medium">
+                              {parsed.fullTranslated}
+                            </div>
+                          </div>
+                        )
+                      ) : (
+                        <div className="mt-3 text-xs text-slate-300 leading-relaxed bg-[#0b1019] p-3 rounded-lg border border-[#162030] whitespace-pre-line font-mono">
+                          <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1 font-bold">
+                            COM2US OFFICIAL TEXT:
+                          </div>
+                          {card.preview || card.officialText}
+                        </div>
+                      )}
                     </div>
 
                     {/* Bottom Action bar */}
