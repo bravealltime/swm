@@ -9,6 +9,7 @@ export const NAVIGATION_CATEGORIES = [
       { id: 'monster-defense-trending', label: 'Tier List มอนสเตอร์ตั้งรับ (202 ตัว)', icon: 'Shield' },
       { id: 'monster-offense-trending', label: 'Tier List มอนสเตอร์ตัวบุก (247 ตัว)', icon: 'Swords' },
       { id: 'siege-calculator', label: 'เครื่องคำนวณคะแนน Siege', icon: 'Calculator' },
+      { id: 'siege-tournament', label: 'ทัวร์นาเมนต์ Siege ชิงแชมป์โลก', icon: 'Trophy', badge: 'Tournament' },
       { id: '3mdc-stats', label: 'ศูนย์สถิติและรายงาน 3MDC', icon: 'BarChart3' },
     ]
   },
@@ -16,6 +17,9 @@ export const NAVIGATION_CATEGORIES = [
     id: 'rta-rankings',
     title: 'เวิลด์อารีน่า & จัดอันดับ (RTA & Rankings)',
     items: [
+      { id: 'draft-explorer', label: 'จำลองดราฟต์ 5v5 (Draft Explorer & Advisor)', icon: 'Swords', badge: 'Lucksack' },
+      { id: 'rta-synergies', label: 'คอมโบดูโอ้ & ทริโอ้ (Duo & Trio Synergies)', icon: 'Users', badge: 'ใหม่' },
+      { id: 'meta-dashboard', label: 'เมต้าแดชบอร์ด & การกระจายแรงค์ (Meta Dashboard)', icon: 'BarChart3' },
       { id: 'rta-tierlist', label: 'RTA Tier List (S38 ซีซั่นล่าสุด)', icon: 'Trophy', badge: 'S38' },
       { id: 'rta-meta', label: 'สถิติ Pick/Win/Ban 300 ตัว', icon: 'BarChart3' },
       { id: 'rta-replays', label: 'รีเพลย์แข่งสดการ์เดียน', icon: 'Flame' },
@@ -27,6 +31,7 @@ export const NAVIGATION_CATEGORIES = [
     id: 'tools-dungeons',
     title: 'เครื่องมือช่วยเล่น & ดันเจี้ยน (Tools & Dungeons)',
     items: [
+      { id: 'tier-list-maker', label: 'สร้าง Tier List มอนสเตอร์ (Tier List Maker)', icon: 'Trophy', badge: 'สร้างเอง' },
       { id: 'artifact-optimizer', label: 'ดาเมจเสริมอาร์ติแฟกต์ & Monster Finder', icon: 'Flame', badge: 'Hot' },
       { id: 'speed-calculator', label: 'สปีดทิก & จูนความเร็วกันแซง', icon: 'Gauge' },
       { id: 'game-guides', label: 'สารบัญคู่มือกลยุทธ์ 10 ดันเจี้ยน', icon: 'BookOpen' },

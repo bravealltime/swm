@@ -1,0 +1,126 @@
+{
+  "season": "Tournament Season 17",
+  "status": "Championship Concluded",
+  "servers": {
+    "Global": {
+      "champion": "Ventrue",
+      "runnerUp": "SSA",
+      "thirdPlace": "Say Swear",
+      "bracket": [
+        {
+          "round": "Quarterfinals",
+          "matches": [
+            { "team1": "Ventrue", "score1": "20,000", "team2": "Origin", "score2": "17,450", "winner": "Ventrue" },
+            { "team1": "SSA", "score1": "20,000", "team2": "Apocalypse", "score2": "18,920", "winner": "SSA" },
+            { "team1": "Say Swear", "score1": "20,000", "team2": "Relentless", "score2": "16,100", "winner": "Say Swear" },
+            { "team1": "Legacy", "score1": "20,000", "team2": "Novus", "score2": "15,800", "winner": "Legacy" }
+          ]
+        },
+        {
+          "round": "Semifinals",
+          "matches": [
+            { "team1": "Ventrue", "score1": "20,000", "team2": "Say Swear", "score2": "18,400", "winner": "Ventrue" },
+            { "team1": "SSA", "score1": "20,000", "team2": "Legacy", "score2": "17,650", "winner": "SSA" }
+          ]
+        },
+        {
+          "round": "Grand Final",
+          "matches": [
+            { "team1": "Ventrue", "score1": "20,000", "team2": "SSA", "score2": "19,250", "winner": "Ventrue" }
+          ]
+        }
+      ],
+      "mvpDefenses": [
+        {
+          "title": "Byungchul + Juno + Camilla",
+          "record": "14 Wins - 2 Losses (87.5% WR)",
+          "monsters": ["Byungchul", "Juno", "Camilla"],
+          "notes": "ทีมรับเหล็กกล้าที่เจาะยากที่สุดในทัวร์นาเมนต์ แชมป์โลก Ventrue ใช้ยึดหอคอยหลัก"
+        },
+        {
+          "title": "Carcano + Savannah + Miles",
+          "record": "19 Wins - 5 Losses (79.2% WR)",
+          "monsters": ["Carcano", "Savannah", "Miles"],
+          "notes": "ทีมสปีดเกราะแตกทะลวง One-Shot บังคับให้ศัตรูต้องเสียเทียน่า/กัลเลียนตี"
+        },
+        {
+          "title": "Khmun + Vigor + Skogul (4★)",
+          "record": "22 Wins - 4 Losses (84.6% WR)",
+          "monsters": ["Khmun", "Vigor", "Skogul"],
+          "notes": "สุดยอดทีม 4 ดาวหอคอยจำกัดดาว ทำคะแนนป้องกันได้สูงสุดในรอบชิง"
+        }
+      ]
+    },
+    "Asia": {
+      "champion": "悪魔 (Akuma)",
+      "runnerUp": "ผัดกะเพราไข่ดาว",
+      "thirdPlace": "Braveheart",
+      "bracket": [
+        {
+          "round": "Quarterfinals",
+          "matches": [
+            { "team1": "悪魔 (Akuma)", "score1": "20,000", "team2": "RedSun", "score2": "16,800", "winner": "悪魔 (Akuma)" },
+            { "team1": "ผัดกะเพราไข่ดาว", "score1": "20,000", "team2": "Dynasty", "score2": "17,900", "winner": "ผัดกะเพราไข่ดาว" },
+            { "team1": "Braveheart", "score1": "20,000", "team2": "Zero", "score2": "15,400", "winner": "Braveheart" },
+            { "team1": "Lotus", "score1": "20,000", "team2": "Valkyrie", "score2": "16,200", "winner": "Lotus" }
+          ]
+        },
+        {
+          "round": "Semifinals",
+          "matches": [
+            { "team1": "悪魔 (Akuma)", "score1": "20,000", "team2": "Braveheart", "score2": "18,900", "winner": "悪魔 (Akuma)" },
+            { "team1": "ผัดกะเพราไข่ดาว", "score1": "20,000", "team2": "Lotus", "score2": "18,200", "winner": "ผัดกะเพราไข่ดาว" }
+          ]
+        },
+        {
+          "round": "Grand Final",
+          "matches": [
+            { "team1": "悪魔 (Akuma)", "score1": "20,000", "team2": "ผัดกะเพราไข่ดาว", "score2": "19,850", "winner": "悪魔 (Akuma)" }
+          ]
+        }
+      ],
+      "mvpDefenses": [
+        {
+          "title": "Nana + Savannah + Perna",
+          "record": "16 Wins - 3 Losses (84.2% WR)",
+          "monsters": ["Nana", "Savannah", "Perna"],
+          "notes": "สองชีวิต + สปีดฉีดเกราะแตก นานะเก็บหินวิญญาณชุบต่อเนื่อง"
+        },
+        {
+          "title": "Mo Long + Harmonia + Taranys",
+          "record": "13 Wins - 2 Losses (86.7% WR)",
+          "monsters": ["Mo Long", "Harmonia", "Taranys"],
+          "notes": "มังกรน้ำสับแลกเลือด ทารานิสชุบ ฮาร์โมเนียสลับเลือดสวนกลับ"
+        }
+      ]
+    },
+    "Europe": {
+      "champion": "Legendary",
+      "runnerUp": "Aftermath EU",
+      "thirdPlace": "Invictus",
+      "bracket": [
+        {
+          "round": "Semifinals",
+          "matches": [
+            { "team1": "Legendary", "score1": "20,000", "team2": "Invictus", "score2": "17,800", "winner": "Legendary" },
+            { "team1": "Aftermath EU", "score1": "20,000", "team2": "Nordic", "score2": "16,400", "winner": "Aftermath EU" }
+          ]
+        },
+        {
+          "round": "Grand Final",
+          "matches": [
+            { "team1": "Legendary", "score1": "20,000", "team2": "Aftermath EU", "score2": "19,100", "winner": "Legendary" }
+          ]
+        }
+      ],
+      "mvpDefenses": [
+        {
+          "title": "Seara + Orion + Perna",
+          "record": "18 Wins - 4 Losses (81.8% WR)",
+          "monsters": ["Seara", "Orion", "Perna"],
+          "notes": "โอไรออนสปีด +220 สุ่มสลับเกราะแตก เซอาร่าวางระเบิดตูมเดียวตาย"
+        }
+      ]
+    }
+  }
+}

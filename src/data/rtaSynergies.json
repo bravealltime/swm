@@ -1,0 +1,204 @@
+{
+  "duos": [
+    {
+      "id": "duo-1",
+      "monsters": ["Oliver", "Cheongpung"],
+      "element1": "wind",
+      "element2": "wind",
+      "winRate": 56.4,
+      "matches": 42800,
+      "synergyDelta": "+4.8%",
+      "archetype": "Control & ATB Pushback",
+      "thaiDesc": "คู่หูลดเกจและรีเซ็ตคูลดาวน์สุดโหด คู่แข่งแทบไม่ได้ขยับสกิล",
+      "bestAgainst": ["Bruiser Teams", "Slow Turn 2"]
+    },
+    {
+      "id": "duo-2",
+      "monsters": ["Moore", "Robo"],
+      "element1": "water",
+      "element2": "wind",
+      "winRate": 55.2,
+      "matches": 38900,
+      "synergyDelta": "+3.9%",
+      "archetype": "Speed Contest & Strip",
+      "thaiDesc": "มัวร์เปิดล้างบัฟและตัดเทิร์น ตามด้วยโรโบ้ล้างซ้ำและสตันเกลี้ยงสนาม",
+      "bestAgainst": ["Will-Rune Cleave", "High Speed Teams"]
+    },
+    {
+      "id": "duo-3",
+      "monsters": ["Sagar", "Miles"],
+      "element1": "wind",
+      "element2": "water",
+      "winRate": 57.1,
+      "matches": 35200,
+      "synergyDelta": "+5.2%",
+      "archetype": "Speed Scaling & Taunt",
+      "thaiDesc": "ซาก้าร์รีเซ็ตคูลดาวน์และยั่วยวน ไมล์สสะสมสปีดพุ่งทะลวงเป้าหมายตายทันที",
+      "bestAgainst": ["Single Carry", "Support Heavy"]
+    },
+    {
+      "id": "duo-4",
+      "monsters": ["Chandra", "Sagar"],
+      "element1": "water",
+      "element2": "wind",
+      "winRate": 58.6,
+      "matches": 31400,
+      "synergyDelta": "+6.1%",
+      "archetype": "Defensive Hug & Disruption",
+      "thaiDesc": "จันทรากอดป้องกันซาก้าร์ ทำให้ควบคุมและลดเกจได้ตลอดทั้งแมตช์โดยไม่ตาย",
+      "bestAgainst": ["High Burst Assassins", "Sonia / Ethna"]
+    },
+    {
+      "id": "duo-5",
+      "monsters": ["Sekhmet", "Ethna"],
+      "element1": "fire",
+      "element2": "wind",
+      "winRate": 54.8,
+      "matches": 29800,
+      "synergyDelta": "+3.7%",
+      "archetype": "First Turn Lockdown",
+      "thaiDesc": "เซคเมตขโมยบัฟรีเซ็ตตัวสำคัญ เอทน่าตามมาฉีกเกราะและจับสตันเทิร์นแรก",
+      "bestAgainst": ["Oliver Lead", "Cleave Openers"]
+    },
+    {
+      "id": "duo-6",
+      "monsters": ["Vanessa", "Sonia"],
+      "element1": "fire",
+      "element2": "wind",
+      "winRate": 56.9,
+      "matches": 28400,
+      "synergyDelta": "+4.5%",
+      "archetype": "Speed Lead & One-Shot",
+      "thaiDesc": "วาเนสซ่าบัฟ 33% SPD ลีดเดอร์และชุบชีวิต โซเนียสปีดพุ่งทะลุแทงทีเดียวตาย",
+      "bestAgainst": ["Squishy Bruisers", "Slow Damage"]
+    },
+    {
+      "id": "duo-7",
+      "monsters": ["Haeyang", "Camilla"],
+      "element1": "water",
+      "element2": "water",
+      "winRate": 55.7,
+      "matches": 26100,
+      "synergyDelta": "+4.2%",
+      "archetype": "Anti-Cleave & Sustain",
+      "thaiDesc": "แฮยางลดคริติคอลและดาเมจหมู่ คามิลล่าล้างดีบัฟตัวเองและแทงก์สวนกลับ",
+      "bestAgainst": ["Fast Cleave", "Fire DPS Comps"]
+    },
+    {
+      "id": "duo-8",
+      "monsters": ["Leo", "Lucifer"],
+      "element1": "wind",
+      "element2": "light",
+      "winRate": 61.3,
+      "matches": 19500,
+      "synergyDelta": "+11.4%",
+      "archetype": "Speed Cap & ATB Boost",
+      "thaiDesc": "คอมโบฟ้าประทาน ลีโอกดสปีดทุกคน ลูซิเฟอร์เร่งเกจทีมเต็มหลอดทันที",
+      "bestAgainst": ["Swift-heavy Teams", "Ultra Speed Contests"]
+    },
+    {
+      "id": "duo-9",
+      "monsters": ["Byungchul", "Juno"],
+      "element1": "wind",
+      "element2": "fire",
+      "winRate": 56.2,
+      "matches": 24900,
+      "synergyDelta": "+4.0%",
+      "archetype": "Passive Annoyance",
+      "thaiDesc": "บยองชอลเคาน์เตอร์ดาเมจหนัก จูโน่ล้างดีบัฟฮีลทีม ควบคุมยากทั้งคู่",
+      "bestAgainst": ["Heavy Debuff Comps", "Aoe CC Teams"]
+    },
+    {
+      "id": "duo-10",
+      "monsters": ["Adriana", "Sonia"],
+      "element1": "water",
+      "element2": "wind",
+      "winRate": 57.5,
+      "matches": 22300,
+      "synergyDelta": "+5.8%",
+      "archetype": "Speed Buff & True Damage",
+      "thaiDesc": "อาเดรียนาบัฟสปีดและเกราะ โซเนียได้สเกลดาเมจสปีดสูงสุดแทงทะลุเกราะชัวร์",
+      "bestAgainst": ["Bruiser Cores", "Tank Teams"]
+    },
+    {
+      "id": "duo-11",
+      "monsters": ["Shizuka", "Tomoe"],
+      "element1": "water",
+      "element2": "fire",
+      "winRate": 54.6,
+      "matches": 21000,
+      "synergyDelta": "+3.5%",
+      "archetype": "Karma & Debuff Spread",
+      "thaiDesc": "ชิซูกะจำลองสกิลและชุบ โทโมเอะกระจายกรรมและดีบัฟเต็มสนาม",
+      "bestAgainst": ["Passive Heavy", "Slow Stall"]
+    },
+    {
+      "id": "duo-12",
+      "monsters": ["Velajuel", "Chandra"],
+      "element1": "fire",
+      "element2": "water",
+      "winRate": 55.4,
+      "matches": 19800,
+      "synergyDelta": "+3.8%",
+      "archetype": "Immunity & Cleanse Tank",
+      "thaiDesc": "เวลาจุเอลกันดีบัฟ 3 เทิร์น จันทรากอดและสตัน ควบคุมไฟต์ระยะยาว",
+      "bestAgainst": ["CC Spammers", "Debuff Cleave"]
+    }
+  ],
+  "trios": [
+    {
+      "id": "trio-1",
+      "monsters": ["Oliver", "Cheongpung", "Moore"],
+      "winRate": 57.8,
+      "matches": 28400,
+      "archetype": "Triple Turn Denial Cleave",
+      "thaiDesc": "แกนหลักคอนโทรลระดับการ์เดียน มัวร์ล้างบัฟ ชองพุงลดเกจ โอลิเวอร์รีเซ็ตคูลดาวน์",
+      "banPriority": "Oliver หรือ Moore"
+    },
+    {
+      "id": "trio-2",
+      "monsters": ["Chandra", "Sagar", "Velajuel"],
+      "winRate": 58.9,
+      "matches": 22100,
+      "archetype": "Unkillable Bruiser Core",
+      "thaiDesc": "เกราะบัฟกันสถานะ + กอดซาก้าร์ + ยั่วยวนไม่ให้ศัตรูออกสกิลได้เลย",
+      "banPriority": "Chandra หรือ Sagar"
+    },
+    {
+      "id": "trio-3",
+      "monsters": ["Vanessa", "Sonia", "Adriana"],
+      "winRate": 58.2,
+      "matches": 19800,
+      "archetype": "Hyper Speed Snipe",
+      "thaiDesc": "สปีดลีด 33% + บัฟสปีดเกราะ + สไนป์ตัวหลักตาย 1 ตัวตั้งแต่ยังไม่ได้เริ่ม",
+      "banPriority": "Sonia หรือ Vanessa"
+    },
+    {
+      "id": "trio-4",
+      "monsters": ["Moore", "Robo", "Ethna"],
+      "winRate": 56.7,
+      "matches": 18200,
+      "archetype": "Stun Lock Blitz",
+      "thaiDesc": "ล้างบัฟซ้ำ 2 ครั้ง สตันหมู่ และจับเดี่ยวตัวล้างบัฟฝ่ายตรงข้าม",
+      "banPriority": "Robo"
+    },
+    {
+      "id": "trio-5",
+      "monsters": ["Leo", "Lucifer", "Megan"],
+      "winRate": 63.4,
+      "matches": 14600,
+      "archetype": "Zero Speed OTK Cleave",
+      "thaiDesc": "ลีโอลดสปีด ลูซิเฟอร์เร่งเกจ เมแกนบัฟดาเมจเกราะแล้วกวาดตายเรียบ",
+      "banPriority": "Leo หรือ Lucifer"
+    },
+    {
+      "id": "trio-6",
+      "monsters": ["Haeyang", "Camilla", "Byungchul"],
+      "winRate": 57.3,
+      "matches": 16900,
+      "archetype": "Iron Wall Anti-Burst",
+      "thaiDesc": "3 ตัวแทงก์ต้านทานสายตีเร็ว เลือดเยอะ ฮีลตัวเอง และสวนกลับดาเมจหนัก",
+      "banPriority": "Byungchul"
+    }
+  ]
+}

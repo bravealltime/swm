@@ -32,12 +32,13 @@ import { LEADERBOARDS } from '../data/leaderboards';
 import latestSiegeBattles from '../data/latestSiegeBattles.json';
 
 const POPULAR_QUICK_TAGS = [
+  { label: '⚔️ จำลองดราฟต์ 5v5', type: 'draft-explorer' },
+  { label: '👥 ดูโอ้คอมโบ', type: 'rta-synergies' },
+  { label: '🏆 สร้าง Tier List', type: 'tier-list-maker' },
   { label: 'Byungchul', type: 'where2use', param: 'Byungchul' },
   { label: 'Juno', type: 'where2use', param: 'Juno' },
   { label: 'Savannah', type: 'where2use', param: 'Savannah' },
   { label: '🎁 โค้ดล่าสุด', type: 'codes' },
-  { label: '🏆 RTA Tier List', type: 'rta' },
-  { label: '🐉 ยักษ์ Abyss 0:24s', type: 'dungeons' },
   { label: '🏰 คำนวณแต้ม Siege', type: 'siege-calculator' },
 ];
 

@@ -21,6 +21,11 @@ import WhereToUseView from './views/WhereToUseView';
 import SiegeCalculatorView from './views/SiegeCalculatorView';
 import MdcStatsView from './views/MdcStatsView';
 import GameGuidesView from './views/GameGuidesView';
+import DraftExplorerView from './views/DraftExplorerView';
+import RtaSynergiesView from './views/RtaSynergiesView';
+import TierListMakerView from './views/TierListMakerView';
+import MetaDashboardView from './views/MetaDashboardView';
+import SiegeTournamentView from './views/SiegeTournamentView';
 import SwmLogo from './components/SwmLogo';
 
 export default function App() {
@@ -50,6 +55,16 @@ export default function App() {
       case 'siege-calc':
       case 'siege-calculator':
         return <SiegeCalculatorView onNavigate={handleNavigate} {...viewParams} />;
+      case 'siege-tournament':
+        return <SiegeTournamentView onNavigate={handleNavigate} {...viewParams} />;
+      case 'draft-explorer':
+        return <DraftExplorerView onNavigate={handleNavigate} {...viewParams} />;
+      case 'rta-synergies':
+        return <RtaSynergiesView onNavigate={handleNavigate} {...viewParams} />;
+      case 'meta-dashboard':
+        return <MetaDashboardView onNavigate={handleNavigate} {...viewParams} />;
+      case 'tier-list-maker':
+        return <TierListMakerView onNavigate={handleNavigate} {...viewParams} />;
       case 'trending':
         return <TrendingAnalyticsView onNavigate={handleNavigate} {...viewParams} />;
       case 'dungeons':
