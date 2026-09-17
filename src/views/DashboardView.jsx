@@ -1,4 +1,4 @@
-﻿import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { 
   Shield, 
   Gift, 
@@ -32,6 +32,7 @@ import { MONSTERS } from '../data/monsters';
 import { PROMO_CODES } from '../data/promoCodes';
 import { LEADERBOARDS } from '../data/leaderboards';
 import playerProfiles from '../data/playerProfiles.json';
+import { getR2AvatarUrl } from '../services/r2Service';
 
 const POPULAR_PRESETS = [
   { label: 'Seara + Orion + Perna', defKey: 'Seara,Orion,Perna', monsters: ['Seara', 'Orion', 'Perna'] },
@@ -296,7 +297,7 @@ export default function DashboardView({ onNavigate }) {
                     >
                       <td className="py-2.5 font-bold text-white group-hover:text-amber-400 transition-colors flex items-center gap-2">
                         <img 
-                          src={player.profileAvatar} 
+                          src={getR2AvatarUrl(player.id, player.profileAvatar)} 
                           alt={player.name}
                           className="w-6 h-6 rounded-full object-cover border border-white/15 bg-slate-800"
                           onError={(e) => {

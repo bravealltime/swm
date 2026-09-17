@@ -31,6 +31,7 @@ import {
 import MonsterAvatar from '../components/MonsterAvatar';
 import playerProfiles from '../data/playerProfiles.json';
 import allMonstersData from '../data/allMonsters.json';
+import { getR2AvatarUrl } from '../services/r2Service';
 
 const RANK_FILTERS = [
   { id: 'all', label: 'ทุกระดับแรงค์ (All Ranks)', icon: Globe },
@@ -318,7 +319,7 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
                     {/* Left: Avatar + Name + Flag */}
                     <div className="flex items-center gap-3 min-w-0">
                       <img
-                        src={sug.profileAvatar}
+                        src={getR2AvatarUrl(sug.id, sug.profileAvatar)}
                         alt={sug.name}
                         className="w-10 h-10 rounded-full object-cover border-2 border-slate-700 group-hover:border-blue-400 transition-colors shrink-0 bg-slate-800"
                         onError={(e) => {
@@ -376,7 +377,7 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
                 }`}
               >
                 <img
-                  src={p.profileAvatar}
+                  src={getR2AvatarUrl(p.id, p.profileAvatar)}
                   alt={p.name}
                   className="w-5 h-5 rounded-full object-cover shrink-0 border border-slate-600"
                   onError={(e) => {
@@ -444,7 +445,7 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
           <div className="flex items-start sm:items-center gap-5">
             <div className="relative shrink-0">
               <img
-                src={activePlayer.profileAvatar}
+                src={getR2AvatarUrl(activePlayer.id, activePlayer.profileAvatar)}
                 alt={activePlayer.name}
                 className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover border-2 border-blue-400/50 shadow-xl shadow-blue-500/20 bg-slate-900"
                 onError={(e) => {
