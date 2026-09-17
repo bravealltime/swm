@@ -392,7 +392,7 @@ export default function ArtifactOptimizerView({ onNavigate }) {
             <Flame className="w-5 h-5 animate-pulse" />
           </div>
           <div>
-            <div className="text-[10px] font-mono text-orange-400 uppercase font-bold">True Damage Math</div>
+            <div className="text-[11px] font-mono text-orange-400 uppercase font-bold">True Damage Math</div>
             <div className="text-xs sm:text-sm font-bold text-white">Full SWM Engine</div>
           </div>
         </div>
@@ -448,7 +448,7 @@ export default function ArtifactOptimizerView({ onNavigate }) {
                   }`}
                 >
                   <div className="text-xs font-black">{opt.name}</div>
-                  <div className={`text-[10px] mt-0.5 line-clamp-1 ${selectedFinderSubstat === opt.id ? 'text-slate-800' : 'text-slate-500'}`}>
+                  <div className={`text-[11px] mt-0.5 line-clamp-1 ${selectedFinderSubstat === opt.id ? 'text-slate-800' : 'text-slate-400'}`}>
                     {opt.desc}
                   </div>
                 </button>
@@ -478,7 +478,7 @@ export default function ArtifactOptimizerView({ onNavigate }) {
                       <div className="flex items-start justify-between gap-2">
                         <div>
                           <div className="text-sm font-black text-white">{m.name}</div>
-                          <span className={`inline-block mt-1 px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
+                          <span className={`inline-block mt-1 px-2 py-0.5 rounded text-[11px] font-bold uppercase ${
                             m.element === 'fire' ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30' :
                             m.element === 'water' ? 'bg-sky-500/20 text-sky-400 border border-sky-500/30' :
                             m.element === 'wind' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' :
@@ -494,7 +494,7 @@ export default function ArtifactOptimizerView({ onNavigate }) {
                       </div>
 
                       <div className="p-3 bg-[#0c121c] rounded-xl border border-[#1e2a3c]/60 text-xs text-slate-300">
-                        <div className="text-[10px] text-slate-500 font-bold uppercase mb-1">เหตุผลที่เหมาะสม:</div>
+                        <div className="text-[11px] text-slate-400 font-bold uppercase mb-1">เหตุผลที่เหมาะสม:</div>
                         <div>{m.role}</div>
                       </div>
 
@@ -520,7 +520,7 @@ export default function ArtifactOptimizerView({ onNavigate }) {
           <span className="text-xs font-bold text-slate-300 uppercase tracking-wider font-mono">
             เลือกมอนสเตอร์ที่ต้องการ Optimize ดาเมจเสริม:
           </span>
-          <span className="text-xs text-slate-500">มอนสเตอร์ที่พึ่งพา Additional Damage สูงสุด</span>
+          <span className="text-xs text-slate-400">มอนสเตอร์ที่พึ่งพา Additional Damage สูงสุด</span>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -541,8 +541,8 @@ export default function ArtifactOptimizerView({ onNavigate }) {
                 </div>
                 <div className="min-w-0">
                   <div className="font-bold text-xs truncate">{m.name}</div>
-                  <div className="text-[10px] text-slate-400 mt-0.5">{m.elementTh} • {m.archetypeTh}</div>
-                  <div className="text-[10px] text-orange-400 font-mono font-semibold">{m.hitsPerAttack} ฮิต/ครั้ง</div>
+                  <div className="text-[11px] text-slate-400 mt-0.5">{m.elementTh} • {m.archetypeTh}</div>
+                  <div className="text-[11px] text-orange-400 font-mono font-semibold">{m.hitsPerAttack} ฮิต/ครั้ง</div>
                 </div>
               </button>
             );
@@ -564,13 +564,13 @@ export default function ArtifactOptimizerView({ onNavigate }) {
               </div>
               <div className="w-24 h-24 rounded-2xl overflow-hidden border-2 border-orange-500/70 shadow-lg mx-auto bg-black relative">
                 <img src={currentMonster.img} alt={currentMonster.name} className="w-full h-full object-cover" />
-                <span className="absolute bottom-0 right-0 bg-black/80 text-[10px] font-mono text-orange-400 px-1.5 py-0.5 rounded-tl">
+                <span className="absolute bottom-0 right-0 bg-black/80 text-[11px] font-mono text-orange-400 px-1.5 py-0.5 rounded-tl">
                   6★
                 </span>
               </div>
               <h3 className="text-white font-bold text-base mt-2">{currentMonster.name}</h3>
               <div className="text-xs text-slate-400 mt-0.5">LEVEL 40 / 40</div>
-              <div className="flex items-center justify-center gap-2 mt-2 text-[11px]">
+              <div className="flex items-center justify-center gap-2 mt-2 text-xs">
                 <span className="px-2 py-0.5 bg-slate-800 text-slate-300 rounded border border-slate-700">
                   {currentMonster.archetypeTh}
                 </span>
@@ -580,8 +580,8 @@ export default function ArtifactOptimizerView({ onNavigate }) {
               </div>
             </div>
 
-            <div className="mt-3 text-[11px] text-slate-400 bg-[#0c131f] p-2.5 rounded-lg border border-[#1a283b] w-full text-left">
-              <div className="text-[10px] text-orange-400 font-mono uppercase font-bold">ลักษณะสกิล:</div>
+            <div className="mt-3 text-xs text-slate-400 bg-[#0c131f] p-2.5 rounded-lg border border-[#1a283b] w-full text-left">
+              <div className="text-[11px] text-orange-400 font-mono uppercase font-bold">ลักษณะสกิล:</div>
               {currentMonster.skillDescription}
             </div>
           </div>
@@ -590,7 +590,7 @@ export default function ArtifactOptimizerView({ onNavigate }) {
           <div className="lg:col-span-5 bg-[#111927] border border-[#1d2b3e] rounded-xl p-4 space-y-2.5">
             <div className="flex items-center justify-between border-b border-[#1b2a3d] pb-2">
               <span className="text-xs font-bold text-white uppercase font-mono">สเตตัส (Stat Sheet)</span>
-              <span className="text-[10px] font-mono text-slate-400">Base | Final (+Rune)</span>
+              <span className="text-[11px] font-mono text-slate-400">Base | Final (+Rune)</span>
             </div>
 
             <div className="space-y-1.5 text-xs font-mono">
@@ -622,7 +622,7 @@ export default function ArtifactOptimizerView({ onNavigate }) {
                 <span className="text-emerald-400 font-semibold">+{currentMonster.defaultRune.spd}</span>
               </div>
 
-              <div className="grid grid-cols-2 gap-1.5 pt-1 text-[11px]">
+              <div className="grid grid-cols-2 gap-1.5 pt-1 text-xs">
                 <div className="bg-[#152030] p-1.5 rounded flex justify-between">
                   <span className="text-slate-400">CR Rate:</span>
                   <span className="text-white font-bold">{combatStats.cr}%</span>
@@ -648,7 +648,7 @@ export default function ArtifactOptimizerView({ onNavigate }) {
             <div>
               <div className="flex items-center justify-between border-b border-[#1b2a3d] pb-2">
                 <span className="text-xs font-bold text-white uppercase font-mono">อาร์ติแฟกต์ปัจจุบัน (Current)</span>
-                <span className="text-[10px] text-cyan-400 font-mono">In-Game Equipped</span>
+                <span className="text-[11px] text-cyan-400 font-mono">In-Game Equipped</span>
               </div>
 
               <div className="grid grid-cols-2 gap-2.5 mt-3">
@@ -656,29 +656,29 @@ export default function ArtifactOptimizerView({ onNavigate }) {
                   <div className="w-10 h-10 rounded-lg mx-auto bg-orange-600/30 border border-orange-500 flex items-center justify-center text-orange-400 font-bold mb-1">
                     🎯
                   </div>
-                  <div className="text-[11px] font-bold text-white truncate">{currentMonster.currentArtifacts.left.main}</div>
-                  <div className="text-[10px] text-slate-400 font-mono">Eff: {currentMonster.currentArtifacts.left.eff}</div>
+                  <div className="text-xs font-bold text-white truncate">{currentMonster.currentArtifacts.left.main}</div>
+                  <div className="text-[11px] text-slate-400 font-mono">Eff: {currentMonster.currentArtifacts.left.eff}</div>
                 </div>
 
                 <div className="bg-[#152030] border border-[#22334a] p-2.5 rounded-lg text-center">
                   <div className="w-10 h-10 rounded-lg mx-auto bg-orange-600/30 border border-orange-500 flex items-center justify-center text-orange-400 font-bold mb-1">
                     🛡️
                   </div>
-                  <div className="text-[11px] font-bold text-white truncate">{currentMonster.currentArtifacts.right.main}</div>
-                  <div className="text-[10px] text-slate-400 font-mono">Eff: {currentMonster.currentArtifacts.right.eff}</div>
+                  <div className="text-xs font-bold text-white truncate">{currentMonster.currentArtifacts.right.main}</div>
+                  <div className="text-[11px] text-slate-400 font-mono">Eff: {currentMonster.currentArtifacts.right.eff}</div>
                 </div>
               </div>
             </div>
 
             {/* Current Damage Display */}
             <div className="mt-4 pt-3 border-t border-[#1b2a3d] text-center">
-              <div className="text-[10px] font-mono uppercase text-slate-400 tracking-wider">
+              <div className="text-[11px] font-mono uppercase text-slate-400 tracking-wider">
                 ดาเมจเสริมปัจจุบัน (ADD'L DMG / HIT)
               </div>
               <div className="text-3xl font-mono font-extrabold text-indigo-300 mt-0.5">
                 {currentAddlDmg.totalHit} <span className="text-xs font-normal text-slate-400">/ ฮิต</span>
               </div>
-              <div className="text-[11px] text-slate-400 font-mono mt-0.5">
+              <div className="text-xs text-slate-400 font-mono mt-0.5">
                 รวม {currentMonster.hitsPerAttack} ฮิต = <span className="text-white font-bold">{currentAddlDmg.totalMulti}</span> ดาเมจต่อการโจมตี
               </div>
             </div>
@@ -702,9 +702,9 @@ export default function ArtifactOptimizerView({ onNavigate }) {
             
             {/* Current Damage Card (2 cols) */}
             <div className="lg:col-span-2 bg-[#101724] border border-[#1e2a3c] p-4 rounded-xl text-center">
-              <div className="text-[10px] font-mono text-slate-400 uppercase">ดาเมจปัจจุบัน</div>
+              <div className="text-[11px] font-mono text-slate-400 uppercase">ดาเมจปัจจุบัน</div>
               <div className="text-2xl font-mono font-bold text-slate-300 mt-1">{currentAddlDmg.totalHit}</div>
-              <div className="text-[10px] text-slate-500">Per Hit</div>
+              <div className="text-[11px] text-slate-400">Per Hit</div>
             </div>
 
             {/* Arrow separator */}
@@ -714,14 +714,14 @@ export default function ArtifactOptimizerView({ onNavigate }) {
 
             {/* Best Left Artifact (3 cols) */}
             <div className="lg:col-span-3 bg-[#131d2c] border border-amber-500/40 p-4 rounded-xl relative shadow-lg shadow-amber-500/5">
-              <div className="text-[10px] font-mono text-amber-400 font-bold uppercase flex items-center justify-between">
+              <div className="text-[11px] font-mono text-amber-400 font-bold uppercase flex items-center justify-between">
                 <span>BEST LEFT ARTIFACT (ธาตุ)</span>
-                <span className="bg-amber-500/20 text-amber-300 px-1.5 py-0.5 rounded text-[9px]">BEST 1</span>
+                <span className="bg-amber-500/20 text-amber-300 px-1.5 py-0.5 rounded text-[10px]">BEST 1</span>
               </div>
 
               <div className="mt-2 text-xs font-bold text-white">{optimizedArtifacts.bestLeft.main}</div>
 
-              <div className="mt-2 space-y-1 text-[11px] font-mono text-slate-300">
+              <div className="mt-2 space-y-1 text-xs font-mono text-slate-300">
                 <div className="flex items-center gap-1.5 text-emerald-400">
                   <span>1.</span> <span>{optimizedArtifacts.bestLeft.sub1}</span>
                 </div>
@@ -740,20 +740,20 @@ export default function ArtifactOptimizerView({ onNavigate }) {
             </div>
 
             {/* Plus separator */}
-            <div className="hidden lg:flex lg:col-span-1 justify-center text-slate-500 font-bold text-xl">
+            <div className="hidden lg:flex lg:col-span-1 justify-center text-slate-400 font-bold text-xl">
               +
             </div>
 
             {/* Best Right Artifact (3 cols) */}
             <div className="lg:col-span-3 bg-[#131d2c] border border-amber-500/40 p-4 rounded-xl relative shadow-lg shadow-amber-500/5">
-              <div className="text-[10px] font-mono text-amber-400 font-bold uppercase flex items-center justify-between">
+              <div className="text-[11px] font-mono text-amber-400 font-bold uppercase flex items-center justify-between">
                 <span>BEST RIGHT ARTIFACT (สาย)</span>
-                <span className="bg-amber-500/20 text-amber-300 px-1.5 py-0.5 rounded text-[9px]">BEST 1</span>
+                <span className="bg-amber-500/20 text-amber-300 px-1.5 py-0.5 rounded text-[10px]">BEST 1</span>
               </div>
 
               <div className="mt-2 text-xs font-bold text-white">{optimizedArtifacts.bestRight.main}</div>
 
-              <div className="mt-2 space-y-1 text-[11px] font-mono text-slate-300">
+              <div className="mt-2 space-y-1 text-xs font-mono text-slate-300">
                 <div className="flex items-center gap-1.5 text-emerald-400">
                   <span>1.</span> <span>{optimizedArtifacts.bestRight.sub1}</span>
                 </div>
@@ -773,17 +773,17 @@ export default function ArtifactOptimizerView({ onNavigate }) {
 
             {/* Equals / Best Combination Card (2 cols) */}
             <div className="lg:col-span-2 bg-gradient-to-b from-[#1c2c44] to-[#121c2d] border-2 border-emerald-500 p-4 rounded-xl text-center shadow-xl shadow-emerald-500/10">
-              <div className="text-[10px] font-mono text-emerald-400 font-bold uppercase tracking-wider">
+              <div className="text-[11px] font-mono text-emerald-400 font-bold uppercase tracking-wider">
                 คู่ผสมที่ดีที่สุด
               </div>
               <div className="text-3xl font-mono font-black text-white mt-1">
                 {optimizedArtifacts.totalHit}
               </div>
-              <div className="text-[10px] text-slate-400">Per Hit</div>
+              <div className="text-[11px] text-slate-400">Per Hit</div>
               
               <div className="mt-2 pt-2 border-t border-[#233754] text-xs font-mono font-bold text-emerald-400">
                 +{optimizedArtifacts.deltaHit} (+{optimizedArtifacts.deltaPercent}%)
-                <span className="block text-[9px] text-slate-400 font-normal mt-0.5">vs อาร์ติแฟกต์เดิม</span>
+                <span className="block text-[10px] text-slate-400 font-normal mt-0.5">vs อาร์ติแฟกต์เดิม</span>
               </div>
             </div>
 
@@ -797,7 +797,7 @@ export default function ArtifactOptimizerView({ onNavigate }) {
               <Sliders className="w-4 h-4 text-cyan-400" />
               <span>จำลองบัฟในสมรภูมิจริง (Battle Modifiers & Combat Buffs)</span>
             </span>
-            <span className="text-[11px] text-slate-400 font-mono">
+            <span className="text-xs text-slate-400 font-mono">
               สเตตัสในเกมจริง: SPD {combatStats.inSpd} • ATK {combatStats.inAtk} • HP {combatStats.inHp}
             </span>
           </div>
@@ -844,12 +844,12 @@ export default function ArtifactOptimizerView({ onNavigate }) {
             </label>
 
             <div className="flex items-center gap-1.5 p-2 rounded bg-[#162232] border border-[#223348] col-span-2 sm:col-span-3">
-              <span className="text-slate-400 text-[11px]">ลีดเดอร์ SPD:</span>
+              <span className="text-slate-400 text-xs">ลีดเดอร์ SPD:</span>
               {[0, 19, 24, 33].map(val => (
                 <button
                   key={val}
                   onClick={() => setModifiers(prev => ({ ...prev, leaderSpd: val }))}
-                  className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold transition-colors ${
+                  className={`px-2 py-0.5 rounded text-[11px] font-mono font-bold transition-colors ${
                     modifiers.leaderSpd === val ? 'bg-cyan-600 text-white' : 'text-slate-400 hover:text-white'
                   }`}
                 >
@@ -868,7 +868,7 @@ export default function ArtifactOptimizerView({ onNavigate }) {
             </div>
             <div>
               <div className="text-xs font-bold text-white uppercase font-mono">SCAN & COMPARE</div>
-              <p className="text-[11px] text-slate-400 mt-0.5">
+              <p className="text-xs text-slate-400 mt-0.5">
                 สแกนและเปรียบเทียบทุกอาร์ติแฟกต์ในคลังที่มอนสเตอร์ใส่ได้
               </p>
             </div>
@@ -880,7 +880,7 @@ export default function ArtifactOptimizerView({ onNavigate }) {
             </div>
             <div>
               <div className="text-xs font-bold text-white uppercase font-mono">ALL MODIFIERS INCLUDED</div>
-              <p className="text-[11px] text-slate-400 mt-0.5">
+              <p className="text-xs text-slate-400 mt-0.5">
                 คำนวณรวมเสาอารีน่า บัฟดาบ บัฟสปีด และลีดเดอร์ในเกม
               </p>
             </div>
@@ -892,7 +892,7 @@ export default function ArtifactOptimizerView({ onNavigate }) {
             </div>
             <div>
               <div className="text-xs font-bold text-white uppercase font-mono">SEE THE BEST COMBINATION</div>
-              <p className="text-[11px] text-slate-400 mt-0.5">
+              <p className="text-xs text-slate-400 mt-0.5">
                 จัดอันดับชิ้นซ้าย (ธาตุ) ชิ้นขวา (สาย) และคู่ผสมที่ดีที่สุด
               </p>
             </div>
@@ -904,7 +904,7 @@ export default function ArtifactOptimizerView({ onNavigate }) {
             </div>
             <div>
               <div className="text-xs font-bold text-white uppercase font-mono">MAXIMIZE YOUR DAMAGE</div>
-              <p className="text-[11px] text-slate-400 mt-0.5">
+              <p className="text-xs text-slate-400 mt-0.5">
                 รีดดาเมจเสริมแท้ทะลุเกราะได้สูงสุดในทุกการโจมตี
               </p>
             </div>

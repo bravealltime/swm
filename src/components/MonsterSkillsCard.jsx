@@ -84,7 +84,7 @@ export default function MonsterSkillsCard({ monsterData }) {
                 />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className="px-1.5 py-0.5 bg-amber-500/20 text-amber-300 border border-amber-500/40 rounded text-[10px] font-extrabold uppercase tracking-wider">
+                    <span className="px-1.5 py-0.5 bg-amber-500/20 text-amber-300 border border-amber-500/40 rounded text-[11px] font-extrabold uppercase tracking-wider">
                       Leader Skill
                     </span>
                     <span className="text-xs font-bold text-white">
@@ -120,7 +120,7 @@ export default function MonsterSkillsCard({ monsterData }) {
                           e.target.src = 'https://do9d4mpqk497d.cloudfront.net/common/images/skills36/skill_icon_0001_0_0.png';
                         }}
                       />
-                      <span className="absolute -bottom-1.5 right-0 text-[9px] font-mono font-bold bg-[#0d1522] border border-[#1d2b3f] text-slate-300 px-1 rounded shadow">
+                      <span className="absolute -bottom-1.5 right-0 text-[10px] font-mono font-bold bg-[#0d1522] border border-[#1d2b3f] text-slate-300 px-1 rounded shadow">
                         {skill.isPassive ? 'Pass' : `1/${skill.maxLevel || 3}`}
                       </span>
                     </div>
@@ -128,7 +128,7 @@ export default function MonsterSkillsCard({ monsterData }) {
 
                   <div>
                     <div className="flex items-center gap-1.5 flex-wrap">
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-extrabold uppercase ${
+                      <span className={`px-2 py-0.5 rounded text-[11px] font-extrabold uppercase ${
                         skill.isPassive 
                           ? 'bg-purple-500/20 text-purple-300 border border-purple-500/40' 
                           : skill.slot === 1 
@@ -140,7 +140,7 @@ export default function MonsterSkillsCard({ monsterData }) {
                         {skill.slotLabel}
                       </span>
 
-                      <span className={`text-[10px] px-2 py-0.5 rounded font-mono font-bold ${
+                      <span className={`text-[11px] px-2 py-0.5 rounded font-mono font-bold ${
                         skill.isPassive 
                           ? 'bg-purple-950/40 text-purple-300 border border-purple-800/40'
                           : skill.cooldown 
@@ -151,13 +151,13 @@ export default function MonsterSkillsCard({ monsterData }) {
                       </span>
 
                       {skill.isAoe && (
-                        <span className="text-[10px] bg-indigo-950/40 text-indigo-300 px-2 py-0.5 rounded border border-indigo-800/40 font-bold">
+                        <span className="text-[11px] bg-indigo-950/40 text-indigo-300 px-2 py-0.5 rounded border border-indigo-800/40 font-bold">
                           โจมตีหมู่ (AOE)
                         </span>
                       )}
 
                       {skill.hits > 1 && (
-                        <span className="text-[10px] bg-yellow-950/40 text-yellow-300 px-2 py-0.5 rounded border border-yellow-800/40 font-mono font-bold">
+                        <span className="text-[11px] bg-yellow-950/40 text-yellow-300 px-2 py-0.5 rounded border border-yellow-800/40 font-mono font-bold">
                           {skill.hits} ฮิต
                         </span>
                       )}
@@ -180,13 +180,13 @@ export default function MonsterSkillsCard({ monsterData }) {
                 <div className="flex flex-wrap items-center gap-2 text-xs bg-[#090e17] px-3 py-1.5 rounded-lg border border-[#192537]">
                   {skill.multiplier && (
                     <div className="flex items-center gap-1.5 font-mono">
-                      <span className="text-slate-400 text-[11px]">สูตรดาเมจตัวคูณ:</span>
+                      <span className="text-slate-400 text-xs">สูตรดาเมจตัวคูณ:</span>
                       <span className="text-amber-400 font-bold">{skill.multiplier}</span>
                     </div>
                   )}
                   {skill.scalesWith && skill.scalesWith.length > 0 && (
                     <div className="flex items-center gap-1.5">
-                      <span className="text-slate-400 text-[11px]">สเกลตาม:</span>
+                      <span className="text-slate-400 text-xs">สเกลตาม:</span>
                       <span className="text-emerald-400 font-bold font-mono">
                         {skill.scalesWith.join(' + ')}
                       </span>
@@ -201,7 +201,7 @@ export default function MonsterSkillsCard({ monsterData }) {
                   {skill.effects.map((eff, i) => (
                     <span 
                       key={i}
-                      className={`px-2 py-0.5 rounded-md text-[10px] font-bold border ${eff.badgeClass || 'bg-slate-800 text-slate-300 border-slate-700'}`}
+                      className={`px-2 py-0.5 rounded-md text-[11px] font-bold border ${eff.badgeClass || 'bg-slate-800 text-slate-300 border-slate-700'}`}
                     >
                       {eff.nameTh || eff.name} {eff.chance ? `(${eff.chance}%)` : ''}
                     </span>
@@ -211,7 +211,7 @@ export default function MonsterSkillsCard({ monsterData }) {
 
               {/* Tactics & Mechanics Note */}
               {skill.tactics && (
-                <div className="text-[11px] text-blue-300/90 bg-blue-950/20 border border-blue-900/30 px-3 py-1.5 rounded-lg leading-relaxed">
+                <div className="text-xs text-blue-300/90 bg-blue-950/20 border border-blue-900/30 px-3 py-1.5 rounded-lg leading-relaxed">
                   {skill.tactics}
                 </div>
               )}
@@ -219,14 +219,14 @@ export default function MonsterSkillsCard({ monsterData }) {
               {/* Skill-ups */}
               {skill.skillups && skill.skillups.length > 0 && (
                 <div className="pt-2 border-t border-[#162232]">
-                  <div className="text-[10px] text-slate-400 font-bold mb-1 flex items-center gap-1">
-                    <Layers className="w-3 h-3 text-slate-500" />
+                  <div className="text-[11px] text-slate-400 font-bold mb-1 flex items-center gap-1">
+                    <Layers className="w-3 h-3 text-slate-400" />
                     อัปเกรดเลเวลสกิล (Skill Ups สูงสุด Lv.{skill.maxLevel || (skill.skillups.length + 1)}):
                   </div>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-1 text-[10px]">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-1 text-[11px]">
                     {skill.skillups.map((u, ui) => (
                       <div key={ui} className="bg-[#090e17] px-2 py-1 rounded border border-[#162232] text-slate-300 font-mono flex items-center justify-between">
-                        <span className="text-slate-500">Lv.{ui + 2}</span>
+                        <span className="text-slate-400">Lv.{ui + 2}</span>
                         <span className="text-slate-200">{u}</span>
                       </div>
                     ))}
@@ -248,7 +248,7 @@ export default function MonsterSkillsCard({ monsterData }) {
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
             <div className="bg-[#101724] p-3 rounded-xl border border-[#1d2b3f] space-y-1">
-              <span className="text-slate-400 text-[11px] flex items-center gap-1">
+              <span className="text-slate-400 text-xs flex items-center gap-1">
                 <Heart className="w-3.5 h-3.5 text-rose-400" /> พลังชีวิต (HP)
               </span>
               <div className="text-lg font-black text-rose-400 font-mono">
@@ -257,7 +257,7 @@ export default function MonsterSkillsCard({ monsterData }) {
             </div>
 
             <div className="bg-[#101724] p-3 rounded-xl border border-[#1d2b3f] space-y-1">
-              <span className="text-slate-400 text-[11px] flex items-center gap-1">
+              <span className="text-slate-400 text-xs flex items-center gap-1">
                 <Swords className="w-3.5 h-3.5 text-amber-400" /> พลังโจมตี (ATK)
               </span>
               <div className="text-lg font-black text-amber-400 font-mono">
@@ -266,7 +266,7 @@ export default function MonsterSkillsCard({ monsterData }) {
             </div>
 
             <div className="bg-[#101724] p-3 rounded-xl border border-[#1d2b3f] space-y-1">
-              <span className="text-slate-400 text-[11px] flex items-center gap-1">
+              <span className="text-slate-400 text-xs flex items-center gap-1">
                 <Shield className="w-3.5 h-3.5 text-blue-400" /> พลังป้องกัน (DEF)
               </span>
               <div className="text-lg font-black text-blue-400 font-mono">
@@ -275,7 +275,7 @@ export default function MonsterSkillsCard({ monsterData }) {
             </div>
 
             <div className="bg-[#101724] p-3 rounded-xl border border-[#1d2b3f] space-y-1">
-              <span className="text-slate-400 text-[11px] flex items-center gap-1">
+              <span className="text-slate-400 text-xs flex items-center gap-1">
                 <Zap className="w-3.5 h-3.5 text-emerald-400" /> ความเร็ว (SPD)
               </span>
               <div className="text-lg font-black text-emerald-400 font-mono">
@@ -286,28 +286,28 @@ export default function MonsterSkillsCard({ monsterData }) {
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs pt-1">
             <div className="bg-[#101724] p-2.5 rounded-xl border border-[#1d2b3f]">
-              <span className="text-slate-400 text-[11px]">อัตราคริ (CRI Rate)</span>
+              <span className="text-slate-400 text-xs">อัตราคริ (CRI Rate)</span>
               <div className="text-sm font-bold text-yellow-400 font-mono">
                 {baseStats.critRate || 15}%
               </div>
             </div>
 
             <div className="bg-[#101724] p-2.5 rounded-xl border border-[#1d2b3f]">
-              <span className="text-slate-400 text-[11px]">แดเมจคริ (CRI Dmg)</span>
+              <span className="text-slate-400 text-xs">แดเมจคริ (CRI Dmg)</span>
               <div className="text-sm font-bold text-amber-400 font-mono">
                 {baseStats.critDmg || 50}%
               </div>
             </div>
 
             <div className="bg-[#101724] p-2.5 rounded-xl border border-[#1d2b3f]">
-              <span className="text-slate-400 text-[11px]">ความต้านทาน (RES)</span>
+              <span className="text-slate-400 text-xs">ความต้านทาน (RES)</span>
               <div className="text-sm font-bold text-sky-400 font-mono">
                 {baseStats.res || 15}%
               </div>
             </div>
 
             <div className="bg-[#101724] p-2.5 rounded-xl border border-[#1d2b3f]">
-              <span className="text-slate-400 text-[11px]">ความแม่นยำ (ACC)</span>
+              <span className="text-slate-400 text-xs">ความแม่นยำ (ACC)</span>
               <div className="text-sm font-bold text-indigo-400 font-mono">
                 {baseStats.acc || 0}%
               </div>

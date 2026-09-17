@@ -83,19 +83,19 @@ export default function MetaDashboardView({ onNavigate }) {
           <div className="p-4 rounded-xl bg-[#080d16] border border-[#1b283d] space-y-1">
             <div className="text-xs text-slate-400 font-medium">ความได้เปรียบ First Pick (พิกแรก)</div>
             <div className="text-xl font-mono font-black text-cyan-400">51.8% WIN RATE</div>
-            <div className="text-[11px] text-slate-500">ฝ่ายเริ่มก่อนได้เปรียบชิงมอนสเตอร์เมต้า Tier S+</div>
+            <div className="text-xs text-slate-400">ฝ่ายเริ่มก่อนได้เปรียบชิงมอนสเตอร์เมต้า Tier S+</div>
           </div>
 
           <div className="p-4 rounded-xl bg-[#080d16] border border-[#1b283d] space-y-1">
             <div className="text-xs text-slate-400 font-medium">ความได้เปรียบ Second Pick (พิกหลัง)</div>
             <div className="text-xl font-mono font-black text-rose-400">48.2% WIN RATE</div>
-            <div className="text-[11px] text-slate-500">ได้เปรียบจังหวะ Double Pick และ Last Pick เคาน์เตอร์</div>
+            <div className="text-xs text-slate-400">ได้เปรียบจังหวะ Double Pick และ Last Pick เคาน์เตอร์</div>
           </div>
 
           <div className="p-4 rounded-xl bg-[#080d16] border border-[#1b283d] space-y-1">
             <div className="text-xs text-slate-400 font-medium">จำนวนแมตช์ที่เก็บรวบรวม</div>
             <div className="text-xl font-mono font-black text-amber-400">6,842,100 แมตช์</div>
-            <div className="text-[11px] text-slate-500">บันทึกสดผ่านระบบ SWRT & Lucksack Engine</div>
+            <div className="text-xs text-slate-400">บันทึกสดผ่านระบบ SWRT & Lucksack Engine</div>
           </div>
         </div>
       </div>
@@ -125,7 +125,7 @@ export default function MetaDashboardView({ onNavigate }) {
             ))}
           </div>
 
-          <div className="flex items-center justify-between text-[11px] text-slate-500 font-mono px-1">
+          <div className="flex items-center justify-between text-xs text-slate-400 font-mono px-1">
             <span>◄ Top 0.1% (Guardian 3)</span>
             <span>Conqueror (Top 15-25%)</span>
             <span>Fighter (ผู้เล่นทั่วไป) ►</span>
@@ -143,13 +143,13 @@ export default function MetaDashboardView({ onNavigate }) {
                 <span className={`w-3 h-3 rounded-full ${item.color}`} />
                 <div>
                   <div className="text-xs font-bold text-white">{item.rank}</div>
-                  <div className="text-[10px] text-slate-400 font-mono">สัดส่วน {item.percent}% ({item.count})</div>
+                  <div className="text-[11px] text-slate-400 font-mono">สัดส่วน {item.percent}% ({item.count})</div>
                 </div>
               </div>
 
               <div className="text-right">
                 <div className="text-xs font-mono font-bold text-amber-300">{item.cutoff}</div>
-                <div className="text-[9px] text-slate-500 uppercase">จุดตัดคะแนน</div>
+                <div className="text-[10px] text-slate-400 uppercase">จุดตัดคะแนน</div>
               </div>
             </div>
           ))}

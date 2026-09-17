@@ -153,24 +153,24 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
         {/* Global Telemetry Card */}
         <div className="relative z-10 rounded-2xl bg-white/[0.04] border border-white/10 backdrop-blur-xl p-3.5 flex items-center gap-4 self-start lg:self-auto text-xs font-mono shadow-xl">
           <div>
-            <div className="text-slate-400 text-[10px]">ซีซั่นปัจจุบัน</div>
+            <div className="text-slate-400 text-[11px]">ซีซั่นปัจจุบัน</div>
             <div className="text-cyan-400 font-bold text-sm">Season {tierData.season}</div>
           </div>
           <div className="w-px h-8 bg-white/10"></div>
           <div>
-            <div className="text-slate-400 text-[10px]">แพตช์ตัวเกม</div>
+            <div className="text-slate-400 text-[11px]">แพตช์ตัวเกม</div>
             <div className="text-purple-400 font-bold text-sm">{tierData.version}</div>
           </div>
           <div className="w-px h-8 bg-white/10"></div>
           <div>
-            <div className="text-slate-400 text-[10px]">แมตช์ที่เก็บสถิติ</div>
+            <div className="text-slate-400 text-[11px]">แมตช์ที่เก็บสถิติ</div>
             <div className="text-emerald-400 font-bold text-sm">6.8M+ แมตช์</div>
           </div>
         </div>
       </div>
 
       {/* Main Tabs Navigation */}
-      <div className="flex items-center gap-1.5 p-1.5 rounded-2xl bg-[#0a0f19]/80 border border-white/[0.08] backdrop-blur-xl overflow-x-auto shadow-lg">
+      <div role="tablist" className="flex flex-wrap items-center gap-1.5 p-1.5 rounded-2xl bg-[#0a0f19]/80 border border-white/[0.08] backdrop-blur-xl shadow-lg">
         <button
           onClick={() => setActiveTab('tierlist')}
           className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap ${
@@ -255,7 +255,7 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
                 </div>
               </div>
 
-              <div className="text-[11px] font-mono text-cyan-400 bg-cyan-950/40 px-2.5 py-1 rounded-lg border border-cyan-500/30">
+              <div className="text-xs font-mono text-cyan-400 bg-cyan-950/40 px-2.5 py-1 rounded-lg border border-cyan-500/30">
                 {selectedRank === 'guardian' ? 'เฉพาะการ์เดียน (G1-G3) • มาตรฐานการแข่งระดับโปร' :
                  selectedRank === 'conqueror' ? 'ระดับคอนเคอเรอร์ (C1-C3) • เมต้าผู้เล่นระดับกลาง-สูง' :
                  'สถิติรวมทุกระดับการแข่งขัน'}
@@ -284,7 +284,7 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
                     }`}
                   >
                     <span>{t === 'all' ? 'ทุกเทียร์' : `${t} Tier`}</span>
-                    <span className={`px-1.5 py-0.2 rounded text-[10px] font-mono ${isSelected ? 'bg-black/30' : 'bg-[#182333]'}`}>
+                    <span className={`px-1.5 py-0.2 rounded text-[11px] font-mono ${isSelected ? 'bg-black/30' : 'bg-[#182333]'}`}>
                       {count}
                     </span>
                   </button>
@@ -332,7 +332,7 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
                 <span className="font-bold">{tierMeta[selectedTier].label}:</span>
                 <span>{tierMeta[selectedTier].sub} • พบทั้งหมด {displayedTierMonsters.length} ตัวที่ตรงตามเงื่อนไข</span>
               </div>
-              <span className="text-[11px] font-mono">คลิกที่การ์ดเพื่อดูตัวแก้ทาง & คู่หูที่ดีที่สุด</span>
+              <span className="text-xs font-mono">คลิกที่การ์ดเพื่อดูตัวแก้ทาง & คู่หูที่ดีที่สุด</span>
             </div>
           )}
 
@@ -359,7 +359,7 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
                         <MonsterAvatar monster={monster} size="md" />
                         <div>
                           <div className="flex items-center gap-1.5">
-                            <span className={`px-1.5 py-0.2 rounded text-[9px] font-extrabold uppercase ${
+                            <span className={`px-1.5 py-0.2 rounded text-[10px] font-extrabold uppercase ${
                               monster.element === 'fire' ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30' :
                               monster.element === 'water' ? 'bg-sky-500/20 text-sky-400 border border-sky-500/30' :
                               monster.element === 'wind' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' :
@@ -368,7 +368,7 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
                             }`}>
                               {monster.element}
                             </span>
-                            <span className="text-[10px] text-slate-400 font-bold">
+                            <span className="text-[11px] text-slate-400 font-bold">
                               {monster.tier ? `${monster.tier} Tier` : ''}
                             </span>
                           </div>
@@ -376,7 +376,7 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
                           <h3 className="text-sm font-bold text-white group-hover:text-cyan-400 transition-colors mt-1 truncate max-w-[130px]">
                             {monster.thaiName || monster.name}
                           </h3>
-                          <div className="text-[11px] text-slate-400 truncate max-w-[130px]">
+                          <div className="text-xs text-slate-400 truncate max-w-[130px]">
                             {monster.name}
                           </div>
                         </div>
@@ -385,7 +385,7 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
                       {/* AI Score Badge */}
                       {monster.aiScore > 0 && (
                         <div className="flex flex-col items-end">
-                          <span className="text-[9px] text-slate-400 font-mono">AI RATING</span>
+                          <span className="text-[10px] text-slate-400 font-mono">AI RATING</span>
                           <span className="text-xs font-mono font-black text-amber-400 bg-amber-950/60 px-2 py-0.5 rounded border border-amber-800/40">
                             ★ {monster.aiScore.toFixed(1)}
                           </span>
@@ -396,24 +396,24 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
                     {/* Stats Metric Strip */}
                     <div className="grid grid-cols-4 gap-1.5 mt-3 pt-2.5 border-t border-[#182333] text-center font-mono">
                       <div className="bg-[#0c121c] p-1.5 rounded-lg border border-[#162232]">
-                        <div className="text-[9px] text-slate-400">PICK%</div>
+                        <div className="text-[10px] text-slate-400">PICK%</div>
                         <div className="text-xs font-bold text-white">{monster.pickRate}%</div>
                       </div>
 
                       <div className="bg-[#0c121c] p-1.5 rounded-lg border border-[#162232]">
-                        <div className="text-[9px] text-slate-400">WIN%</div>
+                        <div className="text-[10px] text-slate-400">WIN%</div>
                         <div className={`text-xs font-bold ${monster.winRate >= 50 ? 'text-emerald-400' : 'text-rose-400'}`}>
                           {monster.winRate}%
                         </div>
                       </div>
 
                       <div className="bg-[#0c121c] p-1.5 rounded-lg border border-[#162232]">
-                        <div className="text-[9px] text-slate-400">BAN%</div>
+                        <div className="text-[10px] text-slate-400">BAN%</div>
                         <div className="text-xs font-bold text-amber-400">{monster.banRate}%</div>
                       </div>
 
                       <div className="bg-[#0c121c] p-1.5 rounded-lg border border-[#162232]">
-                        <div className="text-[9px] text-slate-400">1st PICK</div>
+                        <div className="text-[10px] text-slate-400">1st PICK</div>
                         <div className="text-xs font-bold text-cyan-400">{monster.firstPickRate}%</div>
                       </div>
                     </div>
@@ -424,7 +424,7 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
                     <div className="mt-3 pt-3 border-t border-[#1d2b3f] space-y-3 text-xs animate-in fade-in duration-150">
                       {/* Synergies */}
                       <div>
-                        <div className="text-[11px] font-bold text-emerald-400 flex items-center gap-1 mb-1.5">
+                        <div className="text-xs font-bold text-emerald-400 flex items-center gap-1 mb-1.5">
                           <Users className="w-3.5 h-3.5" />
                           <span>คู่หูที่ดีที่สุด (Best Synergies):</span>
                         </div>
@@ -433,9 +433,9 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
                             <div key={sIdx} className="flex items-center justify-between p-1.5 rounded-lg bg-[#090e17] border border-[#162132]">
                               <div className="flex items-center gap-2">
                                 <img src={syn.avatarUrl} alt={syn.name} className="w-6 h-6 rounded border border-emerald-500/40" />
-                                <span className="text-[11px] text-slate-200 font-semibold">{syn.thaiName || syn.name}</span>
+                                <span className="text-xs text-slate-200 font-semibold">{syn.thaiName || syn.name}</span>
                               </div>
-                              <span className="text-[11px] font-mono font-bold text-emerald-400">{syn.winRate}% WR</span>
+                              <span className="text-xs font-mono font-bold text-emerald-400">{syn.winRate}% WR</span>
                             </div>
                           ))}
                         </div>
@@ -443,7 +443,7 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
 
                       {/* Hard Counters */}
                       <div>
-                        <div className="text-[11px] font-bold text-rose-400 flex items-center gap-1 mb-1.5">
+                        <div className="text-xs font-bold text-rose-400 flex items-center gap-1 mb-1.5">
                           <XCircle className="w-3.5 h-3.5" />
                           <span>ตัวแก้ทางที่แพ้บ่อยสุด (Hard Counters):</span>
                         </div>
@@ -452,9 +452,9 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
                             <div key={cIdx} className="flex items-center justify-between p-1.5 rounded-lg bg-[#090e17] border border-[#162132]">
                               <div className="flex items-center gap-2">
                                 <img src={cnt.avatarUrl} alt={cnt.name} className="w-6 h-6 rounded border border-rose-500/40" />
-                                <span className="text-[11px] text-slate-200 font-semibold">{cnt.thaiName || cnt.name}</span>
+                                <span className="text-xs text-slate-200 font-semibold">{cnt.thaiName || cnt.name}</span>
                               </div>
-                              <span className="text-[11px] font-mono font-bold text-rose-400">{cnt.winRate}% WR</span>
+                              <span className="text-xs font-mono font-bold text-rose-400">{cnt.winRate}% WR</span>
                             </div>
                           ))}
                         </div>
@@ -464,7 +464,7 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
 
                   {/* Footer hint */}
                   <div className="mt-2 text-right">
-                    <span className="text-[10px] text-slate-500 group-hover:text-cyan-400 transition-colors">
+                    <span className="text-[11px] text-slate-400 group-hover:text-cyan-400 transition-colors">
                       {isExpanded ? '▲ ย่อข้อมูล' : '▼ ดูตัวแก้ทาง & คู่หู'}
                     </span>
                   </div>
@@ -522,7 +522,7 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs border-collapse font-sans">
                 <thead>
-                  <tr className="border-b border-[#1d2b3f] bg-[#0c121c] text-slate-400 font-mono text-[11px] uppercase tracking-wider">
+                  <tr className="border-b border-[#1d2b3f] bg-[#0c121c] text-slate-400 font-mono text-xs uppercase tracking-wider">
                     <th className="py-3 px-4">#</th>
                     <th className="py-3 px-4">มอนสเตอร์</th>
                     <th className="py-3 px-4 text-right">จำนวนเกมที่เลือก (Pick Count)</th>
@@ -535,7 +535,7 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
                 <tbody className="divide-y divide-[#182333]">
                   {displayedMeta.map((m, idx) => (
                     <tr key={m.monsterId} className="hover:bg-[#131c2c] transition-colors">
-                      <td className="py-3 px-4 font-mono text-slate-500 font-bold">{idx + 1}</td>
+                      <td className="py-3 px-4 font-mono text-slate-400 font-bold">{idx + 1}</td>
                       <td className="py-3 px-4">
                         <div className="flex items-center gap-3">
                           <img 
@@ -548,7 +548,7 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
                             <div className="font-bold text-white text-xs sm:text-sm">
                               {m.thaiName || m.name}
                             </div>
-                            <div className="text-[11px] text-slate-400">
+                            <div className="text-xs text-slate-400">
                               {m.name} ({m.element})
                             </div>
                           </div>
@@ -629,7 +629,7 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
                       <Clock className="w-3.5 h-3.5" />
                       <span>{rep.date}</span>
                     </span>
-                    <span className="text-slate-500">
+                    <span className="text-slate-400">
                       Match ID: #{rep.id}
                     </span>
                   </div>
@@ -651,7 +651,7 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
                             {p1?.name}
                           </span>
                           {p1Won && (
-                            <span className="flex items-center gap-1 text-[10px] font-bold bg-amber-500 text-slate-950 px-2 py-0.5 rounded-full shadow-sm">
+                            <span className="flex items-center gap-1 text-[11px] font-bold bg-amber-500 text-slate-950 px-2 py-0.5 rounded-full shadow-sm">
                               <Crown className="w-3 h-3" /> ชนะ (WIN)
                             </span>
                           )}
@@ -684,7 +684,7 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
                               </div>
                             )}
                             {m.isLeader && (
-                              <span className="absolute -top-1.5 -left-1 text-[8px] font-extrabold bg-amber-500 text-slate-950 px-1 rounded shadow">
+                              <span className="absolute -top-1.5 -left-1 text-[9px] font-extrabold bg-amber-500 text-slate-950 px-1 rounded shadow">
                                 L
                               </span>
                             )}
@@ -708,7 +708,7 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
                             {p2?.name}
                           </span>
                           {p2Won && (
-                            <span className="flex items-center gap-1 text-[10px] font-bold bg-amber-500 text-slate-950 px-2 py-0.5 rounded-full shadow-sm">
+                            <span className="flex items-center gap-1 text-[11px] font-bold bg-amber-500 text-slate-950 px-2 py-0.5 rounded-full shadow-sm">
                               <Crown className="w-3 h-3" /> ชนะ (WIN)
                             </span>
                           )}
@@ -741,7 +741,7 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
                               </div>
                             )}
                             {m.isLeader && (
-                              <span className="absolute -top-1.5 -left-1 text-[8px] font-extrabold bg-amber-500 text-slate-950 px-1 rounded shadow">
+                              <span className="absolute -top-1.5 -left-1 text-[9px] font-extrabold bg-amber-500 text-slate-950 px-1 rounded shadow">
                                 L
                               </span>
                             )}
@@ -783,9 +783,9 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
                 { rank: 'P2 (Special 2)', score: nowLine.s2?.score || 1205, cutRank: nowLine.s2?.rank || 7500, color: 'border-emerald-500/50 text-emerald-400' }
               ].map((tier, idx) => (
                 <div key={idx} className={`p-4 rounded-2xl bg-[#101724] border ${tier.color} space-y-1 shadow-lg`}>
-                  <div className="text-[11px] font-bold uppercase tracking-wider">{tier.rank}</div>
+                  <div className="text-xs font-bold uppercase tracking-wider">{tier.rank}</div>
                   <div className="text-2xl font-black text-white font-mono">{tier.score?.toLocaleString()} คะแนน</div>
-                  <div className="text-[11px] text-slate-400 font-mono">อันดับตัด #{tier.cutRank}</div>
+                  <div className="text-xs text-slate-400 font-mono">อันดับตัด #{tier.cutRank}</div>
                 </div>
               ))}
             </div>

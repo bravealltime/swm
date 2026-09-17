@@ -80,7 +80,7 @@ export default function MdcStatsView({ onNavigate }) {
           <div className="text-2xl sm:text-3xl font-mono font-black text-white mt-1">
             {totalDefenses.toLocaleString()}
           </div>
-          <div className="text-[11px] text-slate-500 mt-1">ทีมเมต้าหอ 4★ และ 5★</div>
+          <div className="text-xs text-slate-400 mt-1">ทีมเมต้าหอ 4★ และ 5★</div>
         </div>
 
         <div className="p-4 rounded-2xl bg-[#101724] border border-[#1d2b3f] shadow-lg">
@@ -91,7 +91,7 @@ export default function MdcStatsView({ onNavigate }) {
           <div className="text-2xl sm:text-3xl font-mono font-black text-emerald-400 mt-1">
             {totalCounters.toLocaleString()}
           </div>
-          <div className="text-[11px] text-slate-500 mt-1">สูตรเจาะพร้อม Win Rate</div>
+          <div className="text-xs text-slate-400 mt-1">สูตรเจาะพร้อม Win Rate</div>
         </div>
 
         <div className="p-4 rounded-2xl bg-[#101724] border border-[#1d2b3f] shadow-lg">
@@ -102,7 +102,7 @@ export default function MdcStatsView({ onNavigate }) {
           <div className="text-2xl sm:text-3xl font-mono font-black text-amber-400 mt-1">
             {totalBattles.toLocaleString()}
           </div>
-          <div className="text-[11px] text-slate-500 mt-1">รอบการต่อสู้ทั่วทุกเซิร์ฟ</div>
+          <div className="text-xs text-slate-400 mt-1">รอบการต่อสู้ทั่วทุกเซิร์ฟ</div>
         </div>
 
         <div className="p-4 rounded-2xl bg-[#101724] border border-[#1d2b3f] shadow-lg">
@@ -113,7 +113,7 @@ export default function MdcStatsView({ onNavigate }) {
           <div className="text-2xl sm:text-3xl font-mono font-black text-purple-400 mt-1">
             100%
           </div>
-          <div className="text-[11px] text-slate-500 mt-1">SWGT Authentic Certified</div>
+          <div className="text-xs text-slate-400 mt-1">SWGT Authentic Certified</div>
         </div>
       </div>
 
@@ -254,7 +254,7 @@ export default function MdcStatsView({ onNavigate }) {
                 <div className="flex items-start justify-between">
                   <div>
                     <div className="text-xs font-black text-white">{def.title}</div>
-                    <div className="text-[10px] text-slate-400 mt-0.5">{def.towerType === 'nat4' ? 'หอ 4 ดาว' : 'หอ 5 ดาว'}</div>
+                    <div className="text-[11px] text-slate-400 mt-0.5">{def.towerType === 'nat4' ? 'หอ 4 ดาว' : 'หอ 5 ดาว'}</div>
                   </div>
                   <span className="px-2 py-0.5 rounded text-xs font-mono font-bold bg-blue-500/20 text-blue-400 border border-blue-500/30">
                     {def.totalBattles} แมตช์
@@ -265,7 +265,7 @@ export default function MdcStatsView({ onNavigate }) {
                   {def.defenseMonsters.map((m, idx) => (
                     <div key={idx} className="flex items-center gap-1.5">
                       <MonsterAvatar monster={m} size="sm" />
-                      <span className="text-[11px] font-bold text-slate-300 hidden sm:inline">{m.name}</span>
+                      <span className="text-xs font-bold text-slate-300 hidden sm:inline">{m.name}</span>
                     </div>
                   ))}
                 </div>
@@ -309,18 +309,18 @@ export default function MdcStatsView({ onNavigate }) {
                 </div>
 
                 <div className="bg-[#0c121c] p-2.5 rounded-xl border border-[#1d2b3f]">
-                  <div className="text-[10px] text-slate-400 font-bold uppercase mb-1">ทีมบุกที่ใช้:</div>
+                  <div className="text-[11px] text-slate-400 font-bold uppercase mb-1">ทีมบุกที่ใช้:</div>
                   <div className="flex items-center gap-2">
                     {item.counter.monsters.map((m, mIdx) => (
                       <div key={mIdx} className="flex items-center gap-1.5">
                         <MonsterAvatar monster={m} size="sm" />
-                        <span className="text-[11px] font-bold text-slate-200 hidden sm:inline">{m.name}</span>
+                        <span className="text-xs font-bold text-slate-200 hidden sm:inline">{m.name}</span>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                <div className="text-[11px] text-slate-400 flex items-center justify-between pt-1 border-t border-[#182333]">
+                <div className="text-xs text-slate-400 flex items-center justify-between pt-1 border-t border-[#182333]">
                   <span>สถิติการรบ: <strong className="text-slate-200 font-mono">{item.counter.battles} รอบ</strong></span>
                   <button
                     onClick={() => onNavigate && onNavigate('3mdc', { search: item.againstDef.title })}

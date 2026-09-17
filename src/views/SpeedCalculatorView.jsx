@@ -121,7 +121,7 @@ export default function SpeedCalculatorView() {
                 }`}
               >
                 <span>{p.name}</span>
-                <span className={`text-[10px] font-mono px-1 rounded ${isActive ? 'bg-black/20 text-slate-950' : 'bg-[#152030] text-cyan-400'}`}>
+                <span className={`text-[11px] font-mono px-1 rounded ${isActive ? 'bg-black/20 text-slate-950' : 'bg-[#152030] text-cyan-400'}`}>
                   {p.spd}
                 </span>
               </button>
@@ -205,7 +205,7 @@ export default function SpeedCalculatorView() {
                 onChange={(e) => setTotemBonus(Number(e.target.value))}
                 className="w-full accent-amber-500 cursor-pointer"
               />
-              <div className="flex justify-between text-[10px] text-slate-500 font-mono">
+              <div className="flex justify-between text-[11px] text-slate-400 font-mono">
                 <span>0% (Lv 0)</span>
                 <span>7.5% (Lv 15)</span>
                 <span>15% (Max Lv 30)</span>
@@ -255,7 +255,7 @@ export default function SpeedCalculatorView() {
             <div className="flex items-center justify-between p-3 rounded-xl bg-[#0c121c] border border-[#1d2b3f]">
               <div>
                 <span className="font-bold text-white text-xs block">ใส่เซ็ตรูน Swift (+25% Base SPD)</span>
-                <span className="text-[10px] text-slate-400">เพิ่ม +{Math.floor(baseSpd * 0.25)} สปีดจากการใส่เซ็ต Swift 4 ชิ้น</span>
+                <span className="text-[11px] text-slate-400">เพิ่ม +{Math.floor(baseSpd * 0.25)} สปีดจากการใส่เซ็ต Swift 4 ชิ้น</span>
               </div>
               <input
                 type="checkbox"
@@ -269,7 +269,7 @@ export default function SpeedCalculatorView() {
             <div className="flex items-center justify-between p-3 rounded-xl bg-[#0c121c] border border-[#1d2b3f]">
               <div>
                 <span className="font-bold text-white text-xs block">มีบัฟความเร็วในการต่อสู้ (SPD Buff +33%)</span>
-                <span className="text-[10px] text-slate-400">คูณความเร็วจริงในเทิร์น x1.33 เท่า</span>
+                <span className="text-[11px] text-slate-400">คูณความเร็วจริงในเทิร์น x1.33 เท่า</span>
               </div>
               <input
                 type="checkbox"
@@ -305,7 +305,7 @@ export default function SpeedCalculatorView() {
 
             {/* Breakdown Formula */}
             <div className="p-3 bg-[#0c121c] rounded-xl border border-[#1d2b3f] text-xs font-mono space-y-1 text-slate-300">
-              <div className="text-[10px] text-slate-500 font-bold uppercase mb-1">รายละเอียดสูตรคำนวณ:</div>
+              <div className="text-[11px] text-slate-400 font-bold uppercase mb-1">รายละเอียดสูตรคำนวณ:</div>
               <div>Base ({baseSpd}) + รูน (+{runeSpd}) = {baseSpd + runeSpd}</div>
               <div>+ Swift (+{swiftBonus}) + ลีด (+{leadBonus}) + เสา/ธง (+{buildingBonus}) = <strong className="text-cyan-400">{combatSpdBeforeBuff}</strong></div>
               {hasSpdBuff && <div>x บัฟสปีด (+33%) = <strong className="text-emerald-400">{totalCombatSpd} Combat SPD</strong></div>}
@@ -356,7 +356,7 @@ export default function SpeedCalculatorView() {
                     ≥ {requiredFollowerCombatSpd} Combat SPD
                   </span>
                 </div>
-                <p className="text-[11px] text-slate-400 leading-relaxed">
+                <p className="text-xs text-slate-400 leading-relaxed">
                   💡 หากตัวแก้บัฟ (Stripper), ลดเกราะ หรือตัวดาเมจของคุณมี Combat SPD ถึง <strong className="text-white">{requiredFollowerCombatSpd}</strong> ฝั่งตรงข้ามที่มีความเร็วน้อยกว่าตัวเปิดจะไม่สามารถแทรกเทิร์นเข้ามาคั่นได้แน่นอน
                 </p>
               </div>

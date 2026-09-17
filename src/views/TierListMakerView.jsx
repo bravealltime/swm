@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { buildUrl } from '../router';
 import { 
   Trophy, 
   RotateCcw, 
@@ -132,7 +133,7 @@ export default function TierListMakerView() {
   // Copy share link
   const handleCopyShare = () => {
     setCopiedLink(true);
-    navigator.clipboard.writeText(window.location.href);
+    navigator.clipboard.writeText(window.location.origin + buildUrl('tier-list-maker'));
     setTimeout(() => setCopiedLink(false), 2500);
   };
 
@@ -232,14 +233,14 @@ export default function TierListMakerView() {
                       title={`คลิกเพื่อลบ ${name}`}
                     >
                       <MonsterAvatar monster={monster} size="sm" showStars={false} />
-                      <div className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-rose-600 text-white flex items-center justify-center text-[9px] font-bold opacity-0 group-hover/m:opacity-100 transition-opacity">
+                      <div className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-rose-600 text-white flex items-center justify-center text-[10px] font-bold opacity-0 group-hover/m:opacity-100 transition-opacity">
                         ✕
                       </div>
                     </div>
                   );
                 })
               ) : (
-                <div className="text-xs text-slate-500 italic pl-2">
+                <div className="text-xs text-slate-400 italic pl-2">
                   (ยังไม่มีมอนสเตอร์ในระดับนี้ - คลิกเลือกจากคลังด้านล่าง)
                 </div>
               )}
@@ -316,7 +317,7 @@ export default function TierListMakerView() {
                 <button
                   key={el.id}
                   onClick={() => setElementFilter(el.id)}
-                  className={`px-2 py-0.5 rounded text-[10px] font-bold transition-all cursor-pointer ${
+                  className={`px-2 py-0.5 rounded text-[11px] font-bold transition-all cursor-pointer ${
                     elementFilter === el.id
                       ? 'bg-cyan-600 text-white shadow-sm'
                       : 'bg-[#121c2c] text-slate-400 hover:text-white'
@@ -356,7 +357,7 @@ export default function TierListMakerView() {
                 className="w-9 h-9 rounded object-cover group-hover:scale-105 transition-transform"
                 onError={(e) => { e.target.src = 'https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0001_0_0.png'; }}
               />
-              <span className="text-[10px] text-slate-300 group-hover:text-cyan-300 truncate w-full text-center font-medium">
+              <span className="text-[11px] text-slate-300 group-hover:text-cyan-300 truncate w-full text-center font-medium">
                 {m.name}
               </span>
             </button>

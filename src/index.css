@@ -19,6 +19,27 @@
     line-height: 1.35;
     letter-spacing: -0.015em;
   }
+
+  /* Keyboard users always get a visible focus ring, even where a utility removed the outline */
+  :where(a, button, [role="button"], [role="option"], [tabindex]):focus-visible {
+    outline: 2px solid #60a5fa !important;
+    outline-offset: 2px;
+    border-radius: 0.5rem;
+  }
+  :where(input, select, textarea):focus-visible {
+    outline: 2px solid #3b82f6 !important;
+    outline-offset: 0;
+  }
+
+  /* Respect the OS "reduce motion" setting: stop looping/entrance animations */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
 }
 
 /* Custom Scrollbar - Sleek and tactile */

@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { buildUrl } from '../router';
 import {
   Search,
   Trophy,
@@ -163,7 +164,7 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
   };
 
   const copyShareLink = () => {
-    navigator.clipboard.writeText(window.location.origin + '?player=' + activePlayer.name);
+    navigator.clipboard.writeText(window.location.origin + buildUrl('player-tracker', { initialPlayer: activePlayer.name }));
     setCopiedLink(true);
     setTimeout(() => setCopiedLink(false), 2000);
   };
@@ -238,7 +239,7 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
         {/* Backdrop overlay to click outside and dismiss dropdown */}
         {isSearchFocused && searchQuery.trim() && (
           <div
-            className="fixed inset-0 bg-black/70 backdrop-blur-xs z-40"
+            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-40"
             onClick={() => setIsSearchFocused(false)}
           />
         )}
@@ -304,9 +305,9 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
           {/* Autocomplete Dropdown (Lucksack Styled Match List) */}
           {isSearchFocused && searchQuery.trim() && (
             <div className="absolute top-full left-0 right-0 mt-2 bg-[#0c1322] border border-blue-500/40 rounded-2xl shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9)] z-50 overflow-hidden divide-y divide-slate-800/80 max-h-96 overflow-y-auto ring-1 ring-blue-500/30">
-              <div className="px-4 py-2.5 text-[11px] font-bold text-slate-300 bg-[#080e1a] border-b border-slate-800 flex items-center justify-between">
+              <div className="px-4 py-2.5 text-xs font-bold text-slate-300 bg-[#080e1a] border-b border-slate-800 flex items-center justify-between">
                 <span>Players ({searchSuggestions.length} matches)</span>
-                <span className="text-slate-500">คลิกเพื่อเปิดโปรไฟล์</span>
+                <span className="text-slate-400">คลิกเพื่อเปิดโปรไฟล์</span>
               </div>
               {searchSuggestions.length > 0 ? (
                 searchSuggestions.map((sug) => (
@@ -343,7 +344,7 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
                         <Star className={`w-3.5 h-3.5 ${getScoreStarColor(sug.score)}`} />
                         <span className="text-slate-100">{sug.score}</span>
                       </div>
-                      <span className={`text-[9px] px-1.5 py-0.5 rounded font-black border uppercase ${getBadgeStyle(sug.rankCategory, sug.rankBadge)}`}>
+                      <span className={`text-[10px] px-1.5 py-0.5 rounded font-black border uppercase ${getBadgeStyle(sug.rankCategory, sug.rankBadge)}`}>
                         {sug.rankBadge || 'RTA'}
                       </span>
                     </div>
@@ -385,7 +386,7 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
                   }}
                 />
                 <span>{p.displayName || p.name}</span>
-                <span className={`text-[9px] px-1 py-0.2 rounded font-black border ${getBadgeStyle(p.rankCategory, p.rankBadge)}`}>
+                <span className={`text-[10px] px-1 py-0.2 rounded font-black border ${getBadgeStyle(p.rankCategory, p.rankBadge)}`}>
                   {p.rankBadge || 'RTA'}
                 </span>
               </button>
@@ -452,7 +453,7 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
                   e.target.src = `https://api.dicebear.com/7.x/adventurer/svg?seed=${encodeURIComponent(activePlayer.name)}`;
                 }}
               />
-              <div className={`absolute -bottom-2 -right-2 px-2 py-0.5 rounded-md text-[11px] font-black shadow-md border ${getBadgeStyle(activePlayer.rankCategory, activePlayer.rankBadge)}`}>
+              <div className={`absolute -bottom-2 -right-2 px-2 py-0.5 rounded-md text-xs font-black shadow-md border ${getBadgeStyle(activePlayer.rankCategory, activePlayer.rankBadge)}`}>
                 {activePlayer.rankBadge || 'RTA'}
               </div>
             </div>
@@ -482,7 +483,7 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
                   <Star className={`w-3.5 h-3.5 ${getScoreStarColor(activePlayer.score)}`} />
                   <strong className="text-white font-mono">{activePlayer.score.toLocaleString()}</strong> pts
                 </span>
-                <span className="text-xs text-slate-500">•</span>
+                <span className="text-xs text-slate-400">•</span>
                 <span className="text-xs text-slate-400 font-semibold">
                   อันดับโลก: <strong className="text-blue-400">#{activePlayer.worldRank.toLocaleString()}</strong>
                 </span>
@@ -506,24 +507,24 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
               <div className="text-xs text-slate-400 mb-1 font-medium">สถิติ ชนะ / แพ้</div>
               <div className="text-base font-black text-white font-mono">
                 <span className="text-emerald-400">{activePlayer.wins}W</span>
-                <span className="text-slate-500 mx-1">-</span>
+                <span className="text-slate-400 mx-1">-</span>
                 <span className="text-rose-400">{activePlayer.losses}L</span>
               </div>
-              <div className="text-[11px] text-slate-400 mt-1.5">{activePlayer.matchesRecorded} แมตช์ที่บันทึก</div>
+              <div className="text-xs text-slate-400 mt-1.5">{activePlayer.matchesRecorded} แมตช์ที่บันทึก</div>
             </div>
 
             {/* Archetype */}
             <div className="p-3.5 bg-[#0a0f18] rounded-xl border border-slate-800 text-center min-w-[130px] col-span-2 sm:col-span-1">
               <div className="text-xs text-slate-400 mb-1 font-medium">สไตล์การเล่นหลัก</div>
               <div className="text-sm font-bold text-blue-400 truncate">{activePlayer.archetype}</div>
-              <div className="text-[11px] text-slate-400 mt-1 truncate">{activePlayer.archetypeThai}</div>
+              <div className="text-xs text-slate-400 mt-1 truncate">{activePlayer.archetypeThai}</div>
             </div>
 
             {/* First Pick % */}
             <div className="p-3.5 bg-[#0a0f18] rounded-xl border border-slate-800 text-center min-w-[110px]">
               <div className="text-xs text-slate-400 mb-1 font-medium">First Pick Share</div>
               <div className="text-2xl font-black text-amber-400 font-mono">{activePlayer.firstPickPreference || 50}%</div>
-              <div className="text-[11px] text-slate-400 mt-1">อัตราได้เริ่มก่อน</div>
+              <div className="text-xs text-slate-400 mt-1">อัตราได้เริ่มก่อน</div>
             </div>
           </div>
         </div>
@@ -599,7 +600,7 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
                       <div className="text-xs text-slate-400 truncate">
                         {mon.thaiName || mon.name}
                       </div>
-                      <div className="text-[10px] font-semibold text-blue-400">
+                      <div className="text-[11px] font-semibold text-blue-400">
                         อันดับ #{index + 1} Most Picked
                       </div>
                     </div>
@@ -623,7 +624,7 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
                       <div className="bg-emerald-500 h-full rounded-full" style={{ width: `${mon.winRate}%` }} />
                     </div>
 
-                    <div className="flex items-center justify-between pt-1 text-[11px] text-slate-500">
+                    <div className="flex items-center justify-between pt-1 text-xs text-slate-400">
                       <span>จำนวนแมตช์:</span>
                       <span className="font-mono text-slate-400">{mon.matches} เกม</span>
                     </div>
@@ -760,7 +761,7 @@ function MatchCard({ match, playerName }) {
           </span>
 
           {match.firstPick && (
-            <span className="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-300 border border-amber-500/30">
+            <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-300 border border-amber-500/30">
               ⚡ First Pick
             </span>
           )}
@@ -770,7 +771,7 @@ function MatchCard({ match, playerName }) {
           <span>{match.date}</span>
           <span>•</span>
           <span className="flex items-center gap-1 font-mono">
-            <Clock className="w-3.5 h-3.5 text-slate-500" />
+            <Clock className="w-3.5 h-3.5 text-slate-400" />
             {match.duration || '2:15'}
           </span>
         </div>
@@ -785,7 +786,7 @@ function MatchCard({ match, playerName }) {
               <span className="w-2 h-2 rounded-full bg-blue-500" />
               {playerName}
             </span>
-            <span className="text-[11px] text-slate-400">ดราฟต์ 5 มอนสเตอร์</span>
+            <span className="text-xs text-slate-400">ดราฟต์ 5 มอนสเตอร์</span>
           </div>
 
           <div className="flex items-center gap-2 overflow-x-auto pb-1">
@@ -805,7 +806,7 @@ function MatchCard({ match, playerName }) {
         {/* Right: Opponent's 5 Monsters (5 cols) */}
         <div className="lg:col-span-5 space-y-2">
           <div className="flex items-center justify-between text-xs">
-            <span className="text-[11px] text-slate-400">คู่แข่ง</span>
+            <span className="text-xs text-slate-400">คู่แข่ง</span>
             <span className="font-bold text-slate-200 flex items-center gap-1.5">
               {match.opponent?.flag} {match.opponent?.name}
               <span className="text-xs text-slate-400 font-normal">({match.opponent?.score} pts)</span>
@@ -833,7 +834,7 @@ function DraftSlot({ monster }) {
 
       {/* Leader Crown Badge */}
       {monster.isLeader && (
-        <div className="absolute -top-1.5 -left-1.5 px-1 rounded-xs bg-amber-500 text-slate-950 text-[9px] font-black shadow-xs z-10">
+        <div className="absolute -top-1.5 -left-1.5 px-1 rounded-xs bg-amber-500 text-slate-950 text-[10px] font-black shadow-xs z-10">
           LEAD
         </div>
       )}
@@ -841,7 +842,7 @@ function DraftSlot({ monster }) {
       {/* Banned Overlay Badge */}
       {monster.isBanned && (
         <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
-          <div className="w-full bg-rose-600/90 text-white text-[9px] font-black text-center py-0.5 shadow-md uppercase tracking-wider transform -rotate-12 border border-rose-400">
+          <div className="w-full bg-rose-600/90 text-white text-[10px] font-black text-center py-0.5 shadow-md uppercase tracking-wider transform -rotate-12 border border-rose-400">
             BAN
           </div>
         </div>

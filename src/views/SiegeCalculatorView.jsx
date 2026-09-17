@@ -159,7 +159,7 @@ export default function SiegeCalculatorView() {
                   onChange={(e) => handleUpdate(g.id, 'name', e.target.value)}
                   className="bg-transparent text-white font-black text-base border-b border-transparent hover:border-slate-500 focus:border-cyan-400 focus:outline-none px-1"
                 />
-                <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${badgeBg}`}>
+                <span className={`px-2 py-0.5 rounded text-[11px] font-bold uppercase ${badgeBg}`}>
                   {g.color}
                 </span>
               </div>
@@ -204,7 +204,7 @@ export default function SiegeCalculatorView() {
                     onChange={(e) => handleUpdate(g.id, 'bases', e.target.value)}
                     className="w-full accent-cyan-500 cursor-pointer"
                   />
-                  <div className="flex justify-between text-[10px] text-slate-500 font-mono mt-0.5">
+                  <div className="flex justify-between text-[11px] text-slate-400 font-mono mt-0.5">
                     <span>0 ฐาน</span>
                     <span>12 ฐาน (สมดุล)</span>
                     <span>30 ฐาน</span>
@@ -213,16 +213,16 @@ export default function SiegeCalculatorView() {
 
                 {/* Live tick stats for this guild */}
                 <div className="pt-2 border-t border-[#182333] space-y-1.5">
-                  <div className="flex justify-between text-[11px]">
+                  <div className="flex justify-between text-xs">
                     <span className="text-slate-400">อัตราเพิ่มแต้ม:</span>
                     <span className="font-mono font-bold text-emerald-400">+{ppm} แต้ม/นาที</span>
                   </div>
-                  <div className="flex justify-between text-[11px]">
+                  <div className="flex justify-between text-xs">
                     <span className="text-slate-400">อัตราต่อชั่วโมง:</span>
                     <span className="font-mono font-bold text-slate-300">+{ppm * 60} แต้ม/ชม.</span>
                   </div>
                   {g.bases >= 13 && (
-                    <div className="text-[10px] text-amber-400 font-bold bg-amber-500/10 p-1.5 rounded border border-amber-500/20">
+                    <div className="text-[11px] text-amber-400 font-bold bg-amber-500/10 p-1.5 rounded border border-amber-500/20">
                       ⚡ ได้รับโบนัส Over-cap (+{(g.bases - 12) * 15} แต้ม/นาที)
                     </div>
                   )}
@@ -276,7 +276,7 @@ export default function SiegeCalculatorView() {
                 </div>
 
                 <div className="mt-4 pt-3 border-t border-[#1d2b3f] flex items-center justify-between">
-                  <span className="text-[11px] text-slate-400 flex items-center gap-1">
+                  <span className="text-xs text-slate-400 flex items-center gap-1">
                     <Clock className="w-3.5 h-3.5 text-cyan-400" /> เวลาที่ใช้:
                   </span>
                   <span className={`text-sm font-mono font-black ${isFirst ? 'text-amber-400' : 'text-slate-300'}`}>

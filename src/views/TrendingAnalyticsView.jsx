@@ -153,7 +153,7 @@ export default function TrendingAnalyticsView({ onNavigate, subItem }) {
           <div className="space-y-1 text-xs sm:text-sm">
             <h3 className="font-extrabold text-white text-sm sm:text-base flex items-center gap-2">
               <span>Monster - Offense - Trending คืออะไร?</span>
-              <span className="text-[10px] font-mono text-cyan-400 bg-cyan-950/60 px-2 py-0.5 rounded border border-cyan-500/30">
+              <span className="text-[11px] font-mono text-cyan-400 bg-cyan-950/60 px-2 py-0.5 rounded border border-cyan-500/30">
                 SWM Global Meta
               </span>
             </h3>
@@ -318,7 +318,7 @@ export default function TrendingAnalyticsView({ onNavigate, subItem }) {
                         className="w-full h-full object-cover"
                         onError={(e) => { e.target.src = 'https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0001_0_0.png'; }}
                       />
-                      <span className={`absolute bottom-0 right-0 text-[8px] font-bold px-1 rounded-tl uppercase ${
+                      <span className={`absolute bottom-0 right-0 text-[9px] font-bold px-1 rounded-tl uppercase ${
                         item.element === 'fire' ? 'bg-rose-600 text-white' :
                         item.element === 'water' ? 'bg-sky-600 text-white' :
                         item.element === 'wind' ? 'bg-amber-600 text-white' :
@@ -332,7 +332,7 @@ export default function TrendingAnalyticsView({ onNavigate, subItem }) {
                       <h4 className="text-sm font-extrabold text-white group-hover:text-blue-400 transition-colors truncate max-w-[140px]">
                         {item.name}
                       </h4>
-                      <div className="text-[11px] text-slate-400 font-mono">
+                      <div className="text-xs text-slate-400 font-mono">
                         {item.battleCount} battles • {item.pickShare}
                       </div>
                     </div>
@@ -340,12 +340,12 @@ export default function TrendingAnalyticsView({ onNavigate, subItem }) {
 
                   <div className="flex flex-col items-end gap-1.5">
                     <div className="bg-emerald-500/10 border border-emerald-500/30 px-2.5 py-1 rounded-lg text-right">
-                      <div className="text-[9px] text-emerald-400 uppercase font-bold">Win Rate</div>
+                      <div className="text-[10px] text-emerald-400 uppercase font-bold">Win Rate</div>
                       <div className="text-sm font-mono font-black text-emerald-300">{item.winRate}</div>
                     </div>
                     <button
                       onClick={() => onNavigate && onNavigate('3mdc', { search: item.name })}
-                      className="text-[11px] text-blue-400 hover:text-blue-300 font-semibold flex items-center gap-0.5 group-hover:underline cursor-pointer"
+                      className="text-xs text-blue-400 hover:text-blue-300 font-semibold flex items-center gap-0.5 group-hover:underline cursor-pointer"
                     >
                       ดูทีม 3MDC →
                     </button>
@@ -394,7 +394,7 @@ export default function TrendingAnalyticsView({ onNavigate, subItem }) {
                         className="w-full h-full object-cover"
                         onError={(e) => { e.target.src = 'https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0001_0_0.png'; }}
                       />
-                      <span className={`absolute bottom-0 right-0 text-[8px] font-bold px-1 rounded-tl uppercase ${
+                      <span className={`absolute bottom-0 right-0 text-[9px] font-bold px-1 rounded-tl uppercase ${
                         item.element === 'fire' ? 'bg-rose-600 text-white' :
                         item.element === 'water' ? 'bg-sky-600 text-white' :
                         item.element === 'wind' ? 'bg-amber-600 text-white' :
@@ -408,7 +408,7 @@ export default function TrendingAnalyticsView({ onNavigate, subItem }) {
                       <h4 className="text-sm font-extrabold text-white group-hover:text-purple-400 transition-colors truncate max-w-[140px]">
                         {item.name}
                       </h4>
-                      <div className="text-[11px] text-slate-400 font-mono">
+                      <div className="text-xs text-slate-400 font-mono">
                         {item.battleCount} battles • {item.pickShare}
                       </div>
                     </div>
@@ -416,12 +416,12 @@ export default function TrendingAnalyticsView({ onNavigate, subItem }) {
 
                   <div className="flex flex-col items-end gap-1.5">
                     <div className="bg-purple-500/10 border border-purple-500/30 px-2.5 py-1 rounded-lg text-right">
-                      <div className="text-[9px] text-purple-400 uppercase font-bold">Def Win</div>
+                      <div className="text-[10px] text-purple-400 uppercase font-bold">Def Win</div>
                       <div className="text-sm font-mono font-black text-purple-300">{item.winRate}</div>
                     </div>
                     <button
                       onClick={() => onNavigate && onNavigate('3mdc', { search: item.name })}
-                      className="text-[11px] text-blue-400 hover:text-blue-300 font-semibold flex items-center gap-0.5 group-hover:underline cursor-pointer"
+                      className="text-xs text-blue-400 hover:text-blue-300 font-semibold flex items-center gap-0.5 group-hover:underline cursor-pointer"
                     >
                       ดูทีมแก้ทาง →
                     </button>
@@ -472,12 +472,12 @@ export default function TrendingAnalyticsView({ onNavigate, subItem }) {
                             onError={(e) => { e.target.src = 'https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0001_0_0.png'; }}
                           />
                           {idx === 0 && (
-                            <span className="absolute bottom-0 right-0 bg-blue-600 text-[9px] font-bold text-white px-1 rounded-tl">
+                            <span className="absolute bottom-0 right-0 bg-blue-600 text-[10px] font-bold text-white px-1 rounded-tl">
                               LEAD
                             </span>
                           )}
                         </div>
-                        <span className="text-[11px] font-bold text-slate-300 truncate max-w-[80px]">
+                        <span className="text-xs font-bold text-slate-300 truncate max-w-[80px]">
                           {m.name}
                         </span>
                       </div>
@@ -490,7 +490,7 @@ export default function TrendingAnalyticsView({ onNavigate, subItem }) {
                   <div className="pt-2 border-t border-[#1a2433] grid grid-cols-2 gap-2 text-xs text-slate-400">
                     {def.stats.map((st, sIdx) => (
                       <div key={sIdx} className="flex items-center justify-between bg-[#0e1520] px-2 py-1 rounded">
-                        <span className="text-slate-500">{sIdx === 0 ? 'Pick Count:' : sIdx === 1 ? 'Win Rate:' : 'Score:'}</span>
+                        <span className="text-slate-400">{sIdx === 0 ? 'Pick Count:' : sIdx === 1 ? 'Win Rate:' : 'Score:'}</span>
                         <span className="font-mono text-slate-200 font-semibold">{st}</span>
                       </div>
                     ))}

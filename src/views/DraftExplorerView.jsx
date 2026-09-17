@@ -263,7 +263,7 @@ export default function DraftExplorerView({ onNavigate }) {
             <div className="flex items-center gap-2 text-xs font-mono text-purple-400 uppercase tracking-wider mb-1">
               <Sparkles className="w-4 h-4 text-purple-400" />
               <span>SWM Draft Engine • Pro Tournament Simulator</span>
-              <span className="px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30 text-[10px] font-black">
+              <span className="px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30 text-[11px] font-black">
                 RTA S38 LIVE
               </span>
             </div>
@@ -303,7 +303,7 @@ export default function DraftExplorerView({ onNavigate }) {
             <button
               key={idx}
               onClick={() => handleLoadPreset(preset)}
-              className="px-3 py-1.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] hover:border-purple-500/40 text-slate-300 hover:text-white border border-white/[0.06] text-[11px] font-semibold whitespace-nowrap transition-all cursor-pointer shadow-sm"
+              className="px-3 py-1.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] hover:border-purple-500/40 text-slate-300 hover:text-white border border-white/[0.06] text-xs font-semibold whitespace-nowrap transition-all cursor-pointer shadow-sm"
             >
               {preset.name}
             </button>
@@ -322,7 +322,7 @@ export default function DraftExplorerView({ onNavigate }) {
             </span>
           </div>
 
-          <div className="flex items-center gap-1.5 text-slate-400 font-mono text-[11px]">
+          <div className="flex items-center gap-1.5 text-slate-400 font-mono text-xs">
             <Swords className="w-3.5 h-3.5 text-amber-400" />
             <span>PROJECTED WIN CHANCE</span>
           </div>
@@ -361,7 +361,7 @@ export default function DraftExplorerView({ onNavigate }) {
               </span>
               <span className="text-xs text-slate-400">เลือก 5 มอนสเตอร์</span>
             </div>
-            <div className="text-[11px] text-slate-400 font-mono">
+            <div className="text-xs text-slate-400 font-mono">
               คู่แข่งแบน: <strong className="text-rose-400">{blueTeam[redBan]?.name || 'ยังไม่เลือก'}</strong>
             </div>
           </div>
@@ -388,7 +388,7 @@ export default function DraftExplorerView({ onNavigate }) {
                   <button
                     onClick={(e) => { e.stopPropagation(); setBlueLeader(slotIdx); }}
                     className={`absolute top-1 left-1 p-1 rounded transition-colors ${
-                      isLeader ? 'bg-amber-500 text-slate-950 font-black' : 'text-slate-600 hover:text-amber-400'
+                      isLeader ? 'bg-amber-500 text-slate-950 font-black' : 'text-slate-400 hover:text-amber-400'
                     }`}
                     title={isLeader ? 'Leader Skill Active' : 'ตั้งเป็น Leader Skill'}
                   >
@@ -399,7 +399,7 @@ export default function DraftExplorerView({ onNavigate }) {
                   <button
                     onClick={(e) => { e.stopPropagation(); setRedBan(redBan === slotIdx ? null : slotIdx); }}
                     className={`absolute top-1 right-1 p-1 rounded transition-colors ${
-                      isBanned ? 'bg-rose-600 text-white font-bold' : 'text-slate-600 hover:text-rose-400'
+                      isBanned ? 'bg-rose-600 text-white font-bold' : 'text-slate-400 hover:text-rose-400'
                     }`}
                     title={isBanned ? 'ถูกแบนโดยคู่แข่ง' : 'จำลองให้คู่แข่งแบนตัวนี้'}
                   >
@@ -411,24 +411,24 @@ export default function DraftExplorerView({ onNavigate }) {
                       <div className="mt-3 mb-1">
                         <MonsterAvatar monster={monster} size="md" showStars={false} />
                       </div>
-                      <div className="font-bold text-white text-[11px] sm:text-xs truncate w-full px-1">
+                      <div className="font-bold text-white text-xs sm:text-xs truncate w-full px-1">
                         {monster.name}
                       </div>
-                      <div className="text-[9px] text-slate-400 truncate w-full">
+                      <div className="text-[10px] text-slate-400 truncate w-full">
                         {monster.thaiName || monster.family}
                       </div>
                       {isBanned && (
-                        <div className="absolute inset-0 bg-rose-950/70 backdrop-blur-xs rounded-xl flex items-center justify-center">
-                          <span className="text-[10px] font-black tracking-wider text-rose-300 bg-rose-900/80 px-2 py-0.5 rounded border border-rose-500/50">
+                        <div className="absolute inset-0 bg-rose-950/70 backdrop-blur-sm rounded-xl flex items-center justify-center">
+                          <span className="text-[11px] font-black tracking-wider text-rose-300 bg-rose-900/80 px-2 py-0.5 rounded border border-rose-500/50">
                             BANNED
                           </span>
                         </div>
                       )}
                     </>
                   ) : (
-                    <div className="flex flex-col items-center justify-center gap-1 text-slate-500">
+                    <div className="flex flex-col items-center justify-center gap-1 text-slate-400">
                       <span className="text-xl font-light text-cyan-400">+</span>
-                      <span className="text-[10px] font-bold text-slate-400">พิก #{slotIdx + 1}</span>
+                      <span className="text-[11px] font-bold text-slate-400">พิก #{slotIdx + 1}</span>
                     </div>
                   )}
                 </div>
@@ -446,7 +446,7 @@ export default function DraftExplorerView({ onNavigate }) {
               </span>
               <span className="text-xs text-slate-400">เลือก 5 มอนสเตอร์</span>
             </div>
-            <div className="text-[11px] text-slate-400 font-mono">
+            <div className="text-xs text-slate-400 font-mono">
               คุณเลือกแบน: <strong className="text-cyan-400">{redTeam[blueBan]?.name || 'ยังไม่เลือก'}</strong>
             </div>
           </div>
@@ -473,7 +473,7 @@ export default function DraftExplorerView({ onNavigate }) {
                   <button
                     onClick={(e) => { e.stopPropagation(); setRedLeader(slotIdx); }}
                     className={`absolute top-1 left-1 p-1 rounded transition-colors ${
-                      isLeader ? 'bg-amber-500 text-slate-950 font-black' : 'text-slate-600 hover:text-amber-400'
+                      isLeader ? 'bg-amber-500 text-slate-950 font-black' : 'text-slate-400 hover:text-amber-400'
                     }`}
                     title={isLeader ? 'Leader Skill Active' : 'ตั้งเป็น Leader Skill'}
                   >
@@ -484,7 +484,7 @@ export default function DraftExplorerView({ onNavigate }) {
                   <button
                     onClick={(e) => { e.stopPropagation(); setBlueBan(blueBan === slotIdx ? null : slotIdx); }}
                     className={`absolute top-1 right-1 p-1 rounded transition-colors ${
-                      isBanned ? 'bg-cyan-600 text-white font-bold' : 'text-slate-600 hover:text-cyan-400'
+                      isBanned ? 'bg-cyan-600 text-white font-bold' : 'text-slate-400 hover:text-cyan-400'
                     }`}
                     title={isBanned ? 'คุณเลือกแบนตัวนี้' : 'กดเพื่อแบนตัวนี้'}
                   >
@@ -496,24 +496,24 @@ export default function DraftExplorerView({ onNavigate }) {
                       <div className="mt-3 mb-1">
                         <MonsterAvatar monster={monster} size="md" showStars={false} />
                       </div>
-                      <div className="font-bold text-white text-[11px] sm:text-xs truncate w-full px-1">
+                      <div className="font-bold text-white text-xs sm:text-xs truncate w-full px-1">
                         {monster.name}
                       </div>
-                      <div className="text-[9px] text-slate-400 truncate w-full">
+                      <div className="text-[10px] text-slate-400 truncate w-full">
                         {monster.thaiName || monster.family}
                       </div>
                       {isBanned && (
-                        <div className="absolute inset-0 bg-rose-950/70 backdrop-blur-xs rounded-xl flex items-center justify-center">
-                          <span className="text-[10px] font-black tracking-wider text-rose-300 bg-rose-900/80 px-2 py-0.5 rounded border border-rose-500/50">
+                        <div className="absolute inset-0 bg-rose-950/70 backdrop-blur-sm rounded-xl flex items-center justify-center">
+                          <span className="text-[11px] font-black tracking-wider text-rose-300 bg-rose-900/80 px-2 py-0.5 rounded border border-rose-500/50">
                             BANNED
                           </span>
                         </div>
                       )}
                     </>
                   ) : (
-                    <div className="flex flex-col items-center justify-center gap-1 text-slate-500">
+                    <div className="flex flex-col items-center justify-center gap-1 text-slate-400">
                       <span className="text-xl font-light text-rose-400">+</span>
-                      <span className="text-[10px] font-bold text-slate-400">พิก #{slotIdx + 1}</span>
+                      <span className="text-[11px] font-bold text-slate-400">พิก #{slotIdx + 1}</span>
                     </div>
                   )}
                 </div>
@@ -552,7 +552,7 @@ export default function DraftExplorerView({ onNavigate }) {
                   <button
                     key={el.id}
                     onClick={() => setPickerElement(el.id)}
-                    className={`px-2 py-0.5 rounded text-[10px] font-bold transition-all cursor-pointer ${
+                    className={`px-2 py-0.5 rounded text-[11px] font-bold transition-all cursor-pointer ${
                       pickerElement === el.id
                         ? 'bg-cyan-600 text-white shadow-sm'
                         : 'bg-[#121c2c] text-slate-400 hover:text-white'
@@ -597,7 +597,7 @@ export default function DraftExplorerView({ onNavigate }) {
                   className="w-9 h-9 sm:w-10 sm:h-10 rounded object-cover group-hover:scale-105 transition-transform"
                   onError={(e) => { e.target.src = 'https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0001_0_0.png'; }}
                 />
-                <span className="text-[10px] text-slate-300 group-hover:text-cyan-300 truncate w-full text-center font-medium">
+                <span className="text-[11px] text-slate-300 group-hover:text-cyan-300 truncate w-full text-center font-medium">
                   {m.name}
                 </span>
               </button>
@@ -631,7 +631,7 @@ export default function DraftExplorerView({ onNavigate }) {
               const max = Math.max(100, bVal, rVal);
               return (
                 <div key={idx} className="space-y-1">
-                  <div className="flex items-center justify-between text-[11px] text-slate-300">
+                  <div className="flex items-center justify-between text-xs text-slate-300">
                     <span className="font-mono text-cyan-400 font-bold">{bVal}</span>
                     <span className="font-semibold">{stat.label}</span>
                     <span className="font-mono text-rose-400 font-bold">{rVal}</span>
@@ -666,7 +666,7 @@ export default function DraftExplorerView({ onNavigate }) {
               <span className="text-xs font-bold text-rose-400 uppercase tracking-wide">
                 เป้าหมายแบนอันดับ #1
               </span>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40">
+              <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40">
                 CRITICAL THREAT
               </span>
             </div>
@@ -701,9 +701,9 @@ export default function DraftExplorerView({ onNavigate }) {
                 <div>
                   <div className="text-xs font-bold text-white flex items-center gap-1.5">
                     <span>{sug.name}</span>
-                    <span className="text-[10px] text-amber-400 font-mono">({sug.role})</span>
+                    <span className="text-[11px] text-amber-400 font-mono">({sug.role})</span>
                   </div>
-                  <div className="text-[11px] text-slate-400">{sug.reason}</div>
+                  <div className="text-xs text-slate-400">{sug.reason}</div>
                 </div>
                 <button
                   onClick={() => {
@@ -716,7 +716,7 @@ export default function DraftExplorerView({ onNavigate }) {
                       setBlueTeam(next);
                     }
                   }}
-                  className="px-2 py-1 rounded bg-blue-600/20 hover:bg-blue-600 text-blue-300 hover:text-white text-[10px] font-bold border border-blue-500/30 transition-all cursor-pointer shrink-0"
+                  className="px-2 py-1 rounded bg-blue-600/20 hover:bg-blue-600 text-blue-300 hover:text-white text-[11px] font-bold border border-blue-500/30 transition-all cursor-pointer shrink-0"
                 >
                   + ใส่ทีม
                 </button>

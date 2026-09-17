@@ -109,7 +109,7 @@ export default function GuildRecruitView() {
                     </h3>
                     <div className="flex items-center gap-2 text-xs mt-0.5">
                       <span className="text-slate-400 font-medium">เซิร์ฟเวอร์: <strong className="text-slate-200">{guild.server}</strong></span>
-                      <span className="text-slate-600">•</span>
+                      <span className="text-slate-400">•</span>
                       <span className="text-slate-400">สมาชิก: <strong className="text-slate-200 font-mono">{guild.members}</strong></span>
                     </div>
                   </div>
@@ -134,7 +134,7 @@ export default function GuildRecruitView() {
 
             {/* Actions */}
             <div className="mt-4 pt-3 border-t border-[#182333] flex items-center justify-between">
-              <span className="text-[11px] text-slate-500 font-mono">ID: #{guild.id}</span>
+              <span className="text-xs text-slate-400 font-mono">ID: #{guild.id}</span>
               {guild.applyUrl ? (
                 <a
                   href={guild.applyUrl}

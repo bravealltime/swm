@@ -88,12 +88,12 @@ export default function MonsterAvatar({
   if (!mon) return null;
 
   const sizeMap = {
-    xs: { box: 'w-8 h-8', icon: 'w-2.5 h-2.5', stars: 'text-[7px]', text: 'text-[10px]' },
-    sm: { box: 'w-11 h-11', icon: 'w-3.5 h-3.5', stars: 'text-[8px]', text: 'text-xs' },
-    md: { box: 'w-14 h-14 sm:w-16 sm:h-16', icon: 'w-4 h-4', stars: 'text-[9px]', text: 'text-xs' },
-    lg: { box: 'w-20 h-20', icon: 'w-5 h-5', stars: 'text-[10px]', text: 'text-sm' },
+    xs: { box: 'w-8 h-8', icon: 'w-2.5 h-2.5', stars: 'text-[9px]', text: 'text-[11px]' },
+    sm: { box: 'w-11 h-11', icon: 'w-3.5 h-3.5', stars: 'text-[9px]', text: 'text-xs' },
+    md: { box: 'w-14 h-14 sm:w-16 sm:h-16', icon: 'w-4 h-4', stars: 'text-[10px]', text: 'text-xs' },
+    lg: { box: 'w-20 h-20', icon: 'w-5 h-5', stars: 'text-[11px]', text: 'text-sm' },
     xl: { box: 'w-24 h-24', icon: 'w-6 h-6', stars: 'text-xs', text: 'text-base' }
-  }[size] || { box: 'w-12 h-12', icon: 'w-3.5 h-3.5', stars: 'text-[8px]', text: 'text-xs' };
+  }[size] || { box: 'w-12 h-12', icon: 'w-3.5 h-3.5', stars: 'text-[9px]', text: 'text-xs' };
 
   const elemKey = (mon.element || 'fire').toLowerCase();
   const elem = ELEMENT_STYLES[elemKey] || ELEMENT_STYLES.fire;
@@ -155,7 +155,7 @@ export default function MonsterAvatar({
           <div className={`${sizeMap.text} font-bold text-slate-100 group-hover:text-blue-400 transition-colors truncate`}>
             {displayName.split(' ')[0]}
           </div>
-          <div className="text-[10px] text-slate-400 truncate">
+          <div className="text-[11px] text-slate-400 truncate">
             {engName}
           </div>
         </div>

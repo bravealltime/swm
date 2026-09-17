@@ -171,10 +171,10 @@ export default function WhereToUseView({ onNavigate, initialMonster = 'Byungchul
                     <MonsterAvatar monster={m} size="sm" />
                     <div>
                       <div className="text-xs font-bold text-white">{m.thaiName || m.name}</div>
-                      <div className="text-[10px] text-slate-400">{m.name} ({m.family})</div>
+                      <div className="text-[11px] text-slate-400">{m.name} ({m.family})</div>
                     </div>
                   </div>
-                  <span className="text-[10px] text-amber-400 font-bold uppercase px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/20">
+                  <span className="text-[11px] text-amber-400 font-bold uppercase px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/20">
                     {m.element}
                   </span>
                 </button>
@@ -216,13 +216,13 @@ export default function WhereToUseView({ onNavigate, initialMonster = 'Byungchul
           <div className="flex items-center gap-4">
             <div className="relative">
               <MonsterAvatar monster={selectedMonster} size="xl" />
-              <div className="absolute -bottom-1 -right-1 px-1.5 py-0.5 bg-black/80 rounded border border-white/20 text-[10px] font-bold text-amber-400">
+              <div className="absolute -bottom-1 -right-1 px-1.5 py-0.5 bg-black/80 rounded border border-white/20 text-[11px] font-bold text-amber-400">
                 ★{selectedMonster.stars || 5}
               </div>
             </div>
             <div>
               <div className="flex items-center gap-2 flex-wrap">
-                <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
+                <span className={`px-2 py-0.5 rounded text-[11px] font-bold uppercase ${
                   selectedMonster.element === 'fire' ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30' :
                   selectedMonster.element === 'water' ? 'bg-sky-500/20 text-sky-400 border border-sky-500/30' :
                   selectedMonster.element === 'wind' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' :
@@ -247,20 +247,20 @@ export default function WhereToUseView({ onNavigate, initialMonster = 'Byungchul
           {/* Quick Stats Counter Pills */}
           <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
             <div className="bg-[#0c121c] border border-[#1d2b3f] rounded-xl px-3 py-2 text-center">
-              <div className="text-[10px] text-slate-400 font-bold uppercase">ทีมรับกิลด์วอร์</div>
+              <div className="text-[11px] text-slate-400 font-bold uppercase">ทีมรับกิลด์วอร์</div>
               <div className="text-base font-mono font-black text-blue-400">{defenseMatches.length} ทีม</div>
             </div>
             <div className="bg-[#0c121c] border border-[#1d2b3f] rounded-xl px-3 py-2 text-center">
-              <div className="text-[10px] text-slate-400 font-bold uppercase">สูตรทีมบุกแก้ทาง</div>
+              <div className="text-[11px] text-slate-400 font-bold uppercase">สูตรทีมบุกแก้ทาง</div>
               <div className="text-base font-mono font-black text-emerald-400">{counterMatches.length} สูตร</div>
             </div>
             <div className="bg-[#0c121c] border border-[#1d2b3f] rounded-xl px-3 py-2 text-center">
-              <div className="text-[10px] text-slate-400 font-bold uppercase">ทีมฟาร์มดันเจี้ยน</div>
+              <div className="text-[11px] text-slate-400 font-bold uppercase">ทีมฟาร์มดันเจี้ยน</div>
               <div className="text-base font-mono font-black text-purple-400">{dungeonMatches.length} ดันเจี้ยน</div>
             </div>
             {rtaMatch && (
               <div className="bg-[#0c121c] border border-[#1d2b3f] rounded-xl px-3 py-2 text-center">
-                <div className="text-[10px] text-slate-400 font-bold uppercase">RTA Pick Rate</div>
+                <div className="text-[11px] text-slate-400 font-bold uppercase">RTA Pick Rate</div>
                 <div className="text-base font-mono font-black text-amber-400">{rtaMatch.pickRate}%</div>
               </div>
             )}
@@ -362,7 +362,7 @@ export default function WhereToUseView({ onNavigate, initialMonster = 'Byungchul
                   <div className="flex items-start justify-between gap-2">
                     <div>
                       <div className="text-xs font-bold text-white">{def.title}</div>
-                      <div className="text-[10px] text-slate-400 mt-0.5">{def.towerType === 'nat4' ? 'หอ 4 ดาว (Nat 4)' : 'หอ 5 ดาว (Nat 5)'} • แข่งทั้งหมด {def.totalBattles} แมตช์</div>
+                      <div className="text-[11px] text-slate-400 mt-0.5">{def.towerType === 'nat4' ? 'หอ 4 ดาว (Nat 4)' : 'หอ 5 ดาว (Nat 5)'} • แข่งทั้งหมด {def.totalBattles} แมตช์</div>
                     </div>
                     <span className="px-2 py-0.5 rounded text-xs font-mono font-bold bg-blue-500/20 text-blue-400 border border-blue-500/30">
                       WR {def.winRate}%
@@ -374,14 +374,14 @@ export default function WhereToUseView({ onNavigate, initialMonster = 'Byungchul
                     {def.defenseMonsters.map((m, idx) => (
                       <div key={idx} className="flex items-center gap-2">
                         <MonsterAvatar monster={m} size="md" />
-                        <div className="text-[11px] font-bold text-slate-200 hidden sm:block">
+                        <div className="text-xs font-bold text-slate-200 hidden sm:block">
                           {m.name}
                         </div>
                       </div>
                     ))}
                   </div>
 
-                  <div className="flex items-center justify-between text-[11px] pt-1">
+                  <div className="flex items-center justify-between text-xs pt-1">
                     <span className="text-slate-400">มีสูตรเคาน์เตอร์ในระบบ: <strong className="text-slate-200">{def.counters.length} ทีม</strong></span>
                     <button
                       onClick={() => onNavigate && onNavigate('3mdc', { search: def.title })}
@@ -429,12 +429,12 @@ export default function WhereToUseView({ onNavigate, initialMonster = 'Byungchul
 
                   {/* Offense Team */}
                   <div className="bg-[#0c121c] p-2.5 rounded-xl border border-[#1d2b3f]/60">
-                    <div className="text-[10px] text-slate-400 font-bold uppercase mb-1.5">ทีมบุกที่ใช้:</div>
+                    <div className="text-[11px] text-slate-400 font-bold uppercase mb-1.5">ทีมบุกที่ใช้:</div>
                     <div className="flex items-center gap-3">
                       {item.counterTeam.monsters.map((m, mIdx) => (
                         <div key={mIdx} className="flex items-center gap-2">
                           <MonsterAvatar monster={m} size="md" />
-                          <div className="text-[11px] font-bold text-slate-200 hidden sm:block">
+                          <div className="text-xs font-bold text-slate-200 hidden sm:block">
                             {m.name}
                           </div>
                         </div>
@@ -443,7 +443,7 @@ export default function WhereToUseView({ onNavigate, initialMonster = 'Byungchul
                   </div>
 
                   {item.counterTeam.notes && (
-                    <div className="text-[11px] text-slate-400 italic bg-[#0c121c]/50 p-2 rounded-lg border border-[#1d2b3f]/30">
+                    <div className="text-xs text-slate-400 italic bg-[#0c121c]/50 p-2 rounded-lg border border-[#1d2b3f]/30">
                       💡 เทคนิค: {item.counterTeam.notes}
                     </div>
                   )}
@@ -478,7 +478,7 @@ export default function WhereToUseView({ onNavigate, initialMonster = 'Byungchul
                   <div className="flex items-center justify-between">
                     <div>
                       <div className="text-xs font-bold text-white">{dm.dungeon.nameTh}</div>
-                      <div className="text-[10px] text-slate-400">เวลาเร็วสุด: <span className="text-emerald-400 font-mono font-bold">{dm.dungeon.recordTime}</span> • เฉลี่ย: {dm.dungeon.avgTime}</div>
+                      <div className="text-[11px] text-slate-400">เวลาเร็วสุด: <span className="text-emerald-400 font-mono font-bold">{dm.dungeon.recordTime}</span> • เฉลี่ย: {dm.dungeon.avgTime}</div>
                     </div>
                     <span className="px-2 py-0.5 rounded text-xs font-mono font-bold bg-purple-500/20 text-purple-400 border border-purple-500/30">
                       ผ่าน {dm.dungeon.successRate}
@@ -487,7 +487,7 @@ export default function WhereToUseView({ onNavigate, initialMonster = 'Byungchul
 
                   <div className="bg-[#0c121c] p-3 rounded-xl border border-[#1d2b3f]/60 space-y-1.5">
                     <div className="text-xs font-bold text-amber-300">บทบาทในทีม: {dm.roleInfo.role}</div>
-                    <div className="text-[11px] text-slate-400 flex items-center justify-between">
+                    <div className="text-xs text-slate-400 flex items-center justify-between">
                       <span>เซ็ตรูนแนะนำ: <strong className="text-slate-200">{dm.roleInfo.rune}</strong></span>
                       <span>สปีด: <strong className="text-cyan-400 font-mono">{dm.roleInfo.spd}</strong></span>
                     </div>
@@ -509,24 +509,24 @@ export default function WhereToUseView({ onNavigate, initialMonster = 'Byungchul
 
           <div className="p-5 rounded-2xl bg-[#101724] border border-[#1d2b3f] grid grid-cols-2 sm:grid-cols-4 gap-4 shadow-lg">
             <div className="bg-[#0c121c] p-3.5 rounded-xl border border-[#1d2b3f] text-center">
-              <div className="text-[10px] text-slate-400 font-bold uppercase">Pick Rate</div>
+              <div className="text-[11px] text-slate-400 font-bold uppercase">Pick Rate</div>
               <div className="text-xl font-mono font-black text-amber-400 mt-0.5">{rtaMatch.pickRate}%</div>
-              <div className="text-[10px] text-slate-500 mt-0.5">({rtaMatch.pickTotal?.toLocaleString()} ครั้ง)</div>
+              <div className="text-[11px] text-slate-400 mt-0.5">({rtaMatch.pickTotal?.toLocaleString()} ครั้ง)</div>
             </div>
             <div className="bg-[#0c121c] p-3.5 rounded-xl border border-[#1d2b3f] text-center">
-              <div className="text-[10px] text-slate-400 font-bold uppercase">Win Rate</div>
+              <div className="text-[11px] text-slate-400 font-bold uppercase">Win Rate</div>
               <div className="text-xl font-mono font-black text-emerald-400 mt-0.5">{rtaMatch.winRate}%</div>
-              <div className="text-[10px] text-slate-500 mt-0.5">อัตราการชนะ</div>
+              <div className="text-[11px] text-slate-400 mt-0.5">อัตราการชนะ</div>
             </div>
             <div className="bg-[#0c121c] p-3.5 rounded-xl border border-[#1d2b3f] text-center">
-              <div className="text-[10px] text-slate-400 font-bold uppercase">Ban Rate</div>
+              <div className="text-[11px] text-slate-400 font-bold uppercase">Ban Rate</div>
               <div className="text-xl font-mono font-black text-rose-400 mt-0.5">{rtaMatch.banRate}%</div>
-              <div className="text-[10px] text-slate-500 mt-0.5">อัตราโดนแบน</div>
+              <div className="text-[11px] text-slate-400 mt-0.5">อัตราโดนแบน</div>
             </div>
             <div className="bg-[#0c121c] p-3.5 rounded-xl border border-[#1d2b3f] text-center">
-              <div className="text-[10px] text-slate-400 font-bold uppercase">First Pick Rate</div>
+              <div className="text-[11px] text-slate-400 font-bold uppercase">First Pick Rate</div>
               <div className="text-xl font-mono font-black text-blue-400 mt-0.5">{rtaMatch.firstPickRate || 'N/A'}%</div>
-              <div className="text-[10px] text-slate-500 mt-0.5">หยิบเป็นตัวแรก</div>
+              <div className="text-[11px] text-slate-400 mt-0.5">หยิบเป็นตัวแรก</div>
             </div>
           </div>
         </div>

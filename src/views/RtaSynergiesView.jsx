@@ -155,7 +155,7 @@ export default function RtaSynergiesView({ onNavigate }) {
                     <span className="px-2 py-0.5 rounded-full text-xs font-mono font-black bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
                       {item.synergyDelta} SYNERGY
                     </span>
-                    <div className="text-[10px] text-slate-400 font-mono mt-0.5">
+                    <div className="text-[11px] text-slate-400 font-mono mt-0.5">
                       {item.matches.toLocaleString()} แมตช์
                     </div>
                   </div>
@@ -167,7 +167,7 @@ export default function RtaSynergiesView({ onNavigate }) {
                     <h3 className="text-sm font-bold text-white group-hover:text-cyan-300 transition-colors">
                       {item.monsters[0]} & {item.monsters[1]}
                     </h3>
-                    <span className="text-[11px] text-amber-400 font-mono font-semibold">
+                    <span className="text-xs text-amber-400 font-mono font-semibold">
                       {item.archetype}
                     </span>
                   </div>
@@ -176,7 +176,7 @@ export default function RtaSynergiesView({ onNavigate }) {
                     <div className="text-lg font-mono font-black text-white">
                       {item.winRate}%
                     </div>
-                    <div className="text-[10px] text-slate-400 font-semibold">
+                    <div className="text-[11px] text-slate-400 font-semibold">
                       WIN RATE
                     </div>
                   </div>
@@ -188,7 +188,7 @@ export default function RtaSynergiesView({ onNavigate }) {
                 </p>
 
                 {/* Best Against */}
-                <div className="flex items-center justify-between text-[11px] text-slate-400 pt-1">
+                <div className="flex items-center justify-between text-xs text-slate-400 pt-1">
                   <span>ชนะทาง: <strong className="text-slate-200">{item.bestAgainst.join(', ')}</strong></span>
                   <button
                     onClick={() => onNavigate('draft-explorer')}
@@ -228,7 +228,7 @@ export default function RtaSynergiesView({ onNavigate }) {
                     <div className="text-lg font-mono font-black text-amber-400">
                       {item.winRate}% WR
                     </div>
-                    <div className="text-[10px] text-slate-400 font-mono">
+                    <div className="text-[11px] text-slate-400 font-mono">
                       {item.matches.toLocaleString()} แมตช์
                     </div>
                   </div>
@@ -247,7 +247,7 @@ export default function RtaSynergiesView({ onNavigate }) {
                   {item.thaiDesc}
                 </p>
 
-                <div className="flex items-center justify-between text-[11px] text-slate-400 pt-1">
+                <div className="flex items-center justify-between text-xs text-slate-400 pt-1">
                   <span>ตัวควรแบน: <strong className="text-rose-400">{item.banPriority}</strong></span>
                   <button
                     onClick={() => onNavigate('draft-explorer')}

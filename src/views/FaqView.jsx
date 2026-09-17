@@ -51,7 +51,7 @@ export default function FaqView() {
               {isOpen && (
                 <div className="px-5 pb-5 pt-1 text-slate-300 text-xs sm:text-sm leading-relaxed border-t border-[#1a2537]">
                   <p>{item.answer}</p>
-                  <div className="mt-3 pt-3 border-t border-[#162131] flex items-center justify-between text-[11px] text-slate-500">
+                  <div className="mt-3 pt-3 border-t border-[#162131] flex items-center justify-between text-xs text-slate-400">
                     <span className="text-cyan-400 font-mono">ศูนย์ข้อมูลยุทธวิธี SWM Knowledge Base</span>
                   </div>
                 </div>

@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+import animate from 'tailwindcss-animate';
+
 export default {
   content: [
     "./index.html",
@@ -27,8 +29,17 @@ export default {
       lineHeight: {
         'thai-relaxed': '1.65',
         'thai-normal': '1.5',
-      }
+      },
+      keyframes: {
+        fadeIn: {
+          from: { opacity: '0', transform: 'translateY(4px)' },
+          to: { opacity: '1', transform: 'translateY(0)' },
+        },
+      },
+      animation: {
+        fadeIn: 'fadeIn 0.3s ease-out both',
+      },
     },
   },
-  plugins: [],
+  plugins: [animate],
 }

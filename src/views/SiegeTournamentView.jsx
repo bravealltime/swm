@@ -72,7 +72,7 @@ export default function SiegeTournamentView({ onNavigate }) {
             <div className="flex items-center gap-2.5">
               <span className="text-2xl">🥇</span>
               <div>
-                <div className="text-[10px] text-amber-400 font-bold uppercase tracking-wider">แชมป์ประจำเซิร์ฟเวอร์</div>
+                <div className="text-[11px] text-amber-400 font-bold uppercase tracking-wider">แชมป์ประจำเซิร์ฟเวอร์</div>
                 <div className="text-base font-black text-white">{serverData.champion}</div>
               </div>
             </div>
@@ -83,7 +83,7 @@ export default function SiegeTournamentView({ onNavigate }) {
             <div className="flex items-center gap-2.5">
               <span className="text-2xl">🥈</span>
               <div>
-                <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">รองแชมป์อันดับ 1</div>
+                <div className="text-[11px] text-slate-400 font-bold uppercase tracking-wider">รองแชมป์อันดับ 1</div>
                 <div className="text-sm font-bold text-slate-200">{serverData.runnerUp}</div>
               </div>
             </div>
@@ -94,7 +94,7 @@ export default function SiegeTournamentView({ onNavigate }) {
             <div className="flex items-center gap-2.5">
               <span className="text-2xl">🥉</span>
               <div>
-                <div className="text-[10px] text-amber-600 font-bold uppercase tracking-wider">รองแชมป์อันดับ 2</div>
+                <div className="text-[11px] text-amber-600 font-bold uppercase tracking-wider">รองแชมป์อันดับ 2</div>
                 <div className="text-sm font-bold text-slate-200">{serverData.thirdPlace}</div>
               </div>
             </div>
@@ -177,7 +177,7 @@ export default function SiegeTournamentView({ onNavigate }) {
               >
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-white truncate">{def.title}</span>
-                  <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">
+                  <span className="px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">
                     {def.record}
                   </span>
                 </div>

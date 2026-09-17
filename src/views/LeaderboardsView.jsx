@@ -134,7 +134,7 @@ export default function LeaderboardsView() {
             }`}
           >
             <div className="text-xs sm:text-sm font-black">{m.name}</div>
-            <div className={`text-[10px] mt-0.5 line-clamp-1 ${selectedMode === m.id ? 'text-blue-100' : 'text-slate-500'}`}>
+            <div className={`text-[11px] mt-0.5 line-clamp-1 ${selectedMode === m.id ? 'text-blue-100' : 'text-slate-400'}`}>
               {m.desc}
             </div>
           </button>

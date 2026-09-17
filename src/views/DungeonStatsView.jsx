@@ -59,12 +59,12 @@ export default function DungeonStatsView({ onNavigate }) {
         {/* Aggregate KPI */}
         <div className="relative z-10 rounded-2xl bg-white/[0.04] border border-white/10 backdrop-blur-xl p-3.5 flex items-center gap-4 text-xs font-mono shadow-xl shrink-0">
           <div>
-            <div className="text-slate-400 text-[10px]">บันทึกการฟาร์ม</div>
+            <div className="text-slate-400 text-[11px]">บันทึกการฟาร์ม</div>
             <div className="text-cyan-400 font-bold text-sm">110,000+ รอบ</div>
           </div>
           <div className="w-px h-8 bg-white/10"></div>
           <div>
-            <div className="text-slate-400 text-[10px]">ความแม่นยำ</div>
+            <div className="text-slate-400 text-[11px]">ความแม่นยำ</div>
             <div className="text-emerald-400 font-bold text-sm">99.8% Success</div>
           </div>
         </div>
@@ -89,11 +89,11 @@ export default function DungeonStatsView({ onNavigate }) {
             >
               <div>
                 <div className="flex items-center justify-between mb-1.5">
-                  <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded border flex items-center gap-1 ${e.bg}`}>
+                  <span className={`text-[11px] font-bold px-1.5 py-0.5 rounded border flex items-center gap-1 ${e.bg}`}>
                     <Icon className="w-3 h-3" />
                     <span>{e.label}</span>
                   </span>
-                  <span className="text-[10px] font-mono text-slate-400 font-medium">
+                  <span className="text-[11px] font-mono text-slate-400 font-medium">
                     {d.totalRuns} รอบ
                   </span>
                 </div>
@@ -102,7 +102,7 @@ export default function DungeonStatsView({ onNavigate }) {
                 </div>
               </div>
 
-              <div className="mt-2 pt-1.5 border-t border-[#1d2a3c] flex items-center justify-between text-[10px] font-mono">
+              <div className="mt-2 pt-1.5 border-t border-[#1d2a3c] flex items-center justify-between text-[11px] font-mono">
                 <span className="text-emerald-400 font-bold">⏱ {d.avgTime}</span>
                 <span className="text-slate-400">{d.successRate}</span>
               </div>
@@ -140,19 +140,19 @@ export default function DungeonStatsView({ onNavigate }) {
           {/* Performance Badges */}
           <div className="flex flex-wrap items-center gap-2.5">
             <div className="bg-[#0b1018] border border-[#1d2b3e] px-3.5 py-2 rounded-xl text-center min-w-[100px]">
-              <div className="text-[10px] text-slate-400 font-mono">เวลาเฉลี่ย (Avg)</div>
+              <div className="text-[11px] text-slate-400 font-mono">เวลาเฉลี่ย (Avg)</div>
               <div className="text-base sm:text-lg font-mono font-bold text-emerald-400">{currentDungeon.avgTime} นาที</div>
             </div>
             <div className="bg-[#0b1018] border border-[#1d2b3e] px-3.5 py-2 rounded-xl text-center min-w-[100px]">
-              <div className="text-[10px] text-slate-400 font-mono">เร็วสุด (Record)</div>
+              <div className="text-[11px] text-slate-400 font-mono">เร็วสุด (Record)</div>
               <div className="text-base sm:text-lg font-mono font-bold text-cyan-400">{currentDungeon.recordTime} นาที</div>
             </div>
             <div className="bg-[#0b1018] border border-[#1d2b3e] px-3.5 py-2 rounded-xl text-center min-w-[100px]">
-              <div className="text-[10px] text-slate-400 font-mono">อัตราผ่าน (Win)</div>
+              <div className="text-[11px] text-slate-400 font-mono">อัตราผ่าน (Win)</div>
               <div className="text-base sm:text-lg font-mono font-bold text-amber-400">{currentDungeon.successRate}</div>
             </div>
             <div className="bg-[#0b1018] border border-[#1d2b3e] px-3.5 py-2 rounded-xl text-center min-w-[100px]">
-              <div className="text-[10px] text-slate-400 font-mono">ฐานข้อมูล (Runs)</div>
+              <div className="text-[11px] text-slate-400 font-mono">ฐานข้อมูล (Runs)</div>
               <div className="text-base sm:text-lg font-mono font-bold text-indigo-300">{currentDungeon.totalRuns} รอบ</div>
             </div>
           </div>
@@ -223,7 +223,7 @@ export default function DungeonStatsView({ onNavigate }) {
                             className="w-full h-full object-cover"
                             onError={(e) => { e.target.src = 'https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0001_0_0.png'; }}
                           />
-                          <span className="absolute bottom-0 right-0 bg-cyan-600 text-white text-[9px] font-mono font-bold px-1 rounded-tl">
+                          <span className="absolute bottom-0 right-0 bg-cyan-600 text-white text-[10px] font-mono font-bold px-1 rounded-tl">
                             #{idx + 1}
                           </span>
                         </div>
@@ -231,17 +231,17 @@ export default function DungeonStatsView({ onNavigate }) {
                           <h4 className="text-white font-bold text-xs truncate group-hover:text-cyan-300 transition-colors">
                             {m.name}
                           </h4>
-                          <span className="text-[10px] text-amber-400 font-mono block mt-0.5">
+                          <span className="text-[11px] text-amber-400 font-mono block mt-0.5">
                             SPD {m.spd}
                           </span>
-                          <span className="text-[10px] text-cyan-400/90 font-mono block">
+                          <span className="text-[11px] text-cyan-400/90 font-mono block">
                             {m.rune}
                           </span>
                         </div>
                       </div>
 
                       {/* Role Explanation in Thai */}
-                      <div className="mt-2.5 pt-2 border-t border-[#182333] text-[11px] text-slate-300 leading-tight">
+                      <div className="mt-2.5 pt-2 border-t border-[#182333] text-xs text-slate-300 leading-tight">
                         {m.role}
                       </div>
                     </div>
@@ -250,7 +250,7 @@ export default function DungeonStatsView({ onNavigate }) {
                     {onNavigate && (
                       <button
                         onClick={() => onNavigate('catalog', { search: m.name.replace(/\s*\(.*\)/, '') })}
-                        className="mt-3 text-[10px] text-blue-400 hover:text-blue-300 flex items-center justify-end gap-1 transition-colors"
+                        className="mt-3 text-[11px] text-blue-400 hover:text-blue-300 flex items-center justify-end gap-1 transition-colors"
                       >
                         <span>ดูสเตตัสในสารานุกรม</span>
                         <span>→</span>
@@ -315,12 +315,12 @@ export default function DungeonStatsView({ onNavigate }) {
                             <span className="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
                             <div>
                               <div>{drop.itemTh}</div>
-                              <div className="text-[10px] text-slate-500 font-mono">{drop.itemEn}</div>
+                              <div className="text-[11px] text-slate-400 font-mono">{drop.itemEn}</div>
                             </div>
                           </td>
                           <td className="py-2.5 px-3 text-right font-mono font-bold text-emerald-400">
                             {drop.rate}
-                            <div className="text-[10px] text-slate-500 font-normal">{drop.counts}</div>
+                            <div className="text-[11px] text-slate-400 font-normal">{drop.counts}</div>
                           </td>
                           <td className="py-2.5 px-3 text-center font-mono text-slate-300">
                             {drop.amount}
@@ -358,15 +358,15 @@ export default function DungeonStatsView({ onNavigate }) {
 
                 {/* General Resource Drops */}
                 <div className="bg-[#0c121d] border border-[#1e2a3c] rounded-xl p-3.5 space-y-2">
-                  <div className="text-[11px] font-bold text-slate-400 uppercase font-mono">
+                  <div className="text-xs font-bold text-slate-400 uppercase font-mono">
                     ทรัพยากรพื้นฐานที่ได้รับเฉลี่ยต่อรอบ (General Resources)
                   </div>
                   <div className="grid grid-cols-3 gap-2 text-center text-xs">
                     {currentDungeon.generalDrops.map((gd, idx) => (
                       <div key={idx} className="bg-[#131d2b] p-2 rounded-lg border border-[#1f2e43]">
-                        <div className="text-slate-400 text-[10px]">{gd.itemTh.split('(')[0]}</div>
+                        <div className="text-slate-400 text-[11px]">{gd.itemTh.split('(')[0]}</div>
                         <div className="text-emerald-400 font-mono font-bold mt-0.5">{gd.rate}</div>
-                        <div className="text-[10px] text-slate-500">เฉลี่ย {gd.avg}</div>
+                        <div className="text-[11px] text-slate-400">เฉลี่ย {gd.avg}</div>
                       </div>
                     ))}
                   </div>
@@ -388,35 +388,35 @@ export default function DungeonStatsView({ onNavigate }) {
             {currentDungeon.bossStats ? (
               <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
                 <div className="bg-[#0b1018] border border-[#1d2b3e] p-3 rounded-xl text-center">
-                  <div className="text-[10px] text-slate-400">เลเวล (Level)</div>
+                  <div className="text-[11px] text-slate-400">เลเวล (Level)</div>
                   <div className="text-lg font-mono font-bold text-white mt-1">{currentDungeon.bossStats.level}</div>
                 </div>
                 <div className="bg-[#0b1018] border border-[#1d2b3e] p-3 rounded-xl text-center">
-                  <div className="text-[10px] text-slate-400">พลังชีวิต (HP)</div>
+                  <div className="text-[11px] text-slate-400">พลังชีวิต (HP)</div>
                   <div className="text-lg font-mono font-bold text-emerald-400 mt-1">{currentDungeon.bossStats.hp}</div>
                 </div>
                 <div className="bg-[#0b1018] border border-[#1d2b3e] p-3 rounded-xl text-center">
-                  <div className="text-[10px] text-slate-400">พลังโจมตี (ATK)</div>
+                  <div className="text-[11px] text-slate-400">พลังโจมตี (ATK)</div>
                   <div className="text-lg font-mono font-bold text-rose-400 mt-1">{currentDungeon.bossStats.atk}</div>
                 </div>
                 <div className="bg-[#0b1018] border border-[#1d2b3e] p-3 rounded-xl text-center">
-                  <div className="text-[10px] text-slate-400">พลังป้องกัน (DEF)</div>
+                  <div className="text-[11px] text-slate-400">พลังป้องกัน (DEF)</div>
                   <div className="text-lg font-mono font-bold text-blue-400 mt-1">{currentDungeon.bossStats.def}</div>
                 </div>
                 <div className="bg-[#0b1018] border border-[#1d2b3e] p-3 rounded-xl text-center">
-                  <div className="text-[10px] text-slate-400">ความเร็ว (SPD)</div>
+                  <div className="text-[11px] text-slate-400">ความเร็ว (SPD)</div>
                   <div className="text-lg font-mono font-bold text-cyan-400 mt-1">{currentDungeon.bossStats.spd}</div>
                 </div>
                 <div className="bg-[#0b1018] border border-[#1d2b3e] p-3 rounded-xl text-center">
-                  <div className="text-[10px] text-slate-400">ต้านทาน (RES)</div>
+                  <div className="text-[11px] text-slate-400">ต้านทาน (RES)</div>
                   <div className="text-lg font-mono font-bold text-amber-400 mt-1">{currentDungeon.bossStats.res}</div>
                 </div>
                 <div className="bg-[#0b1018] border border-[#1d2b3e] p-3 rounded-xl text-center">
-                  <div className="text-[10px] text-slate-400">แม่นยำ (ACC)</div>
+                  <div className="text-[11px] text-slate-400">แม่นยำ (ACC)</div>
                   <div className="text-lg font-mono font-bold text-indigo-300 mt-1">{currentDungeon.bossStats.acc}</div>
                 </div>
                 <div className="bg-[#0b1018] border border-[#1d2b3e] p-3 rounded-xl text-center">
-                  <div className="text-[10px] text-slate-400">อัตราคริ (CR)</div>
+                  <div className="text-[11px] text-slate-400">อัตราคริ (CR)</div>
                   <div className="text-lg font-mono font-bold text-pink-400 mt-1">{currentDungeon.bossStats.cr}</div>
                 </div>
               </div>

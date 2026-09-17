@@ -88,7 +88,7 @@ export default function MonsterTierListView({
           </div>
         </div>
 
-        <div className="flex items-center gap-2 self-end sm:self-auto shrink-0 font-mono text-[11px] text-slate-400 bg-[#0c121c] px-2.5 py-1 rounded-lg border border-[#1e2a3c]">
+        <div className="flex items-center gap-2 self-end sm:self-auto shrink-0 font-mono text-xs text-slate-400 bg-[#0c121c] px-2.5 py-1 rounded-lg border border-[#1e2a3c]">
           <span>แสดง:</span>
           <span className="text-white font-bold">{totalDisplayed}</span>
           <span>จาก {monsters.length} ตัว</span>
@@ -112,7 +112,7 @@ export default function MonsterTierListView({
                 <span className="font-black text-lg sm:text-xl tracking-wider">
                   {tier.label}
                 </span>
-                <span className="text-[10px] font-bold opacity-75 sm:mt-0.5">
+                <span className="text-[11px] font-bold opacity-75 sm:mt-0.5">
                   {items.length} ตัว
                 </span>
               </div>
@@ -151,7 +151,7 @@ export default function MonsterTierListView({
                     </div>
                   ))
                 ) : (
-                  <span className="text-xs text-slate-500 italic px-2 py-1">
+                  <span className="text-xs text-slate-400 italic px-2 py-1">
                     {searchTerm || elementFilter !== 'all' ? 'ไม่มีมอนสเตอร์ที่ตรงกับตัวกรองใน Tier นี้' : 'ไม่มีมอนสเตอร์'}
                   </span>
                 )}
@@ -174,7 +174,7 @@ export default function MonsterTierListView({
             </div>
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-1.5">
-                <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded uppercase ${
+                <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded uppercase ${
                   hoveredMonster.element === 'fire' ? 'bg-rose-900/60 text-rose-300 border border-rose-500/40' :
                   hoveredMonster.element === 'water' ? 'bg-sky-900/60 text-sky-300 border border-sky-500/40' :
                   hoveredMonster.element === 'wind' ? 'bg-amber-900/60 text-amber-300 border border-amber-500/40' :
@@ -183,10 +183,10 @@ export default function MonsterTierListView({
                 }`}>
                   {hoveredMonster.element}
                 </span>
-                <span className="text-[10px] text-amber-400 font-bold font-mono">
+                <span className="text-[11px] text-amber-400 font-bold font-mono">
                   {hoveredMonster.stars}★
                 </span>
-                <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-[#1e2a3c] text-white">
+                <span className="text-[11px] font-bold px-1.5 py-0.2 rounded bg-[#1e2a3c] text-white">
                   Tier {hoveredMonster.tierId}
                 </span>
               </div>
@@ -194,7 +194,7 @@ export default function MonsterTierListView({
                 {hoveredMonster.name}
               </h4>
               {hoveredMonster.thaiName && hoveredMonster.thaiName !== hoveredMonster.name && (
-                <div className="text-[11px] text-slate-400 truncate">
+                <div className="text-xs text-slate-400 truncate">
                   {hoveredMonster.thaiName}
                 </div>
               )}
@@ -203,7 +203,7 @@ export default function MonsterTierListView({
 
           <div className="grid grid-cols-3 gap-2 pt-3 text-center">
             <div className="bg-[#0b1018] p-2 rounded-lg border border-[#1b283d]">
-              <div className="text-[10px] text-slate-400 uppercase font-bold">
+              <div className="text-[11px] text-slate-400 uppercase font-bold">
                 {type === 'defense' ? 'Def Win' : 'Offense Win'}
               </div>
               <div className="text-sm font-mono font-black text-emerald-400">
@@ -211,20 +211,20 @@ export default function MonsterTierListView({
               </div>
             </div>
             <div className="bg-[#0b1018] p-2 rounded-lg border border-[#1b283d]">
-              <div className="text-[10px] text-slate-400 uppercase font-bold">Pick Rate</div>
+              <div className="text-[11px] text-slate-400 uppercase font-bold">Pick Rate</div>
               <div className="text-sm font-mono font-bold text-blue-400">
                 {hoveredMonster.pickShare}
               </div>
             </div>
             <div className="bg-[#0b1018] p-2 rounded-lg border border-[#1b283d]">
-              <div className="text-[10px] text-slate-400 uppercase font-bold">Battles</div>
+              <div className="text-[11px] text-slate-400 uppercase font-bold">Battles</div>
               <div className="text-xs font-mono font-bold text-slate-200 mt-0.5">
                 {hoveredMonster.battleCount}
               </div>
             </div>
           </div>
 
-          <div className="mt-2 text-[10px] text-slate-400 text-center font-mono">
+          <div className="mt-2 text-[11px] text-slate-400 text-center font-mono">
             คลิกเพื่อเปิดดูรายละเอียด & ค้นหา 3MDC
           </div>
         </div>
@@ -233,7 +233,7 @@ export default function MonsterTierListView({
       {/* Selected Monster Modal / Quick Details */}
       {selectedMonster && (
         <div 
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs animate-in fade-in duration-150"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-150"
           onClick={() => setSelectedMonster(null)}
         >
           <div 
@@ -280,7 +280,7 @@ export default function MonsterTierListView({
             {/* Performance Stats Cards */}
             <div className="grid grid-cols-3 gap-2.5">
               <div className="bg-[#0c121c] p-3 rounded-xl border border-[#1b283d] text-center">
-                <div className="text-[10px] text-slate-400 font-bold uppercase">
+                <div className="text-[11px] text-slate-400 font-bold uppercase">
                   {type === 'defense' ? 'Winrate ป้องกัน' : 'Winrate บุก'}
                 </div>
                 <div className="text-base font-mono font-black text-emerald-400 mt-0.5">
@@ -288,13 +288,13 @@ export default function MonsterTierListView({
                 </div>
               </div>
               <div className="bg-[#0c121c] p-3 rounded-xl border border-[#1b283d] text-center">
-                <div className="text-[10px] text-slate-400 font-bold uppercase">อัตราการหยิบ</div>
+                <div className="text-[11px] text-slate-400 font-bold uppercase">อัตราการหยิบ</div>
                 <div className="text-base font-mono font-black text-blue-400 mt-0.5">
                   {selectedMonster.pickShare}
                 </div>
               </div>
               <div className="bg-[#0c121c] p-3 rounded-xl border border-[#1b283d] text-center">
-                <div className="text-[10px] text-slate-400 font-bold uppercase">รอบรบทั้งหมด</div>
+                <div className="text-[11px] text-slate-400 font-bold uppercase">รอบรบทั้งหมด</div>
                 <div className="text-base font-mono font-black text-slate-200 mt-0.5">
                   {selectedMonster.battleCount}
                 </div>
@@ -307,7 +307,7 @@ export default function MonsterTierListView({
                 <Info className="w-4 h-4" />
                 <span>เกณฑ์การจัดอันดับของ SWGT:</span>
               </div>
-              <p className="text-[11px] text-slate-400 leading-relaxed">
+              <p className="text-xs text-slate-400 leading-relaxed">
                 จัดอยู่ใน <strong>Tier {selectedMonster.tierId}</strong> จากการเปรียบเทียบ Pick Rate ({selectedMonster.pickShare}) คู่กับ 2x Win Rate ({selectedMonster.winRate}) ผ่านสูตร Bayesian Theorem เพื่อตัดมอนสเตอร์ที่ชนะฟลุกแต่คนเล่นน้อยออกอย่างเป็นธรรม
               </p>
             </div>

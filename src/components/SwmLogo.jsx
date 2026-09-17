@@ -2,11 +2,11 @@
 
 export default function SwmLogo({ size = 'md', showText = true, className = '' }) {
   const sizeMap = {
-    sm: { icon: 'w-7 h-7', text: 'text-base', sub: 'text-[9px]' },
-    md: { icon: 'w-9 h-9', text: 'text-xl', sub: 'text-[10px]' },
+    sm: { icon: 'w-7 h-7', text: 'text-base', sub: 'text-[10px]' },
+    md: { icon: 'w-9 h-9', text: 'text-xl', sub: 'text-[11px]' },
     lg: { icon: 'w-12 h-12', text: 'text-2xl', sub: 'text-xs' },
     xl: { icon: 'w-16 h-16', text: 'text-3xl', sub: 'text-sm' }
-  }[size] || { icon: 'w-9 h-9', text: 'text-xl', sub: 'text-[10px]' };
+  }[size] || { icon: 'w-9 h-9', text: 'text-xl', sub: 'text-[11px]' };
 
   return (
     <div className={`flex items-center gap-2.5 select-none ${className}`}>
@@ -58,7 +58,7 @@ export default function SwmLogo({ size = 'md', showText = true, className = '' }
             <span className={`${sizeMap.text} font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-indigo-300 font-mono`}>
               SWM
             </span>
-            <span className="px-1.5 py-0.2 rounded bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-mono font-extrabold text-[9px] uppercase tracking-wider shadow-sm">
+            <span className="px-1.5 py-0.2 rounded bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-mono font-extrabold text-[10px] uppercase tracking-wider shadow-sm">
               MASTER
             </span>
           </div>

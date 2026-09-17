@@ -105,12 +105,12 @@ export default function SkillTooltip({
                 />
                 <div>
                   <div className="flex items-center gap-1.5">
-                    <span className="px-1.5 py-0.2 bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded text-[10px] font-bold">
+                    <span className="px-1.5 py-0.2 bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded text-[11px] font-bold">
                       LEADER
                     </span>
                     <span className="text-xs font-bold text-white">ลีดเดอร์สกิล</span>
                   </div>
-                  <div className="text-[11px] text-amber-300/90 font-semibold">
+                  <div className="text-xs text-amber-300/90 font-semibold">
                     เพิ่ม {leaderSkill.attribute} +{leaderSkill.amount}%
                   </div>
                 </div>
@@ -120,7 +120,7 @@ export default function SkillTooltip({
                 {leaderSkill.textTh}
               </p>
 
-              <div className="text-[10px] text-slate-400 border-t border-[#1c2a3f] pt-1.5 font-mono">
+              <div className="text-[11px] text-slate-400 border-t border-[#1c2a3f] pt-1.5 font-mono">
                 {leaderSkill.textEn}
               </div>
             </div>
@@ -140,7 +140,7 @@ export default function SkillTooltip({
                 />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-1.5 flex-wrap">
-                    <span className={`px-1.5 py-0.2 rounded text-[10px] font-extrabold uppercase ${
+                    <span className={`px-1.5 py-0.2 rounded text-[11px] font-extrabold uppercase ${
                       skill.isPassive 
                         ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30' 
                         : skill.slot === 1 
@@ -153,20 +153,20 @@ export default function SkillTooltip({
                     </span>
 
                     {skill.cooldown && (
-                      <span className="flex items-center gap-1 text-[10px] text-sky-400 bg-sky-950/60 px-1.5 py-0.2 rounded border border-sky-800/40 font-mono">
+                      <span className="flex items-center gap-1 text-[11px] text-sky-400 bg-sky-950/60 px-1.5 py-0.2 rounded border border-sky-800/40 font-mono">
                         <Clock className="w-2.5 h-2.5" />
                         {skill.cooldown} เทิร์น
                       </span>
                     )}
 
                     {skill.isAoe && (
-                      <span className="text-[10px] text-indigo-300 bg-indigo-950/60 px-1.5 py-0.2 rounded border border-indigo-800/40">
+                      <span className="text-[11px] text-indigo-300 bg-indigo-950/60 px-1.5 py-0.2 rounded border border-indigo-800/40">
                         AOE หมู่
                       </span>
                     )}
 
                     {skill.hits > 1 && (
-                      <span className="text-[10px] text-yellow-300 bg-yellow-950/60 px-1.5 py-0.2 rounded border border-yellow-800/40 font-mono">
+                      <span className="text-[11px] text-yellow-300 bg-yellow-950/60 px-1.5 py-0.2 rounded border border-yellow-800/40 font-mono">
                         {skill.hits} Hits
                       </span>
                     )}
@@ -185,7 +185,7 @@ export default function SkillTooltip({
 
               {/* Multiplier / Scaling Formula */}
               {(skill.multiplier || (skill.scalesWith && skill.scalesWith.length > 0)) && (
-                <div className="bg-[#080d14] rounded-lg p-2 border border-[#1a2536] text-[11px] space-y-1">
+                <div className="bg-[#080d14] rounded-lg p-2 border border-[#1a2536] text-xs space-y-1">
                   {skill.multiplier && (
                     <div className="flex items-center justify-between">
                       <span className="text-slate-400 font-bold">สูตรดาเมจตัวคูณ:</span>
@@ -207,7 +207,7 @@ export default function SkillTooltip({
                   {skill.effects.map((eff, i) => (
                     <span 
                       key={i} 
-                      className={`px-1.5 py-0.5 rounded text-[10px] font-bold border ${eff.badgeClass || 'bg-slate-800 text-slate-300 border-slate-700'}`}
+                      className={`px-1.5 py-0.5 rounded text-[11px] font-bold border ${eff.badgeClass || 'bg-slate-800 text-slate-300 border-slate-700'}`}
                     >
                       {eff.nameTh || eff.name} {eff.chance ? `(${eff.chance}%)` : ''}
                     </span>
@@ -218,14 +218,14 @@ export default function SkillTooltip({
               {/* Skill-ups */}
               {skill.skillups && skill.skillups.length > 0 && (
                 <div className="border-t border-[#1c2a3f] pt-1.5">
-                  <div className="text-[10px] font-bold text-slate-400 mb-1 flex items-center gap-1">
+                  <div className="text-[11px] font-bold text-slate-400 mb-1 flex items-center gap-1">
                     <Layers className="w-2.5 h-2.5" />
                     อัปเกรดเลเวลสกิล (Skill Ups สูงสุด Lv.{skill.maxLevel || (skill.skillups.length + 1)}):
                   </div>
-                  <div className="grid grid-cols-2 gap-1 text-[10px] text-slate-300">
+                  <div className="grid grid-cols-2 gap-1 text-[11px] text-slate-300">
                     {skill.skillups.map((up, idx) => (
                       <div key={idx} className="flex items-center gap-1 text-slate-300 font-mono">
-                        <span className="text-slate-500">Lv.{idx + 2}:</span>
+                        <span className="text-slate-400">Lv.{idx + 2}:</span>
                         <span>{up}</span>
                       </div>
                     ))}

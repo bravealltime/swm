@@ -1,37 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import SwmLogo from './SwmLogo';
-import { 
-  ChevronDown, 
-  ChevronRight, 
-  UserCheck, 
-  Award, 
-  Layers, 
-  BookOpen, 
-  History, 
-  ShieldAlert, 
-  Sparkles, 
-  TrendingUp, 
-  Cpu, 
-  Gem, 
-  Shield, 
-  Swords, 
-  Users, 
-  Search, 
-  Activity, 
-  UserPlus, 
-  FileText, 
-  Crosshair, 
-  Star, 
-  HelpCircle, 
-  BarChart3, 
-  Trophy, 
-  Map, 
-  Calendar, 
-  Globe, 
-  Gift, 
-  Book, 
-  Gauge, 
-  Calculator, 
+import {
+  ChevronDown,
+  ChevronRight,
+  UserCheck,
+  Award,
+  Layers,
+  BookOpen,
+  History,
+  ShieldAlert,
+  Sparkles,
+  TrendingUp,
+  Cpu,
+  Gem,
+  Shield,
+  Swords,
+  Users,
+  Search,
+  Activity,
+  UserPlus,
+  FileText,
+  Crosshair,
+  Star,
+  HelpCircle,
+  BarChart3,
+  Trophy,
+  Map,
+  Calendar,
+  Globe,
+  Gift,
+  Book,
+  Gauge,
+  Calculator,
   Sliders,
   Flame,
   Compass,
@@ -39,6 +39,7 @@ import {
   X
 } from 'lucide-react';
 import { NAVIGATION_CATEGORIES } from '../data/navigation';
+import { buildUrl } from '../router';
 
 const ICON_MAP = {
   UserCheck, Award, Layers, BookOpen, History, ShieldAlert, Sparkles, TrendingUp,
@@ -47,11 +48,11 @@ const ICON_MAP = {
   Calculator, Sliders, Flame, Compass, Home
 };
 
-export default function Sidebar({ 
-  currentView, 
-  onNavigate, 
-  isOpen, 
-  onClose 
+export default function Sidebar({
+  currentView,
+  onNavigate,
+  isOpen,
+  onClose
 }) {
   const [expandedCategories, setExpandedCategories] = useState({
     'guild-siege': true,
@@ -67,38 +68,54 @@ export default function Sidebar({
     }));
   };
 
-  const handleItemClick = (itemId) => {
-    let view = 'dashboard';
-    if (itemId === 'where2use') view = 'where2use';
-    else if (itemId === '3mdc-stats') view = '3mdc-stats';
-    else if (itemId === 'game-guides') view = 'game-guides';
-    else if (itemId === 'siege-calculator' || itemId === 'siege-calc') view = 'siege-calculator';
-    else if (itemId === 'siege-tournament') view = 'siege-tournament';
-    else if (itemId === 'player-tracker' || itemId.includes('player')) view = 'player-tracker';
-    else if (itemId === 'draft-explorer') view = 'draft-explorer';
-    else if (itemId === 'rta-synergies') view = 'rta-synergies';
-    else if (itemId === 'meta-dashboard') view = 'meta-dashboard';
-    else if (itemId === 'tier-list-maker') view = 'tier-list-maker';
-    else if (itemId === 'defense-trending') view = 'trending';
-    else if (itemId === 'monster-defense-trending' || itemId === 'monster-offense-trending') view = 'trending';
-    else if (itemId.includes('3mdc')) view = '3mdc';
-    else if (itemId.includes('rta')) view = 'rta';
-    else if (itemId.includes('dungeon')) view = 'dungeons';
-    else if (itemId.includes('balance')) view = 'balance';
-    else if (itemId.includes('faq')) view = 'faq';
-    else if (itemId.includes('code')) view = 'codes';
-    else if (itemId.includes('siege') || itemId.includes('wgb')) view = 'leaderboards';
-    else if (itemId.includes('catalog')) view = 'catalog';
-    else if (itemId.includes('speed')) view = 'speed';
-    else if (itemId.includes('rune')) view = 'rune';
-    else if (itemId.includes('artifact')) view = 'artifact';
-    else if (itemId.includes('recruiting')) view = 'recruit';
-    else if (itemId.includes('swex') || itemId.includes('aegis') || itemId.includes('account')) {
-      view = 'aegislink';
-    }
-    else view = 'dashboard';
+  const closeBtnRef = useRef(null);
 
-    onNavigate(view, { subItem: itemId });
+  // Escape closes, background stops scrolling, focus lands on the close button
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKeyDown = (e) => { if (e.key === 'Escape') onClose?.(); };
+    document.addEventListener('keydown', onKeyDown);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    closeBtnRef.current?.focus();
+    return () => {
+      document.removeEventListener('keydown', onKeyDown);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [isOpen, onClose]);
+
+  const resolveView = (itemId) => {
+    if (itemId === 'where2use') return 'where2use';
+    if (itemId === '3mdc-stats') return '3mdc-stats';
+    if (itemId === 'game-guides') return 'game-guides';
+    if (itemId === 'siege-calculator' || itemId === 'siege-calc') return 'siege-calculator';
+    if (itemId === 'siege-tournament') return 'siege-tournament';
+    if (itemId === 'player-tracker' || itemId.includes('player')) return 'player-tracker';
+    if (itemId === 'draft-explorer') return 'draft-explorer';
+    if (itemId === 'rta-synergies') return 'rta-synergies';
+    if (itemId === 'meta-dashboard') return 'meta-dashboard';
+    if (itemId === 'tier-list-maker') return 'tier-list-maker';
+    if (itemId === 'defense-trending') return 'trending';
+    if (itemId === 'monster-defense-trending' || itemId === 'monster-offense-trending') return 'trending';
+    if (itemId.includes('3mdc')) return '3mdc';
+    if (itemId.includes('rta')) return 'rta';
+    if (itemId.includes('dungeon')) return 'dungeons';
+    if (itemId.includes('balance')) return 'balance';
+    if (itemId.includes('faq')) return 'faq';
+    if (itemId.includes('code')) return 'codes';
+    if (itemId.includes('siege') || itemId.includes('wgb')) return 'leaderboards';
+    if (itemId.includes('catalog')) return 'catalog';
+    if (itemId.includes('speed')) return 'speed';
+    if (itemId.includes('rune')) return 'rune';
+    if (itemId.includes('artifact')) return 'artifact';
+    if (itemId.includes('recruiting')) return 'recruit';
+    if (itemId.includes('swex') || itemId.includes('aegis') || itemId.includes('account')) return 'aegislink';
+    return 'dashboard';
+  };
+
+  const handleItemClick = (e, itemId) => {
+    e.preventDefault();
+    onNavigate(resolveView(itemId), { subItem: itemId });
     if (onClose) onClose();
   };
 
@@ -106,14 +123,19 @@ export default function Sidebar({
     <>
       {/* Slide-over Drawer Backdrop */}
       {isOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 transition-opacity animate-in fade-in duration-200"
           onClick={onClose}
         />
       )}
 
       {/* Sidebar Navigation Drawer */}
-      <aside 
+      <aside
+        role="dialog"
+        aria-modal="true"
+        aria-label="สารบัญระบบทั้งหมด"
+        aria-hidden={!isOpen}
+        inert={!isOpen}
         className={`fixed top-0 bottom-0 left-0 w-80 max-w-[85vw] bg-[#0a0f18]/98 backdrop-blur-xl border-r border-[#1e293b] z-50 flex flex-col transition-transform duration-300 ease-out shadow-2xl ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
@@ -124,10 +146,11 @@ export default function Sidebar({
             <SwmLogo size="sm" />
             <span className="text-xs font-bold text-slate-300 tracking-wide uppercase">สารบัญระบบทั้งหมด</span>
           </div>
-          <button 
+          <button
+            ref={closeBtnRef}
             onClick={onClose}
             className="p-1.5 rounded-lg text-slate-400 hover:text-white bg-[#131c2d] border border-[#24354f] hover:border-slate-500 transition-colors cursor-pointer"
-            title="ปิดเมนู"
+            aria-label="ปิดเมนู"
           >
             <X className="w-4 h-4" />
           </button>
@@ -135,11 +158,13 @@ export default function Sidebar({
 
         {/* Scrollable Navigation Items */}
         <div className="flex-1 overflow-y-auto px-3 py-4 space-y-4 text-xs select-none custom-scrollbar">
-          
+
           {/* Main Dashboard Home Button */}
-          <button
-            onClick={() => { onNavigate('dashboard'); if (onClose) onClose(); }}
-            className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl font-bold transition-all cursor-pointer ${
+          <a
+            href="/"
+            onClick={(e) => { e.preventDefault(); onNavigate('dashboard'); if (onClose) onClose(); }}
+            aria-current={currentView === 'dashboard' ? 'page' : undefined}
+            className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl font-bold transition-all ${
               currentView === 'dashboard'
                 ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30 font-black'
                 : 'text-slate-300 hover:text-white hover:bg-[#111927]'
@@ -147,7 +172,7 @@ export default function Sidebar({
           >
             <Home className="w-4 h-4" />
             <span className="text-sm">หน้าแรก (Dashboard)</span>
-          </button>
+          </a>
 
           {/* 4 Clean Pillars */}
           {NAVIGATION_CATEGORIES.map((cat) => {
@@ -158,13 +183,14 @@ export default function Sidebar({
                 {/* Category Header with Toggle */}
                 <button
                   onClick={() => toggleCategory(cat.id)}
-                  className="w-full flex items-center justify-between px-2.5 py-1.5 text-[11px] font-bold text-slate-400 hover:text-slate-200 transition-colors uppercase tracking-wider cursor-pointer"
+                  aria-expanded={isExpanded}
+                  className="w-full flex items-center justify-between px-2.5 py-1.5 text-xs font-bold text-slate-400 hover:text-slate-200 transition-colors uppercase tracking-wider cursor-pointer"
                 >
                   <span className="truncate">{cat.title}</span>
                   {isExpanded ? (
-                    <ChevronDown className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+                    <ChevronDown className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                   ) : (
-                    <ChevronRight className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+                    <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                   )}
                 </button>
 
@@ -173,9 +199,9 @@ export default function Sidebar({
                   <div className="space-y-0.5 pl-1">
                     {cat.items.map((item) => {
                       const IconComponent = ICON_MAP[item.icon] || Shield;
-                      
+
                       // Check active state
-                      const isActive = 
+                      const isActive =
                         (item.id === '3mdc-search' && currentView === '3mdc') ||
                         (item.id === 'where2use' && currentView === 'where2use') ||
                         (item.id === '3mdc-stats' && currentView === '3mdc-stats') ||
@@ -196,30 +222,32 @@ export default function Sidebar({
                         (item.id === 'faq-guides' && currentView === 'faq');
 
                       return (
-                        <button
+                        <a
                           key={item.id}
-                          onClick={() => handleItemClick(item.id)}
-                          className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-left font-medium transition-all cursor-pointer ${
+                          href={buildUrl(resolveView(item.id), { subItem: item.id })}
+                          onClick={(e) => handleItemClick(e, item.id)}
+                          aria-current={isActive ? 'page' : undefined}
+                          className={`w-full flex items-center justify-between gap-2 px-3 py-2 rounded-xl text-left font-medium transition-all ${
                             isActive
                               ? 'bg-blue-600/15 text-blue-400 font-bold border-l-2 border-blue-500'
                               : 'text-slate-300 hover:text-white hover:bg-[#111927]'
                           }`}
                         >
-                          <div className="flex items-center gap-2.5 truncate">
-                            <IconComponent className={`w-4 h-4 shrink-0 ${isActive ? 'text-blue-400' : 'text-slate-500'}`} />
-                            <span className="truncate text-xs">{item.label}</span>
+                          <div className="flex items-center gap-2.5 min-w-0">
+                            <IconComponent className={`w-4 h-4 shrink-0 ${isActive ? 'text-blue-400' : 'text-slate-400'}`} />
+                            <span className="text-xs leading-snug">{item.label}</span>
                           </div>
 
                           {item.badge && (
-                            <span className={`px-1.5 py-0.2 rounded text-[10px] font-mono font-bold shrink-0 ${
-                              isActive 
-                                ? 'bg-blue-500/20 text-blue-300' 
+                            <span className={`px-1.5 py-0.2 rounded text-[11px] font-mono font-bold shrink-0 ${
+                              isActive
+                                ? 'bg-blue-500/20 text-blue-300'
                                 : 'bg-[#152030] text-slate-400 border border-[#202f45]'
                             }`}>
                               {item.badge}
                             </span>
                           )}
-                        </button>
+                        </a>
                       );
                     })}
                   </div>
@@ -230,7 +258,7 @@ export default function Sidebar({
         </div>
 
         {/* Sidebar Footer */}
-        <div className="p-3 border-t border-[#172233] bg-[#070b12] text-[10px] text-slate-500 flex items-center justify-between font-mono">
+        <div className="p-3 border-t border-[#172233] bg-[#070b12] text-[11px] text-slate-400 flex items-center justify-between font-mono">
           <span>SUMMONERS WAR MASTER</span>
           <span className="text-emerald-400">● LIVE</span>
         </div>

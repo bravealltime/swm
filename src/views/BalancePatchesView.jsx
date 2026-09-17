@@ -178,7 +178,7 @@ export default function BalancePatchesView({ onNavigate }) {
                     }`}
                   >
                     <span>Patch #{pid}</span>
-                    <span className="text-[10px] opacity-75">
+                    <span className="text-[11px] opacity-75">
                       {patchItem ? `(${patchItem.date.split(',')[0]})` : ''}
                     </span>
                     {pid === '92' && (
@@ -193,54 +193,54 @@ export default function BalancePatchesView({ onNavigate }) {
           {/* Patch Overview Metrics Header */}
           <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
             <div className="bg-[#111927] border border-[#1e2a3c] p-3.5 rounded-xl">
-              <div className="text-[11px] text-slate-400">วันที่ประกาศแพตช์</div>
+              <div className="text-xs text-slate-400">วันที่ประกาศแพตช์</div>
               <div className="text-sm sm:text-base font-bold text-white mt-1 flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-indigo-400"></span>
                 <span>{currentPatchMeta.date}</span>
               </div>
-              <div className="text-[10px] text-slate-500 mt-0.5 font-mono">
+              <div className="text-[11px] text-slate-400 mt-0.5 font-mono">
                 {currentPatchMeta.daysSincePrevious ? `ห่างจากแพตช์ก่อนหน้า ${currentPatchMeta.daysSincePrevious} วัน` : 'แพตช์แรก'}
               </div>
             </div>
 
             <div className="bg-[#111927] border border-[#1e2a3c] p-3.5 rounded-xl">
-              <div className="text-[11px] text-slate-400">มอนสเตอร์ที่ปรับปรุง</div>
+              <div className="text-xs text-slate-400">มอนสเตอร์ที่ปรับปรุง</div>
               <div className="text-xl sm:text-2xl font-mono font-bold text-amber-400 mt-1">
                 {patchStats.uniqueMonsters} <span className="text-xs font-normal text-slate-400">ตัว</span>
               </div>
-              <div className="text-[10px] text-slate-500 mt-0.5">
+              <div className="text-[11px] text-slate-400 mt-0.5">
                 รวมทั้งหมด {patchStats.total} สกิล
               </div>
             </div>
 
             <div className="bg-[#111927] border border-emerald-900/30 p-3.5 rounded-xl">
-              <div className="text-[11px] text-emerald-400 flex items-center gap-1">
+              <div className="text-xs text-emerald-400 flex items-center gap-1">
                 <span>🟢</span> <span>บัฟ / เพิ่มพลัง</span>
               </div>
               <div className="text-xl sm:text-2xl font-mono font-bold text-emerald-400 mt-1">
                 {patchStats.buffs} <span className="text-xs font-normal text-slate-400">สกิล</span>
               </div>
-              <div className="text-[10px] text-slate-500 mt-0.5">เพิ่มดาเมจ/ลดคูลดาวน์</div>
+              <div className="text-[11px] text-slate-400 mt-0.5">เพิ่มดาเมจ/ลดคูลดาวน์</div>
             </div>
 
             <div className="bg-[#111927] border border-rose-900/30 p-3.5 rounded-xl">
-              <div className="text-[11px] text-rose-400 flex items-center gap-1">
+              <div className="text-xs text-rose-400 flex items-center gap-1">
                 <span>🔴</span> <span>เนิร์ฟ / ลดทอน</span>
               </div>
               <div className="text-xl sm:text-2xl font-mono font-bold text-rose-400 mt-1">
                 {patchStats.nerfs} <span className="text-xs font-normal text-slate-400">สกิล</span>
               </div>
-              <div className="text-[10px] text-slate-500 mt-0.5">ลดเกจ/ลดผลสกิล</div>
+              <div className="text-[11px] text-slate-400 mt-0.5">ลดเกจ/ลดผลสกิล</div>
             </div>
 
             <div className="bg-[#111927] border border-indigo-900/30 p-3.5 rounded-xl col-span-2 sm:col-span-1">
-              <div className="text-[11px] text-indigo-300 flex items-center gap-1">
+              <div className="text-xs text-indigo-300 flex items-center gap-1">
                 <span>🟣</span> <span>ปรับกลไกสกิล</span>
               </div>
               <div className="text-xl sm:text-2xl font-mono font-bold text-indigo-300 mt-1">
                 {patchStats.rebalance} <span className="text-xs font-normal text-slate-400">สกิล</span>
               </div>
-              <div className="text-[10px] text-slate-500 mt-0.5">เปลี่ยนเงื่อนไข/เอฟเฟกต์</div>
+              <div className="text-[11px] text-slate-400 mt-0.5">เปลี่ยนเงื่อนไข/เอฟเฟกต์</div>
             </div>
           </div>
 
@@ -256,7 +256,7 @@ export default function BalancePatchesView({ onNavigate }) {
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full bg-[#162232] border border-[#233348] rounded-lg pl-9 pr-4 py-2 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500"
                 />
-                <span className="absolute left-3 top-2.5 text-slate-500 text-xs">🔍</span>
+                <span className="absolute left-3 top-2.5 text-slate-400 text-xs">🔍</span>
                 {searchTerm && (
                   <button
                     onClick={() => setSearchTerm('')}
@@ -451,7 +451,7 @@ export default function BalancePatchesView({ onNavigate }) {
                             />
                             {/* Element pip badge */}
                             <span
-                              className="absolute bottom-0 right-0 text-[10px] px-1 py-0.5 rounded-tl font-bold leading-none"
+                              className="absolute bottom-0 right-0 text-[11px] px-1 py-0.5 rounded-tl font-bold leading-none"
                               style={{ backgroundColor: elemMeta.color, color: '#000' }}
                             >
                               {elemMeta.icon}
@@ -468,14 +468,14 @@ export default function BalancePatchesView({ onNavigate }) {
                                 </span>
                               )}
                             </h3>
-                            <div className="flex items-center gap-1.5 mt-1 text-[11px]">
+                            <div className="flex items-center gap-1.5 mt-1 text-xs">
                               <span
-                                className="px-1.5 py-0.5 rounded text-[10px] font-semibold"
+                                className="px-1.5 py-0.5 rounded text-[11px] font-semibold"
                                 style={{ backgroundColor: elemMeta.bg, color: elemMeta.color }}
                               >
                                 {elemMeta.label}
                               </span>
-                              <span className="text-slate-500 font-mono text-[10px]">
+                              <span className="text-slate-400 font-mono text-[11px]">
                                 {card.element}
                               </span>
                             </div>
@@ -484,10 +484,10 @@ export default function BalancePatchesView({ onNavigate }) {
 
                         {/* Impact & Change Type Badges */}
                         <div className="flex flex-col items-end gap-1 flex-shrink-0">
-                          <span className={`px-2 py-0.5 rounded text-[10px] font-bold tracking-wide border uppercase ${impactMeta.bg}`}>
+                          <span className={`px-2 py-0.5 rounded text-[11px] font-bold tracking-wide border uppercase ${impactMeta.bg}`}>
                             {impactMeta.badge}
                           </span>
-                          <span className="px-2 py-0.5 bg-[#162232] text-cyan-300 border border-[#233147] rounded text-[10px] font-medium">
+                          <span className="px-2 py-0.5 bg-[#162232] text-cyan-300 border border-[#233147] rounded text-[11px] font-medium">
                             {thaiChangeType}
                           </span>
                         </div>
@@ -504,19 +504,19 @@ export default function BalancePatchesView({ onNavigate }) {
                               loading="lazy"
                             />
                           ) : (
-                            <div className="w-full h-full flex items-center justify-center text-xs text-slate-500 font-mono">
+                            <div className="w-full h-full flex items-center justify-center text-xs text-slate-400 font-mono">
                               SK
                             </div>
                           )}
                           {card.skillBadge && (
-                            <span className="absolute bottom-0 right-0 bg-blue-600 text-white text-[8px] font-mono font-bold px-0.5 leading-none rounded-tl">
+                            <span className="absolute bottom-0 right-0 bg-blue-600 text-white text-[9px] font-mono font-bold px-0.5 leading-none rounded-tl">
                               {card.skillBadge}
                             </span>
                           )}
                         </div>
 
                         <div className="min-w-0 flex-1">
-                          <div className="text-[10px] text-slate-400 uppercase font-mono tracking-wider">
+                          <div className="text-[11px] text-slate-400 uppercase font-mono tracking-wider">
                             สกิลที่ถูกปรับ (Skill)
                           </div>
                           <div className="text-xs font-semibold text-indigo-300 truncate">
@@ -528,7 +528,7 @@ export default function BalancePatchesView({ onNavigate }) {
                       {/* Value Changes Box (Before ➔ After) */}
                       {card.valueChanges && card.valueChanges.length > 0 && (
                         <div className="mt-2.5 bg-[#152233] border border-[#22354e] rounded-lg p-2 flex flex-wrap items-center gap-2">
-                          <span className="text-[11px] text-slate-400 font-medium">ตัวเลขที่เปลี่ยน:</span>
+                          <span className="text-xs text-slate-400 font-medium">ตัวเลขที่เปลี่ยน:</span>
                           {card.valueChanges.map((vc, idx) => (
                             <div key={idx} className="flex items-center gap-1.5 font-mono text-xs">
                               <span className="px-2 py-0.5 bg-rose-500/15 text-rose-300 border border-rose-500/30 rounded font-semibold line-through">
@@ -549,7 +549,7 @@ export default function BalancePatchesView({ onNavigate }) {
                           <div className="mt-3 space-y-2">
                             {/* Before box */}
                             <div className="p-2.5 rounded-lg bg-rose-950/20 border border-rose-500/30 text-xs">
-                              <div className="flex items-center gap-1.5 text-[10px] font-bold text-rose-400 uppercase tracking-wider mb-1">
+                              <div className="flex items-center gap-1.5 text-[11px] font-bold text-rose-400 uppercase tracking-wider mb-1">
                                 <span className="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
                                 <span>เดิม (ก่อนปรับปรุง):</span>
                               </div>
@@ -560,7 +560,7 @@ export default function BalancePatchesView({ onNavigate }) {
 
                             {/* After box */}
                             <div className="p-2.5 rounded-lg bg-emerald-950/25 border border-emerald-500/40 text-xs shadow-sm">
-                              <div className="flex items-center gap-1.5 text-[10px] font-bold text-emerald-400 uppercase tracking-wider mb-1">
+                              <div className="flex items-center gap-1.5 text-[11px] font-bold text-emerald-400 uppercase tracking-wider mb-1">
                                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
                                 <span>ใหม่ (หลังปรับปรุง):</span>
                               </div>
@@ -571,7 +571,7 @@ export default function BalancePatchesView({ onNavigate }) {
                           </div>
                         ) : (
                           <div className="mt-3 p-3 rounded-lg bg-[#0b1019] border border-[#162030] text-xs leading-relaxed font-sans space-y-1">
-                            <div className="flex items-center gap-1.5 text-[10px] font-bold text-indigo-400 uppercase tracking-wider">
+                            <div className="flex items-center gap-1.5 text-[11px] font-bold text-indigo-400 uppercase tracking-wider">
                               <Sparkles className="w-3 h-3 text-indigo-400" />
                               <span>สรุปการปรับปรุง (ภาษาไทย):</span>
                             </div>
@@ -582,7 +582,7 @@ export default function BalancePatchesView({ onNavigate }) {
                         )
                       ) : (
                         <div className="mt-3 text-xs text-slate-300 leading-relaxed bg-[#0b1019] p-3 rounded-lg border border-[#162030] whitespace-pre-line font-mono">
-                          <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1 font-bold">
+                          <div className="text-[11px] text-slate-400 uppercase tracking-wider mb-1 font-bold">
                             COM2US OFFICIAL TEXT:
                           </div>
                           {card.preview || card.officialText}
@@ -591,8 +591,8 @@ export default function BalancePatchesView({ onNavigate }) {
                     </div>
 
                     {/* Bottom Action bar */}
-                    <div className="mt-3 pt-2.5 border-t border-[#182333] flex items-center justify-between text-[11px] text-slate-400">
-                      <span className="font-mono text-slate-500">
+                    <div className="mt-3 pt-2.5 border-t border-[#182333] flex items-center justify-between text-xs text-slate-400">
+                      <span className="font-mono text-slate-400">
                         Patch #{card.patchId}
                       </span>
                       {onNavigate && (
@@ -652,7 +652,7 @@ export default function BalancePatchesView({ onNavigate }) {
 
                     return (
                       <tr key={idx} className="hover:bg-[#152030]/60 transition-colors">
-                        <td className="py-3 px-4 font-mono text-slate-500 font-semibold">
+                        <td className="py-3 px-4 font-mono text-slate-400 font-semibold">
                           #{patchNum}
                         </td>
                         <td className="py-3 px-4 font-medium text-white flex items-center gap-2">

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { 
   Shield, 
   Gift, 
@@ -27,11 +27,8 @@ import {
   Crosshair
 } from 'lucide-react';
 import MonsterAvatar from '../components/MonsterAvatar';
-import ALL_MDC_DATA from '../data/allMdcData.json';
-import { MONSTERS } from '../data/monsters';
 import { PROMO_CODES } from '../data/promoCodes';
 import { LEADERBOARDS } from '../data/leaderboards';
-import playerProfiles from '../data/playerProfiles.json';
 import { getR2AvatarUrl } from '../services/r2Service';
 
 const POPULAR_PRESETS = [
@@ -52,20 +49,27 @@ export default function DashboardView({ onNavigate }) {
     return PROMO_CODES.filter(c => c.status === 'active').slice(0, 4);
   }, []);
 
-  // Top Real RTA Players from Lucksack/SWC dataset
-  const topRtaPlayers = useMemo(() => {
-    return playerProfiles.slice(0, 4);
+  // The big datasets are only needed for two preview widgets, so they are
+  // fetched after first paint instead of being part of the home-page bundle.
+  const [mdcData, setMdcData] = useState(null);
+  const [topRtaPlayers, setTopRtaPlayers] = useState([]);
+  useEffect(() => {
+    let alive = true;
+    import('../data/allMdcData.json').then((m) => { if (alive) setMdcData(m.default); });
+    import('../data/playerProfiles.json').then((m) => { if (alive) setTopRtaPlayers(m.default.slice(0, 4)); });
+    return () => { alive = false; };
   }, []);
 
-  // Match defense team from ALL_MDC_DATA with real defenseMonsters
+  // Match defense team from the MDC dataset with real defenseMonsters
   const currentDefenseData = useMemo(() => {
+    if (!mdcData) return null;
     const targetNames = selectedPreset.monsters;
-    const match = ALL_MDC_DATA.find(def => {
+    const match = mdcData.find(def => {
       const defNames = def.defenseMonsters?.map(m => m.name?.toLowerCase()) || [];
       return targetNames.every(t => defNames.some(d => d?.includes(t.toLowerCase())));
     });
-    return match || ALL_MDC_DATA[0];
-  }, [selectedPreset]);
+    return match || mdcData[0];
+  }, [mdcData, selectedPreset]);
 
   const handleCopy = (code) => {
     navigator.clipboard.writeText(code);
@@ -91,22 +95,22 @@ export default function DashboardView({ onNavigate }) {
     <div className="space-y-8 max-w-[1780px] 2xl:max-w-[1880px] mx-auto pb-16 animate-in fade-in duration-300">
       
       {/* 1. HERO COMMAND SPOTLIGHT (2026 Esports Design) */}
-      <section className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-b from-[#0e1626] via-[#090e18] to-[#070b12] p-6 sm:p-10 shadow-2xl">
+      <section className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-b from-[#0e1626] via-[#090e18] to-[#070b12] p-5 sm:p-10 shadow-2xl">
         {/* Ambient Glow Orbs */}
         <div className="absolute -top-24 -left-24 w-96 h-96 bg-blue-600/15 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -top-24 -right-24 w-96 h-96 bg-purple-600/15 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="relative z-10 max-w-4xl mx-auto text-center space-y-5">
+        <div className="relative z-10 max-w-4xl mx-auto text-center space-y-4 sm:space-y-5">
           {/* Badge Chips */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.05] border border-white/10 backdrop-blur-md text-xs font-semibold text-slate-300 shadow-inner">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.05] border border-white/10 backdrop-blur-md text-xs font-semibold text-slate-300 shadow-inner whitespace-nowrap">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-emerald-400 font-mono font-bold">LIVE RTA S38</span>
-            <span className="text-slate-500">•</span>
-            <span>ศูนย์ข้อมูลยุทธวิธี Summoners War ภาษาไทย 100%</span>
+            <span className="text-emerald-400 font-mono font-bold">RTA S38</span>
+            <span className="text-slate-400 hidden sm:inline">•</span>
+            <span className="hidden sm:inline">ศูนย์ข้อมูลยุทธวิธี Summoners War ภาษาไทย</span>
           </div>
 
           {/* High-Impact Headline */}
-          <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-white leading-tight">
+          <h1 className="text-2xl sm:text-5xl font-black tracking-tight text-white leading-tight">
             คลังกลยุทธ์ & สถิติการแข่งขัน <br />
             <span className="bg-gradient-to-r from-blue-400 via-cyan-300 to-indigo-300 bg-clip-text text-transparent">
               Summoners War Master
@@ -137,7 +141,7 @@ export default function DashboardView({ onNavigate }) {
 
             {/* Quick Hot Suggestions */}
             <div className="flex flex-wrap items-center justify-center gap-2 pt-3 text-xs">
-              <span className="text-slate-400 text-[11px] font-semibold">แนะนำค้นหา:</span>
+              <span className="text-slate-400 text-xs font-semibold">แนะนำค้นหา:</span>
               <button
                 type="button"
                 onClick={() => onNavigate('player-tracker', { initialPlayer: 'Lest' })}
@@ -174,22 +178,22 @@ export default function DashboardView({ onNavigate }) {
             <div className="p-3 rounded-2xl bg-white/[0.02] border border-white/[0.04]">
               <div className="text-xs text-slate-400 font-medium">ข้อมูลมอนสเตอร์</div>
               <div className="text-lg sm:text-xl font-black text-white mt-0.5">940+ ตัว</div>
-              <div className="text-[11px] text-emerald-400 font-medium">แปลสกิลไทย 100%</div>
+              <div className="text-xs text-emerald-400 font-medium">แปลสกิลไทย 100%</div>
             </div>
             <div className="p-3 rounded-2xl bg-white/[0.02] border border-white/[0.04]">
               <div className="text-xs text-slate-400 font-medium">ทีมแก้ทาง Siege</div>
               <div className="text-lg sm:text-xl font-black text-white mt-0.5">1,500+ สูตร</div>
-              <div className="text-[11px] text-blue-400 font-medium">3MDC Counter Data</div>
+              <div className="text-xs text-blue-400 font-medium">3MDC Counter Data</div>
             </div>
             <div className="p-3 rounded-2xl bg-white/[0.02] border border-white/[0.04]">
               <div className="text-xs text-slate-400 font-medium">World Arena RTA</div>
               <div className="text-lg sm:text-xl font-black text-white mt-0.5">Season 38</div>
-              <div className="text-[11px] text-amber-400 font-medium">SWRT Esports Stats</div>
+              <div className="text-xs text-amber-400 font-medium">SWRT Esports Stats</div>
             </div>
             <div className="p-3 rounded-2xl bg-white/[0.02] border border-white/[0.04]">
               <div className="text-xs text-slate-400 font-medium">โค้ดไอเทมแจกฟรี</div>
               <div className="text-lg sm:text-xl font-black text-white mt-0.5">5 โค้ดแอคทีฟ</div>
-              <div className="text-[11px] text-purple-400 font-medium">รับได้ทันทีในเกม</div>
+              <div className="text-xs text-purple-400 font-medium">รับได้ทันทีในเกม</div>
             </div>
           </div>
         </div>
@@ -205,7 +209,7 @@ export default function DashboardView({ onNavigate }) {
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="text-sm sm:text-base font-bold text-white">โค้ดแจกไอเทมประจำเดือน</h2>
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-500/20 text-emerald-300 uppercase">
+                <span className="px-2 py-0.5 rounded-full text-[11px] font-black bg-emerald-500/20 text-emerald-300 uppercase">
                   Active Codes
                 </span>
               </div>
@@ -309,7 +313,7 @@ export default function DashboardView({ onNavigate }) {
                       </td>
                       <td className="py-2.5 text-slate-400">{player.server}</td>
                       <td className="py-2.5">
-                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30">
+                        <span className="px-2 py-0.5 rounded-full text-[11px] font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30">
                           {player.rankBadge || player.rankTier}
                         </span>
                       </td>
@@ -368,7 +372,7 @@ export default function DashboardView({ onNavigate }) {
 
             {/* Presets Picker */}
             <div className="space-y-2">
-              <div className="text-[11px] font-semibold text-slate-400">ทีมตั้งรับยอดนิยม:</div>
+              <div className="text-xs font-semibold text-slate-400">ทีมตั้งรับยอดนิยม:</div>
               <div className="flex flex-wrap gap-1.5">
                 {POPULAR_PRESETS.map((preset) => (
                   <button
@@ -387,10 +391,13 @@ export default function DashboardView({ onNavigate }) {
             </div>
 
             {/* Defense Presentation with REAL Monster Avatars */}
+            {!currentDefenseData ? (
+              <div className="p-4 rounded-2xl bg-[#090e18] border border-white/[0.06] h-40 animate-pulse" aria-busy="true" />
+            ) : (
             <div className="p-4 rounded-2xl bg-[#090e18] border border-white/[0.06] space-y-3">
               <div className="flex items-center justify-between text-xs text-slate-400">
                 <span className="font-bold text-slate-300">ทีมตั้งรับ (Defense):</span>
-                <span className="font-mono text-emerald-400 font-bold">อัตราชนะบุก {currentDefenseData.counters?.[0]?.winRate || '90%+'}</span>
+                <span className="font-mono text-emerald-400 font-bold">ความน่าเชื่อถือ {currentDefenseData.counters?.[0]?.winRate || '—'}</span>
               </div>
               
               <div className="flex items-center gap-3">
@@ -398,7 +405,7 @@ export default function DashboardView({ onNavigate }) {
                   currentDefenseData.defenseMonsters.map((m, i) => (
                     <div key={i} className="flex flex-col items-center gap-1">
                       <MonsterAvatar monster={m} size="sm" />
-                      <span className="text-[10px] text-slate-300 font-bold truncate max-w-[64px] text-center">
+                      <span className="text-[11px] text-slate-300 font-bold truncate max-w-[64px] text-center">
                         {m.thaiName || m.name}
                       </span>
                     </div>
@@ -407,7 +414,7 @@ export default function DashboardView({ onNavigate }) {
                   selectedPreset.monsters.map((name, i) => (
                     <div key={i} className="flex flex-col items-center gap-1">
                       <MonsterAvatar monster={name} size="sm" />
-                      <span className="text-[10px] text-slate-300 font-bold truncate max-w-[64px] text-center">{name}</span>
+                      <span className="text-[11px] text-slate-300 font-bold truncate max-w-[64px] text-center">{name}</span>
                     </div>
                   ))
                 )}
@@ -415,7 +422,7 @@ export default function DashboardView({ onNavigate }) {
 
               {/* Best Recommended Counter from Real 3MDC Data */}
               <div className="pt-2.5 border-t border-white/[0.06] space-y-2">
-                <div className="text-[11px] font-bold text-amber-400 flex items-center gap-1">
+                <div className="text-xs font-bold text-amber-400 flex items-center gap-1">
                   <CheckCircle2 className="w-3.5 h-3.5" />
                   <span>สูตรทีมแก้ทางที่แนะนำอันดับ 1:</span>
                 </div>
@@ -441,6 +448,7 @@ export default function DashboardView({ onNavigate }) {
                 )}
               </div>
             </div>
+            )}
           </div>
 
           <button
@@ -466,7 +474,7 @@ export default function DashboardView({ onNavigate }) {
             <div className="p-2.5 rounded-xl bg-purple-500/10 border border-purple-500/30 text-purple-400">
               <Swords className="w-5 h-5" />
             </div>
-            <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300">
+            <span className="text-[11px] font-black uppercase px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300">
               RTA Simulator
             </span>
           </div>
@@ -493,7 +501,7 @@ export default function DashboardView({ onNavigate }) {
             <div className="p-2.5 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400">
               <Sparkles className="w-5 h-5" />
             </div>
-            <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300">
+            <span className="text-[11px] font-black uppercase px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300">
               True Damage
             </span>
           </div>
@@ -520,7 +528,7 @@ export default function DashboardView({ onNavigate }) {
             <div className="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
               <Cpu className="w-5 h-5" />
             </div>
-            <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300">
+            <span className="text-[11px] font-black uppercase px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300">
               PVE Abyss Hard
             </span>
           </div>
@@ -587,14 +595,14 @@ export default function DashboardView({ onNavigate }) {
                 }`}>
                   #{idx + 1}
                 </span>
-                <span className="text-[10px] text-slate-500 uppercase">{selectedServer}</span>
+                <span className="text-[11px] text-slate-400 uppercase">{selectedServer}</span>
               </div>
               <div className="font-black text-sm text-white truncate" title={guild.name}>
                 {guild.name}
               </div>
               <div className="flex items-center justify-between text-xs text-slate-400 pt-1 border-t border-white/[0.04]">
                 <span>คะแนน</span>
-                <span className="font-mono font-bold text-cyan-400">{guild.rating || '2,400+'}</span>
+                <span className="font-mono font-bold text-cyan-400">{guild.score ? guild.score.toLocaleString() : '—'}</span>
               </div>
             </div>
           ))}

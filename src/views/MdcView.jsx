@@ -1,4 +1,4 @@
-﻿import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import { 
   Shield, 
   Search, 
@@ -25,12 +25,22 @@ import { MONSTERS } from '../data/monsters';
 export default function MdcView({ search = '' }) {
   const [towerFilter, setTowerFilter] = useState('all'); // 'all', 'nat4', 'nat5'
   const [searchQuery, setSearchQuery] = useState(search);
+  const detailRef = useRef(null);
+
   const [selectedSlots, setSelectedSlots] = useState([null, null, null]);
   const [activeSlotIdx, setActiveSlotIdx] = useState(null);
   const [pickerElement, setPickerElement] = useState('all');
   const [pickerSearch, setPickerSearch] = useState('');
   const [selectedDefenseId, setSelectedDefenseId] = useState(ALL_MDC_DATA[0]?.id || 'def-1');
   const [counterCountLimit, setCounterCountLimit] = useState(25);
+  // On narrow screens the detail panel sits below the list, so bring it into view on pick
+  const pickDefense = (id) => {
+    setSelectedDefenseId(id);
+    setCounterCountLimit(25);
+    if (window.matchMedia('(max-width: 1023px)').matches) {
+      requestAnimationFrame(() => detailRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+    }
+  };
 
   // Top preset meta defenses for instant 1-click selection
   const topPresets = [
@@ -271,7 +281,7 @@ export default function MdcView({ search = '' }) {
                     <span className="mt-2 text-xs font-bold text-white truncate max-w-full">
                       {monster.thaiName || monster.name}
                     </span>
-                    <span className="text-[10px] text-cyan-400 font-mono font-bold">
+                    <span className="text-[11px] text-cyan-400 font-mono font-bold">
                       {slotIdx === 0 ? '👑 Leader' : `มอน #${slotIdx + 1}`}
                     </span>
                   </>
@@ -283,7 +293,7 @@ export default function MdcView({ search = '' }) {
                     <span className="text-xs font-bold text-slate-300">
                       {slotIdx === 0 ? 'เลือก Leader' : `เลือกตัวที่ #${slotIdx + 1}`}
                     </span>
-                    <span className="text-[10px] text-slate-500">กดเพื่อเลือก</span>
+                    <span className="text-[11px] text-slate-400">กดเพื่อเลือก</span>
                   </div>
                 )}
               </div>
@@ -299,7 +309,7 @@ export default function MdcView({ search = '' }) {
                 <span className="text-xs font-bold text-cyan-400">
                   กำลังเลือกตำแหน่ง: {activeSlotIdx === 0 ? '👑 Leader' : `ตัวที่ #${activeSlotIdx + 1}`}
                 </span>
-                <span className="text-slate-500">•</span>
+                <span className="text-slate-400">•</span>
                 <span className="text-xs text-slate-400">คลิกที่มอนสเตอร์เพื่อเลือก</span>
               </div>
               <button
@@ -357,7 +367,7 @@ export default function MdcView({ search = '' }) {
                   className="p-1.5 rounded-xl hover:bg-white/[0.08] flex flex-col items-center gap-1 transition-all cursor-pointer group"
                 >
                   <MonsterAvatar monster={m} size="sm" showStars={false} />
-                  <span className="text-[10px] font-bold text-slate-300 truncate w-full group-hover:text-cyan-400 text-center">
+                  <span className="text-[11px] font-bold text-slate-300 truncate w-full group-hover:text-cyan-400 text-center">
                     {m.thaiName || m.name}
                   </span>
                 </button>
@@ -368,7 +378,7 @@ export default function MdcView({ search = '' }) {
 
         {/* 1-Click Meta Presets */}
         <div className="pt-3 border-t border-white/[0.06]">
-          <div className="text-[11px] font-bold text-slate-400 mb-2 flex items-center gap-1.5">
+          <div className="text-xs font-bold text-slate-400 mb-2 flex items-center gap-1.5">
             <Flame className="w-3.5 h-3.5 text-rose-400" />
             <span>กดปุ่มด่วนเลือกทีมยอดนิยมในกิลด์วอร์ (1-Click Meta Presets):</span>
           </div>
@@ -381,7 +391,7 @@ export default function MdcView({ search = '' }) {
                 className="px-3 py-1.5 rounded-xl bg-white/[0.04] hover:bg-blue-600/20 text-slate-200 hover:text-white border border-white/10 hover:border-blue-500/40 text-xs font-semibold transition-all flex items-center gap-2 cursor-pointer shadow-sm"
               >
                 <span>{p.title}</span>
-                <span className="text-[10px] font-mono text-emerald-400 font-bold bg-emerald-500/20 px-1.5 py-0.5 rounded border border-emerald-500/30">
+                <span className="text-[11px] font-mono text-emerald-400 font-bold bg-emerald-500/20 px-1.5 py-0.5 rounded border border-emerald-500/30">
                   {p.count}
                 </span>
               </button>
@@ -425,10 +435,12 @@ export default function MdcView({ search = '' }) {
               const isSelected = currentDefense && team.id === currentDefense.id;
 
               return (
-                <div
+                <button
+                  type="button"
                   key={team.id}
-                  onClick={() => { setSelectedDefenseId(team.id); setCounterCountLimit(25); }}
-                  className={`p-4 rounded-2xl border transition-all cursor-pointer shadow-md ${
+                  onClick={() => pickDefense(team.id)}
+                  aria-pressed={isSelected}
+                  className={`w-full text-left p-4 rounded-2xl border transition-all cursor-pointer shadow-md ${
                     isSelected
                       ? 'bg-blue-600/15 border-blue-500/60 shadow-blue-500/15 ring-1 ring-blue-500/40'
                       : 'bg-[#0a0f19]/80 border-white/[0.06] hover:border-white/20 hover:bg-white/[0.04]'
@@ -436,14 +448,14 @@ export default function MdcView({ search = '' }) {
                 >
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-2">
-                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                      <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${
                         team.towerType === 'nat4' 
                           ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' 
                           : 'bg-purple-500/20 text-purple-300 border border-purple-500/30'
                       }`}>
                         {team.towerType === 'nat4' ? 'หอ 4 ดาว' : 'หอ 5 ดาว'}
                       </span>
-                      <span className="text-[11px] font-mono text-slate-400">
+                      <span className="text-xs font-mono text-slate-400">
                         {team.difficulty}
                       </span>
                     </div>
@@ -464,19 +476,19 @@ export default function MdcView({ search = '' }) {
                       <div className="text-xs font-bold text-white max-w-[150px] truncate">
                         {team.title}
                       </div>
-                      <span className="text-[11px] text-cyan-400 font-semibold flex items-center justify-end gap-1 mt-1">
+                      <span className="text-xs text-cyan-400 font-semibold flex items-center justify-end gap-1 mt-1">
                         ดูทีมบุกทั้งหมด <ChevronRight className="w-3.5 h-3.5" />
                       </span>
                     </div>
                   </div>
-                </div>
+                </button>
               );
             })}
           </div>
         </div>
 
         {/* Right Column: Counter Strategies */}
-        <div className="lg:col-span-7 space-y-4">
+        <div ref={detailRef} className="lg:col-span-7 space-y-4 scroll-mt-20">
           {currentDefense ? (
             <>
               {/* Selected Defense Overview Card */}
@@ -539,8 +551,8 @@ export default function MdcView({ search = '' }) {
                             <h4 className="text-sm font-black text-white truncate max-w-[200px]">
                               {counter.title}
                             </h4>
-                            <div className="text-[11px] text-slate-400 flex items-center gap-1">
-                              <UserCheck className="w-3 h-3 text-slate-500" />
+                            <div className="text-xs text-slate-400 flex items-center gap-1">
+                              <UserCheck className="w-3 h-3 text-slate-400" />
                               <span>บันทึกโดย: <strong className="text-slate-200">{counter.author}</strong></span>
                             </div>
                           </div>
@@ -553,7 +565,7 @@ export default function MdcView({ search = '' }) {
                           </div>
 
                           <div className="bg-emerald-500/10 border border-emerald-500/30 px-3 py-1 rounded-xl text-right">
-                            <div className="text-[9px] text-emerald-400 font-medium">อัตราชนะ</div>
+                            <div className="text-[10px] text-emerald-400 font-medium">ความน่าเชื่อถือ</div>
                             <div className="text-xs font-mono font-bold text-emerald-300">{counter.winRate}</div>
                           </div>
                         </div>
@@ -568,7 +580,7 @@ export default function MdcView({ search = '' }) {
                           </span>
                         </div>
 
-                        <div className="text-slate-400 text-[11px] px-1 font-sans">
+                        <div className="text-slate-400 text-xs px-1 font-sans">
                           💡 {counter.notes}
                         </div>
                       </div>
@@ -589,7 +601,7 @@ export default function MdcView({ search = '' }) {
               </div>
             </>
           ) : (
-            <div className="p-12 text-center text-slate-500 bg-[#0a0f19]/80 border border-white/[0.08] rounded-3xl">
+            <div className="p-12 text-center text-slate-400 bg-[#0a0f19]/80 border border-white/[0.08] rounded-3xl">
               ไม่พบทีมตั้งรับที่ตรงกับคำค้นหา
             </div>
           )}

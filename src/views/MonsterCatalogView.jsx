@@ -248,7 +248,7 @@ export default function MonsterCatalogView({ initialSearch = '', onNavigate }) {
                 <h3 className="font-bold text-xs sm:text-sm text-white group-hover:text-blue-400 transition-colors mt-2 truncate max-w-full">
                   {displayName}
                 </h3>
-                <p className="text-[11px] text-slate-400 truncate max-w-full mt-0.5">
+                <p className="text-xs text-slate-400 truncate max-w-full mt-0.5">
                   {engName !== displayName ? engName : family}
                 </p>
               </div>
@@ -269,7 +269,7 @@ export default function MonsterCatalogView({ initialSearch = '', onNavigate }) {
                           className="w-7 h-7 rounded border border-amber-500/60 bg-black/50 p-0.5 group-hover/sk:border-amber-400 group-hover/sk:scale-110 transition-transform"
                           onError={(e) => { e.target.style.display = 'none'; }}
                         />
-                        <span className="absolute -bottom-1 -right-1 text-[7px] font-bold bg-amber-600 text-white px-0.5 rounded leading-none">
+                        <span className="absolute -bottom-1 -right-1 text-[9px] font-bold bg-amber-600 text-white px-0.5 rounded leading-none">
                           L
                         </span>
                       </div>
@@ -293,7 +293,7 @@ export default function MonsterCatalogView({ initialSearch = '', onNavigate }) {
                             e.target.src = 'https://do9d4mpqk497d.cloudfront.net/common/images/skills36/skill_icon_0001_0_0.png';
                           }}
                         />
-                        <span className={`absolute -bottom-1 -right-1 text-[7px] font-bold px-0.5 rounded leading-none ${
+                        <span className={`absolute -bottom-1 -right-1 text-[9px] font-bold px-0.5 rounded leading-none ${
                           sk.isPassive ? 'bg-purple-600 text-white' : 'bg-[#182333] text-slate-300 border border-slate-700'
                         }`}>
                           {sk.slotLabel || `S${sidx + 1}`}
@@ -306,7 +306,7 @@ export default function MonsterCatalogView({ initialSearch = '', onNavigate }) {
 
               {/* Role label */}
               <div className="w-full mt-2 pt-1.5 border-t border-[#141d2a]">
-                <span className="text-[10px] text-slate-400 line-clamp-1">
+                <span className="text-[11px] text-slate-400 line-clamp-1">
                   {role || (monster.archetype ? `สาย ${monster.archetype}` : 'สายต่อสู้')}
                 </span>
               </div>
@@ -337,7 +337,7 @@ export default function MonsterCatalogView({ initialSearch = '', onNavigate }) {
                 <MonsterAvatar monster={selectedMonster} size="lg" />
                 <div>
                   <div className="flex items-center gap-1.5 flex-wrap">
-                    <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
+                    <span className={`px-2 py-0.5 rounded text-[11px] font-bold uppercase ${
                       selectedMonster.element === 'fire' ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30' :
                       selectedMonster.element === 'water' ? 'bg-sky-500/20 text-sky-400 border border-sky-500/30' :
                       selectedMonster.element === 'wind' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' :

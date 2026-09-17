@@ -275,7 +275,7 @@ export default function PluginCompanionView({ onNavigate }) {
             <Radio className="w-4 h-4 animate-pulse" />
           </div>
           <div>
-            <div className="text-[10px] text-slate-400 uppercase font-mono tracking-wider">สถานะการเชื่อมต่อ</div>
+            <div className="text-[11px] text-slate-400 uppercase font-mono tracking-wider">สถานะการเชื่อมต่อ</div>
             <div className="text-xs sm:text-sm font-bold text-emerald-400 flex items-center gap-1.5">
               <span>● พร้อมรับข้อมูล (Bridge Ready)</span>
             </div>
@@ -293,9 +293,9 @@ export default function PluginCompanionView({ onNavigate }) {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           {/* Step 1 */}
           <div className="bg-[#152030] border border-[#22334a] p-3.5 rounded-xl relative">
-            <div className="text-[10px] font-mono text-cyan-400">STEP 1</div>
+            <div className="text-[11px] font-mono text-cyan-400">STEP 1</div>
             <div className="text-sm font-bold text-white mt-1">📱 เกม Summoners War</div>
-            <p className="text-[11px] text-slate-400 mt-1">
+            <p className="text-xs text-slate-400 mt-1">
               ผู้เล่นต่อสู้ใน Siege, Guild War หรือลงดันเจี้ยนในเกมตามปกติบนมือถือ
             </p>
             <div className="hidden lg:block absolute -right-3 top-1/2 -translate-y-1/2 z-10 text-cyan-400 font-bold">
@@ -305,9 +305,9 @@ export default function PluginCompanionView({ onNavigate }) {
 
           {/* Step 2 */}
           <div className="bg-[#152030] border border-[#22334a] p-3.5 rounded-xl relative">
-            <div className="text-[10px] font-mono text-cyan-400">STEP 2</div>
+            <div className="text-[11px] font-mono text-cyan-400">STEP 2</div>
             <div className="text-sm font-bold text-white mt-1">🔌 SWEX Proxy</div>
-            <p className="text-[11px] text-slate-400 mt-1">
+            <p className="text-xs text-slate-400 mt-1">
               โปรแกรม Exporter ดักจับสัญญาณเน็ตเวิร์ก (Packets) ที่เกมส่งไปหา Com2uS
             </p>
             <div className="hidden lg:block absolute -right-3 top-1/2 -translate-y-1/2 z-10 text-cyan-400 font-bold">
@@ -317,9 +317,9 @@ export default function PluginCompanionView({ onNavigate }) {
 
           {/* Step 3 */}
           <div className="bg-[#152030] border border-cyan-500/40 p-3.5 rounded-xl relative shadow-md shadow-cyan-500/5">
-            <div className="text-[10px] font-mono text-cyan-300">STEP 3 (AegisLink)</div>
+            <div className="text-[11px] font-mono text-cyan-300">STEP 3 (AegisLink)</div>
             <div className="text-sm font-bold text-cyan-300 mt-1">🛡️ ปลั๊กอิน AegisLink</div>
-            <p className="text-[11px] text-slate-300 mt-1">
+            <p className="text-xs text-slate-300 mt-1">
               คัดกรองเฉพาะมอนสเตอร์บุก/ตั้งรับ ผลแพ้ชนะ และแนบ SWM Key ส่งข้ามพอร์ต
             </p>
             <div className="hidden lg:block absolute -right-3 top-1/2 -translate-y-1/2 z-10 text-cyan-400 font-bold">
@@ -329,9 +329,9 @@ export default function PluginCompanionView({ onNavigate }) {
 
           {/* Step 4 */}
           <div className="bg-[#152030] border border-emerald-500/40 p-3.5 rounded-xl shadow-md shadow-emerald-500/5">
-            <div className="text-[10px] font-mono text-emerald-400">STEP 4 (Live Platform)</div>
+            <div className="text-[11px] font-mono text-emerald-400">STEP 4 (Live Platform)</div>
             <div className="text-sm font-bold text-emerald-400 mt-1">💻 SWM Web Hub</div>
-            <p className="text-[11px] text-slate-300 mt-1">
+            <p className="text-xs text-slate-300 mt-1">
               ระบบหน้าเว็บอัปเดตสถิติ 3MDC, อัตราชนะ และวิเคราะห์การแก้ทางแบบเรียลไทม์
             </p>
           </div>
@@ -365,9 +365,9 @@ export default function PluginCompanionView({ onNavigate }) {
               >
                 <div className="text-xs font-bold text-white group-hover:text-emerald-400 flex items-center justify-between">
                   <span>⚔️ จำลอง Siege 3MDC (ชนะ)</span>
-                  <span className="text-[10px] font-mono bg-emerald-500/20 text-emerald-400 px-1.5 py-0.5 rounded">WIN</span>
+                  <span className="text-[11px] font-mono bg-emerald-500/20 text-emerald-400 px-1.5 py-0.5 rounded">WIN</span>
                 </div>
-                <div className="text-[11px] text-slate-400 mt-1">
+                <div className="text-xs text-slate-400 mt-1">
                   ส่งผลบุกแก้ทาง Seara Orion Perna สำเร็จ
                 </div>
               </button>
@@ -378,9 +378,9 @@ export default function PluginCompanionView({ onNavigate }) {
               >
                 <div className="text-xs font-bold text-white group-hover:text-rose-400 flex items-center justify-between">
                   <span>💥 จำลอง Siege 3MDC (แพ้)</span>
-                  <span className="text-[10px] font-mono bg-rose-500/20 text-rose-400 px-1.5 py-0.5 rounded">LOSE</span>
+                  <span className="text-[11px] font-mono bg-rose-500/20 text-rose-400 px-1.5 py-0.5 rounded">LOSE</span>
                 </div>
-                <div className="text-[11px] text-slate-400 mt-1">
+                <div className="text-xs text-slate-400 mt-1">
                   ส่งผลบุกแพ้ Carcano Eshir Savanah
                 </div>
               </button>
@@ -391,9 +391,9 @@ export default function PluginCompanionView({ onNavigate }) {
               >
                 <div className="text-xs font-bold text-white group-hover:text-cyan-400 flex items-center justify-between">
                   <span>💎 จำลองดรอป Giants Abyss</span>
-                  <span className="text-[10px] font-mono bg-cyan-500/20 text-cyan-400 px-1.5 py-0.5 rounded">DROP</span>
+                  <span className="text-[11px] font-mono bg-cyan-500/20 text-cyan-400 px-1.5 py-0.5 rounded">DROP</span>
                 </div>
-                <div className="text-[11px] text-slate-400 mt-1">
+                <div className="text-xs text-slate-400 mt-1">
                   ดรอปรูน Swift 6★ ส้ม ช่อง 4 SPD+18
                 </div>
               </button>
@@ -404,9 +404,9 @@ export default function PluginCompanionView({ onNavigate }) {
               >
                 <div className="text-xs font-bold text-white group-hover:text-indigo-400 flex items-center justify-between">
                   <span>👤 จำลองซิงก์ Account JSON</span>
-                  <span className="text-[10px] font-mono bg-indigo-500/20 text-indigo-400 px-1.5 py-0.5 rounded">SYNC</span>
+                  <span className="text-[11px] font-mono bg-indigo-500/20 text-indigo-400 px-1.5 py-0.5 rounded">SYNC</span>
                 </div>
-                <div className="text-[11px] text-slate-400 mt-1">
+                <div className="text-xs text-slate-400 mt-1">
                   อัปเดตมอนสเตอร์ 148 ตัว และรูน 720 เม็ด
                 </div>
               </button>
@@ -422,7 +422,7 @@ export default function PluginCompanionView({ onNavigate }) {
               </div>
               <button
                 onClick={() => setConsoleLogs([])}
-                className="text-[11px] font-mono text-slate-400 hover:text-white transition-colors"
+                className="text-xs font-mono text-slate-400 hover:text-white transition-colors"
               >
                 ล้างคอนโซล (Clear)
               </button>
@@ -430,17 +430,17 @@ export default function PluginCompanionView({ onNavigate }) {
 
             <div className="p-3 font-mono text-xs max-h-64 overflow-y-auto space-y-2 select-text">
               {consoleLogs.length === 0 ? (
-                <div className="text-slate-600 text-center py-6">คอนโซลว่างเปล่า กดปุ่มจำลองด้านบนเพื่อดูข้อมูล</div>
+                <div className="text-slate-400 text-center py-6">คอนโซลว่างเปล่า กดปุ่มจำลองด้านบนเพื่อดูข้อมูล</div>
               ) : (
                 consoleLogs.map(log => (
-                  <div key={log.id} className="border-l-2 border-emerald-500/60 pl-2.5 py-0.5 text-[11px] leading-tight">
+                  <div key={log.id} className="border-l-2 border-emerald-500/60 pl-2.5 py-0.5 text-xs leading-tight">
                     <div className="flex items-center gap-2">
-                      <span className="text-slate-500">[{log.time}]</span>
+                      <span className="text-slate-400">[{log.time}]</span>
                       <span className="text-emerald-400 font-bold">{log.type}</span>
                       <span className="text-white font-medium">{log.action}</span>
                     </div>
                     {log.details && (
-                      <div className="text-slate-400 mt-0.5 text-[10px]">{log.details}</div>
+                      <div className="text-slate-400 mt-0.5 text-[11px]">{log.details}</div>
                     )}
                   </div>
                 ))
@@ -502,7 +502,7 @@ export default function PluginCompanionView({ onNavigate }) {
               </span>
               <button
                 onClick={handleRegenerateKey}
-                className="text-[11px] text-indigo-400 hover:text-indigo-300 flex items-center gap-1"
+                className="text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1"
                 title="สร้างคีย์ความปลอดภัยใหม่"
               >
                 <RefreshCw className="w-3 h-3" />
@@ -525,7 +525,7 @@ export default function PluginCompanionView({ onNavigate }) {
                 <span>{copiedKey ? 'คัดลอกแล้ว' : 'คัดลอก'}</span>
               </button>
             </div>
-            <p className="text-[11px] text-slate-400">
+            <p className="text-xs text-slate-400">
               นำรหัสนี้ไปกรอกในช่อง <code>apiKey</code> ในหน้า Settings ของ SWEX เพื่อให้ระบบจำแนกข้อมูลเป็นของคุณ
             </p>
           </div>
@@ -570,7 +570,7 @@ export default function PluginCompanionView({ onNavigate }) {
               <div className="flex items-center gap-1.5">
                 <button
                   onClick={() => setActiveCodeTab('index.js')}
-                  className={`px-2 py-1 rounded text-[11px] font-mono transition-colors ${
+                  className={`px-2 py-1 rounded text-xs font-mono transition-colors ${
                     activeCodeTab === 'index.js' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'
                   }`}
                 >
@@ -578,7 +578,7 @@ export default function PluginCompanionView({ onNavigate }) {
                 </button>
                 <button
                   onClick={() => setActiveCodeTab('package.json')}
-                  className={`px-2 py-1 rounded text-[11px] font-mono transition-colors ${
+                  className={`px-2 py-1 rounded text-xs font-mono transition-colors ${
                     activeCodeTab === 'package.json' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'
                   }`}
                 >
@@ -589,13 +589,13 @@ export default function PluginCompanionView({ onNavigate }) {
 
             {/* Code Snippet Box */}
             <div className="relative">
-              <pre className="bg-[#090d16] border border-[#1c2738] p-3 rounded-lg text-[10px] font-mono text-slate-300 max-h-56 overflow-y-auto leading-relaxed select-text">
+              <pre className="bg-[#090d16] border border-[#1c2738] p-3 rounded-lg text-[11px] font-mono text-slate-300 max-h-56 overflow-y-auto leading-relaxed select-text">
                 {activeCodeTab === 'index.js' ? PLUGIN_INDEX_JS : PLUGIN_PACKAGE_JSON}
               </pre>
 
               <button
                 onClick={handleCopyCode}
-                className="absolute top-2 right-2 px-2.5 py-1 bg-slate-800/80 hover:bg-slate-700 text-white text-[10px] rounded font-mono flex items-center gap-1 border border-slate-600 backdrop-blur-sm transition-colors"
+                className="absolute top-2 right-2 px-2.5 py-1 bg-slate-800/80 hover:bg-slate-700 text-white text-[11px] rounded font-mono flex items-center gap-1 border border-slate-600 backdrop-blur-sm transition-colors"
               >
                 {copiedCode ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
                 <span>{copiedCode ? 'คัดลอกแล้ว' : 'คัดลอกโค้ด'}</span>
@@ -604,10 +604,10 @@ export default function PluginCompanionView({ onNavigate }) {
 
             {/* 4-Step Installation Instructions */}
             <div className="mt-3 pt-3 border-t border-[#1c2738] space-y-2 text-xs">
-              <div className="text-[11px] font-bold text-slate-300 uppercase tracking-wider font-mono">
+              <div className="text-xs font-bold text-slate-300 uppercase tracking-wider font-mono">
                 วิธีติดตั้งลงใน SWEX (4 ขั้นตอน):
               </div>
-              <ol className="list-decimal list-inside space-y-1 text-[11px] text-slate-400">
+              <ol className="list-decimal list-inside space-y-1 text-xs text-slate-400">
                 <li>เปิดโฟลเดอร์ติดตั้งของ <strong>Summoners War Exporter</strong></li>
                 <li>เข้าไปที่โฟลเดอร์ <code>plugins/</code> แล้วสร้างโฟลเดอร์ชื่อ <code>aegislink</code></li>
                 <li>บันทึกไฟล์ <code>index.js</code> และ <code>package.json</code> ลงในโฟลเดอร์นี้</li>
