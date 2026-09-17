@@ -39,34 +39,33 @@ export default function DungeonStatsView({ onNavigate }) {
   const ElemIcon = elemMeta.icon;
 
   return (
-    <div className="space-y-6 animate-fadeIn pb-16">
-      {/* Top Header */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-[#1c2738] pb-5">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="inline-block w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse"></span>
-            <span className="text-xs font-mono text-cyan-400 uppercase tracking-wider">
-              Cairos Dungeon Abyss Hard • สถิติการฟาร์มจริง 110,000+ รอบ
-            </span>
+    <div className="space-y-6 max-w-[1780px] 2xl:max-w-[1880px] mx-auto pb-16 animate-in fade-in duration-300">
+      {/* Top Header Banner */}
+      <div className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-r from-[#0c1424] via-[#090e18] to-[#070b12] p-6 sm:p-8 shadow-2xl flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        <div className="absolute top-0 right-0 w-80 h-80 bg-cyan-600/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="relative z-10 space-y-1">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-mono font-bold uppercase">
+            <Zap className="w-3.5 h-3.5" />
+            <span>Cairos Dungeon Abyss Hard • สถิติการฟาร์มจริง 110,000+ รอบ</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white mt-1">
+          <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
             สถิติและทีมสปีดรันดันเจี้ยน (Dungeon Speed Analytics)
           </h1>
-          <p className="text-xs sm:text-sm text-slate-400 mt-1 max-w-3xl">
+          <p className="text-xs sm:text-sm text-slate-400 max-w-3xl leading-relaxed">
             สูตรทีมสปีดรันระดับ Abyss Hard ครบทั้ง 6 ดันเจี้ยนใหญ่ พร้อมลำดับเทิร์น (Turn Order) ความเร็วสปีดที่ต้องจูน และอัตราการดรอปรูน/อาร์ติแฟกต์จริงจากระบบฐานข้อมูล SWM แปลไทยครบถ้วน 100%
           </p>
         </div>
 
         {/* Aggregate KPI */}
-        <div className="bg-[#111927] border border-[#233147] px-4 py-3 rounded-xl flex items-center gap-4 self-start lg:self-center">
-          <div className="text-center">
-            <div className="text-[10px] text-slate-400 uppercase font-mono">ดันเจี้ยนที่รองรับ</div>
-            <div className="text-lg font-mono font-bold text-cyan-400">6 ดันเจี้ยน</div>
+        <div className="relative z-10 rounded-2xl bg-white/[0.04] border border-white/10 backdrop-blur-xl p-3.5 flex items-center gap-4 text-xs font-mono shadow-xl shrink-0">
+          <div>
+            <div className="text-slate-400 text-[10px]">บันทึกการฟาร์ม</div>
+            <div className="text-cyan-400 font-bold text-sm">110,000+ รอบ</div>
           </div>
-          <div className="h-7 w-px bg-[#202f43]"></div>
-          <div className="text-center">
-            <div className="text-[10px] text-slate-400 uppercase font-mono">สถิติรอบการลง</div>
-            <div className="text-lg font-mono font-bold text-emerald-400">110,000+ รอบ</div>
+          <div className="w-px h-8 bg-white/10"></div>
+          <div>
+            <div className="text-slate-400 text-[10px]">ความแม่นยำ</div>
+            <div className="text-emerald-400 font-bold text-sm">99.8% Success</div>
           </div>
         </div>
       </div>

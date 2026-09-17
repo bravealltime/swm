@@ -369,54 +369,53 @@ export default function ArtifactOptimizerView({ onNavigate }) {
   }, [combatStats, currentMonster, currentAddlDmg]);
 
   return (
-    <div className="space-y-6 animate-fadeIn pb-16">
+    <div className="space-y-6 max-w-[1780px] 2xl:max-w-[1880px] mx-auto pb-16 animate-in fade-in duration-300">
       {/* Top Banner */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-[#1c2738] pb-5">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="inline-block w-2.5 h-2.5 rounded-full bg-orange-500 animate-pulse"></span>
-            <span className="text-xs font-mono text-orange-400 uppercase tracking-wider">
-              SWM 7.8 Tactical Engine • Artifact Additional Damage Optimizer
-            </span>
+      <div className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-r from-[#0c1424] via-[#090e18] to-[#070b12] p-6 sm:p-8 shadow-2xl flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        <div className="absolute top-0 right-0 w-80 h-80 bg-orange-600/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="relative z-10 space-y-1">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-400 text-xs font-mono font-bold uppercase">
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Artifact Tactical Engine • True Damage Optimizer</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white mt-1 flex items-center gap-3">
-            <span>💥 ระบบจำลองและค้นหาอาร์ติแฟกต์ดาเมจเสริม (Additional Damage Optimizer)</span>
+          <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
+            ระบบจำลองและค้นหาอาร์ติแฟกต์ดาเมจเสริม
           </h1>
-          <p className="text-xs sm:text-sm text-slate-400 mt-1 max-w-3xl">
+          <p className="text-xs sm:text-sm text-slate-400 max-w-3xl leading-relaxed">
             ค้นหาคู่ผสมอาร์ติแฟกต์ (ธาตุ + สาย) ที่ให้ค่า <strong>Additional Damage (ดาเมจเสริมแท้ต่อฮิต)</strong> สูงสุด โดยคำนวณรวมทั้ง Base Stats, สเตตัสรูน, เสาอารีน่า (Towers), สกิลหัวหน้าทีม, และบัฟในสมรภูมิจริง
           </p>
         </div>
 
         {/* Global Feature Badge */}
-        <div className="bg-[#111927] border border-orange-500/30 px-4 py-2.5 rounded-xl flex items-center gap-3 self-start lg:self-center shadow-lg shadow-orange-500/5">
-          <div className="w-9 h-9 rounded-lg bg-orange-500/20 border border-orange-500/40 flex items-center justify-center text-orange-400 font-bold">
+        <div className="relative z-10 rounded-2xl bg-white/[0.04] border border-white/10 backdrop-blur-xl p-3.5 flex items-center gap-3 self-start lg:self-center shadow-xl">
+          <div className="w-9 h-9 rounded-xl bg-orange-500/20 border border-orange-500/40 flex items-center justify-center text-orange-400 font-bold">
             <Flame className="w-5 h-5 animate-pulse" />
           </div>
           <div>
-            <div className="text-[10px] font-mono text-orange-400 uppercase">ฟีเจอร์ใหม่ล่าสุด</div>
-            <div className="text-xs sm:text-sm font-bold text-white">Full SWM Integration</div>
+            <div className="text-[10px] font-mono text-orange-400 uppercase font-bold">True Damage Math</div>
+            <div className="text-xs sm:text-sm font-bold text-white">Full SWM Engine</div>
           </div>
         </div>
       </div>
 
       {/* Mode Switcher Tabs */}
-      <div className="flex items-center gap-2 p-1.5 rounded-xl bg-[#111927] border border-[#1e2a3c]">
+      <div className="flex items-center gap-1.5 p-1.5 rounded-2xl bg-[#0a0f19]/80 border border-white/[0.08] backdrop-blur-xl shadow-lg">
         <button
           onClick={() => setActiveMode('calc')}
-          className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+          className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
             activeMode === 'calc'
-              ? 'bg-orange-600 text-white shadow-md shadow-orange-600/30'
-              : 'text-slate-400 hover:text-white'
+              ? 'bg-orange-600 text-white shadow-lg shadow-orange-600/25'
+              : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
           }`}
         >
           💥 เครื่องจำลองดาเมจเสริมละเอียด (Damage Optimizer)
         </button>
         <button
           onClick={() => setActiveMode('finder')}
-          className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+          className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
             activeMode === 'finder'
-              ? 'bg-amber-500 text-slate-950 font-black shadow-md shadow-amber-500/30'
-              : 'text-slate-400 hover:text-white'
+              ? 'bg-amber-500 text-slate-950 font-black shadow-lg shadow-amber-500/25'
+              : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
           }`}
         >
           🔍 ค้นหามอนสเตอร์ตามออปชั่นอาร์ติแฟกต์ (Monster Finder)

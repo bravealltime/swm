@@ -79,33 +79,34 @@ export default function PromoCodesView() {
   };
 
   return (
-    <div className="space-y-6 pb-12 relative">
+    <div className="space-y-6 max-w-[1780px] 2xl:max-w-[1880px] mx-auto pb-16 animate-in fade-in duration-300 relative">
       {/* Toast */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-5 py-3.5 rounded-xl bg-blue-600 text-white shadow-xl text-sm font-bold animate-in slide-in-from-bottom duration-200">
+        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-5 py-3.5 rounded-2xl bg-blue-600 text-white shadow-2xl text-sm font-bold animate-in slide-in-from-bottom duration-200 backdrop-blur-md">
           <CheckCircle2 className="w-5 h-5 text-emerald-300" />
           <span>{toastMessage}</span>
         </div>
       )}
 
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2 text-xs font-bold text-emerald-400 mb-1">
-            <Gift className="w-4 h-4" />
-            Summoners War - Official Promo Codes
+      {/* Header Banner */}
+      <div className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-r from-[#0c1424] via-[#090e18] to-[#070b12] p-6 sm:p-8 shadow-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="absolute top-0 right-0 w-80 h-80 bg-emerald-600/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="relative z-10 space-y-1">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono font-bold uppercase">
+            <Gift className="w-3.5 h-3.5" />
+            <span>Summoners War • Official Promo Codes</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+          <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
             ศูนย์รวมโค้ดแจกไอเทมฟรี (ภาษาไทย)
           </h1>
-          <p className="text-sm text-slate-300 mt-1 max-w-2xl leading-relaxed">
+          <p className="text-xs sm:text-sm text-slate-400 max-w-2xl leading-relaxed">
             รวบรวมโค้ดแจก คัมภีร์เวทมนตร์, หินซัมมอน, รูน, พลังงาน และมานา ที่ยังใช้งานได้อยู่ กดปุ่มเพื่อคัดลอกหรือเปิดหน้ารับของรางวัลผ่าน Hive ID ได้ทันที
           </p>
         </div>
 
         <button
           onClick={() => setShowAddModal(true)}
-          className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-bold shadow-sm transition-all flex items-center gap-2 cursor-pointer self-start sm:self-auto"
+          className="relative z-10 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-bold shadow-lg shadow-emerald-600/25 transition-all flex items-center gap-2 cursor-pointer self-start sm:self-auto"
         >
           <Plus className="w-4 h-4" />
           แชร์โค้ดใหม่
@@ -113,25 +114,25 @@ export default function PromoCodesView() {
       </div>
 
       {/* Codes Table / Cards */}
-      <div className="bg-[#101724] border border-[#1d2b3f] rounded-2xl overflow-hidden shadow-sm">
-        <div className="p-4 sm:p-5 border-b border-[#1d2b3f] flex items-center justify-between bg-[#0b1019]">
-          <div className="flex items-center gap-2">
+      <div className="rounded-3xl border border-white/[0.08] bg-[#0a0f19]/80 backdrop-blur-xl overflow-hidden shadow-2xl">
+        <div className="p-5 border-b border-white/[0.08] flex items-center justify-between bg-white/[0.02]">
+          <div className="flex items-center gap-2.5">
             <span className="text-sm sm:text-base font-bold text-white">โค้ดที่ยังใช้งานได้</span>
-            <span className="px-2.5 py-0.5 rounded-full bg-emerald-600/20 text-emerald-300 text-xs font-mono font-bold border border-emerald-500/30">
+            <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-mono font-black border border-emerald-500/30">
               {codes.length} โค้ด
             </span>
           </div>
           <span className="text-xs text-slate-400 flex items-center gap-1.5">
-            <Clock className="w-4 h-4 text-blue-400" />
+            <Clock className="w-4 h-4 text-emerald-400" />
             ตรวจสอบล่าสุด: วันนี้
           </span>
         </div>
 
-        <div className="divide-y divide-[#1d2b3f]">
+        <div className="divide-y divide-white/[0.04]">
           {codes.map((item) => (
             <div 
               key={item.id}
-              className="p-4 sm:p-5 hover:bg-[#131d2c] transition-colors flex flex-col md:flex-row md:items-center justify-between gap-4"
+              className="p-5 hover:bg-white/[0.03] transition-colors flex flex-col md:flex-row md:items-center justify-between gap-4"
             >
               {/* Code & Copy */}
               <div className="space-y-1 min-w-[240px]">

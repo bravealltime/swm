@@ -253,23 +253,24 @@ export default function DraftExplorerView({ onNavigate }) {
   }, [blueTeam, redTeam, blueBan, redBan]);
 
   return (
-    <div className="space-y-6 pb-12 animate-fadeIn">
+    <div className="space-y-6 max-w-[1780px] 2xl:max-w-[1880px] mx-auto pb-16 animate-in fade-in duration-300">
       
       {/* 1. Header Banner */}
-      <div className="bg-gradient-to-br from-[#101a2d] via-[#0d1424] to-[#090e18] border border-[#1b2b42] rounded-2xl p-5 sm:p-6 shadow-xl space-y-4">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-r from-[#0c1424] via-[#090e18] to-[#070b12] p-6 sm:p-8 shadow-2xl space-y-4">
+        <div className="absolute top-0 right-0 w-80 h-80 bg-purple-600/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2 text-xs font-mono text-amber-400 uppercase tracking-wider mb-1">
-              <Sparkles className="w-4 h-4 text-amber-400" />
-              <span>SWM Draft Engine • Inspired by Lucksack.gg</span>
-              <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] font-black">
+            <div className="flex items-center gap-2 text-xs font-mono text-purple-400 uppercase tracking-wider mb-1">
+              <Sparkles className="w-4 h-4 text-purple-400" />
+              <span>SWM Draft Engine • Pro Tournament Simulator</span>
+              <span className="px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30 text-[10px] font-black">
                 RTA S38 LIVE
               </span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+            <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
               RTA Draft Explorer & Draft Advisor
             </h1>
-            <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-3xl leading-relaxed">
+            <p className="text-xs sm:text-sm text-slate-400 mt-1 max-w-3xl leading-relaxed">
               เครื่องมือจำลอง Pick & Ban 5v5 ระดับทัวร์นาเมนต์การ์เดียน วิเคราะห์โอกาสชนะ คำนวณ Synergy ทีม และแนะนำตัวที่ควรแบน / ตัวเคาน์เตอร์แบบเรียลไทม์
             </p>
           </div>
@@ -277,23 +278,23 @@ export default function DraftExplorerView({ onNavigate }) {
           <div className="flex items-center gap-2 shrink-0">
             <button
               onClick={handleResetDraft}
-              className="px-3 py-2 rounded-xl bg-[#141e2e] hover:bg-[#1b283d] text-slate-300 hover:text-white border border-[#22334a] text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-md"
+              className="px-3.5 py-2 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] text-slate-300 hover:text-white border border-white/10 text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-md"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               <span>ล้างดราฟต์ใหม่</span>
             </button>
             <button
               onClick={() => onNavigate('rta')}
-              className="px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-lg shadow-blue-600/30"
+              className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-lg shadow-blue-600/25"
             >
-              <Trophy className="w-3.5 h-3.5" />
+              <Trophy className="w-3.5 h-3.5 text-amber-400" />
               <span>ดูสถิติ RTA S38</span>
             </button>
           </div>
         </div>
 
         {/* Preset Templates */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs border-t border-[#182638] pt-3">
+        <div className="relative z-10 flex items-center gap-2 overflow-x-auto pb-1 text-xs border-t border-white/[0.06] pt-3">
           <span className="font-bold text-slate-400 shrink-0 flex items-center gap-1">
             <Flame className="w-3.5 h-3.5 text-amber-400" />
             ดราฟต์ตัวอย่างการ์เดียน:
@@ -302,7 +303,7 @@ export default function DraftExplorerView({ onNavigate }) {
             <button
               key={idx}
               onClick={() => handleLoadPreset(preset)}
-              className="px-2.5 py-1.5 rounded-lg bg-[#0e1624] hover:bg-blue-950/60 hover:border-blue-500/50 text-slate-300 hover:text-white border border-[#1b283d] text-[11px] font-semibold whitespace-nowrap transition-all cursor-pointer"
+              className="px-3 py-1.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] hover:border-purple-500/40 text-slate-300 hover:text-white border border-white/[0.06] text-[11px] font-semibold whitespace-nowrap transition-all cursor-pointer shadow-sm"
             >
               {preset.name}
             </button>
@@ -311,10 +312,10 @@ export default function DraftExplorerView({ onNavigate }) {
       </div>
 
       {/* 2. Win Probability Bar */}
-      <div className="bg-[#0c1320] border border-[#1b2b42] rounded-2xl p-4 sm:p-5 shadow-lg space-y-3">
+      <div className="rounded-3xl border border-white/[0.08] bg-[#0a0f19]/80 backdrop-blur-xl p-5 sm:p-6 shadow-xl space-y-3">
         <div className="flex items-center justify-between text-xs font-bold">
           <div className="flex items-center gap-2 text-cyan-400">
-            <span className="w-3 h-3 rounded-full bg-cyan-500 animate-pulse"></span>
+            <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse"></span>
             <span>ทีมคุณ (BLUE TEAM)</span>
             <span className="text-base sm:text-lg font-mono font-black text-cyan-300">
               {analysis.blueWinProb}%
@@ -331,12 +332,12 @@ export default function DraftExplorerView({ onNavigate }) {
               {analysis.redWinProb}%
             </span>
             <span>คู่แข่ง (RED TEAM)</span>
-            <span className="w-3 h-3 rounded-full bg-rose-500 animate-pulse"></span>
+            <span className="w-2.5 h-2.5 rounded-full bg-rose-400 animate-pulse"></span>
           </div>
         </div>
 
         {/* Visual Progress Bar */}
-        <div className="w-full h-3 rounded-full bg-slate-900 overflow-hidden flex p-0.5 border border-[#1f3047]">
+        <div className="w-full h-3 rounded-full bg-white/[0.04] overflow-hidden flex p-0.5 border border-white/10">
           <div 
             className="h-full rounded-l-full bg-gradient-to-r from-cyan-600 to-blue-500 transition-all duration-500 shadow-md shadow-cyan-500/30"
             style={{ width: `${analysis.blueWinProb}%` }}
@@ -352,10 +353,10 @@ export default function DraftExplorerView({ onNavigate }) {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         
         {/* Blue Team (5 slots) */}
-        <div className="bg-[#0b121e] border-2 border-cyan-500/30 rounded-2xl p-4 sm:p-5 shadow-xl space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-[#18273c]">
+        <div className="rounded-3xl border border-cyan-500/30 bg-[#0a0f19]/80 backdrop-blur-xl p-5 sm:p-6 shadow-xl space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
             <div className="flex items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-xs font-black">
+              <span className="px-3 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-xs font-black">
                 BLUE TEAM (คุณ)
               </span>
               <span className="text-xs text-slate-400">เลือก 5 มอนสเตอร์</span>

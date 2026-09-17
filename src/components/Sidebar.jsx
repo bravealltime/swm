@@ -104,26 +104,30 @@ export default function Sidebar({
 
   return (
     <>
-      {/* Mobile Drawer Backdrop */}
+      {/* Slide-over Drawer Backdrop */}
       {isOpen && (
         <div 
-          className="fixed inset-0 bg-black/80 backdrop-blur-xs z-40 lg:hidden transition-opacity"
+          className="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 transition-opacity animate-in fade-in duration-200"
           onClick={onClose}
         />
       )}
 
-      {/* Sidebar Navigation Panel */}
+      {/* Sidebar Navigation Drawer */}
       <aside 
-        className={`fixed top-15 sm:top-16 bottom-0 left-0 w-72 bg-[#0a0f18] border-r border-[#172233] z-50 flex flex-col transition-transform duration-200 ease-in-out lg:translate-x-0 ${
-          isOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full'
+        className={`fixed top-0 bottom-0 left-0 w-80 max-w-[85vw] bg-[#0a0f18]/98 backdrop-blur-xl border-r border-[#1e293b] z-50 flex flex-col transition-transform duration-300 ease-out shadow-2xl ${
+          isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        {/* Mobile Header Inside Drawer */}
-        <div className="flex lg:hidden items-center justify-between p-4 border-b border-[#172233]">
-          <SwmLogo size="sm" />
+        {/* Drawer Header */}
+        <div className="flex items-center justify-between p-4 border-b border-[#1e293b] bg-[#0c1322]/80">
+          <div className="flex items-center gap-2.5">
+            <SwmLogo size="sm" />
+            <span className="text-xs font-bold text-slate-300 tracking-wide uppercase">สารบัญระบบทั้งหมด</span>
+          </div>
           <button 
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white bg-[#0f1726] border border-[#1d2b3f] cursor-pointer"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-white bg-[#131c2d] border border-[#24354f] hover:border-slate-500 transition-colors cursor-pointer"
+            title="ปิดเมนู"
           >
             <X className="w-4 h-4" />
           </button>

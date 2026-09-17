@@ -130,37 +130,38 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
   const historyLine = cutoffData.history || [];
 
   return (
-    <div className="space-y-6 pb-12 animate-fadeIn">
-      {/* Header */}
-      <div className="border-b border-[#1c2738] pb-5 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2 text-xs font-mono text-cyan-400 uppercase tracking-wider mb-1">
-            <Trophy className="w-4 h-4" />
-            SWRT Intelligence Core • World Arena (RTA) Season {tierData.season} ({tierData.version})
+    <div className="space-y-6 max-w-[1780px] 2xl:max-w-[1880px] mx-auto pb-16 animate-in fade-in duration-300">
+      {/* Header Banner */}
+      <div className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-r from-[#0c1424] via-[#090e18] to-[#070b12] p-6 sm:p-8 shadow-2xl flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        <div className="absolute top-0 right-0 w-80 h-80 bg-purple-600/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="relative z-10 space-y-1">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-400 text-xs font-mono font-bold uppercase">
+            <Trophy className="w-3.5 h-3.5" />
+            <span>SWRT Intelligence Core • World Arena RTA Season {tierData.season}</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-2.5">
+          <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight flex items-center gap-2.5">
             <span>วิเคราะห์ RTA อารีน่าโลก & สถิติ SWRT</span>
-            <span className="px-2 py-0.5 rounded bg-blue-600 text-white text-xs font-mono font-bold">
-              LIVE 2026
+            <span className="px-2.5 py-0.5 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 text-xs font-mono font-black">
+              S38 LIVE
             </span>
           </h1>
-          <p className="text-sm text-slate-400 mt-1 max-w-3xl leading-relaxed">
+          <p className="text-xs sm:text-sm text-slate-400 max-w-3xl leading-relaxed">
             ฐานข้อมูลจัดอันดับ RTA ฉบับสมบูรณ์: Tier List เมต้าซีซั่น 38, อัตรา Pick / Ban / Win จาก 6.8 ล้านแมตช์, คะแนนตัดแรงค์ G1-G3 เรียลไทม์ และรีเพลย์สดระดับ Guardian
           </p>
         </div>
 
         {/* Global Telemetry Card */}
-        <div className="bg-[#101724] border border-[#1d2b3f] p-3 rounded-xl flex items-center gap-4 self-start lg:self-auto text-xs font-mono shadow-md">
+        <div className="relative z-10 rounded-2xl bg-white/[0.04] border border-white/10 backdrop-blur-xl p-3.5 flex items-center gap-4 self-start lg:self-auto text-xs font-mono shadow-xl">
           <div>
             <div className="text-slate-400 text-[10px]">ซีซั่นปัจจุบัน</div>
             <div className="text-cyan-400 font-bold text-sm">Season {tierData.season}</div>
           </div>
-          <div className="w-px h-8 bg-[#1d2b3f]"></div>
+          <div className="w-px h-8 bg-white/10"></div>
           <div>
             <div className="text-slate-400 text-[10px]">แพตช์ตัวเกม</div>
             <div className="text-purple-400 font-bold text-sm">{tierData.version}</div>
           </div>
-          <div className="w-px h-8 bg-[#1d2b3f]"></div>
+          <div className="w-px h-8 bg-white/10"></div>
           <div>
             <div className="text-slate-400 text-[10px]">แมตช์ที่เก็บสถิติ</div>
             <div className="text-emerald-400 font-bold text-sm">6.8M+ แมตช์</div>
@@ -169,16 +170,16 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
       </div>
 
       {/* Main Tabs Navigation */}
-      <div className="flex items-center gap-1.5 p-1.5 rounded-2xl bg-[#0e1522] border border-[#1d2b3f] overflow-x-auto shadow-lg">
+      <div className="flex items-center gap-1.5 p-1.5 rounded-2xl bg-[#0a0f19]/80 border border-white/[0.08] backdrop-blur-xl overflow-x-auto shadow-lg">
         <button
           onClick={() => setActiveTab('tierlist')}
           className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap ${
             activeTab === 'tierlist'
-              ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30'
-              : 'text-slate-300 hover:text-white hover:bg-[#152030]'
+              ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/25'
+              : 'text-slate-300 hover:text-white hover:bg-white/[0.04]'
           }`}
         >
-          <Trophy className="w-4 h-4" />
+          <Trophy className="w-4 h-4 text-amber-400" />
           <span>🏆 Tier List มอนสเตอร์ RTA (Season 38)</span>
         </button>
 
@@ -186,11 +187,11 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
           onClick={() => setActiveTab('stats')}
           className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap ${
             activeTab === 'stats'
-              ? 'bg-purple-600 text-white shadow-md shadow-purple-600/30'
-              : 'text-slate-300 hover:text-white hover:bg-[#152030]'
+              ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/25'
+              : 'text-slate-300 hover:text-white hover:bg-white/[0.04]'
           }`}
         >
-          <BarChart3 className="w-4 h-4" />
+          <BarChart3 className="w-4 h-4 text-purple-400" />
           <span>📊 สถิติเมต้า (Pick / Win / Ban Rate)</span>
         </button>
 
@@ -198,11 +199,11 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
           onClick={() => setActiveTab('replays')}
           className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap ${
             activeTab === 'replays'
-              ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/30'
-              : 'text-slate-300 hover:text-white hover:bg-[#152030]'
+              ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/25'
+              : 'text-slate-300 hover:text-white hover:bg-white/[0.04]'
           }`}
         >
-          <Swords className="w-4 h-4" />
+          <Swords className="w-4 h-4 text-emerald-400" />
           <span>⚔️ รีเพลย์การต่อสู้สดระดับ Guardian ({replaysData.length})</span>
         </button>
 
@@ -210,11 +211,11 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
           onClick={() => setActiveTab('cutoffs')}
           className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap ${
             activeTab === 'cutoffs'
-              ? 'bg-amber-600 text-white shadow-md shadow-amber-600/30'
-              : 'text-slate-300 hover:text-white hover:bg-[#152030]'
+              ? 'bg-amber-600 text-white shadow-lg shadow-amber-600/25'
+              : 'text-slate-300 hover:text-white hover:bg-white/[0.04]'
           }`}
         >
-          <Target className="w-4 h-4" />
+          <Target className="w-4 h-4 text-amber-400" />
           <span>🎯 คะแนนตัดแรงค์ RTA (Rank Cutoffs)</span>
         </button>
       </div>

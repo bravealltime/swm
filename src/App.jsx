@@ -28,6 +28,7 @@ import MetaDashboardView from './views/MetaDashboardView';
 import SiegeTournamentView from './views/SiegeTournamentView';
 import PlayerTrackerView from './views/PlayerTrackerView';
 import SwmLogo from './components/SwmLogo';
+import { Home, Shield, Trophy, Search, Menu } from 'lucide-react';
 
 export default function App() {
   const [currentView, setCurrentView] = useState('dashboard');
@@ -108,11 +109,12 @@ export default function App() {
         onOpenSearch={() => setIsSearchOpen(true)}
         mobileMenuOpen={mobileMenuOpen}
         setMobileMenuOpen={setMobileMenuOpen}
+        viewParams={viewParams}
       />
 
-      {/* Main Layout Body - Responsive for 21:9 Ultrawide, 16:9 Desktop, 4:3 Tablets, Mobile */}
+      {/* Main Layout Body - Horizon Full Width */}
       <div className="flex-1 flex w-full max-w-[1720px] 2xl:max-w-[1850px] mx-auto">
-        {/* Hierarchical Sidebar */}
+        {/* On-Demand Slide-over Sidebar Drawer */}
         <Sidebar
           currentView={currentView}
           onNavigate={handleNavigate}
@@ -120,8 +122,8 @@ export default function App() {
           onClose={() => setMobileMenuOpen(false)}
         />
 
-        {/* Content View Area */}
-        <main className="flex-1 lg:pl-72 w-full min-w-0 px-4 sm:px-6 lg:px-8 py-6">
+        {/* Content View Area - Centered & Spacious Full Width */}
+        <main className="flex-1 w-full min-w-0 px-3 sm:px-6 lg:px-8 py-6 pb-24 md:pb-8">
           {renderView()}
         </main>
       </div>
@@ -152,6 +154,51 @@ export default function App() {
           </div>
         </div>
       </footer>
+
+      {/* Mobile Bottom Navigation Dock */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#090d16]/95 backdrop-blur-lg border-t border-[#1e293b] px-3 py-1.5 flex items-center justify-around shadow-[0_-8px_20px_rgba(0,0,0,0.6)]">
+        <button
+          onClick={() => handleNavigate('dashboard')}
+          className={`flex flex-col items-center gap-0.5 py-1 px-2.5 rounded-lg text-[10px] font-bold transition-colors cursor-pointer ${
+            currentView === 'dashboard' ? 'text-blue-400' : 'text-slate-400 hover:text-slate-200'
+          }`}
+        >
+          <Home className="w-4 h-4" />
+          <span>หน้าแรก</span>
+        </button>
+        <button
+          onClick={() => handleNavigate('3mdc')}
+          className={`flex flex-col items-center gap-0.5 py-1 px-2.5 rounded-lg text-[10px] font-bold transition-colors cursor-pointer ${
+            currentView === '3mdc' ? 'text-blue-400' : 'text-slate-400 hover:text-slate-200'
+          }`}
+        >
+          <Shield className="w-4 h-4" />
+          <span>3MDC</span>
+        </button>
+        <button
+          onClick={() => handleNavigate('rta')}
+          className={`flex flex-col items-center gap-0.5 py-1 px-2.5 rounded-lg text-[10px] font-bold transition-colors cursor-pointer ${
+            ['rta', 'player-tracker', 'draft-explorer', 'rta-synergies', 'meta-dashboard'].includes(currentView) ? 'text-amber-400' : 'text-slate-400 hover:text-slate-200'
+          }`}
+        >
+          <Trophy className="w-4 h-4" />
+          <span>RTA</span>
+        </button>
+        <button
+          onClick={() => setIsSearchOpen(true)}
+          className="flex flex-col items-center gap-0.5 py-1 px-2.5 rounded-lg text-[10px] font-bold text-slate-400 hover:text-slate-200 transition-colors cursor-pointer"
+        >
+          <Search className="w-4 h-4" />
+          <span>ค้นหา</span>
+        </button>
+        <button
+          onClick={() => setMobileMenuOpen(true)}
+          className="flex flex-col items-center gap-0.5 py-1 px-2.5 rounded-lg text-[10px] font-bold text-slate-400 hover:text-slate-200 transition-colors cursor-pointer"
+        >
+          <Menu className="w-4 h-4" />
+          <span>เมนู</span>
+        </button>
+      </nav>
 
       {/* Global Command Palette (Ctrl+K) */}
       <CommandPalette

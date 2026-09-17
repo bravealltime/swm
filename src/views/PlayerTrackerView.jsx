@@ -197,23 +197,23 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
   };
 
   return (
-    <div className="space-y-6 max-w-[1720px] mx-auto pb-12">
+    <div className="space-y-6 max-w-[1780px] 2xl:max-w-[1880px] mx-auto pb-16 animate-in fade-in duration-300">
       {/* 1. Header & Title Banner */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-gradient-to-r from-[#0c1424] via-[#111c33] to-[#0c1424] p-6 rounded-2xl border border-blue-900/40 shadow-xl relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-r from-[#0c1424] via-[#090e18] to-[#070b12] p-6 sm:p-8 shadow-2xl flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="relative z-10">
           <div className="flex items-center gap-3 mb-2">
-            <div className="p-2.5 rounded-xl bg-blue-500/10 border border-blue-500/30 text-blue-400">
+            <div className="p-2.5 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-400">
               <Search className="w-6 h-6" />
             </div>
             <div>
-              <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-2 flex-wrap">
-                ค้นหาสถิติผู้เล่น <span className="text-blue-400">Player Tracker</span>
-                <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
-                  ดึงรูปโปรไฟล์ & สถิติแบบ Lucksack.gg
+              <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight flex items-center gap-3 flex-wrap">
+                ค้นหาสถิติผู้เล่น <span className="bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">Player Tracker</span>
+                <span className="text-xs font-semibold px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                  Lucksack.gg Real Data
                 </span>
               </h1>
-              <p className="text-sm text-slate-400">
+              <p className="text-xs sm:text-sm text-slate-400 mt-1">
                 ระบบค้นหาสถิติผู้เล่น RTA พร้อมรูปโปรไฟล์จริง สถิติดราฟต์ 5v5 และมอนสเตอร์คู่ใจทุกระดับแรงค์
               </p>
             </div>
@@ -224,20 +224,20 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
         <div className="flex items-center gap-3 relative z-10">
           <button
             onClick={copyShareLink}
-            className="px-4 py-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 text-xs font-semibold flex items-center gap-2 transition-colors cursor-pointer"
+            className="px-4 py-2.5 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] text-slate-200 hover:text-white border border-white/10 text-xs font-bold flex items-center gap-2 transition-all cursor-pointer"
           >
-            {copiedLink ? <CheckCircle2 className="w-4 h-4 text-emerald-400" /> : <Share2 className="w-4 h-4 text-blue-400" />}
+            {copiedLink ? <CheckCircle2 className="w-4 h-4 text-emerald-400" /> : <Share2 className="w-4 h-4 text-amber-400" />}
             {copiedLink ? 'คัดลอกลิงก์แล้ว!' : 'แชร์โปรไฟล์นี้'}
           </button>
         </div>
       </div>
 
       {/* 2. Search Area & Autocomplete Modal */}
-      <div className="relative z-50 bg-[#0f172a]/95 backdrop-blur-md rounded-2xl border border-slate-800 p-4 sm:p-5 shadow-xl space-y-4">
+      <div className="relative z-50 rounded-3xl border border-white/[0.08] bg-[#0a0f19]/80 backdrop-blur-xl p-5 sm:p-6 shadow-xl space-y-4">
         {/* Backdrop overlay to click outside and dismiss dropdown */}
         {isSearchFocused && searchQuery.trim() && (
           <div
-            className="fixed inset-0 bg-black/60 backdrop-blur-xs z-40"
+            className="fixed inset-0 bg-black/70 backdrop-blur-xs z-40"
             onClick={() => setIsSearchFocused(false)}
           />
         )}
@@ -394,10 +394,10 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
       </div>
 
       {/* 3. Player Profile Overview Hero Card with Real Profile Picture */}
-      <div className="bg-[#0f172a] rounded-2xl border border-slate-800 p-6 shadow-xl relative z-10 overflow-hidden">
+      <div className="rounded-3xl border border-white/[0.08] bg-[#0a0f19]/90 backdrop-blur-xl p-6 sm:p-8 shadow-2xl relative z-10 overflow-hidden">
         {/* If Custom user-searched profile, show interactive Rank Estimator Switcher */}
         {activePlayer.id.startsWith('custom-') && (
-          <div className="mb-4 p-3.5 bg-blue-950/30 border border-blue-500/30 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <div className="mb-4 p-3.5 bg-blue-600/10 border border-blue-500/30 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
             <div className="flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
               <div className="text-xs text-slate-200">
@@ -565,18 +565,18 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
       {activeTab === 'overview' && (
         <div className="space-y-6">
           {/* Signature Monsters Pool */}
-          <div className="bg-[#0f172a] rounded-2xl border border-slate-800 p-6 shadow-xl space-y-4">
+          <div className="rounded-3xl border border-white/[0.08] bg-[#0a0f19]/85 backdrop-blur-xl p-6 sm:p-8 shadow-2xl space-y-5">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
                 <h2 className="text-lg font-black text-white flex items-center gap-2">
                   <Flame className="w-5 h-5 text-amber-400" />
                   มอนสเตอร์คู่ใจที่หยิบบ่อยที่สุด (Signature Monster Pool)
                 </h2>
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-slate-400 mt-0.5">
                   วิเคราะห์จากอัตราการหยิบ (Pick Share %) และ Win Rate เฉพาะตัวของ {activePlayer.name} ({activePlayer.rankTier})
                 </p>
               </div>
-              <span className="text-xs font-semibold px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-slate-300">
+              <span className="text-xs font-semibold px-3 py-1 rounded-full bg-white/[0.05] border border-white/10 text-slate-300">
                 สถิติเฉพาะตัวผู้เล่นนี้
               </span>
             </div>
@@ -586,7 +586,7 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
               {activePlayer.signatureMonsters.map((mon, index) => (
                 <div
                   key={mon.name + index}
-                  className="bg-[#0a0f18] hover:bg-[#121c2e] p-4 rounded-xl border border-slate-800 hover:border-blue-500/40 transition-all group flex flex-col justify-between space-y-3"
+                  className="rounded-2xl bg-white/[0.03] hover:bg-white/[0.06] p-4 border border-white/[0.06] hover:border-amber-500/40 transition-all group flex flex-col justify-between space-y-3 shadow-lg"
                 >
                   {/* Top Monster Header */}
                   <div className="flex items-center gap-3">
