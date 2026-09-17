@@ -19,6 +19,8 @@ import ArtifactOptimizerView from './views/ArtifactOptimizerView';
 import RtaAnalyticsView from './views/RtaAnalyticsView';
 import WhereToUseView from './views/WhereToUseView';
 import SiegeCalculatorView from './views/SiegeCalculatorView';
+import MdcStatsView from './views/MdcStatsView';
+import GameGuidesView from './views/GameGuidesView';
 import SwmLogo from './components/SwmLogo';
 
 export default function App() {
@@ -41,6 +43,10 @@ export default function App() {
         return <MdcView onNavigate={handleNavigate} {...viewParams} />;
       case 'where2use':
         return <WhereToUseView onNavigate={handleNavigate} {...viewParams} />;
+      case '3mdc-stats':
+        return <MdcStatsView onNavigate={handleNavigate} {...viewParams} />;
+      case 'game-guides':
+        return <GameGuidesView onNavigate={handleNavigate} {...viewParams} />;
       case 'siege-calc':
       case 'siege-calculator':
         return <SiegeCalculatorView onNavigate={handleNavigate} {...viewParams} />;

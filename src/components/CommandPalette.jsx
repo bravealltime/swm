@@ -38,6 +38,8 @@ export default function CommandPalette({ isOpen, onClose, onNavigate }) {
 
   const quickTools = [
     { id: 'where2use', name: 'ใช้มอนสเตอร์ตัวนี้ที่ไหนดี? (Where to Use)', desc: 'ตรวจสอบการใช้งานในทีมรับ, ทีมบุก, ดันเจี้ยน และ RTA', icon: Shield, view: 'where2use' },
+    { id: '3mdc-stats', name: 'ศูนย์สถิติและรายงาน 3MDC (Statistics Hub)', desc: 'รวมรายงานเมต้า, สถิติวินเรท, และ Battle Log Performance', icon: Trophy, view: '3mdc-stats' },
+    { id: 'game-guides', name: 'สารบัญคู่มือกลยุทธ์เกม (Game Guides)', desc: 'คู่มือ 10 ดันเจี้ยน Abyss Hard และแผน Siege', icon: BookOpen, view: 'game-guides' },
     { id: 'siege-calc', name: 'เครื่องคำนวณคะแนน Siege (Siege Calculator)', desc: 'คำนวณแต้มต่อนาทีและเวลาชนะ 20,000 แต้ม', icon: Gauge, view: 'siege-calculator' },
     { id: 'rta', name: 'วิเคราะห์ RTA & สถิติ SWRT S38', desc: 'Tier List เมต้า, Pick/Win/Ban 300 ตัว, รีเพลย์แข่งสด', icon: Trophy, view: 'rta' },
     { id: '3mdc', name: 'ค้นหาตัวแก้ทาง 3MDC', desc: 'ค้นหาทีมเจาะหอ 4★ / 5★ พร้อม % วินเรท', icon: Shield, view: '3mdc' },

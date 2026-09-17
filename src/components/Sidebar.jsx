@@ -69,7 +69,10 @@ export default function Sidebar({
   };
 
   const handleItemClick = (itemId) => {
+    let view = 'dashboard';
     if (itemId === 'where2use') view = 'where2use';
+    else if (itemId === '3mdc-stats') view = '3mdc-stats';
+    else if (itemId === 'game-guides') view = 'game-guides';
     else if (itemId === 'siege-calculator' || itemId === 'siege-calc') view = 'siege-calculator';
     else if (itemId === '3mdc-trending') view = 'trending';
     else if (itemId.includes('3mdc')) view = '3mdc';

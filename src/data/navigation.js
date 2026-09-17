@@ -6,7 +6,7 @@ export const NAVIGATION_CATEGORIES = [
       { id: '3mdc-search', label: 'ค้นหาตัวแก้ทาง (3MDC Search)', icon: 'Crosshair', badge: 'สำคัญสุด' },
       { id: 'where2use', label: '🧭 มอนสเตอร์นี้ใช้ที่ไหน? (Where to Use)', icon: 'Compass', badge: 'SWGT แท้' },
       { id: '3mdc-trending', label: 'ทีมตั้งรับยอดนิยม (Trending Defenses)', icon: 'Flame', badge: '20 ทีม' },
-      { id: '3mdc-statistics', label: 'สถิติการชนะ (Winrate Stats)', icon: 'BarChart3' },
+      { id: '3mdc-stats', label: '📊 ศูนย์สถิติ 3MDC (Statistics Hub)', icon: 'BarChart3', badge: '4 หมวด' },
     ]
   },
   {
@@ -32,6 +32,7 @@ export const NAVIGATION_CATEGORIES = [
     id: 'tools',
     title: 'เครื่องมือช่วยเล่น (Game Tools & Dungeons)',
     items: [
+      { id: 'game-guides', label: '📖 สารบัญคู่มือกลยุทธ์ (Game Guides)', icon: 'BookOpen', badge: '10 ดัน' },
       { id: 'siege-calculator', label: '🏰 คำนวณแต้ม Siege (Siege Calc)', icon: 'Calculator', badge: 'กลยุทธ์' },
       { id: 'speed-calculator', label: '⚡ สปีดทิก & ป้องกันแซง (Speed Tuning)', icon: 'Gauge', badge: 'อัปเกรด' },
       { id: 'artifact-optimizer', label: '💥 ดาเมจเสริมอาร์ติแฟกต์ & ค้นหามอน', icon: 'Flame', badge: 'NEW 7.8' },
