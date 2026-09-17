@@ -74,6 +74,7 @@ export default function Sidebar({
     else if (itemId === 'game-guides') view = 'game-guides';
     else if (itemId === 'siege-calculator' || itemId === 'siege-calc') view = 'siege-calculator';
     else if (itemId === 'siege-tournament') view = 'siege-tournament';
+    else if (itemId === 'player-tracker' || itemId.includes('player')) view = 'player-tracker';
     else if (itemId === 'draft-explorer') view = 'draft-explorer';
     else if (itemId === 'rta-synergies') view = 'rta-synergies';
     else if (itemId === 'meta-dashboard') view = 'meta-dashboard';

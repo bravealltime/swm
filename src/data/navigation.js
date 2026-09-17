@@ -17,6 +17,7 @@ export const NAVIGATION_CATEGORIES = [
     id: 'rta-rankings',
     title: 'เวิลด์อารีน่า & จัดอันดับ (RTA & Rankings)',
     items: [
+      { id: 'player-tracker', label: 'ค้นหาสถิติผู้เล่น (Player Tracker)', icon: 'Search', badge: 'สถิติโปร' },
       { id: 'draft-explorer', label: 'จำลองดราฟต์ 5v5 (Draft Explorer & Advisor)', icon: 'Swords', badge: 'Lucksack' },
       { id: 'rta-synergies', label: 'คอมโบดูโอ้ & ทริโอ้ (Duo & Trio Synergies)', icon: 'Users', badge: 'ใหม่' },
       { id: 'meta-dashboard', label: 'เมต้าแดชบอร์ด & การกระจายแรงค์ (Meta Dashboard)', icon: 'BarChart3' },

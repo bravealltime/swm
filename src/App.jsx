@@ -26,6 +26,7 @@ import RtaSynergiesView from './views/RtaSynergiesView';
 import TierListMakerView from './views/TierListMakerView';
 import MetaDashboardView from './views/MetaDashboardView';
 import SiegeTournamentView from './views/SiegeTournamentView';
+import PlayerTrackerView from './views/PlayerTrackerView';
 import SwmLogo from './components/SwmLogo';
 
 export default function App() {
@@ -57,6 +58,8 @@ export default function App() {
         return <SiegeCalculatorView onNavigate={handleNavigate} {...viewParams} />;
       case 'siege-tournament':
         return <SiegeTournamentView onNavigate={handleNavigate} {...viewParams} />;
+      case 'player-tracker':
+        return <PlayerTrackerView onNavigate={handleNavigate} {...viewParams} />;
       case 'draft-explorer':
         return <DraftExplorerView onNavigate={handleNavigate} {...viewParams} />;
       case 'rta-synergies':
