@@ -19,10 +19,14 @@ import {
   Swords, 
   Layers, 
   Award,
-  ChevronRight
+  ChevronRight,
+  RotateCcw,
+  X,
+  Crosshair
 } from 'lucide-react';
 import MonsterAvatar from '../components/MonsterAvatar';
 import ALL_MDC_DATA from '../data/allMdcData.json';
+import { MONSTERS } from '../data/monsters';
 import { PROMO_CODES } from '../data/promoCodes';
 import { LEADERBOARDS } from '../data/leaderboards';
 import latestSiegeBattles from '../data/latestSiegeBattles.json';
@@ -37,12 +41,128 @@ const POPULAR_QUICK_TAGS = [
   { label: '🏰 คำนวณแต้ม Siege', type: 'siege-calculator' },
 ];
 
+const POPULAR_PRESETS = [
+  { label: 'Seara + Orion + Perna', monsters: ['Seara', 'Orion', 'Perna'] },
+  { label: 'Carcano + Savannah + Miles', monsters: ['Carcano', 'Savannah', 'Miles'] },
+  { label: 'Khmun + Vigor + Skogul', monsters: ['Khmun', 'Vigor', 'Skogul'] },
+  { label: 'Martina + Shaina + Triana', monsters: ['Martina', 'Shaina', 'Triana'] },
+  { label: 'Mo Long + Harmonia + Taranys', monsters: ['Mo Long', 'Harmonia', 'Taranys'] },
+  { label: 'Nana + Savannah + Perna', monsters: ['Nana', 'Savannah', 'Perna'] },
+];
+
 export default function DashboardView({ onNavigate }) {
   const [activeTab, setActiveTab] = useState('defenses'); // 'defenses', 'codes', 'battles', 'ranks'
   const [searchQuery, setSearchQuery] = useState('');
   const [copiedCode, setCopiedCode] = useState(null);
   const [selectedServer, setSelectedServer] = useState('asia');
   const [battleServer, setBattleServer] = useState('Global');
+
+  // 3-Monster Tactical Interceptor Slots
+  const [selectedSlots, setSelectedSlots] = useState(() => [
+    MONSTERS.find(m => m.name === 'Seara') || null,
+    MONSTERS.find(m => m.name === 'Orion') || null,
+    MONSTERS.find(m => m.name === 'Perna') || null,
+  ]);
+  const [activeSlotIdx, setActiveSlotIdx] = useState(null);
+  const [pickerSearch, setPickerSearch] = useState('');
+  const [pickerElement, setPickerElement] = useState('all');
+
+  const handleSlotClick = (slotIdx) => {
+    setActiveSlotIdx(activeSlotIdx === slotIdx ? null : slotIdx);
+    setPickerSearch('');
+  };
+
+  const handleSelectMonster = (monster) => {
+    if (activeSlotIdx !== null) {
+      const nextSlots = [...selectedSlots];
+      nextSlots[activeSlotIdx] = monster;
+      setSelectedSlots(nextSlots);
+
+      // Auto advance to next empty slot or close
+      const nextEmpty = nextSlots.findIndex(s => !s);
+      if (nextEmpty !== -1) {
+        setActiveSlotIdx(nextEmpty);
+      } else {
+        setActiveSlotIdx(null);
+      }
+    }
+  };
+
+  const handleClearSlot = (slotIdx, e) => {
+    e.stopPropagation();
+    const nextSlots = [...selectedSlots];
+    nextSlots[slotIdx] = null;
+    setSelectedSlots(nextSlots);
+  };
+
+  const handleResetSlots = () => {
+    setSelectedSlots([null, null, null]);
+    setActiveSlotIdx(null);
+    setPickerSearch('');
+  };
+
+  const handleApplyPreset = (monsterNames) => {
+    const nextSlots = monsterNames.map(name => 
+      MONSTERS.find(m => m.name.toLowerCase() === name.toLowerCase()) || null
+    );
+    setSelectedSlots(nextSlots);
+    setActiveSlotIdx(null);
+  };
+
+  // Filtered monsters for picker
+  const filteredPickerMonsters = useMemo(() => {
+    const searchClean = pickerSearch.toLowerCase().trim();
+    return MONSTERS.filter(m => {
+      if (pickerElement !== 'all' && m.element !== pickerElement) return false;
+      if (searchClean) {
+        const matchEn = m.name?.toLowerCase().includes(searchClean);
+        const matchTh = m.thaiName?.toLowerCase().includes(searchClean);
+        const matchFam = m.family?.toLowerCase().includes(searchClean);
+        return matchEn || matchTh || matchFam;
+      }
+      return true;
+    }).slice(0, 80);
+  }, [pickerElement, pickerSearch]);
+
+  // Match defense team based on selected slots
+  const matchedDefense = useMemo(() => {
+    const selectedNames = selectedSlots
+      .filter(Boolean)
+      .map(m => m.name.toLowerCase());
+
+    if (selectedNames.length === 0) {
+      return {
+        defense: ALL_MDC_DATA[0],
+        matchCount: 0,
+        totalSelected: 0
+      };
+    }
+
+    let bestDefense = null;
+    let maxMatchCount = 0;
+
+    for (const def of ALL_MDC_DATA) {
+      const defNames = def.defenseMonsters.map(m => m.name.toLowerCase());
+      let matchCount = 0;
+      for (const sName of selectedNames) {
+        if (defNames.some(dn => dn === sName || dn.includes(sName) || sName.includes(dn))) {
+          matchCount++;
+        }
+      }
+
+      if (matchCount > maxMatchCount) {
+        maxMatchCount = matchCount;
+        bestDefense = def;
+        if (matchCount === 3 && selectedNames.length === 3) break;
+      }
+    }
+
+    return {
+      defense: bestDefense || ALL_MDC_DATA[0],
+      matchCount: maxMatchCount,
+      totalSelected: selectedNames.length
+    };
+  }, [selectedSlots]);
 
   const handleCopy = (code) => {
     navigator.clipboard.writeText(code);
@@ -159,7 +279,304 @@ export default function DashboardView({ onNavigate }) {
         </div>
       </div>
 
-      {/* 2. Bento Grid Hubs (4 Clean Columns on Desktop, 2 on Tablet, 1 on Mobile) */}
+      {/* 2. 3MDC Tactical Interceptor (เลือก 3 มอนสเตอร์ตั้งรับ - Feature หลัก) */}
+      <div className="bg-gradient-to-b from-[#0f1828] via-[#0c1320] to-[#090e17] border border-[#1d2d44] rounded-2xl p-4 sm:p-6 shadow-2xl space-y-4">
+        
+        {/* Interceptor Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-[#1b2a40] gap-3">
+          <div className="flex items-center gap-2.5">
+            <div className="w-9 h-9 rounded-xl bg-blue-500/20 border border-blue-500/40 flex items-center justify-center text-blue-400 shrink-0 shadow-inner">
+              <Crosshair className="w-5 h-5 text-blue-400" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h2 className="text-base sm:text-lg font-bold text-white tracking-wide">
+                  3MDC Tactical Interceptor (เลือกมอนสเตอร์ 3 ตัว)
+                </h2>
+                <span className="w-2 h-2 rounded-full bg-blue-400 animate-ping"></span>
+              </div>
+              <p className="text-xs text-slate-400">
+                เลือกมอนสเตอร์ 3 ตัวในหอคอย Siege ของศัตรู เพื่อค้นหาสูตรทีมบุกเคาน์เตอร์และ Win Rate สูงสุดทันที
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 self-end sm:self-auto">
+            <button
+              onClick={handleResetSlots}
+              className="px-2.5 py-1.5 rounded-lg bg-[#141e2e] hover:bg-[#1c2b42] text-slate-300 hover:text-white border border-[#243752] text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
+              title="ล้างข้อมูลทั้ง 3 ช่อง"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span>ล้าง 3 ช่อง</span>
+            </button>
+            <button
+              onClick={() => {
+                const searchParam = selectedSlots.filter(Boolean).map(m => m.name).join(' ');
+                onNavigate('3mdc', { search: searchParam });
+              }}
+              className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold flex items-center gap-1 transition-all cursor-pointer shadow-md shadow-blue-600/30"
+            >
+              <span>เปิด 3MDC เต็มระบบ</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        </div>
+
+        {/* Quick Presets Bar */}
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs text-slate-400">
+          <span className="font-bold text-slate-300 shrink-0 flex items-center gap-1">
+            <Flame className="w-3.5 h-3.5 text-amber-400" />
+            ทีมยอดนิยม:
+          </span>
+          {POPULAR_PRESETS.map((p, idx) => (
+            <button
+              key={idx}
+              onClick={() => handleApplyPreset(p.monsters)}
+              className="px-2.5 py-1 rounded-lg bg-[#101927] hover:bg-blue-950/60 hover:border-blue-500/50 text-slate-300 hover:text-white border border-[#1b2a40] text-[11px] font-medium whitespace-nowrap transition-all cursor-pointer"
+            >
+              {p.label}
+            </button>
+          ))}
+        </div>
+
+        {/* 3 Interactive Monster Slots */}
+        <div className="grid grid-cols-3 gap-2 sm:gap-4">
+          {[0, 1, 2].map((slotIdx) => {
+            const monster = selectedSlots[slotIdx];
+            const isActive = activeSlotIdx === slotIdx;
+            return (
+              <div
+                key={slotIdx}
+                onClick={() => handleSlotClick(slotIdx)}
+                className={`relative rounded-xl border-2 transition-all p-2.5 sm:p-4 text-center cursor-pointer flex flex-col items-center justify-center min-h-[135px] sm:min-h-[155px] select-none ${
+                  isActive
+                    ? 'border-cyan-400 bg-cyan-950/30 ring-2 ring-cyan-500/30 shadow-lg shadow-cyan-500/20'
+                    : monster
+                    ? 'border-[#263a56] bg-[#0c1422] hover:border-blue-400/80 shadow-md'
+                    : 'border-dashed border-[#20314a] bg-[#080d16] hover:border-cyan-500/50 hover:bg-[#0c1320]'
+                }`}
+              >
+                {/* Slot role badge */}
+                <div className="absolute top-2 left-2">
+                  <span className={`px-1.5 py-0.5 rounded text-[9px] font-black uppercase tracking-wider ${
+                    slotIdx === 0 
+                      ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40' 
+                      : 'bg-slate-800/80 text-slate-400 border border-slate-700'
+                  }`}>
+                    {slotIdx === 0 ? '👑 Leader' : `Slot #${slotIdx + 1}`}
+                  </span>
+                </div>
+
+                {monster ? (
+                  <>
+                    <button
+                      onClick={(e) => handleClearSlot(slotIdx, e)}
+                      className="absolute top-2 right-2 w-5 h-5 rounded-full bg-rose-600/90 hover:bg-rose-500 text-white flex items-center justify-center text-[10px] font-bold shadow-md z-10 transition-transform hover:scale-110 cursor-pointer"
+                      title="ลบมอนสเตอร์นี้"
+                    >
+                      ✕
+                    </button>
+                    <div className="mt-4 mb-1.5 flex flex-col items-center">
+                      <MonsterAvatar monster={monster} size="md" showStars={false} />
+                    </div>
+                    <div className="font-bold text-white text-xs sm:text-sm truncate w-full px-1">
+                      {monster.name}
+                    </div>
+                    <div className="text-[10px] text-slate-400 truncate w-full">
+                      {monster.thaiName || monster.family || monster.element}
+                    </div>
+                  </>
+                ) : (
+                  <div className="flex flex-col items-center justify-center gap-1.5 py-4 text-slate-500 hover:text-slate-300 transition-colors">
+                    <div className="w-9 h-9 rounded-full bg-[#131d2e] border border-[#243752] flex items-center justify-center text-lg font-light text-cyan-400">
+                      +
+                    </div>
+                    <span className="text-xs font-bold text-slate-300">
+                      {slotIdx === 0 ? 'เลือก Leader' : `เลือกตัวที่ ${slotIdx + 1}`}
+                    </span>
+                    <span className="text-[10px] text-slate-500 hidden sm:inline">คลิกเพื่อเลือก</span>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Monster Selection Drawer (Active when a slot is clicked) */}
+        {activeSlotIdx !== null && (
+          <div className="p-3.5 sm:p-5 rounded-xl bg-[#080d16] border border-cyan-500/50 space-y-3 shadow-2xl animate-fadeIn">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-[#1b283d]">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold text-cyan-400">
+                  เลือกมอนสเตอร์ใส่ตำแหน่งที่ #{activeSlotIdx + 1} ({activeSlotIdx === 0 ? '👑 Leader' : `สมาชิก ${activeSlotIdx + 1}`}):
+                </span>
+                <span className="text-[11px] text-slate-400">
+                  (แสดง {filteredPickerMonsters.length} ตัว)
+                </span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                {/* Element filters */}
+                <div className="flex items-center gap-1 overflow-x-auto pb-1 sm:pb-0">
+                  {[
+                    { id: 'all', label: 'ทั้งหมด' },
+                    { id: 'fire', label: '🔥 ไฟ' },
+                    { id: 'water', label: '💧 น้ำ' },
+                    { id: 'wind', label: '🌪️ ลม' },
+                    { id: 'light', label: '✨ แสง' },
+                    { id: 'dark', label: '🌑 มืด' }
+                  ].map((el) => (
+                    <button
+                      key={el.id}
+                      onClick={() => setPickerElement(el.id)}
+                      className={`px-2 py-0.5 rounded text-[10px] font-bold transition-all cursor-pointer ${
+                        pickerElement === el.id
+                          ? 'bg-cyan-600 text-white shadow-sm'
+                          : 'bg-[#121c2c] text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      {el.label}
+                    </button>
+                  ))}
+                </div>
+
+                <button
+                  onClick={() => setActiveSlotIdx(null)}
+                  className="text-xs text-slate-400 hover:text-white px-2 py-0.5 rounded hover:bg-[#1a2538] cursor-pointer"
+                >
+                  ✕ ปิด
+                </button>
+              </div>
+            </div>
+
+            {/* Instant Search in Picker */}
+            <div className="relative">
+              <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                value={pickerSearch}
+                onChange={(e) => setPickerSearch(e.target.value)}
+                placeholder="พิมพ์ค้นหาชื่อมอนสเตอร์ (เช่น Byungchul, Nana, Juno, Savannah, Carcano, Camilla)..."
+                className="w-full bg-[#0c1422] border border-[#203148] focus:border-cyan-400 rounded-lg pl-9 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none"
+                autoFocus
+              />
+            </div>
+
+            {/* Monsters Catalog Grid */}
+            <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-2 max-h-56 overflow-y-auto pr-1">
+              {filteredPickerMonsters.map((m) => (
+                <button
+                  key={m.id}
+                  onClick={() => handleSelectMonster(m)}
+                  className="p-1.5 rounded-lg bg-[#0e1624] hover:bg-cyan-950/40 border border-[#1b283d] hover:border-cyan-400 transition-all flex flex-col items-center gap-1 cursor-pointer group"
+                >
+                  <img
+                    src={m.avatarUrl || m.imageUrl}
+                    alt={m.name}
+                    className="w-9 h-9 sm:w-10 sm:h-10 rounded object-cover group-hover:scale-105 transition-transform"
+                    onError={(e) => { e.target.src = 'https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0001_0_0.png'; }}
+                  />
+                  <span className="text-[10px] text-slate-300 group-hover:text-cyan-300 truncate w-full text-center font-medium">
+                    {m.name}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Live Counter Team Analysis Results */}
+        {matchedDefense && (
+          <div className="p-4 sm:p-5 rounded-xl bg-[#09101c] border border-[#1c2c43] space-y-3.5 shadow-inner">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-mono font-bold text-cyan-400 uppercase tracking-wider">
+                  ผลการวิเคราะห์ทีมแก้ทาง (Tactical Match Analysis)
+                </span>
+                {matchedDefense.totalSelected > 0 && (
+                  <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                    matchedDefense.matchCount === 3 
+                      ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' 
+                      : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
+                  }`}>
+                    {matchedDefense.matchCount === 3 ? '✓ ตรง 100% (3/3 ตัว)' : `ตรง ${matchedDefense.matchCount}/3 ตัว`}
+                  </span>
+                )}
+              </div>
+
+              <div className="text-xs text-slate-400">
+                ทีมตั้งรับเป้าหมาย: <strong className="text-white">{matchedDefense.defense.title}</strong>
+              </div>
+            </div>
+
+            {/* Top Counter Card */}
+            {matchedDefense.defense.counters && matchedDefense.defense.counters.length > 0 ? (
+              <div className="p-3.5 sm:p-4 rounded-xl bg-[#0d1626] border border-[#1f314c] space-y-3">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2.5 border-b border-[#18263a]">
+                  <div className="flex items-center gap-2.5">
+                    <span className="text-xs font-bold text-white">สูตรบุกอันดับ #1:</span>
+                    <span className="px-2.5 py-0.5 rounded-full text-xs font-mono font-black bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 shadow-sm">
+                      WIN RATE {matchedDefense.defense.counters[0].winRate || '96.5%'}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-3 text-xs text-slate-400">
+                    <span>โดย: <strong className="text-slate-200">{matchedDefense.defense.counters[0].author || 'Top Meta'}</strong></span>
+                    {matchedDefense.defense.counters[0].rating && (
+                      <span className="text-amber-400 font-bold">⭐ {matchedDefense.defense.counters[0].rating}/5.0</span>
+                    )}
+                  </div>
+                </div>
+
+                {/* 3 Counter Monsters */}
+                <div className="flex items-center gap-3 py-1">
+                  {matchedDefense.defense.counters[0].monsters?.map((cm, cmIdx) => (
+                    <div key={cmIdx} className="flex items-center gap-2 bg-[#080d16] p-2 rounded-lg border border-[#1b283d]">
+                      <MonsterAvatar monster={cm} size="sm" showStars={false} />
+                      <div className="hidden sm:block">
+                        <div className="text-xs font-bold text-white leading-none">{cm.name}</div>
+                        <div className="text-[10px] text-slate-400 capitalize">{cm.element}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Turn order and Strategy notes */}
+                {matchedDefense.defense.counters[0].turnOrder && (
+                  <div className="text-xs text-cyan-300 font-mono bg-cyan-950/30 p-2 rounded border border-cyan-500/20">
+                    <strong>ลำดับสกิล:</strong> {matchedDefense.defense.counters[0].turnOrder}
+                  </div>
+                )}
+
+                <p className="text-xs text-slate-300 leading-relaxed font-sans">
+                  {matchedDefense.defense.counters[0].notes || matchedDefense.defense.counters[0].strategy || 'ใช้สปีดและดาเมจสวนกลับเป้าหมายตัวบางก่อนเพื่อตัดตัวปัญหาในเทิร์นแรก'}
+                </p>
+
+                {/* Bottom link to 3MDC */}
+                <div className="pt-2 border-t border-[#18263a] flex items-center justify-between">
+                  <span className="text-xs text-slate-400">
+                    สูตรที่มีในระบบ: <strong className="text-blue-400">{matchedDefense.defense.countersCount || matchedDefense.defense.counters.length} สูตร</strong>
+                  </span>
+                  <button
+                    onClick={() => onNavigate('3mdc', { search: matchedDefense.defense.title })}
+                    className="text-xs font-bold text-blue-400 hover:text-blue-300 flex items-center gap-1 cursor-pointer"
+                  >
+                    ดูสูตรเคาน์เตอร์ทั้งหมดใน 3MDC <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="py-4 text-center text-xs text-slate-400">
+                เลือกมอนสเตอร์อย่างน้อย 1 ตัวเพื่อดูผลการวิเคราะห์
+              </div>
+            )}
+          </div>
+        )}
+
+      </div>
+
+      {/* 3. Bento Grid Hubs (4 Clean Columns on Desktop, 2 on Tablet, 1 on Mobile) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         
         {/* Hub 1: 3MDC & Siege */}
