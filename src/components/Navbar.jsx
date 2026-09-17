@@ -3,14 +3,13 @@ import {
   Shield, 
   Gift, 
   Trophy, 
-  Layers, 
-  Gauge, 
   Search, 
   Menu, 
   X, 
-  ExternalLink,
+  Sparkles,
   Zap,
-  Activity
+  Flame,
+  Compass
 } from 'lucide-react';
 import SwmLogo from './SwmLogo';
 
@@ -21,100 +20,90 @@ export default function Navbar({
   mobileMenuOpen, 
   setMobileMenuOpen 
 }) {
-  const navItems = [
-    { id: 'dashboard', label: 'หน้าแรก', icon: Activity },
-    { id: '3mdc', label: 'ทีมแก้ทาง 3MDC', icon: Shield, badge: 'แนะนำ' },
-    { id: 'codes', label: 'โค้ดแจกไอเทม', icon: Gift, badge: '5 โค้ด' },
-    { id: 'leaderboards', label: 'อันดับกิลด์ Siege', icon: Trophy },
-    { id: 'catalog', label: 'สารานุกรมมอนสเตอร์', icon: Layers },
-    { id: 'speed', label: 'คำนวณสปีดทิก', icon: Gauge },
-  ];
-
   return (
-    <header className="sticky top-0 z-40 w-full bg-[#080d16] border-b border-[#1b2636]">
-      {/* Top Telemetry Strip */}
-      <div className="hidden md:flex items-center justify-between px-4 sm:px-6 lg:px-8 py-1.5 bg-[#050910] border-b border-[#131b27] text-[11px] text-slate-400 font-mono">
-        <div className="flex items-center gap-4">
-          <span className="flex items-center gap-1.5 text-cyan-400 font-bold">
-            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
-            SWM TACTICAL CORE ONLINE
-          </span>
-          <span className="text-slate-600">|</span>
-          <span>SUMMONERS WAR MASTER v2.5</span>
-          <span className="text-slate-600">|</span>
-          <span className="text-slate-300">SERVER DATA: SYNCED</span>
-        </div>
-        <div className="flex items-center gap-4">
-          <span className="text-emerald-400 font-bold">🎁 โค้ดที่ใช้ได้วันนี้: 5 โค้ด</span>
-          <span className="text-slate-600">|</span>
-          <span className="text-slate-400">ระบบภาษาไทย 100%</span>
-        </div>
-      </div>
-
-      {/* Main Command Bar */}
-      <div className="max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 sm:h-18">
+    <header className="sticky top-0 z-40 w-full bg-[#080d16]/90 backdrop-blur-md border-b border-[#182335]">
+      <div className="max-w-[1850px] mx-auto px-3.5 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-15 sm:h-16 gap-3">
           
-          {/* Logo Brand */}
-          <div className="flex items-center gap-3">
+          {/* Left: Brand & Mobile Drawer Toggle */}
+          <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 rounded-lg text-slate-300 hover:text-white hover:bg-[#152030] focus:outline-none cursor-pointer"
+              className="lg:hidden p-2 rounded-xl text-slate-300 hover:text-white bg-[#0f1726] border border-[#1b2738] focus:outline-none cursor-pointer"
               aria-label="เปิดเมนูนำทาง"
             >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {mobileMenuOpen ? <X className="w-5 h-5 text-rose-400" /> : <Menu className="w-5 h-5" />}
             </button>
 
             <div 
               onClick={() => onNavigate('dashboard')} 
-              className="cursor-pointer select-none"
+              className="cursor-pointer select-none flex items-center gap-2"
             >
-              <SwmLogo size="md" />
+              <SwmLogo size="sm" />
+              <span className="hidden sm:inline-block px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-blue-500/15 text-blue-400 border border-blue-500/30">
+                v3.0 Clean
+              </span>
             </div>
           </div>
 
-          {/* Central Segmented Command Tabs */}
-          <nav className="hidden lg:flex items-center p-1 rounded-xl bg-[#0e1522] border border-[#1b2636] space-x-1">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = currentView === item.id;
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => onNavigate(item.id)}
-                  className={`px-3.5 py-2 rounded-lg text-xs sm:text-sm font-bold flex items-center gap-2 transition-all cursor-pointer ${
-                    isActive
-                      ? 'bg-blue-600 text-white shadow-sm'
-                      : 'text-slate-300 hover:text-white hover:bg-[#162030]'
-                  }`}
-                >
-                  <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-slate-400'}`} />
-                  <span>{item.label}</span>
-                  {item.badge && (
-                    <span className={`px-1.5 py-0.2 rounded font-mono text-[10px] font-bold ${
-                      isActive 
-                        ? 'bg-blue-800 text-blue-100' 
-                        : 'bg-emerald-600/20 text-emerald-400 border border-emerald-500/30'
-                    }`}>
-                      {item.badge}
-                    </span>
-                  )}
-                </button>
-              );
-            })}
-          </nav>
-
-          {/* Right Action: Quick Search Bar */}
-          <div className="flex items-center gap-2.5">
+          {/* Center: Universal Command Search Input Trigger */}
+          <div className="flex-1 max-w-xl mx-auto px-1 sm:px-4">
             <button
               onClick={onOpenSearch}
-              className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#111927] border border-[#1f2c3e] hover:border-blue-500 text-slate-300 hover:text-white text-xs sm:text-sm font-semibold transition-all cursor-pointer shadow-xs"
+              className="w-full flex items-center justify-between px-3.5 py-2 rounded-xl bg-[#0e1624] border border-[#1d2b3f] hover:border-blue-500/60 text-slate-400 hover:text-slate-200 transition-all cursor-pointer shadow-inner group"
             >
-              <Search className="w-4 h-4 text-blue-400" />
-              <span className="hidden sm:inline">ค้นหา...</span>
-              <kbd className="hidden md:inline-block px-1.5 py-0.5 text-[10px] bg-[#090f19] text-slate-400 rounded border border-[#1f2c3e] font-mono">
-                Ctrl K
-              </kbd>
+              <div className="flex items-center gap-2.5 truncate">
+                <Search className="w-4 h-4 text-blue-400 shrink-0 group-hover:text-blue-300" />
+                <span className="text-xs sm:text-sm font-medium truncate">
+                  ค้นหาทีมแก้ทาง 3MDC, มอนสเตอร์, ดันเจี้ยน, โค้ด...
+                </span>
+              </div>
+              <div className="hidden sm:flex items-center gap-1 font-mono text-[10px] text-slate-400 bg-[#080d16] px-2 py-0.5 rounded border border-[#1b2636] shrink-0">
+                <span>Ctrl</span>
+                <span>K</span>
+              </div>
+            </button>
+          </div>
+
+          {/* Right: Quick Action Shortcuts */}
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+            {/* Quick RTA S38 */}
+            <button
+              onClick={() => onNavigate('rta')}
+              className={`hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                currentView === 'rta'
+                  ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
+                  : 'bg-[#0f1726] border border-[#1b2738] text-slate-300 hover:text-white hover:bg-[#162132]'
+              }`}
+            >
+              <Trophy className="w-3.5 h-3.5 text-amber-400" />
+              <span>RTA S38</span>
+            </button>
+
+            {/* Quick 3MDC */}
+            <button
+              onClick={() => onNavigate('3mdc')}
+              className={`hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                currentView === '3mdc'
+                  ? 'bg-blue-600 text-white shadow-sm'
+                  : 'bg-[#0f1726] border border-[#1b2738] text-slate-300 hover:text-white hover:bg-[#162132]'
+              }`}
+            >
+              <Shield className="w-3.5 h-3.5 text-blue-400" />
+              <span>3MDC</span>
+            </button>
+
+            {/* Active Codes Pill */}
+            <button
+              onClick={() => onNavigate('codes')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                currentView === 'codes'
+                  ? 'bg-emerald-600 text-white shadow-sm'
+                  : 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20'
+              }`}
+            >
+              <Gift className="w-3.5 h-3.5 text-emerald-400" />
+              <span>5 โค้ด</span>
             </button>
           </div>
 

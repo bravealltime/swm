@@ -1,63 +1,49 @@
 export const NAVIGATION_CATEGORIES = [
   {
-    id: '3mdc',
-    title: 'ระบบแก้ทาง 3MDC (Siege & Guild War)',
+    id: 'guild-siege',
+    title: 'กิลด์วอร์ & ศึกยึดเกาะ (Guild & Siege)',
     items: [
-      { id: '3mdc-search', label: 'ค้นหาตัวแก้ทาง (3MDC Search)', icon: 'Crosshair', badge: 'สำคัญสุด' },
-      { id: 'where2use', label: '🧭 มอนสเตอร์นี้ใช้ที่ไหน? (Where to Use)', icon: 'Compass', badge: 'SWGT แท้' },
-      { id: '3mdc-trending', label: 'ทีมตั้งรับยอดนิยม (Trending Defenses)', icon: 'Flame', badge: '20 ทีม' },
-      { id: '3mdc-stats', label: '📊 ศูนย์สถิติ 3MDC (Statistics Hub)', icon: 'BarChart3', badge: '4 หมวด' },
+      { id: '3mdc-search', label: 'ค้นหาตัวแก้ทาง (3MDC Search)', icon: 'Crosshair', badge: 'หลัก' },
+      { id: 'where2use', label: 'มอนสเตอร์นี้ใช้ที่ไหน? (Where to Use)', icon: 'Compass', badge: 'SWGT แท้' },
+      { id: 'defense-trending', label: '96 ทีมตั้งรับยอดนิยมทั่วโลก', icon: 'TrendingUp' },
+      { id: 'monster-defense-trending', label: 'Tier List มอนสเตอร์ตั้งรับ (202 ตัว)', icon: 'Shield' },
+      { id: 'monster-offense-trending', label: 'Tier List มอนสเตอร์ตัวบุก (247 ตัว)', icon: 'Swords' },
+      { id: 'siege-calculator', label: 'เครื่องคำนวณคะแนน Siege', icon: 'Calculator' },
+      { id: '3mdc-stats', label: 'ศูนย์สถิติและรายงาน 3MDC', icon: 'BarChart3' },
     ]
   },
   {
-    id: 'meta-analytics',
-    title: 'สถิติเซิร์ฟเวอร์รวม (All Server Analytics)',
+    id: 'rta-rankings',
+    title: 'เวิลด์อารีน่า & จัดอันดับ (RTA & Rankings)',
     items: [
-      { id: 'defense-trending', label: '96 ทีมตั้งรับยอดนิยมทั่วโลก', icon: 'TrendingUp', badge: '96 ทีม' },
-      { id: 'monster-defense-trending', label: 'มอนสเตอร์ตั้งรับยอดฮิต (202 ตัว)', icon: 'Shield' },
-      { id: 'monster-offense-trending', label: 'มอนสเตอร์ตัวตียอดฮิต (247 ตัว)', icon: 'Swords' },
+      { id: 'rta-tierlist', label: 'RTA Tier List (S38 ซีซั่นล่าสุด)', icon: 'Trophy', badge: 'S38' },
+      { id: 'rta-meta', label: 'สถิติ Pick/Win/Ban 300 ตัว', icon: 'BarChart3' },
+      { id: 'rta-replays', label: 'รีเพลย์แข่งสดการ์เดียน', icon: 'Flame' },
+      { id: 'rta-cutoffs', label: 'คะแนนตัดเกรด G1-G3', icon: 'Gauge' },
+      { id: 'siege-leaderboards', label: 'ตารางอันดับกิลด์โลก (4 โหมด)', icon: 'Award' },
     ]
   },
   {
-    id: 'rta',
-    title: 'วิเคราะห์เวิลด์อารีน่า (RTA SWRT Ranking)',
+    id: 'tools-dungeons',
+    title: 'เครื่องมือช่วยเล่น & ดันเจี้ยน (Tools & Dungeons)',
     items: [
-      { id: 'rta-tierlist', label: '🏆 RTA Tier List (S38 ซีซั่นล่าสุด)', icon: 'Trophy', badge: 'S38 Meta' },
-      { id: 'rta-meta', label: '📊 สถิติ Pick/Win/Ban 300 ตัว', icon: 'BarChart3', badge: '6.8M แมตช์' },
-      { id: 'rta-replays', label: '⚔️ รีเพลย์แข่งสดการ์เดียน (Live Replays)', icon: 'Flame', badge: 'สด' },
-      { id: 'rta-cutoffs', label: '🎯 คะแนนตัดเกรด G1-G3 (Rank Cutoffs)', icon: 'Gauge' },
-    ]
-  },
-  {
-    id: 'tools',
-    title: 'เครื่องมือช่วยเล่น (Game Tools & Dungeons)',
-    items: [
-      { id: 'game-guides', label: '📖 สารบัญคู่มือกลยุทธ์ (Game Guides)', icon: 'BookOpen', badge: '10 ดัน' },
-      { id: 'siege-calculator', label: '🏰 คำนวณแต้ม Siege (Siege Calc)', icon: 'Calculator', badge: 'กลยุทธ์' },
-      { id: 'speed-calculator', label: '⚡ สปีดทิก & ป้องกันแซง (Speed Tuning)', icon: 'Gauge', badge: 'อัปเกรด' },
-      { id: 'artifact-optimizer', label: '💥 ดาเมจเสริมอาร์ติแฟกต์ & ค้นหามอน', icon: 'Flame', badge: 'NEW 7.8' },
-      { id: 'game-codes', label: 'รหัสโค้ดแจกไอเทม (Active Codes)', icon: 'Gift', badge: 'ของแท้' },
-      { id: 'dungeon-stats', label: 'ทีมฟาร์มดันเจี้ยน (Abyss Speed)', icon: 'Compass', badge: 'Abyss Hard' },
-      { id: 'balance-patch', label: 'ประวัติแพตช์ปรับสมดุล (92 แพตช์)', icon: 'History', badge: '92 แพตช์' },
-      { id: 'monster-catalog', label: 'สารานุกรมสกิลมอนสเตอร์ (Skills & Stats)', icon: 'BookOpen', badge: 'ครบทุกตัว' },
+      { id: 'artifact-optimizer', label: 'ดาเมจเสริมอาร์ติแฟกต์ & Monster Finder', icon: 'Flame', badge: 'Hot' },
+      { id: 'speed-calculator', label: 'สปีดทิก & จูนความเร็วกันแซง', icon: 'Gauge' },
+      { id: 'game-guides', label: 'สารบัญคู่มือกลยุทธ์ 10 ดันเจี้ยน', icon: 'BookOpen' },
+      { id: 'dungeon-stats', label: 'ทีมฟาร์ม Abyss Hard Speed', icon: 'Compass' },
+      { id: 'monster-catalog', label: 'สารานุกรมสกิลมอนสเตอร์ (940 ตัว)', icon: 'BookOpen' },
+      { id: 'game-codes', label: 'รหัสโค้ดแจกไอเทม (Active Codes)', icon: 'Gift', badge: '5 โค้ด' },
+      { id: 'balance-patch', label: 'ประวัติแพตช์ปรับสมดุล (92 แพตช์)', icon: 'History' },
       { id: 'rune-calculator', label: 'คำนวณประสิทธิภาพรูน & หินขัด', icon: 'Calculator' },
     ]
   },
   {
-    id: 'guild',
-    title: 'ระบบกิลด์ (Guild Hub)',
+    id: 'community-account',
+    title: 'ชุมชน & เชื่อมต่อไอดี (Community & SWEX)',
     items: [
-      { id: 'guild-recruiting', label: 'ประกาศรับสมัครกิลด์ (120 กิลด์)', icon: 'UserPlus', badge: '120 กิลด์' },
-      { id: 'siege-leaderboards', label: 'ตารางอันดับ Siege (Leaderboard)', icon: 'Trophy', badge: 'เรียลไทม์' },
-      { id: 'faq-guides', label: 'คู่มือ & คำถามพบบ่อย (FAQ/SWEX)', icon: 'HelpCircle' },
-    ]
-  },
-  {
-    id: 'account',
-    title: 'เชื่อมต่อไอดี (SWEX Integration)',
-    items: [
-      { id: 'aegislink', label: '🛡️ AegisLink ปลั๊กอินส่งข้อมูลสด', icon: 'Cpu', badge: 'v1.0 ใหม่' },
-      { id: 'account-summary', label: 'ภาพรวมระบบ SWGT', icon: 'UserCheck' },
+      { id: 'guild-recruiting', label: 'ประกาศรับสมัครกิลด์ (120 กิลด์)', icon: 'UserPlus' },
+      { id: 'aegislink', label: 'AegisLink ปลั๊กอินส่งข้อมูลสด', icon: 'Cpu', badge: 'SWEX' },
+      { id: 'faq-guides', label: 'คู่มือ & คำถามพบบ่อย (FAQ)', icon: 'HelpCircle' },
     ]
   }
 ];

@@ -35,6 +35,7 @@ import {
   Sliders,
   Flame,
   Compass,
+  Home,
   X
 } from 'lucide-react';
 import { NAVIGATION_CATEGORIES } from '../data/navigation';
@@ -43,7 +44,7 @@ const ICON_MAP = {
   UserCheck, Award, Layers, BookOpen, History, ShieldAlert, Sparkles, TrendingUp,
   Cpu, Gem, Shield, Swords, Users, Search, Activity, UserPlus, FileText, Crosshair,
   Star, HelpCircle, BarChart3, Trophy, Map, Calendar, Globe, Gift, Book, Gauge,
-  Calculator, Sliders, Flame, Compass
+  Calculator, Sliders, Flame, Compass, Home
 };
 
 export default function Sidebar({ 
@@ -53,12 +54,10 @@ export default function Sidebar({
   onClose 
 }) {
   const [expandedCategories, setExpandedCategories] = useState({
-    '3mdc': true,
-    'meta-analytics': true,
-    'rta': true,
-    'tools': true,
-    'guild': true,
-    'account': true
+    'guild-siege': true,
+    'rta-rankings': true,
+    'tools-dungeons': true,
+    'community-account': true
   });
 
   const toggleCategory = (catId) => {
@@ -74,10 +73,10 @@ export default function Sidebar({
     else if (itemId === '3mdc-stats') view = '3mdc-stats';
     else if (itemId === 'game-guides') view = 'game-guides';
     else if (itemId === 'siege-calculator' || itemId === 'siege-calc') view = 'siege-calculator';
-    else if (itemId === '3mdc-trending') view = 'trending';
+    else if (itemId === 'defense-trending') view = 'trending';
+    else if (itemId === 'monster-defense-trending' || itemId === 'monster-offense-trending') view = 'trending';
     else if (itemId.includes('3mdc')) view = '3mdc';
     else if (itemId.includes('rta')) view = 'rta';
-    else if (itemId.includes('trending') || itemId.includes('monster-defense') || itemId.includes('monster-offense')) view = 'trending';
     else if (itemId.includes('dungeon')) view = 'dungeons';
     else if (itemId.includes('balance')) view = 'balance';
     else if (itemId.includes('faq')) view = 'faq';
@@ -102,83 +101,111 @@ export default function Sidebar({
       {/* Mobile Drawer Backdrop */}
       {isOpen && (
         <div 
-          className="fixed inset-0 bg-black/75 z-40 lg:hidden transition-opacity"
+          className="fixed inset-0 bg-black/80 backdrop-blur-xs z-40 lg:hidden transition-opacity"
           onClick={onClose}
         />
       )}
 
       {/* Sidebar Navigation Panel */}
       <aside 
-        className={`fixed top-16 sm:top-20 bottom-0 left-0 w-72 bg-[#0e141f] border-r border-[#1f2c3f] z-50 flex flex-col transition-transform duration-200 ease-in-out lg:translate-x-0 ${
-          isOpen ? 'translate-x-0' : '-translate-x-full'
+        className={`fixed top-15 sm:top-16 bottom-0 left-0 w-72 bg-[#0a0f18] border-r border-[#172233] z-50 flex flex-col transition-transform duration-200 ease-in-out lg:translate-x-0 ${
+          isOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full'
         }`}
       >
         {/* Mobile Header Inside Drawer */}
-        <div className="flex lg:hidden items-center justify-between p-4 border-b border-[#1f2c3f]">
+        <div className="flex lg:hidden items-center justify-between p-4 border-b border-[#172233]">
           <SwmLogo size="sm" />
           <button 
             onClick={onClose}
-            className="p-1 rounded text-slate-400 hover:text-white cursor-pointer"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-white bg-[#0f1726] border border-[#1d2b3f] cursor-pointer"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 
-        {/* Scrollable Navigation List */}
-        <div className="flex-1 overflow-y-auto px-3 py-4 space-y-4 text-xs">
+        {/* Scrollable Navigation Items */}
+        <div className="flex-1 overflow-y-auto px-3 py-4 space-y-4 text-xs select-none custom-scrollbar">
           
-          {/* Main Home Button */}
+          {/* Main Dashboard Home Button */}
           <button
             onClick={() => { onNavigate('dashboard'); if (onClose) onClose(); }}
-            className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-left font-bold transition-all cursor-pointer ${
+            className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl font-bold transition-all cursor-pointer ${
               currentView === 'dashboard'
-                ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20'
-                : 'text-slate-300 hover:bg-[#152030] hover:text-white'
+                ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30 font-black'
+                : 'text-slate-300 hover:text-white hover:bg-[#111927]'
             }`}
           >
-            <div className="flex items-center gap-2.5">
-              <Crosshair className="w-4 h-4" />
-              <span>หน้าหลัก (Tactical Dashboard)</span>
-            </div>
-            <span className="text-[10px] font-mono text-blue-200">HUD</span>
+            <Home className="w-4 h-4" />
+            <span className="text-sm">หน้าแรก (Dashboard)</span>
           </button>
 
-          {/* Categorized Menu Tree */}
-          {NAVIGATION_CATEGORIES.map((category) => {
-            const isExpanded = expandedCategories[category.id];
+          {/* 4 Clean Pillars */}
+          {NAVIGATION_CATEGORIES.map((cat) => {
+            const isExpanded = expandedCategories[cat.id];
+
             return (
-              <div key={category.id} className="space-y-1">
-                {/* Category Header Accordion */}
+              <div key={cat.id} className="space-y-1">
+                {/* Category Header with Toggle */}
                 <button
-                  onClick={() => toggleCategory(category.id)}
-                  className="w-full flex items-center justify-between px-2.5 py-1.5 text-slate-400 hover:text-slate-200 uppercase tracking-wider text-[11px] font-extrabold cursor-pointer group"
+                  onClick={() => toggleCategory(cat.id)}
+                  className="w-full flex items-center justify-between px-2.5 py-1.5 text-[11px] font-bold text-slate-400 hover:text-slate-200 transition-colors uppercase tracking-wider cursor-pointer"
                 >
-                  <span>{category.title}</span>
+                  <span className="truncate">{cat.title}</span>
                   {isExpanded ? (
-                    <ChevronDown className="w-3.5 h-3.5 text-slate-500 group-hover:text-slate-300" />
+                    <ChevronDown className="w-3.5 h-3.5 text-slate-500 shrink-0" />
                   ) : (
-                    <ChevronRight className="w-3.5 h-3.5 text-slate-500 group-hover:text-slate-300" />
+                    <ChevronRight className="w-3.5 h-3.5 text-slate-500 shrink-0" />
                   )}
                 </button>
 
                 {/* Category Items List */}
                 {isExpanded && (
-                  <div className="space-y-0.5 pl-1 border-l-2 border-[#1c2738] ml-2">
-                    {category.items.map((item) => {
+                  <div className="space-y-0.5 pl-1">
+                    {cat.items.map((item) => {
                       const IconComponent = ICON_MAP[item.icon] || Shield;
+                      
+                      // Check active state
+                      const isActive = 
+                        (item.id === '3mdc-search' && currentView === '3mdc') ||
+                        (item.id === 'where2use' && currentView === 'where2use') ||
+                        (item.id === '3mdc-stats' && currentView === '3mdc-stats') ||
+                        (item.id === 'game-guides' && currentView === 'game-guides') ||
+                        (item.id === 'siege-calculator' && currentView === 'siege-calculator') ||
+                        ((item.id === 'defense-trending' || item.id === 'monster-defense-trending' || item.id === 'monster-offense-trending') && currentView === 'trending') ||
+                        (item.id.includes('rta') && currentView === 'rta') ||
+                        (item.id === 'siege-leaderboards' && currentView === 'leaderboards') ||
+                        (item.id === 'artifact-optimizer' && currentView === 'artifact') ||
+                        (item.id === 'speed-calculator' && currentView === 'speed') ||
+                        (item.id === 'dungeon-stats' && currentView === 'dungeons') ||
+                        (item.id === 'monster-catalog' && currentView === 'catalog') ||
+                        (item.id === 'game-codes' && currentView === 'codes') ||
+                        (item.id === 'balance-patch' && currentView === 'balance') ||
+                        (item.id === 'rune-calculator' && currentView === 'rune') ||
+                        (item.id === 'guild-recruiting' && currentView === 'recruit') ||
+                        (item.id === 'aegislink' && currentView === 'aegislink') ||
+                        (item.id === 'faq-guides' && currentView === 'faq');
+
                       return (
                         <button
                           key={item.id}
                           onClick={() => handleItemClick(item.id)}
-                          className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-left text-slate-300 hover:text-white hover:bg-[#152030] transition-colors cursor-pointer group"
+                          className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-left font-medium transition-all cursor-pointer ${
+                            isActive
+                              ? 'bg-blue-600/15 text-blue-400 font-bold border-l-2 border-blue-500'
+                              : 'text-slate-300 hover:text-white hover:bg-[#111927]'
+                          }`}
                         >
                           <div className="flex items-center gap-2.5 truncate">
-                            <IconComponent className="w-4 h-4 text-slate-400 group-hover:text-blue-400 shrink-0" />
-                            <span className="truncate">{item.label}</span>
+                            <IconComponent className={`w-4 h-4 shrink-0 ${isActive ? 'text-blue-400' : 'text-slate-500'}`} />
+                            <span className="truncate text-xs">{item.label}</span>
                           </div>
 
                           {item.badge && (
-                            <span className="text-[10px] px-1.5 py-0.5 rounded font-mono font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20 shrink-0">
+                            <span className={`px-1.5 py-0.2 rounded text-[10px] font-mono font-bold shrink-0 ${
+                              isActive 
+                                ? 'bg-blue-500/20 text-blue-300' 
+                                : 'bg-[#152030] text-slate-400 border border-[#202f45]'
+                            }`}>
                               {item.badge}
                             </span>
                           )}
@@ -190,16 +217,12 @@ export default function Sidebar({
               </div>
             );
           })}
-
         </div>
 
-        {/* Sidebar Footer User Telemetry */}
-        <div className="p-3 border-t border-[#1f2c3f] bg-[#090e17] text-[11px] text-slate-400 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-            <span className="text-cyan-300 font-semibold">SWM Master Engine</span>
-          </div>
-          <span className="font-mono text-slate-400">v2.5 Thai</span>
+        {/* Sidebar Footer */}
+        <div className="p-3 border-t border-[#172233] bg-[#070b12] text-[10px] text-slate-500 flex items-center justify-between font-mono">
+          <span>SUMMONERS WAR MASTER</span>
+          <span className="text-emerald-400">● LIVE</span>
         </div>
       </aside>
     </>
