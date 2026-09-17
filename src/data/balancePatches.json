@@ -1,0 +1,738 @@
+[
+  {
+    "id": 1,
+    "date": "July 26, 2026",
+    "monstersCount": "72",
+    "skillCount": "87",
+    "daysSincePrevious": "58",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=92"
+  },
+  {
+    "id": 2,
+    "date": "May 29, 2026",
+    "monstersCount": "50",
+    "skillCount": "60",
+    "daysSincePrevious": "30",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=91"
+  },
+  {
+    "id": 3,
+    "date": "April 29, 2026",
+    "monstersCount": "1",
+    "skillCount": "1",
+    "daysSincePrevious": "32",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=90"
+  },
+  {
+    "id": 4,
+    "date": "March 28, 2026",
+    "monstersCount": "49",
+    "skillCount": "66",
+    "daysSincePrevious": "17",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=89"
+  },
+  {
+    "id": 5,
+    "date": "March 11, 2026",
+    "monstersCount": "8",
+    "skillCount": "8",
+    "daysSincePrevious": "13",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=88"
+  },
+  {
+    "id": 6,
+    "date": "February 25, 2026",
+    "monstersCount": "8",
+    "skillCount": "8",
+    "daysSincePrevious": "14",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=87"
+  },
+  {
+    "id": 7,
+    "date": "February 11, 2026",
+    "monstersCount": "64",
+    "skillCount": "88",
+    "daysSincePrevious": "12",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=86"
+  },
+  {
+    "id": 8,
+    "date": "January 30, 2026",
+    "monstersCount": "2",
+    "skillCount": "2",
+    "daysSincePrevious": "16",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=85"
+  },
+  {
+    "id": 9,
+    "date": "January 14, 2026",
+    "monstersCount": "1",
+    "skillCount": "1",
+    "daysSincePrevious": "51",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=84"
+  },
+  {
+    "id": 10,
+    "date": "November 24, 2025",
+    "monstersCount": "115",
+    "skillCount": "126",
+    "daysSincePrevious": "40",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=83"
+  },
+  {
+    "id": 11,
+    "date": "October 15, 2025",
+    "monstersCount": "2",
+    "skillCount": "3",
+    "daysSincePrevious": "14",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=82"
+  },
+  {
+    "id": 12,
+    "date": "October 01, 2025",
+    "monstersCount": "1",
+    "skillCount": "1",
+    "daysSincePrevious": "2",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=81"
+  },
+  {
+    "id": 13,
+    "date": "September 29, 2025",
+    "monstersCount": "55",
+    "skillCount": "64",
+    "daysSincePrevious": "17",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=80"
+  },
+  {
+    "id": 14,
+    "date": "September 12, 2025",
+    "monstersCount": "1",
+    "skillCount": "1",
+    "daysSincePrevious": "16",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=79"
+  },
+  {
+    "id": 15,
+    "date": "August 27, 2025",
+    "monstersCount": "1",
+    "skillCount": "1",
+    "daysSincePrevious": "14",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=78"
+  },
+  {
+    "id": 16,
+    "date": "August 13, 2025",
+    "monstersCount": "2",
+    "skillCount": "2",
+    "daysSincePrevious": "24",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=77"
+  },
+  {
+    "id": 17,
+    "date": "July 20, 2025",
+    "monstersCount": "65",
+    "skillCount": "78",
+    "daysSincePrevious": "53",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=76"
+  },
+  {
+    "id": 18,
+    "date": "May 28, 2025",
+    "monstersCount": "101",
+    "skillCount": "112",
+    "daysSincePrevious": "14",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=75"
+  },
+  {
+    "id": 19,
+    "date": "May 14, 2025",
+    "monstersCount": "11",
+    "skillCount": "11",
+    "daysSincePrevious": "45",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=74"
+  },
+  {
+    "id": 20,
+    "date": "March 30, 2025",
+    "monstersCount": "51",
+    "skillCount": "62",
+    "daysSincePrevious": "64",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=73"
+  },
+  {
+    "id": 21,
+    "date": "January 24, 2025",
+    "monstersCount": "54",
+    "skillCount": "61",
+    "daysSincePrevious": "58",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=72"
+  },
+  {
+    "id": 22,
+    "date": "November 27, 2024",
+    "monstersCount": "58",
+    "skillCount": "66",
+    "daysSincePrevious": "59",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=71"
+  },
+  {
+    "id": 23,
+    "date": "September 29, 2024",
+    "monstersCount": "28",
+    "skillCount": "28",
+    "daysSincePrevious": "66",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=70"
+  },
+  {
+    "id": 24,
+    "date": "July 24, 2024",
+    "monstersCount": "41",
+    "skillCount": "52",
+    "daysSincePrevious": "56",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=69"
+  },
+  {
+    "id": 25,
+    "date": "May 29, 2024",
+    "monstersCount": "69",
+    "skillCount": "88",
+    "daysSincePrevious": "62",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=68"
+  },
+  {
+    "id": 26,
+    "date": "March 27, 2024",
+    "monstersCount": "55",
+    "skillCount": "63",
+    "daysSincePrevious": "41",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=67"
+  },
+  {
+    "id": 27,
+    "date": "February 14, 2024",
+    "monstersCount": "1",
+    "skillCount": "1",
+    "daysSincePrevious": "15",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=66"
+  },
+  {
+    "id": 28,
+    "date": "January 30, 2024",
+    "monstersCount": "52",
+    "skillCount": "79",
+    "daysSincePrevious": "63",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=65"
+  },
+  {
+    "id": 29,
+    "date": "November 28, 2023",
+    "monstersCount": "62",
+    "skillCount": "76",
+    "daysSincePrevious": "63",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=64"
+  },
+  {
+    "id": 30,
+    "date": "September 26, 2023",
+    "monstersCount": "41",
+    "skillCount": "49",
+    "daysSincePrevious": "13",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=63"
+  },
+  {
+    "id": 31,
+    "date": "September 13, 2023",
+    "monstersCount": "1",
+    "skillCount": "1",
+    "daysSincePrevious": "47",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=62"
+  },
+  {
+    "id": 32,
+    "date": "July 28, 2023",
+    "monstersCount": "48",
+    "skillCount": "72",
+    "daysSincePrevious": "59",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=61"
+  },
+  {
+    "id": 33,
+    "date": "May 30, 2023",
+    "monstersCount": "49",
+    "skillCount": "73",
+    "daysSincePrevious": "63",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=60"
+  },
+  {
+    "id": 34,
+    "date": "March 28, 2023",
+    "monstersCount": "57",
+    "skillCount": "75",
+    "daysSincePrevious": "58",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=59"
+  },
+  {
+    "id": 35,
+    "date": "January 29, 2023",
+    "monstersCount": "53",
+    "skillCount": "70",
+    "daysSincePrevious": "49",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=58"
+  },
+  {
+    "id": 36,
+    "date": "December 11, 2022",
+    "monstersCount": "1",
+    "skillCount": "1",
+    "daysSincePrevious": "13",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=57"
+  },
+  {
+    "id": 37,
+    "date": "November 28, 2022",
+    "monstersCount": "56",
+    "skillCount": "69",
+    "daysSincePrevious": "61",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=56"
+  },
+  {
+    "id": 38,
+    "date": "September 28, 2022",
+    "monstersCount": "46",
+    "skillCount": "61",
+    "daysSincePrevious": "61",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=55"
+  },
+  {
+    "id": 39,
+    "date": "July 29, 2022",
+    "monstersCount": "43",
+    "skillCount": "58",
+    "daysSincePrevious": "57",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=54"
+  },
+  {
+    "id": 40,
+    "date": "June 02, 2022",
+    "monstersCount": "1",
+    "skillCount": "1",
+    "daysSincePrevious": "3",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=53"
+  },
+  {
+    "id": 41,
+    "date": "May 30, 2022",
+    "monstersCount": "46",
+    "skillCount": "59",
+    "daysSincePrevious": "61",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=52"
+  },
+  {
+    "id": 42,
+    "date": "March 30, 2022",
+    "monstersCount": "38",
+    "skillCount": "49",
+    "daysSincePrevious": "62",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=51"
+  },
+  {
+    "id": 43,
+    "date": "January 27, 2022",
+    "monstersCount": "57",
+    "skillCount": "79",
+    "daysSincePrevious": "59",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=50"
+  },
+  {
+    "id": 44,
+    "date": "November 29, 2021",
+    "monstersCount": "47",
+    "skillCount": "67",
+    "daysSincePrevious": "57",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=49"
+  },
+  {
+    "id": 45,
+    "date": "October 03, 2021",
+    "monstersCount": "57",
+    "skillCount": "91",
+    "daysSincePrevious": "84",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=48"
+  },
+  {
+    "id": 46,
+    "date": "July 11, 2021",
+    "monstersCount": "2",
+    "skillCount": "3",
+    "daysSincePrevious": "13",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=47"
+  },
+  {
+    "id": 47,
+    "date": "June 28, 2021",
+    "monstersCount": "46",
+    "skillCount": "56",
+    "daysSincePrevious": "90",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=46"
+  },
+  {
+    "id": 48,
+    "date": "March 30, 2021",
+    "monstersCount": "56",
+    "skillCount": "93",
+    "daysSincePrevious": "22",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=45"
+  },
+  {
+    "id": 49,
+    "date": "March 08, 2021",
+    "monstersCount": "1",
+    "skillCount": "1",
+    "daysSincePrevious": "52",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=44"
+  },
+  {
+    "id": 50,
+    "date": "January 15, 2021",
+    "monstersCount": "54",
+    "skillCount": "80",
+    "daysSincePrevious": "109",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=43"
+  },
+  {
+    "id": 51,
+    "date": "September 28, 2020",
+    "monstersCount": "35",
+    "skillCount": "63",
+    "daysSincePrevious": "28",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=42"
+  },
+  {
+    "id": 52,
+    "date": "August 31, 2020",
+    "monstersCount": "1",
+    "skillCount": "1",
+    "daysSincePrevious": "63",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=41"
+  },
+  {
+    "id": 53,
+    "date": "June 29, 2020",
+    "monstersCount": "61",
+    "skillCount": "90",
+    "daysSincePrevious": "94",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=40"
+  },
+  {
+    "id": 54,
+    "date": "March 27, 2020",
+    "monstersCount": "15",
+    "skillCount": "31",
+    "daysSincePrevious": "14",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=39"
+  },
+  {
+    "id": 55,
+    "date": "March 13, 2020",
+    "monstersCount": "58",
+    "skillCount": "69",
+    "daysSincePrevious": "50",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=38"
+  },
+  {
+    "id": 56,
+    "date": "January 23, 2020",
+    "monstersCount": "1",
+    "skillCount": "1",
+    "daysSincePrevious": "16",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=37"
+  },
+  {
+    "id": 57,
+    "date": "January 07, 2020",
+    "monstersCount": "55",
+    "skillCount": "119",
+    "daysSincePrevious": "59",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=36"
+  },
+  {
+    "id": 58,
+    "date": "November 09, 2019",
+    "monstersCount": "5",
+    "skillCount": "49",
+    "daysSincePrevious": "11",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=35"
+  },
+  {
+    "id": 59,
+    "date": "October 29, 2019",
+    "monstersCount": "39",
+    "skillCount": "59",
+    "daysSincePrevious": "62",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=34"
+  },
+  {
+    "id": 60,
+    "date": "August 28, 2019",
+    "monstersCount": "5",
+    "skillCount": "7",
+    "daysSincePrevious": "30",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=33"
+  },
+  {
+    "id": 61,
+    "date": "July 29, 2019",
+    "monstersCount": "40",
+    "skillCount": "55",
+    "daysSincePrevious": "62",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=32"
+  },
+  {
+    "id": 62,
+    "date": "May 28, 2019",
+    "monstersCount": "30",
+    "skillCount": "41",
+    "daysSincePrevious": "59",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=31"
+  },
+  {
+    "id": 63,
+    "date": "March 30, 2019",
+    "monstersCount": "38",
+    "skillCount": "85",
+    "daysSincePrevious": "100",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=30"
+  },
+  {
+    "id": 64,
+    "date": "December 20, 2018",
+    "monstersCount": "43",
+    "skillCount": "53",
+    "daysSincePrevious": "112",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=29"
+  },
+  {
+    "id": 65,
+    "date": "August 30, 2018",
+    "monstersCount": "32",
+    "skillCount": "52",
+    "daysSincePrevious": "57",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=28"
+  },
+  {
+    "id": 66,
+    "date": "July 04, 2018",
+    "monstersCount": "26",
+    "skillCount": "46",
+    "daysSincePrevious": "68",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=27"
+  },
+  {
+    "id": 67,
+    "date": "April 27, 2018",
+    "monstersCount": "31",
+    "skillCount": "41",
+    "daysSincePrevious": "29",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=26"
+  },
+  {
+    "id": 68,
+    "date": "March 29, 2018",
+    "monstersCount": "10",
+    "skillCount": "10",
+    "daysSincePrevious": "59",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=25"
+  },
+  {
+    "id": 69,
+    "date": "January 29, 2018",
+    "monstersCount": "35",
+    "skillCount": "44",
+    "daysSincePrevious": "61",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=24"
+  },
+  {
+    "id": 70,
+    "date": "November 29, 2017",
+    "monstersCount": "23",
+    "skillCount": "28",
+    "daysSincePrevious": "62",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=23"
+  },
+  {
+    "id": 71,
+    "date": "September 28, 2017",
+    "monstersCount": "8",
+    "skillCount": "13",
+    "daysSincePrevious": "29",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=22"
+  },
+  {
+    "id": 72,
+    "date": "August 30, 2017",
+    "monstersCount": "29",
+    "skillCount": "46",
+    "daysSincePrevious": "88",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=21"
+  },
+  {
+    "id": 73,
+    "date": "June 03, 2017",
+    "monstersCount": "37",
+    "skillCount": "58",
+    "daysSincePrevious": "96",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=20"
+  },
+  {
+    "id": 74,
+    "date": "February 27, 2017",
+    "monstersCount": "34",
+    "skillCount": "48",
+    "daysSincePrevious": "69",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=19"
+  },
+  {
+    "id": 75,
+    "date": "December 20, 2016",
+    "monstersCount": "26",
+    "skillCount": "49",
+    "daysSincePrevious": "68",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=18"
+  },
+  {
+    "id": 76,
+    "date": "October 13, 2016",
+    "monstersCount": "33",
+    "skillCount": "58",
+    "daysSincePrevious": "47",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=17"
+  },
+  {
+    "id": 77,
+    "date": "August 27, 2016",
+    "monstersCount": "39",
+    "skillCount": "68",
+    "daysSincePrevious": "89",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=16"
+  },
+  {
+    "id": 78,
+    "date": "May 30, 2016",
+    "monstersCount": "33",
+    "skillCount": "51",
+    "daysSincePrevious": "60",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=15"
+  },
+  {
+    "id": 79,
+    "date": "March 31, 2016",
+    "monstersCount": "67",
+    "skillCount": "106",
+    "daysSincePrevious": "63",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=14"
+  },
+  {
+    "id": 80,
+    "date": "January 28, 2016",
+    "monstersCount": "68",
+    "skillCount": "103",
+    "daysSincePrevious": "90",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=13"
+  },
+  {
+    "id": 81,
+    "date": "October 30, 2015",
+    "monstersCount": "81",
+    "skillCount": "95",
+    "daysSincePrevious": "71",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=12"
+  },
+  {
+    "id": 82,
+    "date": "August 20, 2015",
+    "monstersCount": "50",
+    "skillCount": "54",
+    "daysSincePrevious": "50",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=11"
+  },
+  {
+    "id": 83,
+    "date": "July 01, 2015",
+    "monstersCount": "41",
+    "skillCount": "46",
+    "daysSincePrevious": "29",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=10"
+  },
+  {
+    "id": 84,
+    "date": "June 02, 2015",
+    "monstersCount": "25",
+    "skillCount": "26",
+    "daysSincePrevious": "50",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=9"
+  },
+  {
+    "id": 85,
+    "date": "April 13, 2015",
+    "monstersCount": "68",
+    "skillCount": "85",
+    "daysSincePrevious": "73",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=8"
+  },
+  {
+    "id": 86,
+    "date": "January 30, 2015",
+    "monstersCount": "171",
+    "skillCount": "213",
+    "daysSincePrevious": "59",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=7"
+  },
+  {
+    "id": 87,
+    "date": "December 02, 2014",
+    "monstersCount": "22",
+    "skillCount": "40",
+    "daysSincePrevious": "38",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=6"
+  },
+  {
+    "id": 88,
+    "date": "October 25, 2014",
+    "monstersCount": "61",
+    "skillCount": "65",
+    "daysSincePrevious": "28",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=5"
+  },
+  {
+    "id": 89,
+    "date": "September 27, 2014",
+    "monstersCount": "29",
+    "skillCount": "34",
+    "daysSincePrevious": "28",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=4"
+  },
+  {
+    "id": 90,
+    "date": "August 30, 2014",
+    "monstersCount": "2",
+    "skillCount": "2",
+    "daysSincePrevious": "16",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=3"
+  },
+  {
+    "id": 91,
+    "date": "August 14, 2014",
+    "monstersCount": "22",
+    "skillCount": "22",
+    "daysSincePrevious": "27",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=2"
+  },
+  {
+    "id": 92,
+    "date": "July 18, 2014",
+    "monstersCount": "37",
+    "skillCount": "38",
+    "daysSincePrevious": "0",
+    "link": "https://swgt.io/controllers/balancePatch/specific?balancePatchID=1"
+  }
+]

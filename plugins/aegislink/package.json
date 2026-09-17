@@ -1,0 +1,19 @@
+{
+  "name": "swm-aegislink",
+  "version": "1.0.0",
+  "description": "AegisLink: Next-generation tactical battle & account synchronizer plugin for Summoners War Exporter (SWEX), engineered for the SWM Tactical Web Platform.",
+  "main": "index.js",
+  "author": "SWM Tactical Intelligence Team",
+  "license": "MIT",
+  "keywords": [
+    "summoners-war",
+    "swex",
+    "swex-plugin",
+    "swm",
+    "aegislink",
+    "siege",
+    "guild-war",
+    "3mdc",
+    "counter-logger"
+  ]
+}

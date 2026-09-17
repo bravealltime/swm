@@ -1,0 +1,4945 @@
+{
+  "defense": [
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0077_1_4.png",
+        "name": "ROBO-E65"
+      },
+      "stats": [
+        "ROBO-E65",
+        "1,178 / 0.1%",
+        "25.6%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0099_1_3_swgtC2NC.png",
+        "name": "Angela"
+      },
+      "stats": [
+        "Angela",
+        "5,009 / 0.3%",
+        "21.4%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0175_1_5.png",
+        "name": "Velaska"
+      },
+      "stats": [
+        "Velaska",
+        "3,908 / 0.2%",
+        "20.2%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0215_1_4_swgtC2NC.png",
+        "name": "Light Old Wood"
+      },
+      "stats": [
+        "Light Old Wood",
+        "1,046 / 0.1%",
+        "20.0%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0077_1_1.png",
+        "name": "ROBO-R40"
+      },
+      "stats": [
+        "ROBO-R40",
+        "2,255 / 0.1%",
+        "18.9%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0197_1_5_swgtC2NC.png",
+        "name": "Dark Shasha"
+      },
+      "stats": [
+        "Dark Shasha",
+        "1,437 / 0.1%",
+        "18.4%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0180_1_5_swgtC2NC.png",
+        "name": "Dark Vermilion Bird Dancer"
+      },
+      "stats": [
+        "Dark Vermilion Bird Dancer",
+        "1,377 / 0.1%",
+        "17.6%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0046_4_1.png",
+        "name": "Hyanes"
+      },
+      "stats": [
+        "Hyanes",
+        "2,310 / 0.1%",
+        "17.6%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0133_1_2.png",
+        "name": "Moogwang"
+      },
+      "stats": [
+        "Moogwang",
+        "1,449 / 0.1%",
+        "17.5%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0215_1_1_swgtC2NC.png",
+        "name": "Water Old Wood"
+      },
+      "stats": [
+        "Water Old Wood",
+        "2,878 / 0.2%",
+        "17.5%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0024_3_3.png",
+        "name": "Conrad"
+      },
+      "stats": [
+        "Conrad",
+        "4,718 / 0.3%",
+        "17.3%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0031_1_1.png",
+        "name": "Chiwu"
+      },
+      "stats": [
+        "Chiwu",
+        "1,959 / 0.1%",
+        "17.3%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0118_1_5.png",
+        "name": "Devaraja"
+      },
+      "stats": [
+        "Devaraja",
+        "2,603 / 0.1%",
+        "17.1%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0098_1_5_swgtC2NC.png",
+        "name": "Truffle"
+      },
+      "stats": [
+        "Truffle",
+        "2,534 / 0.1%",
+        "16.9%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0019_3_2.png",
+        "name": "Artamiel"
+      },
+      "stats": [
+        "Artamiel",
+        "1,151 / 0.1%",
+        "16.8%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0073_1_2.png",
+        "name": "Kaki"
+      },
+      "stats": [
+        "Kaki",
+        "1,700 / 0.1%",
+        "16.8%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0027_2_1.png",
+        "name": "Ritesh"
+      },
+      "stats": [
+        "Ritesh",
+        "2,906 / 0.2%",
+        "16.7%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0080_1_4.png",
+        "name": "Benedict"
+      },
+      "stats": [
+        "Benedict",
+        "1,370 / 0.1%",
+        "16.7%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0031_3_1.png",
+        "name": "Nigong"
+      },
+      "stats": [
+        "Nigong",
+        "2,426 / 0.1%",
+        "16.7%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0035_4_0.png",
+        "name": "Betta"
+      },
+      "stats": [
+        "Betta",
+        "2,180 / 0.1%",
+        "16.6%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0078_1_1.png",
+        "name": "Aaliyah"
+      },
+      "stats": [
+        "Aaliyah",
+        "1,392 / 0.1%",
+        "16.6%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0118_1_1.png",
+        "name": "Parjanya"
+      },
+      "stats": [
+        "Parjanya",
+        "2,561 / 0.1%",
+        "16.6%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0036_1_0.png",
+        "name": "Trevor"
+      },
+      "stats": [
+        "Trevor",
+        "8,085 / 0.4%",
+        "16.5%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0017_1_3.png",
+        "name": "Perna"
+      },
+      "stats": [
+        "Perna",
+        "6,463 / 0.4%",
+        "16.5%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0097_1_5_swgtC2NC.png",
+        "name": "Giselle"
+      },
+      "stats": [
+        "Giselle",
+        "7,338 / 0.4%",
+        "16.4%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0086_1_1.png",
+        "name": "Minato"
+      },
+      "stats": [
+        "Minato",
+        "1,555 / 0.1%",
+        "16.4%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0025_1_4.png",
+        "name": "Mei Hou Wang"
+      },
+      "stats": [
+        "Mei Hou Wang",
+        "1,171 / 0.1%",
+        "16.4%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0133_1_5.png",
+        "name": "Gapsoo"
+      },
+      "stats": [
+        "Gapsoo",
+        "6,968 / 0.4%",
+        "16.3%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0044_1_4.png",
+        "name": "Ophilia"
+      },
+      "stats": [
+        "Ophilia",
+        "10,589 / 0.6%",
+        "16.3%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0045_4_3.png",
+        "name": "Martina"
+      },
+      "stats": [
+        "Martina",
+        "1,718 / 0.1%",
+        "16.3%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0097_1_4_swgtC2NC.png",
+        "name": "Audrey"
+      },
+      "stats": [
+        "Audrey",
+        "3,444 / 0.2%",
+        "16.1%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0146_1_2.png",
+        "name": "7R1X"
+      },
+      "stats": [
+        "7R1X",
+        "7,772 / 0.4%",
+        "16.1%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0115_1_2_swgtC2NC.png",
+        "name": "Ashour"
+      },
+      "stats": [
+        "Ashour",
+        "16,735 / 0.9%",
+        "16.1%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0027_1_1.png",
+        "name": "Kumar"
+      },
+      "stats": [
+        "Kumar",
+        "15,181 / 0.8%",
+        "16.0%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0133_1_3.png",
+        "name": "Byungchul"
+      },
+      "stats": [
+        "Byungchul",
+        "41,064 / 2.2%",
+        "16.0%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0045_1_1.png",
+        "name": "Shaina"
+      },
+      "stats": [
+        "Shaina",
+        "1,781 / 0.1%",
+        "15.9%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0027_3_1.png",
+        "name": "Shazam"
+      },
+      "stats": [
+        "Shazam",
+        "4,505 / 0.2%",
+        "15.9%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0075_1_1.png",
+        "name": "Nana"
+      },
+      "stats": [
+        "Nana",
+        "9,870 / 0.5%",
+        "15.8%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0015_4_3.png",
+        "name": "Guillaume"
+      },
+      "stats": [
+        "Guillaume",
+        "5,572 / 0.3%",
+        "15.8%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0031_0_1.png",
+        "name": "Woosa"
+      },
+      "stats": [
+        "Woosa",
+        "2,176 / 0.1%",
+        "15.7%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0051_1_3.png",
+        "name": "Raoq"
+      },
+      "stats": [
+        "Raoq",
+        "1,041 / 0.1%",
+        "15.7%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0073_1_4.png",
+        "name": "Kinki"
+      },
+      "stats": [
+        "Kinki",
+        "7,212 / 0.4%",
+        "15.6%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0047_3_2.png",
+        "name": "Geldnir"
+      },
+      "stats": [
+        "Geldnir",
+        "9,385 / 0.5%",
+        "15.6%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0163_1_5_swgtC2NC.png",
+        "name": "Dark Rick"
+      },
+      "stats": [
+        "Dark Rick",
+        "1,814 / 0.1%",
+        "15.6%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0080_1_3.png",
+        "name": "Dominic"
+      },
+      "stats": [
+        "Dominic",
+        "1,606 / 0.1%",
+        "15.6%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0017_1_2.png",
+        "name": "Rakan"
+      },
+      "stats": [
+        "Rakan",
+        "8,398 / 0.5%",
+        "15.6%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0017_4_2.png",
+        "name": "Zeratu"
+      },
+      "stats": [
+        "Zeratu",
+        "5,190 / 0.3%",
+        "15.5%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0016_3_0.png",
+        "name": "Zerath"
+      },
+      "stats": [
+        "Zerath",
+        "2,796 / 0.2%",
+        "15.5%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0097_1_1_swgtC2NC.png",
+        "name": "Manon"
+      },
+      "stats": [
+        "Manon",
+        "2,347 / 0.1%",
+        "15.5%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0037_4_1.png",
+        "name": "Sylvia"
+      },
+      "stats": [
+        "Sylvia",
+        "26,416 / 1.4%",
+        "15.4%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0024_4_1.png",
+        "name": "Grego"
+      },
+      "stats": [
+        "Grego",
+        "1,716 / 0.1%",
+        "15.4%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0127_1_5.png",
+        "name": "Liliana"
+      },
+      "stats": [
+        "Liliana",
+        "2,377 / 0.1%",
+        "15.4%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0117_1_1_swgtC2NC.png",
+        "name": "Brita"
+      },
+      "stats": [
+        "Brita",
+        "12,377 / 0.7%",
+        "15.3%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0044_2_4.png",
+        "name": "Louise"
+      },
+      "stats": [
+        "Louise",
+        "2,279 / 0.1%",
+        "15.3%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0086_1_3.png",
+        "name": "Zen"
+      },
+      "stats": [
+        "Zen",
+        "6,144 / 0.3%",
+        "15.1%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0086_1_4.png",
+        "name": "Shun"
+      },
+      "stats": [
+        "Shun",
+        "2,820 / 0.2%",
+        "15.1%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0181_1_3_swgtC2NC.png",
+        "name": "Wind Qilin Slasher"
+      },
+      "stats": [
+        "Wind Qilin Slasher",
+        "37,868 / 2.1%",
+        "15.1%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0046_3_2.png",
+        "name": "Valantis"
+      },
+      "stats": [
+        "Valantis",
+        "1,149 / 0.1%",
+        "15.1%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0106_1_3.png",
+        "name": "Smicer"
+      },
+      "stats": [
+        "Smicer",
+        "1,603 / 0.1%",
+        "15.0%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0027_4_1.png",
+        "name": "Rahul"
+      },
+      "stats": [
+        "Rahul",
+        "14,644 / 0.8%",
+        "15.0%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0081_1_5.png",
+        "name": "Deborah"
+      },
+      "stats": [
+        "Deborah",
+        "1,059 / 0.1%",
+        "14.9%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0027_0_1.png",
+        "name": "Chandra"
+      },
+      "stats": [
+        "Chandra",
+        "31,829 / 1.7%",
+        "14.9%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0216_1_5_swgtC2NC.png",
+        "name": "Dark Night Fang"
+      },
+      "stats": [
+        "Dark Night Fang",
+        "2,467 / 0.1%",
+        "14.9%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0014_0_2.png",
+        "name": "Camilla"
+      },
+      "stats": [
+        "Camilla",
+        "3,997 / 0.2%",
+        "14.8%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0165_1_5_swgtC2NC.png",
+        "name": "Dark Tetsuya"
+      },
+      "stats": [
+        "Dark Tetsuya",
+        "3,067 / 0.2%",
+        "14.8%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0041_4_4.png",
+        "name": "Mi Ying"
+      },
+      "stats": [
+        "Mi Ying",
+        "1,822 / 0.1%",
+        "14.8%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0211_3_5.png",
+        "name": "Shumar"
+      },
+      "stats": [
+        "Shumar",
+        "6,982 / 0.4%",
+        "14.8%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0032_0_2.png",
+        "name": "Theomars"
+      },
+      "stats": [
+        "Theomars",
+        "13,758 / 0.8%",
+        "14.8%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0054_1_0.png",
+        "name": "Masha"
+      },
+      "stats": [
+        "Masha",
+        "1,614 / 0.1%",
+        "14.7%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0175_1_1.png",
+        "name": "Lamiella"
+      },
+      "stats": [
+        "Lamiella",
+        "75,908 / 4.2%",
+        "14.7%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0052_4_4.png",
+        "name": "Beelzebub"
+      },
+      "stats": [
+        "Beelzebub",
+        "5,287 / 0.3%",
+        "14.7%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0078_1_5.png",
+        "name": "Maya"
+      },
+      "stats": [
+        "Maya",
+        "1,776 / 0.1%",
+        "14.6%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0041_2_4.png",
+        "name": "Feng Yan"
+      },
+      "stats": [
+        "Feng Yan",
+        "4,649 / 0.3%",
+        "14.6%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0046_2_2.png",
+        "name": "Taranys"
+      },
+      "stats": [
+        "Taranys",
+        "15,505 / 0.8%",
+        "14.6%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0115_1_3_swgtC2NC.png",
+        "name": "Shahat"
+      },
+      "stats": [
+        "Shahat",
+        "15,221 / 0.8%",
+        "14.6%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0022_1_1.png",
+        "name": "Juno"
+      },
+      "stats": [
+        "Juno",
+        "2,094 / 0.1%",
+        "14.6%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0127_1_1.png",
+        "name": "Irene"
+      },
+      "stats": [
+        "Irene",
+        "17,282 / 0.9%",
+        "14.5%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0025_4_4.png",
+        "name": "Son Zhang Lao"
+      },
+      "stats": [
+        "Son Zhang Lao",
+        "12,672 / 0.7%",
+        "14.5%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0117_1_5_swgtC2NC.png",
+        "name": "Sigrid"
+      },
+      "stats": [
+        "Sigrid",
+        "2,055 / 0.1%",
+        "14.5%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0025_2_0.png",
+        "name": "Leo"
+      },
+      "stats": [
+        "Leo",
+        "1,735 / 0.1%",
+        "14.5%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0049_3_4.png",
+        "name": "Emily"
+      },
+      "stats": [
+        "Emily",
+        "3,091 / 0.2%",
+        "14.5%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0202_1_3.png",
+        "name": "Driana"
+      },
+      "stats": [
+        "Driana",
+        "40,233 / 2.2%",
+        "14.4%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0078_1_2.png",
+        "name": "Nora"
+      },
+      "stats": [
+        "Nora",
+        "7,542 / 0.4%",
+        "14.4%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0056_1_5.png",
+        "name": "Mookwol"
+      },
+      "stats": [
+        "Mookwol",
+        "1,602 / 0.1%",
+        "14.4%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0076_1_1.png",
+        "name": "Miles"
+      },
+      "stats": [
+        "Miles",
+        "5,958 / 0.3%",
+        "14.4%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0025_2_4.png",
+        "name": "Xing Zhe"
+      },
+      "stats": [
+        "Xing Zhe",
+        "5,607 / 0.3%",
+        "14.4%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0075_1_5.png",
+        "name": "Kiki"
+      },
+      "stats": [
+        "Kiki",
+        "5,307 / 0.3%",
+        "14.4%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0035_4_3.png",
+        "name": "Manannan"
+      },
+      "stats": [
+        "Manannan",
+        "2,026 / 0.1%",
+        "14.4%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0086_1_5.png",
+        "name": "Ritsu"
+      },
+      "stats": [
+        "Ritsu",
+        "1,442 / 0.1%",
+        "14.3%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0025_1_0.png",
+        "name": "Laika"
+      },
+      "stats": [
+        "Laika",
+        "1,376 / 0.1%",
+        "14.2%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0035_1_0.png",
+        "name": "Platy"
+      },
+      "stats": [
+        "Platy",
+        "10,986 / 0.6%",
+        "14.2%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0019_1_2.png",
+        "name": "Velajuel"
+      },
+      "stats": [
+        "Velajuel",
+        "1,167 / 0.1%",
+        "14.2%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0043_2_2.png",
+        "name": "Triana"
+      },
+      "stats": [
+        "Triana",
+        "2,591 / 0.1%",
+        "14.2%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0014_1_4.png",
+        "name": "Clara"
+      },
+      "stats": [
+        "Clara",
+        "3,807 / 0.2%",
+        "14.2%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0177_1_1.png",
+        "name": "Gideon"
+      },
+      "stats": [
+        "Gideon",
+        "1,917 / 0.1%",
+        "14.1%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0118_1_4.png",
+        "name": "Dyeus"
+      },
+      "stats": [
+        "Dyeus",
+        "2,810 / 0.2%",
+        "14.1%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0043_4_0.png",
+        "name": "Monte"
+      },
+      "stats": [
+        "Monte",
+        "4,074 / 0.2%",
+        "14.0%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0029_0_3.png",
+        "name": "Mihyang"
+      },
+      "stats": [
+        "Mihyang",
+        "9,197 / 0.5%",
+        "13.9%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0022_3_4.png",
+        "name": "Lora"
+      },
+      "stats": [
+        "Lora",
+        "17,800 / 1.0%",
+        "13.9%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0041_0_4.png",
+        "name": "Mo Long"
+      },
+      "stats": [
+        "Mo Long",
+        "1,197 / 0.1%",
+        "13.9%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0019_4_2.png",
+        "name": "Fermion"
+      },
+      "stats": [
+        "Fermion",
+        "3,411 / 0.2%",
+        "13.9%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0013_4_3.png",
+        "name": "Han"
+      },
+      "stats": [
+        "Han",
+        "2,040 / 0.1%",
+        "13.8%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0038_1_1.png",
+        "name": "Khmun"
+      },
+      "stats": [
+        "Khmun",
+        "1,360 / 0.1%",
+        "13.8%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0080_1_5.png",
+        "name": "Maximilian"
+      },
+      "stats": [
+        "Maximilian",
+        "11,602 / 0.6%",
+        "13.7%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0040_1_3.png",
+        "name": "Daphnis"
+      },
+      "stats": [
+        "Daphnis",
+        "21,650 / 1.2%",
+        "13.7%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0049_0_4.png",
+        "name": "Abigail"
+      },
+      "stats": [
+        "Abigail",
+        "6,773 / 0.4%",
+        "13.7%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0028_0_4.png",
+        "name": "Orion"
+      },
+      "stats": [
+        "Orion",
+        "18,786 / 1.0%",
+        "13.6%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0115_1_5_swgtC2NC.png",
+        "name": "Salah"
+      },
+      "stats": [
+        "Salah",
+        "3,535 / 0.2%",
+        "13.6%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0086_1_2.png",
+        "name": "Ren"
+      },
+      "stats": [
+        "Ren",
+        "18,565 / 1.0%",
+        "13.6%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0035_3_3.png",
+        "name": "Pontos"
+      },
+      "stats": [
+        "Pontos",
+        "2,041 / 0.1%",
+        "13.6%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0078_1_3.png",
+        "name": "Riley"
+      },
+      "stats": [
+        "Riley",
+        "4,579 / 0.3%",
+        "13.6%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0025_0_4.png",
+        "name": "Shi Hou"
+      },
+      "stats": [
+        "Shi Hou",
+        "5,758 / 0.3%",
+        "13.5%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0054_3_0.png",
+        "name": "Narsha"
+      },
+      "stats": [
+        "Narsha",
+        "13,292 / 0.7%",
+        "13.4%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0068_1_4_swgtC2NC.png",
+        "name": "Craig"
+      },
+      "stats": [
+        "Craig",
+        "3,528 / 0.2%",
+        "13.4%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0179_1_4_swgtC2NC.png",
+        "name": "Light Azure Dragon Swordsman"
+      },
+      "stats": [
+        "Light Azure Dragon Swordsman",
+        "1,117 / 0.1%",
+        "13.3%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0166_1_2_swgtC2NC.png",
+        "name": "Fire Werner"
+      },
+      "stats": [
+        "Fire Werner",
+        "3,600 / 0.2%",
+        "13.3%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0176_1_2.png",
+        "name": "Rex"
+      },
+      "stats": [
+        "Rex",
+        "20,555 / 1.1%",
+        "13.3%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0136_1_1.png",
+        "name": "Ramael and Judiah"
+      },
+      "stats": [
+        "Ramael and Judiah",
+        "13,557 / 0.7%",
+        "13.3%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0043_0_0.png",
+        "name": "Reno"
+      },
+      "stats": [
+        "Reno",
+        "5,546 / 0.3%",
+        "13.3%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0166_1_5_swgtC2NC.png",
+        "name": "Dark Werner"
+      },
+      "stats": [
+        "Dark Werner",
+        "4,993 / 0.3%",
+        "13.3%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0054_4_0.png",
+        "name": "Xiana"
+      },
+      "stats": [
+        "Xiana",
+        "6,147 / 0.3%",
+        "13.3%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0043_2_0.png",
+        "name": "Morris"
+      },
+      "stats": [
+        "Morris",
+        "58,141 / 3.2%",
+        "13.3%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0048_1_1.png",
+        "name": "Carcano"
+      },
+      "stats": [
+        "Carcano",
+        "13,791 / 0.8%",
+        "13.2%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0016_4_2.png",
+        "name": "Cadiz"
+      },
+      "stats": [
+        "Cadiz",
+        "4,001 / 0.2%",
+        "13.2%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0151_1_5_swgtC2NC.png",
+        "name": "Fiona"
+      },
+      "stats": [
+        "Fiona",
+        "68,508 / 3.8%",
+        "13.2%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0181_1_5_swgtC2NC.png",
+        "name": "Dark Qilin Slasher"
+      },
+      "stats": [
+        "Dark Qilin Slasher",
+        "1,774 / 0.1%",
+        "13.2%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0035_3_0.png",
+        "name": "Molly"
+      },
+      "stats": [
+        "Molly",
+        "19,283 / 1.1%",
+        "13.1%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0032_2_0.png",
+        "name": "Hraesvelg"
+      },
+      "stats": [
+        "Hraesvelg",
+        "8,498 / 0.5%",
+        "13.1%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0019_2_2.png",
+        "name": "Eladriel"
+      },
+      "stats": [
+        "Eladriel",
+        "3,326 / 0.2%",
+        "13.0%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0040_0_1.png",
+        "name": "Chilling"
+      },
+      "stats": [
+        "Chilling",
+        "4,500 / 0.2%",
+        "13.0%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0017_4_3.png",
+        "name": "Jaara"
+      },
+      "stats": [
+        "Jaara",
+        "6,458 / 0.4%",
+        "13.0%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0119_1_5.png",
+        "name": "Vritra"
+      },
+      "stats": [
+        "Vritra",
+        "7,667 / 0.4%",
+        "13.0%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0118_1_3.png",
+        "name": "Chakra"
+      },
+      "stats": [
+        "Chakra",
+        "2,494 / 0.1%",
+        "13.0%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0221_1_3.png",
+        "name": "Wind Stark"
+      },
+      "stats": [
+        "Wind Stark",
+        "2,012 / 0.1%",
+        "12.9%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0023_4_1.png",
+        "name": "Craka"
+      },
+      "stats": [
+        "Craka",
+        "7,117 / 0.4%",
+        "12.9%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0119_1_3.png",
+        "name": "Usha"
+      },
+      "stats": [
+        "Usha",
+        "1,019 / 0.1%",
+        "12.9%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0073_1_3.png",
+        "name": "Fuuki"
+      },
+      "stats": [
+        "Fuuki",
+        "3,552 / 0.2%",
+        "12.8%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0211_3_3.png",
+        "name": "Gamir"
+      },
+      "stats": [
+        "Gamir",
+        "5,137 / 0.3%",
+        "12.8%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0032_1_2.png",
+        "name": "Tesarion"
+      },
+      "stats": [
+        "Tesarion",
+        "6,279 / 0.3%",
+        "12.8%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0117_1_4_swgtC2NC.png",
+        "name": "Berghild"
+      },
+      "stats": [
+        "Berghild",
+        "6,039 / 0.3%",
+        "12.7%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0053_0_1.png",
+        "name": "Vigor"
+      },
+      "stats": [
+        "Vigor",
+        "23,983 / 1.3%",
+        "12.7%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0038_4_1.png",
+        "name": "Thebae"
+      },
+      "stats": [
+        "Thebae",
+        "2,658 / 0.1%",
+        "12.6%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0032_3_0.png",
+        "name": "Mimirr"
+      },
+      "stats": [
+        "Mimirr",
+        "11,754 / 0.6%",
+        "12.6%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0053_3_1.png",
+        "name": "Eshir"
+      },
+      "stats": [
+        "Eshir",
+        "54,245 / 3.0%",
+        "12.5%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0008_3_4.png",
+        "name": "Liu Mei"
+      },
+      "stats": [
+        "Liu Mei",
+        "15,086 / 0.8%",
+        "12.5%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0036_3_4.png",
+        "name": "Iris"
+      },
+      "stats": [
+        "Iris",
+        "16,434 / 0.9%",
+        "12.5%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0016_0_2.png",
+        "name": "Liesel"
+      },
+      "stats": [
+        "Liesel",
+        "17,169 / 0.9%",
+        "12.5%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0049_4_4.png",
+        "name": "Bella"
+      },
+      "stats": [
+        "Bella",
+        "1,869 / 0.1%",
+        "12.5%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0043_4_2.png",
+        "name": "Vivachel"
+      },
+      "stats": [
+        "Vivachel",
+        "4,011 / 0.2%",
+        "12.5%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0023_3_1.png",
+        "name": "Asima"
+      },
+      "stats": [
+        "Asima",
+        "1,100 / 0.1%",
+        "12.5%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0118_1_2.png",
+        "name": "Vendhan"
+      },
+      "stats": [
+        "Vendhan",
+        "9,775 / 0.5%",
+        "12.4%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0022_2_1.png",
+        "name": "Seara"
+      },
+      "stats": [
+        "Seara",
+        "40,396 / 2.2%",
+        "12.4%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0043_3_2.png",
+        "name": "Celia"
+      },
+      "stats": [
+        "Celia",
+        "3,829 / 0.2%",
+        "12.4%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0041_3_4.png",
+        "name": "Tian Lang"
+      },
+      "stats": [
+        "Tian Lang",
+        "5,080 / 0.3%",
+        "12.3%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0211_3_1.png",
+        "name": "Tarq"
+      },
+      "stats": [
+        "Tarq",
+        "3,908 / 0.2%",
+        "12.3%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0066_1_5_swgtC2NC.png",
+        "name": "Vancliffe"
+      },
+      "stats": [
+        "Vancliffe",
+        "2,660 / 0.1%",
+        "12.3%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0218_1_2_swgtC2NC.png",
+        "name": "Fire Elder Horn"
+      },
+      "stats": [
+        "Fire Elder Horn",
+        "1,447 / 0.1%",
+        "12.2%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0076_1_2.png",
+        "name": "John"
+      },
+      "stats": [
+        "John",
+        "3,328 / 0.2%",
+        "12.2%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0047_2_2.png",
+        "name": "Odin"
+      },
+      "stats": [
+        "Odin",
+        "26,467 / 1.4%",
+        "12.2%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0066_1_1_swgtC2NC.png",
+        "name": "Moore"
+      },
+      "stats": [
+        "Moore",
+        "28,755 / 1.6%",
+        "12.2%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0022_4_1.png",
+        "name": "Giana"
+      },
+      "stats": [
+        "Giana",
+        "2,612 / 0.1%",
+        "12.2%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0054_2_0.png",
+        "name": "Savannah"
+      },
+      "stats": [
+        "Savannah",
+        "38,296 / 2.1%",
+        "12.2%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0016_3_2.png",
+        "name": "Julianne"
+      },
+      "stats": [
+        "Julianne",
+        "1,870 / 0.1%",
+        "12.1%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0032_3_2.png",
+        "name": "Elsharion"
+      },
+      "stats": [
+        "Elsharion",
+        "8,459 / 0.5%",
+        "12.1%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0166_1_4_swgtC2NC.png",
+        "name": "Light Werner"
+      },
+      "stats": [
+        "Light Werner",
+        "1,215 / 0.1%",
+        "11.9%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0008_4_4.png",
+        "name": "Fei"
+      },
+      "stats": [
+        "Fei",
+        "1,266 / 0.1%",
+        "11.9%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0072_1_5.png",
+        "name": "Douman"
+      },
+      "stats": [
+        "Douman",
+        "1,023 / 0.1%",
+        "11.9%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0182_1_4_swgtC2NC.png",
+        "name": "Light White Tiger Blade Master"
+      },
+      "stats": [
+        "Light White Tiger Blade Master",
+        "1,670 / 0.1%",
+        "11.9%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0099_1_1_swgtC2NC.png",
+        "name": "Adriana"
+      },
+      "stats": [
+        "Adriana",
+        "21,448 / 1.2%",
+        "11.8%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0133_1_4.png",
+        "name": "Euldong"
+      },
+      "stats": [
+        "Euldong",
+        "1,582 / 0.1%",
+        "11.6%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0114_1_1_swgtC2NC.png",
+        "name": "Lionel"
+      },
+      "stats": [
+        "Lionel",
+        "20,447 / 1.1%",
+        "11.6%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0127_1_3.png",
+        "name": "Layla"
+      },
+      "stats": [
+        "Layla",
+        "14,796 / 0.8%",
+        "11.6%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0152_1_2_swgtC2NC.png",
+        "name": "Tarnisha"
+      },
+      "stats": [
+        "Tarnisha",
+        "51,571 / 2.8%",
+        "11.6%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0011_3_2.png",
+        "name": "Figaro"
+      },
+      "stats": [
+        "Figaro",
+        "12,142 / 0.7%",
+        "11.6%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0040_4_3.png",
+        "name": "Nyx"
+      },
+      "stats": [
+        "Nyx",
+        "1,213 / 0.1%",
+        "11.5%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0034_0_0.png",
+        "name": "Galleon"
+      },
+      "stats": [
+        "Galleon",
+        "1,620 / 0.1%",
+        "11.5%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0087_1_5.png",
+        "name": "Destiny"
+      },
+      "stats": [
+        "Destiny",
+        "1,387 / 0.1%",
+        "11.5%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0039_4_2.png",
+        "name": "Nephthys"
+      },
+      "stats": [
+        "Nephthys",
+        "12,288 / 0.7%",
+        "11.4%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0073_1_5.png",
+        "name": "Ongyouki"
+      },
+      "stats": [
+        "Ongyouki",
+        "1,342 / 0.1%",
+        "11.4%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0017_3_3.png",
+        "name": "Eludia"
+      },
+      "stats": [
+        "Eludia",
+        "1,712 / 0.1%",
+        "11.2%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0117_1_2_swgtC2NC.png",
+        "name": "Solveig"
+      },
+      "stats": [
+        "Solveig",
+        "53,235 / 2.9%",
+        "11.1%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0031_4_1.png",
+        "name": "Woonsa"
+      },
+      "stats": [
+        "Woonsa",
+        "2,414 / 0.1%",
+        "11.1%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0075_1_3.png",
+        "name": "Momo"
+      },
+      "stats": [
+        "Momo",
+        "4,250 / 0.2%",
+        "11.1%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0160_3_5.png",
+        "name": "Seren"
+      },
+      "stats": [
+        "Seren",
+        "1,697 / 0.1%",
+        "11.1%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0054_0_0.png",
+        "name": "Barbara"
+      },
+      "stats": [
+        "Barbara",
+        "7,570 / 0.4%",
+        "11.1%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0033_2_3.png",
+        "name": "Tiana"
+      },
+      "stats": [
+        "Tiana",
+        "1,268 / 0.1%",
+        "11.0%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0017_2_3.png",
+        "name": "Teshar"
+      },
+      "stats": [
+        "Teshar",
+        "8,781 / 0.5%",
+        "10.9%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0056_1_2.png",
+        "name": "Jeogun"
+      },
+      "stats": [
+        "Jeogun",
+        "14,132 / 0.8%",
+        "10.9%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0075_1_4.png",
+        "name": "Dorothy"
+      },
+      "stats": [
+        "Dorothy",
+        "2,547 / 0.1%",
+        "10.9%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0035_2_0.png",
+        "name": "Cichlid"
+      },
+      "stats": [
+        "Cichlid",
+        "28,110 / 1.5%",
+        "10.9%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0039_0_2.png",
+        "name": "Bastet"
+      },
+      "stats": [
+        "Bastet",
+        "1,628 / 0.1%",
+        "10.9%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0199_1_4_swgtC2NC.png",
+        "name": "Light Duke"
+      },
+      "stats": [
+        "Light Duke",
+        "5,558 / 0.3%",
+        "10.8%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0023_2_1.png",
+        "name": "Ethna"
+      },
+      "stats": [
+        "Ethna",
+        "7,507 / 0.4%",
+        "10.7%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0116_1_5_swgtC2NC.png",
+        "name": "Kiara"
+      },
+      "stats": [
+        "Kiara",
+        "1,732 / 0.1%",
+        "10.7%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0197_1_4_swgtC2NC.png",
+        "name": "Light Shasha"
+      },
+      "stats": [
+        "Light Shasha",
+        "1,546 / 0.1%",
+        "10.5%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0035_2_3.png",
+        "name": "Triton"
+      },
+      "stats": [
+        "Triton",
+        "12,486 / 0.7%",
+        "10.5%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0022_4_4.png",
+        "name": "Nicki"
+      },
+      "stats": [
+        "Nicki",
+        "1,398 / 0.1%",
+        "10.4%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0055_0_0.png",
+        "name": "Kahn"
+      },
+      "stats": [
+        "Kahn",
+        "1,222 / 0.1%",
+        "10.3%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0087_1_1.png",
+        "name": "Amber"
+      },
+      "stats": [
+        "Amber",
+        "9,822 / 0.5%",
+        "10.3%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0015_0_3.png",
+        "name": "Luer"
+      },
+      "stats": [
+        "Luer",
+        "1,152 / 0.1%",
+        "10.1%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0049_2_4.png",
+        "name": "Christina"
+      },
+      "stats": [
+        "Christina",
+        "1,426 / 0.1%",
+        "9.9%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0075_1_2.png",
+        "name": "Coco"
+      },
+      "stats": [
+        "Coco",
+        "1,545 / 0.1%",
+        "9.8%"
+      ]
+    }
+  ],
+  "offense": [
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0192_1_4.png",
+        "name": "Christine"
+      },
+      "stats": [
+        "Christine",
+        "1,124 / 0.1%",
+        "94.7%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0024_2_1.png",
+        "name": "Fuco"
+      },
+      "stats": [
+        "Fuco",
+        "1,901 / 0.1%",
+        "93.9%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0073_1_1.png",
+        "name": "Suiki"
+      },
+      "stats": [
+        "Suiki",
+        "1,624 / 0.1%",
+        "93.0%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0046_4_2.png",
+        "name": "Pater"
+      },
+      "stats": [
+        "Pater",
+        "1,882 / 0.1%",
+        "92.8%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0044_2_1.png",
+        "name": "Light Homunculus(Support)"
+      },
+      "stats": [
+        "Light Homunculus(Support)",
+        "2,121 / 0.1%",
+        "92.6%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0004_1_3.png",
+        "name": "Shihwa"
+      },
+      "stats": [
+        "Shihwa",
+        "9,863 / 0.5%",
+        "92.5%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0020_3_1.png",
+        "name": "Iona"
+      },
+      "stats": [
+        "Iona",
+        "2,190 / 0.1%",
+        "92.4%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0068_1_3_swgtC2NC.png",
+        "name": "Sagar"
+      },
+      "stats": [
+        "Sagar",
+        "1,513 / 0.1%",
+        "92.3%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0151_1_1_swgtC2NC.png",
+        "name": "Rigna"
+      },
+      "stats": [
+        "Rigna",
+        "69,196 / 3.8%",
+        "92.0%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0035_4_0.png",
+        "name": "Betta"
+      },
+      "stats": [
+        "Betta",
+        "10,889 / 0.6%",
+        "91.9%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0099_1_1_swgtC2NC.png",
+        "name": "Adriana"
+      },
+      "stats": [
+        "Adriana",
+        "79,675 / 4.4%",
+        "91.9%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0037_4_1.png",
+        "name": "Sylvia"
+      },
+      "stats": [
+        "Sylvia",
+        "6,445 / 0.4%",
+        "91.8%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0040_3_1.png",
+        "name": "Misty"
+      },
+      "stats": [
+        "Misty",
+        "2,030 / 0.1%",
+        "91.8%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0052_1_2.png",
+        "name": "Kunite"
+      },
+      "stats": [
+        "Kunite",
+        "7,983 / 0.4%",
+        "91.3%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0051_0_0.png",
+        "name": "Elucia"
+      },
+      "stats": [
+        "Elucia",
+        "5,232 / 0.3%",
+        "91.2%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0047_3_2.png",
+        "name": "Geldnir"
+      },
+      "stats": [
+        "Geldnir",
+        "2,760 / 0.2%",
+        "91.2%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0180_1_1_swgtC2NC.png",
+        "name": "Water Vermilion Bird Dancer"
+      },
+      "stats": [
+        "Water Vermilion Bird Dancer",
+        "4,281 / 0.2%",
+        "91.1%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0044_3_1.png",
+        "name": "Dark Homunculus(Support)"
+      },
+      "stats": [
+        "Dark Homunculus(Support)",
+        "14,653 / 0.8%",
+        "90.9%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0035_1_0.png",
+        "name": "Platy"
+      },
+      "stats": [
+        "Platy",
+        "8,268 / 0.5%",
+        "90.9%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0026_2_1.png",
+        "name": "Kaito"
+      },
+      "stats": [
+        "Kaito",
+        "2,206 / 0.1%",
+        "90.8%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0022_3_4.png",
+        "name": "Lora"
+      },
+      "stats": [
+        "Lora",
+        "3,948 / 0.2%",
+        "90.5%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0081_1_2.png",
+        "name": "Miriam"
+      },
+      "stats": [
+        "Miriam",
+        "1,572 / 0.1%",
+        "90.5%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0039_4_2.png",
+        "name": "Nephthys"
+      },
+      "stats": [
+        "Nephthys",
+        "7,448 / 0.4%",
+        "90.2%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0151_1_3_swgtC2NC.png",
+        "name": "Tirsa"
+      },
+      "stats": [
+        "Tirsa",
+        "3,011 / 0.2%",
+        "90.2%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0064_1_5_swgtC2NC.png",
+        "name": "Cayde"
+      },
+      "stats": [
+        "Cayde",
+        "4,718 / 0.3%",
+        "90.2%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0041_4_2.png",
+        "name": "Kroa"
+      },
+      "stats": [
+        "Kroa",
+        "3,759 / 0.2%",
+        "90.2%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0126_3_1.png",
+        "name": "Tractor"
+      },
+      "stats": [
+        "Tractor",
+        "7,059 / 0.4%",
+        "90.2%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0046_4_1.png",
+        "name": "Hyanes"
+      },
+      "stats": [
+        "Hyanes",
+        "17,758 / 1.0%",
+        "90.2%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0016_0_0.png",
+        "name": "Verad"
+      },
+      "stats": [
+        "Verad",
+        "17,104 / 0.9%",
+        "90.1%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0057_1_3.png",
+        "name": "Yeonhwa"
+      },
+      "stats": [
+        "Yeonhwa",
+        "2,952 / 0.2%",
+        "90.1%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0035_0_0.png",
+        "name": "Tetra"
+      },
+      "stats": [
+        "Tetra",
+        "40,281 / 2.2%",
+        "90.1%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0073_1_4.png",
+        "name": "Kinki"
+      },
+      "stats": [
+        "Kinki",
+        "23,416 / 1.3%",
+        "90.1%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0126_3_5.png",
+        "name": "Crawler"
+      },
+      "stats": [
+        "Crawler",
+        "4,483 / 0.2%",
+        "90.0%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0035_3_3.png",
+        "name": "Pontos"
+      },
+      "stats": [
+        "Pontos",
+        "2,177 / 0.1%",
+        "89.9%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0118_1_3.png",
+        "name": "Chakra"
+      },
+      "stats": [
+        "Chakra",
+        "1,132 / 0.1%",
+        "89.8%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0114_1_4_swgtC2NC.png",
+        "name": "Ian"
+      },
+      "stats": [
+        "Ian",
+        "2,647 / 0.1%",
+        "89.8%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0183_1_3_swgtC2NC.png",
+        "name": "Wind Black Tortoise Champion"
+      },
+      "stats": [
+        "Wind Black Tortoise Champion",
+        "7,778 / 0.4%",
+        "89.8%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0151_1_4_swgtC2NC.png",
+        "name": "Birgitta"
+      },
+      "stats": [
+        "Birgitta",
+        "1,743 / 0.1%",
+        "89.8%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0146_1_5.png",
+        "name": "N1X"
+      },
+      "stats": [
+        "N1X",
+        "1,120 / 0.1%",
+        "89.6%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0014_3_2.png",
+        "name": "Akroma"
+      },
+      "stats": [
+        "Akroma",
+        "2,905 / 0.2%",
+        "89.6%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0021_2_4.png",
+        "name": "Yen"
+      },
+      "stats": [
+        "Yen",
+        "1,716 / 0.1%",
+        "89.6%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0024_2_3.png",
+        "name": "Briand"
+      },
+      "stats": [
+        "Briand",
+        "4,437 / 0.2%",
+        "89.6%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0127_1_4.png",
+        "name": "Jessica"
+      },
+      "stats": [
+        "Jessica",
+        "1,397 / 0.1%",
+        "89.5%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0029_0_3.png",
+        "name": "Mihyang"
+      },
+      "stats": [
+        "Mihyang",
+        "92,072 / 5.0%",
+        "89.5%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0016_3_0.png",
+        "name": "Zerath"
+      },
+      "stats": [
+        "Zerath",
+        "2,715 / 0.1%",
+        "89.5%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0052_3_4.png",
+        "name": "Lucifer"
+      },
+      "stats": [
+        "Lucifer",
+        "7,886 / 0.4%",
+        "89.4%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0065_1_2_swgtC2NC.png",
+        "name": "Berenice"
+      },
+      "stats": [
+        "Berenice",
+        "1,717 / 0.1%",
+        "89.4%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0024_4_3.png",
+        "name": "Dias"
+      },
+      "stats": [
+        "Dias",
+        "6,151 / 0.3%",
+        "89.4%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0099_1_2_swgtC2NC.png",
+        "name": "Lucia"
+      },
+      "stats": [
+        "Lucia",
+        "3,845 / 0.2%",
+        "89.3%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0066_1_5_swgtC2NC.png",
+        "name": "Vancliffe"
+      },
+      "stats": [
+        "Vancliffe",
+        "1,970 / 0.1%",
+        "89.3%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0016_4_0.png",
+        "name": "Grogen"
+      },
+      "stats": [
+        "Grogen",
+        "4,613 / 0.3%",
+        "89.2%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0054_4_0.png",
+        "name": "Xiana"
+      },
+      "stats": [
+        "Xiana",
+        "1,890 / 0.1%",
+        "89.2%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0087_1_3.png",
+        "name": "Sonia"
+      },
+      "stats": [
+        "Sonia",
+        "17,311 / 0.9%",
+        "89.1%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0127_1_2.png",
+        "name": "Bloodya"
+      },
+      "stats": [
+        "Bloodya",
+        "6,769 / 0.4%",
+        "89.1%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0037_2_1.png",
+        "name": "Olivia"
+      },
+      "stats": [
+        "Olivia",
+        "3,433 / 0.2%",
+        "89.1%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0046_3_1.png",
+        "name": "Felleria"
+      },
+      "stats": [
+        "Felleria",
+        "1,798 / 0.1%",
+        "89.0%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0099_1_3_swgtC2NC.png",
+        "name": "Angela"
+      },
+      "stats": [
+        "Angela",
+        "18,873 / 1.0%",
+        "89.0%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0161_1_4.png",
+        "name": "Fridrion"
+      },
+      "stats": [
+        "Fridrion",
+        "1,293 / 0.1%",
+        "88.9%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0025_2_4.png",
+        "name": "Xing Zhe"
+      },
+      "stats": [
+        "Xing Zhe",
+        "13,649 / 0.7%",
+        "88.8%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0006_2_1.png",
+        "name": "Delphoi"
+      },
+      "stats": [
+        "Delphoi",
+        "13,378 / 0.7%",
+        "88.8%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0021_1_4.png",
+        "name": "Hwa"
+      },
+      "stats": [
+        "Hwa",
+        "1,301 / 0.1%",
+        "88.7%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0027_4_1.png",
+        "name": "Rahul"
+      },
+      "stats": [
+        "Rahul",
+        "2,329 / 0.1%",
+        "88.7%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0014_0_2.png",
+        "name": "Camilla"
+      },
+      "stats": [
+        "Camilla",
+        "39,925 / 2.2%",
+        "88.7%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0077_1_4.png",
+        "name": "ROBO-E65"
+      },
+      "stats": [
+        "ROBO-E65",
+        "1,702 / 0.1%",
+        "88.6%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0019_3_2.png",
+        "name": "Artamiel"
+      },
+      "stats": [
+        "Artamiel",
+        "2,014 / 0.1%",
+        "88.6%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0024_1_3.png",
+        "name": "Arnold"
+      },
+      "stats": [
+        "Arnold",
+        "2,180 / 0.1%",
+        "88.5%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0072_1_5.png",
+        "name": "Douman"
+      },
+      "stats": [
+        "Douman",
+        "2,139 / 0.1%",
+        "88.5%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0153_1_5_swgtC2NC.png",
+        "name": "Celestara"
+      },
+      "stats": [
+        "Celestara",
+        "1,164 / 0.1%",
+        "88.5%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0218_1_3_swgtC2NC.png",
+        "name": "Wind Elder Horn"
+      },
+      "stats": [
+        "Wind Elder Horn",
+        "3,974 / 0.2%",
+        "88.5%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0041_1_2.png",
+        "name": "Racuni"
+      },
+      "stats": [
+        "Racuni",
+        "35,946 / 2.0%",
+        "88.4%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0115_1_3_swgtC2NC.png",
+        "name": "Shahat"
+      },
+      "stats": [
+        "Shahat",
+        "9,235 / 0.5%",
+        "88.4%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0051_0_3.png",
+        "name": "Icaru"
+      },
+      "stats": [
+        "Icaru",
+        "5,205 / 0.3%",
+        "88.4%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0043_2_4.png",
+        "name": "Diana"
+      },
+      "stats": [
+        "Diana",
+        "1,970 / 0.1%",
+        "88.3%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0016_0_2.png",
+        "name": "Liesel"
+      },
+      "stats": [
+        "Liesel",
+        "1,786 / 0.1%",
+        "88.1%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0119_1_5.png",
+        "name": "Vritra"
+      },
+      "stats": [
+        "Vritra",
+        "3,091 / 0.2%",
+        "88.1%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0043_1_4.png",
+        "name": "Helena"
+      },
+      "stats": [
+        "Helena",
+        "9,547 / 0.5%",
+        "88.0%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0175_1_3.png",
+        "name": "Orphina"
+      },
+      "stats": [
+        "Orphina",
+        "1,620 / 0.1%",
+        "88.0%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0066_1_4_swgtC2NC.png",
+        "name": "Talisman"
+      },
+      "stats": [
+        "Talisman",
+        "3,124 / 0.2%",
+        "88.0%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0078_1_1.png",
+        "name": "Aaliyah"
+      },
+      "stats": [
+        "Aaliyah",
+        "29,000 / 1.6%",
+        "87.9%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0080_1_5.png",
+        "name": "Maximilian"
+      },
+      "stats": [
+        "Maximilian",
+        "4,437 / 0.2%",
+        "87.9%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0025_2_0.png",
+        "name": "Leo"
+      },
+      "stats": [
+        "Leo",
+        "50,191 / 2.8%",
+        "87.9%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0056_1_1.png",
+        "name": "Haegang"
+      },
+      "stats": [
+        "Haegang",
+        "29,051 / 1.6%",
+        "87.8%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0019_1_2.png",
+        "name": "Velajuel"
+      },
+      "stats": [
+        "Velajuel",
+        "15,814 / 0.9%",
+        "87.8%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0068_1_4_swgtC2NC.png",
+        "name": "Craig"
+      },
+      "stats": [
+        "Craig",
+        "1,495 / 0.1%",
+        "87.8%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0176_1_1.png",
+        "name": "Mork"
+      },
+      "stats": [
+        "Mork",
+        "14,099 / 0.8%",
+        "87.7%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0116_1_5_swgtC2NC.png",
+        "name": "Kiara"
+      },
+      "stats": [
+        "Kiara",
+        "1,855 / 0.1%",
+        "87.7%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0052_0_4.png",
+        "name": "Belial"
+      },
+      "stats": [
+        "Belial",
+        "21,287 / 1.2%",
+        "87.6%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0029_2_3.png",
+        "name": "Chasun"
+      },
+      "stats": [
+        "Chasun",
+        "1,818 / 0.1%",
+        "87.6%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0032_3_0.png",
+        "name": "Mimirr"
+      },
+      "stats": [
+        "Mimirr",
+        "7,309 / 0.4%",
+        "87.5%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0040_2_3.png",
+        "name": "Ganymede"
+      },
+      "stats": [
+        "Ganymede",
+        "1,394 / 0.1%",
+        "87.5%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0003_3_2.png",
+        "name": "Teon"
+      },
+      "stats": [
+        "Teon",
+        "4,003 / 0.2%",
+        "87.5%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0020_3_3.png",
+        "name": "Chris"
+      },
+      "stats": [
+        "Chris",
+        "3,437 / 0.2%",
+        "87.4%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0065_1_4_swgtC2NC.png",
+        "name": "Leah"
+      },
+      "stats": [
+        "Leah",
+        "6,047 / 0.3%",
+        "87.3%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0057_1_5.png",
+        "name": "Mirinae"
+      },
+      "stats": [
+        "Mirinae",
+        "12,669 / 0.7%",
+        "87.3%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0216_1_1_swgtC2NC.png",
+        "name": "Water Night Fang"
+      },
+      "stats": [
+        "Water Night Fang",
+        "1,882 / 0.1%",
+        "87.3%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0115_1_2_swgtC2NC.png",
+        "name": "Ashour"
+      },
+      "stats": [
+        "Ashour",
+        "14,953 / 0.8%",
+        "87.3%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0118_1_1.png",
+        "name": "Parjanya"
+      },
+      "stats": [
+        "Parjanya",
+        "2,042 / 0.1%",
+        "87.1%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0175_1_5.png",
+        "name": "Velaska"
+      },
+      "stats": [
+        "Velaska",
+        "2,009 / 0.1%",
+        "87.1%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0055_0_2.png",
+        "name": "Bernard"
+      },
+      "stats": [
+        "Bernard",
+        "5,638 / 0.3%",
+        "87.0%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0164_1_4_swgtC2NC.png",
+        "name": "Light Aya"
+      },
+      "stats": [
+        "Light Aya",
+        "1,139 / 0.1%",
+        "87.0%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0041_2_4.png",
+        "name": "Feng Yan"
+      },
+      "stats": [
+        "Feng Yan",
+        "33,878 / 1.9%",
+        "87.0%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0029_3_3.png",
+        "name": "Yeonhong"
+      },
+      "stats": [
+        "Yeonhong",
+        "1,510 / 0.1%",
+        "87.0%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0041_4_1.png",
+        "name": "Isillen"
+      },
+      "stats": [
+        "Isillen",
+        "5,528 / 0.3%",
+        "86.9%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0072_1_4.png",
+        "name": "Seimei"
+      },
+      "stats": [
+        "Seimei",
+        "2,087 / 0.1%",
+        "86.8%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0044_3_4.png",
+        "name": "Jeanne"
+      },
+      "stats": [
+        "Jeanne",
+        "10,204 / 0.6%",
+        "86.7%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0040_0_1.png",
+        "name": "Chilling"
+      },
+      "stats": [
+        "Chilling",
+        "34,647 / 1.9%",
+        "86.7%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0013_4_3.png",
+        "name": "Han"
+      },
+      "stats": [
+        "Han",
+        "1,995 / 0.1%",
+        "86.6%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0023_3_1.png",
+        "name": "Asima"
+      },
+      "stats": [
+        "Asima",
+        "2,699 / 0.1%",
+        "86.6%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0027_1_1.png",
+        "name": "Kumar"
+      },
+      "stats": [
+        "Kumar",
+        "13,992 / 0.8%",
+        "86.5%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0013_2_3.png",
+        "name": "Orochi"
+      },
+      "stats": [
+        "Orochi",
+        "4,220 / 0.2%",
+        "86.4%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0165_1_5_swgtC2NC.png",
+        "name": "Dark Tetsuya"
+      },
+      "stats": [
+        "Dark Tetsuya",
+        "1,378 / 0.1%",
+        "86.4%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0013_0_3.png",
+        "name": "Susano"
+      },
+      "stats": [
+        "Susano",
+        "5,800 / 0.3%",
+        "86.4%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0146_1_2.png",
+        "name": "7R1X"
+      },
+      "stats": [
+        "7R1X",
+        "16,792 / 0.9%",
+        "86.4%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0040_2_1.png",
+        "name": "Windy"
+      },
+      "stats": [
+        "Windy",
+        "6,874 / 0.4%",
+        "86.3%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0118_1_4.png",
+        "name": "Dyeus"
+      },
+      "stats": [
+        "Dyeus",
+        "1,099 / 0.1%",
+        "86.1%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0072_1_2.png",
+        "name": "Tomoe"
+      },
+      "stats": [
+        "Tomoe",
+        "9,423 / 0.5%",
+        "86.0%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0211_3_1.png",
+        "name": "Tarq"
+      },
+      "stats": [
+        "Tarq",
+        "4,130 / 0.2%",
+        "86.0%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0022_4_1.png",
+        "name": "Giana"
+      },
+      "stats": [
+        "Giana",
+        "3,295 / 0.2%",
+        "86.0%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0032_1_2.png",
+        "name": "Tesarion"
+      },
+      "stats": [
+        "Tesarion",
+        "22,419 / 1.2%",
+        "85.9%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0078_1_3.png",
+        "name": "Riley"
+      },
+      "stats": [
+        "Riley",
+        "36,759 / 2.0%",
+        "85.9%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0106_1_3.png",
+        "name": "Smicer"
+      },
+      "stats": [
+        "Smicer",
+        "2,102 / 0.1%",
+        "85.9%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0025_1_4.png",
+        "name": "Mei Hou Wang"
+      },
+      "stats": [
+        "Mei Hou Wang",
+        "3,381 / 0.2%",
+        "85.9%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0016_3_2.png",
+        "name": "Julianne"
+      },
+      "stats": [
+        "Julianne",
+        "1,653 / 0.1%",
+        "85.7%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0051_0_2.png",
+        "name": "Dagora"
+      },
+      "stats": [
+        "Dagora",
+        "1,484 / 0.1%",
+        "85.6%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0151_1_5_swgtC2NC.png",
+        "name": "Fiona"
+      },
+      "stats": [
+        "Fiona",
+        "5,997 / 0.3%",
+        "85.6%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0150_1_2_swgtC2NC.png",
+        "name": "Magnus"
+      },
+      "stats": [
+        "Magnus",
+        "1,828 / 0.1%",
+        "85.6%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0117_1_2_swgtC2NC.png",
+        "name": "Solveig"
+      },
+      "stats": [
+        "Solveig",
+        "5,338 / 0.3%",
+        "85.6%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0046_1_2.png",
+        "name": "Bellenus"
+      },
+      "stats": [
+        "Bellenus",
+        "2,958 / 0.2%",
+        "85.4%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0032_2_0.png",
+        "name": "Hraesvelg"
+      },
+      "stats": [
+        "Hraesvelg",
+        "1,277 / 0.1%",
+        "85.4%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0215_1_1_swgtC2NC.png",
+        "name": "Water Old Wood"
+      },
+      "stats": [
+        "Water Old Wood",
+        "8,193 / 0.4%",
+        "85.3%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0132_1_2.png",
+        "name": "Yeji and Sapsaree"
+      },
+      "stats": [
+        "Yeji and Sapsaree",
+        "2,238 / 0.1%",
+        "85.3%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0052_2_2.png",
+        "name": "Malite"
+      },
+      "stats": [
+        "Malite",
+        "5,894 / 0.3%",
+        "85.2%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0016_2_0.png",
+        "name": "Jamire"
+      },
+      "stats": [
+        "Jamire",
+        "4,376 / 0.2%",
+        "85.2%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0011_2_2.png",
+        "name": "Lushen"
+      },
+      "stats": [
+        "Lushen",
+        "31,819 / 1.7%",
+        "85.2%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0022_1_1.png",
+        "name": "Juno"
+      },
+      "stats": [
+        "Juno",
+        "9,922 / 0.5%",
+        "85.2%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0020_0_1.png",
+        "name": "Rina"
+      },
+      "stats": [
+        "Rina",
+        "5,832 / 0.3%",
+        "85.1%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0043_3_4.png",
+        "name": "Eleanor"
+      },
+      "stats": [
+        "Eleanor",
+        "1,365 / 0.1%",
+        "85.1%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0044_2_4.png",
+        "name": "Louise"
+      },
+      "stats": [
+        "Louise",
+        "4,845 / 0.3%",
+        "85.0%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0033_2_3.png",
+        "name": "Tiana"
+      },
+      "stats": [
+        "Tiana",
+        "26,980 / 1.5%",
+        "85.0%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0025_4_4.png",
+        "name": "Son Zhang Lao"
+      },
+      "stats": [
+        "Son Zhang Lao",
+        "1,880 / 0.1%",
+        "85.0%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0179_1_5_swgtC2NC.png",
+        "name": "Dark Azure Dragon Swordsman"
+      },
+      "stats": [
+        "Dark Azure Dragon Swordsman",
+        "1,051 / 0.1%",
+        "85.0%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0098_1_5_swgtC2NC.png",
+        "name": "Truffle"
+      },
+      "stats": [
+        "Truffle",
+        "3,551 / 0.2%",
+        "85.0%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0017_4_2.png",
+        "name": "Zeratu"
+      },
+      "stats": [
+        "Zeratu",
+        "1,134 / 0.1%",
+        "84.9%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0022_3_1.png",
+        "name": "Laima"
+      },
+      "stats": [
+        "Laima",
+        "1,085 / 0.1%",
+        "84.9%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0019_0_2.png",
+        "name": "Ariel"
+      },
+      "stats": [
+        "Ariel",
+        "5,875 / 0.3%",
+        "84.8%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0022_1_4.png",
+        "name": "Rica"
+      },
+      "stats": [
+        "Rica",
+        "6,365 / 0.3%",
+        "84.8%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0043_2_2.png",
+        "name": "Triana"
+      },
+      "stats": [
+        "Triana",
+        "13,110 / 0.7%",
+        "84.8%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0020_1_1.png",
+        "name": "Chloe"
+      },
+      "stats": [
+        "Chloe",
+        "5,001 / 0.3%",
+        "84.7%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0035_3_0.png",
+        "name": "Molly"
+      },
+      "stats": [
+        "Molly",
+        "2,650 / 0.1%",
+        "84.7%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0017_4_3.png",
+        "name": "Jaara"
+      },
+      "stats": [
+        "Jaara",
+        "1,688 / 0.1%",
+        "84.7%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0014_0_4.png",
+        "name": "Julie"
+      },
+      "stats": [
+        "Julie",
+        "1,539 / 0.1%",
+        "84.7%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0041_3_2.png",
+        "name": "Dova"
+      },
+      "stats": [
+        "Dova",
+        "13,443 / 0.7%",
+        "84.6%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0153_1_4_swgtC2NC.png",
+        "name": "Groa"
+      },
+      "stats": [
+        "Groa",
+        "1,046 / 0.1%",
+        "84.6%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0116_1_2_swgtC2NC.png",
+        "name": "Federica"
+      },
+      "stats": [
+        "Federica",
+        "3,446 / 0.2%",
+        "84.5%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0019_2_2.png",
+        "name": "Eladriel"
+      },
+      "stats": [
+        "Eladriel",
+        "3,456 / 0.2%",
+        "84.5%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0077_1_1.png",
+        "name": "ROBO-R40"
+      },
+      "stats": [
+        "ROBO-R40",
+        "5,319 / 0.3%",
+        "84.4%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0038_1_1.png",
+        "name": "Khmun"
+      },
+      "stats": [
+        "Khmun",
+        "3,405 / 0.2%",
+        "84.4%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0075_1_4.png",
+        "name": "Dorothy"
+      },
+      "stats": [
+        "Dorothy",
+        "1,459 / 0.1%",
+        "84.4%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0030_3_0.png",
+        "name": "Hwadam"
+      },
+      "stats": [
+        "Hwadam",
+        "3,211 / 0.2%",
+        "84.4%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0024_3_3.png",
+        "name": "Conrad"
+      },
+      "stats": [
+        "Conrad",
+        "5,954 / 0.3%",
+        "84.3%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0043_0_4.png",
+        "name": "Amelia"
+      },
+      "stats": [
+        "Amelia",
+        "8,902 / 0.5%",
+        "84.3%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0019_4_2.png",
+        "name": "Fermion"
+      },
+      "stats": [
+        "Fermion",
+        "1,021 / 0.1%",
+        "84.2%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0087_1_2.png",
+        "name": "Claire"
+      },
+      "stats": [
+        "Claire",
+        "3,675 / 0.2%",
+        "84.2%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0133_1_5.png",
+        "name": "Gapsoo"
+      },
+      "stats": [
+        "Gapsoo",
+        "2,086 / 0.1%",
+        "84.1%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0020_4_3.png",
+        "name": "Bethony"
+      },
+      "stats": [
+        "Bethony",
+        "4,611 / 0.3%",
+        "84.0%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0017_3_3.png",
+        "name": "Eludia"
+      },
+      "stats": [
+        "Eludia",
+        "1,843 / 0.1%",
+        "84.0%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0022_0_4.png",
+        "name": "Anavel"
+      },
+      "stats": [
+        "Anavel",
+        "2,904 / 0.2%",
+        "83.8%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0077_1_5.png",
+        "name": "ROBO-F29"
+      },
+      "stats": [
+        "ROBO-F29",
+        "4,344 / 0.2%",
+        "83.8%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0164_1_3_swgtC2NC.png",
+        "name": "Wind Aya"
+      },
+      "stats": [
+        "Wind Aya",
+        "9,425 / 0.5%",
+        "83.7%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0053_4_1.png",
+        "name": "Jultan"
+      },
+      "stats": [
+        "Jultan",
+        "7,544 / 0.4%",
+        "83.7%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0017_1_2.png",
+        "name": "Rakan"
+      },
+      "stats": [
+        "Rakan",
+        "3,920 / 0.2%",
+        "83.5%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0133_1_2.png",
+        "name": "Moogwang"
+      },
+      "stats": [
+        "Moogwang",
+        "7,573 / 0.4%",
+        "83.4%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0056_1_3.png",
+        "name": "Cheongpung"
+      },
+      "stats": [
+        "Cheongpung",
+        "5,503 / 0.3%",
+        "83.4%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0125_3_3.png",
+        "name": "Copper"
+      },
+      "stats": [
+        "Copper",
+        "2,308 / 0.1%",
+        "83.4%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0114_1_1_swgtC2NC.png",
+        "name": "Lionel"
+      },
+      "stats": [
+        "Lionel",
+        "2,911 / 0.2%",
+        "83.3%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0034_0_0.png",
+        "name": "Galleon"
+      },
+      "stats": [
+        "Galleon",
+        "23,493 / 1.3%",
+        "83.2%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0047_2_2.png",
+        "name": "Odin"
+      },
+      "stats": [
+        "Odin",
+        "4,661 / 0.3%",
+        "83.1%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0087_1_1.png",
+        "name": "Amber"
+      },
+      "stats": [
+        "Amber",
+        "7,629 / 0.4%",
+        "83.0%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0032_4_2.png",
+        "name": "Veromos"
+      },
+      "stats": [
+        "Veromos",
+        "10,419 / 0.6%",
+        "83.0%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0053_3_1.png",
+        "name": "Eshir"
+      },
+      "stats": [
+        "Eshir",
+        "8,849 / 0.5%",
+        "82.9%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0039_2_0.png",
+        "name": "Imesety"
+      },
+      "stats": [
+        "Imesety",
+        "2,338 / 0.1%",
+        "82.9%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0077_1_3.png",
+        "name": "ROBO-G92"
+      },
+      "stats": [
+        "ROBO-G92",
+        "1,715 / 0.1%",
+        "82.9%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0044_1_4.png",
+        "name": "Ophilia"
+      },
+      "stats": [
+        "Ophilia",
+        "2,521 / 0.1%",
+        "82.8%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0001_3_4.png",
+        "name": "Kabilla"
+      },
+      "stats": [
+        "Kabilla",
+        "4,882 / 0.3%",
+        "82.7%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0082_3_3.png",
+        "name": "Roid"
+      },
+      "stats": [
+        "Roid",
+        "6,480 / 0.4%",
+        "82.7%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0098_1_3_swgtC2NC.png",
+        "name": "Praline"
+      },
+      "stats": [
+        "Praline",
+        "7,614 / 0.4%",
+        "82.4%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0133_1_3.png",
+        "name": "Byungchul"
+      },
+      "stats": [
+        "Byungchul",
+        "8,732 / 0.5%",
+        "82.4%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0031_1_1.png",
+        "name": "Chiwu"
+      },
+      "stats": [
+        "Chiwu",
+        "2,403 / 0.1%",
+        "82.4%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0047_0_2.png",
+        "name": "Bolverk"
+      },
+      "stats": [
+        "Bolverk",
+        "11,038 / 0.6%",
+        "82.2%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0097_1_1_swgtC2NC.png",
+        "name": "Manon"
+      },
+      "stats": [
+        "Manon",
+        "1,034 / 0.1%",
+        "82.2%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0048_1_1.png",
+        "name": "Carcano"
+      },
+      "stats": [
+        "Carcano",
+        "6,529 / 0.4%",
+        "82.2%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0071_3_4.png",
+        "name": "Thrain"
+      },
+      "stats": [
+        "Thrain",
+        "1,378 / 0.1%",
+        "82.1%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0164_1_1_swgtC2NC.png",
+        "name": "Water Aya"
+      },
+      "stats": [
+        "Water Aya",
+        "2,171 / 0.1%",
+        "82.1%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0180_1_3_swgtC2NC.png",
+        "name": "Wind Vermilion Bird Dancer"
+      },
+      "stats": [
+        "Wind Vermilion Bird Dancer",
+        "7,749 / 0.4%",
+        "81.9%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0211_3_5.png",
+        "name": "Shumar"
+      },
+      "stats": [
+        "Shumar",
+        "4,227 / 0.2%",
+        "81.7%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0028_4_0.png",
+        "name": "Fran"
+      },
+      "stats": [
+        "Fran",
+        "2,875 / 0.2%",
+        "81.0%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0076_1_2.png",
+        "name": "John"
+      },
+      "stats": [
+        "John",
+        "2,965 / 0.2%",
+        "81.0%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0175_1_1.png",
+        "name": "Lamiella"
+      },
+      "stats": [
+        "Lamiella",
+        "6,751 / 0.4%",
+        "80.9%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0071_3_1.png",
+        "name": "Sath"
+      },
+      "stats": [
+        "Sath",
+        "1,565 / 0.1%",
+        "80.8%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0041_0_4.png",
+        "name": "Mo Long"
+      },
+      "stats": [
+        "Mo Long",
+        "7,019 / 0.4%",
+        "80.8%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0017_1_3.png",
+        "name": "Perna"
+      },
+      "stats": [
+        "Perna",
+        "4,189 / 0.2%",
+        "80.7%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0145_1_3.png",
+        "name": "Eliza"
+      },
+      "stats": [
+        "Eliza",
+        "2,350 / 0.1%",
+        "80.6%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0027_0_1.png",
+        "name": "Chandra"
+      },
+      "stats": [
+        "Chandra",
+        "3,477 / 0.2%",
+        "80.4%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0036_4_2.png",
+        "name": "Isabelle"
+      },
+      "stats": [
+        "Isabelle",
+        "4,014 / 0.2%",
+        "80.3%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0044_0_4.png",
+        "name": "Josephine"
+      },
+      "stats": [
+        "Josephine",
+        "1,294 / 0.1%",
+        "80.1%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0027_2_1.png",
+        "name": "Ritesh"
+      },
+      "stats": [
+        "Ritesh",
+        "1,416 / 0.1%",
+        "80.0%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0078_1_2.png",
+        "name": "Nora"
+      },
+      "stats": [
+        "Nora",
+        "7,500 / 0.4%",
+        "80.0%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0038_2_1.png",
+        "name": "Iunu"
+      },
+      "stats": [
+        "Iunu",
+        "10,380 / 0.6%",
+        "80.0%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0075_1_1.png",
+        "name": "Nana"
+      },
+      "stats": [
+        "Nana",
+        "3,290 / 0.2%",
+        "79.7%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0040_0_3.png",
+        "name": "Psamathe"
+      },
+      "stats": [
+        "Psamathe",
+        "6,098 / 0.3%",
+        "79.6%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0074_3_2.png",
+        "name": "Kahli"
+      },
+      "stats": [
+        "Kahli",
+        "3,276 / 0.2%",
+        "79.5%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0048_0_1.png",
+        "name": "Covenant"
+      },
+      "stats": [
+        "Covenant",
+        "1,971 / 0.1%",
+        "79.5%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0160_3_5.png",
+        "name": "Seren"
+      },
+      "stats": [
+        "Seren",
+        "1,344 / 0.1%",
+        "79.1%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0034_4_0.png",
+        "name": "Frigate"
+      },
+      "stats": [
+        "Frigate",
+        "1,108 / 0.1%",
+        "79.0%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0003_0_2.png",
+        "name": "Konamiya"
+      },
+      "stats": [
+        "Konamiya",
+        "1,158 / 0.1%",
+        "78.9%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0043_2_0.png",
+        "name": "Morris"
+      },
+      "stats": [
+        "Morris",
+        "1,296 / 0.1%",
+        "78.9%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0016_1_0.png",
+        "name": "Zaiross"
+      },
+      "stats": [
+        "Zaiross",
+        "5,467 / 0.3%",
+        "78.9%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0028_3_4.png",
+        "name": "Gemini"
+      },
+      "stats": [
+        "Gemini",
+        "4,441 / 0.2%",
+        "78.7%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0053_0_1.png",
+        "name": "Vigor"
+      },
+      "stats": [
+        "Vigor",
+        "2,895 / 0.2%",
+        "78.7%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0176_1_2.png",
+        "name": "Rex"
+      },
+      "stats": [
+        "Rex",
+        "1,109 / 0.1%",
+        "78.5%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0039_0_2.png",
+        "name": "Bastet"
+      },
+      "stats": [
+        "Bastet",
+        "2,921 / 0.2%",
+        "78.3%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0212_3_5.png",
+        "name": "Drogan"
+      },
+      "stats": [
+        "Drogan",
+        "1,455 / 0.1%",
+        "78.3%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0022_2_1.png",
+        "name": "Seara"
+      },
+      "stats": [
+        "Seara",
+        "7,557 / 0.4%",
+        "78.0%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0056_1_2.png",
+        "name": "Jeogun"
+      },
+      "stats": [
+        "Jeogun",
+        "3,107 / 0.2%",
+        "77.8%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0070_3_0.png",
+        "name": "Lulu and Friends"
+      },
+      "stats": [
+        "Lulu and Friends",
+        "3,425 / 0.2%",
+        "77.7%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0025_0_0.png",
+        "name": "Chow"
+      },
+      "stats": [
+        "Chow",
+        "1,612 / 0.1%",
+        "77.7%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0013_3_3.png",
+        "name": "Gin"
+      },
+      "stats": [
+        "Gin",
+        "2,386 / 0.1%",
+        "77.5%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0006_4_1.png",
+        "name": "Tilasha"
+      },
+      "stats": [
+        "Tilasha",
+        "2,570 / 0.1%",
+        "77.2%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0032_3_4.png",
+        "name": "Loren"
+      },
+      "stats": [
+        "Loren",
+        "1,183 / 0.1%",
+        "77.1%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0080_1_3.png",
+        "name": "Dominic"
+      },
+      "stats": [
+        "Dominic",
+        "1,082 / 0.1%",
+        "77.1%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0066_1_2_swgtC2NC.png",
+        "name": "Douglas"
+      },
+      "stats": [
+        "Douglas",
+        "1,644 / 0.1%",
+        "77.1%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0054_2_0.png",
+        "name": "Savannah"
+      },
+      "stats": [
+        "Savannah",
+        "2,183 / 0.1%",
+        "77.0%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0052_2_4.png",
+        "name": "Mephisto"
+      },
+      "stats": [
+        "Mephisto",
+        "1,211 / 0.1%",
+        "77.0%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0035_0_3.png",
+        "name": "Poseidon"
+      },
+      "stats": [
+        "Poseidon",
+        "1,189 / 0.1%",
+        "76.6%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0221_1_2.png",
+        "name": "Fire Stark"
+      },
+      "stats": [
+        "Fire Stark",
+        "1,534 / 0.1%",
+        "76.2%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0031_0_1.png",
+        "name": "Woosa"
+      },
+      "stats": [
+        "Woosa",
+        "2,569 / 0.1%",
+        "76.1%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0046_2_2.png",
+        "name": "Taranys"
+      },
+      "stats": [
+        "Taranys",
+        "2,162 / 0.1%",
+        "75.2%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0035_2_3.png",
+        "name": "Triton"
+      },
+      "stats": [
+        "Triton",
+        "1,183 / 0.1%",
+        "74.2%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0014_2_2.png",
+        "name": "Katarina"
+      },
+      "stats": [
+        "Katarina",
+        "1,089 / 0.1%",
+        "72.5%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0152_1_2_swgtC2NC.png",
+        "name": "Tarnisha"
+      },
+      "stats": [
+        "Tarnisha",
+        "2,101 / 0.1%",
+        "72.4%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0047_2_0.png",
+        "name": "Skogul"
+      },
+      "stats": [
+        "Skogul",
+        "1,456 / 0.1%",
+        "72.3%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0045_1_1.png",
+        "name": "Shaina"
+      },
+      "stats": [
+        "Shaina",
+        "2,212 / 0.1%",
+        "72.0%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0011_0_2.png",
+        "name": "Sian"
+      },
+      "stats": [
+        "Sian",
+        "1,955 / 0.1%",
+        "71.3%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0045_4_3.png",
+        "name": "Martina"
+      },
+      "stats": [
+        "Martina",
+        "2,017 / 0.1%",
+        "70.6%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0066_1_1_swgtC2NC.png",
+        "name": "Moore"
+      },
+      "stats": [
+        "Moore",
+        "2,172 / 0.1%",
+        "70.3%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0025_1_0.png",
+        "name": "Laika"
+      },
+      "stats": [
+        "Laika",
+        "1,602 / 0.1%",
+        "67.5%"
+      ]
+    },
+    {
+      "monster": {
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0032_0_2.png",
+        "name": "Theomars"
+      },
+      "stats": [
+        "Theomars",
+        "1,305 / 0.1%",
+        "64.4%"
+      ]
+    }
+  ]
+}

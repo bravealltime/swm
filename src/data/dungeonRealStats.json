@@ -1,0 +1,1186 @@
+[
+  {
+    "id": "giants-abyss-hard",
+    "file": "dungeon_8011_2.html",
+    "nameTh": "ดันเจี้ยนยักษ์โบราณ (Giant's Keep) - Abyss Hard",
+    "nameEn": "Giant's Keep Abyss Hard",
+    "element": "Water",
+    "elementTh": "ธาตุน้ำ",
+    "dungeonId": "8011",
+    "stageId": "2",
+    "recordTime": "00:24",
+    "avgTime": "00:32",
+    "successRate": "99.8%",
+    "recommendedTeam": [
+      {
+        "name": "Teshar (L)",
+        "role": "ดาเมจหลักกวาดม็อบ & ล้างเวฟ",
+        "rune": "Fatal / Blade",
+        "spd": "+42",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0027_2_4.png"
+      },
+      {
+        "name": "Homunculus (Wind)",
+        "role": "ดาเมจเจาะเกราะตาม % เลือดบอส",
+        "rune": "Rage / Blade",
+        "spd": "+40",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0047_2_0.png"
+      },
+      {
+        "name": "Prilea (Water Harpu 2A)",
+        "role": "เปิดเทิร์น ลดเกราะ Def Break 100%",
+        "rune": "Fight x3 / Will",
+        "spd": "+75",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0009_0_1.png"
+      },
+      {
+        "name": "Deborah (Dark Blacksmith)",
+        "role": "พาสซีฟเพิ่มดาเมจเจาะเกราะ +25%",
+        "rune": "Fight x3 / Will",
+        "spd": "+65",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0055_4_0.png"
+      },
+      {
+        "name": "Lyn (Light Amazon)",
+        "role": "ปิดฉากบอสตาม Max HP ศัตรู",
+        "rune": "Rage / Blade",
+        "spd": "+35",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0006_3_4.png"
+      }
+    ],
+    "leaderSkill": "Teshar (เพิ่มอัตราคริติคอล CRIT Rate +33% ในดันเจี้ยน)",
+    "turnOrderTh": "1. Prilea (เปิดลดเกราะ Def Break) ➔ 2. Deborah (ซัพพอร์ตเจาะเกราะ) ➔ 3. Teshar (สกิล 3 Tempest กวาดล้างม็อบรีเซ็ตคูลดาวน์) ➔ 4. Wind Homunculus (ลดเลือดบอส) ➔ 5. Lyn (สกิล 3 ตีตาม % เลือดบอสปิดฉาก)",
+    "bossMechanicTh": "บอสยักษ์จะเคาน์เตอร์โจมตีสวนกลับอัตโนมัติทุกๆ 7 ครั้งที่โดนตี และมีหอคอยบัฟโจมตี + เจาะเกราะ จึงต้องใช้ทีมที่จบเวฟม็อบใน 1 เทิร์น และระเบิดดาเมจใส่บอสให้ตายก่อนโดนสวน",
+    "totalRuns": "30,670",
+    "bossStats": {
+      "bossName": "",
+      "level": "75",
+      "hp": "147,195",
+      "atk": "11,366",
+      "def": "2,159",
+      "spd": "164",
+      "res": "50%",
+      "acc": "25%",
+      "cr": "15%"
+    },
+    "generalDrops": [
+      {
+        "itemEn": "Mana",
+        "itemTh": "หินมานา (Mana Stones)",
+        "rate": "100.0%",
+        "counts": "30,664 / 30,670",
+        "amountRange": "134 - 11,762",
+        "avg": "5,548"
+      },
+      {
+        "itemEn": "Energy",
+        "itemTh": "พลังงาน (Energy)",
+        "rate": "53.3%",
+        "counts": "16,344 / 30,670",
+        "amountRange": "1 - 6",
+        "avg": "1.4"
+      },
+      {
+        "itemEn": "Crystals",
+        "itemTh": "คริสตัล (Crystals)",
+        "rate": "4.4%",
+        "counts": "1,348 / 30,670",
+        "amountRange": "1 - 2",
+        "avg": "1.0"
+      }
+    ],
+    "itemDrops": [
+      {
+        "itemEn": "6-Star Rune",
+        "itemTh": "รูน 6 ดาว (ระดับ Hero / Legend)",
+        "rate": "79.1%",
+        "counts": "24,262 / 30,670",
+        "amount": "1"
+      },
+      {
+        "itemEn": "Symbol of Giant",
+        "itemTh": "ชิ้นส่วนสัญลักษณ์ยักษ์ (ใช้คราฟต์รูน)",
+        "rate": "10.1%",
+        "counts": "3,104 / 30,670",
+        "amount": "8 - 12"
+      },
+      {
+        "itemEn": "Rune Piece",
+        "itemTh": "เศษชิ้นส่วนรูน",
+        "rate": "5.0%",
+        "counts": "1,547 / 30,670",
+        "amount": "8 - 12"
+      },
+      {
+        "itemEn": "3-Star Rainbowmon LVL 1",
+        "itemTh": "เรนโบว์มอน 3 ดาว เลเวล 1",
+        "rate": "1.8%",
+        "counts": "541 / 30,670",
+        "amount": "1"
+      },
+      {
+        "itemEn": "Engraved Summoning Pieces",
+        "itemTh": "ชิ้นส่วนคัมภีร์หินอัญเชิญโบราณ",
+        "rate": "1.2%",
+        "counts": "364 / 30,670",
+        "amount": "2 - 3"
+      },
+      {
+        "itemEn": "Unknown Scroll",
+        "itemTh": "คัมภีร์เวทมนตร์นิรนาม (ม้วนขาว)",
+        "rate": "0.8%",
+        "counts": "234 / 30,670",
+        "amount": "11 - 13"
+      },
+      {
+        "itemEn": "Mystical Scroll",
+        "itemTh": "คัมภีร์เวทมนตร์ลึกลับ (ม้วนฟ้า)",
+        "rate": "0.6%",
+        "counts": "192 / 30,670",
+        "amount": "1"
+      },
+      {
+        "itemEn": "4-Star Rainbowmon LVL 1",
+        "itemTh": "เรนโบว์มอน 4 ดาว เลเวล 1",
+        "rate": "0.5%",
+        "counts": "148 / 30,670",
+        "amount": "1"
+      },
+      {
+        "itemEn": "Shapeshifting Stone",
+        "itemTh": "หินแปลงร่างมอนสเตอร์ (Transmog Stone)",
+        "rate": "0.2%",
+        "counts": "62 / 30,670",
+        "amount": "2 - 3"
+      }
+    ],
+    "runeSets": [
+      {
+        "setEn": "Blade",
+        "setTh": "รูนคมมีด (Blade)",
+        "count": "4,911",
+        "percent": "20.2%"
+      },
+      {
+        "setEn": "Despair",
+        "setTh": "รูนสิ้นหวัง (Despair)",
+        "count": "3,884",
+        "percent": "16.0%"
+      },
+      {
+        "setEn": "Energy",
+        "setTh": "รูนพลังชีวิต (Energy)",
+        "count": "4,891",
+        "percent": "20.2%"
+      },
+      {
+        "setEn": "Fatal",
+        "setTh": "รูนสังหาร (Fatal)",
+        "count": "4,852",
+        "percent": "20.0%"
+      },
+      {
+        "setEn": "Intangible",
+        "setTh": "รูนไร้รูป (Intangible)",
+        "count": "826",
+        "percent": "3.4%"
+      },
+      {
+        "setEn": "Swift",
+        "setTh": "รูนว่องไว (Swift)",
+        "count": "4,898",
+        "percent": "20.2%"
+      }
+    ]
+  },
+  {
+    "id": "dragons-abyss-hard",
+    "file": "dungeon_9011_2.html",
+    "nameTh": "ดันเจี้ยนมังกรเพลิง (Dragon's Lair) - Abyss Hard",
+    "nameEn": "Dragon's Lair Abyss Hard",
+    "element": "Fire",
+    "elementTh": "ธาตุไฟ",
+    "dungeonId": "9011",
+    "stageId": "2",
+    "recordTime": "00:28",
+    "avgTime": "00:38",
+    "successRate": "99.4%",
+    "recommendedTeam": [
+      {
+        "name": "Verdehile (L)",
+        "role": "เร่งเกจเทิร์นทั้งทีมเมื่อคริติคอล",
+        "rune": "Rage / Blade (Atk/CD/Atk)",
+        "spd": "+30",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0016_1_2.png"
+      },
+      {
+        "name": "Liam (Water Weapon Master)",
+        "role": "ดาเมจเดี่ยวสุดแรงปาดมังกรทีเดียวตาย",
+        "rune": "Rage / Will",
+        "spd": "+38",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0059_0_1.png"
+      },
+      {
+        "name": "Julie (Water Pierret)",
+        "role": "สกิลกวาด 6 นัดเคลียร์เวฟ 1 & 3",
+        "rune": "Fatal / Blade (100% HP)",
+        "spd": "+85",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0018_0_1.png"
+      },
+      {
+        "name": "Shaina (Fire Boomerang)",
+        "role": "เจาะเกราะ Def Break มินิบอสและมังกร",
+        "rune": "Fight x2 / Will",
+        "spd": "+65",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0049_1_0.png"
+      },
+      {
+        "name": "Sabrina (Water Chakram)",
+        "role": "จับคู่แท็กทีมเพิ่มดาเมจ Shaina",
+        "rune": "Fight x2 / Blade",
+        "spd": "+55",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0049_0_0.png"
+      }
+    ],
+    "leaderSkill": "Verdehile (เพิ่มความเร็วโจมตี Attack Speed +28% ในดันเจี้ยน)",
+    "turnOrderTh": "1. Julie (กวาดเวฟม็อบเลือดเต็ม 100%) ➔ 2. Shaina (เกราะแตก) ➔ 3. Sabrina (แท็กทีมลดเกจ) ➔ 4. Liam (สกิล 3 ปาดดาเมจหนัก) ➔ 5. Verdehile (เร่งเกจเทิร์นปิดเกม)",
+    "bossMechanicTh": "หอคอยขวาจะกางเกราะอมตะ (Immunity) ให้มังกร และมังกรจะโจมตีแรงขึ้นมหาศาลหากเลือดต่ำกว่า 30% กลยุทธ์ที่เร็วที่สุดคือใช้ Liam ยิงปิดฉากในเทิร์นแรกก่อนหอคอยขวาจะได้ขยับ",
+    "totalRuns": "30,455",
+    "bossStats": {
+      "bossName": "",
+      "level": "75",
+      "hp": "143,490",
+      "atk": "6,196",
+      "def": "2,345",
+      "spd": "163",
+      "res": "30%",
+      "acc": "20%",
+      "cr": "15%"
+    },
+    "generalDrops": [
+      {
+        "itemEn": "Mana",
+        "itemTh": "หินมานา (Mana Stones)",
+        "rate": "100.0%",
+        "counts": "30,451 / 30,455",
+        "amountRange": "108 - 7,967",
+        "avg": "6,153"
+      },
+      {
+        "itemEn": "Energy",
+        "itemTh": "พลังงาน (Energy)",
+        "rate": "52.9%",
+        "counts": "16,096 / 30,455",
+        "amountRange": "1 - 6",
+        "avg": "1.4"
+      },
+      {
+        "itemEn": "Crystals",
+        "itemTh": "คริสตัล (Crystals)",
+        "rate": "4.3%",
+        "counts": "1,308 / 30,455",
+        "amountRange": "1 - 2",
+        "avg": "1.0"
+      }
+    ],
+    "itemDrops": [
+      {
+        "itemEn": "6-Star Rune",
+        "itemTh": "รูน 6 ดาว (ระดับ Hero / Legend)",
+        "rate": "76.5%",
+        "counts": "23,302 / 30,455",
+        "amount": "1"
+      },
+      {
+        "itemEn": "Symbol of Dragon",
+        "itemTh": "ชิ้นส่วนสัญลักษณ์มังกร (ใช้คราฟต์รูน)",
+        "rate": "11.5%",
+        "counts": "3,502 / 30,455",
+        "amount": "8 - 12"
+      },
+      {
+        "itemEn": "Rune Piece",
+        "itemTh": "เศษชิ้นส่วนรูน",
+        "rate": "5.9%",
+        "counts": "1,782 / 30,455",
+        "amount": "8 - 12"
+      },
+      {
+        "itemEn": "3-Star Rainbowmon LVL 1",
+        "itemTh": "เรนโบว์มอน 3 ดาว เลเวล 1",
+        "rate": "1.8%",
+        "counts": "544 / 30,455",
+        "amount": "1"
+      },
+      {
+        "itemEn": "Engraved Summoning Pieces",
+        "itemTh": "ชิ้นส่วนคัมภีร์หินอัญเชิญโบราณ",
+        "rate": "1.4%",
+        "counts": "435 / 30,455",
+        "amount": "2 - 3"
+      },
+      {
+        "itemEn": "Unknown Scroll",
+        "itemTh": "คัมภีร์เวทมนตร์นิรนาม (ม้วนขาว)",
+        "rate": "0.9%",
+        "counts": "261 / 30,455",
+        "amount": "11 - 13"
+      },
+      {
+        "itemEn": "Mystical Scroll",
+        "itemTh": "คัมภีร์เวทมนตร์ลึกลับ (ม้วนฟ้า)",
+        "rate": "0.7%",
+        "counts": "215 / 30,455",
+        "amount": "1"
+      },
+      {
+        "itemEn": "4-Star Rainbowmon LVL 1",
+        "itemTh": "เรนโบว์มอน 4 ดาว เลเวล 1",
+        "rate": "0.5%",
+        "counts": "167 / 30,455",
+        "amount": "1"
+      },
+      {
+        "itemEn": "Shapeshifting Stone",
+        "itemTh": "หินแปลงร่างมอนสเตอร์ (Transmog Stone)",
+        "rate": "0.3%",
+        "counts": "87 / 30,455",
+        "amount": "2 - 3"
+      }
+    ],
+    "runeSets": [
+      {
+        "setEn": "Endure",
+        "setTh": "Endure",
+        "count": "3,865",
+        "percent": "16.6%"
+      },
+      {
+        "setEn": "Focus",
+        "setTh": "Focus",
+        "count": "3,863",
+        "percent": "16.6%"
+      },
+      {
+        "setEn": "Guard",
+        "setTh": "Guard",
+        "count": "3,858",
+        "percent": "16.6%"
+      },
+      {
+        "setEn": "Intangible",
+        "setTh": "รูนไร้รูป (Intangible)",
+        "count": "871",
+        "percent": "3.7%"
+      },
+      {
+        "setEn": "Revenge",
+        "setTh": "รูนตอบโต้ (Revenge)",
+        "count": "3,922",
+        "percent": "16.8%"
+      },
+      {
+        "setEn": "Shield",
+        "setTh": "รูนโล่ (Shield)",
+        "count": "3,820",
+        "percent": "16.4%"
+      },
+      {
+        "setEn": "Violent",
+        "setTh": "รูนคลุ้มคลั่ง (Violent)",
+        "count": "3,103",
+        "percent": "13.3%"
+      }
+    ]
+  },
+  {
+    "id": "necropolis-abyss-hard",
+    "file": "dungeon_6011_2.html",
+    "nameTh": "ดันเจี้ยนเนโครพลิส (Necropolis) - Abyss Hard",
+    "nameEn": "Necropolis Abyss Hard",
+    "element": "Dark",
+    "elementTh": "ธาตุมืด",
+    "dungeonId": "6011",
+    "stageId": "2",
+    "recordTime": "00:31",
+    "avgTime": "00:44",
+    "successRate": "99.5%",
+    "recommendedTeam": [
+      {
+        "name": "Astar (Fire Magic Knight L)",
+        "role": "ตีหลายฮิตทำลายเกราะบาเรีย + กวาดเวฟ",
+        "rune": "Vampire / Revenge",
+        "spd": "+35",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0029_1_2.png"
+      },
+      {
+        "name": "Shamann (Light Griffon 2A)",
+        "role": "ดาเมจ x2 ต่อมอนสเตอร์มืดตาม Max HP",
+        "rune": "Rage / Blade",
+        "spd": "+38",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0010_3_4.png"
+      },
+      {
+        "name": "Raoq (Fire Inugami 2A)",
+        "role": "รุมโจมตีลดคูลดาวน์เพื่อน & รีเทิร์น",
+        "rune": "Violent / Revenge",
+        "spd": "+48",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0007_1_2.png"
+      },
+      {
+        "name": "Icaru (Water Inugami 2A)",
+        "role": "ดึงเพื่อนร่วมโจมตี 3 ตัวทำลายเกราะ",
+        "rune": "Guard x3 (DEF สูงสุด)",
+        "spd": "+45",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0007_0_1.png"
+      },
+      {
+        "name": "Lucasha (Fire Harpu 2A)",
+        "role": "ดีบัฟเกราะแตกและห้ามฟื้นฟูเลือด",
+        "rune": "Fight x2 / Revenge",
+        "spd": "+55",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0009_0_2.png"
+      }
+    ],
+    "leaderSkill": "Astar (เพิ่มพลังโจมตี ATK +33% ในดันเจี้ยน)",
+    "turnOrderTh": "1. Lucasha (เปิดเกราะแตก + ตีหลายฮิต) ➔ 2. Icaru (รุมตีปลดบาเรีย 7 ชั้น) ➔ 3. Raoq (รุมตีรอบสอง) ➔ 4. Shamann (ทุบมังกร/บอสธาตุมืด ดาเมจทะลุหลอด) ➔ 5. Astar (เคลียร์ซ้ำ)",
+    "bossMechanicTh": "บอสเนโครจะกางโล่บาเรีย 7 ฮิตที่ไม่คิดความเสียหาย และจำกัดสปีดโจมตี จึงต้องใช้มอนสเตอร์รุมตีหลายฮิต (Team Up) เพื่อทำลายเกราะก่อน แล้วให้ Shamann ปิดฉาก",
+    "totalRuns": "10,184",
+    "bossStats": {
+      "bossName": "",
+      "level": "75",
+      "hp": "88,350",
+      "atk": "3,961",
+      "def": "1,684",
+      "spd": "164",
+      "res": "30%",
+      "acc": "25%",
+      "cr": "15%"
+    },
+    "generalDrops": [
+      {
+        "itemEn": "Mana",
+        "itemTh": "หินมานา (Mana Stones)",
+        "rate": "100.0%",
+        "counts": "10,181 / 10,184",
+        "amountRange": "264 - 12,717",
+        "avg": "5,534"
+      },
+      {
+        "itemEn": "Energy",
+        "itemTh": "พลังงาน (Energy)",
+        "rate": "52.5%",
+        "counts": "5,344 / 10,184",
+        "amountRange": "1 - 5",
+        "avg": "1.4"
+      },
+      {
+        "itemEn": "Crystals",
+        "itemTh": "คริสตัล (Crystals)",
+        "rate": "4.3%",
+        "counts": "434 / 10,184",
+        "amountRange": "1 - 2",
+        "avg": "1.0"
+      }
+    ],
+    "itemDrops": [
+      {
+        "itemEn": "6-Star Rune",
+        "itemTh": "รูน 6 ดาว (ระดับ Hero / Legend)",
+        "rate": "81.9%",
+        "counts": "8,339 / 10,184",
+        "amount": "1"
+      },
+      {
+        "itemEn": "Symbol of Death",
+        "itemTh": "ชิ้นส่วนสัญลักษณ์ความตาย (เนโคร)",
+        "rate": "9.2%",
+        "counts": "941 / 10,184",
+        "amount": "8 - 12"
+      },
+      {
+        "itemEn": "Rune Piece",
+        "itemTh": "เศษชิ้นส่วนรูน",
+        "rate": "4.1%",
+        "counts": "414 / 10,184",
+        "amount": "8 - 12"
+      },
+      {
+        "itemEn": "3-Star Rainbowmon LVL 1",
+        "itemTh": "เรนโบว์มอน 3 ดาว เลเวล 1",
+        "rate": "1.3%",
+        "counts": "137 / 10,184",
+        "amount": "1"
+      },
+      {
+        "itemEn": "Engraved Summoning Pieces",
+        "itemTh": "ชิ้นส่วนคัมภีร์หินอัญเชิญโบราณ",
+        "rate": "1.0%",
+        "counts": "102 / 10,184",
+        "amount": "2 - 3"
+      },
+      {
+        "itemEn": "Unknown Scroll",
+        "itemTh": "คัมภีร์เวทมนตร์นิรนาม (ม้วนขาว)",
+        "rate": "0.6%",
+        "counts": "59 / 10,184",
+        "amount": "11 - 13"
+      },
+      {
+        "itemEn": "4-Star Rainbowmon LVL 1",
+        "itemTh": "เรนโบว์มอน 4 ดาว เลเวล 1",
+        "rate": "0.5%",
+        "counts": "46 / 10,184",
+        "amount": "1"
+      },
+      {
+        "itemEn": "Mystical Scroll",
+        "itemTh": "คัมภีร์เวทมนตร์ลึกลับ (ม้วนฟ้า)",
+        "rate": "0.4%",
+        "counts": "38 / 10,184",
+        "amount": "1"
+      },
+      {
+        "itemEn": "Shapeshifting Stone",
+        "itemTh": "หินแปลงร่างมอนสเตอร์ (Transmog Stone)",
+        "rate": "0.2%",
+        "counts": "21 / 10,184",
+        "amount": "2 - 3"
+      }
+    ],
+    "runeSets": [
+      {
+        "setEn": "Destroy",
+        "setTh": "รูนทำลาย (Destroy)",
+        "count": "1,743",
+        "percent": "20.9%"
+      },
+      {
+        "setEn": "Intangible",
+        "setTh": "รูนไร้รูป (Intangible)",
+        "count": "244",
+        "percent": "2.9%"
+      },
+      {
+        "setEn": "Nemesis",
+        "setTh": "รูนพยาบาท (Nemesis)",
+        "count": "1,664",
+        "percent": "20.0%"
+      },
+      {
+        "setEn": "Rage",
+        "setTh": "รูนพิโรธ (Rage)",
+        "count": "1,371",
+        "percent": "16.4%"
+      },
+      {
+        "setEn": "Vampire",
+        "setTh": "รูนดูดเลือด (Vampire)",
+        "count": "1,631",
+        "percent": "19.6%"
+      },
+      {
+        "setEn": "Will",
+        "setTh": "รูนเจตจำนง (Will)",
+        "count": "1,686",
+        "percent": "20.2%"
+      }
+    ]
+  },
+  {
+    "id": "spiritual-abyss-hard",
+    "file": "dungeon_9513_2.html",
+    "nameTh": "ดันเจี้ยนแดนวิญญาณ (Spiritual Realm) - Abyss Hard",
+    "nameEn": "Spiritual Realm Abyss Hard",
+    "element": "Wind",
+    "elementTh": "ธาตุลม",
+    "dungeonId": "9513",
+    "stageId": "2",
+    "recordTime": "00:42",
+    "avgTime": "00:54",
+    "successRate": "99.0%",
+    "recommendedTeam": [
+      {
+        "name": "Veromos (Dark Ifrit L)",
+        "role": "ล้างดีบัฟทั้งทีมทุกเทิร์น + สตั๊นเวฟ",
+        "rune": "Violent / Nemesis",
+        "spd": "+85",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0028_0_5.png"
+      },
+      {
+        "name": "Riley (Wind Totemist)",
+        "role": "บัฟดาบ บัฟภูมิคุ้มกัน และฟื้นฟูเลือด",
+        "rune": "Violent / Will",
+        "spd": "+75",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0058_0_0.png"
+      },
+      {
+        "name": "Nora (Fire Totemist)",
+        "role": "เผาเลือดด้วย DoT และปลดบัฟศัตรู",
+        "rune": "Despair / Will",
+        "spd": "+78",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0058_0_2.png"
+      },
+      {
+        "name": "Loren (Light Cow Girl)",
+        "role": "ลดเกจโจมตี + เจาะเกราะต่อเนื่อง",
+        "rune": "Swift / Focus",
+        "spd": "+95",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0038_0_4.png"
+      },
+      {
+        "name": "Belial (Water Demon)",
+        "role": "ฟื้นคืนชีพไม่จำกัด + เจาะเกราะ 100%",
+        "rune": "Vampire / Nemesis",
+        "spd": "+30",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0054_0_1.png"
+      }
+    ],
+    "leaderSkill": "Veromos (เพิ่มพลังชีวิต HP +33% แก่พรรคพวกทุกคน)",
+    "turnOrderTh": "1. Loren (เจาะเกราะ + ลดเกจ) ➔ 2. Riley (บัฟดาบ ATK + ภูมิคุ้มกัน) ➔ 3. Veromos (ล้างสถานะผิดปกติ) ➔ 4. Nora (ลงพิษต่อเนื่อง DoT) ➔ 5. Belial (ดาเมจเจาะเกราะสังหารบอส)",
+    "bossMechanicTh": "บอสจะขโมยบัฟของทีมเราไปเป็นของตัวเอง และแจกดีบัฟหนัก จึงต้องใช้ Veromos ล้างพิษตลอดเวลา และเน้นดาเมจที่เจาะเกราะทะลวงหลอด",
+    "totalRuns": "2,173",
+    "bossStats": {
+      "bossName": "",
+      "level": "75",
+      "hp": "103,740",
+      "atk": "5,775",
+      "def": "2,549",
+      "spd": "164",
+      "res": "50%",
+      "acc": "25%",
+      "cr": "15%"
+    },
+    "generalDrops": [
+      {
+        "itemEn": "Mana",
+        "itemTh": "หินมานา (Mana Stones)",
+        "rate": "100.0%",
+        "counts": "2,173 / 2,173",
+        "amountRange": "117 - 6,907",
+        "avg": "5,474"
+      },
+      {
+        "itemEn": "Energy",
+        "itemTh": "พลังงาน (Energy)",
+        "rate": "53.2%",
+        "counts": "1,155 / 2,173",
+        "amountRange": "1 - 5",
+        "avg": "1.4"
+      },
+      {
+        "itemEn": "Crystals",
+        "itemTh": "คริสตัล (Crystals)",
+        "rate": "4.6%",
+        "counts": "99 / 2,173",
+        "amountRange": "1 - 2",
+        "avg": "1.0"
+      }
+    ],
+    "itemDrops": [
+      {
+        "itemEn": "6-Star Rune",
+        "itemTh": "รูน 6 ดาว (ระดับ Hero / Legend)",
+        "rate": "74.2%",
+        "counts": "1,612 / 2,173",
+        "amount": "1"
+      },
+      {
+        "itemEn": "Symbol of Spirit",
+        "itemTh": "Symbol of Spirit",
+        "rate": "12.1%",
+        "counts": "264 / 2,173",
+        "amount": "8 - 12"
+      },
+      {
+        "itemEn": "Rune Piece",
+        "itemTh": "เศษชิ้นส่วนรูน",
+        "rate": "6.7%",
+        "counts": "146 / 2,173",
+        "amount": "8 - 12"
+      },
+      {
+        "itemEn": "3-Star Rainbowmon LVL 1",
+        "itemTh": "เรนโบว์มอน 3 ดาว เลเวล 1",
+        "rate": "2.2%",
+        "counts": "48 / 2,173",
+        "amount": "1"
+      },
+      {
+        "itemEn": "Engraved Summoning Pieces",
+        "itemTh": "ชิ้นส่วนคัมภีร์หินอัญเชิญโบราณ",
+        "rate": "1.8%",
+        "counts": "40 / 2,173",
+        "amount": "2 - 3"
+      },
+      {
+        "itemEn": "Unknown Scroll",
+        "itemTh": "คัมภีร์เวทมนตร์นิรนาม (ม้วนขาว)",
+        "rate": "1.0%",
+        "counts": "22 / 2,173",
+        "amount": "11 - 13"
+      },
+      {
+        "itemEn": "Mystical Scroll",
+        "itemTh": "คัมภีร์เวทมนตร์ลึกลับ (ม้วนฟ้า)",
+        "rate": "0.6%",
+        "counts": "14 / 2,173",
+        "amount": "1"
+      },
+      {
+        "itemEn": "4-Star Rainbowmon LVL 1",
+        "itemTh": "เรนโบว์มอน 4 ดาว เลเวล 1",
+        "rate": "0.6%",
+        "counts": "13 / 2,173",
+        "amount": "1"
+      },
+      {
+        "itemEn": "Shapeshifting Stone",
+        "itemTh": "หินแปลงร่างมอนสเตอร์ (Transmog Stone)",
+        "rate": "0.3%",
+        "counts": "6 / 2,173",
+        "amount": "2 - 3"
+      }
+    ],
+    "runeSets": [
+      {
+        "setEn": "Accuracy",
+        "setTh": "รูนแม่นยำ (Accuracy)",
+        "count": "259",
+        "percent": "16.1%"
+      },
+      {
+        "setEn": "Determination",
+        "setTh": "รูนแน่วแน่ (Determination)",
+        "count": "280",
+        "percent": "17.4%"
+      },
+      {
+        "setEn": "Enhance",
+        "setTh": "รูนเสริมกำลัง (Enhance)",
+        "count": "265",
+        "percent": "16.4%"
+      },
+      {
+        "setEn": "Fight",
+        "setTh": "รูนต่อสู้ (Fight)",
+        "count": "252",
+        "percent": "15.6%"
+      },
+      {
+        "setEn": "Intangible",
+        "setTh": "รูนไร้รูป (Intangible)",
+        "count": "66",
+        "percent": "4.1%"
+      },
+      {
+        "setEn": "Seal",
+        "setTh": "รูนผนึก (Seal)",
+        "count": "206",
+        "percent": "12.8%"
+      },
+      {
+        "setEn": "Tolerance",
+        "setTh": "รูนอดทน (Tolerance)",
+        "count": "284",
+        "percent": "17.6%"
+      }
+    ]
+  },
+  {
+    "id": "steel-abyss-hard",
+    "file": "dungeon_9511_2.html",
+    "nameTh": "ดันเจี้ยนป้อมปราการเหล็ก (Steel Fortress) - Abyss Hard",
+    "nameEn": "Steel Fortress Abyss Hard",
+    "element": "Wind",
+    "elementTh": "ธาตุลม",
+    "dungeonId": "9511",
+    "stageId": "2",
+    "recordTime": "00:29",
+    "avgTime": "00:39",
+    "successRate": "99.4%",
+    "recommendedTeam": [
+      {
+        "name": "Eirgar (Dark Vampire Lord L)",
+        "role": "บัฟ ATK บัฟดูดเลือด และนำทีมบุก",
+        "rune": "Fight x3",
+        "spd": "+65",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0016_2_5.png"
+      },
+      {
+        "name": "Zinc (Dark Living Armor 2A)",
+        "role": "สกิลห้ามบอสรับบัฟ (Block Buff) 100%",
+        "rune": "Despair / Guard",
+        "spd": "+70",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0013_1_5.png"
+      },
+      {
+        "name": "Loren (Light Cow Girl)",
+        "role": "เจาะเกราะ Def Break + ควบคุมเกจบอส",
+        "rune": "Swift / Focus",
+        "spd": "+98",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0038_0_4.png"
+      },
+      {
+        "name": "Kro (Dark Inugami 2A)",
+        "role": "ดาเมจระเบิดตามจำนวนดีบัฟบนตัวบอส",
+        "rune": "Rage / Blade",
+        "spd": "+42",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0007_1_5.png"
+      },
+      {
+        "name": "Pang (Light Rakshasa)",
+        "role": "ยืดระยะเวลาดีบัฟห้ามบัฟและเกราะแตก",
+        "rune": "Violent / Focus",
+        "spd": "+60",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0015_0_4.png"
+      }
+    ],
+    "leaderSkill": "Eirgar (เพิ่มพลังโจมตี ATK +38% ในดันเจี้ยน)",
+    "turnOrderTh": "1. Loren (เจาะเกราะ Def Break) ➔ 2. Zinc (ลงดีบัฟห้ามรับบัฟ Block Beneficial Effects) ➔ 3. Eirgar (แจกบัฟดาบ ATK) ➔ 4. Pang (ยืดระยะดีบัฟ) ➔ 5. Kro (สกิล 3 Scar ระเบิดบอสตายทันที)",
+    "bossMechanicTh": "บอสจะสะสมพลังเกราะและยิงสตั๊นทั้งทีมหากได้บัฟ กุญแจสำคัญคือห้ามให้บอสติดบัฟ (Block Buff) โดยเด็ดขาด จะทำให้บอสตัวเปล่าและโดน Kro ยิงดอกเดียวดับ",
+    "totalRuns": "22,083",
+    "bossStats": {
+      "bossName": "",
+      "level": "75",
+      "hp": "100,095",
+      "atk": "4,482",
+      "def": "2,147",
+      "spd": "145",
+      "res": "39%",
+      "acc": "50%",
+      "cr": "15%"
+    },
+    "generalDrops": [
+      {
+        "itemEn": "Mana",
+        "itemTh": "หินมานา (Mana Stones)",
+        "rate": "100.0%",
+        "counts": "22,079 / 22,083",
+        "amountRange": "108 - 12,872",
+        "avg": "5,440"
+      },
+      {
+        "itemEn": "Energy",
+        "itemTh": "พลังงาน (Energy)",
+        "rate": "53.9%",
+        "counts": "11,900 / 22,083",
+        "amountRange": "1 - 6",
+        "avg": "1.4"
+      },
+      {
+        "itemEn": "Crystals",
+        "itemTh": "คริสตัล (Crystals)",
+        "rate": "4.4%",
+        "counts": "965 / 22,083",
+        "amountRange": "1 - 3",
+        "avg": "1.0"
+      }
+    ],
+    "itemDrops": [
+      {
+        "itemEn": "Dark Artifact",
+        "itemTh": "อาร์ติแฟกต์ (Artifact)",
+        "rate": "16.7%",
+        "counts": "3,687 / 22,083",
+        "amount": "1"
+      },
+      {
+        "itemEn": "Wind Artifact",
+        "itemTh": "อาร์ติแฟกต์ (Artifact)",
+        "rate": "16.6%",
+        "counts": "3,671 / 22,083",
+        "amount": "1"
+      },
+      {
+        "itemEn": "Water Artifact",
+        "itemTh": "อาร์ติแฟกต์ (Artifact)",
+        "rate": "16.5%",
+        "counts": "3,653 / 22,083",
+        "amount": "1"
+      },
+      {
+        "itemEn": "Fire Artifact",
+        "itemTh": "อาร์ติแฟกต์ (Artifact)",
+        "rate": "16.3%",
+        "counts": "3,610 / 22,083",
+        "amount": "1"
+      },
+      {
+        "itemEn": "Light Artifact",
+        "itemTh": "อาร์ติแฟกต์ (Artifact)",
+        "rate": "16.3%",
+        "counts": "3,608 / 22,083",
+        "amount": "1"
+      },
+      {
+        "itemEn": "Conversion Stone",
+        "itemTh": "Conversion Stone",
+        "rate": "9.4%",
+        "counts": "2,079 / 22,083",
+        "amount": "20 - 25"
+      },
+      {
+        "itemEn": "Intangible Artifact",
+        "itemTh": "อาร์ติแฟกต์ (Artifact)",
+        "rate": "2.1%",
+        "counts": "464 / 22,083",
+        "amount": "1"
+      },
+      {
+        "itemEn": "3-Star Rainbowmon LVL 1",
+        "itemTh": "เรนโบว์มอน 3 ดาว เลเวล 1",
+        "rate": "1.4%",
+        "counts": "318 / 22,083",
+        "amount": "1"
+      },
+      {
+        "itemEn": "Engraved Summoning Pieces",
+        "itemTh": "ชิ้นส่วนคัมภีร์หินอัญเชิญโบราณ",
+        "rate": "1.0%",
+        "counts": "224 / 22,083",
+        "amount": "2 - 3"
+      },
+      {
+        "itemEn": "Unknown Scroll",
+        "itemTh": "คัมภีร์เวทมนตร์นิรนาม (ม้วนขาว)",
+        "rate": "0.7%",
+        "counts": "150 / 22,083",
+        "amount": "10 - 12"
+      }
+    ],
+    "runeSets": [
+      {
+        "setEn": "Dark",
+        "setTh": "อาร์ติแฟกต์ธาตุมืด (Dark Artifact)",
+        "count": "3,687",
+        "percent": "19.7%"
+      },
+      {
+        "setEn": "Fire",
+        "setTh": "อาร์ติแฟกต์ธาตุไฟ (Fire Artifact)",
+        "count": "3,610",
+        "percent": "19.3%"
+      },
+      {
+        "setEn": "Intangible",
+        "setTh": "รูนไร้รูป (Intangible)",
+        "count": "464",
+        "percent": "2.5%"
+      },
+      {
+        "setEn": "Light",
+        "setTh": "อาร์ติแฟกต์ธาตุแสง (Light Artifact)",
+        "count": "3,608",
+        "percent": "19.3%"
+      },
+      {
+        "setEn": "Water",
+        "setTh": "อาร์ติแฟกต์ธาตุน้ำ (Water Artifact)",
+        "count": "3,653",
+        "percent": "19.5%"
+      },
+      {
+        "setEn": "Wind",
+        "setTh": "อาร์ติแฟกต์ธาตุลม (Wind Artifact)",
+        "count": "3,671",
+        "percent": "19.6%"
+      }
+    ]
+  },
+  {
+    "id": "punishers-abyss-hard",
+    "file": "dungeon_9512_2.html",
+    "nameTh": "ดันเจี้ยนสุสานผู้ลงทัณฑ์ (Punisher's Crypt) - Abyss Hard",
+    "nameEn": "Punisher's Crypt Abyss Hard",
+    "element": "Light",
+    "elementTh": "ธาตุแสง",
+    "dungeonId": "9512",
+    "stageId": "2",
+    "recordTime": "00:33",
+    "avgTime": "00:43",
+    "successRate": "99.3%",
+    "recommendedTeam": [
+      {
+        "name": "Verdehile (Fire Vampire L)",
+        "role": "เพิ่มความเร็วสปีดดันเจี้ยน + ลีดเดอร์",
+        "rune": "Rage / Blade",
+        "spd": "+35",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0016_1_2.png"
+      },
+      {
+        "name": "Loren (Light Cow Girl)",
+        "role": "ชะลอความเร็วบอส Slow + ลดเกจ",
+        "rune": "Swift / Focus",
+        "spd": "+92",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0038_0_4.png"
+      },
+      {
+        "name": "Raoq (Fire Inugami 2A)",
+        "role": "ดึงเพื่อนรุมตีลดคูลดาวน์",
+        "rune": "Violent / Blade",
+        "spd": "+48",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0007_1_2.png"
+      },
+      {
+        "name": "Jultan (Dark Werewolf 2A)",
+        "role": "เกราะแตก 100% เมื่อคริติคอล + เลือดหนา",
+        "rune": "Energy x3 / Will",
+        "spd": "+55",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0008_1_5.png"
+      },
+      {
+        "name": "Kro (Dark Inugami 2A)",
+        "role": "สไนเปอร์บอสด้วยดาเมจคูณดีบัฟ",
+        "rune": "Rage / Blade",
+        "spd": "+40",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0007_1_5.png"
+      }
+    ],
+    "leaderSkill": "Verdehile (เพิ่มความเร็วโจมตี Attack Speed +28% ในดันเจี้ยน)",
+    "turnOrderTh": "1. Loren (ใส่ดีบัฟสโลว์ + เจาะเกราะ) ➔ 2. Jultan (เกราะแตกซ้ำ + บล็อกฮีล) ➔ 3. Raoq (รุมตีเร่งเทิร์น) ➔ 4. Kro (สกิล 3 ระเบิดดาเมจมหาศาล) ➔ 5. Verdehile (ดันเกจซ้ำ)",
+    "bossMechanicTh": "บอสจะได้รับความเร็วและเกจโจมตีเพิ่มขึ้นตามความเร็วของทีมเรา ห้ามใช้บัฟสปีด และควรใช้ Loren ลดเกจสโลว์บอสไว้ไม่ให้ขยับ",
+    "totalRuns": "14,556",
+    "bossStats": {
+      "bossName": "",
+      "level": "75",
+      "hp": "111,225",
+      "atk": "4,482",
+      "def": "1,874",
+      "spd": "170",
+      "res": "54%",
+      "acc": "50%",
+      "cr": "15%"
+    },
+    "generalDrops": [
+      {
+        "itemEn": "Mana",
+        "itemTh": "หินมานา (Mana Stones)",
+        "rate": "100.0%",
+        "counts": "14,549 / 14,556",
+        "amountRange": "110 - 6,870",
+        "avg": "5,366"
+      },
+      {
+        "itemEn": "Energy",
+        "itemTh": "พลังงาน (Energy)",
+        "rate": "54.1%",
+        "counts": "7,882 / 14,556",
+        "amountRange": "1 - 5",
+        "avg": "1.4"
+      },
+      {
+        "itemEn": "Crystals",
+        "itemTh": "คริสตัล (Crystals)",
+        "rate": "4.4%",
+        "counts": "645 / 14,556",
+        "amountRange": "1 - 2",
+        "avg": "1.0"
+      }
+    ],
+    "itemDrops": [
+      {
+        "itemEn": "Support Artifact",
+        "itemTh": "อาร์ติแฟกต์ (Artifact)",
+        "rate": "20.3%",
+        "counts": "2,950 / 14,556",
+        "amount": "1"
+      },
+      {
+        "itemEn": "Attack Artifact",
+        "itemTh": "อาร์ติแฟกต์ (Artifact)",
+        "rate": "19.6%",
+        "counts": "2,859 / 14,556",
+        "amount": "1"
+      },
+      {
+        "itemEn": "Defense Artifact",
+        "itemTh": "อาร์ติแฟกต์ (Artifact)",
+        "rate": "19.3%",
+        "counts": "2,810 / 14,556",
+        "amount": "1"
+      },
+      {
+        "itemEn": "HP Artifact",
+        "itemTh": "อาร์ติแฟกต์ (Artifact)",
+        "rate": "19.1%",
+        "counts": "2,773 / 14,556",
+        "amount": "1"
+      },
+      {
+        "itemEn": "Conversion Stone",
+        "itemTh": "Conversion Stone",
+        "rate": "12.6%",
+        "counts": "1,836 / 14,556",
+        "amount": "20 - 25"
+      },
+      {
+        "itemEn": "Intangible Artifact",
+        "itemTh": "อาร์ติแฟกต์ (Artifact)",
+        "rate": "2.5%",
+        "counts": "358 / 14,556",
+        "amount": "1"
+      },
+      {
+        "itemEn": "3-Star Rainbowmon LVL 1",
+        "itemTh": "เรนโบว์มอน 3 ดาว เลเวล 1",
+        "rate": "1.8%",
+        "counts": "261 / 14,556",
+        "amount": "1"
+      },
+      {
+        "itemEn": "Engraved Summoning Pieces",
+        "itemTh": "ชิ้นส่วนคัมภีร์หินอัญเชิญโบราณ",
+        "rate": "1.4%",
+        "counts": "200 / 14,556",
+        "amount": "2 - 3"
+      },
+      {
+        "itemEn": "Unknown Scroll",
+        "itemTh": "คัมภีร์เวทมนตร์นิรนาม (ม้วนขาว)",
+        "rate": "0.9%",
+        "counts": "128 / 14,556",
+        "amount": "10 - 12"
+      },
+      {
+        "itemEn": "Mystical Scroll",
+        "itemTh": "คัมภีร์เวทมนตร์ลึกลับ (ม้วนฟ้า)",
+        "rate": "0.6%",
+        "counts": "94 / 14,556",
+        "amount": "1"
+      }
+    ],
+    "runeSets": [
+      {
+        "setEn": "Attack",
+        "setTh": "อาร์ติแฟกต์สายโจมตี (Attack Type)",
+        "count": "2,859",
+        "percent": "24.3%"
+      },
+      {
+        "setEn": "Defense",
+        "setTh": "อาร์ติแฟกต์สายป้องกัน (Defense Type)",
+        "count": "2,810",
+        "percent": "23.9%"
+      },
+      {
+        "setEn": "HP",
+        "setTh": "อาร์ติแฟกต์สายพลังชีวิต (HP Type)",
+        "count": "2,773",
+        "percent": "23.6%"
+      },
+      {
+        "setEn": "Intangible",
+        "setTh": "รูนไร้รูป (Intangible)",
+        "count": "358",
+        "percent": "3.0%"
+      },
+      {
+        "setEn": "Support",
+        "setTh": "อาร์ติแฟกต์สายสนับสนุน (Support Type)",
+        "count": "2,950",
+        "percent": "25.1%"
+      }
+    ]
+  }
+]

@@ -1,0 +1,66 @@
+[
+  {
+    "code": "11DINGSHANGJIAN14",
+    "hiveUrl": "http://withhive.me/313/11DINGSHANGJIAN14",
+    "upvotes": 126,
+    "downvotes": 10,
+    "rewards": [
+      {
+        "title": "Energy x200",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/summoners_war_query_jp/energy.png"
+      },
+      {
+        "title": "Mystical Scroll x5",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/summoners_war_query_jp/scroll_mystical.png"
+      },
+      {
+        "title": "Rune x30",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/summoners_war_query_jp/rune.png"
+      }
+    ],
+    "status": "Active (ใช้งานได้)"
+  },
+  {
+    "code": "9CHONGYASWC12",
+    "hiveUrl": "http://withhive.me/313/9CHONGYASWC12",
+    "upvotes": 121,
+    "downvotes": 10,
+    "rewards": [
+      {
+        "title": "Summoning Stones x40",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/summoners_war_query_jp/summon_exclusive.png"
+      }
+    ],
+    "status": "Active (ใช้งานได้)"
+  },
+  {
+    "code": "XI4NHUANYINGN1",
+    "hiveUrl": "http://withhive.me/313/XI4NHUANYINGN1",
+    "upvotes": 111,
+    "downvotes": 8,
+    "rewards": [
+      {
+        "title": "Mana x500,000",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/summoners_war_query_jp/mana.png"
+      }
+    ],
+    "status": "Active (ใช้งานได้)"
+  },
+  {
+    "code": "SEPSW2026I8B",
+    "hiveUrl": "http://withhive.me/313/SEPSW2026I8B",
+    "upvotes": 197,
+    "downvotes": 6,
+    "rewards": [
+      {
+        "title": "Mana x300,000",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/summoners_war_query_jp/mana.png"
+      },
+      {
+        "title": "Water Scroll x3",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/summoners_war_query_jp/scroll_water.png"
+      }
+    ],
+    "status": "Active (ใช้งานได้)"
+  }
+]

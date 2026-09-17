@@ -1,0 +1,322 @@
+[
+  {
+    "id": "trend-1",
+    "leader": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0043_2_0.png",
+      "name": "Morris"
+    },
+    "monster2": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0176_1_2.png",
+      "name": "Rex"
+    },
+    "monster3": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0211_3_5.png",
+      "name": "Shumar"
+    },
+    "query": "Morris Rex Shumar"
+  },
+  {
+    "id": "trend-2",
+    "leader": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0024_3_3.png",
+      "name": "Conrad"
+    },
+    "monster2": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0073_1_4.png",
+      "name": "Kinki"
+    },
+    "monster3": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0077_1_1.png",
+      "name": "ROBO-R40"
+    },
+    "query": "Conrad Kinki ROBO-R40"
+  },
+  {
+    "id": "trend-3",
+    "leader": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0022_2_1.png",
+      "name": "Seara"
+    },
+    "monster2": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0028_0_4.png",
+      "name": "Orion"
+    },
+    "monster3": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0017_1_2.png",
+      "name": "Rakan"
+    },
+    "query": "Seara Orion Rakan"
+  },
+  {
+    "id": "trend-4",
+    "leader": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0152_1_2_swgtC2NC.png",
+      "name": "Tarnisha"
+    },
+    "monster2": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0011_3_2.png",
+      "name": "Figaro"
+    },
+    "monster3": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0054_2_0.png",
+      "name": "Savannah"
+    },
+    "query": "Tarnisha Figaro Savannah"
+  },
+  {
+    "id": "trend-5",
+    "leader": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0024_3_3.png",
+      "name": "Conrad"
+    },
+    "monster2": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0024_4_1.png",
+      "name": "Grego"
+    },
+    "monster3": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0077_1_1.png",
+      "name": "ROBO-R40"
+    },
+    "query": "Conrad Grego ROBO-R40"
+  },
+  {
+    "id": "trend-6",
+    "leader": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0151_1_5_swgtC2NC.png",
+      "name": "Fiona"
+    },
+    "monster2": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0053_3_1.png",
+      "name": "Eshir"
+    },
+    "monster3": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0016_0_2.png",
+      "name": "Liesel"
+    },
+    "query": "Fiona Eshir Liesel"
+  },
+  {
+    "id": "trend-7",
+    "leader": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0043_2_0.png",
+      "name": "Morris"
+    },
+    "monster2": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0008_3_4.png",
+      "name": "Liu Mei"
+    },
+    "monster3": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0053_0_1.png",
+      "name": "Vigor"
+    },
+    "query": "Morris Liu Mei Vigor"
+  },
+  {
+    "id": "trend-8",
+    "leader": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0022_2_1.png",
+      "name": "Seara"
+    },
+    "monster2": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0056_1_2.png",
+      "name": "Jeogun"
+    },
+    "monster3": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0175_1_1.png",
+      "name": "Lamiella"
+    },
+    "query": "Seara Jeogun Lamiella"
+  },
+  {
+    "id": "trend-9",
+    "leader": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0175_1_1.png",
+      "name": "Lamiella"
+    },
+    "monster2": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0115_1_2_swgtC2NC.png",
+      "name": "Ashour"
+    },
+    "monster3": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0133_1_3.png",
+      "name": "Byungchul"
+    },
+    "query": "Lamiella Ashour Byungchul"
+  },
+  {
+    "id": "trend-10",
+    "leader": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0039_0_2.png",
+      "name": "Bastet"
+    },
+    "monster2": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0027_2_1.png",
+      "name": "Ritesh"
+    },
+    "monster3": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0028_3_2.png",
+      "name": "Glinodon"
+    },
+    "query": "Bastet Ritesh Glinodon"
+  },
+  {
+    "id": "trend-11",
+    "leader": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0152_1_2_swgtC2NC.png",
+      "name": "Tarnisha"
+    },
+    "monster2": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0127_1_1.png",
+      "name": "Irene"
+    },
+    "monster3": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0181_1_3_swgtC2NC.png",
+      "name": "Wind Qilin Slasher"
+    },
+    "query": "Tarnisha Irene Wind Qilin Slasher"
+  },
+  {
+    "id": "trend-12",
+    "leader": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0048_1_1.png",
+      "name": "Carcano"
+    },
+    "monster2": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0040_2_3.png",
+      "name": "Ganymede"
+    },
+    "monster3": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0014_1_4.png",
+      "name": "Clara"
+    },
+    "query": "Carcano Ganymede Clara"
+  },
+  {
+    "id": "trend-13",
+    "leader": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0066_1_1_swgtC2NC.png",
+      "name": "Moore"
+    },
+    "monster2": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0040_1_3.png",
+      "name": "Daphnis"
+    },
+    "monster3": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0054_2_0.png",
+      "name": "Savannah"
+    },
+    "query": "Moore Daphnis Savannah"
+  },
+  {
+    "id": "trend-14",
+    "leader": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0115_1_2_swgtC2NC.png",
+      "name": "Ashour"
+    },
+    "monster2": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0117_1_1_swgtC2NC.png",
+      "name": "Brita"
+    },
+    "monster3": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0046_2_2.png",
+      "name": "Taranys"
+    },
+    "query": "Ashour Brita Taranys"
+  },
+  {
+    "id": "trend-15",
+    "leader": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0045_4_3.png",
+      "name": "Martina"
+    },
+    "monster2": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0045_1_1.png",
+      "name": "Shaina"
+    },
+    "monster3": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0043_2_2.png",
+      "name": "Triana"
+    },
+    "query": "Martina Shaina Triana"
+  },
+  {
+    "id": "trend-16",
+    "leader": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0115_1_2_swgtC2NC.png",
+      "name": "Ashour"
+    },
+    "monster2": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0117_1_1_swgtC2NC.png",
+      "name": "Brita"
+    },
+    "monster3": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0133_1_3.png",
+      "name": "Byungchul"
+    },
+    "query": "Ashour Brita Byungchul"
+  },
+  {
+    "id": "trend-17",
+    "leader": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0041_2_4.png",
+      "name": "Feng Yan"
+    },
+    "monster2": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0078_1_2.png",
+      "name": "Nora"
+    },
+    "monster3": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0118_1_1.png",
+      "name": "Parjanya"
+    },
+    "query": "Feng Yan Nora Parjanya"
+  },
+  {
+    "id": "trend-18",
+    "leader": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0022_2_1.png",
+      "name": "Seara"
+    },
+    "monster2": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0040_1_3.png",
+      "name": "Daphnis"
+    },
+    "monster3": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0017_1_3.png",
+      "name": "Perna"
+    },
+    "query": "Seara Daphnis Perna"
+  },
+  {
+    "id": "trend-19",
+    "leader": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0032_0_2.png",
+      "name": "Theomars"
+    },
+    "monster2": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0032_1_2.png",
+      "name": "Tesarion"
+    },
+    "monster3": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0031_0_1.png",
+      "name": "Woosa"
+    },
+    "query": "Theomars Tesarion Woosa"
+  },
+  {
+    "id": "trend-20",
+    "leader": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0022_2_1.png",
+      "name": "Seara"
+    },
+    "monster2": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0035_3_0.png",
+      "name": "Molly"
+    },
+    "monster3": {
+      "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0022_4_1.png",
+      "name": "Giana"
+    },
+    "query": "Seara Molly Giana"
+  }
+]

@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-[#0b1017] text-slate-100 font-thai;
+    line-height: 1.6;
+    letter-spacing: normal; /* Do not pull Thai tone marks apart */
+    overflow-x: hidden;
+  }
+
+  /* Ensure all Thai headings give enough vertical clearance for tone marks */
+  h1, h2, h3, h4, h5, h6 {
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+  }
+}
+
+/* Custom Scrollbar - Sleek and tactile */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0b1017;
+}
+::-webkit-scrollbar-thumb {
+  background: #233044;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #364864;
+}
+
+/* Solid, human-designed game card surfaces */
+.game-card {
+  background-color: #131b26;
+  border: 1px solid #233044;
+  border-radius: 0.875rem;
+}
+
+.game-card-inner {
+  background-color: #0e151f;
+  border: 1px solid #1e2a3c;
+  border-radius: 0.625rem;
+}
+
+.game-card-hover {
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+.game-card-hover:hover {
+  border-color: #3b5275;
+  background-color: #162130;
+}

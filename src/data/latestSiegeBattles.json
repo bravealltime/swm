@@ -1,0 +1,2889 @@
+{
+  "Global": [
+    {
+      "id": 1,
+      "guilds": [
+        {
+          "rank": "#8",
+          "name": "PinkVoid",
+          "score": "20,000",
+          "speed": "39/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#2",
+          "name": "Malevolent.",
+          "score": "7,878",
+          "speed": "5/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#1",
+          "name": "Mythril",
+          "score": "7,675",
+          "speed": "0/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#3",
+          "name": "&Lambda;poca|ypse",
+          "score": "20,000",
+          "speed": "42/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#15",
+          "name": "Cl&atilde; Destino",
+          "score": "9,010",
+          "speed": "0/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#12",
+          "name": "SKANKS",
+          "score": "7,251",
+          "speed": "3/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#4",
+          "name": "R.E.D",
+          "score": "20,000",
+          "speed": "36/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#6",
+          "name": "SINfullyDEEP",
+          "score": "11,178",
+          "speed": "3/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#17",
+          "name": "Frauds",
+          "score": "5,208",
+          "speed": "0/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#9",
+          "name": "Candy Shop",
+          "score": "20,000",
+          "speed": "41/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#14",
+          "name": "Phant&oslash;ma",
+          "score": "9,388",
+          "speed": "0/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#23",
+          "name": "No Inactives",
+          "score": "8,385",
+          "speed": "0/min",
+          "colorClass": "text-danger"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "guilds": [
+        {
+          "rank": "#23",
+          "name": "Ascensi&oslash;n",
+          "score": "20,000",
+          "speed": "41/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#7",
+          "name": "HypеrАсtive",
+          "score": "9,140",
+          "speed": "2/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#16",
+          "name": "Nu||",
+          "score": "7,337",
+          "speed": "3/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#5",
+          "name": "Belligerent",
+          "score": "20,000",
+          "speed": "43/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#21",
+          "name": "-AMATERASU-",
+          "score": "11,866",
+          "speed": "0/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#23",
+          "name": "BloodRose",
+          "score": "5,725",
+          "speed": "0/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#19",
+          "name": "PhongTrao",
+          "score": "20,000",
+          "speed": "37/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#13",
+          "name": "P0i$0&pi;",
+          "score": "11,287",
+          "speed": "7/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#27",
+          "name": "NovaKings",
+          "score": "7,019",
+          "speed": "1/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#10",
+          "name": "SūperN&oslash;va",
+          "score": "20,000",
+          "speed": "11/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#32",
+          "name": "Ước",
+          "score": "19,073",
+          "speed": "12/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#27",
+          "name": "Death Cannon",
+          "score": "17,083",
+          "speed": "11/min",
+          "colorClass": "text-warning text-warning2"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "guilds": [
+        {
+          "rank": "#11",
+          "name": "B.L.U.E.",
+          "score": "20,000",
+          "speed": "35/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#36",
+          "name": "Extra",
+          "score": "10,146",
+          "speed": "2/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#31",
+          "name": "Valiant Reborn",
+          "score": "9,561",
+          "speed": "6/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#27",
+          "name": "Solidarity",
+          "score": "20,000",
+          "speed": "39/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#20",
+          "name": "VIP!",
+          "score": "12,363",
+          "speed": "0/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#38",
+          "name": "Ghostx",
+          "score": "9,270",
+          "speed": "4/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#17",
+          "name": "Bewitchment",
+          "score": "20,000",
+          "speed": "34/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#27",
+          "name": "Ground Zero",
+          "score": "10,943",
+          "speed": "10/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#38",
+          "name": "FalconBeast$",
+          "score": "7,344",
+          "speed": "1/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#22",
+          "name": "Skуfall",
+          "score": "20,000",
+          "speed": "39/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#43",
+          "name": "V0X POPULI",
+          "score": "12,212",
+          "speed": "1/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#38",
+          "name": "RedAlert",
+          "score": "5,640",
+          "speed": "0/min",
+          "colorClass": "text-danger"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "guilds": [
+        {
+          "rank": "#43",
+          "name": "Rebel Mercs",
+          "score": "20,000",
+          "speed": "43/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#35",
+          "name": "V0X Integritas",
+          "score": "8,249",
+          "speed": "2/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#51",
+          "name": "Bug2Us&trade;",
+          "score": "7,156",
+          "speed": "1/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#34",
+          "name": "Summoner's Bar",
+          "score": "14,367",
+          "speed": "9/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#23",
+          "name": "Full Farm Br",
+          "score": "13,400",
+          "speed": "24/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#51",
+          "name": "Seirios Flight",
+          "score": "11,159",
+          "speed": "8/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#51",
+          "name": "GrumpyOGs",
+          "score": "15,403",
+          "speed": "7/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#51",
+          "name": "Super Salty",
+          "score": "11,223",
+          "speed": "28/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#67",
+          "name": "Cl&atilde; D3stino",
+          "score": "11,117",
+          "speed": "5/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#67",
+          "name": "Satellite Lite",
+          "score": "19,426",
+          "speed": "5/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#51",
+          "name": "eXcLusive&trade;",
+          "score": "18,525",
+          "speed": "24/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#51",
+          "name": "SENSEI",
+          "score": "15,843",
+          "speed": "3/min",
+          "colorClass": "text-primary"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "guilds": [
+        {
+          "rank": "#73",
+          "name": "Ephitaph",
+          "score": "20,000",
+          "speed": "28/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#67",
+          "name": "RuneAddicts",
+          "score": "18,202",
+          "speed": "26/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#62",
+          "name": "RoyalOblivion",
+          "score": "12,591",
+          "speed": "1/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#73",
+          "name": "OneX",
+          "score": "20,000",
+          "speed": "27/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#59",
+          "name": "S W A G",
+          "score": "13,233",
+          "speed": "9/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#51",
+          "name": "VN.ANHEM",
+          "score": "11,289",
+          "speed": "1/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#67",
+          "name": "Drama Club",
+          "score": "20,000",
+          "speed": "9/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#78",
+          "name": "Fir&euml;ZtorM",
+          "score": "14,169",
+          "speed": "10/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#73",
+          "name": "Wild4",
+          "score": "13,029",
+          "speed": "25/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#59",
+          "name": "Cl&atilde; D12stino",
+          "score": "20,000",
+          "speed": "38/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#78",
+          "name": "Diamond I",
+          "score": "8,512",
+          "speed": "0/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#65",
+          "name": "FargoUnited",
+          "score": "7,519",
+          "speed": "4/min",
+          "colorClass": "text-danger"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "guilds": [
+        {
+          "rank": "#88",
+          "name": "Cl&atilde; D25stino",
+          "score": "16,059",
+          "speed": "0/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#73",
+          "name": "HeartBreakKids",
+          "score": "6,831",
+          "speed": "11/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#78",
+          "name": "英雄故事館",
+          "score": "2,302",
+          "speed": "5/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#88",
+          "name": "Adrenalina",
+          "score": "20,000",
+          "speed": "40/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#78",
+          "name": "光之聖界",
+          "score": "4,413",
+          "speed": "3/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#91",
+          "name": "Chungus",
+          "score": "4,372",
+          "speed": "0/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "",
+          "name": "FallenKingdom",
+          "score": "20,000",
+          "speed": "44/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "",
+          "name": "SKET",
+          "score": "0",
+          "speed": "0/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "",
+          "name": "OMA7323",
+          "score": "0",
+          "speed": "1/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "",
+          "name": "1finalfantasy",
+          "score": "1,407",
+          "speed": "24/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "",
+          "name": "Mount&Do",
+          "score": "365",
+          "speed": "10/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "",
+          "name": "&deg;QuebradaBr&deg;",
+          "score": "0",
+          "speed": "12/min",
+          "colorClass": "text-primary"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "guilds": [
+        {
+          "rank": "",
+          "name": "WeRFarmers",
+          "score": "510",
+          "speed": "12/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "",
+          "name": "UNeedSomeMilk",
+          "score": "0",
+          "speed": "12/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "",
+          "name": "Old Champions",
+          "score": "0",
+          "speed": "12/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "",
+          "name": "The_Redwings⚔",
+          "score": "18,736",
+          "speed": "25/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "",
+          "name": "Ziggys crew",
+          "score": "18,047",
+          "speed": "26/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "",
+          "name": "RadiantKnights",
+          "score": "12,554",
+          "speed": "5/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "",
+          "name": "TikkyIsAThief!",
+          "score": "20,000",
+          "speed": "26/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "",
+          "name": "Bad_News_Bears",
+          "score": "9,885",
+          "speed": "12/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#1855",
+          "name": "OnlineGangster",
+          "score": "9,040",
+          "speed": "8/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "",
+          "name": "逆襲的夏亞",
+          "score": "20,000",
+          "speed": "27/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#922",
+          "name": "Chaotic Royals",
+          "score": "14,606",
+          "speed": "24/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "",
+          "name": "We Got Duped",
+          "score": "6,442",
+          "speed": "3/min",
+          "colorClass": "text-primary"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "guilds": [
+        {
+          "rank": "",
+          "name": "KABALAGTONBR",
+          "score": "10,719",
+          "speed": "27/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "",
+          "name": "EpicFail.Omega",
+          "score": "5,933",
+          "speed": "8/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "",
+          "name": "sᴀɪɴᴛs",
+          "score": "5,252",
+          "speed": "11/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "",
+          "name": "六扇門",
+          "score": "20,000",
+          "speed": "25/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "",
+          "name": "Trash Panda",
+          "score": "17,051",
+          "speed": "7/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "",
+          "name": "THEWALL",
+          "score": "14,763",
+          "speed": "18/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "",
+          "name": "No Drama",
+          "score": "20,000",
+          "speed": "25/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "",
+          "name": "Canadian Eh! 2",
+          "score": "17,493",
+          "speed": "26/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "",
+          "name": "ᛒad☥&Phi;m&Sigma;ns",
+          "score": "9,404",
+          "speed": "4/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "",
+          "name": "The Valkyries",
+          "score": "10,338",
+          "speed": "29/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "",
+          "name": "Ish'Tal",
+          "score": "5,362",
+          "speed": "8/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "",
+          "name": "ᴍɪᴅɢᴀʀᴅ",
+          "score": "5,212",
+          "speed": "8/min",
+          "colorClass": "text-warning text-warning2"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "guilds": [
+        {
+          "rank": "",
+          "name": "ShadowWatch",
+          "score": "20,000",
+          "speed": "35/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "",
+          "name": "TheFunnyFarm2",
+          "score": "5,313",
+          "speed": "2/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "",
+          "name": "sudakas",
+          "score": "4,276",
+          "speed": "5/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#521",
+          "name": "Benevolent",
+          "score": "9,675",
+          "speed": "28/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "",
+          "name": "Cl&atilde; D27stino",
+          "score": "6,928",
+          "speed": "25/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "",
+          "name": "We Surrendered",
+          "score": "3,632",
+          "speed": "0/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "",
+          "name": "Straw Hat Sums",
+          "score": "20,000",
+          "speed": "34/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "",
+          "name": "Mount-Olympus",
+          "score": "8,174",
+          "speed": "0/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "",
+          "name": "#HargSquad",
+          "score": "6,651",
+          "speed": "1/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "",
+          "name": "Goodguild66",
+          "score": "20,000",
+          "speed": "33/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#360",
+          "name": "The Walkers",
+          "score": "3,786",
+          "speed": "10/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "",
+          "name": "Shadow_Aeros",
+          "score": "2,818",
+          "speed": "1/min",
+          "colorClass": "text-danger"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "guilds": [
+        {
+          "rank": "",
+          "name": "Worthy Origins",
+          "score": "20,000",
+          "speed": "26/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "",
+          "name": "Pink Pandas",
+          "score": "8,457",
+          "speed": "9/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "",
+          "name": "Silent noise",
+          "score": "6,386",
+          "speed": "10/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#342",
+          "name": "New Uprising",
+          "score": "20,000",
+          "speed": "6/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "",
+          "name": "AcademiaCD3",
+          "score": "18,803",
+          "speed": "32/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "",
+          "name": "Camarilla",
+          "score": "8,312",
+          "speed": "8/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "",
+          "name": "CornRush",
+          "score": "18,383",
+          "speed": "27/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "",
+          "name": "thefightclub",
+          "score": "13,491",
+          "speed": "26/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "",
+          "name": "Kuro_Neko",
+          "score": "2,167",
+          "speed": "3/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#252",
+          "name": "TrashProc",
+          "score": "20,000",
+          "speed": "33/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "",
+          "name": "*SIN*",
+          "score": "8,632",
+          "speed": "2/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "",
+          "name": "Elang Emprit",
+          "score": "8,125",
+          "speed": "9/min",
+          "colorClass": "text-danger"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "guilds": [
+        {
+          "rank": "",
+          "name": "GoldenHeart",
+          "score": "20,000",
+          "speed": "24/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#238",
+          "name": "Mini&spades;Madness",
+          "score": "7,765",
+          "speed": "12/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "",
+          "name": "New Rules",
+          "score": "4,410",
+          "speed": "8/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "",
+          "name": "Cl&atilde; D6stino",
+          "score": "20,000",
+          "speed": "32/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#238",
+          "name": "✨DARK Fenix✨",
+          "score": "4,143",
+          "speed": "11/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "",
+          "name": "TeamNoFear",
+          "score": "4,136",
+          "speed": "3/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#201",
+          "name": "SuperSaiyajins",
+          "score": "14,506",
+          "speed": "40/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "",
+          "name": "ShadowDarkS",
+          "score": "4,928",
+          "speed": "4/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "",
+          "name": "Gandara",
+          "score": "3,537",
+          "speed": "1/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "",
+          "name": "Canard",
+          "score": "20,000",
+          "speed": "28/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "",
+          "name": "Cl&atilde; D5stino",
+          "score": "18,811",
+          "speed": "25/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "",
+          "name": "Fury Two",
+          "score": "2,855",
+          "speed": "2/min",
+          "colorClass": "text-warning text-warning2"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "guilds": [
+        {
+          "rank": "#201",
+          "name": "Noodz & BooTea",
+          "score": "955",
+          "speed": "12/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "",
+          "name": "ShadowBandits",
+          "score": "707",
+          "speed": "18/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "",
+          "name": "AlwaysCrit",
+          "score": "639",
+          "speed": "11/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#176",
+          "name": "Oz Br Proc",
+          "score": "20,000",
+          "speed": "44/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "",
+          "name": "Void Wraith",
+          "score": "4,367",
+          "speed": "1/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "",
+          "name": "SENSEI&sup2;",
+          "score": "2,607",
+          "speed": "1/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "",
+          "name": "&Oslash;BLIVI&Oslash;N",
+          "score": "8,905",
+          "speed": "35/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "",
+          "name": "Army Airdrop",
+          "score": "7,999",
+          "speed": "0/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "",
+          "name": "Global Heros",
+          "score": "3,098",
+          "speed": "0/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#155",
+          "name": "TheArrombeds",
+          "score": "20,000",
+          "speed": "33/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "",
+          "name": "Smoke n play",
+          "score": "7,068",
+          "speed": "3/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "",
+          "name": "Noob Rising",
+          "score": "3,706",
+          "speed": "7/min",
+          "colorClass": "text-warning text-warning2"
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "guilds": [
+        {
+          "rank": "",
+          "name": "༆Valyrians༆",
+          "score": "20,000",
+          "speed": "25/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "",
+          "name": "Sandy",
+          "score": "14,397",
+          "speed": "10/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#141",
+          "name": "ProcChop$",
+          "score": "13,275",
+          "speed": "5/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "",
+          "name": "4x4 BR",
+          "score": "20,000",
+          "speed": "28/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#141",
+          "name": "Raging Storms",
+          "score": "7,360",
+          "speed": "0/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "",
+          "name": "Nilbog",
+          "score": "6,514",
+          "speed": "12/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "",
+          "name": "Sylveon",
+          "score": "4,247",
+          "speed": "27/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#114",
+          "name": "Rejected Dream",
+          "score": "3,697",
+          "speed": "18/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "",
+          "name": "ImperialKing'z",
+          "score": "1,542",
+          "speed": "6/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "",
+          "name": "NESTLE",
+          "score": "20,000",
+          "speed": "24/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "",
+          "name": "★THE WOLVEZ★",
+          "score": "19,613",
+          "speed": "25/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#124",
+          "name": "TheOldGuard",
+          "score": "13,300",
+          "speed": "4/min",
+          "colorClass": "text-danger"
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "guilds": [
+        {
+          "rank": "",
+          "name": "Dopamina",
+          "score": "20,000",
+          "speed": "25/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "",
+          "name": "PRO K",
+          "score": "15,922",
+          "speed": "7/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "",
+          "name": "The Pea",
+          "score": "13,941",
+          "speed": "0/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#91",
+          "name": "Catac|ysm",
+          "score": "20,000",
+          "speed": "25/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#78",
+          "name": "繼續廢青",
+          "score": "17,112",
+          "speed": "1/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "",
+          "name": "Los Brutos",
+          "score": "4,630",
+          "speed": "4/min",
+          "colorClass": "text-danger"
+        }
+      ]
+    }
+  ],
+  "Asia": [
+    {
+      "id": 1,
+      "guilds": [
+        {
+          "rank": "#1",
+          "name": "ටrphanage",
+          "score": "20,000",
+          "speed": "25/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#4",
+          "name": "-惡魔卡普拉-",
+          "score": "17,144",
+          "speed": "10/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#6",
+          "name": "Aphroditє",
+          "score": "15,747",
+          "speed": "10/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#3",
+          "name": "SaiGonFC",
+          "score": "20,000",
+          "speed": "30/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#10",
+          "name": "T&aacute;o.M&egrave;o",
+          "score": "9,340",
+          "speed": "7/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#7",
+          "name": "Th&iacute;ch",
+          "score": "8,659",
+          "speed": "6/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#2",
+          "name": "C.O.W",
+          "score": "20,000",
+          "speed": "30/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#18",
+          "name": "殺戮薑薑",
+          "score": "16,928",
+          "speed": "10/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#8",
+          "name": "Last Shine",
+          "score": "15,048",
+          "speed": "3/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#24",
+          "name": "鸟人帮",
+          "score": "16,805",
+          "speed": "11/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#14",
+          "name": "[▸Exotic◂]",
+          "score": "16,744",
+          "speed": "18/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#22",
+          "name": "-WinterFell-",
+          "score": "14,327",
+          "speed": "11/min",
+          "colorClass": "text-warning text-warning2"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "guilds": [
+        {
+          "rank": "#5",
+          "name": "Zenith",
+          "score": "11,800",
+          "speed": "24/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#11",
+          "name": "維護世界和平",
+          "score": "11,682",
+          "speed": "11/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#24",
+          "name": "流芳千古",
+          "score": "10,778",
+          "speed": "10/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#14",
+          "name": "(SymphoniC)",
+          "score": "20,000",
+          "speed": "25/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#17",
+          "name": "SaiGonFC&lrm;",
+          "score": "16,497",
+          "speed": "8/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#29",
+          "name": "Maybach",
+          "score": "16,427",
+          "speed": "10/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#19",
+          "name": "PhoenixVN",
+          "score": "20,000",
+          "speed": "36/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#27",
+          "name": "V&ocirc; Danh",
+          "score": "15,617",
+          "speed": "10/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#40",
+          "name": "OuraSlayer",
+          "score": "8,569",
+          "speed": "0/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#64",
+          "name": "昔日榮耀",
+          "score": "20,000",
+          "speed": "12/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#54",
+          "name": "Singularity",
+          "score": "18,873",
+          "speed": "18/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#70",
+          "name": "神盾局",
+          "score": "14,336",
+          "speed": "10/min",
+          "colorClass": "text-danger"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "guilds": [
+        {
+          "rank": "",
+          "name": "LETS FUN",
+          "score": "20,000",
+          "speed": "28/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "",
+          "name": "Gen13",
+          "score": "9,617",
+          "speed": "9/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "",
+          "name": "Bartender",
+          "score": "8,607",
+          "speed": "9/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "",
+          "name": "食物鏈最底層",
+          "score": "20,000",
+          "speed": "32/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#178",
+          "name": "TheCommunists",
+          "score": "12,296",
+          "speed": "2/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "",
+          "name": "Teddy-",
+          "score": "4,343",
+          "speed": "4/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#136",
+          "name": "RETRACTOR",
+          "score": "20,000",
+          "speed": "37/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "",
+          "name": "SHINKEN",
+          "score": "5,433",
+          "speed": "3/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "",
+          "name": "꧁PLUNDERER꧂",
+          "score": "5,283",
+          "speed": "0/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#98",
+          "name": "The Company",
+          "score": "20,000",
+          "speed": "11/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "",
+          "name": "StrongLight",
+          "score": "9,191",
+          "speed": "27/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "",
+          "name": "放肆玩樂",
+          "score": "4,105",
+          "speed": "6/min",
+          "colorClass": "text-warning text-warning2"
+        }
+      ]
+    }
+  ],
+  "Europe": [
+    {
+      "id": 1,
+      "guilds": [
+        {
+          "rank": "#1",
+          "name": "Aftermath Eu",
+          "score": "20,000",
+          "speed": "37/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#10",
+          "name": "7 Deadly Syns",
+          "score": "7,491",
+          "speed": "3/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#11",
+          "name": "-Just For Fun-",
+          "score": "6,055",
+          "speed": "1/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#4",
+          "name": "Doubt",
+          "score": "20,000",
+          "speed": "36/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#13",
+          "name": "Teik&oslash;u 2",
+          "score": "11,399",
+          "speed": "6/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#12",
+          "name": "LesTripleBuses",
+          "score": "9,808",
+          "speed": "0/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#2",
+          "name": "&Oslash;rigiи",
+          "score": "20,000",
+          "speed": "37/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#5",
+          "name": "Af: Solace",
+          "score": "12,365",
+          "speed": "1/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#17",
+          "name": "Babylon",
+          "score": "8,993",
+          "speed": "5/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#8",
+          "name": "Sacr&eacute; C&oelig;ur 3",
+          "score": "20,000",
+          "speed": "12/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#3",
+          "name": "Smash Br&oslash;s.",
+          "score": "19,868",
+          "speed": "12/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#19",
+          "name": "AkatsukiDemons",
+          "score": "16,418",
+          "speed": "11/min",
+          "colorClass": "text-warning text-warning2"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "guilds": [
+        {
+          "rank": "#6",
+          "name": "ShowTime",
+          "score": "20,000",
+          "speed": "41/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#17",
+          "name": "Partekus",
+          "score": "9,965",
+          "speed": "0/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#22",
+          "name": "All Stars~",
+          "score": "8,591",
+          "speed": "0/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#7",
+          "name": "IṨṨ&Theta;⇜",
+          "score": "20,000",
+          "speed": "39/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#23",
+          "name": "Chow Main",
+          "score": "15,626",
+          "speed": "2/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#25",
+          "name": "MadLine",
+          "score": "13,915",
+          "speed": "2/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#9",
+          "name": "[haVoc]",
+          "score": "20,000",
+          "speed": "33/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#29",
+          "name": "Mel&oslash;dix",
+          "score": "12,975",
+          "speed": "1/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#25",
+          "name": "TIT4NS",
+          "score": "9,649",
+          "speed": "4/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#19",
+          "name": "Plan Pew Pew",
+          "score": "20,000",
+          "speed": "33/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#25",
+          "name": "Showtime&sup2;",
+          "score": "14,679",
+          "speed": "10/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#34",
+          "name": "Hunters Wars",
+          "score": "11,967",
+          "speed": "1/min",
+          "colorClass": "text-warning text-warning2"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "guilds": [
+        {
+          "rank": "#34",
+          "name": "GodsArmy",
+          "score": "20,000",
+          "speed": "28/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#13",
+          "name": "-LazYggdrasil-",
+          "score": "14,381",
+          "speed": "8/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#32",
+          "name": "ProccDiff",
+          "score": "11,985",
+          "speed": "6/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#37",
+          "name": "[chAos]",
+          "score": "20,000",
+          "speed": "18/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#25",
+          "name": "8th sin",
+          "score": "17,011",
+          "speed": "9/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#19",
+          "name": "White Walkers",
+          "score": "15,049",
+          "speed": "12/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#16",
+          "name": "Nefarious 2.0",
+          "score": "20,000",
+          "speed": "26/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#15",
+          "name": "CrashOut",
+          "score": "15,738",
+          "speed": "8/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#37",
+          "name": "BrasilianStorm",
+          "score": "10,400",
+          "speed": "7/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#23",
+          "name": "Two Sins",
+          "score": "20,000",
+          "speed": "36/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#41",
+          "name": "RachenĐrachen",
+          "score": "12,012",
+          "speed": "0/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#43",
+          "name": "TUGA",
+          "score": "8,998",
+          "speed": "3/min",
+          "colorClass": "text-warning text-warning2"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "guilds": [
+        {
+          "rank": "#29",
+          "name": "6thElement",
+          "score": "20,000",
+          "speed": "33/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#32",
+          "name": "DreamyValkyrja",
+          "score": "14,922",
+          "speed": "8/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#45",
+          "name": "The Chaotic",
+          "score": "12,457",
+          "speed": "5/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#34",
+          "name": "Pr&oslash;ject: Zer0",
+          "score": "20,000",
+          "speed": "26/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#48",
+          "name": "L'&eacute;quipage II",
+          "score": "11,834",
+          "speed": "3/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#37",
+          "name": "Down~",
+          "score": "11,742",
+          "speed": "9/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#31",
+          "name": "OS: Enc&oslash;re",
+          "score": "20,000",
+          "speed": "28/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#51",
+          "name": "Obsidi&Lambda;n",
+          "score": "14,065",
+          "speed": "6/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#45",
+          "name": "Final Emblem",
+          "score": "8,782",
+          "speed": "7/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#48",
+          "name": "-YggdraChill-",
+          "score": "20,000",
+          "speed": "31/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#58",
+          "name": "&Lambda;stralys",
+          "score": "17,045",
+          "speed": "10/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#54",
+          "name": "Tensur&alpha;",
+          "score": "11,853",
+          "speed": "2/min",
+          "colorClass": "text-danger"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "guilds": [
+        {
+          "rank": "#43",
+          "name": "L'acad&eacute;mie",
+          "score": "20,000",
+          "speed": "32/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#45",
+          "name": "Soepkippen",
+          "score": "11,534",
+          "speed": "0/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#58",
+          "name": "Poney Squad",
+          "score": "7,817",
+          "speed": "1/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#58",
+          "name": "Oni Giri",
+          "score": "20,000",
+          "speed": "9/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#37",
+          "name": "My Dirty Hobby",
+          "score": "15,783",
+          "speed": "24/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#54",
+          "name": "1&deg;Orden",
+          "score": "10,182",
+          "speed": "6/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#54",
+          "name": "-BabYggdrasil-",
+          "score": "20,000",
+          "speed": "31/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#63",
+          "name": "First &Oslash;rder",
+          "score": "15,284",
+          "speed": "6/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#70",
+          "name": "TheOlympians",
+          "score": "15,227",
+          "speed": "8/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#51",
+          "name": "RiseOfBurn",
+          "score": "20,000",
+          "speed": "25/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#58",
+          "name": "Ordre 66",
+          "score": "18,881",
+          "speed": "9/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#70",
+          "name": "Darkanima",
+          "score": "14,515",
+          "speed": "10/min",
+          "colorClass": "text-warning text-warning2"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "guilds": [
+        {
+          "rank": "#48",
+          "name": "Arcadie",
+          "score": "20,000",
+          "speed": "38/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#70",
+          "name": "Ch@p&eacute;us P@lh@",
+          "score": "8,634",
+          "speed": "8/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#63",
+          "name": "Ref&oslash;rged",
+          "score": "7,951",
+          "speed": "0/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#51",
+          "name": "Kronos7",
+          "score": "20,000",
+          "speed": "27/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#76",
+          "name": "SpaceSquids",
+          "score": "16,084",
+          "speed": "3/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#63",
+          "name": "Quiquik",
+          "score": "9,820",
+          "speed": "18/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#76",
+          "name": "=PEACE 2=",
+          "score": "20,000",
+          "speed": "27/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#70",
+          "name": "[=Wanderers=]",
+          "score": "12,028",
+          "speed": "4/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#82",
+          "name": "B&auml;ren Odins",
+          "score": "7,704",
+          "speed": "12/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#63",
+          "name": "LegionMon",
+          "score": "20,000",
+          "speed": "28/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#76",
+          "name": "Rock Bottom",
+          "score": "16,827",
+          "speed": "6/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#82",
+          "name": "Cl&atilde; D8stino",
+          "score": "14,014",
+          "speed": "12/min",
+          "colorClass": "text-warning text-warning2"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "guilds": [
+        {
+          "rank": "#63",
+          "name": "LegadoDeCairos",
+          "score": "20,000",
+          "speed": "11/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#76",
+          "name": "Black Blossom",
+          "score": "17,347",
+          "speed": "12/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#93",
+          "name": "=Peace 3=",
+          "score": "13,104",
+          "speed": "18/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#82",
+          "name": "L'&eacute;quipage",
+          "score": "20,000",
+          "speed": "32/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#82",
+          "name": "♤OUROBORS♤",
+          "score": "11,245",
+          "speed": "6/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#98",
+          "name": "Klompendansers",
+          "score": "6,029",
+          "speed": "1/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#75",
+          "name": "Lyrix",
+          "score": "20,000",
+          "speed": "27/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#98",
+          "name": "Ancestral&rsquo;s",
+          "score": "9,071",
+          "speed": "24/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#82",
+          "name": "Dutch",
+          "score": "8,848",
+          "speed": "3/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#7770",
+          "name": "Cyrix",
+          "score": "20,000",
+          "speed": "43/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "",
+          "name": "Stance_Crew",
+          "score": "2,126",
+          "speed": "3/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "",
+          "name": "NyuNoobAccs",
+          "score": "0",
+          "speed": "0/min",
+          "colorClass": "text-danger"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "guilds": [
+        {
+          "rank": "",
+          "name": "Jabberwock",
+          "score": "20,000",
+          "speed": "18/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "",
+          "name": "Heiwa To Hakai",
+          "score": "19,359",
+          "speed": "12/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "",
+          "name": "NBE 2.0",
+          "score": "0",
+          "speed": "11/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "",
+          "name": "I Love Cookies",
+          "score": "15,363",
+          "speed": "26/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#2052",
+          "name": "Blood Circle",
+          "score": "13,203",
+          "speed": "25/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "",
+          "name": "&pound;ruption",
+          "score": "3,199",
+          "speed": "5/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "",
+          "name": "Amici di Mario",
+          "score": "16,573",
+          "speed": "28/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#1416",
+          "name": "TheBloodline",
+          "score": "9,073",
+          "speed": "5/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "",
+          "name": "Bier+Wein=Fein",
+          "score": "8,251",
+          "speed": "6/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "",
+          "name": "extinction.ph",
+          "score": "20,000",
+          "speed": "26/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "",
+          "name": "GloriousBeasts",
+          "score": "9,622",
+          "speed": "18/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "",
+          "name": "Burgundy Squad",
+          "score": "8,738",
+          "speed": "7/min",
+          "colorClass": "text-primary"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "guilds": [
+        {
+          "rank": "#1222",
+          "name": "NHeroes",
+          "score": "20,000",
+          "speed": "12/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "",
+          "name": "MYKREW",
+          "score": "18,727",
+          "speed": "18/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "",
+          "name": "Wernham & Hogg",
+          "score": "13,560",
+          "speed": "11/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "",
+          "name": "DarkLegion~",
+          "score": "20,000",
+          "speed": "27/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#972",
+          "name": "ProcAdvantage",
+          "score": "13,262",
+          "speed": "8/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "",
+          "name": "ShadowSumoners",
+          "score": "10,893",
+          "speed": "10/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "",
+          "name": "PainGaKil",
+          "score": "20,000",
+          "speed": "12/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "",
+          "name": "SocialNetBwork",
+          "score": "12,015",
+          "speed": "18/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#766",
+          "name": "Reisfarmer",
+          "score": "9,597",
+          "speed": "7/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "",
+          "name": "FarmLand V2",
+          "score": "20,000",
+          "speed": "34/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#589",
+          "name": "Eternal Scream",
+          "score": "5,641",
+          "speed": "4/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "",
+          "name": "Station 4",
+          "score": "4,292",
+          "speed": "5/min",
+          "colorClass": "text-danger"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "guilds": [
+        {
+          "rank": "#482",
+          "name": "Valkyrious",
+          "score": "20,000",
+          "speed": "29/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "",
+          "name": "Todesser",
+          "score": "18,927",
+          "speed": "12/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "",
+          "name": "убивцы",
+          "score": "6,844",
+          "speed": "2/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#502",
+          "name": "BOIZZZ 07",
+          "score": "20,000",
+          "speed": "31/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "",
+          "name": "Blųe Ph&phi;nix",
+          "score": "9,168",
+          "speed": "7/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "",
+          "name": "Noob'Oros",
+          "score": "2,378",
+          "speed": "3/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "",
+          "name": "Dragon Slime",
+          "score": "20,000",
+          "speed": "25/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#482",
+          "name": "Farming-Way",
+          "score": "18,157",
+          "speed": "27/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "",
+          "name": "Hall of war",
+          "score": "4,180",
+          "speed": "4/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "",
+          "name": "BlackRocks",
+          "score": "20,000",
+          "speed": "32/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#482",
+          "name": "Reis|Academy",
+          "score": "10,219",
+          "speed": "9/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "",
+          "name": "GARUDA",
+          "score": "2,228",
+          "speed": "1/min",
+          "colorClass": "text-primary"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "guilds": [
+        {
+          "rank": "#421",
+          "name": "cozy farming",
+          "score": "20,000",
+          "speed": "25/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "",
+          "name": "Penguin Mafia",
+          "score": "14,441",
+          "speed": "24/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "",
+          "name": "LegendaryBR01",
+          "score": "5,610",
+          "speed": "7/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "",
+          "name": "HispaFarm",
+          "score": "20,000",
+          "speed": "26/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#421",
+          "name": "Eurus",
+          "score": "14,337",
+          "speed": "25/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "",
+          "name": "La 747",
+          "score": "9,000",
+          "speed": "4/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "",
+          "name": "Angel's slayer",
+          "score": "12,267",
+          "speed": "34/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "",
+          "name": "Proc&Co&trade;",
+          "score": "4,624",
+          "speed": "5/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "",
+          "name": "Katzenrudel",
+          "score": "3,651",
+          "speed": "0/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "",
+          "name": "The Killers∆",
+          "score": "20,000",
+          "speed": "30/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#389",
+          "name": "Blue Blossom",
+          "score": "11,443",
+          "speed": "18/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "",
+          "name": "Exlibris 2.0",
+          "score": "7,478",
+          "speed": "2/min",
+          "colorClass": "text-danger"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "guilds": [
+        {
+          "rank": "",
+          "name": "tugaz'Я'us",
+          "score": "20,000",
+          "speed": "24/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "",
+          "name": "Deverry",
+          "score": "14,898",
+          "speed": "25/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "",
+          "name": "sayanjin's",
+          "score": "8,172",
+          "speed": "6/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "",
+          "name": "Hikaru",
+          "score": "20,000",
+          "speed": "29/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#375",
+          "name": "Aur&oslash;ra",
+          "score": "8,275",
+          "speed": "9/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "",
+          "name": "The new GOATS",
+          "score": "6,742",
+          "speed": "8/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "",
+          "name": "KillZone Wars",
+          "score": "20,000",
+          "speed": "32/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "",
+          "name": "L&oslash;rds",
+          "score": "11,423",
+          "speed": "8/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "",
+          "name": "~FaMiLy~",
+          "score": "10,814",
+          "speed": "6/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "",
+          "name": "N&oslash;va][Ex&oslash;dus",
+          "score": "20,000",
+          "speed": "28/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#271",
+          "name": "Grey Blossom",
+          "score": "14,277",
+          "speed": "11/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "",
+          "name": "D@rk side",
+          "score": "8,039",
+          "speed": "6/min",
+          "colorClass": "text-danger"
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "guilds": [
+        {
+          "rank": "#257",
+          "name": "Balkan Express",
+          "score": "20,000",
+          "speed": "31/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "",
+          "name": "&Eacute;volut&iacute;&oslash;n",
+          "score": "9,992",
+          "speed": "10/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "",
+          "name": "LushenRoulette",
+          "score": "4,785",
+          "speed": "1/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#257",
+          "name": "Imesetys II",
+          "score": "20,000",
+          "speed": "38/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "",
+          "name": "Les f&eacute;es",
+          "score": "5,888",
+          "speed": "1/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "",
+          "name": "HallOfValhalla",
+          "score": "3,955",
+          "speed": "2/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#247",
+          "name": "ORDR",
+          "score": "20,000",
+          "speed": "35/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "",
+          "name": "L'acad&eacute;mie 2",
+          "score": "15,356",
+          "speed": "7/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#257",
+          "name": "TenshiFighter2",
+          "score": "7,291",
+          "speed": "1/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "",
+          "name": "&bull;Sinne&bull;",
+          "score": "20,000",
+          "speed": "18/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "",
+          "name": "ShadowSoul",
+          "score": "17,331",
+          "speed": "7/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "",
+          "name": "Unicorn Fury",
+          "score": "10,390",
+          "speed": "18/min",
+          "colorClass": "text-danger"
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "guilds": [
+        {
+          "rank": "",
+          "name": "NYWarriors",
+          "score": "20,000",
+          "speed": "33/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#192",
+          "name": "Renaissаnce",
+          "score": "18,580",
+          "speed": "2/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "",
+          "name": "Hellas",
+          "score": "7,018",
+          "speed": "7/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "",
+          "name": "STARFISH",
+          "score": "20,000",
+          "speed": "30/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#142",
+          "name": "Falken Odins",
+          "score": "10,462",
+          "speed": "9/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "",
+          "name": "Fr0stW0lf",
+          "score": "3,623",
+          "speed": "6/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#151",
+          "name": "Le navire",
+          "score": "4,036",
+          "speed": "33/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "",
+          "name": "gardiens",
+          "score": "1,505",
+          "speed": "4/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "",
+          "name": "Erathric",
+          "score": "1,382",
+          "speed": "7/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "",
+          "name": "AgeOfRespawn",
+          "score": "20,000",
+          "speed": "12/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#121",
+          "name": "GodsArmy II",
+          "score": "15,067",
+          "speed": "9/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "",
+          "name": "Ǥ&Oslash;ĐLIKe-",
+          "score": "12,213",
+          "speed": "10/min",
+          "colorClass": "text-primary"
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "guilds": [
+        {
+          "rank": "",
+          "name": "ҽɳ&iota;ɠɱ&alpha;2",
+          "score": "16,742",
+          "speed": "6/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#108",
+          "name": "Exil",
+          "score": "13,265",
+          "speed": "28/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "",
+          "name": "Schutzengel",
+          "score": "5,654",
+          "speed": "7/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#98",
+          "name": "&Oslash;rder Trident",
+          "score": "20,000",
+          "speed": "31/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "",
+          "name": "OneTwo",
+          "score": "16,019",
+          "speed": "5/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "",
+          "name": "CZ/SK guilda",
+          "score": "9,684",
+          "speed": "6/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "",
+          "name": "Rising Stars",
+          "score": "20,000",
+          "speed": "10/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "",
+          "name": "-Yggdrasil-",
+          "score": "7,447",
+          "speed": "25/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#95",
+          "name": "Gamechanger 2",
+          "score": "5,587",
+          "speed": "7/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#95",
+          "name": "Tenshi Fighter",
+          "score": "20,000",
+          "speed": "31/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#82",
+          "name": "=PEACE=",
+          "score": "15,203",
+          "speed": "0/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "",
+          "name": "Kuntagious",
+          "score": "4,245",
+          "speed": "6/min",
+          "colorClass": "text-warning text-warning2"
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "guilds": [
+        {
+          "rank": "#76",
+          "name": "Moon✗Dawn",
+          "score": "20,000",
+          "speed": "34/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#82",
+          "name": "Gl&uuml;xb&auml;rchis",
+          "score": "12,611",
+          "speed": "12/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "",
+          "name": "ᴍoshΐᴍoshΐ",
+          "score": "8,791",
+          "speed": "0/min",
+          "colorClass": "text-danger"
+        }
+      ]
+    }
+  ],
+  "JPKR": [
+    {
+      "id": 1,
+      "guilds": [
+        {
+          "rank": "#9",
+          "name": "겨울왕국&",
+          "score": "20,000",
+          "speed": "12/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#11",
+          "name": "콩코드",
+          "score": "19,501",
+          "speed": "10/min",
+          "colorClass": "text-warning text-warning2"
+        },
+        {
+          "rank": "#22",
+          "name": "Moe's Bar",
+          "score": "11,420",
+          "speed": "9/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#81",
+          "name": "쿨엔조이",
+          "score": "20,000",
+          "speed": "6/min",
+          "colorClass": "text-danger"
+        },
+        {
+          "rank": "#75",
+          "name": "TWICE",
+          "score": "19,186",
+          "speed": "26/min",
+          "colorClass": "text-primary"
+        },
+        {
+          "rank": "#88",
+          "name": "MOJITO",
+          "score": "7,177",
+          "speed": "5/min",
+          "colorClass": "text-warning text-warning2"
+        }
+      ]
+    }
+  ]
+}

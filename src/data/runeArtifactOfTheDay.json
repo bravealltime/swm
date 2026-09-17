@@ -1,0 +1,20 @@
+{
+  "rune": {
+    "title": "+15 Violent Rune",
+    "mainStat": "SPD +42",
+    "subStats": [],
+    "slot": 2,
+    "efficiency": "108.4%"
+  },
+  "artifact": {
+    "title": "+15 Legend Attribute Artifact (Water)",
+    "mainStat": "HP +1500",
+    "subStats": [
+      "[Skill 3] CRIT DMG +19%",
+      "Damage Dealt on Fire +15%",
+      "SPD Under Inability +18%",
+      "Single-target CRIT DMG on your turn +14%"
+    ],
+    "efficiency": "102.1%"
+  }
+}

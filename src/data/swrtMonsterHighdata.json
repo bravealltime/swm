@@ -1,0 +1,1821 @@
+{
+  "13515": {
+    "monsterId": 13515,
+    "synergies": [
+      {
+        "monsterId": 35814,
+        "name": "Light Fern",
+        "thaiName": "Light Fern",
+        "element": "light",
+        "winRate": 58.2,
+        "matches": 4389,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0222_1_4.png"
+      },
+      {
+        "monsterId": 17915,
+        "name": "Craka",
+        "thaiName": "Craka",
+        "element": "dark",
+        "winRate": 55.6,
+        "matches": 4580,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0023_4_1.png"
+      },
+      {
+        "monsterId": 27715,
+        "name": "Monster",
+        "element": "fire",
+        "winRate": 55.3,
+        "matches": 30979,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0107_1_5.png"
+      },
+      {
+        "monsterId": 31915,
+        "name": "Monster",
+        "element": "fire",
+        "winRate": 55.1,
+        "matches": 4113,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0168_1_5.png"
+      },
+      {
+        "monsterId": 25115,
+        "name": "Ongyouki",
+        "thaiName": "Ongyouki",
+        "element": "dark",
+        "winRate": 55.1,
+        "matches": 4175,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0073_1_5.png"
+      }
+    ],
+    "counters": [
+      {
+        "monsterId": 31315,
+        "name": "Velaska",
+        "thaiName": "Velaska",
+        "element": "dark",
+        "winRate": 41.1,
+        "matches": 15902,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0175_1_5.png"
+      },
+      {
+        "monsterId": 17014,
+        "name": "Artamiel",
+        "thaiName": "Artamiel",
+        "element": "light",
+        "winRate": 42.4,
+        "matches": 4999,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0019_3_2.png"
+      },
+      {
+        "monsterId": 35814,
+        "name": "Light Fern",
+        "thaiName": "Light Fern",
+        "element": "light",
+        "winRate": 42.8,
+        "matches": 7888,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0222_1_4.png"
+      },
+      {
+        "monsterId": 21514,
+        "name": "Eleanor",
+        "thaiName": "Eleanor",
+        "element": "light",
+        "winRate": 44,
+        "matches": 4797,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0043_3_4.png"
+      },
+      {
+        "monsterId": 22913,
+        "name": "Christina",
+        "thaiName": "Christina",
+        "element": "wind",
+        "winRate": 44.1,
+        "matches": 4384,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0049_2_4.png"
+      }
+    ]
+  },
+  "13812": {
+    "monsterId": 13812,
+    "synergies": [
+      {
+        "monsterId": 31315,
+        "name": "Velaska",
+        "thaiName": "Velaska",
+        "element": "dark",
+        "winRate": 55.1,
+        "matches": 111748,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0175_1_5.png"
+      },
+      {
+        "monsterId": 35814,
+        "name": "Light Fern",
+        "thaiName": "Light Fern",
+        "element": "light",
+        "winRate": 55.1,
+        "matches": 30945,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0222_1_4.png"
+      },
+      {
+        "monsterId": 22913,
+        "name": "Christina",
+        "thaiName": "Christina",
+        "element": "wind",
+        "winRate": 54.4,
+        "matches": 52374,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0049_2_4.png"
+      },
+      {
+        "monsterId": 32215,
+        "name": "Monster",
+        "element": "fire",
+        "winRate": 54.1,
+        "matches": 114333,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0169_1_5.png"
+      },
+      {
+        "monsterId": 16614,
+        "name": "Jager",
+        "thaiName": "Jager",
+        "element": "light",
+        "winRate": 54.1,
+        "matches": 115762,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0025_3_0.png"
+      }
+    ],
+    "counters": [
+      {
+        "monsterId": 31315,
+        "name": "Velaska",
+        "thaiName": "Velaska",
+        "element": "dark",
+        "winRate": 40.8,
+        "matches": 107554,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0175_1_5.png"
+      },
+      {
+        "monsterId": 20415,
+        "name": "Thebae",
+        "thaiName": "Thebae",
+        "element": "dark",
+        "winRate": 41.4,
+        "matches": 21333,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0038_4_1.png"
+      },
+      {
+        "monsterId": 21512,
+        "name": "Helena",
+        "thaiName": "Helena",
+        "element": "fire",
+        "winRate": 41.5,
+        "matches": 17765,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0043_1_4.png"
+      },
+      {
+        "monsterId": 28315,
+        "name": "Devaraja",
+        "thaiName": "Devaraja",
+        "element": "dark",
+        "winRate": 42.3,
+        "matches": 26583,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0118_1_5.png"
+      },
+      {
+        "monsterId": 35814,
+        "name": "Light Fern",
+        "thaiName": "Light Fern",
+        "element": "light",
+        "winRate": 42.8,
+        "matches": 44099,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0222_1_4.png"
+      }
+    ]
+  },
+  "15713": {
+    "monsterId": 15713,
+    "synergies": [
+      {
+        "monsterId": 35814,
+        "name": "Light Fern",
+        "thaiName": "Light Fern",
+        "element": "light",
+        "winRate": 55.8,
+        "matches": 17534,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0222_1_4.png"
+      },
+      {
+        "monsterId": 20714,
+        "name": "Misty",
+        "thaiName": "Misty",
+        "element": "light",
+        "winRate": 53.9,
+        "matches": 23868,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0040_3_1.png"
+      },
+      {
+        "monsterId": 25614,
+        "name": "Ella",
+        "thaiName": "Ella",
+        "element": "light",
+        "winRate": 53.7,
+        "matches": 29489,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0078_1_4.png"
+      },
+      {
+        "monsterId": 25014,
+        "name": "Seimei",
+        "thaiName": "Seimei",
+        "element": "light",
+        "winRate": 53.6,
+        "matches": 19576,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0072_1_4.png"
+      },
+      {
+        "monsterId": 15714,
+        "name": "Laima",
+        "thaiName": "Laima",
+        "element": "light",
+        "winRate": 53.6,
+        "matches": 67012,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0022_3_1.png"
+      }
+    ],
+    "counters": [
+      {
+        "monsterId": 35814,
+        "name": "Light Fern",
+        "thaiName": "Light Fern",
+        "element": "light",
+        "winRate": 40.5,
+        "matches": 48752,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0222_1_4.png"
+      },
+      {
+        "monsterId": 22913,
+        "name": "Christina",
+        "thaiName": "Christina",
+        "element": "wind",
+        "winRate": 42.3,
+        "matches": 31291,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0049_2_4.png"
+      },
+      {
+        "monsterId": 16614,
+        "name": "Jager",
+        "thaiName": "Jager",
+        "element": "light",
+        "winRate": 43,
+        "matches": 88184,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0025_3_0.png"
+      },
+      {
+        "monsterId": 31315,
+        "name": "Velaska",
+        "thaiName": "Velaska",
+        "element": "dark",
+        "winRate": 43.1,
+        "matches": 93702,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0175_1_5.png"
+      },
+      {
+        "monsterId": 21115,
+        "name": "Nyx",
+        "thaiName": "Nyx",
+        "element": "dark",
+        "winRate": 43.1,
+        "matches": 79433,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0040_4_3.png"
+      }
+    ]
+  },
+  "15714": {
+    "monsterId": 15714,
+    "synergies": [
+      {
+        "monsterId": 35814,
+        "name": "Light Fern",
+        "thaiName": "Light Fern",
+        "element": "light",
+        "winRate": 58.7,
+        "matches": 22741,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0222_1_4.png"
+      },
+      {
+        "monsterId": 16615,
+        "name": "Ragdoll",
+        "thaiName": "Ragdoll",
+        "element": "dark",
+        "winRate": 57,
+        "matches": 24054,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0025_4_0.png"
+      },
+      {
+        "monsterId": 34615,
+        "name": "Monster",
+        "element": "fire",
+        "winRate": 56.9,
+        "matches": 18375,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0206_1_5.png"
+      },
+      {
+        "monsterId": 22611,
+        "name": "Bolverk",
+        "thaiName": "Bolverk",
+        "element": "water",
+        "winRate": 56.5,
+        "matches": 26571,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0047_0_2.png"
+      },
+      {
+        "monsterId": 31315,
+        "name": "Velaska",
+        "thaiName": "Velaska",
+        "element": "dark",
+        "winRate": 55.8,
+        "matches": 14081,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0175_1_5.png"
+      }
+    ],
+    "counters": [
+      {
+        "monsterId": 25014,
+        "name": "Seimei",
+        "thaiName": "Seimei",
+        "element": "light",
+        "winRate": 46.4,
+        "matches": 31535,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0072_1_4.png"
+      },
+      {
+        "monsterId": 25414,
+        "name": "ROBO-E65",
+        "thaiName": "ROBO-E65",
+        "element": "light",
+        "winRate": 47.1,
+        "matches": 9269,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0077_1_4.png"
+      },
+      {
+        "monsterId": 23114,
+        "name": "Lucifer",
+        "thaiName": "Lucifer",
+        "element": "light",
+        "winRate": 48.2,
+        "matches": 11443,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0052_3_4.png"
+      },
+      {
+        "monsterId": 15712,
+        "name": "Juno",
+        "thaiName": "Juno",
+        "element": "fire",
+        "winRate": 48.2,
+        "matches": 164418,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0022_1_1.png"
+      },
+      {
+        "monsterId": 24515,
+        "name": "Vancliffe / RYU",
+        "thaiName": "Vancliffe / RYU",
+        "element": "dark",
+        "winRate": 48.5,
+        "matches": 6937,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0066_1_5.png"
+      }
+    ]
+  },
+  "15715": {
+    "monsterId": 15715,
+    "synergies": [
+      {
+        "monsterId": 35814,
+        "name": "Light Fern",
+        "thaiName": "Light Fern",
+        "element": "light",
+        "winRate": 55.9,
+        "matches": 21278,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0222_1_4.png"
+      },
+      {
+        "monsterId": 25614,
+        "name": "Ella",
+        "thaiName": "Ella",
+        "element": "light",
+        "winRate": 55.8,
+        "matches": 19636,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0078_1_4.png"
+      },
+      {
+        "monsterId": 15714,
+        "name": "Laima",
+        "thaiName": "Laima",
+        "element": "light",
+        "winRate": 55.2,
+        "matches": 64590,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0022_3_1.png"
+      },
+      {
+        "monsterId": 20714,
+        "name": "Misty",
+        "thaiName": "Misty",
+        "element": "light",
+        "winRate": 55,
+        "matches": 11858,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0040_3_1.png"
+      },
+      {
+        "monsterId": 34615,
+        "name": "Monster",
+        "element": "fire",
+        "winRate": 54.7,
+        "matches": 21624,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0206_1_5.png"
+      }
+    ],
+    "counters": [
+      {
+        "monsterId": 21115,
+        "name": "Nyx",
+        "thaiName": "Nyx",
+        "element": "dark",
+        "winRate": 43.8,
+        "matches": 49501,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0040_4_3.png"
+      },
+      {
+        "monsterId": 35814,
+        "name": "Light Fern",
+        "thaiName": "Light Fern",
+        "element": "light",
+        "winRate": 44,
+        "matches": 32261,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0222_1_4.png"
+      },
+      {
+        "monsterId": 16614,
+        "name": "Jager",
+        "thaiName": "Jager",
+        "element": "light",
+        "winRate": 44.9,
+        "matches": 53883,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0025_3_0.png"
+      },
+      {
+        "monsterId": 22215,
+        "name": "Pater",
+        "thaiName": "Pater",
+        "element": "dark",
+        "winRate": 45.8,
+        "matches": 28590,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0046_4_2.png"
+      },
+      {
+        "monsterId": 22913,
+        "name": "Christina",
+        "thaiName": "Christina",
+        "element": "wind",
+        "winRate": 46.1,
+        "matches": 23394,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0049_2_4.png"
+      }
+    ]
+  },
+  "16811": {
+    "monsterId": 16811,
+    "synergies": [
+      {
+        "monsterId": 35814,
+        "name": "Light Fern",
+        "thaiName": "Light Fern",
+        "element": "light",
+        "winRate": 56,
+        "matches": 27737,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0222_1_4.png"
+      },
+      {
+        "monsterId": 31315,
+        "name": "Velaska",
+        "thaiName": "Velaska",
+        "element": "dark",
+        "winRate": 55,
+        "matches": 30778,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0175_1_5.png"
+      },
+      {
+        "monsterId": 34615,
+        "name": "Monster",
+        "element": "fire",
+        "winRate": 54.3,
+        "matches": 27363,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0206_1_5.png"
+      },
+      {
+        "monsterId": 15714,
+        "name": "Laima",
+        "thaiName": "Laima",
+        "element": "light",
+        "winRate": 53.9,
+        "matches": 95624,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0022_3_1.png"
+      },
+      {
+        "monsterId": 25014,
+        "name": "Seimei",
+        "thaiName": "Seimei",
+        "element": "light",
+        "winRate": 53.8,
+        "matches": 24846,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0072_1_4.png"
+      }
+    ],
+    "counters": [
+      {
+        "monsterId": 16614,
+        "name": "Jager",
+        "thaiName": "Jager",
+        "element": "light",
+        "winRate": 42.3,
+        "matches": 111609,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0025_3_0.png"
+      },
+      {
+        "monsterId": 20714,
+        "name": "Misty",
+        "thaiName": "Misty",
+        "element": "light",
+        "winRate": 43.9,
+        "matches": 57971,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0040_3_1.png"
+      },
+      {
+        "monsterId": 21514,
+        "name": "Eleanor",
+        "thaiName": "Eleanor",
+        "element": "light",
+        "winRate": 44.2,
+        "matches": 23315,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0043_3_4.png"
+      },
+      {
+        "monsterId": 27215,
+        "name": "Zenisek",
+        "thaiName": "Zenisek",
+        "element": "dark",
+        "winRate": 44.3,
+        "matches": 19408,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0106_1_5.png"
+      },
+      {
+        "monsterId": 26813,
+        "name": "Angela / Pure Vanilla Cookie",
+        "thaiName": "Angela / Pure Vanilla Cookie",
+        "element": "wind",
+        "winRate": 44.6,
+        "matches": 169300,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0099_1_3.png"
+      }
+    ]
+  },
+  "21415": {
+    "monsterId": 21415,
+    "synergies": [
+      {
+        "monsterId": 28315,
+        "name": "Devaraja",
+        "thaiName": "Devaraja",
+        "element": "dark",
+        "winRate": 57.5,
+        "matches": 18892,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0118_1_5.png"
+      },
+      {
+        "monsterId": 35814,
+        "name": "Light Fern",
+        "thaiName": "Light Fern",
+        "element": "light",
+        "winRate": 57,
+        "matches": 13133,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0222_1_4.png"
+      },
+      {
+        "monsterId": 26813,
+        "name": "Angela / Pure Vanilla Cookie",
+        "thaiName": "Angela / Pure Vanilla Cookie",
+        "element": "wind",
+        "winRate": 55.5,
+        "matches": 63327,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0099_1_3.png"
+      },
+      {
+        "monsterId": 21811,
+        "name": "Josephine",
+        "thaiName": "Josephine",
+        "element": "water",
+        "winRate": 55.4,
+        "matches": 94373,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0044_0_4.png"
+      },
+      {
+        "monsterId": 33214,
+        "name": "Monster",
+        "element": "fire",
+        "winRate": 55.3,
+        "matches": 16971,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0185_1_4.png"
+      }
+    ],
+    "counters": [
+      {
+        "monsterId": 30415,
+        "name": "Monster",
+        "element": "fire",
+        "winRate": 45.3,
+        "matches": 7804,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0155_1_5.png"
+      },
+      {
+        "monsterId": 23514,
+        "name": "Narsha",
+        "thaiName": "Narsha",
+        "element": "light",
+        "winRate": 45.8,
+        "matches": 8509,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0054_3_0.png"
+      },
+      {
+        "monsterId": 23115,
+        "name": "Beelzebub",
+        "thaiName": "Beelzebub",
+        "element": "dark",
+        "winRate": 45.9,
+        "matches": 31832,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0052_4_4.png"
+      },
+      {
+        "monsterId": 21512,
+        "name": "Helena",
+        "thaiName": "Helena",
+        "element": "fire",
+        "winRate": 45.9,
+        "matches": 9750,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0043_1_4.png"
+      },
+      {
+        "monsterId": 27615,
+        "name": "Monster",
+        "element": "fire",
+        "winRate": 46.3,
+        "matches": 11947,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0108_1_5.png"
+      }
+    ]
+  },
+  "23711": {
+    "monsterId": 23711,
+    "synergies": [
+      {
+        "monsterId": 35814,
+        "name": "Light Fern",
+        "thaiName": "Light Fern",
+        "element": "light",
+        "winRate": 56.9,
+        "matches": 55583,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0222_1_4.png"
+      },
+      {
+        "monsterId": 26913,
+        "name": "Jade / Hollyberry Cookie",
+        "thaiName": "Jade / Hollyberry Cookie",
+        "element": "wind",
+        "winRate": 56.4,
+        "matches": 40626,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0097_1_3.png"
+      },
+      {
+        "monsterId": 28315,
+        "name": "Devaraja",
+        "thaiName": "Devaraja",
+        "element": "dark",
+        "winRate": 55.4,
+        "matches": 49085,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0118_1_5.png"
+      },
+      {
+        "monsterId": 15714,
+        "name": "Laima",
+        "thaiName": "Laima",
+        "element": "light",
+        "winRate": 55.2,
+        "matches": 129449,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0022_3_1.png"
+      },
+      {
+        "monsterId": 17911,
+        "name": "Beth",
+        "thaiName": "Beth",
+        "element": "water",
+        "winRate": 55,
+        "matches": 24440,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0023_0_1.png"
+      }
+    ],
+    "counters": [
+      {
+        "monsterId": 25014,
+        "name": "Seimei",
+        "thaiName": "Seimei",
+        "element": "light",
+        "winRate": 39.4,
+        "matches": 59501,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0072_1_4.png"
+      },
+      {
+        "monsterId": 33214,
+        "name": "Monster",
+        "element": "fire",
+        "winRate": 41.2,
+        "matches": 28980,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0185_1_4.png"
+      },
+      {
+        "monsterId": 25414,
+        "name": "ROBO-E65",
+        "thaiName": "ROBO-E65",
+        "element": "light",
+        "winRate": 43.2,
+        "matches": 23485,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0077_1_4.png"
+      },
+      {
+        "monsterId": 20714,
+        "name": "Misty",
+        "thaiName": "Misty",
+        "element": "light",
+        "winRate": 43.6,
+        "matches": 62219,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0040_3_1.png"
+      },
+      {
+        "monsterId": 35814,
+        "name": "Light Fern",
+        "thaiName": "Light Fern",
+        "element": "light",
+        "winRate": 44,
+        "matches": 56256,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0222_1_4.png"
+      }
+    ]
+  },
+  "24714": {
+    "monsterId": 24714,
+    "synergies": [
+      {
+        "monsterId": 14415,
+        "name": "Grogen",
+        "thaiName": "Grogen",
+        "element": "dark",
+        "winRate": 59.6,
+        "matches": 4874,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0016_4_0.png"
+      },
+      {
+        "monsterId": 28312,
+        "name": "Vendhan",
+        "thaiName": "Vendhan",
+        "element": "fire",
+        "winRate": 57.1,
+        "matches": 37632,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0118_1_2.png"
+      },
+      {
+        "monsterId": 28612,
+        "name": "Bloodya",
+        "thaiName": "Bloodya",
+        "element": "fire",
+        "winRate": 56.9,
+        "matches": 12947,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0127_1_2.png"
+      },
+      {
+        "monsterId": 24514,
+        "name": "Talisman / RYU",
+        "thaiName": "Talisman / RYU",
+        "element": "light",
+        "winRate": 56.9,
+        "matches": 5958,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0066_1_4.png"
+      },
+      {
+        "monsterId": 25715,
+        "name": "Maximilian",
+        "thaiName": "Maximilian",
+        "element": "dark",
+        "winRate": 56.9,
+        "matches": 19793,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0080_1_5.png"
+      }
+    ],
+    "counters": [
+      {
+        "monsterId": 31315,
+        "name": "Velaska",
+        "thaiName": "Velaska",
+        "element": "dark",
+        "winRate": 43.6,
+        "matches": 26234,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0175_1_5.png"
+      },
+      {
+        "monsterId": 22211,
+        "name": "Abellio",
+        "thaiName": "Abellio",
+        "element": "water",
+        "winRate": 45.3,
+        "matches": 33016,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0046_0_2.png"
+      },
+      {
+        "monsterId": 18615,
+        "name": "Woonsa",
+        "thaiName": "Woonsa",
+        "element": "dark",
+        "winRate": 46.1,
+        "matches": 10992,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0031_4_1.png"
+      },
+      {
+        "monsterId": 35915,
+        "name": "Dark Stark",
+        "thaiName": "Dark Stark",
+        "element": "dark",
+        "winRate": 47.1,
+        "matches": 13501,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0221_1_5.png"
+      },
+      {
+        "monsterId": 16615,
+        "name": "Ragdoll",
+        "thaiName": "Ragdoll",
+        "element": "dark",
+        "winRate": 47.2,
+        "matches": 23323,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0025_4_0.png"
+      }
+    ]
+  },
+  "25313": {
+    "monsterId": 25313,
+    "synergies": [
+      {
+        "monsterId": 35814,
+        "name": "Light Fern",
+        "thaiName": "Light Fern",
+        "element": "light",
+        "winRate": 55.7,
+        "matches": 30063,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0222_1_4.png"
+      },
+      {
+        "monsterId": 15714,
+        "name": "Laima",
+        "thaiName": "Laima",
+        "element": "light",
+        "winRate": 53.8,
+        "matches": 112211,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0022_3_1.png"
+      },
+      {
+        "monsterId": 16815,
+        "name": "Son Zhang Lao",
+        "thaiName": "Son Zhang Lao",
+        "element": "dark",
+        "winRate": 53.2,
+        "matches": 85173,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0025_4_4.png"
+      },
+      {
+        "monsterId": 26815,
+        "name": "Elena / Pure Vanilla Cookie",
+        "thaiName": "Elena / Pure Vanilla Cookie",
+        "element": "dark",
+        "winRate": 53.1,
+        "matches": 37902,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0099_1_5.png"
+      },
+      {
+        "monsterId": 30515,
+        "name": "Monster",
+        "element": "fire",
+        "winRate": 52.9,
+        "matches": 39448,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0157_1_5.png"
+      }
+    ],
+    "counters": [
+      {
+        "monsterId": 16614,
+        "name": "Jager",
+        "thaiName": "Jager",
+        "element": "light",
+        "winRate": 41.9,
+        "matches": 105740,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0025_3_0.png"
+      },
+      {
+        "monsterId": 16812,
+        "name": "Mei Hou Wang",
+        "thaiName": "Mei Hou Wang",
+        "element": "fire",
+        "winRate": 42.9,
+        "matches": 184249,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0025_1_4.png"
+      },
+      {
+        "monsterId": 21514,
+        "name": "Eleanor",
+        "thaiName": "Eleanor",
+        "element": "light",
+        "winRate": 43.1,
+        "matches": 24847,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0043_3_4.png"
+      },
+      {
+        "monsterId": 26812,
+        "name": "Lucia / Pure Vanilla Cookie",
+        "thaiName": "Lucia / Pure Vanilla Cookie",
+        "element": "fire",
+        "winRate": 43.2,
+        "matches": 49270,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0099_1_2.png"
+      },
+      {
+        "monsterId": 16615,
+        "name": "Ragdoll",
+        "thaiName": "Ragdoll",
+        "element": "dark",
+        "winRate": 43.4,
+        "matches": 82089,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0025_4_0.png"
+      }
+    ]
+  },
+  "26813": {
+    "monsterId": 26813,
+    "synergies": [
+      {
+        "monsterId": 17014,
+        "name": "Artamiel",
+        "thaiName": "Artamiel",
+        "element": "light",
+        "winRate": 58.3,
+        "matches": 29958,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0019_3_2.png"
+      },
+      {
+        "monsterId": 28315,
+        "name": "Devaraja",
+        "thaiName": "Devaraja",
+        "element": "dark",
+        "winRate": 57,
+        "matches": 21314,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0118_1_5.png"
+      },
+      {
+        "monsterId": 35814,
+        "name": "Light Fern",
+        "thaiName": "Light Fern",
+        "element": "light",
+        "winRate": 56.8,
+        "matches": 28388,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0222_1_4.png"
+      },
+      {
+        "monsterId": 30614,
+        "name": "Monster",
+        "element": "fire",
+        "winRate": 56.5,
+        "matches": 19930,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0156_1_4.png"
+      },
+      {
+        "monsterId": 16615,
+        "name": "Ragdoll",
+        "thaiName": "Ragdoll",
+        "element": "dark",
+        "winRate": 56.2,
+        "matches": 118436,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0025_4_0.png"
+      }
+    ],
+    "counters": [
+      {
+        "monsterId": 26913,
+        "name": "Jade / Hollyberry Cookie",
+        "thaiName": "Jade / Hollyberry Cookie",
+        "element": "wind",
+        "winRate": 40.1,
+        "matches": 15448,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0097_1_3.png"
+      },
+      {
+        "monsterId": 29311,
+        "name": "Monster",
+        "element": "fire",
+        "winRate": 41.1,
+        "matches": 12543,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0142_1_1.png"
+      },
+      {
+        "monsterId": 27615,
+        "name": "Monster",
+        "element": "fire",
+        "winRate": 41.2,
+        "matches": 18486,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0108_1_5.png"
+      },
+      {
+        "monsterId": 30415,
+        "name": "Monster",
+        "element": "fire",
+        "winRate": 41.5,
+        "matches": 13914,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0155_1_5.png"
+      },
+      {
+        "monsterId": 24513,
+        "name": "Kashmir / RYU",
+        "thaiName": "Kashmir / RYU",
+        "element": "wind",
+        "winRate": 41.7,
+        "matches": 20492,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0066_1_3.png"
+      }
+    ]
+  },
+  "27214": {
+    "monsterId": 27214,
+    "synergies": [
+      {
+        "monsterId": 14615,
+        "name": "Zeratu",
+        "thaiName": "Zeratu",
+        "element": "dark",
+        "winRate": 58.2,
+        "matches": 5005,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0017_4_2.png"
+      },
+      {
+        "monsterId": 35814,
+        "name": "Light Fern",
+        "thaiName": "Light Fern",
+        "element": "light",
+        "winRate": 57,
+        "matches": 7303,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0222_1_4.png"
+      },
+      {
+        "monsterId": 28313,
+        "name": "Chakra",
+        "thaiName": "Chakra",
+        "element": "wind",
+        "winRate": 56.9,
+        "matches": 5666,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0118_1_3.png"
+      },
+      {
+        "monsterId": 27615,
+        "name": "Monster",
+        "element": "fire",
+        "winRate": 56.7,
+        "matches": 12753,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0108_1_5.png"
+      },
+      {
+        "monsterId": 20714,
+        "name": "Misty",
+        "thaiName": "Misty",
+        "element": "light",
+        "winRate": 56,
+        "matches": 9980,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0040_3_1.png"
+      }
+    ],
+    "counters": [
+      {
+        "monsterId": 24714,
+        "name": "Craig / M. BISON",
+        "thaiName": "Craig / M. BISON",
+        "element": "light",
+        "winRate": 44.8,
+        "matches": 15936,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0068_1_4.png"
+      },
+      {
+        "monsterId": 25414,
+        "name": "ROBO-E65",
+        "thaiName": "ROBO-E65",
+        "element": "light",
+        "winRate": 45.6,
+        "matches": 5680,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0077_1_4.png"
+      },
+      {
+        "monsterId": 21214,
+        "name": "Tian Lang",
+        "thaiName": "Tian Lang",
+        "element": "light",
+        "winRate": 45.9,
+        "matches": 14132,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0041_3_4.png"
+      },
+      {
+        "monsterId": 31315,
+        "name": "Velaska",
+        "thaiName": "Velaska",
+        "element": "dark",
+        "winRate": 45.9,
+        "matches": 26760,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0175_1_5.png"
+      },
+      {
+        "monsterId": 18315,
+        "name": "Wolyung",
+        "thaiName": "Wolyung",
+        "element": "dark",
+        "winRate": 46.2,
+        "matches": 9253,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0029_4_3.png"
+      }
+    ]
+  },
+  "30314": {
+    "monsterId": 30314,
+    "synergies": [
+      {
+        "monsterId": 21514,
+        "name": "Eleanor",
+        "thaiName": "Eleanor",
+        "element": "light",
+        "winRate": 56,
+        "matches": 3576,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0043_3_4.png"
+      },
+      {
+        "monsterId": 35814,
+        "name": "Light Fern",
+        "thaiName": "Light Fern",
+        "element": "light",
+        "winRate": 55.2,
+        "matches": 7306,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0222_1_4.png"
+      },
+      {
+        "monsterId": 32315,
+        "name": "Actaeon",
+        "thaiName": "Actaeon",
+        "element": "dark",
+        "winRate": 54.6,
+        "matches": 5279,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0177_1_5.png"
+      },
+      {
+        "monsterId": 28314,
+        "name": "Dyeus",
+        "thaiName": "Dyeus",
+        "element": "light",
+        "winRate": 54.6,
+        "matches": 3908,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0118_1_4.png"
+      },
+      {
+        "monsterId": 16114,
+        "name": "Lora",
+        "thaiName": "Lora",
+        "element": "light",
+        "winRate": 54.4,
+        "matches": 43394,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0022_3_4.png"
+      }
+    ],
+    "counters": [
+      {
+        "monsterId": 16615,
+        "name": "Ragdoll",
+        "thaiName": "Ragdoll",
+        "element": "dark",
+        "winRate": 36.8,
+        "matches": 16839,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0025_4_0.png"
+      },
+      {
+        "monsterId": 26812,
+        "name": "Lucia / Pure Vanilla Cookie",
+        "thaiName": "Lucia / Pure Vanilla Cookie",
+        "element": "fire",
+        "winRate": 40.6,
+        "matches": 3824,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0099_1_2.png"
+      },
+      {
+        "monsterId": 31315,
+        "name": "Velaska",
+        "thaiName": "Velaska",
+        "element": "dark",
+        "winRate": 41.4,
+        "matches": 17723,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0175_1_5.png"
+      },
+      {
+        "monsterId": 16613,
+        "name": "Leo",
+        "thaiName": "Leo",
+        "element": "wind",
+        "winRate": 42.4,
+        "matches": 28339,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0025_2_0.png"
+      },
+      {
+        "monsterId": 26813,
+        "name": "Angela / Pure Vanilla Cookie",
+        "thaiName": "Angela / Pure Vanilla Cookie",
+        "element": "wind",
+        "winRate": 42.5,
+        "matches": 38256,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0099_1_3.png"
+      }
+    ]
+  },
+  "30512": {
+    "monsterId": 30512,
+    "synergies": [
+      {
+        "monsterId": 35814,
+        "name": "Light Fern",
+        "thaiName": "Light Fern",
+        "element": "light",
+        "winRate": 54.5,
+        "matches": 45616,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0222_1_4.png"
+      },
+      {
+        "monsterId": 34615,
+        "name": "Monster",
+        "element": "fire",
+        "winRate": 54.2,
+        "matches": 38238,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0206_1_5.png"
+      },
+      {
+        "monsterId": 22211,
+        "name": "Abellio",
+        "thaiName": "Abellio",
+        "element": "water",
+        "winRate": 52.9,
+        "matches": 33598,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0046_0_2.png"
+      },
+      {
+        "monsterId": 16614,
+        "name": "Jager",
+        "thaiName": "Jager",
+        "element": "light",
+        "winRate": 52.6,
+        "matches": 101067,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0025_3_0.png"
+      },
+      {
+        "monsterId": 31315,
+        "name": "Velaska",
+        "thaiName": "Velaska",
+        "element": "dark",
+        "winRate": 52.6,
+        "matches": 55298,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0175_1_5.png"
+      }
+    ],
+    "counters": [
+      {
+        "monsterId": 33214,
+        "name": "Monster",
+        "element": "fire",
+        "winRate": 40,
+        "matches": 28131,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0185_1_4.png"
+      },
+      {
+        "monsterId": 16614,
+        "name": "Jager",
+        "thaiName": "Jager",
+        "element": "light",
+        "winRate": 40.4,
+        "matches": 117192,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0025_3_0.png"
+      },
+      {
+        "monsterId": 26813,
+        "name": "Angela / Pure Vanilla Cookie",
+        "thaiName": "Angela / Pure Vanilla Cookie",
+        "element": "wind",
+        "winRate": 40.5,
+        "matches": 237009,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0099_1_3.png"
+      },
+      {
+        "monsterId": 35814,
+        "name": "Light Fern",
+        "thaiName": "Light Fern",
+        "element": "light",
+        "winRate": 40.6,
+        "matches": 48147,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0222_1_4.png"
+      },
+      {
+        "monsterId": 16812,
+        "name": "Mei Hou Wang",
+        "thaiName": "Mei Hou Wang",
+        "element": "fire",
+        "winRate": 40.7,
+        "matches": 222883,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0025_1_4.png"
+      }
+    ]
+  },
+  "31315": {
+    "monsterId": 31315,
+    "synergies": [
+      {
+        "monsterId": 25211,
+        "name": "Nana",
+        "thaiName": "นานา",
+        "element": "water",
+        "winRate": 56.9,
+        "matches": 15029,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0075_1_1.png"
+      },
+      {
+        "monsterId": 26113,
+        "name": "Sonia",
+        "thaiName": "Sonia",
+        "element": "wind",
+        "winRate": 56.8,
+        "matches": 71013,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0087_1_3.png"
+      },
+      {
+        "monsterId": 30515,
+        "name": "Monster",
+        "element": "fire",
+        "winRate": 56.7,
+        "matches": 11506,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0157_1_5.png"
+      },
+      {
+        "monsterId": 35814,
+        "name": "Light Fern",
+        "thaiName": "Light Fern",
+        "element": "light",
+        "winRate": 56.4,
+        "matches": 16240,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0222_1_4.png"
+      },
+      {
+        "monsterId": 35913,
+        "name": "Wind Stark",
+        "thaiName": "Wind Stark",
+        "element": "wind",
+        "winRate": 56.2,
+        "matches": 161503,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0221_1_3.png"
+      }
+    ],
+    "counters": [
+      {
+        "monsterId": 32311,
+        "name": "Gideon",
+        "thaiName": "Gideon",
+        "element": "water",
+        "winRate": 41.5,
+        "matches": 19824,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0177_1_1.png"
+      },
+      {
+        "monsterId": 26913,
+        "name": "Jade / Hollyberry Cookie",
+        "thaiName": "Jade / Hollyberry Cookie",
+        "element": "wind",
+        "winRate": 42.9,
+        "matches": 7855,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0097_1_3.png"
+      },
+      {
+        "monsterId": 34411,
+        "name": "Monster",
+        "element": "fire",
+        "winRate": 43.5,
+        "matches": 70945,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0204_1_1.png"
+      },
+      {
+        "monsterId": 22611,
+        "name": "Bolverk",
+        "thaiName": "Bolverk",
+        "element": "water",
+        "winRate": 43.9,
+        "matches": 26017,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0047_0_2.png"
+      },
+      {
+        "monsterId": 35011,
+        "name": "Water Old Wood / Gandalf",
+        "thaiName": "Water Old Wood / Gandalf",
+        "element": "water",
+        "winRate": 44.1,
+        "matches": 8171,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0215_1_1.png"
+      }
+    ]
+  },
+  "34615": {
+    "monsterId": 34615,
+    "synergies": [
+      {
+        "monsterId": 14615,
+        "name": "Zeratu",
+        "thaiName": "Zeratu",
+        "element": "dark",
+        "winRate": 57.5,
+        "matches": 4053,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0017_4_2.png"
+      },
+      {
+        "monsterId": 35814,
+        "name": "Light Fern",
+        "thaiName": "Light Fern",
+        "element": "light",
+        "winRate": 56.9,
+        "matches": 5971,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0222_1_4.png"
+      },
+      {
+        "monsterId": 15714,
+        "name": "Laima",
+        "thaiName": "Laima",
+        "element": "light",
+        "winRate": 56.9,
+        "matches": 18375,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0022_3_1.png"
+      },
+      {
+        "monsterId": 21514,
+        "name": "Eleanor",
+        "thaiName": "Eleanor",
+        "element": "light",
+        "winRate": 56.8,
+        "matches": 3195,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0043_3_4.png"
+      },
+      {
+        "monsterId": 25014,
+        "name": "Seimei",
+        "thaiName": "Seimei",
+        "element": "light",
+        "winRate": 56.6,
+        "matches": 3565,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0072_1_4.png"
+      }
+    ],
+    "counters": [
+      {
+        "monsterId": 35814,
+        "name": "Light Fern",
+        "thaiName": "Light Fern",
+        "element": "light",
+        "winRate": 44.4,
+        "matches": 7127,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0222_1_4.png"
+      },
+      {
+        "monsterId": 16615,
+        "name": "Ragdoll",
+        "thaiName": "Ragdoll",
+        "element": "dark",
+        "winRate": 46.2,
+        "matches": 12608,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0025_4_0.png"
+      },
+      {
+        "monsterId": 23114,
+        "name": "Lucifer",
+        "thaiName": "Lucifer",
+        "element": "light",
+        "winRate": 46.6,
+        "matches": 4731,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0052_3_4.png"
+      },
+      {
+        "monsterId": 25715,
+        "name": "Maximilian",
+        "thaiName": "Maximilian",
+        "element": "dark",
+        "winRate": 47.2,
+        "matches": 5475,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0080_1_5.png"
+      },
+      {
+        "monsterId": 25414,
+        "name": "ROBO-E65",
+        "thaiName": "ROBO-E65",
+        "element": "light",
+        "winRate": 47.5,
+        "matches": 3566,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0077_1_4.png"
+      }
+    ]
+  },
+  "35814": {
+    "monsterId": 35814,
+    "synergies": [
+      {
+        "monsterId": 22614,
+        "name": "Geldnir",
+        "thaiName": "Geldnir",
+        "element": "light",
+        "winRate": 60.9,
+        "matches": 3138,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0047_3_2.png"
+      },
+      {
+        "monsterId": 21115,
+        "name": "Nyx",
+        "thaiName": "Nyx",
+        "element": "dark",
+        "winRate": 60.3,
+        "matches": 10309,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0040_4_3.png"
+      },
+      {
+        "monsterId": 27715,
+        "name": "Monster",
+        "element": "fire",
+        "winRate": 58.9,
+        "matches": 6073,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0107_1_5.png"
+      },
+      {
+        "monsterId": 15714,
+        "name": "Laima",
+        "thaiName": "Laima",
+        "element": "light",
+        "winRate": 58.7,
+        "matches": 22741,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0022_3_1.png"
+      },
+      {
+        "monsterId": 33214,
+        "name": "Monster",
+        "element": "fire",
+        "winRate": 58.5,
+        "matches": 5659,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0185_1_4.png"
+      }
+    ],
+    "counters": [
+      {
+        "monsterId": 22614,
+        "name": "Geldnir",
+        "thaiName": "Geldnir",
+        "element": "light",
+        "winRate": 43.6,
+        "matches": 3359,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0047_3_2.png"
+      },
+      {
+        "monsterId": 15712,
+        "name": "Juno",
+        "thaiName": "Juno",
+        "element": "fire",
+        "winRate": 45.8,
+        "matches": 27057,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0022_1_1.png"
+      },
+      {
+        "monsterId": 22611,
+        "name": "Bolverk",
+        "thaiName": "Bolverk",
+        "element": "water",
+        "winRate": 46.7,
+        "matches": 36367,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0047_0_2.png"
+      },
+      {
+        "monsterId": 15714,
+        "name": "Laima",
+        "thaiName": "Laima",
+        "element": "light",
+        "winRate": 46.8,
+        "matches": 17938,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0022_3_1.png"
+      },
+      {
+        "monsterId": 25014,
+        "name": "Seimei",
+        "thaiName": "Seimei",
+        "element": "light",
+        "winRate": 46.9,
+        "matches": 7996,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0072_1_4.png"
+      }
+    ]
+  },
+  "35913": {
+    "monsterId": 35913,
+    "synergies": [
+      {
+        "monsterId": 25414,
+        "name": "ROBO-E65",
+        "thaiName": "ROBO-E65",
+        "element": "light",
+        "winRate": 57.1,
+        "matches": 22583,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0077_1_4.png"
+      },
+      {
+        "monsterId": 31315,
+        "name": "Velaska",
+        "thaiName": "Velaska",
+        "element": "dark",
+        "winRate": 56.2,
+        "matches": 161503,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0175_1_5.png"
+      },
+      {
+        "monsterId": 22913,
+        "name": "Christina",
+        "thaiName": "Christina",
+        "element": "wind",
+        "winRate": 55.9,
+        "matches": 37349,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0049_2_4.png"
+      },
+      {
+        "monsterId": 35814,
+        "name": "Light Fern",
+        "thaiName": "Light Fern",
+        "element": "light",
+        "winRate": 55.9,
+        "matches": 85935,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0222_1_4.png"
+      },
+      {
+        "monsterId": 32215,
+        "name": "Monster",
+        "element": "fire",
+        "winRate": 55.7,
+        "matches": 37325,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0169_1_5.png"
+      }
+    ],
+    "counters": [
+      {
+        "monsterId": 26913,
+        "name": "Jade / Hollyberry Cookie",
+        "thaiName": "Jade / Hollyberry Cookie",
+        "element": "wind",
+        "winRate": 39.1,
+        "matches": 24730,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0097_1_3.png"
+      },
+      {
+        "monsterId": 17014,
+        "name": "Artamiel",
+        "thaiName": "Artamiel",
+        "element": "light",
+        "winRate": 41,
+        "matches": 33419,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0019_3_2.png"
+      },
+      {
+        "monsterId": 26813,
+        "name": "Angela / Pure Vanilla Cookie",
+        "thaiName": "Angela / Pure Vanilla Cookie",
+        "element": "wind",
+        "winRate": 42.2,
+        "matches": 346677,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0099_1_3.png"
+      },
+      {
+        "monsterId": 28315,
+        "name": "Devaraja",
+        "thaiName": "Devaraja",
+        "element": "dark",
+        "winRate": 43,
+        "matches": 39236,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0118_1_5.png"
+      },
+      {
+        "monsterId": 21512,
+        "name": "Helena",
+        "thaiName": "Helena",
+        "element": "fire",
+        "winRate": 43.9,
+        "matches": 26036,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0043_1_4.png"
+      }
+    ]
+  },
+  "35915": {
+    "monsterId": 35915,
+    "synergies": [
+      {
+        "monsterId": 16615,
+        "name": "Ragdoll",
+        "thaiName": "Ragdoll",
+        "element": "dark",
+        "winRate": 56.8,
+        "matches": 7991,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0025_4_0.png"
+      },
+      {
+        "monsterId": 23114,
+        "name": "Lucifer",
+        "thaiName": "Lucifer",
+        "element": "light",
+        "winRate": 56.5,
+        "matches": 3861,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0052_3_4.png"
+      },
+      {
+        "monsterId": 28315,
+        "name": "Devaraja",
+        "thaiName": "Devaraja",
+        "element": "dark",
+        "winRate": 55.9,
+        "matches": 3517,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0118_1_5.png"
+      },
+      {
+        "monsterId": 25414,
+        "name": "ROBO-E65",
+        "thaiName": "ROBO-E65",
+        "element": "light",
+        "winRate": 55.7,
+        "matches": 4996,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0077_1_4.png"
+      },
+      {
+        "monsterId": 17014,
+        "name": "Artamiel",
+        "thaiName": "Artamiel",
+        "element": "light",
+        "winRate": 55.7,
+        "matches": 3714,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0019_3_2.png"
+      }
+    ],
+    "counters": [
+      {
+        "monsterId": 21512,
+        "name": "Helena",
+        "thaiName": "Helena",
+        "element": "fire",
+        "winRate": 43,
+        "matches": 4093,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0043_1_4.png"
+      },
+      {
+        "monsterId": 26813,
+        "name": "Angela / Pure Vanilla Cookie",
+        "thaiName": "Angela / Pure Vanilla Cookie",
+        "element": "wind",
+        "winRate": 43.3,
+        "matches": 48073,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0099_1_3.png"
+      },
+      {
+        "monsterId": 26913,
+        "name": "Jade / Hollyberry Cookie",
+        "thaiName": "Jade / Hollyberry Cookie",
+        "element": "wind",
+        "winRate": 43.9,
+        "matches": 3768,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0097_1_3.png"
+      },
+      {
+        "monsterId": 34411,
+        "name": "Monster",
+        "element": "fire",
+        "winRate": 44.1,
+        "matches": 21310,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0204_1_1.png"
+      },
+      {
+        "monsterId": 28311,
+        "name": "Parjanya",
+        "thaiName": "Parjanya",
+        "element": "water",
+        "winRate": 44.4,
+        "matches": 11287,
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0118_1_1.png"
+      }
+    ]
+  }
+}

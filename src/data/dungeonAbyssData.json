@@ -1,0 +1,130 @@
+[
+  {
+    "id": "giants-abyss-hard",
+    "name": "Giant's Keep (ดันเจี้ยนยักษ์) - Abyss Hard",
+    "element": "Water",
+    "avgTime": "00:38",
+    "fastestTime": "00:24",
+    "successRate": "99.4%",
+    "popularMonsters": [
+      {
+        "name": "Teshar",
+        "img": "https://swarfarm.com/static/herders/images/monsters/unit_icon_0027_2_4.png"
+      },
+      {
+        "name": "Homunculus (Wind)",
+        "img": "https://swarfarm.com/static/herders/images/monsters/unit_icon_0047_2_0.png"
+      },
+      {
+        "name": "Deborah",
+        "img": "https://swarfarm.com/static/herders/images/monsters/unit_icon_0055_4_0.png"
+      },
+      {
+        "name": "Priest (Water)",
+        "img": "https://swarfarm.com/static/herders/images/monsters/unit_icon_0009_0_1.png"
+      },
+      {
+        "name": "Lyn",
+        "img": "https://swarfarm.com/static/herders/images/monsters/unit_icon_0006_3_4.png"
+      }
+    ],
+    "leaderSkill": "Teshar (CRIT Rate +33% in Dungeons)",
+    "turnOrder": "1. Priest (บัฟดาบ ATK) -> 2. Deborah (เจาะเกราะ Passive) -> 3. Teshar (Tempest S3 กวาดม็อบ) -> 4. Wind Homunculus -> 5. Lyn (บอสปิดฉาก)"
+  },
+  {
+    "id": "dragon-abyss-hard",
+    "name": "Dragon's Lair (ดันเจี้ยนมังกร) - Abyss Hard",
+    "element": "Fire",
+    "avgTime": "00:46",
+    "fastestTime": "00:31",
+    "successRate": "98.8%",
+    "popularMonsters": [
+      {
+        "name": "Liam",
+        "img": "https://swarfarm.com/static/herders/images/monsters/unit_icon_0059_0_1.png"
+      },
+      {
+        "name": "Shaina",
+        "img": "https://swarfarm.com/static/herders/images/monsters/unit_icon_0049_1_0.png"
+      },
+      {
+        "name": "Sabrina",
+        "img": "https://swarfarm.com/static/herders/images/monsters/unit_icon_0049_0_0.png"
+      },
+      {
+        "name": "Verdehile",
+        "img": "https://swarfarm.com/static/herders/images/monsters/unit_icon_0016_1_2.png"
+      },
+      {
+        "name": "Deborah",
+        "img": "https://swarfarm.com/static/herders/images/monsters/unit_icon_0055_4_0.png"
+      }
+    ],
+    "leaderSkill": "Verdehile (SPD +28% in Dungeons)",
+    "turnOrder": "1. Shaina (ลดเกราะหมู่) -> 2. Sabrina (ดึงเพื่อนตี) -> 3. Liam (Tidal Wave S3 วันช็อตมังกร) -> 4. Verdehile (เร่งเกจเทิร์น)"
+  },
+  {
+    "id": "necro-abyss-hard",
+    "name": "Necropolis (ดันเจี้ยนเนโคร) - Abyss Hard",
+    "element": "Dark",
+    "avgTime": "00:49",
+    "fastestTime": "00:36",
+    "successRate": "99.1%",
+    "popularMonsters": [
+      {
+        "name": "Astar",
+        "img": "https://swarfarm.com/static/herders/images/monsters/unit_icon_0036_1_3.png"
+      },
+      {
+        "name": "Shamann",
+        "img": "https://swarfarm.com/static/herders/images/monsters/unit_icon_0010_3_3.png"
+      },
+      {
+        "name": "Raoq (2A)",
+        "img": "https://swarfarm.com/static/herders/images/monsters/unit_icon_0007_1_0.png"
+      },
+      {
+        "name": "Abigail",
+        "img": "https://swarfarm.com/static/herders/images/monsters/unit_icon_0052_0_3.png"
+      },
+      {
+        "name": "Icaru (2A)",
+        "img": "https://swarfarm.com/static/herders/images/monsters/unit_icon_0007_0_0.png"
+      }
+    ],
+    "leaderSkill": "Abigail (ATK +33% in Dungeons)",
+    "turnOrder": "1. Abigail (ทำลายบาเรียบอส) -> 2. Raoq (ดึงเพื่อนกระซวก) -> 3. Astar (ตีหลายฮิตดาเมจไฟ) -> 4. Shamann (ทุบแสงดาเมจทะลุหลอด)"
+  },
+  {
+    "id": "spiritual-realm-abyss",
+    "name": "Spiritual Realm (โกเลมโบราณ) - Abyss Hard",
+    "element": "Wind",
+    "avgTime": "00:52",
+    "fastestTime": "00:39",
+    "successRate": "98.2%",
+    "popularMonsters": [
+      {
+        "name": "Perna",
+        "img": "https://swarfarm.com/static/herders/images/monsters/unit_icon_0027_1_4.png"
+      },
+      {
+        "name": "Verdehile",
+        "img": "https://swarfarm.com/static/herders/images/monsters/unit_icon_0016_1_2.png"
+      },
+      {
+        "name": "Ken",
+        "img": "https://swarfarm.com/static/herders/images/monsters/unit_icon_0057_1_0.png"
+      },
+      {
+        "name": "Colleen",
+        "img": "https://swarfarm.com/static/herders/images/monsters/unit_icon_0004_1_1.png"
+      },
+      {
+        "name": "Raoq (2A)",
+        "img": "https://swarfarm.com/static/herders/images/monsters/unit_icon_0007_1_0.png"
+      }
+    ],
+    "leaderSkill": "Perna (ATK +44% in Dungeons)",
+    "turnOrder": "1. Colleen (บัฟดาบ + ฮีล) -> 2. Raoq (เจาะเกราะ) -> 3. Ken (เตะไฟคอมโบหลายฮิต) -> 4. Perna (ระเบิดดาเมจจบเกม)"
+  }
+]
