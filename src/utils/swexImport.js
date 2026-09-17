@@ -3,10 +3,9 @@
 // in localStorage under STORAGE_KEY.
 
 export const STORAGE_KEY = 'swm:mybox';
+export const BOX_VERSION = 3;
 
 const ELEMENTS = { 1: 'water', 2: 'fire', 3: 'wind', 4: 'light', 5: 'dark' };
-
-export const BOX_VERSION = 2;
 
 // Rune set ids as used by the game client / SWEX
 export const RUNE_SETS = {
@@ -15,8 +14,44 @@ export const RUNE_SETS = {
   18: 'Destroy', 19: 'Fight', 20: 'Determination', 21: 'Enhance', 22: 'Accuracy', 23: 'Tolerance',
   24: 'Seal', 25: 'Intangible',
 };
-const SET_PIECES = { 3: 4, 4: 2, 5: 4, 6: 2, 8: 4, 10: 4, 11: 4, 13: 4, 14: 2, 15: 2, 16: 2, 17: 2, 18: 2, 19: 2, 20: 2, 21: 2, 22: 2, 23: 2, 24: 2, 25: 1, 1: 2, 2: 2, 7: 2 };
-const SPD_EFFECT = 8;
+const SET_PIECES = { 1: 2, 2: 2, 3: 4, 4: 2, 5: 4, 6: 2, 7: 2, 8: 4, 10: 4, 11: 4, 13: 4, 14: 2, 15: 2, 16: 2, 17: 2, 18: 2, 19: 2, 20: 2, 21: 2, 22: 2, 23: 2, 24: 2, 25: 1 };
+
+// Rune stat ids
+export const STAT_NAMES = {
+  1: 'HP', 2: 'HP%', 3: 'ATK', 4: 'ATK%', 5: 'DEF', 6: 'DEF%', 8: 'SPD', 9: 'CRI Rate', 10: 'CRI Dmg', 11: 'RES', 12: 'ACC',
+};
+// Highest total a 6★ substat can reach (5 rolls) — used for the SWOP-style efficiency formula
+const MAX_SUB = { 1: 1875, 2: 40, 3: 100, 4: 40, 5: 100, 6: 40, 8: 30, 9: 30, 10: 35, 11: 40, 12: 40 };
+const SPD = 8;
+
+function runeEfficiency(rune) {
+  let sum = 0;
+  const innate = rune.prefix_eff;
+  if (Array.isArray(innate) && innate[0] && MAX_SUB[innate[0]]) sum += (Number(innate[1]) || 0) / MAX_SUB[innate[0]];
+  for (const sub of Array.isArray(rune.sec_eff) ? rune.sec_eff : []) {
+    if (!Array.isArray(sub) || !MAX_SUB[sub[0]]) continue;
+    sum += ((Number(sub[1]) || 0) + (Number(sub[3]) || 0)) / MAX_SUB[sub[0]];
+  }
+  return Math.round(((1 + sum) / 2.8) * 1000) / 10;
+}
+
+/** Compact rune record: enough for the rune analysis tab, ~70 bytes each. */
+function compactRune(rune, equippedOn) {
+  const stars = Number(rune.class) || 0;
+  return {
+    id: rune.rune_id,
+    slot: Number(rune.slot_no) || 0,
+    set: Number(rune.set_id) || 0,
+    stars: stars > 10 ? stars - 10 : stars,
+    ancient: stars > 10 ? 1 : 0,
+    lvl: Number(rune.upgrade_curr) || 0,
+    main: [Number(rune.pri_eff?.[0]) || 0, Number(rune.pri_eff?.[1]) || 0],
+    innate: rune.prefix_eff?.[0] ? [Number(rune.prefix_eff[0]), Number(rune.prefix_eff[1]) || 0] : null,
+    subs: (Array.isArray(rune.sec_eff) ? rune.sec_eff : []).map((s) => [Number(s[0]) || 0, Number(s[1]) || 0, Number(s[3]) || 0, s[2] ? 1 : 0]),
+    eff: runeEfficiency(rune),
+    unit: equippedOn || 0,
+  };
+}
 
 /**
  * SWEX stores each unit's BASE stats; runes are listed separately on the unit.
@@ -25,14 +60,16 @@ const SPD_EFFECT = 8;
 function runeSummary(unit) {
   const runes = Array.isArray(unit.runes) ? unit.runes : unit.runes ? Object.values(unit.runes) : [];
   let flatSpd = 0;
+  let effSum = 0;
   const setCount = {};
   for (const r of runes) {
     if (!r) continue;
     setCount[r.set_id] = (setCount[r.set_id] || 0) + 1;
     const effects = [r.pri_eff, r.prefix_eff, ...(Array.isArray(r.sec_eff) ? r.sec_eff : [])];
     for (const eff of effects) {
-      if (Array.isArray(eff) && eff[0] === SPD_EFFECT) flatSpd += (Number(eff[1]) || 0) + (Number(eff[3]) || 0);
+      if (Array.isArray(eff) && eff[0] === SPD) flatSpd += (Number(eff[1]) || 0) + (Number(eff[3]) || 0);
     }
+    effSum += runeEfficiency(r);
   }
   const sets = [];
   for (const [id, n] of Object.entries(setCount)) {
@@ -40,7 +77,7 @@ function runeSummary(unit) {
     for (let i = 0; i < Math.floor(n / pieces); i++) sets.push(RUNE_SETS[id] || `Set${id}`);
   }
   const swiftSets = sets.filter((x) => x === 'Swift').length;
-  return { runes: runes.length, flatSpd, swiftSets, sets };
+  return { runes, flatSpd, swiftSets, sets, avgEff: runes.length ? Math.round((effSum / runes.length) * 10) / 10 : 0 };
 }
 
 /**
@@ -69,13 +106,16 @@ export function parseSwexExport(json) {
     idHint: w.wizard_id ? String(w.wizard_id).slice(-4) : '',
   };
 
+  const runes = [];
   const list = units
     .filter((u) => u && u.unit_master_id)
     .map((u) => {
       const base = Number(u.spd) || 0;
       const r = runeSummary(u);
+      const masterId = Number(u.unit_master_id);
+      for (const rune of r.runes) runes.push(compactRune(rune, masterId));
       return {
-        masterId: Number(u.unit_master_id),
+        masterId,
         stars: Number(u.class) || 0,
         level: Number(u.unit_level) || 0,
         element: ELEMENTS[u.attribute] || 'fire',
@@ -88,15 +128,22 @@ export function parseSwexExport(json) {
         cd: Number(u.critical_damage) || 0,
         acc: Number(u.accuracy) || 0,
         res: Number(u.resist) || 0,
-        runes: r.runes,
+        runes: r.runes.length,
         sets: r.sets.slice(0, 3),
+        runeEff: r.avgEff,
       };
     })
     .sort((a, b) => b.stars - a.stars || b.level - a.level || b.spd - a.spd);
 
+  // unequipped runes live at the top level
+  for (const rune of Array.isArray(json.runes) ? json.runes : []) {
+    if (rune && rune.rune_id) runes.push(compactRune(rune, 0));
+  }
+
   return {
     wizard,
     units: list,
+    runes,
     importedAt: new Date().toISOString(),
     version: BOX_VERSION,
   };
