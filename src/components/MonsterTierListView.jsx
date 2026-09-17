@@ -1,4 +1,6 @@
 import React, { useState, useMemo } from 'react';
+import swgtDefenseTiers from '../data/swgtDefenseTiers.json';
+import swgtOffenseTiers from '../data/swgtOffenseTiers.json';
 import { 
   Trophy, 
   HelpCircle, 
@@ -34,60 +36,18 @@ export default function MonsterTierListView({
   const [hoveredMonster, setHoveredMonster] = useState(null);
   const [selectedMonster, setSelectedMonster] = useState(null);
 
-  // 1. Calculate Bayesian Tier Scores and assign Tiers
+  // 1. Use 100% exact authentic SWGT Tier distribution
   const tieredMonsters = useMemo(() => {
-    if (!monsters || monsters.length === 0) return {};
-
-    const mThreshold = 1000;
-    const totalWR = monsters.reduce((sum, m) => sum + (m.winRateNum || 0), 0);
-    const meanWR = totalWR / monsters.length;
-
-    // Clone and score each monster
-    const scored = monsters.map(item => {
-      const battles = parseInt((item.battleCount || '0').toString().replace(/,/g, '')) || 0;
-      const pick = parseFloat(item.pickShare || '0') || 0;
-      const wr = item.winRateNum || 0;
-
-      // Bayesian Theorem comparing pick rate vs 2x win rate (WR%)
-      const bayesWR = battles >= mThreshold
-        ? (battles / (battles + mThreshold)) * (2 * wr) + (mThreshold / (battles + mThreshold)) * (2 * meanWR)
-        : (battles / (mThreshold * 2)) * (2 * wr);
-
-      // Score weight (Pick share + Bayesian WR)
-      const tierScore = (bayesWR * 1.5) + (pick * 8.0);
-
-      return {
-        ...item,
-        battlesNum: battles,
-        pickNum: pick,
-        tierScore
-      };
-    });
-
-    // Sort descending by Bayesian tier score
-    scored.sort((a, b) => b.tierScore - a.tierScore);
-
-    // Group into Tiers
+    const rawTiers = type === 'defense' ? swgtDefenseTiers : swgtOffenseTiers;
     const groups = {};
-    TIER_DEFINITIONS.forEach(t => { groups[t.id] = []; });
-
-    let currentIdx = 0;
-    for (const t of TIER_DEFINITIONS) {
-      if (t.id === 'Other') {
-        while (currentIdx < scored.length) {
-          groups['Other'].push({ ...scored[currentIdx], tierId: 'Other' });
-          currentIdx++;
-        }
-      } else {
-        for (let i = 0; i < t.count && currentIdx < scored.length; i++) {
-          groups[t.id].push({ ...scored[currentIdx], tierId: t.id });
-          currentIdx++;
-        }
-      }
-    }
-
+    TIER_DEFINITIONS.forEach(t => {
+      groups[t.id] = (rawTiers[t.id] || []).map(m => ({
+        ...m,
+        tierId: t.id
+      }));
+    });
     return groups;
-  }, [monsters]);
+  }, [type]);
 
   // 2. Filter monsters within each tier based on search & element filters
   const filteredTierGroups = useMemo(() => {
