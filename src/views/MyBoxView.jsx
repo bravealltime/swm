@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect, useRef } from 'react';
 import {
   Upload, Package, Shield, Flame, Trash2, RefreshCw, Search, Lock, ChevronRight, Star, CheckCircle2, XCircle,
   Compass, LayoutDashboard, Gauge, Gem, Zap, Castle, X, AlertTriangle, Sparkles, FolderSync, FolderOpen, Pause,
-  Download, Trophy, Award, Check, Layers, Sliders
+  Download, Trophy, Award, Check, Layers, Sliders, Crown, Eye
 } from 'lucide-react';
 import MonsterAvatar from '../components/MonsterAvatar';
 import RuneIcon from '../components/RuneIcon';
@@ -10,7 +10,7 @@ import ArtifactIcon from '../components/ArtifactIcon';
 import allMonstersData from '../data/allMonsters.json';
 import guardianMeta from '../data/swrtGuardianMeta.json';
 import { buildMonsterIndex, flagFromCountry } from '../data/swrtPlayerAdapter';
-import { parseSwexExport, ownedIdSet, loadBox, saveBox, clearBox, baseAwakenedId, BOX_VERSION, RUNE_SETS, STAT_NAMES, getArtifactsFromBox, ARTIFACT_EFFECT_NAMES } from '../utils/swexImport';
+import { parseSwexExport, ownedIdSet, loadBox, saveBox, clearBox, baseAwakenedId, BOX_VERSION, RUNE_SETS, STAT_NAMES, getArtifactsFromBox, ARTIFACT_EFFECT_NAMES, loadDemoBox } from '../utils/swexImport';
 import { supportsFolderWatch, loadDirHandle, clearDirHandle, pickSwexFolder, ensurePermission, findNewestExport } from '../utils/swexWatcher';
 import { exportAllDataAsJSON, importDataFromJSON } from '../services/storageService';
 
@@ -38,9 +38,9 @@ const ELEMENT_TH = { water: 'น้ำ', fire: 'ไฟ', wind: 'ลม', light: 
 const TABS = [
   { id: 'overview', label: 'ภาพรวม', icon: LayoutDashboard, color: 'bg-emerald-600 shadow-emerald-600/25' },
   { id: 'box', label: 'มอนสเตอร์', icon: Package, color: 'bg-cyan-600 shadow-cyan-600/25' },
+  { id: 'pokedex', label: 'ตู้สะสม Nat 5 & ทำเนียบ LD5', icon: Trophy, color: 'bg-amber-600 shadow-amber-600/25' },
   { id: 'artifacts', label: 'ค้นหาอาร์ติแฟกต์', icon: Layers, color: 'bg-teal-600 shadow-teal-600/25' },
   { id: 'efficiency', label: 'สแกนรูนเทพ & Quads', icon: Sparkles, color: 'bg-violet-600 shadow-violet-600/25' },
-  { id: 'pokedex', label: 'สมุดสะสม Nat 5 & LD', icon: Trophy, color: 'bg-amber-600 shadow-amber-600/25' },
   { id: 'defense', label: 'สร้างทีมรับ Siege', icon: Castle, color: 'bg-indigo-600 shadow-indigo-600/25' },
   { id: 'teams', label: 'ทีมที่สร้างได้', icon: Shield, color: 'bg-blue-600 shadow-blue-600/25' },
   { id: 'meta', label: 'เมต้า Guardian', icon: Flame, color: 'bg-rose-600 shadow-rose-600/25' },
@@ -63,13 +63,23 @@ function agoLabel(stamp) {
   return `${Math.floor(days / 365)} ปีที่แล้ว`;
 }
 
-export default function MyBoxView({ onNavigate }) {
+export default function MyBoxView({ onNavigate, tab: initialTab, subItem }) {
   const [box, setBox] = useState(() => loadBox());
   const [error, setError] = useState('');
-  const [tab, setTab] = useState('overview');
+  const [tab, setTab] = useState(() => initialTab || subItem || 'overview');
+
+  useEffect(() => {
+    if (initialTab || subItem) setTab(initialTab || subItem);
+  }, [initialTab, subItem]);
 
   const owned = useMemo(() => ownedIdSet(box), [box]);
   const mdc = useMdcAnalysis(owned, !!box);
+
+  const handleLoadDemo = () => {
+    const demo = loadDemoBox();
+    setBox(demo);
+    setError('');
+  };
 
   const importFile = async (file, { auto = false } = {}) => {
     setError('');
@@ -187,44 +197,72 @@ export default function MyBoxView({ onNavigate }) {
         </div>
       )}
 
-      {!box ? (
-        <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} />
-      ) : (
-        <>
-          {(box.version || 1) < BOX_VERSION && (
-            <div className="p-3.5 rounded-2xl border border-amber-500/30 bg-amber-500/5 text-xs text-amber-200 flex flex-wrap items-center justify-between gap-2">
-              <span className="flex items-center gap-2"><AlertTriangle className="w-4 h-4" /> ข้อมูลนี้นำเข้าด้วยเวอร์ชันเก่า — นำเข้าไฟล์ใหม่อีกครั้งเพื่อใช้ SPD รวมรูน, เซ็ตรูน, จูนสปีด และวิเคราะห์รูน</span>
-              <ImportButton onFile={importFile} label="นำเข้าใหม่" icon={RefreshCw} subtle />
+      {!box && (
+        <div className="rounded-3xl border border-amber-500/20 bg-gradient-to-r from-amber-950/20 via-[#0a0f19] to-blue-950/20 p-5 sm:p-6 shadow-xl space-y-4">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="flex items-start gap-3">
+              <div className="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-300 shrink-0">
+                <Sparkles className="w-6 h-6" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <h2 className="text-base sm:text-lg font-black text-white">ยังไม่มีข้อมูลมอนสเตอร์ในเครื่อง — กำลังแสดงในโหมดสารบัญ (Catalog Mode)</h2>
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-amber-500/20 text-amber-300 uppercase">
+                    Catalog Mode
+                  </span>
+                </div>
+                <p className="text-xs text-slate-400 mt-1 max-w-2xl">
+                  คุณสามารถเปิดดู "ตู้สะสม Nat 5 & ทำเนียบ LD 5★", ค้นหาอาร์ติแฟกต์ หรือทดลองทุกระบบทันทีโดยกดโหลดไอดีตัวอย่าง Guardian G3
+                </p>
+              </div>
             </div>
-          )}
-          <BoxHeader box={box} onNavigate={onNavigate} />
-          <SyncCard watch={watch} box={box} onStart={startWatching} onGrant={grantAgain} onStop={stopWatching} />
-
-          <div role="tablist" className="flex flex-wrap items-center gap-1.5 p-1.5 rounded-2xl bg-[#0a0f19]/80 border border-white/[0.08] shadow-lg sticky top-[68px] z-30 backdrop-blur-xl">
-            {TABS.map((t) => {
-              const Icon = t.icon;
-              const active = tab === t.id;
-              return (
-                <button key={t.id} role="tab" aria-selected={active} onClick={() => setTab(t.id)}
-                  className={`px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all cursor-pointer ${active ? `${t.color} text-white shadow-lg` : 'text-slate-300 hover:text-white hover:bg-white/[0.04]'}`}>
-                  <Icon className="w-4 h-4" /> {t.label}
-                </button>
-              );
-            })}
+            <div className="flex flex-wrap items-center gap-2 shrink-0">
+              <button
+                onClick={handleLoadDemo}
+                className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 text-xs font-black flex items-center gap-2 cursor-pointer shadow-lg shadow-amber-500/20"
+              >
+                <Trophy className="w-4 h-4 text-slate-950" />
+                โหลดไอดีตัวอย่าง Guardian G3 (ทดลองทันที)
+              </button>
+              <ImportButton onFile={importFile} label="นำเข้าไฟล์ SWEX" />
+            </div>
           </div>
-
-          {tab === 'overview' && <Overview box={box} mdc={mdc} owned={owned} onTab={setTab} onNavigate={onNavigate} />}
-          {tab === 'box' && <BoxGrid box={box} onNavigate={onNavigate} />}
-          {tab === 'artifacts' && <ArtifactSearchEngine box={box} onNavigate={onNavigate} />}
-          {tab === 'efficiency' && <RuneEfficiencyAndQuads box={box} />}
-          {tab === 'pokedex' && <PokedexCollection box={box} onNavigate={onNavigate} />}
-          {tab === 'defense' && <SiegeDefenseBuilder box={box} onNavigate={onNavigate} />}
-          {tab === 'teams' && <Teams owned={owned} mdc={mdc} onNavigate={onNavigate} />}
-          {tab === 'meta' && <MetaCoverage owned={owned} />}
-          {tab === 'speed' && <SpeedTuner box={box} onNavigate={onNavigate} />}
-          {tab === 'runes' && <Runes box={box} />}
-        </>
+        </div>
       )}
+
+      {box && (box.version || 1) < BOX_VERSION && (
+        <div className="p-3.5 rounded-2xl border border-amber-500/30 bg-amber-500/5 text-xs text-amber-200 flex flex-wrap items-center justify-between gap-2">
+          <span className="flex items-center gap-2"><AlertTriangle className="w-4 h-4" /> ข้อมูลนี้นำเข้าด้วยเวอร์ชันเก่า — นำเข้าไฟล์ใหม่อีกครั้งเพื่อใช้ SPD รวมรูน, เซ็ตรูน, จูนสปีด และวิเคราะห์รูน</span>
+          <ImportButton onFile={importFile} label="นำเข้าใหม่" icon={RefreshCw} subtle />
+        </div>
+      )}
+
+      {box && <BoxHeader box={box} onNavigate={onNavigate} onClearDemo={reset} onImport={importFile} />}
+      {box && <SyncCard watch={watch} box={box} onStart={startWatching} onGrant={grantAgain} onStop={stopWatching} />}
+
+      <div role="tablist" className="flex flex-wrap items-center gap-1.5 p-1.5 rounded-2xl bg-[#0a0f19]/80 border border-white/[0.08] shadow-lg sticky top-[68px] z-30 backdrop-blur-xl">
+        {TABS.map((t) => {
+          const Icon = t.icon;
+          const active = tab === t.id;
+          return (
+            <button key={t.id} role="tab" aria-selected={active} onClick={() => setTab(t.id)}
+              className={`px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all cursor-pointer ${active ? `${t.color} text-white shadow-lg` : 'text-slate-300 hover:text-white hover:bg-white/[0.04]'}`}>
+              <Icon className="w-4 h-4" /> {t.label}
+            </button>
+          );
+        })}
+      </div>
+
+      {tab === 'overview' && (box ? <Overview box={box} mdc={mdc} owned={owned} onTab={setTab} onNavigate={onNavigate} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} />)}
+      {tab === 'box' && (box ? <BoxGrid box={box} onNavigate={onNavigate} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} />)}
+      {tab === 'pokedex' && <PokedexCollection box={box} onNavigate={onNavigate} onLoadDemo={handleLoadDemo} />}
+      {tab === 'artifacts' && <ArtifactSearchEngine box={box} onNavigate={onNavigate} />}
+      {tab === 'efficiency' && (box ? <RuneEfficiencyAndQuads box={box} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} />)}
+      {tab === 'defense' && (box ? <SiegeDefenseBuilder box={box} onNavigate={onNavigate} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} />)}
+      {tab === 'teams' && <Teams owned={owned} mdc={mdc} onNavigate={onNavigate} />}
+      {tab === 'meta' && <MetaCoverage owned={owned} />}
+      {tab === 'speed' && (box ? <SpeedTuner box={box} onNavigate={onNavigate} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} />)}
+      {tab === 'runes' && (box ? <Runes box={box} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} />)}
     </div>
   );
 }
@@ -339,7 +377,7 @@ function ImportButton({ onFile, label, icon: Icon = Upload, subtle = false }) {
   );
 }
 
-function EmptyState({ onFile, onWatch }) {
+function EmptyState({ onFile, onWatch, onLoadDemo }) {
   const [dragging, setDragging] = useState(false);
   return (
     <div
@@ -355,6 +393,11 @@ function EmptyState({ onFile, onWatch }) {
       </div>
       <div className="flex flex-wrap items-center justify-center gap-2">
         <ImportButton onFile={onFile} label="เลือกไฟล์ JSON" />
+        {onLoadDemo && (
+          <button onClick={onLoadDemo} className="px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 cursor-pointer bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-black shadow-lg shadow-amber-500/20">
+            <Trophy className="w-4 h-4 text-slate-950" /> โหลดไอดีตัวอย่าง Guardian G3 (ทดลองทันที)
+          </button>
+        )}
         {onWatch && (
           <button onClick={onWatch} className="px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 cursor-pointer bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 text-slate-200">
             <FolderSync className="w-4 h-4 text-emerald-400" /> หรือเลือกโฟลเดอร์ SWEX เพื่อซิงก์อัตโนมัติ
@@ -379,8 +422,8 @@ function EmptyState({ onFile, onWatch }) {
   );
 }
 
-function BoxHeader({ box, onNavigate }) {
-  const nat5 = box.units.filter((u) => (monsterOf(u.masterId)?.stars || 0) >= 5).length;
+function BoxHeader({ box, onNavigate, onClearDemo, onImport }) {
+  const nat5 = box.units.filter((u) => (monsterOf(u.masterId)?.stars || u.naturalStars || 0) >= 5).length;
   const six = box.units.filter((u) => u.stars === 6).length;
   const runes = box.runes?.length || 0;
   return (
@@ -392,8 +435,17 @@ function BoxHeader({ box, onNavigate }) {
             {box.wizard.name}
             <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-white/[0.05] border border-white/10 text-slate-300">Lv.{box.wizard.level}</span>
             {box.wizard.guild && <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-300">{box.wizard.guild}</span>}
+            {box.isDemo && (
+              <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 flex items-center gap-1">
+                <Sparkles className="w-3.5 h-3.5" /> บัญชีตัวอย่าง Guardian G3 (Demo)
+              </span>
+            )}
           </div>
-          <div className="text-xs text-slate-400 mt-1">นำเข้าเมื่อ {box.importedAt.slice(0, 16).replace('T', ' ')} • เก็บในเครื่องนี้เท่านั้น</div>
+          <div className="text-xs text-slate-400 mt-1">
+            {box.isDemo
+              ? 'ข้อมูลจำลองเพื่อการทดสอบทุกฟังก์ชัน • สามารถกด "นำเข้าใหม่" ด้านบนเพื่อใส่ไฟล์จริงของคุณ'
+              : `นำเข้าเมื่อ ${box.importedAt?.slice(0, 16).replace('T', ' ') || '-'} • เก็บในเครื่องนี้เท่านั้น`}
+          </div>
         </div>
       </div>
       <div className="grid grid-cols-4 gap-2 sm:gap-3 text-center">
@@ -403,7 +455,7 @@ function BoxHeader({ box, onNavigate }) {
           ['ระดับ 6★', six, 'text-emerald-300'],
           ['รูน', runes, 'text-purple-300'],
         ].map(([label, value, color]) => (
-          <div key={label} className="px-3 sm:px-4 py-2.5 rounded-xl bg-[#0a0f18] border border-slate-800">
+          <div key={label} className="px-3 sm:px-4 py-2.5 rounded-xl bg-[#0a0f19] border border-white/[0.08]">
             <div className="text-[11px] text-slate-400">{label}</div>
             <div className={`text-lg sm:text-xl font-black font-mono ${color}`}>{value.toLocaleString()}</div>
           </div>
@@ -1202,27 +1254,102 @@ function RuneEfficiencyAndQuads({ box }) {
 }
 
 // ---------------------------------------------------------------------------
-// 2. Pokedex & Missing Nat 5 / LD 5★ Showcase
+// 2. Pokedex & Missing Nat 5 / LD 5★ Showcase (ตู้สะสม Nat 5 & ทำเนียบ LD 5★)
 // ---------------------------------------------------------------------------
 
-function PokedexCollection({ box, onNavigate }) {
+const TOP_LD5_HALL_OF_FAME = [
+  { name: 'Tian Lang', com2usId: '21214', element: 'light', tier: 'SSS', role: 'ตัวตัดเทิร์นขัดจังหวะยอดฮิต & สตริปสตันหมู่', rtaRating: '99.8%' },
+  { name: 'Giana', com2usId: '15715', element: 'dark', tier: 'SSS', role: 'สตริปหมู่ติดสตัน 100% & ปาระเบิดพิฆาต', rtaRating: '99.5%' },
+  { name: 'Nephthys', com2usId: '20515', element: 'dark', tier: 'SSS', role: 'ลดเกจ + ใบ้ + เจาะเกราะหมู่ทะลุต้านทาน 100%', rtaRating: '99.7%' },
+  { name: 'Lucifer', com2usId: '23114', element: 'light', tier: 'SSS', role: 'ดึงเกจทั้งทีมทันทีเมื่อมีดาเมจเกินเกณฑ์ (Cleave Engine)', rtaRating: '99.4%' },
+  { name: 'Ragdoll', com2usId: '16615', element: 'dark', tier: 'SSS', role: 'ดึงเกจเพื่อนทั้งทีมทุกครั้งที่โดนคริติคอล', rtaRating: '99.2%' },
+  { name: 'Maximilian', com2usId: '25715', element: 'dark', tier: 'SSS', role: 'ดาเมจคลีฟสุดโหด + สโลว์ + ลดเกจ + เจาะเกราะ', rtaRating: '99.3%' },
+  { name: 'Veronica', com2usId: '26114', element: 'light', tier: 'SSS', role: 'สปีดลีดเดอร์ + ดึงคูลดาวน์ + ปลดบัฟ + ตอดดาเมจ', rtaRating: '99.6%' },
+  { name: 'Julianne', com2usId: '14714', element: 'light', tier: 'SS', role: 'อมตะดูดเลือดเพื่อน + วันช็อตเป้าเดี่ยวสตัน', rtaRating: '98.5%' },
+  { name: 'Shan', com2usId: '14614', element: 'light', tier: 'SS', role: 'สปีดลีดเดอร์ + สปีดบัฟ + บูสต์เกจ + สตันหมู่', rtaRating: '98.2%' },
+  { name: 'Han', com2usId: '13515', element: 'dark', tier: 'SS', role: 'สปีดลีดเดอร์ + สตันเดี่ยว 100% วนเทิร์นไม่หยุด', rtaRating: '98.0%' },
+  { name: 'Asima', com2usId: '17914', element: 'light', tier: 'SS', role: 'เจาะเกราะหมู่ + แปะพิษไม่สนต้านทาน + ตอดดาเมจหนัก', rtaRating: '98.7%' },
+  { name: 'Zerath', com2usId: '14414', element: 'light', tier: 'SS', role: 'ดาเมจคลีฟหมู่มหาศาลตาม % เลือดสูงสุด', rtaRating: '98.1%' },
+  { name: 'Kiki', com2usId: '25215', element: 'dark', tier: 'SS', role: 'แพสซีฟกระจายดีบัฟทุกเทิร์น & ดูดเกจศัตรู', rtaRating: '97.9%' },
+  { name: 'Lora', com2usId: '16114', element: 'light', tier: 'SS', role: 'สปีดลีด + สตริปหมู่ + เพิ่มบัฟป้องกัน + สโลว์', rtaRating: '98.4%' },
+  { name: 'Destiny', com2usId: '26115', element: 'dark', tier: 'SS', role: 'เจาะเกราะทะลุการป้องกัน 100% สังหารเป้าหมายเดี่ยว', rtaRating: '98.2%' },
+  { name: 'Wedjat', com2usId: '17014', element: 'light', tier: 'SS', role: 'สปีดลีด RTA + บูสต์เกจ + บัฟเกราะป้องกันตามสปีด', rtaRating: '97.8%' },
+  { name: 'Craig / M. BISON', com2usId: '24714', element: 'light', tier: 'SS', role: 'สละเลือด 50% บูสต์เกจเต็ม + เพิ่มพลังโจมตีคลีฟ', rtaRating: '97.6%' },
+  { name: 'Gurkha / M. BISON', com2usId: '24715', element: 'dark', tier: 'SS', role: 'ยั่วยุเคาน์เตอร์ไม่รู้จบ + ฟื้นเลือดเมื่อโดนตี', rtaRating: '97.5%' },
+  { name: 'Talisman / RYU', com2usId: '24514', element: 'light', tier: 'SS', role: 'สกัดกั้นดาเมจ + หมัดระเบิดหมู่ทะลุต้านทาน', rtaRating: '97.3%' },
+  { name: 'Vancliffe / RYU', com2usId: '24515', element: 'dark', tier: 'SS', role: 'ยืดระยะเวลาดีบัฟ + สตริปหมู่สตันสุดกวน', rtaRating: '97.2%' },
+  { name: 'Cadiz', com2usId: '14715', element: 'dark', tier: 'SS', role: 'แจกดีบัฟ 4 ชนิด + ดึงเกจทั้งทีมทุกการโจมตี', rtaRating: '97.4%' },
+  { name: 'Vivachel', com2usId: '19315', element: 'dark', tier: 'SS', role: 'สลับหลอดเลือด & สลับเกจโจมตีฉับพลัน', rtaRating: '97.8%' },
+  { name: 'Eleanor', com2usId: '21514', element: 'light', tier: 'SS', role: 'ลดอัตราคริติคอลของศัตรูทั้งทีม + ปลดดีบัฟ', rtaRating: '96.8%' },
+  { name: 'Alexandra', com2usId: '21515', element: 'dark', tier: 'SS', role: 'สะท้อนดาเมจ 30% + กางโล่หนา + สตริปตอดเลือดยับ', rtaRating: '96.7%' },
+  { name: 'Yeonhwa', com2usId: '23914', element: 'light', tier: 'SS', role: 'บรรเลงเพลงตัดเกจ & สตริปทุกครั้งที่ศัตรูออกเทิร์น', rtaRating: '96.5%' },
+  { name: 'Sylvia', com2usId: '19015', element: 'dark', tier: 'SS', role: 'สปีดลีดเดอร์กิลด์ + ดึงเพื่อนรุมตีฟรีทุกเทิร์น', rtaRating: '97.1%' },
+  { name: 'Pater', com2usId: '22315', element: 'dark', tier: 'SS', role: 'แปลงร่างล้างดีบัฟทั้งทีมทันทีเมื่อเพื่อนโดน CC', rtaRating: '97.6%' },
+  { name: 'Valantis', com2usId: '22314', element: 'light', tier: 'SS', role: 'สตริปหมู่ติดสตัน Despair + ชุบชีวิตตัวเอง', rtaRating: '97.3%' },
+  { name: 'Woonsa', com2usId: '18615', element: 'dark', tier: 'SS', role: 'เบสสปีดสูงปรี๊ด 118 สตริปหมู่ + ขโมยบัฟเป็นโล่', rtaRating: '97.7%' },
+  { name: 'Narsha', com2usId: '23414', element: 'light', tier: 'SSS', role: 'ขโมยสปีด + เจาะเกราะวนเทิร์นเดี่ยวรัวๆ', rtaRating: '99.0%' },
+  { name: 'Xiana', com2usId: '23415', element: 'dark', tier: 'SS', role: 'ใบ้หมู่ + ลดเกจ 100% + ปิดผนึกสกิลศัตรู', rtaRating: '96.9%' },
+  { name: 'Shun', com2usId: '26414', element: 'light', tier: 'SS', role: 'ผูกเงาส่งผ่านดาเมจ + กำจัดเป้าหมายทันที', rtaRating: '96.5%' },
+  { name: 'Ritsu', com2usId: '26415', element: 'dark', tier: 'SS', role: 'ขังศัตรูในมิติเงา 1v1 ปิดการช่วยเพื่อนทั้งทีม', rtaRating: '96.8%' },
+  { name: 'Dorothy', com2usId: '25414', element: 'light', tier: 'SS', role: 'ทำลายเลือดสูงสุดศัตรู + ระเบิดดาเมจหมู่กวาดล้าง', rtaRating: '96.4%' },
+  { name: 'Thebae', com2usId: '18215', element: 'dark', tier: 'SS', role: 'แปะตรา Brand หมู่ + ดาเมจทะลุเกราะตาม HP', rtaRating: '96.2%' },
+  { name: 'Celia', com2usId: '19314', element: 'light', tier: 'SS', role: 'แพสซีฟสตริปบัฟศัตรู + หลับทุกเทิร์น', rtaRating: '96.6%' },
+  { name: 'Artamiel', com2usId: '13914', element: 'light', tier: 'S', role: 'ฮีโร่สัญลักษณ์เกม สวนกลับเมื่อศัตรูคริ + สตริปบัฟ', rtaRating: '95.5%' },
+  { name: 'Fermion', com2usId: '13915', element: 'dark', tier: 'S', role: 'แทงก์ถึกทนดาเมจเพิ่มขึ้นตามเพื่อนที่ตาย + ยั่วยุ', rtaRating: '95.8%' },
+  { name: 'Nicki', com2usId: '16115', element: 'dark', tier: 'SS', role: 'ล้างดีบัฟทั้งทีม + บัฟดาเมจ 3 เทิร์น + ฮีลแรง', rtaRating: '97.2%' },
+  { name: 'Pontos', com2usId: '20414', element: 'light', tier: 'SS', role: 'สปีดลีด 24% + อมตะและกันดีบัฟทั้งทีม 3 เทิร์น', rtaRating: '97.5%' },
+];
+
+function PokedexCollection({ box, onNavigate, onLoadDemo }) {
   const [eleFilter, setEleFilter] = useState('all');
+  const [ownershipFilter, setOwnershipFilter] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [sortMode, setSortMode] = useState('element');
+  const [hofFilter, setHofFilter] = useState('all');
+
   const units = box?.units || [];
 
-  const ownedMasterIds = useMemo(() => {
+  // Robust ID & Name Matching Set
+  const ownedSet = useMemo(() => {
     const set = new Set();
     units.forEach((u) => {
-      set.add(u.masterId);
-      set.add(baseAwakenedId(u.masterId));
+      const mId = Number(u.masterId);
+      if (mId) {
+        set.add(mId);
+        set.add(String(mId));
+        const baseId = baseAwakenedId(mId);
+        set.add(baseId);
+        set.add(String(baseId));
+        set.add(`m-${mId}`);
+        set.add(`m-${baseId}`);
+      }
+      if (u.name) set.add(u.name.toLowerCase().trim());
+      const info = monsterOf(u.masterId) || monsterOf(baseAwakenedId(u.masterId));
+      if (info?.name) set.add(info.name.toLowerCase().trim());
+      if (info?.com2usId) {
+        set.add(Number(info.com2usId));
+        set.add(String(info.com2usId));
+        set.add(`m-${info.com2usId}`);
+      }
     });
     return set;
   }, [units]);
+
+  const checkIsOwned = useMemo(() => {
+    return (m) => {
+      if (!box || !units.length) return false;
+      const num = Number(m.com2usId || String(m.id || '').replace(/\D/g, ''));
+      if (num && (ownedSet.has(num) || ownedSet.has(String(num)) || ownedSet.has(`m-${num}`))) return true;
+      if (m.id && ownedSet.has(m.id)) return true;
+      if (m.name && ownedSet.has(m.name.toLowerCase().trim())) return true;
+      return false;
+    };
+  }, [box, units.length, ownedSet]);
 
   // Extract all Nat 5 monsters in catalog
   const nat5Catalog = useMemo(() => {
     const map = new Map();
     for (const m of allMonstersData) {
-      // Must be natural 5 star and awakened or canonical form
       const isNat5 = m.natural_stars === 5 || m.default_stars === 5 || m.stars === 5;
       if (isNat5 && m.name && !m.name.includes('(Homunculus)')) {
         const key = m.name.toLowerCase();
@@ -1232,13 +1359,37 @@ function PokedexCollection({ box, onNavigate }) {
     return Array.from(map.values());
   }, []);
 
-  // Owned LD 5★ list
+  // Owned Natural 5★ Light/Dark monsters with rich data
   const ownedLd5s = useMemo(() => {
-    return units.filter((u) => {
-      const isLd = u.element === 'light' || u.element === 'dark';
-      return isLd && u.stars >= 5;
-    });
+    return units
+      .map((u) => {
+        const info = monsterOf(u.masterId) || monsterOf(baseAwakenedId(u.masterId)) || monsterByName(u.name);
+        const ele = (u.element || info?.element || '').toLowerCase();
+        const isLd = ele === 'light' || ele === 'dark';
+        const isNat5 = (info?.stars === 5 || info?.natural_stars === 5 || u.naturalStars === 5) && !info?.name?.includes('(Homunculus)');
+        if (isLd && isNat5) {
+          return {
+            ...u,
+            name: info?.name || u.name || 'Unknown',
+            thaiName: info?.thaiName || u.thaiName || '',
+            avatarUrl: info?.avatarUrl || info?.imageUrl || u.avatarUrl || '',
+            element: ele,
+            info,
+          };
+        }
+        return null;
+      })
+      .filter(Boolean);
   }, [units]);
+
+  const [ldShelfTab, setLdShelfTab] = useState(() => (ownedLd5s.length > 0 ? 'owned' : 'hall-of-fame'));
+
+  // Sync shelf tab when box changes
+  useEffect(() => {
+    if (ownedLd5s.length > 0) {
+      setLdShelfTab('owned');
+    }
+  }, [ownedLd5s.length]);
 
   // Breakdown by element
   const statsByElement = useMemo(() => {
@@ -1254,141 +1405,605 @@ function PokedexCollection({ box, onNavigate }) {
       const ele = (m.element || 'fire').toLowerCase();
       if (counts[ele]) {
         counts[ele].total++;
-        if (ownedMasterIds.has(m.id) || ownedMasterIds.has(m.com2usId) || units.some((u) => u.name?.toLowerCase() === m.name.toLowerCase())) {
+        if (checkIsOwned(m)) {
           counts[ele].owned++;
         }
       }
     }
     return counts;
-  }, [nat5Catalog, ownedMasterIds, units]);
+  }, [nat5Catalog, checkIsOwned]);
 
-  const filteredMonsters = useMemo(() => {
-    return nat5Catalog.filter((m) => {
-      if (eleFilter !== 'all' && (m.element || '').toLowerCase() !== eleFilter) return false;
+  const totalOwned = useMemo(() => {
+    return Object.values(statsByElement).reduce((s, c) => s + c.owned, 0);
+  }, [statsByElement]);
+  const totalNat5 = nat5Catalog.length;
+  const overallPct = totalNat5 > 0 ? Math.round((totalOwned / totalNat5) * 100) : 0;
+
+  // Hall of Fame monsters with ownership matching
+  const hallOfFameMonsters = useMemo(() => {
+    return TOP_LD5_HALL_OF_FAME.map((entry) => {
+      const num = Number(entry.com2usId);
+      const catalogMonster = monsterOf(num) || monsterByName(entry.name) || allMonstersData.find((m) => m.name.toLowerCase() === entry.name.toLowerCase());
+      const isOwned = checkIsOwned(entry) || (catalogMonster && checkIsOwned(catalogMonster));
+      const ownedUnit = isOwned
+        ? units.find((u) => u.masterId === num || baseAwakenedId(u.masterId) === num || u.name?.toLowerCase() === entry.name.toLowerCase())
+        : null;
+      return {
+        ...entry,
+        monster: catalogMonster,
+        isOwned,
+        ownedUnit,
+      };
+    });
+  }, [checkIsOwned, units]);
+
+  const filteredHof = useMemo(() => {
+    return hallOfFameMonsters.filter((item) => {
+      if (hofFilter === 'sss' && item.tier !== 'SSS') return false;
+      if (hofFilter === 'light' && item.element !== 'light') return false;
+      if (hofFilter === 'dark' && item.element !== 'dark') return false;
+      if (hofFilter === 'owned' && !item.isOwned) return false;
       return true;
     });
-  }, [nat5Catalog, eleFilter]);
+  }, [hallOfFameMonsters, hofFilter]);
+
+  // Catalog filtered and sorted
+  const filteredMonsters = useMemo(() => {
+    let list = nat5Catalog.filter((m) => {
+      // Element filter
+      if (eleFilter !== 'all' && (m.element || '').toLowerCase() !== eleFilter) return false;
+
+      // Ownership filter
+      const isOwned = checkIsOwned(m);
+      if (ownershipFilter === 'owned' && !isOwned) return false;
+      if (ownershipFilter === 'missing' && isOwned) return false;
+
+      // Search query
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase().trim();
+        const matchName = m.name?.toLowerCase().includes(q);
+        const matchThai = m.thaiName?.toLowerCase().includes(q);
+        const matchFamily = m.family?.toLowerCase().includes(q) || m.thaiFamily?.toLowerCase().includes(q);
+        if (!matchName && !matchThai && !matchFamily) return false;
+      }
+
+      return true;
+    });
+
+    if (sortMode === 'name') {
+      list.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+    } else if (sortMode === 'owned-first') {
+      list.sort((a, b) => {
+        const ownA = checkIsOwned(a) ? 1 : 0;
+        const ownB = checkIsOwned(b) ? 1 : 0;
+        return ownB - ownA || (a.name || '').localeCompare(b.name || '');
+      });
+    } else {
+      const eleOrder = { water: 1, fire: 2, wind: 3, light: 4, dark: 5 };
+      list.sort((a, b) => {
+        const oA = eleOrder[(a.element || '').toLowerCase()] || 9;
+        const oB = eleOrder[(b.element || '').toLowerCase()] || 9;
+        return oA - oB || (a.name || '').localeCompare(b.name || '');
+      });
+    }
+
+    return list;
+  }, [nat5Catalog, eleFilter, ownershipFilter, searchQuery, sortMode, checkIsOwned]);
 
   return (
     <div className="space-y-6">
-      {/* LD 5★ Showcase Trophy Shelf */}
-      <div className="relative overflow-hidden rounded-3xl border border-yellow-500/20 bg-gradient-to-r from-purple-950/60 via-[#0a0f19] to-amber-950/60 p-6 shadow-2xl backdrop-blur-xl">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-2xl bg-yellow-500/20 border border-yellow-500/40 text-yellow-300">
-              <Trophy className="w-6 h-6" />
+      {/* 1. TOP HEADER & COMPLETION BANNER */}
+      <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-r from-[#0d1627] via-[#090e18] to-[#120f24] p-6 shadow-2xl backdrop-blur-xl">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+          <div className="flex items-start gap-4">
+            <div className="p-3.5 rounded-2xl bg-amber-500/15 border border-amber-500/30 text-amber-300 shrink-0 shadow-lg shadow-amber-500/10">
+              <Trophy className="w-8 h-8" />
             </div>
-            <div>
-              <h3 className="text-xl font-black text-white flex items-center gap-2">
-                ตู้เกียรติยศ LD 5★ (แสง-มืดแท้ในไอดี)
-                <span className="px-2.5 py-0.5 rounded-full bg-yellow-500/20 text-yellow-300 text-xs font-bold border border-yellow-500/30">
-                  {ownedLd5s.length} ตัว
+            <div className="space-y-1.5">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-amber-500/20 text-amber-300 border border-amber-500/30 uppercase tracking-wider">
+                  Summoners War Pokedex & Showcase
                 </span>
-              </h3>
-              <p className="text-xs text-slate-400">มอนสเตอร์แสง-มืดระดับแรร์สูงสุดที่ไอดีคุณครอบครอง</p>
+                {box?.isDemo && (
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                    Guardian Demo Account
+                  </span>
+                )}
+              </div>
+              <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
+                ตู้สะสมเกียรติยศ Nat 5 & ทำเนียบ LD 5★ ระดับโลก
+              </h2>
+              <p className="text-xs text-slate-400 max-w-2xl leading-relaxed">
+                เช็คสารบัญความคืบหน้า 5 ดาวแท้ทั้งหมด 455 ตัว พร้อมตู้โชว์มอนสเตอร์แสง-มืดระดับตำนาน และสถิติการครอบครองในไอดีของคุณ
+              </p>
             </div>
+          </div>
+
+          {/* Quick Progress Indicator */}
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0">
+            <div className="px-4 py-3 rounded-2xl bg-white/[0.03] border border-white/5 text-center sm:text-right">
+              <div className="text-[11px] text-slate-400 font-medium">ความคืบหน้า 5 ดาวแท้ทั้งหมด</div>
+              <div className="text-xl font-black text-amber-300 mt-0.5 font-mono">
+                {totalOwned} <span className="text-xs text-slate-400">/ {totalNat5} ตัว</span>
+                <span className="ml-2 text-sm px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold">
+                  {overallPct}%
+                </span>
+              </div>
+              <div className="w-full sm:w-48 bg-white/10 rounded-full h-1.5 mt-2 overflow-hidden mx-auto sm:ml-auto">
+                <div
+                  className="h-full bg-gradient-to-r from-amber-500 via-yellow-400 to-emerald-400 transition-all duration-500"
+                  style={{ width: `${overallPct}%` }}
+                />
+              </div>
+            </div>
+
+            {(!box || !box.units?.length) && onLoadDemo && (
+              <button
+                onClick={onLoadDemo}
+                className="px-4 py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 text-xs font-black flex items-center justify-center gap-2 shadow-lg shadow-amber-500/25 transition-all cursor-pointer"
+              >
+                <Sparkles className="w-4 h-4 text-slate-950" />
+                <span>โหลดไอดีตัวอย่าง Guardian</span>
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* 2. DUAL-MODE LD 5★ TROPHY CABINET (ตู้เกียรติยศแสง-มืด) */}
+      <div className="relative overflow-hidden rounded-3xl border border-amber-500/30 bg-gradient-to-b from-[#140e26] via-[#090d16] to-[#070b12] p-5 sm:p-7 shadow-2xl backdrop-blur-xl">
+        {/* Ambient Rarity Glow */}
+        <div className="absolute -top-24 -left-24 w-96 h-96 bg-purple-600/15 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -top-24 -right-24 w-96 h-96 bg-yellow-500/15 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="relative z-10 space-y-5">
+          {/* Header & Mode Switcher */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/[0.08] pb-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-2xl bg-gradient-to-tr from-yellow-500/20 to-purple-500/20 border border-yellow-500/40 text-yellow-300 shadow">
+                <Crown className="w-6 h-6 text-yellow-300" />
+              </div>
+              <div>
+                <h3 className="text-lg sm:text-xl font-black text-white flex items-center gap-2">
+                  <span>ตู้เกียรติยศ LD 5★ (แสง-มืดแท้ระดับตำนาน)</span>
+                  <span className="px-2.5 py-0.5 rounded-full bg-yellow-500/20 text-yellow-300 text-xs font-bold border border-yellow-500/30">
+                    {ownedLd5s.length} ตัวในไอดี
+                  </span>
+                </h3>
+                <p className="text-xs text-slate-400 mt-0.5">
+                  มอนสเตอร์ระดับสมบัติล้ำค่าที่สุดในเกม Summoners War
+                </p>
+              </div>
+            </div>
+
+            {/* Mode Toggle Buttons */}
+            <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-white/[0.04] border border-white/10 self-start sm:self-auto">
+              <button
+                onClick={() => setLdShelfTab('owned')}
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+                  ldShelfTab === 'owned'
+                    ? 'bg-gradient-to-r from-amber-600 to-yellow-600 text-white shadow-md'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <Sparkles className="w-3.5 h-3.5 text-yellow-300" />
+                <span>มอนสเตอร์ในไอดีของฉัน ({ownedLd5s.length})</span>
+              </button>
+              <button
+                onClick={() => setLdShelfTab('hall-of-fame')}
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+                  ldShelfTab === 'hall-of-fame'
+                    ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <Crown className="w-3.5 h-3.5 text-purple-300" />
+                <span>ทำเนียบ 40 ตัวท็อปเมต้าโลก</span>
+              </button>
+            </div>
+          </div>
+
+          {/* VIEW A: OWNED LD 5★ TROPHY SHELF */}
+          {ldShelfTab === 'owned' && (
+            <div>
+              {ownedLd5s.length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3.5">
+                  {ownedLd5s.map((u, idx) => {
+                    const isLight = u.element === 'light';
+                    return (
+                      <div
+                        key={idx}
+                        onClick={() => onNavigate('where2use', { initialMonster: u.name })}
+                        className={`relative group p-4 rounded-2xl border transition-all cursor-pointer hover:scale-[1.02] shadow-xl ${
+                          isLight
+                            ? 'border-yellow-400/40 bg-gradient-to-b from-yellow-950/30 via-[#0a0f19] to-black shadow-yellow-500/10 hover:border-yellow-400/70'
+                            : 'border-purple-500/40 bg-gradient-to-b from-purple-950/30 via-[#0a0f19] to-black shadow-purple-500/10 hover:border-purple-400/70'
+                        }`}
+                      >
+                        {/* Pedestal Top Accent */}
+                        <div className="flex items-center justify-between mb-3">
+                          <span
+                            className={`text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full border ${
+                              isLight
+                                ? 'bg-yellow-400/20 text-yellow-200 border-yellow-400/40'
+                                : 'bg-purple-500/20 text-purple-300 border-purple-500/40'
+                            }`}
+                          >
+                            {isLight ? '☀️ Light 5★' : '🌙 Dark 5★'}
+                          </span>
+                          <span className="text-[11px] font-mono font-bold text-amber-300">
+                            +{u.spd - u.baseSpd} SPD
+                          </span>
+                        </div>
+
+                        {/* Centered Avatar */}
+                        <div className="flex flex-col items-center text-center gap-2">
+                          <div className="relative">
+                            <MonsterAvatar
+                              monster={u.info || u}
+                              size={68}
+                              className={`rounded-2xl border-2 shadow-2xl ${
+                                isLight ? 'border-yellow-400/60' : 'border-purple-400/60'
+                              }`}
+                            />
+                            <span className="absolute -top-1.5 -right-1.5 p-1 rounded-full bg-emerald-500 text-white shadow">
+                              <Check className="w-3 h-3 stroke-[3]" />
+                            </span>
+                          </div>
+
+                          <div>
+                            <div className="text-sm font-black text-white group-hover:text-amber-300 transition-colors">
+                              {u.name}
+                            </div>
+                            {u.thaiName && u.thaiName !== u.name && (
+                              <div className="text-[11px] text-slate-400">{u.thaiName}</div>
+                            )}
+                          </div>
+
+                          {/* Quick Stats Badges */}
+                          <div className="w-full pt-2 mt-1 border-t border-white/[0.06] flex items-center justify-between text-[10px] text-slate-300">
+                            <span className="font-semibold text-slate-400">
+                              {u.sets && u.sets.length > 0 ? u.sets.join(' / ') : 'ยังไม่ใส่เซ็ต'}
+                            </span>
+                            {u.runeEff > 0 && (
+                              <span className="font-mono text-emerald-400 font-bold">
+                                {u.runeEff}% Eff
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="py-10 sm:py-14 text-center space-y-4 rounded-2xl bg-white/[0.02] border border-white/5 p-6">
+                  <div className="w-14 h-14 mx-auto rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                    <Trophy className="w-7 h-7" />
+                  </div>
+                  <div className="space-y-1">
+                    <h4 className="text-base font-bold text-white">
+                      ยังไม่พบมอนสเตอร์แสง-มืด 5 ดาวแท้ในไอดีนี้
+                    </h4>
+                    <p className="text-xs text-slate-400 max-w-md mx-auto">
+                      มอนสเตอร์แสง-มืดแท้ (LD 5★) มีโอกาสออกเพียง 0.35% จากคัมภีร์แสง-มืด ขอให้การซัมมอนครั้งต่อไปของคุณได้รับแสงสว่างระดับตำนานครับ!
+                    </p>
+                  </div>
+                  <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
+                    <button
+                      onClick={() => setLdShelfTab('hall-of-fame')}
+                      className="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-lg shadow-purple-600/20 transition-all"
+                    >
+                      <Crown className="w-4 h-4 text-yellow-300" />
+                      <span>เปิดดูทำเนียบ 40 มอนสเตอร์ LD 5★ เมต้าสูงสุดระดับโลก</span>
+                    </button>
+                    {onLoadDemo && (
+                      <button
+                        onClick={onLoadDemo}
+                        className="px-4 py-2 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 text-slate-200 text-xs font-bold flex items-center gap-1.5 cursor-pointer"
+                      >
+                        <Sparkles className="w-4 h-4 text-amber-400" />
+                        <span>🎮 โหลดไอดีตัวอย่าง Guardian G3 เพื่อทดสอบตู้สะสม</span>
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* VIEW B: 40 META LD 5★ GUARDIAN HALL OF FAME */}
+          {ldShelfTab === 'hall-of-fame' && (
+            <div className="space-y-4">
+              {/* Filter Chips */}
+              <div className="flex flex-wrap items-center justify-between gap-2.5">
+                <div className="text-xs text-slate-400 font-medium">
+                  แสดง {filteredHof.length} จาก 40 สุดยอดมอนสเตอร์ LD 5★ เมต้า RTA สากล
+                </div>
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  {[
+                    ['all', 'ทั้งหมด (40)'],
+                    ['sss', 'ระดับ SSS (7)'],
+                    ['light', 'ธาตุแสง (☀️)'],
+                    ['dark', 'ธาตุมืด (🌙)'],
+                    ['owned', `ที่คุณครอบครอง (${hallOfFameMonsters.filter((m) => m.isOwned).length})`],
+                  ].map(([key, label]) => (
+                    <button
+                      key={key}
+                      onClick={() => setHofFilter(key)}
+                      className={`px-3 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                        hofFilter === key
+                          ? 'bg-purple-600 text-white shadow-md'
+                          : 'bg-white/[0.03] text-slate-400 hover:text-white border border-white/5'
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* 40 Cards Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                {filteredHof.map((item, idx) => {
+                  const isLight = item.element === 'light';
+                  return (
+                    <div
+                      key={idx}
+                      onClick={() => onNavigate('where2use', { initialMonster: item.name })}
+                      className={`p-3.5 rounded-2xl border transition-all cursor-pointer group flex flex-col justify-between gap-2.5 ${
+                        item.isOwned
+                          ? 'bg-emerald-950/20 border-emerald-500/40 hover:border-emerald-400 shadow-md shadow-emerald-950/30'
+                          : 'bg-[#0a0f19] border-white/[0.08] hover:border-white/20'
+                      }`}
+                    >
+                      <div className="flex items-start gap-3">
+                        <div className="relative shrink-0">
+                          <MonsterAvatar
+                            monster={item.monster || item}
+                            size={52}
+                            className={`rounded-2xl border-2 ${
+                              item.isOwned ? 'border-emerald-400' : isLight ? 'border-yellow-400/40' : 'border-purple-400/40'
+                            }`}
+                          />
+                          {item.isOwned ? (
+                            <span className="absolute -top-1 -right-1 p-0.5 rounded-full bg-emerald-500 text-white shadow">
+                              <Check className="w-2.5 h-2.5 stroke-[3]" />
+                            </span>
+                          ) : (
+                            <span className="absolute -top-1 -right-1 p-0.5 rounded-full bg-slate-800 text-slate-400 border border-white/10 shadow">
+                              <Lock className="w-2.5 h-2.5" />
+                            </span>
+                          )}
+                        </div>
+
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            <span
+                              className={`text-[10px] font-black px-1.5 py-0.2 rounded font-mono ${
+                                item.tier === 'SSS'
+                                  ? 'bg-amber-500 text-slate-950'
+                                  : 'bg-purple-500/20 text-purple-300 border border-purple-500/30'
+                              }`}
+                            >
+                              {item.tier}
+                            </span>
+                            <span className="text-xs font-black text-white group-hover:text-amber-300 transition-colors truncate">
+                              {item.name}
+                            </span>
+                          </div>
+                          <div className="text-[11px] text-slate-400 truncate mt-0.5">
+                            {item.monster?.thaiName || (isLight ? 'ธาตุแสง' : 'ธาตุมืด')}
+                          </div>
+                          <div className="text-[10px] text-slate-400 line-clamp-1 mt-1 font-medium leading-relaxed">
+                            {item.role}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Card Bottom Status Badge */}
+                      <div className="pt-2 border-t border-white/[0.04] flex items-center justify-between text-[11px]">
+                        <span className="text-[10px] font-mono text-slate-400">
+                          เรตติ้ง RTA {item.rtaRating}
+                        </span>
+                        {item.isOwned ? (
+                          <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-bold flex items-center gap-1">
+                            <Check className="w-3 h-3" /> ครอบครองแล้ว
+                          </span>
+                        ) : (
+                          <span className="px-2 py-0.5 rounded-full bg-white/5 text-slate-400 text-[10px] font-medium flex items-center gap-1">
+                            <Lock className="w-2.5 h-2.5" /> มอนสเตอร์ในฝัน
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* 3. NAT 5 COMPLETION PROGRESS BY ELEMENT */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <div className="text-sm font-bold text-white flex items-center gap-2">
+            <span>ความคืบหน้าการสะสม 5 ดาวแท้แยกตามธาตุ</span>
+            <span className="text-xs text-slate-400 font-normal hidden sm:inline">
+              (คลิกที่การ์ดธาตุเพื่อกรองสารบัญทันที)
+            </span>
+          </div>
+          {eleFilter !== 'all' && (
+            <button
+              onClick={() => setEleFilter('all')}
+              className="text-xs font-bold text-cyan-400 hover:text-cyan-300 cursor-pointer"
+            >
+              แสดงทุกธาตุ
+            </button>
+          )}
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+          {Object.entries(statsByElement).map(([ele, val]) => {
+            const pct = val.total > 0 ? Math.round((val.owned / val.total) * 100) : 0;
+            const isSelected = eleFilter === ele;
+            return (
+              <div
+                key={ele}
+                onClick={() => setEleFilter(isSelected ? 'all' : ele)}
+                className={`p-4 rounded-2xl border transition-all cursor-pointer text-center ${
+                  isSelected
+                    ? 'border-cyan-400 bg-cyan-950/30 shadow-lg shadow-cyan-500/15 ring-2 ring-cyan-400/30'
+                    : `${card} hover:border-white/20 hover:bg-white/[0.04]`
+                }`}
+              >
+                <div className="text-xs font-bold capitalize text-slate-300 mb-1 flex items-center justify-center gap-1.5">
+                  <span className={`w-2.5 h-2.5 rounded-full ${ELEMENT_COLOR[ele]}`} />
+                  <span>ธาตุ{ELEMENT_TH[ele]}</span>
+                </div>
+                <div className="text-xl font-black text-white font-mono">
+                  {val.owned} <span className="text-xs text-slate-400 font-normal">/ {val.total}</span>
+                </div>
+                <div className="w-full bg-white/10 rounded-full h-1.5 mt-2.5 overflow-hidden">
+                  <div className={`h-full ${ELEMENT_COLOR[ele]} transition-all duration-500`} style={{ width: `${pct}%` }} />
+                </div>
+                <div className="text-[11px] text-slate-400 mt-1.5 font-mono font-bold">{pct}%</div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* 4. NAT 5 CATALOG CHECKLIST & SEARCH ENGINE */}
+      <div className={`${card} p-5 sm:p-6 space-y-4`}>
+        {/* Search & Filter Controls */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <h3 className="text-base font-black text-white">
+              สารบัญ 5 ดาวแท้ทั้งหมด
+            </h3>
+            <span className="px-2 py-0.5 rounded-full bg-white/10 text-slate-300 text-xs font-bold font-mono">
+              {filteredMonsters.length} / {nat5Catalog.length}
+            </span>
+          </div>
+
+          {/* Search Box */}
+          <div className="relative flex-1 max-w-md">
+            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="ค้นหาชื่อมอนสเตอร์ (Seara, Byungchul, บยองชอล, เซียร์ร่า)..."
+              className="w-full bg-[#070b12] border border-white/10 focus:border-cyan-400 rounded-xl pl-10 pr-8 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-cyan-400/30 transition-all"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery('')}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white cursor-pointer"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
           </div>
         </div>
 
-        {ownedLd5s.length > 0 ? (
-          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3">
-            {ownedLd5s.map((u, idx) => (
-              <div
-                key={idx}
-                className="p-3 rounded-2xl bg-black/50 border border-yellow-500/30 flex flex-col items-center gap-2 text-center group hover:scale-105 transition-all shadow-lg shadow-purple-950/40"
-              >
-                <div className="relative">
-                  <MonsterAvatar name={u.name} size={64} className="rounded-2xl border-2 border-yellow-400/50 shadow-xl" />
-                  <span className="absolute -bottom-1 -right-1 px-1 rounded bg-black/80 text-[10px] font-bold text-yellow-300 border border-yellow-500/40">
-                    +{u.spd - u.baseSpd} SPD
-                  </span>
-                </div>
-                <div className="text-xs font-black text-white truncate max-w-full">{u.name}</div>
-                <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase ${
-                  u.element === 'light' ? 'bg-yellow-200/20 text-yellow-200 border border-yellow-300/30' : 'bg-purple-500/20 text-purple-300 border border-purple-500/30'
-                }`}>
-                  {u.element} 5★
-                </span>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="py-8 text-center text-xs text-slate-400">
-            ยังไม่พบมอนสเตอร์แสง-มืด 5 ดาวแท้ในไอดีนี้ (ขอให้ซัมมอนครั้งต่อไปแสงลงนะครับ!)
-          </div>
-        )}
-      </div>
-
-      {/* Nat 5 Completion % by Element */}
-      <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-        {Object.entries(statsByElement).map(([ele, val]) => {
-          const pct = val.total > 0 ? Math.round((val.owned / val.total) * 100) : 0;
-          return (
-            <div key={ele} className={`${card} p-3.5 text-center`}>
-              <div className="text-xs font-bold capitalize text-slate-300 mb-1 flex items-center justify-center gap-1.5">
-                <span className={`w-2.5 h-2.5 rounded-full ${ELEMENT_COLOR[ele]}`} />
-                <span>{ELEMENT_TH[ele]}</span>
-              </div>
-              <div className="text-xl font-black text-white">{val.owned} / {val.total}</div>
-              <div className="w-full bg-white/10 rounded-full h-1.5 mt-2 overflow-hidden">
-                <div className={`h-full ${ELEMENT_COLOR[ele]}`} style={{ width: `${pct}%` }} />
-              </div>
-              <div className="text-[10px] text-slate-400 mt-1 font-mono">{pct}%</div>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Catalog Checklist */}
-      <div className={`${card} p-5 space-y-4`}>
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div className="text-sm font-bold text-white">
-            สารบัญ 5 ดาวแท้ทั้งหมด ({filteredMonsters.length} ตัว)
-          </div>
+        {/* Filter Pills & Sort Options */}
+        <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-white/[0.06]">
+          {/* Element Filters */}
           <div className="flex items-center gap-1.5 flex-wrap">
             {ELEMENT_FILTERS.map(([id, label]) => (
               <button
                 key={id}
                 onClick={() => setEleFilter(id)}
-                className={`px-3 py-1 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                  eleFilter === id ? 'bg-cyan-600 text-white' : 'text-slate-400 hover:bg-white/5'
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  eleFilter === id
+                    ? 'bg-cyan-600 text-white shadow-md'
+                    : 'bg-white/[0.04] text-slate-400 hover:text-white border border-white/5'
                 }`}
               >
                 {label}
               </button>
             ))}
           </div>
-        </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2.5">
-          {filteredMonsters.map((m) => {
-            const isOwned = ownedMasterIds.has(m.id) || ownedMasterIds.has(m.com2usId) || units.some((u) => u.name?.toLowerCase() === m.name.toLowerCase());
-            return (
-              <div
-                key={m.id || m.name}
-                className={`p-2 rounded-xl border flex flex-col items-center gap-1.5 text-center transition-all ${
-                  isOwned
-                    ? 'border-emerald-500/40 bg-emerald-950/15'
-                    : 'border-white/5 bg-white/[0.02] opacity-40 grayscale'
+          {/* Ownership Filter */}
+          <div className="flex items-center gap-1.5 flex-wrap">
+            {[
+              ['all', 'ทั้งหมด'],
+              ['owned', `ครอบครองแล้ว (${totalOwned})`],
+              ['missing', `ยังไม่มี (${totalNat5 - totalOwned})`],
+            ].map(([id, label]) => (
+              <button
+                key={id}
+                onClick={() => setOwnershipFilter(id)}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  ownershipFilter === id
+                    ? 'bg-emerald-600 text-white shadow-md'
+                    : 'bg-white/[0.04] text-slate-400 hover:text-white border border-white/5'
                 }`}
               >
-                <div className="relative">
-                  <MonsterAvatar monster={m} size={44} className="rounded-xl" />
-                  {isOwned ? (
-                    <span className="absolute -top-1 -right-1 bg-emerald-500 text-white rounded-full p-0.5">
-                      <Check className="w-2.5 h-2.5" />
-                    </span>
-                  ) : (
-                    <span className="absolute -top-1 -right-1 bg-slate-700 text-slate-300 rounded-full p-0.5">
-                      <Lock className="w-2.5 h-2.5" />
-                    </span>
-                  )}
-                </div>
-                <div className="text-[11px] font-medium text-slate-200 truncate max-w-full">{m.name}</div>
-              </div>
-            );
-          })}
+                {label}
+              </button>
+            ))}
+
+            {/* Sort Mode */}
+            <select
+              value={sortMode}
+              onChange={(e) => setSortMode(e.target.value)}
+              className="bg-[#070b12] border border-white/10 rounded-xl px-2.5 py-1.5 text-xs text-slate-300 focus:outline-none focus:border-cyan-400 cursor-pointer"
+            >
+              <option value="element">เรียงตามธาตุ</option>
+              <option value="name">เรียงตามชื่อ A-Z</option>
+              <option value="owned-first">มอนสเตอร์ที่มีขึ้นก่อน</option>
+            </select>
+          </div>
         </div>
+
+        {/* Monster Checklist Grid */}
+        {filteredMonsters.length > 0 ? (
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-2.5 pt-2">
+            {filteredMonsters.map((m) => {
+              const isOwned = checkIsOwned(m);
+              return (
+                <div
+                  key={m.id || m.name}
+                  onClick={() => onNavigate('where2use', { initialMonster: m.name })}
+                  className={`p-2 rounded-xl border flex flex-col items-center gap-1.5 text-center transition-all cursor-pointer group hover:scale-105 ${
+                    isOwned
+                      ? 'border-emerald-500/50 bg-gradient-to-b from-emerald-950/25 to-[#0a0f19] shadow-md shadow-emerald-950/30'
+                      : 'border-white/5 bg-white/[0.02] opacity-45 grayscale hover:opacity-80 hover:grayscale-0'
+                  }`}
+                  title={`${m.name} (${m.thaiName || m.element}) - คลิกเพื่อดูคู่มือ & สกิล`}
+                >
+                  <div className="relative">
+                    <MonsterAvatar monster={m} size={46} className="rounded-xl" />
+                    {isOwned ? (
+                      <span className="absolute -top-1 -right-1 bg-emerald-500 text-white rounded-full p-0.5 shadow">
+                        <Check className="w-2.5 h-2.5 stroke-[3]" />
+                      </span>
+                    ) : (
+                      <span className="absolute -top-1 -right-1 bg-slate-800 text-slate-400 rounded-full p-0.5 border border-white/10 shadow">
+                        <Lock className="w-2.5 h-2.5" />
+                      </span>
+                    )}
+                  </div>
+                  <div className="text-[11px] font-bold text-slate-200 truncate max-w-full group-hover:text-cyan-300 transition-colors">
+                    {m.name}
+                  </div>
+                  <div className="text-[10px] text-slate-400 truncate max-w-full">
+                    {m.thaiName && m.thaiName !== m.name ? m.thaiName : `${ELEMENT_TH[m.element] || m.element}`}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="py-12 text-center text-slate-400 text-xs">
+            ไม่พบมอนสเตอร์ 5 ดาวแท้ตามเงื่อนไขที่เลือก
+          </div>
+        )}
       </div>
     </div>
   );

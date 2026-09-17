@@ -52,7 +52,7 @@ export const NAVIGATION_CATEGORIES = [
     id: 'community-account',
     title: 'ชุมชน & เชื่อมต่อไอดี (SWEX)',
     items: [
-      { id: 'my-box', label: 'กล่องมอนสเตอร์ของฉัน (นำเข้า SWEX)', icon: 'Layers', badge: 'ใหม่' },
+      { id: 'my-box', label: 'กล่องมอนสเตอร์ & ตู้สะสม (SWEX)', icon: 'Layers', badge: 'ใหม่' },
       { id: 'guild-recruiting', label: 'ประกาศรับสมัครกิลด์', icon: 'UserPlus' },
       { id: 'aegislink', label: 'AegisLink ปลั๊กอินส่งข้อมูลสด', icon: 'Cpu', badge: 'SWEX' },
       { id: 'faq-guides', label: 'คู่มือ & คำถามพบบ่อย (FAQ)', icon: 'HelpCircle' },

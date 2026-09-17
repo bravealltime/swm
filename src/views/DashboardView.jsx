@@ -36,7 +36,7 @@ import { PROMO_CODES } from '../data/promoCodes';
 import { LEADERBOARDS } from '../data/leaderboards';
 import { getR2AvatarUrl } from '../services/r2Service';
 import { useLocalStorage } from '../hooks/useLocalStorage';
-import { loadBox, saveBox, parseSwexExport, getArtifactsFromBox } from '../utils/swexImport';
+import { loadBox, saveBox, parseSwexExport, getArtifactsFromBox, loadDemoBox, getMonsterCatalogInfo } from '../utils/swexImport';
 import { loadUserBoxFromDB, saveUserBoxToDB } from '../services/storageService';
 
 const POPULAR_PRESETS = [
@@ -142,7 +142,22 @@ export default function DashboardView({ onNavigate }) {
     const totalUnits = units.length;
     const sixStarUnits = units.filter((u) => u.stars === 6).length;
     const fastestUnit = [...units].sort((a, b) => b.spd - a.spd)[0] || null;
+    const fastestName = fastestUnit ? (fastestUnit.name || getMonsterCatalogInfo(fastestUnit.masterId)?.name || '') : '';
     const artifacts = getArtifactsFromBox(userBox);
+
+    // Calculate Nat 5 & LD5 counts
+    let nat5Count = 0;
+    let ld5Count = 0;
+    units.forEach((u) => {
+      const info = getMonsterCatalogInfo(u.masterId);
+      const ele = (u.element || info?.element || '').toLowerCase();
+      const isLd = ele === 'light' || ele === 'dark';
+      const isNat5 = (info?.stars === 5 || info?.natural_stars === 5 || u.naturalStars === 5) && !info?.name?.includes('(Homunculus)');
+      if (isNat5) {
+        nat5Count++;
+        if (isLd) ld5Count++;
+      }
+    });
 
     let sumEff = 0;
     let countEff = 0;
@@ -156,16 +171,19 @@ export default function DashboardView({ onNavigate }) {
     const topFastest = [...units].sort((a, b) => b.spd - a.spd).slice(0, 4);
 
     return {
-      name: userBox.wizard?.wizard_name || 'ผู้เรียกมอนสเตอร์ของคุณ',
+      name: userBox.wizard?.name || userBox.wizard?.wizard_name || 'ผู้เรียกมอนสเตอร์ของคุณ',
       server: 'Asia Server',
-      level: userBox.wizard?.wizard_level || 50,
+      level: userBox.wizard?.level || userBox.wizard?.wizard_level || 50,
       totalUnits,
       sixStarUnits,
       fastestSpd: fastestUnit ? fastestUnit.spd : 0,
-      fastestName: fastestUnit ? fastestUnit.name : '',
+      fastestName,
       avgRuneEff,
       totalArtifacts: artifacts.length,
       topFastest,
+      nat5Count,
+      ld5Count,
+      isDemo: !!userBox.isDemo,
     };
   }, [userBox]);
 
@@ -301,6 +319,11 @@ export default function DashboardView({ onNavigate }) {
                   <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 uppercase">
                     โปรไฟล์ของฉัน (My Profile)
                   </span>
+                  {userProfileStats.isDemo && (
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                      G3 Demo Account
+                    </span>
+                  )}
                   <span className="text-xs text-slate-400 font-medium">
                     {userProfileStats.server}
                   </span>
@@ -309,32 +332,40 @@ export default function DashboardView({ onNavigate }) {
                   <span>{userProfileStats.name}</span>
                 </h2>
                 <p className="text-xs text-slate-400">
-                  สถิติมอนสเตอร์ รูน และอาร์ติแฟกต์ของคุณซิงก์จาก SWEX เรียบร้อยแล้ว
+                  สถิติมอนสเตอร์ รูน อาร์ติแฟกต์ และตู้สะสมของคุณซิงก์เรียบร้อยแล้ว
                 </p>
               </div>
             </div>
 
-            {/* Middle: 4 Quick Stat Badges */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-              <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/5 text-center min-w-[105px]">
+            {/* Middle: 5 Quick Stat Badges */}
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
+              <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/5 text-center min-w-[95px]">
                 <div className="text-[10px] text-slate-400 font-bold uppercase">มอนสเตอร์</div>
                 <div className="text-lg font-black text-white mt-0.5">{userProfileStats.totalUnits} <span className="text-xs text-cyan-400">ตัว</span></div>
                 <div className="text-[10px] text-emerald-400 font-semibold">{userProfileStats.sixStarUnits} ตัว 6★</div>
               </div>
 
-              <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/5 text-center min-w-[105px]">
+              <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/5 text-center min-w-[95px]">
                 <div className="text-[10px] text-slate-400 font-bold uppercase">สปีดสูงสุด</div>
                 <div className="text-lg font-black text-cyan-300 mt-0.5">{userProfileStats.fastestSpd} <span className="text-xs text-slate-400">SPD</span></div>
-                <div className="text-[10px] text-slate-400 truncate max-w-[95px] mx-auto">{userProfileStats.fastestName}</div>
+                <div className="text-[10px] text-slate-400 truncate max-w-[85px] mx-auto">{userProfileStats.fastestName}</div>
               </div>
 
-              <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/5 text-center min-w-[105px]">
+              <div className="p-3 rounded-2xl bg-white/[0.03] border border-amber-500/20 bg-amber-500/[0.03] text-center min-w-[95px]">
+                <div className="text-[10px] text-amber-300 font-bold uppercase flex items-center justify-center gap-1">
+                  <Trophy className="w-3 h-3 text-amber-400" /> ตู้สะสม Nat 5
+                </div>
+                <div className="text-lg font-black text-amber-300 mt-0.5">{userProfileStats.nat5Count} <span className="text-xs text-slate-400">/ 455</span></div>
+                <div className="text-[10px] text-yellow-400 font-semibold">{userProfileStats.ld5Count} ตัว LD 5★</div>
+              </div>
+
+              <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/5 text-center min-w-[95px]">
                 <div className="text-[10px] text-slate-400 font-bold uppercase">รูนเฉลี่ย</div>
                 <div className="text-lg font-black text-purple-300 mt-0.5">{userProfileStats.avgRuneEff}%</div>
                 <div className="text-[10px] text-slate-400">Efficiency</div>
               </div>
 
-              <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/5 text-center min-w-[105px]">
+              <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/5 text-center min-w-[95px]">
                 <div className="text-[10px] text-slate-400 font-bold uppercase">อาร์ติแฟกต์</div>
                 <div className="text-lg font-black text-teal-300 mt-0.5">{userProfileStats.totalArtifacts} <span className="text-xs text-slate-400">ชิ้น</span></div>
                 <div className="text-[10px] text-teal-400 font-semibold">ในไอดี</div>
@@ -349,6 +380,13 @@ export default function DashboardView({ onNavigate }) {
               >
                 <Package className="w-4 h-4" />
                 <span>เปิดดู My Box</span>
+              </button>
+              <button
+                onClick={() => onNavigate('my-box', { tab: 'pokedex' })}
+                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-amber-300 text-xs font-bold transition-all cursor-pointer shadow-sm"
+              >
+                <Trophy className="w-4 h-4 text-amber-400" />
+                <span>ตู้สะสม Nat 5 & LD5</span>
               </button>
               <button
                 onClick={() => onNavigate('my-box', { subItem: 'artifacts' })}
@@ -381,12 +419,22 @@ export default function DashboardView({ onNavigate }) {
                   </span>
                 </div>
                 <p className="text-xs sm:text-sm text-slate-400 max-w-2xl">
-                  นำเข้าไฟล์ SWEX JSON เพื่อแสดงโปรไฟล์ สถิติรูน มอนสเตอร์ และอาร์ติแฟกต์ของคุณที่หน้าแรกทันที (ข้อมูลจะถูกบันทึกลงเครื่องแบบถาวร ปลอดภัย 100%)
+                  นำเข้าไฟล์ SWEX JSON เพื่อแสดงโปรไฟล์ สถิติรูน ตู้สะสม Nat 5 & LD และอาร์ติแฟกต์ของคุณที่หน้าแรกทันที หรือทดลองด้วยไอดีตัวอย่าง Guardian
                 </p>
               </div>
             </div>
 
-            <div className="flex items-center gap-3 shrink-0">
+            <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+              <button
+                onClick={() => {
+                  const demo = loadDemoBox();
+                  setUserBox(demo);
+                }}
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 text-xs font-black shadow-lg shadow-amber-500/20 transition-all cursor-pointer"
+              >
+                <Trophy className="w-4 h-4 text-slate-950" />
+                <span>โหลดไอดีตัวอย่าง Guardian G3</span>
+              </button>
               <label className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white text-xs font-bold shadow-lg shadow-cyan-600/20 transition-all cursor-pointer">
                 <Upload className="w-4 h-4" />
                 <span>{uploadingProfile ? 'กำลังอ่านไฟล์...' : 'นำเข้าไฟล์ SWEX JSON'}</span>
@@ -398,12 +446,6 @@ export default function DashboardView({ onNavigate }) {
                   className="hidden"
                 />
               </label>
-              <button
-                onClick={() => onNavigate('my-box')}
-                className="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-white text-xs font-bold transition-all cursor-pointer"
-              >
-                ดูรายละเอียด My Box
-              </button>
             </div>
           </div>
         )}

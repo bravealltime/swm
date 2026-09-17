@@ -16,6 +16,23 @@ export const RUNE_SETS = {
 };
 const SET_PIECES = { 1: 2, 2: 2, 3: 4, 4: 2, 5: 4, 6: 2, 7: 2, 8: 4, 10: 4, 11: 4, 13: 4, 14: 2, 15: 2, 16: 2, 17: 2, 18: 2, 19: 2, 20: 2, 21: 2, 22: 2, 23: 2, 24: 2, 25: 1 };
 
+import allMonstersData from '../data/allMonsters.json';
+import { saveUserBoxToDB, loadUserBoxFromDB, clearUserBoxFromDB } from '../services/storageService';
+
+const MONSTER_ID_MAP = new Map();
+allMonstersData.forEach((m) => {
+  const numId = Number(m.com2usId || String(m.id || '').replace(/\D/g, ''));
+  if (numId) MONSTER_ID_MAP.set(numId, m);
+});
+
+export function getMonsterCatalogInfo(masterId) {
+  const n = Number(masterId);
+  if (!n) return null;
+  const stage = Math.floor(n / 10) % 10;
+  const root = n - stage * 10;
+  return MONSTER_ID_MAP.get(n) || MONSTER_ID_MAP.get(root + 10) || MONSTER_ID_MAP.get(root + 30) || MONSTER_ID_MAP.get(root) || null;
+}
+
 // Rune stat ids
 export const STAT_NAMES = {
   1: 'HP', 2: 'HP%', 3: 'ATK', 4: 'ATK%', 5: 'DEF', 6: 'DEF%', 8: 'SPD', 9: 'CRI Rate', 10: 'CRI Dmg', 11: 'RES', 12: 'ACC',
@@ -181,12 +198,17 @@ export function parseSwexExport(json) {
       const base = Number(u.spd) || 0;
       const r = runeSummary(u);
       const masterId = Number(u.unit_master_id);
+      const info = getMonsterCatalogInfo(masterId);
       for (const rune of r.runes) runes.push(compactRune(rune, masterId));
       return {
         masterId,
+        name: info?.name || '',
+        thaiName: info?.thaiName || info?.name || '',
+        avatarUrl: info?.avatarUrl || info?.imageUrl || '',
         stars: Number(u.class) || 0,
+        naturalStars: info?.stars || 0,
         level: Number(u.unit_level) || 0,
-        element: ELEMENTS[u.attribute] || 'fire',
+        element: ELEMENTS[u.attribute] || info?.element || 'fire',
         baseSpd: base,
         spd: base + r.flatSpd + Math.floor(base * 0.25 * r.swiftSets),
         hp: Number(u.con) ? Number(u.con) * 15 : 0,
@@ -238,12 +260,12 @@ export function getArtifactsFromBox(box) {
   }
   // Realistic fallback artifacts
   return [
-    { id: 'art-1', slot: 1, kind: 'element', element: 'fire', archetype: null, rank: 5, lvl: 15, main: [1, 1500], subs: [[207, 105, 1, 0], [204, 3.8, 1, 0], [208, 8, 1, 0], [302, 14, 1, 0]], unit: box?.units?.[0]?.id || 0 },
-    { id: 'art-2', slot: 2, kind: 'archetype', element: null, archetype: 'Support', rank: 5, lvl: 15, main: [1, 1500], subs: [[207, 26, 0, 0], [306, 12, 1, 0], [400, 7, 0, 0], [206, 6, 0, 0]], unit: box?.units?.[0]?.id || 0 },
-    { id: 'art-3', slot: 1, kind: 'element', element: 'water', archetype: null, rank: 5, lvl: 15, main: [1, 1500], subs: [[207, 118, 1, 0], [204, 4.2, 1, 0], [403, 9, 1, 0], [215, 8, 0, 0]], unit: box?.units?.[1]?.id || 0 },
-    { id: 'art-4', slot: 2, kind: 'archetype', element: null, archetype: 'Attack', rank: 5, lvl: 15, main: [3, 100], subs: [[207, 42, 1, 0], [205, 16, 1, 0], [404, 14, 1, 0], [301, 12, 0, 0]], unit: box?.units?.[1]?.id || 0 },
-    { id: 'art-5', slot: 1, kind: 'element', element: 'wind', archetype: null, rank: 5, lvl: 15, main: [5, 100], subs: [[206, 14, 1, 0], [205, 12, 1, 0], [302, 16, 1, 0], [208, 10, 1, 0]], unit: box?.units?.[2]?.id || 0 },
-    { id: 'art-6', slot: 2, kind: 'archetype', element: null, archetype: 'Defense', rank: 5, lvl: 15, main: [5, 100], subs: [[206, 15, 1, 0], [400, 8, 1, 0], [300, 11, 0, 0], [221, 9, 0, 0]], unit: box?.units?.[2]?.id || 0 },
+    { id: 'art-1', slot: 1, kind: 'element', element: 'fire', archetype: null, rank: 5, lvl: 15, main: [1, 1500], subs: [[207, 105, 1, 0], [204, 3.8, 1, 0], [208, 8, 1, 0], [302, 14, 1, 0]], unit: box?.units?.[0]?.masterId || 0 },
+    { id: 'art-2', slot: 2, kind: 'archetype', element: null, archetype: 'Support', rank: 5, lvl: 15, main: [1, 1500], subs: [[207, 26, 0, 0], [306, 12, 1, 0], [400, 7, 0, 0], [206, 6, 0, 0]], unit: box?.units?.[0]?.masterId || 0 },
+    { id: 'art-3', slot: 1, kind: 'element', element: 'water', archetype: null, rank: 5, lvl: 15, main: [1, 1500], subs: [[207, 118, 1, 0], [204, 4.2, 1, 0], [403, 9, 1, 0], [215, 8, 0, 0]], unit: box?.units?.[1]?.masterId || 0 },
+    { id: 'art-4', slot: 2, kind: 'archetype', element: null, archetype: 'Attack', rank: 5, lvl: 15, main: [3, 100], subs: [[207, 42, 1, 0], [205, 16, 1, 0], [404, 14, 1, 0], [301, 12, 0, 0]], unit: box?.units?.[1]?.masterId || 0 },
+    { id: 'art-5', slot: 1, kind: 'element', element: 'wind', archetype: null, rank: 5, lvl: 15, main: [5, 100], subs: [[206, 14, 1, 0], [205, 12, 1, 0], [302, 16, 1, 0], [208, 10, 1, 0]], unit: box?.units?.[2]?.masterId || 0 },
+    { id: 'art-6', slot: 2, kind: 'archetype', element: null, archetype: 'Defense', rank: 5, lvl: 15, main: [5, 100], subs: [[206, 15, 1, 0], [400, 8, 1, 0], [300, 11, 0, 0], [221, 9, 0, 0]], unit: box?.units?.[2]?.masterId || 0 },
     { id: 'art-7', slot: 1, kind: 'element', element: 'light', archetype: null, rank: 5, lvl: 15, main: [1, 1500], subs: [[204, 4.5, 1, 0], [306, 15, 1, 0], [208, 12, 1, 0], [401, 11, 0, 0]], unit: 0 },
     { id: 'art-8', slot: 2, kind: 'archetype', element: null, archetype: 'HP', rank: 5, lvl: 15, main: [1, 1500], subs: [[204, 4.0, 1, 0], [207, 24, 0, 0], [400, 6, 0, 0], [304, 10, 0, 0]], unit: 0 },
   ];
@@ -259,7 +281,90 @@ export function ownedIdSet(box) {
   return set;
 }
 
-import { saveUserBoxToDB, loadUserBoxFromDB, clearUserBoxFromDB } from '../services/storageService';
+export function getDemoGuardianBox() {
+  const demoUnits = [
+    // 5 Legendary LD 5★
+    { masterId: 21214, stars: 6, level: 40, element: 'light', baseSpd: 96, spd: 310, hp: 42500, atk: 1150, def: 2100, cr: 45, cd: 135, acc: 65, res: 50, runes: 6, sets: ['Swift', 'Will'], runeEff: 104.2 },
+    { masterId: 15715, stars: 6, level: 40, element: 'dark', baseSpd: 100, spd: 292, hp: 32000, atk: 1850, def: 1350, cr: 85, cd: 150, acc: 85, res: 25, runes: 6, sets: ['Despair', 'Will'], runeEff: 102.8 },
+    { masterId: 16615, stars: 6, level: 40, element: 'dark', baseSpd: 100, spd: 248, hp: 38000, atk: 2200, def: 1400, cr: 100, cd: 165, acc: 25, res: 40, runes: 6, sets: ['Violent', 'Nemesis'], runeEff: 103.5 },
+    { masterId: 20515, stars: 6, level: 40, element: 'dark', baseSpd: 99, spd: 295, hp: 36000, atk: 1300, def: 1650, cr: 35, cd: 70, acc: 100, res: 45, runes: 6, sets: ['Despair', 'Will'], runeEff: 101.9 },
+    { masterId: 26114, stars: 6, level: 40, element: 'light', baseSpd: 106, spd: 324, hp: 33500, atk: 1750, def: 1450, cr: 75, cd: 145, acc: 80, res: 30, runes: 6, sets: ['Swift', 'Will'], runeEff: 105.1 },
+    // Top Meta Elemental Nat 5★
+    { masterId: 25313, stars: 6, level: 40, element: 'wind', baseSpd: 105, spd: 310, hp: 31000, atk: 1950, def: 1300, cr: 85, cd: 155, acc: 75, res: 20, runes: 6, sets: ['Swift', 'Will'], runeEff: 103.2 },
+    { masterId: 28913, stars: 6, level: 40, element: 'wind', baseSpd: 101, spd: 257, hp: 46000, atk: 1100, def: 2350, cr: 78, cd: 142, acc: 40, res: 45, runes: 6, sets: ['Violent', 'Will'], runeEff: 104.0 },
+    { masterId: 15713, stars: 6, level: 40, element: 'wind', baseSpd: 100, spd: 268, hp: 34000, atk: 2500, def: 1300, cr: 60, cd: 75, acc: 85, res: 35, runes: 6, sets: ['Violent', 'Will'], runeEff: 102.5 },
+    { masterId: 24511, stars: 6, level: 40, element: 'water', baseSpd: 103, spd: 289, hp: 31500, atk: 1800, def: 1250, cr: 85, cd: 145, acc: 65, res: 20, runes: 6, sets: ['Despair', 'Will'], runeEff: 101.4 },
+    { masterId: 24713, stars: 6, level: 40, element: 'wind', baseSpd: 100, spd: 274, hp: 41000, atk: 1200, def: 1850, cr: 40, cd: 70, acc: 85, res: 40, runes: 6, sets: ['Violent', 'Will'], runeEff: 102.7 },
+    { masterId: 23713, stars: 6, level: 40, element: 'wind', baseSpd: 102, spd: 284, hp: 33000, atk: 1600, def: 1400, cr: 55, cd: 85, acc: 85, res: 25, runes: 6, sets: ['Despair', 'Will'], runeEff: 100.9 },
+    { masterId: 13812, stars: 6, level: 40, element: 'fire', baseSpd: 101, spd: 253, hp: 38500, atk: 1450, def: 1550, cr: 70, cd: 130, acc: 35, res: 50, runes: 6, sets: ['Violent', 'Will'], runeEff: 100.4 },
+    { masterId: 15712, stars: 6, level: 40, element: 'fire', baseSpd: 100, spd: 276, hp: 35000, atk: 1500, def: 1450, cr: 85, cd: 75, acc: 45, res: 30, runes: 6, sets: ['Despair', 'Nemesis'], runeEff: 101.6 },
+    { masterId: 16613, stars: 6, level: 40, element: 'wind', baseSpd: 100, spd: 118, hp: 36000, atk: 2400, def: 1450, cr: 100, cd: 160, acc: 20, res: 35, runes: 6, sets: ['Vampire', 'Blade'], runeEff: 99.8 },
+    { masterId: 23711, stars: 6, level: 40, element: 'water', baseSpd: 100, spd: 270, hp: 37000, atk: 1300, def: 1550, cr: 35, cd: 70, acc: 75, res: 40, runes: 6, sets: ['Despair', 'Will'], runeEff: 100.2 },
+    { masterId: 17913, stars: 6, level: 40, element: 'wind', baseSpd: 119, spd: 329, hp: 28000, atk: 2150, def: 1200, cr: 100, cd: 160, acc: 55, res: 15, runes: 6, sets: ['Swift', 'Blade'], runeEff: 104.5 },
+    { masterId: 25311, stars: 6, level: 40, element: 'water', baseSpd: 104, spd: 306, hp: 35000, atk: 1250, def: 1400, cr: 50, cd: 70, acc: 45, res: 35, runes: 6, sets: ['Swift', 'Will'], runeEff: 101.7 },
+    { masterId: 17411, stars: 6, level: 40, element: 'water', baseSpd: 102, spd: 260, hp: 49000, atk: 1150, def: 1500, cr: 75, cd: 135, acc: 40, res: 40, runes: 6, sets: ['Violent', 'Revenge'], runeEff: 103.1 },
+    { masterId: 19212, stars: 6, level: 40, element: 'fire', baseSpd: 100, spd: 262, hp: 36000, atk: 1800, def: 1400, cr: 80, cd: 140, acc: 55, res: 40, runes: 6, sets: ['Violent', 'Will'], runeEff: 101.1 },
+    { masterId: 25713, stars: 6, level: 40, element: 'wind', baseSpd: 102, spd: 266, hp: 37500, atk: 2600, def: 1300, cr: 30, cd: 65, acc: 40, res: 35, runes: 6, sets: ['Violent', 'Destroy'], runeEff: 102.3 },
+    { masterId: 24712, stars: 6, level: 40, element: 'fire', baseSpd: 99, spd: 253, hp: 48000, atk: 1100, def: 1600, cr: 40, cd: 70, acc: 75, res: 45, runes: 6, sets: ['Violent', 'Will'], runeEff: 102.0 },
+    { masterId: 14512, stars: 6, level: 40, element: 'fire', baseSpd: 109, spd: 254, hp: 27000, atk: 2450, def: 1150, cr: 95, cd: 170, acc: 15, res: 25, runes: 6, sets: ['Violent', 'Will'], runeEff: 101.4 },
+    { masterId: 18611, stars: 6, level: 40, element: 'water', baseSpd: 118, spd: 330, hp: 41000, atk: 1050, def: 1350, cr: 35, cd: 65, acc: 30, res: 65, runes: 6, sets: ['Swift', 'Will'], runeEff: 104.8 },
+    { masterId: 20511, stars: 6, level: 40, element: 'water', baseSpd: 99, spd: 315, hp: 37000, atk: 1200, def: 1700, cr: 30, cd: 65, acc: 65, res: 40, runes: 6, sets: ['Swift', 'Will'], runeEff: 103.9 },
+    { masterId: 18913, stars: 6, level: 40, element: 'wind', baseSpd: 96, spd: 311, hp: 38000, atk: 1150, def: 1600, cr: 30, cd: 65, acc: 55, res: 45, runes: 6, sets: ['Swift', 'Will'], runeEff: 103.5 },
+    { masterId: 18612, stars: 6, level: 40, element: 'fire', baseSpd: 103, spd: 291, hp: 34000, atk: 1300, def: 1450, cr: 40, cd: 70, acc: 85, res: 30, runes: 6, sets: ['Despair', 'Will'], runeEff: 101.8 },
+    { masterId: 21111, stars: 6, level: 40, element: 'water', baseSpd: 98, spd: 263, hp: 22000, atk: 2350, def: 1100, cr: 95, cd: 175, acc: 40, res: 20, runes: 6, sets: ['Despair', 'Nemesis'], runeEff: 100.7 },
+    { masterId: 21213, stars: 6, level: 40, element: 'wind', baseSpd: 96, spd: 236, hp: 32000, atk: 1100, def: 2700, cr: 30, cd: 65, acc: 35, res: 60, runes: 6, sets: ['Violent', 'Will'], runeEff: 101.3 },
+    // Essential 3★/4★
+    { masterId: 19114, stars: 6, level: 40, element: 'light', baseSpd: 103, spd: 285, hp: 33000, atk: 1700, def: 1350, cr: 40, cd: 65, acc: 35, res: 45, runes: 6, sets: ['Violent', 'Will'], runeEff: 99.4 },
+    { masterId: 19314, stars: 6, level: 40, element: 'light', baseSpd: 102, spd: 282, hp: 36000, atk: 1200, def: 1450, cr: 35, cd: 65, acc: 85, res: 35, runes: 6, sets: ['Swift', 'Will'], runeEff: 98.9 },
+    { masterId: 21012, stars: 6, level: 40, element: 'fire', baseSpd: 97, spd: 275, hp: 39000, atk: 950, def: 1550, cr: 25, cd: 60, acc: 25, res: 85, runes: 6, sets: ['Violent', 'Nemesis'], runeEff: 99.8 },
+    { masterId: 14712, stars: 6, level: 40, element: 'fire', baseSpd: 99, spd: 229, hp: 28000, atk: 1850, def: 1200, cr: 100, cd: 145, acc: 25, res: 30, runes: 6, sets: ['Violent', 'Revenge'], runeEff: 98.6 },
+    { masterId: 19411, stars: 6, level: 40, element: 'water', baseSpd: 108, spd: 298, hp: 32000, atk: 1600, def: 1250, cr: 75, cd: 135, acc: 85, res: 25, runes: 6, sets: ['Shield', 'Will'], runeEff: 99.2 },
+    { masterId: 13912, stars: 6, level: 40, element: 'fire', baseSpd: 103, spd: 312, hp: 29000, atk: 1450, def: 1250, cr: 45, cd: 70, acc: 85, res: 20, runes: 6, sets: ['Swift', 'Will'], runeEff: 102.1 },
+    { masterId: 24914, stars: 6, level: 40, element: 'light', baseSpd: 106, spd: 322, hp: 24000, atk: 2250, def: 1100, cr: 100, cd: 165, acc: 30, res: 15, runes: 6, sets: ['Swift', 'Blade'], runeEff: 103.8 },
+  ];
+
+  const enrichedUnits = demoUnits.map((u) => {
+    const info = getMonsterCatalogInfo(u.masterId);
+    return {
+      ...u,
+      name: info?.name || '',
+      thaiName: info?.thaiName || info?.name || '',
+      avatarUrl: info?.avatarUrl || info?.imageUrl || '',
+      naturalStars: info?.stars || 5,
+    };
+  });
+
+  return {
+    wizard: {
+      name: 'Guardian★Demo (G3)',
+      level: 100,
+      country: 'TH',
+      guild: 'Legendary TH',
+      idHint: '8899',
+    },
+    units: enrichedUnits,
+    runes: [
+      { id: 101, slot: 2, set: 3, stars: 6, ancient: 0, lvl: 15, q: 5, q0: 5, main: [8, 42], innate: [2, 8], subs: [[4, 22, 1, 0], [6, 18, 1, 0], [9, 14, 0, 0], [10, 15, 0, 0]], eff: 104.5, unit: 21214 },
+      { id: 102, slot: 4, set: 3, stars: 6, ancient: 0, lvl: 15, q: 5, q0: 5, main: [6, 63], innate: [1, 350], subs: [[8, 28, 1, 0], [2, 18, 1, 0], [9, 12, 0, 0], [12, 16, 0, 0]], eff: 106.2, unit: 21214 },
+      { id: 103, slot: 6, set: 3, stars: 6, ancient: 0, lvl: 15, q: 5, q0: 5, main: [2, 63], innate: [3, 20], subs: [[8, 29, 1, 0], [6, 19, 1, 0], [11, 14, 0, 0], [12, 15, 0, 0]], eff: 107.1, unit: 21214 },
+      { id: 104, slot: 1, set: 3, stars: 6, ancient: 0, lvl: 15, q: 5, q0: 5, main: [3, 160], innate: null, subs: [[8, 26, 1, 0], [2, 21, 1, 0], [6, 15, 1, 0], [10, 16, 0, 0]], eff: 103.8, unit: 21214 },
+      { id: 105, slot: 3, set: 15, stars: 6, ancient: 0, lvl: 15, q: 5, q0: 5, main: [5, 160], innate: [8, 5], subs: [[2, 24, 1, 0], [6, 18, 1, 0], [11, 15, 0, 0], [12, 14, 0, 0]], eff: 102.4, unit: 21214 },
+      { id: 106, slot: 5, set: 15, stars: 6, ancient: 0, lvl: 15, q: 5, q0: 5, main: [1, 2448], innate: null, subs: [[8, 27, 1, 0], [2, 16, 1, 0], [6, 20, 1, 0], [9, 11, 0, 0]], eff: 105.0, unit: 21214 },
+      { id: 107, slot: 4, set: 3, stars: 6, ancient: 0, lvl: 15, q: 5, q0: 5, main: [2, 63], innate: [5, 22], subs: [[8, 30, 1, 0], [4, 15, 1, 0], [9, 12, 0, 0], [10, 14, 0, 0]], eff: 108.4, unit: 26114 },
+      { id: 108, slot: 6, set: 3, stars: 6, ancient: 0, lvl: 15, q: 5, q0: 5, main: [4, 63], innate: [1, 300], subs: [[8, 28, 1, 0], [2, 18, 1, 0], [9, 15, 0, 0], [12, 16, 0, 0]], eff: 105.8, unit: 26114 },
+    ],
+    artifacts: getArtifactsFromBox(),
+    importedAt: new Date().toISOString(),
+    version: BOX_VERSION,
+    isDemo: true,
+  };
+}
+
+export function loadDemoBox() {
+  const demo = getDemoGuardianBox();
+  saveBox(demo);
+  return demo;
+}
 
 export function loadBox() {
   try {
