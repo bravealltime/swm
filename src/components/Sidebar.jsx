@@ -69,8 +69,9 @@ export default function Sidebar({
   };
 
   const handleItemClick = (itemId) => {
-    let view = 'dashboard';
-    if (itemId === '3mdc-trending') view = 'trending';
+    if (itemId === 'where2use') view = 'where2use';
+    else if (itemId === 'siege-calculator' || itemId === 'siege-calc') view = 'siege-calculator';
+    else if (itemId === '3mdc-trending') view = 'trending';
     else if (itemId.includes('3mdc')) view = '3mdc';
     else if (itemId.includes('rta')) view = 'rta';
     else if (itemId.includes('trending') || itemId.includes('monster-defense') || itemId.includes('monster-offense')) view = 'trending';

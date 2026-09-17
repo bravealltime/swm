@@ -17,6 +17,8 @@ import GuildRecruitView from './views/GuildRecruitView';
 import PluginCompanionView from './views/PluginCompanionView';
 import ArtifactOptimizerView from './views/ArtifactOptimizerView';
 import RtaAnalyticsView from './views/RtaAnalyticsView';
+import WhereToUseView from './views/WhereToUseView';
+import SiegeCalculatorView from './views/SiegeCalculatorView';
 import SwmLogo from './components/SwmLogo';
 
 export default function App() {
@@ -37,6 +39,11 @@ export default function App() {
         return <DashboardView onNavigate={handleNavigate} />;
       case '3mdc':
         return <MdcView onNavigate={handleNavigate} {...viewParams} />;
+      case 'where2use':
+        return <WhereToUseView onNavigate={handleNavigate} {...viewParams} />;
+      case 'siege-calc':
+      case 'siege-calculator':
+        return <SiegeCalculatorView onNavigate={handleNavigate} {...viewParams} />;
       case 'trending':
         return <TrendingAnalyticsView onNavigate={handleNavigate} {...viewParams} />;
       case 'dungeons':

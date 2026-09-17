@@ -167,7 +167,81 @@ const POPULAR_OPTIMIZER_MONSTERS = [
   }
 ];
 
+const ARTIFACT_FINDER_OPTIONS = [
+  {
+    id: 'addl_spd',
+    name: "Add'l DMG by SPD (ดาเมจเสริมตามสปีด)",
+    desc: 'เหมาะกับมอนสเตอร์ความเร็วสูงและออกหลายฮิต',
+    monsters: [
+      { name: 'Juno (จูโน่)', element: 'fire', role: 'สกิล 1 ตี 3 ฮิต + สปีดสูง', eff: 'ระดับ SSS' },
+      { name: 'Miles (ไมลส์)', element: 'water', role: 'พาสซีฟสเกลสปีด + สกิล 2 ตี 2 ฮิต', eff: 'ระดับ SSS' },
+      { name: 'Ethna (เอธน่า)', element: 'wind', role: 'สกิล 3 Capture โจมตี 5 ฮิตต่อเนื่อง', eff: 'ระดับ SSS' },
+      { name: 'Sonia (โซเนีย)', element: 'wind', role: 'สปีดนำ = เจาะเกราะดาเมจนิวเคลียร์', eff: 'ระดับ SS' },
+      { name: 'Eshir (เอเชียร์ 2A)', element: 'light', role: 'สกิล 3 Massacre ตี 4 ฮิต สปีด 115', eff: 'ระดับ SS' },
+      { name: 'Liam (เลียม)', element: 'water', role: 'ตีหลายฮิตดาเมจมหาศาล', eff: 'ระดับ SS' },
+    ]
+  },
+  {
+    id: 'addl_hp',
+    name: "Add'l DMG by HP (ดาเมจเสริมตามเลือดสูงสุด)",
+    desc: 'เหมาะกับสายแทงก์เลือดหนา 40,000+ HP ที่ออกหลายฮิตหรือตีเคาน์เตอร์',
+    monsters: [
+      { name: 'Byungchul (บยองชุล)', element: 'wind', role: 'ตีหมู่ตามเลือด + สกิล 1 เคาน์เตอร์', eff: 'ระดับ SSS' },
+      { name: 'Karnal (คาร์นอล)', element: 'fire', role: 'สกิล 3 ดูดเกจหลายฮิต เลือดหนา', eff: 'ระดับ SSS' },
+      { name: 'Vigor (วิกอร์ 2A)', element: 'water', role: 'สกิล 3 Predator ตี 3 ฮิตลดเกราะ', eff: 'ระดับ SS' },
+      { name: 'Chandra (จันทรา)', element: 'water', role: 'กอดเพื่อน เคาน์เตอร์สตั๊นตามเลือด', eff: 'ระดับ SS' },
+      { name: 'Mo Long (โม่หลง)', element: 'water', role: 'สกิล 2 สตั๊น 3 ฮิต เลือด 45,000+', eff: 'ระดับ SS' },
+    ]
+  },
+  {
+    id: 'addl_def',
+    name: "Add'l DMG by DEF (ดาเมจเสริมตามพลังป้องกัน)",
+    desc: 'เหมาะกับตัวถึกสายป้องกัน เช่น แฟรงเกนสไตน์ หรือการ์กอยล์',
+    monsters: [
+      { name: 'Tractor (แทรคเตอร์ 2A)', element: 'fire', role: 'ยั่วยุ + สกิล 1 ตี 2 ฮิต ไม่ติดคริ', eff: 'ระดับ SSS' },
+      { name: 'Windy (วินดี้)', element: 'wind', role: 'บาเรีย + เคาน์เตอร์ตีหลายฮิต', eff: 'ระดับ SS' },
+      { name: 'Feng Yan (แพนด้าลม)', element: 'wind', role: 'พาสซีฟเพิ่มดาเมจตาม DEF + ตี 3 ฮิต', eff: 'ระดับ SS' },
+      { name: 'Copper (คอปเปอร์)', element: 'wind', role: 'สายทุบเจาะเกราะตาม DEF', eff: 'ระดับ S' },
+    ]
+  },
+  {
+    id: 'addl_atk',
+    name: "Add'l DMG by ATK (ดาเมจเสริมตามพลังโจมตี)",
+    desc: 'เหมาะกับตัวดาเมจที่ตีหลายฮิตแต่ไม่พึ่งพาคริติคอล',
+    monsters: [
+      { name: 'Dominic (โดมินิก)', element: 'wind', role: 'พาสซีฟดาเมจแท้ไม่สนใจพลังป้องกัน', eff: 'ระดับ SSS' },
+      { name: 'Seara (เซียร์ร่า)', element: 'wind', role: 'สกิล 1 ตี 3 ฮิต ปั๊มเกจ 45%', eff: 'ระดับ SSS' },
+      { name: 'Kaki (คากิ)', element: 'fire', role: 'ไม่ติดคริ พลังโจมตีพื้นฐานสูงลิ่ว ตีหมู่', eff: 'ระดับ SSS' },
+      { name: 'Suiki (ซุยกิ)', element: 'water', role: 'สะสมสแต็ค ATK/DEF ตีหมู่ดูดเลือด', eff: 'ระดับ SS' },
+    ]
+  },
+  {
+    id: 'bomb_dmg',
+    name: 'Bomb DMG +% (เพิ่มความแรงระเบิด)',
+    desc: 'เร่งดาเมจระเบิดนิวเคลียร์ให้ทะลุ 30,000 - 45,000+',
+    monsters: [
+      { name: 'Seara (เซียร์ร่า)', element: 'wind', role: 'ติดระเบิด + จุดชนวนระเบิดทันที', eff: 'ระดับ SSS' },
+      { name: 'Giana (เจียน่า)', element: 'dark', role: 'ล้างบัฟแปลงเป็นสตั๊น + ติดระเบิด', eff: 'ระดับ SSS' },
+      { name: 'Liebli (โจ๊กเกอร์มืด)', element: 'dark', role: 'พาสซีฟเคาน์เตอร์ + ติดระเบิดลดคูลดาวน์', eff: 'ระดับ SS' },
+      { name: 'John (สกายเซิร์ฟเฟอร์ไฟ)', element: 'fire', role: 'วางระเบิดหมู่ 3 เม็ด', eff: 'ระดับ SS' },
+    ]
+  },
+  {
+    id: 'life_drain',
+    name: 'Life Drain +% (ดูดเลือดจากการทำดาเมจ)',
+    desc: 'เพิ่มความอึดให้ตัวยืนโซโล่ 1v3',
+    monsters: [
+      { name: 'Camilla (คามิลล่า)', element: 'water', role: 'ฮีลล้างดีบัฟ + ดูดเลือดจากทุกการโจมตี', eff: 'ระดับ SSS' },
+      { name: 'Chow (เชาว์)', element: 'water', role: 'พาสซีฟเพิ่มดาเมจตามเลือดหาย + ดูดเลือด', eff: 'ระดับ SSS' },
+      { name: 'Laika (ไลก้า)', element: 'fire', role: 'จำกัดดาเมจต่อฮิต + เคาน์เตอร์ดูดเลือด', eff: 'ระดับ SS' },
+      { name: 'Douglas (ดักลาส)', element: 'fire', role: 'หลบการโจมตี + เคาน์เตอร์ดูดเลือด', eff: 'ระดับ SS' },
+    ]
+  }
+];
+
 export default function ArtifactOptimizerView({ onNavigate }) {
+  const [activeMode, setActiveMode] = useState('calc'); // 'calc' or 'finder'
+  const [selectedFinderSubstat, setSelectedFinderSubstat] = useState('addl_spd');
   const [selectedMonsterId, setSelectedMonsterId] = useState(POPULAR_OPTIMIZER_MONSTERS[0].id);
 
   // Combat Modifiers (Towers, Leaders, Buffs)
@@ -325,6 +399,122 @@ export default function ArtifactOptimizerView({ onNavigate }) {
         </div>
       </div>
 
+      {/* Mode Switcher Tabs */}
+      <div className="flex items-center gap-2 p-1.5 rounded-xl bg-[#111927] border border-[#1e2a3c]">
+        <button
+          onClick={() => setActiveMode('calc')}
+          className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+            activeMode === 'calc'
+              ? 'bg-orange-600 text-white shadow-md shadow-orange-600/30'
+              : 'text-slate-400 hover:text-white'
+          }`}
+        >
+          💥 เครื่องจำลองดาเมจเสริมละเอียด (Damage Optimizer)
+        </button>
+        <button
+          onClick={() => setActiveMode('finder')}
+          className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+            activeMode === 'finder'
+              ? 'bg-amber-500 text-slate-950 font-black shadow-md shadow-amber-500/30'
+              : 'text-slate-400 hover:text-white'
+          }`}
+        >
+          🔍 ค้นหามอนสเตอร์ตามออปชั่นอาร์ติแฟกต์ (Monster Finder)
+        </button>
+      </div>
+
+      {/* Artifact Monster Finder View */}
+      {activeMode === 'finder' ? (
+        <div className="space-y-6">
+          <div className="bg-[#111927] border border-[#1e2a3c] p-5 rounded-2xl shadow-xl space-y-4">
+            <div>
+              <h2 className="text-base font-extrabold text-white flex items-center gap-2">
+                <Target className="w-4 h-4 text-amber-400" />
+                เลือกออปชั่นอาร์ติแฟกต์ที่สุ่มได้ (Select Artifact Sub-stat)
+              </h2>
+              <p className="text-xs text-slate-400 mt-0.5">
+                เลือกสเตตัสรองอาร์ติแฟกต์ เพื่อดูทันทีว่ามอนสเตอร์ตัวไหนในเกมสามารถรีดประสิทธิภาพของออปชั่นนี้ได้สูงที่สุด
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5">
+              {ARTIFACT_FINDER_OPTIONS.map((opt) => (
+                <button
+                  key={opt.id}
+                  onClick={() => setSelectedFinderSubstat(opt.id)}
+                  className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
+                    selectedFinderSubstat === opt.id
+                      ? 'bg-amber-500 text-slate-950 border-amber-400 shadow-lg shadow-amber-500/20'
+                      : 'bg-[#0c121c] border-[#1e2a3c] text-slate-300 hover:text-white hover:bg-[#152030]'
+                  }`}
+                >
+                  <div className="text-xs font-black">{opt.name}</div>
+                  <div className={`text-[10px] mt-0.5 line-clamp-1 ${selectedFinderSubstat === opt.id ? 'text-slate-800' : 'text-slate-500'}`}>
+                    {opt.desc}
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Recommended Monsters for Selected Substat */}
+          {(() => {
+            const currentOption = ARTIFACT_FINDER_OPTIONS.find(o => o.id === selectedFinderSubstat) || ARTIFACT_FINDER_OPTIONS[0];
+            return (
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-base font-bold text-white flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-amber-400" />
+                    มอนสเตอร์แนะนำสูงสุดสำหรับ: <span className="text-amber-400">{currentOption.name}</span>
+                  </h3>
+                  <span className="text-xs text-slate-400">แนะนำ {currentOption.monsters.length} ตัวยอดนิยม</span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {currentOption.monsters.map((m, idx) => (
+                    <div 
+                      key={idx}
+                      className="p-4 rounded-2xl bg-[#111927] border border-[#1e2a3c] hover:border-amber-500/40 transition-all flex flex-col justify-between space-y-3 shadow-lg"
+                    >
+                      <div className="flex items-start justify-between gap-2">
+                        <div>
+                          <div className="text-sm font-black text-white">{m.name}</div>
+                          <span className={`inline-block mt-1 px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
+                            m.element === 'fire' ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30' :
+                            m.element === 'water' ? 'bg-sky-500/20 text-sky-400 border border-sky-500/30' :
+                            m.element === 'wind' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' :
+                            m.element === 'light' ? 'bg-yellow-400/20 text-yellow-300 border border-yellow-400/30' :
+                            'bg-purple-500/20 text-purple-400 border border-purple-500/30'
+                          }`}>
+                            {m.element}
+                          </span>
+                        </div>
+                        <span className="px-2 py-0.5 rounded text-xs font-mono font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">
+                          {m.eff}
+                        </span>
+                      </div>
+
+                      <div className="p-3 bg-[#0c121c] rounded-xl border border-[#1e2a3c]/60 text-xs text-slate-300">
+                        <div className="text-[10px] text-slate-500 font-bold uppercase mb-1">เหตุผลที่เหมาะสม:</div>
+                        <div>{m.role}</div>
+                      </div>
+
+                      <button
+                        onClick={() => onNavigate && onNavigate('where2use', { initialMonster: m.name.split(' ')[0] })}
+                        className="w-full py-2 rounded-lg bg-[#0c121c] hover:bg-[#182333] border border-[#1e2a3c] text-xs font-bold text-amber-400 hover:text-amber-300 transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                      >
+                        <Compass className="w-3.5 h-3.5" />
+                        <span>ตรวจสอบทีมใช้งาน (Where to Use)</span>
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })()}
+        </div>
+      ) : (
+        <>
       {/* Monster Selector Bar */}
       <div className="bg-[#111927] border border-[#1e2a3c] p-4 rounded-xl space-y-3">
         <div className="flex items-center justify-between">
@@ -723,6 +913,8 @@ export default function ArtifactOptimizerView({ onNavigate }) {
         </div>
 
       </div>
+      </>
+      )}
     </div>
   );
 }

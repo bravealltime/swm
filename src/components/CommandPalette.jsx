@@ -37,10 +37,12 @@ export default function CommandPalette({ isOpen, onClose, onNavigate }) {
   ).slice(0, 3);
 
   const quickTools = [
+    { id: 'where2use', name: 'ใช้มอนสเตอร์ตัวนี้ที่ไหนดี? (Where to Use)', desc: 'ตรวจสอบการใช้งานในทีมรับ, ทีมบุก, ดันเจี้ยน และ RTA', icon: Shield, view: 'where2use' },
+    { id: 'siege-calc', name: 'เครื่องคำนวณคะแนน Siege (Siege Calculator)', desc: 'คำนวณแต้มต่อนาทีและเวลาชนะ 20,000 แต้ม', icon: Gauge, view: 'siege-calculator' },
     { id: 'rta', name: 'วิเคราะห์ RTA & สถิติ SWRT S38', desc: 'Tier List เมต้า, Pick/Win/Ban 300 ตัว, รีเพลย์แข่งสด', icon: Trophy, view: 'rta' },
     { id: '3mdc', name: 'ค้นหาตัวแก้ทาง 3MDC', desc: 'ค้นหาทีมเจาะหอ 4★ / 5★ พร้อม % วินเรท', icon: Shield, view: '3mdc' },
     { id: 'codes', name: 'โค้ดแจกไอเทมล่าสุด', desc: 'คัดลอกโค้ดและกดรับของผ่าน Hive ID', icon: Gift, view: 'codes' },
-    { id: 'speed', name: 'เครื่องคำนวณ Speed Tick', desc: 'คำนวณช่วงความเร็วและรอบเทิร์น', icon: Gauge, view: 'speed' },
+    { id: 'speed', name: 'เครื่องคำนวณ Speed Tick & จูนสปีด', desc: 'คำนวณช่วงความเร็วและป้องกันโดนแทรกเทิร์น', icon: Gauge, view: 'speed' },
     { id: 'catalog', name: 'สารานุกรมมอนสเตอร์', desc: 'ดูข้อมูลสกิล ธาตุ รูนแนะนำของทุกตัว', icon: BookOpen, view: 'catalog' },
   ].filter(t => t.name.includes(query) || t.desc.includes(query));
 

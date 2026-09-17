@@ -4,6 +4,7 @@ export const NAVIGATION_CATEGORIES = [
     title: 'ระบบแก้ทาง 3MDC (Siege & Guild War)',
     items: [
       { id: '3mdc-search', label: 'ค้นหาตัวแก้ทาง (3MDC Search)', icon: 'Crosshair', badge: 'สำคัญสุด' },
+      { id: 'where2use', label: '🧭 มอนสเตอร์นี้ใช้ที่ไหน? (Where to Use)', icon: 'Compass', badge: 'SWGT แท้' },
       { id: '3mdc-trending', label: 'ทีมตั้งรับยอดนิยม (Trending Defenses)', icon: 'Flame', badge: '20 ทีม' },
       { id: '3mdc-statistics', label: 'สถิติการชนะ (Winrate Stats)', icon: 'BarChart3' },
     ]
@@ -31,12 +32,13 @@ export const NAVIGATION_CATEGORIES = [
     id: 'tools',
     title: 'เครื่องมือช่วยเล่น (Game Tools & Dungeons)',
     items: [
+      { id: 'siege-calculator', label: '🏰 คำนวณแต้ม Siege (Siege Calc)', icon: 'Calculator', badge: 'กลยุทธ์' },
+      { id: 'speed-calculator', label: '⚡ สปีดทิก & ป้องกันแซง (Speed Tuning)', icon: 'Gauge', badge: 'อัปเกรด' },
+      { id: 'artifact-optimizer', label: '💥 ดาเมจเสริมอาร์ติแฟกต์ & ค้นหามอน', icon: 'Flame', badge: 'NEW 7.8' },
       { id: 'game-codes', label: 'รหัสโค้ดแจกไอเทม (Active Codes)', icon: 'Gift', badge: 'ของแท้' },
       { id: 'dungeon-stats', label: 'ทีมฟาร์มดันเจี้ยน (Abyss Speed)', icon: 'Compass', badge: 'Abyss Hard' },
       { id: 'balance-patch', label: 'ประวัติแพตช์ปรับสมดุล (92 แพตช์)', icon: 'History', badge: '92 แพตช์' },
-      { id: 'speed-calculator', label: 'เครื่องคำนวณ Speed Tick', icon: 'Gauge' },
       { id: 'monster-catalog', label: 'สารานุกรมสกิลมอนสเตอร์ (Skills & Stats)', icon: 'BookOpen', badge: 'ครบทุกตัว' },
-      { id: 'artifact-optimizer', label: '💥 ดาเมจเสริมอาร์ติแฟกต์ (Optimizer)', icon: 'Flame', badge: 'NEW 7.8' },
       { id: 'rune-calculator', label: 'คำนวณประสิทธิภาพรูน & หินขัด', icon: 'Calculator' },
     ]
   },
