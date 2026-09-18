@@ -113,7 +113,11 @@ export default function AuthModal({ isOpen, onClose }) {
     try {
       await signInWithOAuth(provider);
     } catch (err) {
-      setErrorMsg(err.message || 'เชื่อมต่อ Google ไม่สำเร็จ');
+      if (err.message?.includes('provider is not enabled') || err.message?.includes('Unsupported provider')) {
+        setErrorMsg('Supabase ยังไม่ได้เปิดใช้งาน Google Provider — กรุณาสมัครหรือเข้าสู่ระบบด้วย อีเมล และ รหัสผ่าน ด้านล่างนี้แทนครับ (พร้อมใช้งานทันที)');
+      } else {
+        setErrorMsg(err.message || 'เชื่อมต่อ Google ไม่สำเร็จ');
+      }
       setLoading(false);
     }
   };
