@@ -26,7 +26,7 @@ function renderAnswer(text) {
  * Free-text chat with the grounded coach. `buildContext()` returns what the server should know
  * about the current screen (box summary, defense, draft, monsters to look up).
  */
-export default function AiChatPanel({ buildContext, suggestions = [], title = 'ถามโค้ช AI', placeholder = 'พิมพ์คำถาม เช่น จัดทีม GB12 จากกล่องฉัน...', compact = false, className = '' }) {
+export default function AiChatPanel({ buildContext, suggestions = [], title = 'ถามโค้ช AI', placeholder = 'พิมพ์คำถาม เช่น จัดทีม GB12 จากกล่องฉัน...', compact = false, className = '', initialQuestion = '' }) {
   const [messages, setMessages] = useState([]); // { role: 'user' | 'ai', text }
   const [input, setInput] = useState('');
   const [status, setStatus] = useState('idle'); // idle | loading | error
@@ -34,6 +34,16 @@ export default function AiChatPanel({ buildContext, suggestions = [], title = '�
   const listRef = useRef(null);
 
   useEffect(() => { listRef.current?.scrollTo({ top: listRef.current.scrollHeight, behavior: 'smooth' }); }, [messages, status]);
+
+  // A question handed in by the parent (e.g. the home search box) is asked once per value
+  const askedRef = useRef('');
+  useEffect(() => {
+    if (initialQuestion && askedRef.current !== initialQuestion) {
+      askedRef.current = initialQuestion;
+      ask(initialQuestion);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialQuestion]);
 
   const ask = async (question) => {
     const q = String(question || '').trim();

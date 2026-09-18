@@ -40,6 +40,7 @@ import { useLocalStorage } from '../hooks/useLocalStorage';
 import { loadBox, saveBox, parseSwexExport, getArtifactsFromBox, loadDemoBox, getMonsterCatalogInfo, isNonSummonableLd5 } from '../utils/swexImport';
 import { loadUserBoxFromDB, saveUserBoxToDB } from '../services/storageService';
 import { exportProfileCard } from '../utils/cardExporter';
+import AiChatPanel from '../components/AiChatPanel';
 
 const POPULAR_PRESETS = [
   { label: 'Seara + Orion + Perna', defKey: 'Seara,Orion,Perna', monsters: ['Seara', 'Orion', 'Perna'] },
@@ -106,11 +107,18 @@ export default function DashboardView({ onNavigate }) {
     setTimeout(() => setCopiedCode(null), 2500);
   };
 
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
+  // Questions go to the Summoners War coach; short names route to the player / monster pages
+  const [aiQuestion, setAiQuestion] = useState('');
+  const looksLikeQuestion = (q) => /[?？]|ยังไง|อย่างไร|อะไร|ทำไม|ควร|ไหม|มั้ย|แนะนำ|จัดทีม|เทียบ|ดีกว่า|แก้ทาง|ใส่รูน|ตี(?:ยังไง|ไง)/i.test(q) || /(?:^|\W)(how|what|why|should|vs)(?:\W|$)/i.test(q) || q.split(/\s+/).length >= 4;
+
+  const handleSearchSubmit = (e, forceAi = false) => {
+    e?.preventDefault();
     if (!searchQuery.trim()) return;
     const query = searchQuery.trim();
-    // Auto route based on query
+    if (forceAi || looksLikeQuestion(query)) {
+      setAiQuestion(query);
+      return;
+    }
     if (['lest', 'diligent', 'pinkroid', 'ลูกพี่', 'braveheart'].some(p => query.toLowerCase().includes(p))) {
       onNavigate('player-tracker', { initialPlayer: query });
     } else {
@@ -250,16 +258,38 @@ export default function DashboardView({ onNavigate }) {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="ค้นหาชื่อผู้เล่น (Lest, Diligent) • มอนสเตอร์ (Byungchul, Juno) • ทีม 3MDC..."
-                className="w-full bg-[#0d1422]/90 border border-white/15 focus:border-cyan-400 hover:border-white/25 rounded-2xl pl-12 pr-28 py-3.5 sm:py-4 text-sm sm:text-base text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-400/20 transition-all shadow-2xl backdrop-blur-xl"
+                placeholder="พิมพ์ชื่อผู้เล่น / มอนสเตอร์ หรือถามโค้ช AI เช่น Seara แก้ยังไง..."
+                className="w-full bg-[#0d1422]/90 border border-white/15 focus:border-cyan-400 hover:border-white/25 rounded-2xl pl-12 pr-[11.5rem] sm:pr-[13rem] py-3.5 sm:py-4 text-sm sm:text-base text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-400/20 transition-all shadow-2xl backdrop-blur-xl"
               />
-              <button
-                type="submit"
-                className="absolute right-2 px-4 py-2 sm:py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white text-xs sm:text-sm font-bold shadow-lg shadow-blue-500/25 transition-all cursor-pointer"
-              >
-                ค้นหาด่วน
-              </button>
+              <div className="absolute right-2 flex items-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={(e) => handleSearchSubmit(e, true)}
+                  title="ถามโค้ช AI (เฉพาะเรื่อง Summoners War)"
+                  className="px-3 py-2 sm:py-2.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 text-amber-200 text-xs sm:text-sm font-bold flex items-center gap-1.5 transition-all cursor-pointer"
+                >
+                  <Sparkles className="w-3.5 h-3.5" /> ถาม AI
+                </button>
+                <button
+                  type="submit"
+                  className="px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white text-xs sm:text-sm font-bold shadow-lg shadow-blue-500/25 transition-all cursor-pointer"
+                >
+                  ค้นหา
+                </button>
+              </div>
             </div>
+
+            {aiQuestion && (
+              <div className="text-left mt-3">
+                <AiChatPanel
+                  key={aiQuestion}
+                  initialQuestion={aiQuestion}
+                  title="โค้ช AI — ตอบเฉพาะเรื่อง Summoners War"
+                  placeholder="ถามต่อได้เลย..."
+                  buildContext={() => ({ scope: 'general' })}
+                />
+              </div>
+            )}
 
             {/* Quick Hot Suggestions */}
             <div className="flex flex-wrap items-center justify-center gap-2 pt-3 text-xs">
