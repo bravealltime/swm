@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 swgt_raw/
+.env
+.env.*
+!.env.example
 
 # Editor directories and files
 .vscode/*
