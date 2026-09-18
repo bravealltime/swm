@@ -424,34 +424,36 @@ function EmptyState({ onFile, onWatch, onLoadDemo }) {
 }
 
 function BoxHeader({ box, onNavigate, onClearDemo, onImport }) {
-  const nat5 = box.units.filter((u) => (monsterOf(u.masterId)?.stars || u.naturalStars || 0) >= 5).length;
-  const six = box.units.filter((u) => u.stars === 6).length;
-  const runes = box.runes?.length || 0;
+  const units = box?.units || [];
+  const wizard = box?.wizard || { name: 'PedictU', level: 100, country: 'TH' };
+  const nat5 = units.filter((u) => (monsterOf(u.masterId)?.stars || u.naturalStars || 0) >= 5).length;
+  const six = units.filter((u) => u.stars === 6).length;
+  const runes = box?.runes?.length || 0;
   return (
     <div className={`${card} p-5 sm:p-6 flex flex-col lg:flex-row lg:items-center justify-between gap-4`}>
       <div className="flex items-center gap-4">
-        <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-2xl">{flagFromCountry(box.wizard.country)}</div>
+        <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-2xl">{flagFromCountry(wizard.country)}</div>
         <div>
           <div className="text-xl sm:text-2xl font-black text-white flex items-center gap-2 flex-wrap">
-            {box.wizard.name}
-            <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-white/[0.05] border border-white/10 text-slate-300">Lv.{box.wizard.level}</span>
-            {box.wizard.guild && <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-300">{box.wizard.guild}</span>}
-            {box.isDemo && (
+            {wizard.name}
+            <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-white/[0.05] border border-white/10 text-slate-300">Lv.{wizard.level}</span>
+            {wizard.guild && <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-300">{wizard.guild}</span>}
+            {box?.isDemo && (
               <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 flex items-center gap-1">
                 <Sparkles className="w-3.5 h-3.5" /> บัญชีตัวอย่าง Guardian G3 (Demo)
               </span>
             )}
           </div>
           <div className="text-xs text-slate-400 mt-1">
-            {box.isDemo
+            {box?.isDemo
               ? 'ข้อมูลจำลองเพื่อการทดสอบทุกฟังก์ชัน • สามารถกด "นำเข้าใหม่" ด้านบนเพื่อใส่ไฟล์จริงของคุณ'
-              : `นำเข้าเมื่อ ${box.importedAt?.slice(0, 16).replace('T', ' ') || '-'} • เก็บในเครื่องนี้เท่านั้น`}
+              : `นำเข้าเมื่อ ${box?.importedAt?.slice(0, 16).replace('T', ' ') || '-'} • เก็บในเครื่องนี้เท่านั้น`}
           </div>
         </div>
       </div>
       <div className="grid grid-cols-4 gap-2 sm:gap-3 text-center">
         {[
-          ['มอนสเตอร์', box.units.length, 'text-white'],
+          ['มอนสเตอร์', units.length, 'text-white'],
           ['เนเชอรัล 5★', nat5, 'text-amber-300'],
           ['ระดับ 6★', six, 'text-emerald-300'],
           ['รูน', runes, 'text-purple-300'],
