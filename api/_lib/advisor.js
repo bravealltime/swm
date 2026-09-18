@@ -345,7 +345,8 @@ const SYSTEM = `คุณคือโค้ช Summoners War ระดับ Gua
 1. ใช้เฉพาะข้อมูลสกิล/สถิติที่ให้มาในข้อความนี้ ห้ามเดาสกิลหรือธาตุของมอนสเตอร์เอง ถ้าข้อมูลไม่พอให้บอกว่าไม่พอ
 2. อ้างอิงชื่อสกิลจริงเมื่ออธิบายกลไก (เช่น "S3 กวาดล้างลดเกจ 100%")
 3. ให้แผนที่ลงมือทำได้: ลำดับเทิร์น, ใครควรเร็วกว่าใคร, เป้าหมายแรก, จุดเสี่ยง
-4. ไม่ต้องทักทายหรือสรุปซ้ำ ยาวไม่เกิน ~250 คำ`;
+4. ไม่ต้องทักทายหรือสรุปซ้ำ ยาวไม่เกิน ~250 คำ
+5. ห้ามใส่ URL ภายนอกหรือแนะนำให้ออกนอกเว็บ SWM เด็ดขาด หากแนะนำหน้าเว็บให้ใช้ลิงก์ภายใน [ข้อความ](/view-id) เท่านั้น`;
 
 function mdcPrompt({ defense, counters = [] }) {
   const defNames = (defense?.monsters || []).map((m) => m.name || m);
@@ -418,9 +419,6 @@ function findPatchFacts(text) {
       if (sampleChanges) {
         lines.push(`  ตัวอย่างการปรับสมดุลเด่น:\n${sampleChanges}`);
       }
-      if (p.link) {
-        lines.push(`  ลิงก์รายละเอียด: ${p.link}`);
-      }
     }
 
     return lines.join('\n');
@@ -432,6 +430,11 @@ function findPatchFacts(text) {
 const CHAT_SYSTEM = `คุณคือโค้ช Summoners War: Sky Arena ระดับ Guardian ประจำเว็บ SWM คุยเป็นภาษาไทยแบบเพื่อนร่วมกิลด์ที่เก่งเกม กระชับ ตรงประเด็น
 ขอบเขต: ตอบเฉพาะเรื่อง Summoners War เท่านั้น (มอนสเตอร์ รูน อาร์ติแฟกต์ RTA อารีน่า กิลด์วอร์/Siege ดันเจี้ยน อีเวนต์ การจัดทีม แพตช์อัปเดต)
 ถ้าคำถามไม่เกี่ยวกับ Summoners War ให้ตอบสั้น ๆ ประโยคเดียวว่าโค้ชตอบเฉพาะเรื่อง Summoners War แล้วชวนถามเรื่องเกมแทน
+
+⛔ กฎเหล็กสูงสุดเรื่องห้ามออกนอกเว็บ SWM (สำคัญที่สุด ห้ามละเมิดเด็ดขาด):
+1. ห้ามแนะนำให้ออกนอกเว็บ SWM เด็ดขาด: ห้ามใส่ URL ภายนอก (ห้ามใส่ลิงก์หรือบอกให้ไปเว็บ เช่น withhive.com, com2us, swgt.io, youtube, reddit หรือเว็บไซต์อื่นๆ)
+2. ห้ามบอกให้ผู้ใช้ "ไปดูที่หน้าเว็บทางการ" หรือ "ไปติดตามต่อที่..." หรือ "หาข้อมูลเพิ่มเติมภายนอก" ทุกเรื่องต้องสรุปข้อมูลให้ครบถ้วนในคำตอบนี้ทันที
+3. การแนะนำเพิ่มเติมต้องแนะนำเฉพาะหน้าและเครื่องมือภายในเว็บ SWM ของเราเท่านั้น โดยใช้รูปแบบลิงก์ปุ่มภายใน [ข้อความปุ่ม](/view-id) เช่น [เปิดดูหน้า Balance Patch ในเว็บ](/balance) เสมอ
 
 ความรู้หลักและแนวทางการตอบ:
 1. การใส่รูนและปั้นตัวละคร: อิงจาก "แนวทางการใส่รูนและสเตตัสเป้าหมาย Guardian" ที่แนบมา บอกเซ็ต (เช่น Violent/Will), ออฟหลักช่อง 2/4/6 (เช่น SPD/CD/ATK%), ซับสเตตัสที่ต้องเน้น, และอาร์ติแฟกต์
@@ -507,9 +510,14 @@ async function chatPrompt({ question, context = {}, history = [] }) {
       const searchTarget = (q.includes('patch') || q.includes('แพท') || q.includes('update') || q.includes('อัปเดต'))
         ? `Summoners War balance patch update notes Com2uS`
         : `Summoners War ${q}`;
-      const searchSnippets = await searchLiveWeb(searchTarget, 4, 4000);
-      if (searchSnippets && searchSnippets.length > 0) {
-        parts.push(`[ข้อมูลผลการค้นหาเว็บสด (Live Web Grounding)]:\n${searchSnippets.map((s, i) => `${i + 1}. ${s}`).join('\n')}`);
+      const rawSnippets = await searchLiveWeb(searchTarget, 4, 4000);
+      const cleanSnippets = (rawSnippets || []).map(s =>
+        s.replace(/https?:\/\/[^\s)]+/gi, '')
+         .replace(/\b(?:www\.)?[a-zA-Z0-9-]+\.(?:com|io|net|org|kr|gg)\b[^\s)]*/gi, '')
+         .trim()
+      ).filter(s => s.length > 15);
+      if (cleanSnippets.length > 0) {
+        parts.push(`[ข้อมูลผลการค้นหาเว็บสด (Live Web Grounding)]:\n${cleanSnippets.map((s, i) => `${i + 1}. ${s}`).join('\n')}`);
       }
     } catch {}
   }

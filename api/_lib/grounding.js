@@ -22,7 +22,12 @@ export async function searchLiveWeb(query, maxSnippets = 4, timeoutMs = 5000) {
     let match;
 
     while ((match = regex.exec(html)) !== null && results.length < maxSnippets) {
-      const snippet = match[2].replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+      const snippet = match[2]
+        .replace(/<[^>]+>/g, '')
+        .replace(/https?:\/\/[^\s)]+/gi, '')
+        .replace(/\b(?:www\.)?[a-zA-Z0-9-]+\.(?:com|io|net|org|kr|gg)\b[^\s)]*/gi, '')
+        .replace(/\s+/g, ' ')
+        .trim();
       if (snippet && snippet.length > 20) {
         results.push(snippet);
       }

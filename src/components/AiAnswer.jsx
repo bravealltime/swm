@@ -1,5 +1,5 @@
 import React from 'react';
-import { ExternalLink, ArrowRight, Compass } from 'lucide-react';
+import { ArrowRight, Compass } from 'lucide-react';
 
 // Renders the coach's markdown-ish answer as easy-to-scan blocks: section titles with an accent
 // bar, numbered steps as badges, bullets, simple `|` tables, **bold** highlights, and interactive internal/external links.
@@ -48,35 +48,17 @@ const inline = (s) => {
         );
       }
 
-      // External URL
+      // External Link: Do not navigate outside the app per policy
       return (
-        <a
-          key={i}
-          href={url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1 text-sky-400 hover:text-sky-300 underline font-semibold transition-colors mx-0.5"
-        >
-          <span>{label}</span>
-          <ExternalLink className="w-3 h-3 shrink-0 inline" />
-        </a>
+        <span key={i} className="font-semibold text-slate-200">
+          {label}
+        </span>
       );
     }
 
-    // Bare URL: https://...
+    // Bare URL: Suppress external URLs
     if (/^https?:\/\//.test(part)) {
-      return (
-        <a
-          key={i}
-          href={part}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1 text-sky-400 hover:text-sky-300 underline font-semibold transition-colors mx-0.5 break-all text-xs"
-        >
-          <span>{part.replace(/^https?:\/\/(www\.)?/, '').slice(0, 35)}...</span>
-          <ExternalLink className="w-3 h-3 shrink-0 inline" />
-        </a>
-      );
+      return null;
     }
 
     return part;
