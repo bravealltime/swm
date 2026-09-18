@@ -91,15 +91,14 @@ export default function AuthModal({ isOpen, onClose }) {
     setErrorMsg('');
     try {
       const data = await signUpWithEmail(email, password);
-      if (data.session) {
-        setSuccessMsg('สมัครสมาชิกสำเร็จและเข้าสู่ระบบเรียบร้อยแล้ว!');
-        setTimeout(() => {
-          onClose();
-          setSuccessMsg('');
-        }, 1500);
-      } else {
-        setSuccessMsg('สมัครสมาชิกสำเร็จ! กรุณาตรวจสอบอีเมลของคุณเพื่อยืนยันบัญชี');
+      if (!data.session) {
+        await signInWithEmail(email, password);
       }
+      setSuccessMsg('สมัครสมาชิกสำเร็จและเข้าสู่ระบบเรียบร้อยแล้ว!');
+      setTimeout(() => {
+        onClose();
+        setSuccessMsg('');
+      }, 1500);
     } catch (err) {
       setErrorMsg(err.message || 'สมัครสมาชิกไม่สำเร็จ');
     } finally {
@@ -318,45 +317,15 @@ export default function AuthModal({ isOpen, onClose }) {
               </form>
             ) : (
               <div className="space-y-4">
-                {/* 1-Click Google Login */}
-                <button
-                  type="button"
-                  onClick={() => handleOAuth('google')}
-                  disabled={loading || !isConfigured}
-                  className="w-full py-2.5 px-4 rounded-xl bg-white hover:bg-slate-100 text-slate-900 font-bold text-xs flex items-center justify-center gap-2.5 shadow-lg transition cursor-pointer disabled:opacity-50"
-                >
-                  <svg className="w-4 h-4" viewBox="0 0 24 24">
-                    <path
-                      fill="#EA4335"
-                      d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.4l3.7 2.9C6.2 7.3 8.9 5 12 5z"
-                    />
-                    <path
-                      fill="#4285F4"
-                      d="M23.5 12.3c0-.8-.1-1.7-.2-2.3H12v4.6h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.9z"
-                    />
-                    <path
-                      fill="#FBBC05"
-                      d="M5.3 14.7c-.2-.7-.4-1.5-.4-2.3 0-.8.2-1.6.4-2.3L1.6 7.2C.6 9.2 0 11.5 0 14s.6 4.8 1.6 6.8l3.7-3.1c0-.1 0 0 0 0z"
-                    />
-                    <path
-                      fill="#34A853"
-                      d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.3-6.7-5.3L1.6 16.1C3.5 19.9 7.4 23 12 23z"
-                    />
-                  </svg>
-                  <span>เข้าสู่ระบบด้วย Google</span>
-                </button>
-
-                <div className="relative flex items-center justify-center my-3">
-                  <div className="border-t border-white/10 w-full" />
-                  <span className="bg-[#0a0f19] px-3 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
-                    หรือใช้อีเมล
-                  </span>
-                </div>
-
-                {/* Email Form */}
+                {/* Email Form as Primary */}
                 <form onSubmit={mode === 'login' ? handleSignIn : handleSignUp} className="space-y-3.5">
+                  <div className="p-2.5 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-[11px] flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-cyan-400 shrink-0" />
+                    <span>กรอกอีเมลและรหัสผ่านเพื่อเข้าใช้งานได้ทันที (ยืนยันอัตโนมัติ 100%)</span>
+                  </div>
+
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">อีเมล</label>
+                    <label className="block text-xs font-semibold text-slate-300 mb-1">อีเมล (Email)</label>
                     <div className="relative">
                       <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
                       <input
@@ -372,7 +341,7 @@ export default function AuthModal({ isOpen, onClose }) {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">รหัสผ่าน</label>
+                    <label className="block text-xs font-semibold text-slate-300 mb-1">รหัสผ่าน (Password)</label>
                     <div className="relative">
                       <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
                       <input
@@ -411,9 +380,45 @@ export default function AuthModal({ isOpen, onClose }) {
                     className="w-full py-2.5 mt-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white text-xs font-bold shadow-lg shadow-cyan-500/20 transition flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
                   >
                     {loading && <Loader2 className="w-4 h-4 animate-spin" />}
-                    <span>{mode === 'login' ? 'เข้าสู่ระบบ' : 'สร้างบัญชีผู้ใช้'}</span>
+                    <span>{mode === 'login' ? 'เข้าสู่ระบบ (Sign In)' : 'สร้างบัญชีผู้ใช้ (Sign Up)'}</span>
                   </button>
                 </form>
+
+                <div className="relative flex items-center justify-center my-3">
+                  <div className="border-t border-white/10 w-full" />
+                  <span className="bg-[#0a0f19] px-3 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                    หรือเข้าด้วย Social
+                  </span>
+                </div>
+
+                {/* Google Login with explanation */}
+                <button
+                  type="button"
+                  onClick={() => handleOAuth('google')}
+                  disabled={loading || !isConfigured}
+                  className="w-full py-2 px-4 rounded-xl bg-white/[0.05] hover:bg-white/[0.09] border border-white/10 text-slate-300 hover:text-white font-medium text-xs flex items-center justify-center gap-2.5 transition cursor-pointer disabled:opacity-50"
+                  title="ต้องเปิดใช้งาน Google Provider ในแดชบอร์ด Supabase ก่อน"
+                >
+                  <svg className="w-4 h-4" viewBox="0 0 24 24">
+                    <path
+                      fill="#EA4335"
+                      d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.4l3.7 2.9C6.2 7.3 8.9 5 12 5z"
+                    />
+                    <path
+                      fill="#4285F4"
+                      d="M23.5 12.3c0-.8-.1-1.7-.2-2.3H12v4.6h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.9z"
+                    />
+                    <path
+                      fill="#FBBC05"
+                      d="M5.3 14.7c-.2-.7-.4-1.5-.4-2.3 0-.8.2-1.6.4-2.3L1.6 7.2C.6 9.2 0 11.5 0 14s.6 4.8 1.6 6.8l3.7-3.1c0-.1 0 0 0 0z"
+                    />
+                    <path
+                      fill="#34A853"
+                      d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.3-6.7-5.3L1.6 16.1C3.5 19.9 7.4 23 12 23z"
+                    />
+                  </svg>
+                  <span>เข้าสู่ระบบด้วย Google (ต้องเปิด OAuth ก่อน)</span>
+                </button>
               </div>
             )}
           </>
