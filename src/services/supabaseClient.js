@@ -3,6 +3,9 @@ import { createClient } from '@supabase/supabase-js';
 const STORAGE_KEY_URL = 'swm_supabase_url';
 const STORAGE_KEY_ANON = 'swm_supabase_anon_key';
 
+export const DEFAULT_SUPABASE_URL = 'https://cpcuyhfjnbpjvfdedspa.supabase.co';
+export const DEFAULT_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwY3V5aGZqbmJwanZmZGVkc3BhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk3MjQxMDAsImV4cCI6MjEwNTMwMDEwMH0.0bFtwQ-n-ebTLEZDO1fUmVL0fYX71mMjMDrdfMSnNWI';
+
 let cachedClient = null;
 
 /**
@@ -15,8 +18,8 @@ export function getSupabaseCredentials() {
   const localUrl = typeof window !== 'undefined' ? localStorage.getItem(STORAGE_KEY_URL) : null;
   const localAnon = typeof window !== 'undefined' ? localStorage.getItem(STORAGE_KEY_ANON) : null;
 
-  const url = (envUrl || localUrl || '').trim();
-  const anonKey = (envAnon || localAnon || '').trim();
+  const url = (localUrl || envUrl || DEFAULT_SUPABASE_URL).trim();
+  const anonKey = (localAnon || envAnon || DEFAULT_SUPABASE_ANON_KEY).trim();
 
   return { url, anonKey, isConfigured: Boolean(url && anonKey) };
 }
