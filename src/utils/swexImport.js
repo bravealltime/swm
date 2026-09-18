@@ -425,7 +425,14 @@ export function loadDemoBox() {
 export function loadBox() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : null;
+    if (!raw) return null;
+    const data = JSON.parse(raw);
+    if (data && data.unit_list && !Array.isArray(data.units)) {
+      const parsed = parseSwexExport(data);
+      saveBox(parsed);
+      return parsed;
+    }
+    return data;
   } catch {
     return null;
   }

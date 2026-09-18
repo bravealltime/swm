@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { getSupabase, isSupabaseConfigured, saveSupabaseConfig, clearSupabaseConfig } from '../services/supabaseClient';
-import { saveBox, loadBox } from '../utils/swexImport';
+import { saveBox, loadBox, parseSwexExport } from '../utils/swexImport';
 
 const AuthContext = createContext(null);
 
@@ -96,9 +96,17 @@ export function AuthProvider({ children }) {
       return { success: false, error: 'User not logged in' };
     }
 
-    const box = boxToSync || loadBox();
+    let box = boxToSync || loadBox();
     if (!box) {
       return { success: false, error: 'No profile box to sync' };
+    }
+
+    if (box.unit_list && !Array.isArray(box.units)) {
+      try {
+        box = parseSwexExport(box);
+      } catch (err) {
+        console.warn('Failed to parse raw box for cloud sync:', err);
+      }
     }
 
     setSyncStatus('syncing');
@@ -147,9 +155,17 @@ export function AuthProvider({ children }) {
       }
 
       if (data && data.box_data) {
-        saveBox(data.box_data);
+        let box = data.box_data;
+        if (box.unit_list && !Array.isArray(box.units)) {
+          try {
+            box = parseSwexExport(box);
+          } catch (err) {
+            console.warn('Failed to parse cloud box:', err);
+          }
+        }
+        saveBox(box);
         setSyncStatus('synced');
-        return data.box_data;
+        return box;
       }
 
       setSyncStatus('idle');
