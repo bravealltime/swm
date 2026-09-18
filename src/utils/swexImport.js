@@ -2,7 +2,7 @@
 // only what the site needs. Nothing is uploaded anywhere; the compact result is stored
 // in localStorage under STORAGE_KEY.
 
-import { STORAGE_KEY, BOX_VERSION, loadBox, loadBoxAsync, saveBox, clearBox } from './boxStorage';
+import { STORAGE_KEY, BOX_VERSION, loadBox, loadBoxAsync, saveBox, clearBox } from './boxStorage.js';
 export { STORAGE_KEY, BOX_VERSION, loadBox, loadBoxAsync, saveBox, clearBox };
 
 const ELEMENTS = { 1: 'water', 2: 'fire', 3: 'wind', 4: 'light', 5: 'dark' };
@@ -16,7 +16,7 @@ export const RUNE_SETS = {
 };
 const SET_PIECES = { 1: 2, 2: 2, 3: 4, 4: 2, 5: 4, 6: 2, 7: 2, 8: 4, 10: 4, 11: 4, 13: 4, 14: 2, 15: 2, 16: 2, 17: 2, 18: 2, 19: 2, 20: 2, 21: 2, 22: 2, 23: 2, 24: 2, 25: 1 };
 
-import allMonstersData from '../data/allMonsters.json';
+import allMonstersData from '../data/allMonsters.json' with { type: 'json' };
 
 const MONSTER_ID_MAP = new Map();
 allMonstersData.forEach((m) => {
@@ -249,8 +249,10 @@ export function parseSwexExport(json) {
       const r = runeSummary(u);
       const masterId = Number(u.unit_master_id);
       const info = getMonsterCatalogInfo(masterId);
-      for (const rune of r.runes) runes.push(compactRune(rune, masterId));
+      const uid = Number(u.unit_id) || 0;
+      for (const rune of r.runes) runes.push({ ...compactRune(rune, masterId), uid });
       return {
+        uid,
         masterId,
         name: info?.name || '',
         thaiName: info?.thaiName || info?.name || '',

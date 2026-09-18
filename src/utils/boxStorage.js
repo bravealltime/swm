@@ -1,10 +1,10 @@
 // Lightweight persistence for the imported box. Kept separate from swexImport.js so the
 // app shell (App, AuthContext, modals) can read/write the box without pulling the monster
 // catalog and parser into the main bundle.
-import { saveUserBoxToDB, loadUserBoxFromDB, clearUserBoxFromDB } from '../services/storageService';
+import { saveUserBoxToDB, loadUserBoxFromDB, clearUserBoxFromDB } from '../services/storageService.js';
 
 export const STORAGE_KEY = 'swm:mybox';
-export const BOX_VERSION = 4;
+export const BOX_VERSION = 5;
 
 /** Synchronous read of the parsed box (localStorage mirror). Raw, unparsed SWEX dumps are ignored. */
 export function loadBox() {

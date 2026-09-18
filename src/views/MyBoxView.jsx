@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import MonsterAvatar from '../components/MonsterAvatar';
 import RuneIcon from '../components/RuneIcon';
+import MonsterDetailModal from '../components/MonsterDetailModal';
 import ArtifactIcon from '../components/ArtifactIcon';
 import allMonstersData from '../data/allMonsters.json';
 import guardianMeta from '../data/swrtGuardianMeta.json';
@@ -74,6 +75,7 @@ export default function MyBoxView({ onNavigate, tab: initialTab, subItem }) {
   }, [initialTab, subItem]);
 
   const owned = useMemo(() => ownedIdSet(box), [box]);
+  const [openUnit, setOpenUnit] = useState(null); // unit (with .info) shown in the rune/artifact page
   const mdc = useMdcAnalysis(owned, !!box);
 
   const handleLoadDemo = () => {
@@ -254,8 +256,8 @@ export default function MyBoxView({ onNavigate, tab: initialTab, subItem }) {
         })}
       </div>
 
-      {tab === 'overview' && (box ? <Overview box={box} mdc={mdc} owned={owned} onTab={setTab} onNavigate={onNavigate} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} />)}
-      {tab === 'box' && (box ? <BoxGrid box={box} onNavigate={onNavigate} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} />)}
+      {tab === 'overview' && (box ? <Overview box={box} mdc={mdc} owned={owned} onTab={setTab} onNavigate={onNavigate} onOpenUnit={setOpenUnit} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} />)}
+      {tab === 'box' && (box ? <BoxGrid box={box} onNavigate={onNavigate} onOpenUnit={setOpenUnit} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} />)}
       {tab === 'pokedex' && <PokedexCollection box={box} onNavigate={onNavigate} onLoadDemo={handleLoadDemo} />}
       {tab === 'artifacts' && <ArtifactSearchEngine box={box} onNavigate={onNavigate} />}
       {tab === 'efficiency' && (box ? <RuneEfficiencyAndQuads box={box} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} />)}
@@ -264,6 +266,10 @@ export default function MyBoxView({ onNavigate, tab: initialTab, subItem }) {
       {tab === 'meta' && <MetaCoverage owned={owned} />}
       {tab === 'speed' && (box ? <SpeedTuner box={box} onNavigate={onNavigate} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} />)}
       {tab === 'runes' && (box ? <Runes box={box} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} />)}
+
+      {openUnit && box && (
+        <MonsterDetailModal unit={openUnit} box={box} onClose={() => setOpenUnit(null)} onNavigate={(view, params) => { setOpenUnit(null); onNavigate(view, params); }} />
+      )}
     </div>
   );
 }
@@ -475,7 +481,7 @@ function BoxHeader({ box, onNavigate, onClearDemo, onImport }) {
 // ---------------------------------------------------------------------------
 // Overview
 
-function Overview({ box, mdc, owned, onTab, onNavigate }) {
+function Overview({ box, mdc, owned, onTab, onNavigate, onOpenUnit }) {
   const withInfo = useMemo(() => box.units.map((u) => ({ ...u, info: monsterOf(u.masterId) })), [box]);
   const fastest = useMemo(() => [...withInfo].filter((u) => u.info).sort((a, b) => b.spd - a.spd).slice(0, 6), [withInfo]);
   const bestRuned = useMemo(() => [...withInfo].filter((u) => u.info && u.runes >= 6).sort((a, b) => (b.runeEff || 0) - (a.runeEff || 0)).slice(0, 5), [withInfo]);
@@ -508,7 +514,7 @@ function Overview({ box, mdc, owned, onTab, onNavigate }) {
           </div>
           <div className="flex gap-3 overflow-x-auto pb-1">
             {latestNat5.map((u, i) => (
-              <button key={`${u.masterId}-${u.obtained}-${i}`} onClick={() => onNavigate('where2use', { initialMonster: u.info.name })}
+              <button key={`${u.masterId}-${u.obtained}-${i}`} onClick={() => onOpenUnit(u)}
                 className={`shrink-0 w-28 p-2.5 rounded-2xl border text-center cursor-pointer transition-colors ${i === 0 ? 'bg-amber-500/[0.08] border-amber-500/40 hover:border-amber-400' : 'bg-[#0a0f18] border-slate-800 hover:border-white/20'}`}>
                 <div className="flex justify-center"><MonsterAvatar monster={u.info} size="md" showStars={false} /></div>
                 <div className="text-xs font-bold text-white truncate mt-1.5">{u.info.name}</div>
@@ -532,7 +538,7 @@ function Overview({ box, mdc, owned, onTab, onNavigate }) {
         <div className={`${card} p-4 space-y-3`}>
           <h3 className="text-sm font-bold text-white flex items-center gap-2"><Zap className="w-4 h-4 text-amber-400" /> เร็วที่สุด 6 ตัว (รวมรูน)</h3>
           {fastest.map((u, i) => (
-            <button key={`${u.masterId}-${i}`} onClick={() => onNavigate('where2use', { initialMonster: u.info.name })} className="w-full flex items-center gap-3 text-left hover:bg-white/[0.03] rounded-xl p-1 cursor-pointer">
+            <button key={`${u.masterId}-${i}`} onClick={() => onOpenUnit(u)} className="w-full flex items-center gap-3 text-left hover:bg-white/[0.03] rounded-xl p-1 cursor-pointer">
               <span className="text-[11px] font-mono text-slate-500 w-4">{i + 1}</span>
               <MonsterAvatar monster={u.info} size="xs" showStars={false} />
               <div className="min-w-0 flex-1">
@@ -621,7 +627,7 @@ function NextSummons({ list }) {
 
 const SORTS = [['spd', 'SPD'], ['runeEff', 'รูน %'], ['hp', 'HP'], ['atk', 'ATK'], ['def', 'DEF'], ['stars', 'ดาว/เลเวล'], ['obtained', 'ได้มาล่าสุด']];
 
-function BoxGrid({ box, onNavigate }) {
+function BoxGrid({ box, onNavigate, onOpenUnit }) {
   const [element, setElement] = useState('all');
   const [minStars, setMinStars] = useState(5);
   const [query, setQuery] = useState('');
@@ -671,11 +677,11 @@ function BoxGrid({ box, onNavigate }) {
         </div>
       </div>
 
-      <div className="text-xs text-slate-400">แสดง {rows.length} จาก {box.units.length} ตัว • คลิกเพื่อดูว่าใช้ที่ไหนได้บ้าง</div>
+      <div className="text-xs text-slate-400">แสดง {rows.length} จาก {box.units.length} ตัว • คลิกเพื่อเปิดหน้ารูน/อาร์ติแฟกต์ของตัวนั้น</div>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 gap-2">
         {rows.map((u, i) => (
-          <button key={`${u.masterId}-${i}`} onClick={() => u.info && onNavigate('where2use', { initialMonster: u.info.name })}
-            title={u.info ? `ดูว่า ${u.info.name} ใช้ที่ไหนได้บ้าง` : `ไม่พบ #${u.masterId} ในสารานุกรม`}
+          <button key={`${u.uid || u.masterId}-${i}`} onClick={() => onOpenUnit(u)}
+            title={u.info ? `ดูรูน อาร์ติแฟกต์ และสเตตัสของ ${u.info.name}` : `ไม่พบ #${u.masterId} ในสารานุกรม`}
             className={`${card} p-3 hover:border-emerald-500/40 flex items-center gap-3 text-left cursor-pointer`}>
             {u.info ? <MonsterAvatar monster={u.info} size="sm" showStars={false} /> : <div className="w-11 h-11 rounded-xl bg-slate-800 shrink-0" />}
             <div className="min-w-0">
