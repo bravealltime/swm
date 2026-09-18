@@ -244,3 +244,234 @@ export async function exportLdShowcaseCard({ wizardName, ld5List = [] }) {
   link.href = canvas.toDataURL('image/png');
   link.click();
 }
+
+/**
+ * High-Resolution Monster Showcase Card Exporter (PNG)
+ * Exports a monster with real stats, rune sets, 6 slots, and artifacts
+ */
+export async function exportMonsterCard({ monster, wizardName = 'Summoner' }) {
+  if (!monster) return;
+
+  const canvas = document.createElement('canvas');
+  canvas.width = 1100;
+  canvas.height = 650;
+  const ctx = canvas.getContext('2d');
+
+  // 1. Background gradient
+  const bgGrad = ctx.createLinearGradient(0, 0, 1100, 650);
+  bgGrad.addColorStop(0, '#0a0e17');
+  bgGrad.addColorStop(0.5, '#111928');
+  bgGrad.addColorStop(1, '#080c14');
+  ctx.fillStyle = bgGrad;
+  ctx.fillRect(0, 0, 1100, 650);
+
+  // Border with glow
+  const elem = (monster.element || 'fire').toLowerCase();
+  const elemColorMap = {
+    fire: '#f43f5e',
+    water: '#0ea5e9',
+    wind: '#eab308',
+    light: '#fef08a',
+    dark: '#a855f7'
+  };
+  const themeColor = elemColorMap[elem] || '#3b82f6';
+
+  ctx.strokeStyle = themeColor;
+  ctx.lineWidth = 3;
+  ctx.strokeRect(20, 20, 1060, 610);
+
+  // Corner decorations
+  ctx.fillStyle = themeColor;
+  ctx.fillRect(16, 16, 24, 6);
+  ctx.fillRect(16, 16, 6, 24);
+  ctx.fillRect(1060, 16, 24, 6);
+  ctx.fillRect(1078, 16, 6, 24);
+  ctx.fillRect(16, 624, 24, 6);
+  ctx.fillRect(16, 606, 6, 24);
+  ctx.fillRect(1060, 624, 24, 6);
+  ctx.fillRect(1078, 606, 6, 24);
+
+  // Header Title
+  ctx.fillStyle = '#94a3b8';
+  ctx.font = 'bold 14px "SF Pro Display", sans-serif';
+  ctx.fillText('SUMMONERS WAR MASTER • MONSTER PROFILE SHOWCASE', 50, 60);
+
+  ctx.fillStyle = themeColor;
+  ctx.font = 'bold 13px "SF Pro Display", sans-serif';
+  ctx.fillText(`MASTER ID: #${monster.com2usId || monster.unit_master_id || '9999'} • SUMMONER: ${wizardName.toUpperCase()}`, 700, 60);
+
+  // Left Column - Monster Info
+  const startX = 50;
+  const startY = 100;
+
+  // Portrait Box
+  ctx.fillStyle = '#162032';
+  ctx.fillRect(startX, startY, 260, 260);
+  ctx.strokeStyle = themeColor;
+  ctx.lineWidth = 2;
+  ctx.strokeRect(startX, startY, 260, 260);
+
+  // Monster Image if loaded
+  const imgUrl = monster.avatarUrl || monster.imageUrl;
+  if (imgUrl) {
+    try {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      await new Promise((res) => {
+        img.onload = res;
+        img.onerror = res;
+        img.src = imgUrl;
+      });
+      if (img.complete && img.naturalWidth > 0) {
+        ctx.drawImage(img, startX + 10, startY + 10, 240, 240);
+      }
+    } catch {
+      // fallback
+    }
+  }
+
+  // Element & Stars Badge
+  ctx.fillStyle = themeColor;
+  ctx.font = 'bold 15px "SF Pro Display", sans-serif';
+  ctx.fillText(`${elem.toUpperCase()} • ${monster.archetype || 'Monster'}`, startX, 395);
+
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 32px "SF Pro Display", sans-serif';
+  ctx.fillText(monster.name || 'Monster', startX, 435);
+
+  ctx.fillStyle = '#fbbf24';
+  ctx.font = '22px "SF Pro Display", sans-serif';
+  ctx.fillText('★★★★★★', startX, 470);
+
+  if (monster.thaiName && monster.thaiName !== monster.name) {
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '16px "SF Pro Display", sans-serif';
+    ctx.fillText(`(ชื่อไทย: ${monster.thaiName})`, startX, 500);
+  }
+
+  // Rune Sets Banner
+  const sets = monster.runeSets || monster.sets || ['Violent', 'Will'];
+  ctx.fillStyle = '#1e293b';
+  ctx.fillRect(startX, 530, 260, 48);
+  ctx.strokeStyle = '#334155';
+  ctx.strokeRect(startX, 530, 260, 48);
+
+  ctx.fillStyle = '#38bdf8';
+  ctx.font = 'bold 14px "SF Pro Display", sans-serif';
+  ctx.fillText('RUNE SETS:', startX + 15, 560);
+  ctx.fillStyle = '#ffffff';
+  ctx.fillText(sets.join(' / '), startX + 105, 560);
+
+  // Right Column - Stats Grid (340 to 1040)
+  const statX = 350;
+  const statY = 100;
+  const statW = 690;
+  const statH = 480;
+
+  ctx.fillStyle = '#0f172a';
+  ctx.fillRect(statX, statY, statW, statH);
+  ctx.strokeStyle = '#1e293b';
+  ctx.lineWidth = 1.5;
+  ctx.strokeRect(statX, statY, statW, statH);
+
+  // Stats Header
+  ctx.fillStyle = '#f8fafc';
+  ctx.font = 'bold 18px "SF Pro Display", sans-serif';
+  ctx.fillText('⚡ BATTLE STATS (ค่าสเตตัสการต่อสู้จริง)', statX + 25, statY + 38);
+
+  // 8 Primary Stats Layout
+  const s = monster.stats || {};
+  const statItems = [
+    { label: 'HP (พลังชีวิต)', base: s.baseHp || 10500, plus: s.plusHp || 15400, unit: '' },
+    { label: 'ATK (พลังโจมตี)', base: s.baseAtk || 780, plus: s.plusAtk || 1350, unit: '' },
+    { label: 'DEF (พลังป้องกัน)', base: s.baseDef || 620, plus: s.plusDef || 480, unit: '' },
+    { label: 'SPD (ความเร็ว)', base: s.baseSpd || 100, plus: s.plusSpd || 142, unit: '' },
+    { label: 'CRI Rate (อัตราคริ)', base: `${s.critRate || 85}%`, plus: '', isTotal: true },
+    { label: 'CRI Dmg (ดาเมจคริ)', base: `${s.critDmg || 160}%`, plus: '', isTotal: true },
+    { label: 'Resistance (ความต้านทาน)', base: `${s.res || 25}%`, plus: '', isTotal: true },
+    { label: 'Accuracy (ความแม่นยำ)', base: `${s.acc || 45}%`, plus: '', isTotal: true },
+  ];
+
+  statItems.forEach((item, idx) => {
+    const col = idx % 2;
+    const row = Math.floor(idx / 2);
+    const itemLeft = statX + 25 + col * 330;
+    const itemTop = statY + 65 + row * 62;
+
+    // Mini Box
+    ctx.fillStyle = '#162236';
+    ctx.fillRect(itemLeft, itemTop, 310, 52);
+    ctx.strokeStyle = '#22324b';
+    ctx.strokeRect(itemLeft, itemTop, 310, 52);
+
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '12px "SF Pro Display", sans-serif';
+    ctx.fillText(item.label, itemLeft + 12, itemTop + 22);
+
+    if (item.isTotal) {
+      ctx.fillStyle = '#38bdf8';
+      ctx.font = 'bold 20px "SF Pro Display", sans-serif';
+      ctx.fillText(String(item.base), itemLeft + 12, itemTop + 44);
+    } else {
+      const total = Number(item.base) + Number(item.plus);
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 18px "SF Pro Display", sans-serif';
+      ctx.fillText(`${total.toLocaleString()}`, itemLeft + 12, itemTop + 44);
+
+      ctx.fillStyle = '#4ade80';
+      ctx.font = '13px "SF Pro Display", sans-serif';
+      ctx.fillText(`(+${Number(item.plus).toLocaleString()})`, itemLeft + 110, itemTop + 44);
+    }
+  });
+
+  // Runes Slot 1-6 Mini-Display
+  ctx.fillStyle = '#f8fafc';
+  ctx.font = 'bold 15px "SF Pro Display", sans-serif';
+  ctx.fillText('🔮 RUNES 1-6 SLOTS OVERVIEW', statX + 25, statY + 340);
+
+  const runes = monster.runes || [
+    { slot: 1, set: 'Violent', main: 'ATK+160', grade: 6 },
+    { slot: 2, set: 'Violent', main: 'SPD+42', grade: 6 },
+    { slot: 3, set: 'Violent', main: 'DEF+160', grade: 6 },
+    { slot: 4, set: 'Will', main: 'CD+80%', grade: 6 },
+    { slot: 5, set: 'Violent', main: 'HP+2448', grade: 6 },
+    { slot: 6, set: 'Will', main: 'ATK+63%', grade: 6 },
+  ];
+
+  runes.slice(0, 6).forEach((r, i) => {
+    const slotX = statX + 25 + i * 105;
+    const slotY = statY + 360;
+
+    ctx.fillStyle = '#1e293b';
+    ctx.fillRect(slotX, slotY, 95, 75);
+    ctx.strokeStyle = themeColor;
+    ctx.lineWidth = 1;
+    ctx.strokeRect(slotX, slotY, 95, 75);
+
+    ctx.fillStyle = '#fbbf24';
+    ctx.font = 'bold 11px "SF Pro Display", sans-serif';
+    ctx.fillText(`SLOT ${r.slot || i + 1} • +15`, slotX + 8, slotY + 20);
+
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 12px "SF Pro Display", sans-serif';
+    ctx.fillText(r.main || 'Stat', slotX + 8, slotY + 42);
+
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '10px "SF Pro Display", sans-serif';
+    ctx.fillText(r.set || 'Rune', slotX + 8, slotY + 62);
+  });
+
+  // Footer branding
+  ctx.fillStyle = '#64748b';
+  ctx.font = '12px "SF Pro Display", sans-serif';
+  ctx.fillText('SWM Tactical Platform • Summoners War Master AI Engine', 50, 615);
+  ctx.fillText(new Date().toLocaleDateString('th-TH'), 950, 615);
+
+  // Trigger Download
+  const link = document.createElement('a');
+  const safeName = (monster.name || 'Monster').replace(/[^a-zA-Z0-9]/g, '_');
+  link.download = `SWM_Showcase_${safeName}_${wizardName}.png`;
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
+

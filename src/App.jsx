@@ -39,6 +39,7 @@ const VIEWS = {
   'summon-simulator': lazy(() => import('./views/SummonSimulatorView')),
   'siege-planner': lazy(() => import('./views/SiegePlannerView')),
   'guild-war-room': lazy(() => import('./views/GuildWarRoomView')),
+  'ai-farm-optimizer': lazy(() => import('./views/AiFarmOptimizerView')),
 };
 
 const CommandPalette = lazy(() => import('./components/CommandPalette'));

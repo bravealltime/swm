@@ -38,6 +38,7 @@ export const NAVIGATION_CATEGORIES = [
     id: 'tools-dungeons',
     title: 'เครื่องมือช่วยเล่น & ดันเจี้ยน',
     items: [
+      { id: 'ai-farm-optimizer', label: '🤖 AI จัดทีม & รูน Abyss (Realtime)', icon: 'Sparkles', badge: 'AI สด' },
       { id: 'summon-simulator', label: 'ตู้จำลองเปิดคัมภีร์ (Summon Simulator)', icon: 'Sparkles', badge: 'LD 5★' },
       { id: 'tier-list-maker', label: 'สร้าง Tier List ของคุณเอง', icon: 'Trophy' },
       { id: 'artifact-optimizer', label: 'ดาเมจเสริมอาร์ติแฟกต์', icon: 'Flame', badge: 'Hot' },
