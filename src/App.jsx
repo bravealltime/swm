@@ -3,12 +3,10 @@ import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
 import ErrorBoundary from './components/ErrorBoundary';
 import SwmLogo from './components/SwmLogo';
-import CloudSyncModal from './components/CloudSyncModal';
-import AuthModal from './components/AuthModal';
 import { AuthProvider } from './contexts/AuthContext';
 import { Home, Shield, Trophy, Search, Menu, Loader2, CheckCircle2 } from 'lucide-react';
 import { buildUrl, parseLocation, normalizeView, titleFor } from './router';
-import { saveBox, loadBox, parseSwexExport } from './utils/swexImport';
+import { saveBox } from './utils/boxStorage';
 
 // Every view (and the JSON it imports) is its own chunk, so the first paint
 // only downloads the shell + the page that was actually requested.
@@ -47,6 +45,8 @@ const VIEWS = {
 };
 
 const CommandPalette = lazy(() => import('./components/CommandPalette'));
+const CloudSyncModal = lazy(() => import('./components/CloudSyncModal'));
+const AuthModal = lazy(() => import('./components/AuthModal'));
 
 function ViewLoading() {
   return (
@@ -67,41 +67,31 @@ function AppContent() {
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [syncNotice, setSyncNotice] = useState(null);
 
-  // Auto-sync profile across devices via URL param (?sync=...) or LAN auto-fetch
+  // LAN hand-off for development only: open http://<pc-ip>:5173/?sync=<key> on another device and
+  // the Vite dev middleware (/api/profile) serves the local export. Never installs anyone's
+  // account on an anonymous visitor; cross-device sync in production goes through the account login.
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const syncParam = params.get('sync');
-    const existingBox = loadBox();
+    if (!syncParam) return;
+    window.history.replaceState({}, '', window.location.pathname);
 
-    const doSync = async () => {
+    (async () => {
       try {
-        let res = await fetch(`/api/profile${syncParam ? `/${syncParam}` : ''}`).catch(() => null);
-        if (!res || !res.ok) {
-          res = await fetch('/data/my_profile.json').catch(() => null);
-        }
+        const res = await fetch(`/api/profile/${encodeURIComponent(syncParam)}`).catch(() => null);
         if (!res || !res.ok) return;
-
         const data = await res.json();
+        const { parseSwexExport } = await import('./utils/swexImport');
         const parsed = parseSwexExport(data);
-        if (parsed && parsed.units?.length > 0) {
+        if (parsed?.units?.length) {
           saveBox(parsed);
-          const name = parsed.wizard?.name || 'PedictU';
-          setSyncNotice(`✨ ซิงค์ข้อมูลไอดี ${name} (มอนสเตอร์ ${parsed.units.length} ตัว) เข้าสู่อุปกรณ์นี้เรียบร้อยแล้ว!`);
+          setSyncNotice(`✨ ซิงค์ข้อมูลไอดี ${parsed.wizard?.name || ''} (มอนสเตอร์ ${parsed.units.length} ตัว) เข้าสู่อุปกรณ์นี้แล้ว`);
           setTimeout(() => setSyncNotice(null), 6000);
         }
       } catch (err) {
-        console.warn('Auto profile sync warning:', err);
+        console.warn('LAN profile sync warning:', err);
       }
-    };
-
-    if (syncParam) {
-      doSync();
-      const cleanUrl = window.location.pathname;
-      window.history.replaceState({}, '', cleanUrl);
-    } else if (!existingBox || !existingBox.units || existingBox.units.length === 0) {
-      // First visit on another device on LAN -> auto-sync user's profile seamlessly!
-      doSync();
-    }
+    })();
   }, []);
 
   const currentView = route.view;
@@ -271,20 +261,28 @@ function AppContent() {
         </Suspense>
       )}
 
-      <CloudSyncModal
+      {isSyncOpen && (
+        <Suspense fallback={null}>
+          <CloudSyncModal
         isOpen={isSyncOpen}
         onClose={() => setIsSyncOpen(false)}
         onSynced={(box) => {
-          const name = box?.wizard?.name || 'PedictU';
+          const name = box?.wizard?.name || '';
           setSyncNotice(`✨ ซิงค์ข้อมูลไอดี ${name} เรียบร้อยแล้ว!`);
           setTimeout(() => setSyncNotice(null), 5000);
         }}
-      />
+          />
+        </Suspense>
+      )}
 
-      <AuthModal
+      {isAuthOpen && (
+        <Suspense fallback={null}>
+          <AuthModal
         isOpen={isAuthOpen}
         onClose={() => setIsAuthOpen(false)}
-      />
+          />
+        </Suspense>
+      )}
     </div>
   );
 }

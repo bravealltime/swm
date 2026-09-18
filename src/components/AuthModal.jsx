@@ -30,7 +30,7 @@ export default function AuthModal({ isOpen, onClose }) {
   } = useAuth();
 
   const [mode, setMode] = useState(isConfigured ? 'login' : 'config'); // 'login' | 'signup' | 'config'
-  const [email, setEmail] = useState('pedictu@gmail.com');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 

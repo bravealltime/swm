@@ -2,8 +2,8 @@
 // only what the site needs. Nothing is uploaded anywhere; the compact result is stored
 // in localStorage under STORAGE_KEY.
 
-export const STORAGE_KEY = 'swm:mybox';
-export const BOX_VERSION = 4;
+import { STORAGE_KEY, BOX_VERSION, loadBox, loadBoxAsync, saveBox, clearBox } from './boxStorage';
+export { STORAGE_KEY, BOX_VERSION, loadBox, loadBoxAsync, saveBox, clearBox };
 
 const ELEMENTS = { 1: 'water', 2: 'fire', 3: 'wind', 4: 'light', 5: 'dark' };
 
@@ -17,7 +17,6 @@ export const RUNE_SETS = {
 const SET_PIECES = { 1: 2, 2: 2, 3: 4, 4: 2, 5: 4, 6: 2, 7: 2, 8: 4, 10: 4, 11: 4, 13: 4, 14: 2, 15: 2, 16: 2, 17: 2, 18: 2, 19: 2, 20: 2, 21: 2, 22: 2, 23: 2, 24: 2, 25: 1 };
 
 import allMonstersData from '../data/allMonsters.json';
-import { saveUserBoxToDB, loadUserBoxFromDB, clearUserBoxFromDB } from '../services/storageService';
 
 const MONSTER_ID_MAP = new Map();
 allMonstersData.forEach((m) => {
@@ -421,46 +420,3 @@ export function loadDemoBox() {
   saveBox(demo);
   return demo;
 }
-
-export function loadBox() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return null;
-    const data = JSON.parse(raw);
-    if (data && data.unit_list && !Array.isArray(data.units)) {
-      const parsed = parseSwexExport(data);
-      saveBox(parsed);
-      return parsed;
-    }
-    return data;
-  } catch {
-    return null;
-  }
-}
-
-export async function loadBoxAsync() {
-  return await loadUserBoxFromDB();
-}
-
-export function saveBox(box) {
-  // Fire and forget to IndexedDB for unlimited GB persistence
-  saveUserBoxToDB(box).catch((e) => console.warn('IndexedDB save background warning:', e));
-
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(box));
-    return true;
-  } catch {
-    // If localStorage quota is exceeded, IndexedDB still holds the entire dataset safely
-    return true;
-  }
-}
-
-export function clearBox() {
-  clearUserBoxFromDB().catch(() => {});
-  try {
-    localStorage.removeItem(STORAGE_KEY);
-  } catch {
-    // ignore
-  }
-}
-

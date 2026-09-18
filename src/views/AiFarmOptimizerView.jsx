@@ -327,21 +327,8 @@ export default function AiFarmOptimizerView({ onNavigate }) {
   const [exportSuccess, setExportSuccess] = useState('');
   const [watchActive, setWatchActive] = useState(false);
 
-  // Auto-fetch PedictU profile if not in localStorage
-  useEffect(() => {
-    if (!box || !box.units || box.units.length === 0) {
-      fetch('/data/my_profile.json')
-        .then((res) => res.json())
-        .then((data) => {
-          const parsed = parseSwexExport(data);
-          if (parsed && parsed.units?.length > 0) {
-            saveBox(parsed);
-            setBox(parsed);
-          }
-        })
-        .catch(() => {});
-    }
-  }, [box]);
+  // The box comes from /my-box (SWEX import, folder sync or account cloud sync) — nothing is
+  // fetched from the server here.
 
   const activeDungeon = useMemo(
     () => DUNGEON_BLUEPRINTS.find((d) => d.id === activeDungeonId) || DUNGEON_BLUEPRINTS[0],

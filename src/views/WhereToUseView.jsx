@@ -43,6 +43,16 @@ export default function WhereToUseView({ onNavigate, initialMonster = 'Byungchul
     }
   }, [userBox]);
 
+  // Find monster object from monsters database
+  const selectedMonster = useMemo(() => {
+    const clean = selectedMonsterName.toLowerCase().trim();
+    return MONSTERS.find(m => 
+      m.name.toLowerCase() === clean || 
+      (m.thaiName && m.thaiName.toLowerCase() === clean) ||
+      m.name.toLowerCase().includes(clean)
+    ) || MONSTERS[0];
+  }, [selectedMonsterName]);
+
   const monsterBuild = useMemo(() => getMonsterBuild(selectedMonster.name), [selectedMonster]);
 
   // Check if player owns this monster in their SWEX box
@@ -78,15 +88,6 @@ export default function WhereToUseView({ onNavigate, initialMonster = 'Byungchul
     return Math.round((totalRatio / stats.length) * 100);
   }, [ownedUnit, monsterBuild]);
 
-  // Find monster object from monsters database
-  const selectedMonster = useMemo(() => {
-    const clean = selectedMonsterName.toLowerCase().trim();
-    return MONSTERS.find(m => 
-      m.name.toLowerCase() === clean || 
-      (m.thaiName && m.thaiName.toLowerCase() === clean) ||
-      m.name.toLowerCase().includes(clean)
-    ) || MONSTERS[0];
-  }, [selectedMonsterName]);
 
   // Autocomplete filtered list
   const searchResults = useMemo(() => {

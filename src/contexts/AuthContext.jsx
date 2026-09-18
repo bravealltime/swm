@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { getSupabase, isSupabaseConfigured, saveSupabaseConfig, clearSupabaseConfig } from '../services/supabaseClient';
-import { saveBox, loadBox, parseSwexExport } from '../utils/swexImport';
+import { saveBox, loadBox } from '../utils/boxStorage';
+const parseSwexExport = async (raw) => (await import('../utils/swexImport')).parseSwexExport(raw);
 
 const AuthContext = createContext(null);
 
@@ -12,36 +13,33 @@ export function AuthProvider({ children }) {
   const [syncError, setSyncError] = useState(null);
   const [configured, setConfigured] = useState(() => isSupabaseConfigured());
 
-  // Initialize auth state
+  // Initialize auth state (SDK loads lazily; nothing happens until it resolves)
   useEffect(() => {
-    const supabase = getSupabase();
-    if (!supabase) {
-      setLoading(false);
-      return;
-    }
-
-    // Get current session
-    supabase.auth.getSession().then(({ data: { session: currentSession } }) => {
-      setSession(currentSession);
-      setUser(currentSession?.user ?? null);
-      setLoading(false);
+    let alive = true;
+    let subscription = null;
+    getSupabase().then((supabase) => {
+      if (!alive) return;
+      if (!supabase) { setLoading(false); return; }
+      supabase.auth.getSession().then(({ data: { session: currentSession } }) => {
+        if (!alive) return;
+        setSession(currentSession);
+        setUser(currentSession?.user ?? null);
+        setLoading(false);
+      });
+      const { data } = supabase.auth.onAuthStateChange((_event, currentSession) => {
+        if (!alive) return;
+        setSession(currentSession);
+        setUser(currentSession?.user ?? null);
+        setLoading(false);
+      });
+      subscription = data?.subscription || null;
     });
-
-    // Listen to changes in auth state (logged in, signed out, token refreshed)
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, currentSession) => {
-      setSession(currentSession);
-      setUser(currentSession?.user ?? null);
-      setLoading(false);
-    });
-
-    return () => {
-      subscription.unsubscribe();
-    };
+    return () => { alive = false; subscription?.unsubscribe(); };
   }, [configured]);
 
   // Sign In with Email & Password
   const signInWithEmail = useCallback(async (email, password) => {
-    const supabase = getSupabase();
+    const supabase = await getSupabase();
     if (!supabase) throw new Error('กรุณาตั้งค่าเชื่อมต่อ Supabase ก่อนเข้าสู่ระบบ');
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) throw error;
@@ -50,7 +48,7 @@ export function AuthProvider({ children }) {
 
   // Sign Up with Email & Password
   const signUpWithEmail = useCallback(async (email, password) => {
-    const supabase = getSupabase();
+    const supabase = await getSupabase();
     if (!supabase) throw new Error('กรุณาตั้งค่าเชื่อมต่อ Supabase ก่อน');
     const { data, error } = await supabase.auth.signUp({
       email,
@@ -67,7 +65,7 @@ export function AuthProvider({ children }) {
 
   // Sign In with OAuth Provider (Google, Discord, etc.)
   const signInWithOAuth = useCallback(async (provider = 'google') => {
-    const supabase = getSupabase();
+    const supabase = await getSupabase();
     if (!supabase) throw new Error('กรุณาตั้งค่าเชื่อมต่อ Supabase ก่อน');
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider,
@@ -81,7 +79,7 @@ export function AuthProvider({ children }) {
 
   // Sign Out
   const signOut = useCallback(async () => {
-    const supabase = getSupabase();
+    const supabase = await getSupabase();
     if (supabase) {
       await supabase.auth.signOut();
     }
@@ -91,7 +89,7 @@ export function AuthProvider({ children }) {
 
   // Save profile box to Cloud (Supabase `user_profiles` table)
   const syncProfileToCloud = useCallback(async (boxToSync) => {
-    const supabase = getSupabase();
+    const supabase = await getSupabase();
     if (!supabase || !user) {
       return { success: false, error: 'User not logged in' };
     }
@@ -103,7 +101,7 @@ export function AuthProvider({ children }) {
 
     if (box.unit_list && !Array.isArray(box.units)) {
       try {
-        box = parseSwexExport(box);
+        box = await parseSwexExport(box);
       } catch (err) {
         console.warn('Failed to parse raw box for cloud sync:', err);
       }
@@ -115,7 +113,7 @@ export function AuthProvider({ children }) {
     try {
       const payload = {
         id: user.id,
-        wizard_name: box.wizard?.name || 'PedictU',
+        wizard_name: box.wizard?.name || '',
         wizard_id: String(box.wizard?.idHint || '9326961'),
         box_data: box,
         updated_at: new Date().toISOString(),
@@ -139,7 +137,7 @@ export function AuthProvider({ children }) {
 
   // Fetch profile box from Cloud
   const fetchProfileFromCloud = useCallback(async () => {
-    const supabase = getSupabase();
+    const supabase = await getSupabase();
     if (!supabase || !user) return null;
 
     setSyncStatus('syncing');
@@ -158,7 +156,7 @@ export function AuthProvider({ children }) {
         let box = data.box_data;
         if (box.unit_list && !Array.isArray(box.units)) {
           try {
-            box = parseSwexExport(box);
+            box = await parseSwexExport(box);
           } catch (err) {
             console.warn('Failed to parse cloud box:', err);
           }

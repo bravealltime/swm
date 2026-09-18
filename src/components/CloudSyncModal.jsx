@@ -19,7 +19,7 @@ import {
   ShieldCheck,
   Layers
 } from 'lucide-react';
-import { loadBox, saveBox, parseSwexExport } from '../utils/swexImport';
+import { loadBox, saveBox } from '../utils/boxStorage';
 
 export default function CloudSyncModal({ isOpen, onClose, onSynced }) {
   const [box, setBox] = useState(() => loadBox());
@@ -39,7 +39,7 @@ export default function CloudSyncModal({ isOpen, onClose, onSynced }) {
 
   if (!isOpen) return null;
 
-  const wizardName = box?.wizard?.name || box?.wizard_info?.wizard_name || 'PedictU';
+  const wizardName = box?.wizard?.name || box?.wizard_info?.wizard_name || '';
   const wizardId = box?.wizard?.idHint || box?.wizard_info?.wizard_id || '9326961';
   const syncKey = `${wizardName.toUpperCase()}-${wizardId}`;
   const shareLink = typeof window !== 'undefined' ? `${window.location.origin}/?sync=${wizardName}` : '';
@@ -75,14 +75,13 @@ export default function CloudSyncModal({ isOpen, onClose, onSynced }) {
       });
       if (res.ok) {
         setStatusType('success');
-        setStatusMessage('ส่งข้อมูลขึ้น Cloud Sync เรียบร้อยแล้ว! อุปกรณ์อื่นสามารถดึงข้อมูลได้ทันที');
+        setStatusMessage('ส่งข้อมูลไปยังเครื่องพัฒนา (LAN) แล้ว — อุปกรณ์อื่นในวง LAN เปิด ?sync=ชื่อไอดี ได้ทันที');
       } else {
-        throw new Error('ไม่สามารถบันทึกไปยังเซิร์ฟเวอร์ได้');
+        throw new Error('no dev server');
       }
     } catch {
-      // Fallback
-      setStatusType('success');
-      setStatusMessage('บันทึกข้อมูลไอดีในโหมดพร้อมซิงค์เรียบร้อยแล้ว');
+      setStatusType('error');
+      setStatusMessage('โหมด LAN ใช้ได้เฉพาะตอนรัน dev server — บนเว็บจริงให้เข้าสู่ระบบด้วยบัญชี แล้วบันทึกขึ้นคลาวด์แทน');
     }
   };
 
@@ -99,15 +98,12 @@ export default function CloudSyncModal({ isOpen, onClose, onSynced }) {
     setStatusMessage(`กำลังดึงข้อมูลไอดี "${targetKey}" จาก Cloud...`);
 
     try {
-      // Try local API first, then public static data
-      let res = await fetch(`/api/profile/${targetKey}`).catch(() => null);
-      if (!res || !res.ok) {
-        res = await fetch('/data/my_profile.json');
-      }
-
-      if (!res.ok) throw new Error('ไม่พบข้อมูลไอดีนี้บนคลาวด์');
+      // Dev-server LAN endpoint only; there is no public copy of anyone's profile
+      const res = await fetch(`/api/profile/${encodeURIComponent(targetKey)}`).catch(() => null);
+      if (!res || !res.ok) throw new Error('ไม่พบข้อมูลไอดีนี้ — โหมด LAN ใช้ได้เฉพาะตอนรัน dev server บนเว็บจริงให้เข้าสู่ระบบด้วยบัญชีแทน');
 
       const data = await res.json();
+      const { parseSwexExport } = await import('../utils/swexImport');
       const parsed = parseSwexExport(data);
 
       if (!parsed || !parsed.units || parsed.units.length === 0) {
@@ -292,20 +288,6 @@ export default function CloudSyncModal({ isOpen, onClose, onSynced }) {
                 </button>
               </div>
 
-              {/* Quick Preset Button */}
-              <div className="pt-2 flex items-center gap-2">
-                <span className="text-[11px] text-slate-400">ตัวอย่าง:</span>
-                <button
-                  onClick={() => {
-                    setSyncKeyInput('PedictU');
-                    handlePullFromCloud('PedictU');
-                  }}
-                  className="text-[11px] font-mono text-cyan-400 bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 px-2.5 py-1 rounded-lg transition cursor-pointer flex items-center gap-1"
-                >
-                  <Sparkles className="w-3 h-3" />
-                  <span>⚡ ดึงข้อมูลไอดี PedictU</span>
-                </button>
-              </div>
             </div>
 
             <div className="bg-[#142035] border border-slate-800/80 p-4 rounded-2xl text-xs text-slate-300 space-y-2">

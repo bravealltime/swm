@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
+// supabase-js is loaded on demand so the app shell does not pay for it until auth is used.
 
 const STORAGE_KEY_URL = 'swm_supabase_url';
 const STORAGE_KEY_ANON = 'swm_supabase_anon_key';
@@ -34,6 +34,7 @@ export function saveSupabaseConfig(url, anonKey) {
     if (anonKey) localStorage.setItem(STORAGE_KEY_ANON, anonKey.trim());
   }
   cachedClient = null; // Reset cached client so it gets re-initialized
+  clientPromise = null;
 }
 
 export function clearSupabaseConfig() {
@@ -42,28 +43,32 @@ export function clearSupabaseConfig() {
     localStorage.removeItem(STORAGE_KEY_ANON);
   }
   cachedClient = null;
+  clientPromise = null;
 }
 
+let clientPromise = null;
+
 /**
- * Get the Supabase client instance (or null if not yet configured)
+ * Get the Supabase client instance (Promise; resolves to null if not configured).
+ * The SDK is imported lazily the first time it is needed.
  */
 export function getSupabase() {
-  if (cachedClient) return cachedClient;
-
+  if (cachedClient) return Promise.resolve(cachedClient);
   const { url, anonKey, isConfigured } = getSupabaseCredentials();
-  if (!isConfigured) return null;
-
-  try {
-    cachedClient = createClient(url, anonKey, {
-      auth: {
-        persistSession: true,
-        autoRefreshToken: true,
-        detectSessionInUrl: true,
-      },
-    });
-    return cachedClient;
-  } catch (err) {
-    console.error('Failed to initialize Supabase client:', err);
-    return null;
+  if (!isConfigured) return Promise.resolve(null);
+  if (!clientPromise) {
+    clientPromise = import('@supabase/supabase-js')
+      .then(({ createClient }) => {
+        cachedClient = createClient(url, anonKey, {
+          auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
+        });
+        return cachedClient;
+      })
+      .catch((err) => {
+        console.error('Failed to initialize Supabase client:', err);
+        clientPromise = null;
+        return null;
+      });
   }
+  return clientPromise;
 }
