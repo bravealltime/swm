@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { 
   Shield, 
   Gift, 
@@ -41,6 +41,7 @@ import { loadBox, saveBox, parseSwexExport, getArtifactsFromBox, loadDemoBox, ge
 import { loadUserBoxFromDB, saveUserBoxToDB } from '../services/storageService';
 import { exportProfileCard } from '../utils/cardExporter';
 import AiChatPanel from '../components/AiChatPanel';
+import { summarizeBoxForAi, keyMonstersForAi } from '../utils/boxSummary';
 
 const POPULAR_PRESETS = [
   { label: 'Seara + Orion + Perna', defKey: 'Seara,Orion,Perna', monsters: ['Seara', 'Orion', 'Perna'] },
@@ -73,6 +74,7 @@ export default function DashboardView({ onNavigate }) {
   const [mdcData, setMdcData] = useState(null);
   const [topRtaPlayers, setTopRtaPlayers] = useState([]);
   const [thaiGuardians, setThaiGuardians] = useState(null); // { players, total, fetchedAt }
+  const playersRef = useRef({ players: [], adapter: null }); // full SWRT index, for the coach's player lookups
   const [followedPlayers] = useLocalStorage('swm:fav-players', []);
   useEffect(() => {
     let alive = true;
@@ -80,6 +82,7 @@ export default function DashboardView({ onNavigate }) {
     import('../data/playerProfiles.json').then((m) => { if (alive) setTopRtaPlayers(m.default.slice(0, 4)); });
     Promise.all([import('../data/swrtPlayersIndex.json'), import('../data/swrtPlayerAdapter')]).then(([idx, adapter]) => {
       if (!alive) return;
+      playersRef.current = { players: idx.default.players || [], adapter };
       const th = (idx.default.players || []).filter((p) => p.c === 'TH' && p.m > 0).sort((a, b) => b.s - a.s);
       setThaiGuardians({
         total: th.length,
@@ -109,6 +112,27 @@ export default function DashboardView({ onNavigate }) {
 
   // Questions go to the Summoners War coach; short names route to the player / monster pages
   const [aiQuestion, setAiQuestion] = useState('');
+  const coachContext = (question) => {
+    const ctx = { scope: 'general' };
+    if (userBox?.units?.length) {
+      ctx.box = summarizeBoxForAi(userBox, getMonsterCatalogInfo);
+      ctx.monsters = keyMonstersForAi(userBox, getMonsterCatalogInfo);
+    }
+    const q = String(question || '').toLowerCase();
+    const { players, adapter } = playersRef.current;
+    if (q && players.length && adapter) {
+      ctx.players = players
+        .filter((p) => p.n && p.n.length >= 3 && q.includes(p.n.toLowerCase()))
+        .sort((a, b) => b.n.length - a.n.length)
+        .slice(0, 2)
+        .map((p) => {
+          const tier = adapter.tierFromLevel(p.lv);
+          const top = (p.top || p.ts || []).slice(0, 6).map(([m, n, w]) => `${getMonsterCatalogInfo(m)?.name || `#${m}`} ${n} แมตช์ ชนะ ${w}`);
+          return `${p.n} (${p.c || 'GL'}) ${tier.rankTier} คะแนน ${p.s} อันดับโลก ${p.r || '-'} • ${p.m || 0} แมตช์ ชนะ ${p.w || 0} • ใช้บ่อย: ${top.join(', ') || '-'} (พบล่าสุด ${p.seen || '-'})`;
+        });
+    }
+    return ctx;
+  };
   const looksLikeQuestion = (q) => /[?？]|ยังไง|อย่างไร|อะไร|ทำไม|ควร|ไหม|มั้ย|แนะนำ|จัดทีม|เทียบ|ดีกว่า|แก้ทาง|ใส่รูน|ตี(?:ยังไง|ไง)/i.test(q) || /(?:^|\W)(how|what|why|should|vs)(?:\W|$)/i.test(q) || q.split(/\s+/).length >= 4;
 
   const handleSearchSubmit = (e, forceAi = false) => {
@@ -279,18 +303,6 @@ export default function DashboardView({ onNavigate }) {
               </div>
             </div>
 
-            {aiQuestion && (
-              <div className="text-left mt-3">
-                <AiChatPanel
-                  key={aiQuestion}
-                  initialQuestion={aiQuestion}
-                  title="โค้ช AI — ตอบเฉพาะเรื่อง Summoners War"
-                  placeholder="ถามต่อได้เลย..."
-                  buildContext={() => ({ scope: 'general' })}
-                />
-              </div>
-            )}
-
             {/* Quick Hot Suggestions */}
             <div className="flex flex-wrap items-center justify-center gap-2 pt-3 text-xs">
               <span className="text-slate-400 text-xs font-semibold">แนะนำค้นหา:</span>
@@ -324,6 +336,20 @@ export default function DashboardView({ onNavigate }) {
               </button>
             </div>
           </form>
+
+          {aiQuestion && (
+              <div className="text-left mt-3 max-w-2xl mx-auto">
+                <AiChatPanel
+                  key={aiQuestion}
+                  initialQuestion={aiQuestion}
+                  title="โค้ช AI — ตอบเฉพาะเรื่อง Summoners War"
+                  placeholder="ถามต่อได้เลย..."
+                  buildContext={(q) => coachContext(q)}
+                  suggestions={userBox?.units?.length ? ['มอนหลักในกล่องฉันคือตัวไหน', 'จัดทีม Siege ป้องกันจากกล่องฉัน', 'ตัวไหนควรรูนใหม่ก่อน'] : ['เมตา RTA Guardian ตอนนี้เป็นยังไง', 'จัดทีม GB12 สำหรับมือใหม่', 'Seara แก้ทางด้วยอะไร']}
+                />
+              </div>
+            )}
+
 
           {/* Metric Stats Banner */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-6 border-t border-white/[0.06] text-left">

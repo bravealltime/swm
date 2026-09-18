@@ -1,46 +1,72 @@
-﻿import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Sparkles, Zap, Shield, Swords, Info, Clock, Target, Layers } from 'lucide-react';
 
 export default function SkillTooltip({ 
   skill, 
   leaderSkill, 
   children, 
-  placement = 'top',
+  enabled = true,
+  placement = 'auto',
   size = 'md' 
 }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [coords, setCoords] = useState({ top: 0, left: 0, position: 'top' });
+  const [coords, setCoords] = useState({ top: 0, left: 0, actualPlacement: 'bottom' });
   const triggerRef = useRef(null);
   const tooltipRef = useRef(null);
 
-  const calculatePosition = () => {
+  const updatePosition = () => {
     if (!triggerRef.current) return;
     const rect = triggerRef.current.getBoundingClientRect();
     const tooltipWidth = 320;
-    const tooltipHeight = 240;
+    const tooltipHeight = tooltipRef.current ? tooltipRef.current.offsetHeight : 240;
     const padding = 12;
 
+    // Horizontal centering relative to trigger
     let left = rect.left + rect.width / 2 - tooltipWidth / 2;
-    // Keep in viewport horizontally
     if (left < padding) left = padding;
     if (left + tooltipWidth > window.innerWidth - padding) {
       left = window.innerWidth - tooltipWidth - padding;
     }
 
-    let top = rect.top - tooltipHeight - 8;
-    let pos = 'top';
+    // Vertical positioning: default prefer below, or above if near bottom
+    let top;
+    let actualPlacement = 'bottom';
 
-    // If overflows top, show below
-    if (top < padding) {
-      top = rect.bottom + 8;
-      pos = 'bottom';
+    const spaceBelow = window.innerHeight - rect.bottom - padding;
+    const spaceAbove = rect.top - padding;
+
+    if (placement === 'top') {
+      if (spaceAbove >= tooltipHeight || spaceAbove > spaceBelow) {
+        top = rect.top - tooltipHeight - 8;
+        actualPlacement = 'top';
+      } else {
+        top = rect.bottom + 8;
+        actualPlacement = 'bottom';
+      }
+    } else {
+      // Auto or bottom: prefer below if enough space, else above
+      if (spaceBelow >= tooltipHeight || spaceBelow >= spaceAbove) {
+        top = rect.bottom + 8;
+        actualPlacement = 'bottom';
+      } else {
+        top = rect.top - tooltipHeight - 8;
+        actualPlacement = 'top';
+      }
     }
 
-    setCoords({ top, left, position: pos });
+    // Ensure within viewport vertically
+    if (top < padding) top = padding;
+    if (top + tooltipHeight > window.innerHeight - padding) {
+      top = Math.max(padding, window.innerHeight - tooltipHeight - padding);
+    }
+
+    setCoords({ top, left, actualPlacement });
   };
 
   const handleMouseEnter = () => {
-    calculatePosition();
+    if (!enabled) return;
+    updatePosition();
     setIsOpen(true);
   };
 
@@ -50,15 +76,26 @@ export default function SkillTooltip({
 
   // Click toggle for touch devices
   const handleClick = (e) => {
+    if (!enabled) return;
     e.stopPropagation();
-    calculatePosition();
-    setIsOpen(!isOpen);
+    updatePosition();
+    setIsOpen(prev => !prev);
   };
 
+  // Measure after tooltip DOM mounts to guarantee perfect bounds
   useEffect(() => {
+    if (isOpen) {
+      updatePosition();
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
     const handleScrollOrResize = () => {
-      if (isOpen) setIsOpen(false);
+      setIsOpen(false);
     };
+
     window.addEventListener('scroll', handleScrollOrResize, true);
     window.addEventListener('resize', handleScrollOrResize);
     return () => {
@@ -67,21 +104,23 @@ export default function SkillTooltip({
     };
   }, [isOpen]);
 
-  if (!skill && !leaderSkill) {
+  if (!enabled || (!skill && !leaderSkill)) {
     return <>{children}</>;
   }
 
   return (
-    <div 
-      ref={triggerRef}
-      className="relative inline-block"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      onClick={handleClick}
-    >
-      {children}
+    <>
+      <div 
+        ref={triggerRef}
+        className="inline-flex"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        onClick={handleClick}
+      >
+        {children}
+      </div>
 
-      {isOpen && (
+      {isOpen && typeof document !== 'undefined' && createPortal(
         <div 
           ref={tooltipRef}
           style={{
@@ -89,9 +128,9 @@ export default function SkillTooltip({
             top: `${coords.top}px`,
             left: `${coords.left}px`,
             width: '320px',
-            zIndex: 99999
+            zIndex: 999999
           }}
-          className="pointer-events-none animate-in fade-in zoom-in-95 duration-150 bg-[#0d1522] border border-[#22334d] text-white rounded-xl p-3.5 shadow-2xl shadow-black/80 backdrop-blur-md"
+          className="pointer-events-none animate-in fade-in zoom-in-95 duration-150 bg-[#0d1522]/95 border border-[#22334d] text-white rounded-xl p-3.5 shadow-2xl shadow-black/80 backdrop-blur-md max-h-[85vh] overflow-y-auto"
         >
           {leaderSkill ? (
             /* Leader Skill Tooltip */
@@ -100,7 +139,7 @@ export default function SkillTooltip({
                 <img 
                   src={leaderSkill.iconUrl} 
                   alt="Leader" 
-                  className="w-8 h-8 rounded-lg bg-black/40 border border-amber-500/40 p-0.5"
+                  className="w-8 h-8 rounded-lg bg-black/40 border border-amber-500/40 p-0.5 shrink-0"
                   onError={(e) => { e.target.style.display = 'none'; }}
                 />
                 <div>
@@ -117,12 +156,14 @@ export default function SkillTooltip({
               </div>
 
               <p className="text-xs text-slate-300 leading-relaxed">
-                {leaderSkill.textTh}
+                {leaderSkill.textTh || leaderSkill.textEn}
               </p>
 
-              <div className="text-[11px] text-slate-400 border-t border-[#1c2a3f] pt-1.5 font-mono">
-                {leaderSkill.textEn}
-              </div>
+              {leaderSkill.textEn && leaderSkill.textEn !== leaderSkill.textTh && (
+                <div className="text-[11px] text-slate-400 border-t border-[#1c2a3f] pt-1.5 font-mono">
+                  {leaderSkill.textEn}
+                </div>
+              )}
             </div>
           ) : (
             /* Active / Passive Skill Tooltip */
@@ -149,7 +190,7 @@ export default function SkillTooltip({
                         ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30'
                         : 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
                     }`}>
-                      {skill.slotLabel}
+                      {skill.isPassive ? 'Passive' : (skill.slotLabel || `S${skill.slot}`)}
                     </span>
 
                     {skill.cooldown && (
@@ -234,8 +275,9 @@ export default function SkillTooltip({
               )}
             </div>
           )}
-        </div>
+        </div>,
+        document.body
       )}
-    </div>
+    </>
   );
 }

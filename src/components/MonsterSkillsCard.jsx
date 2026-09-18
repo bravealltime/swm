@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { 
   Sparkles, 
   Swords, 
@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 import SkillTooltip from './SkillTooltip';
 
-export default function MonsterSkillsCard({ monsterData }) {
+export default function MonsterSkillsCard({ monsterData, enableTooltip = false }) {
   const [activeTab, setActiveTab] = useState('skills'); // 'skills' | 'stats' | 'guide'
 
   if (!monsterData) {
@@ -74,8 +74,8 @@ export default function MonsterSkillsCard({ monsterData }) {
         <div className="space-y-3">
           {/* Leader Skill */}
           {leaderSkill && (
-            <SkillTooltip leaderSkill={leaderSkill}>
-              <div className="p-3 rounded-xl bg-[#0c121c] border border-amber-500/30 hover:border-amber-500/60 transition-all flex items-start gap-3 cursor-pointer group shadow-sm">
+            <SkillTooltip leaderSkill={leaderSkill} enabled={enableTooltip}>
+              <div className="p-3 rounded-xl bg-[#0c121c] border border-amber-500/30 hover:border-amber-500/60 transition-all flex items-start gap-3 group shadow-sm">
                 <img 
                   src={leaderSkill.iconUrl} 
                   alt="Leader" 
@@ -109,8 +109,8 @@ export default function MonsterSkillsCard({ monsterData }) {
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-center gap-3">
                   {/* Skill icon with hover tooltip */}
-                  <SkillTooltip skill={skill}>
-                    <div className="relative cursor-pointer group">
+                  <SkillTooltip skill={skill} enabled={enableTooltip}>
+                    <div className="relative group">
                       <img 
                         src={skill.iconUrl} 
                         alt={skill.name} 

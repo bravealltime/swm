@@ -329,8 +329,13 @@ export default function MonsterCatalogView({ initialSearch = '', onNavigate }) {
 
       {/* Monster Detail Inspector Modal */}
       {selectedMonster && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="w-full max-w-2xl max-h-[92vh] flex flex-col bg-[#101724] border border-[#1d2b3f] rounded-2xl shadow-2xl relative overflow-hidden">
+        <div 
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setSelectedMonster(null);
+          }}
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200"
+        >
+          <div className="w-full max-w-2xl max-h-[90vh] flex flex-col bg-[#0c121c] border border-slate-700/80 rounded-2xl shadow-2xl relative overflow-hidden ring-1 ring-white/10">
             {/* Modal Header */}
             <div className="flex items-center justify-between p-4 sm:p-5 border-b border-[#1d2b3f] bg-[#0c121c]/80 backdrop-blur-md shrink-0">
               <div className="flex items-center gap-3.5">
@@ -373,7 +378,10 @@ export default function MonsterCatalogView({ initialSearch = '', onNavigate }) {
 
             {/* Modal Scrollable Body */}
             <div className="p-4 sm:p-5 overflow-y-auto flex-1 space-y-4">
-              <MonsterSkillsCard monsterData={selectedMonsterSkills || selectedMonster} />
+              <MonsterSkillsCard 
+                monsterData={selectedMonsterSkills || selectedMonster} 
+                enableTooltip={false}
+              />
             </div>
 
             {/* Modal Actions Footer */}

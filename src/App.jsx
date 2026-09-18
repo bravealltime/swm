@@ -94,6 +94,13 @@ function AppContent() {
     })();
   }, []);
 
+  // Real-time link to the AegisLink SWEX plugin (127.0.0.1) — only loaded when the user turned it on
+  useEffect(() => {
+    let on = false;
+    try { on = localStorage.getItem('swm:aegis-live') === '1'; } catch { /* ignore */ }
+    if (on) import('./services/aegisLive').then((m) => m.autoStart()).catch((err) => console.warn('AegisLink link failed to load', err));
+  }, []);
+
   const currentView = route.view;
   const viewParams = route.params;
 

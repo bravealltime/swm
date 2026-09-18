@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect, useRef } from 'react';
 import {
   Upload, Package, Shield, Flame, Trash2, RefreshCw, Search, Lock, ChevronRight, Star, CheckCircle2, XCircle,
   Compass, LayoutDashboard, Gauge, Gem, Zap, Castle, X, AlertTriangle, Sparkles, FolderSync, FolderOpen, Pause,
-  Download, Trophy, Award, Check, Layers, Sliders, Crown, Eye, EyeOff, Share2
+  Download, Trophy, Award, Check, Layers, Sliders, Crown, Eye, EyeOff, Share2, Radio, Plug, RotateCcw
 } from 'lucide-react';
 import MonsterAvatar from '../components/MonsterAvatar';
 import RuneIcon from '../components/RuneIcon';
@@ -16,6 +16,7 @@ import { buildMonsterIndex, flagFromCountry } from '../data/swrtPlayerAdapter';
 import { parseSwexExport, ownedIdSet, loadBox, saveBox, clearBox, baseAwakenedId, BOX_VERSION, RUNE_SETS, STAT_NAMES, getArtifactsFromBox, ARTIFACT_EFFECT_NAMES, loadDemoBox, isNonSummonableLd5 } from '../utils/swexImport';
 import { supportsFolderWatch, loadDirHandle, clearDirHandle, pickSwexFolder, ensurePermission, findNewestExport } from '../utils/swexWatcher';
 import { exportAllDataAsJSON, importDataFromJSON } from '../services/storageService';
+import * as aegisLive from '../services/aegisLive';
 import { exportLdShowcaseCard } from '../utils/cardExporter';
 
 const WATCH_INTERVAL_MS = 20 * 1000;
@@ -162,6 +163,15 @@ export default function MyBoxView({ onNavigate, tab: initialTab, subItem }) {
     setWatch({ status: 'idle', handle: null, lastCheck: null, newest: null });
   };
 
+  // --- real-time link to the AegisLink SWEX plugin --------------------------
+  const [live, setLive] = useState(() => ({ ...aegisLive.getState() }));
+  useEffect(() => aegisLive.subscribe((type, payload, st) => {
+    if (type === 'state') setLive({ ...st });
+    if (type === 'box') { setBox(payload); setError(''); }
+  }), []);
+  const startLive = () => aegisLive.start();
+  const stopLive = () => aegisLive.stop();
+
   return (
     <div className="space-y-6 max-w-[1780px] 2xl:max-w-[1880px] mx-auto pb-16 animate-in fade-in duration-300">
       <div className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-r from-[#0f2a1a] via-[#090e18] to-[#070b12] p-6 sm:p-8 shadow-2xl">
@@ -243,7 +253,8 @@ export default function MyBoxView({ onNavigate, tab: initialTab, subItem }) {
       )}
 
       {box && <BoxHeader box={box} onNavigate={onNavigate} onClearDemo={reset} onImport={importFile} />}
-      {box && <SyncCard watch={watch} box={box} onStart={startWatching} onGrant={grantAgain} onStop={stopWatching} />}
+      <LiveCard live={live} box={box} onStart={startLive} onStop={stopLive} onNavigate={onNavigate} />
+      {box && live.status === 'off' && <SyncCard watch={watch} box={box} onStart={startWatching} onGrant={grantAgain} onStop={stopWatching} />}
 
       <div role="tablist" className="flex flex-wrap items-center gap-1.5 p-1.5 rounded-2xl bg-[#0a0f19]/80 border border-white/[0.08] shadow-lg sticky top-[68px] z-30 backdrop-blur-xl">
         {TABS.map((t) => {
@@ -258,16 +269,16 @@ export default function MyBoxView({ onNavigate, tab: initialTab, subItem }) {
         })}
       </div>
 
-      {tab === 'overview' && (box ? <Overview box={box} mdc={mdc} owned={owned} onTab={setTab} onNavigate={onNavigate} onOpenUnit={setOpenUnit} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} />)}
-      {tab === 'box' && (box ? <BoxGrid box={box} onNavigate={onNavigate} onOpenUnit={setOpenUnit} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} />)}
+      {tab === 'overview' && (box ? <Overview box={box} mdc={mdc} owned={owned} onTab={setTab} onNavigate={onNavigate} onOpenUnit={setOpenUnit} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} onLive={startLive} />)}
+      {tab === 'box' && (box ? <BoxGrid box={box} onNavigate={onNavigate} onOpenUnit={setOpenUnit} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} onLive={startLive} />)}
       {tab === 'pokedex' && <PokedexCollection box={box} onNavigate={onNavigate} onLoadDemo={handleLoadDemo} />}
       {tab === 'artifacts' && <ArtifactSearchEngine box={box} onNavigate={onNavigate} />}
-      {tab === 'efficiency' && (box ? <RuneEfficiencyAndQuads box={box} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} />)}
-      {tab === 'defense' && (box ? <SiegeDefenseBuilder box={box} onNavigate={onNavigate} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} />)}
+      {tab === 'efficiency' && (box ? <RuneEfficiencyAndQuads box={box} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} onLive={startLive} />)}
+      {tab === 'defense' && (box ? <SiegeDefenseBuilder box={box} onNavigate={onNavigate} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} onLive={startLive} />)}
       {tab === 'teams' && <Teams owned={owned} mdc={mdc} onNavigate={onNavigate} />}
       {tab === 'meta' && <MetaCoverage owned={owned} />}
-      {tab === 'speed' && (box ? <SpeedTuner box={box} onNavigate={onNavigate} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} />)}
-      {tab === 'runes' && (box ? <Runes box={box} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} />)}
+      {tab === 'speed' && (box ? <SpeedTuner box={box} onNavigate={onNavigate} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} onLive={startLive} />)}
+      {tab === 'runes' && (box ? <Runes box={box} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} onLive={startLive} />)}
 
       {openUnit && box && (
         <MonsterDetailModal unit={openUnit} box={box} onClose={() => setOpenUnit(null)} onNavigate={(view, params) => { setOpenUnit(null); onNavigate(view, params); }} />
@@ -318,6 +329,56 @@ function useMdcAnalysis(owned, enabled) {
 }
 
 // ---------------------------------------------------------------------------
+
+function LiveCard({ live, box, onStart, onStop, onNavigate }) {
+  const time = (ms) => (ms ? new Date(ms).toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : '-');
+  const isLive = live.status === 'live';
+  const tone = isLive ? 'bg-cyan-500/10 border-cyan-500/30 text-cyan-300' : live.status === 'error' ? 'bg-rose-500/10 border-rose-500/30 text-rose-300' : live.status === 'connecting' ? 'bg-amber-500/10 border-amber-500/30 text-amber-300' : 'bg-white/[0.04] border-white/10 text-slate-400';
+  return (
+    <div className={`${card} p-3.5 flex flex-col md:flex-row md:items-center justify-between gap-3 ${isLive ? 'border-cyan-500/30' : ''}`}>
+      <div className="flex items-start gap-3 min-w-0">
+        <div className={`p-2 rounded-xl border shrink-0 ${tone}`}><Radio className="w-4 h-4" /></div>
+        <div className="text-xs min-w-0">
+          <div className="font-bold text-white flex items-center gap-2 flex-wrap">
+            เชื่อมต่อ SWEX แบบเรียลไทม์ (AegisLink)
+            {isLive && <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-cyan-500/15 border border-cyan-500/40 text-cyan-200 text-[10px] font-bold"><span className="w-1.5 h-1.5 rounded-full bg-cyan-300 animate-pulse" /> LIVE</span>}
+            {live.status === 'connecting' && <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-amber-500/15 border border-amber-500/40 text-amber-200 text-[10px] font-bold"><RefreshCw className="w-3 h-3 animate-spin" /> กำลังเชื่อมต่อ</span>}
+            {live.status === 'error' && <span className="px-1.5 py-0.5 rounded-full bg-rose-500/15 border border-rose-500/40 text-rose-300 text-[10px] font-bold">ไม่พบปลั๊กอิน</span>}
+          </div>
+          <div className="text-slate-400 mt-0.5 leading-relaxed">
+            {isLive
+              ? live.wizard
+                ? <>ไอดี <span className="text-white font-bold">{live.wizard.name}</span> • {live.units} ตัว • อัปเดตล่าสุด {time(live.lastEventAt)} <span className="font-mono text-slate-500">({live.lastCommand})</span> • รับเหตุการณ์แล้ว {live.events} ครั้ง — เปลี่ยนรูน/อัปเกรด/ขายในเกม หน้านี้จะขยับตามทันที</>
+                : <>เชื่อมต่อปลั๊กอินแล้ว — รอเข้าเกม (หน้า Login) 1 ครั้ง ปลั๊กอินจะส่งกล่องทั้งหมดมาให้เอง{box ? ' ระหว่างนี้ยังแสดงข้อมูลที่นำเข้าไว้ก่อน' : ''}</>
+              : live.status === 'connecting'
+              ? <>กำลังหาปลั๊กอินที่ <span className="font-mono">127.0.0.1:{live.port}</span> — เปิด SWEX ไว้ เปิดใช้ AegisLink ในแท็บ Plugins แล้วเข้าเกม (ถ้าเบราว์เซอร์ถามสิทธิ์ "เครือข่ายในเครื่อง" ให้กดอนุญาต)</>
+              : live.status === 'error'
+              ? live.error
+              : 'ติดตั้งปลั๊กอิน AegisLink ใน SWEX แล้วกดเชื่อมต่อ — กล่องมอนสเตอร์ รูน อาร์ติแฟกต์ และข้อมูลกิลด์/Siege จะอัปเดตทันทีที่เปลี่ยนในเกม โดยไม่ต้อง export ไฟล์อีก (ข้อมูลวิ่งเฉพาะในเครื่องคุณ)'}
+          </div>
+        </div>
+      </div>
+      <div className="flex items-center gap-2 shrink-0 flex-wrap">
+        <button onClick={() => onNavigate?.('aegislink')} className="px-3 py-2 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 text-slate-200 text-xs font-bold flex items-center gap-1.5 cursor-pointer">
+          <Plug className="w-4 h-4" /> วิธีติดตั้งปลั๊กอิน
+        </button>
+        {live.status === 'off' && (
+          <button onClick={onStart} className="px-3 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold flex items-center gap-1.5 cursor-pointer">
+            <Radio className="w-4 h-4" /> เชื่อมต่อ SWEX
+          </button>
+        )}
+        {live.status === 'error' && (
+          <button onClick={() => { onStop(); onStart(); }} className="px-3 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold flex items-center gap-1.5 cursor-pointer"><RotateCcw className="w-4 h-4" /> ลองใหม่</button>
+        )}
+        {live.status !== 'off' && (
+          <button onClick={onStop} className="px-3 py-2 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 text-slate-200 text-xs font-bold flex items-center gap-1.5 cursor-pointer">
+            <Pause className="w-4 h-4" /> ตัดการเชื่อมต่อ
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
 
 function SyncCard({ watch, box, onStart, onGrant, onStop }) {
   if (watch.status === 'unsupported') {
@@ -386,7 +447,7 @@ function ImportButton({ onFile, label, icon: Icon = Upload, subtle = false }) {
   );
 }
 
-function EmptyState({ onFile, onWatch, onLoadDemo }) {
+function EmptyState({ onFile, onWatch, onLoadDemo, onLive }) {
   const [dragging, setDragging] = useState(false);
   return (
     <div
@@ -407,6 +468,11 @@ function EmptyState({ onFile, onWatch, onLoadDemo }) {
             <Trophy className="w-4 h-4 text-slate-950" /> โหลดไอดีตัวอย่าง Guardian G3 (ทดลองทันที)
           </button>
         )}
+        {onLive && (
+          <button onClick={onLive} className="px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 cursor-pointer bg-cyan-600 hover:bg-cyan-500 text-white shadow-lg shadow-cyan-500/20">
+            <Radio className="w-4 h-4" /> เชื่อมต่อ SWEX แบบเรียลไทม์ (AegisLink)
+          </button>
+        )}
         {onWatch && (
           <button onClick={onWatch} className="px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 cursor-pointer bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 text-slate-200">
             <FolderSync className="w-4 h-4 text-emerald-400" /> หรือเลือกโฟลเดอร์ SWEX เพื่อซิงก์อัตโนมัติ
@@ -416,7 +482,7 @@ function EmptyState({ onFile, onWatch, onLoadDemo }) {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-left pt-4 max-w-4xl mx-auto">
         {[
           ['1', 'ติดตั้ง SWEX', 'Summoners War Exporter (Windows/Mac) แล้วเปิดคู่กับเกมผ่าน proxy ตามคู่มือหน้า AegisLink'],
-          ['2', 'Export โปรไฟล์', 'ในเกมเข้า Login หน้าแรก 1 ครั้ง SWEX จะสร้างไฟล์ JSON ให้ในโฟลเดอร์ Files'],
+          ['2', 'เรียลไทม์หรือไฟล์', 'ติดตั้งปลั๊กอิน AegisLink แล้วกด "เชื่อมต่อ SWEX" กล่องจะอัปเดตทันทีที่เปลี่ยนรูนในเกม — หรือจะ export ไฟล์ JSON มาวางก็ได้'],
           ['3', 'นำเข้าที่นี่', 'ไฟล์ถูกอ่านในเบราว์เซอร์ของคุณเท่านั้น เก็บเฉพาะมอนสเตอร์ รูน และค่าสเตตัสไว้ในเครื่อง'],
         ].map(([n, title, desc]) => (
           <div key={n} className="p-4 rounded-2xl bg-white/[0.03] border border-white/[0.06]">

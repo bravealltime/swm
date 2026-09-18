@@ -6,8 +6,12 @@ import {
 } from 'lucide-react';
 import MonsterAvatar from '../components/MonsterAvatar';
 import { loadGuildWarState, saveGuildWarState, subscribeToSync, exportAllDataAsJSON } from '../services/storageService';
-import { loadBox } from '../utils/swexImport';
+import { loadBox, getMonsterCatalogInfo } from '../utils/swexImport';
 import allMonstersData from '../data/allMonsters.json';
+import * as aegisLive from '../services/aegisLive';
+import { applyLiveToWar } from '../utils/siegeLive';
+
+const nameOfMaster = (id) => getMonsterCatalogInfo(id)?.name || `#${id}`;
 
 // Seed initial default 12-base siege state if no state in IndexedDB
 function getInitialWarState() {
@@ -163,17 +167,31 @@ export default function GuildWarRoomView({ onNavigate }) {
     return () => clearInterval(timer);
   }, []);
 
+  // Real-time guild / siege packets from the AegisLink SWEX plugin
+  const [live, setLive] = useState(() => ({ ...aegisLive.getState() }));
+  const mergeLive = (guild, st) => {
+    if (!guild || !Object.keys(guild.packets || {}).length) return;
+    setWar((prev) => {
+      if (!prev) return prev;
+      const next = applyLiveToWar(prev, guild, nameOfMaster, st?.wizard?.name);
+      if (next !== prev) saveGuildWarState(next);
+      return next;
+    });
+  };
+
   // Load from IndexedDB on mount
   useEffect(() => {
     async function init() {
       const saved = await loadGuildWarState();
+      let base;
       if (saved && saved.bases) {
-        setWar(saved);
+        base = saved;
       } else {
-        const initial = getInitialWarState();
-        await saveGuildWarState(initial);
-        setWar(initial);
+        base = getInitialWarState();
+        await saveGuildWarState(base);
       }
+      const st = aegisLive.getState();
+      setWar(applyLiveToWar(base, st.guild, nameOfMaster, st.wizard?.name));
     }
     init();
 
@@ -183,7 +201,11 @@ export default function GuildWarRoomView({ onNavigate }) {
         setWar(event.data);
       }
     });
-    return unsubscribe;
+    const unsubLive = aegisLive.subscribe((type, payload, st) => {
+      if (type === 'state') setLive({ ...st });
+      if (type === 'guild') mergeLive(payload, st);
+    });
+    return () => { unsubscribe(); unsubLive(); };
   }, []);
 
   // Save changes to IndexedDB and broadcast
@@ -331,40 +353,64 @@ export default function GuildWarRoomView({ onNavigate }) {
         <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="relative flex flex-col md:flex-row md:items-center md:justify-between gap-6">
           <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <span className="px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                LIVE COMMAND CENTER
+            <div className="flex items-center gap-2 flex-wrap">
+              {war.live ? (
+                <span className="px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  LIVE จาก SWEX
+                </span>
+              ) : (
+                <span className="px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 flex items-center gap-1.5">
+                  <AlertTriangle className="w-3.5 h-3.5" />
+                  ข้อมูลตัวอย่าง
+                </span>
+              )}
+              <span className={`px-2.5 py-0.5 text-xs rounded-full border flex items-center gap-1.5 ${live.status === 'live' ? 'text-cyan-200 bg-cyan-500/10 border-cyan-500/30' : live.status === 'connecting' ? 'text-amber-200 bg-amber-500/10 border-amber-500/30' : live.status === 'error' ? 'text-rose-200 bg-rose-500/10 border-rose-500/30' : 'text-slate-400 bg-white/5 border-white/5'}`}>
+                <Zap className="w-3 h-3" />
+                {live.status === 'live' ? `AegisLink เชื่อมต่อแล้ว${live.lastEventAt ? ` • ${new Date(live.lastEventAt).toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}` : ''}` : live.status === 'connecting' ? 'กำลังหาปลั๊กอิน AegisLink…' : live.status === 'error' ? 'ไม่พบปลั๊กอิน AegisLink' : 'ยังไม่ได้เชื่อมต่อ SWEX'}
               </span>
-              <span className="px-2.5 py-0.5 text-xs text-slate-400 bg-white/5 rounded-full border border-white/5">
-                {war.server} Server
-              </span>
+              {live.status === 'off' || live.status === 'error' ? (
+                <button onClick={() => { if (live.status === 'error') aegisLive.stop(); aegisLive.start(); }} className="px-2.5 py-0.5 text-xs font-bold rounded-full bg-cyan-600 hover:bg-cyan-500 text-white cursor-pointer">เชื่อมต่อ SWEX</button>
+              ) : (
+                <button onClick={() => aegisLive.stop()} className="px-2.5 py-0.5 text-xs rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 cursor-pointer">ตัดการเชื่อมต่อ</button>
+              )}
             </div>
             <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight flex items-center gap-3">
               🛡️ ศูนย์บัญชาการกิลด์: <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-300">{war.guildName}</span>
             </h1>
-            <p className="text-sm text-slate-300 flex items-center gap-2">
+            <p className="text-sm text-slate-300 flex items-center gap-2 flex-wrap">
               <span>{war.round}</span>
               <span>•</span>
               <span>คุณเล่นในชื่อ: <strong className="text-emerald-400 font-semibold">{war.myPlayerName}</strong></span>
             </p>
+            {war.live ? (
+              <p className="text-[11px] text-slate-400 flex items-center gap-1.5 flex-wrap">
+                <span>แพ็กเก็ตล่าสุดจากเกม:</span>
+                {war.live.commands.slice(0, 6).map((c) => (
+                  <span key={c.command} className="px-1.5 py-0.5 rounded bg-white/5 border border-white/10 font-mono text-[10px] text-slate-300" title={new Date(c.at).toLocaleString('th-TH')}>{c.command}</span>
+                ))}
+                <span className="text-slate-500">— เปิดหน้ากิลด์ / Siege ในเกมเพื่อรับข้อมูลใหม่</span>
+              </p>
+            ) : (
+              <p className="text-[11px] text-amber-200/80">ป้อม คะแนน และสมาชิกด้านล่างเป็นข้อมูลตัวอย่าง — ติดตั้งปลั๊กอิน AegisLink ใน SWEX แล้วกด "เชื่อมต่อ SWEX" ระบบจะดึงกิลด์จริงของคุณทันทีที่เปิดหน้า Siege ในเกม (<button onClick={() => onNavigate?.('aegislink')} className="underline hover:text-white cursor-pointer">วิธีติดตั้ง</button>)</p>
+            )}
           </div>
 
           {/* Quick Score Board & Export Backup Button */}
           <div className="flex items-center gap-3 flex-wrap">
             <div className="flex items-center gap-4 bg-black/40 border border-white/10 rounded-2xl p-3 px-5">
               <div className="text-center">
-                <div className="text-[10px] uppercase font-bold text-blue-400">เรา (น้ำเงิน)</div>
+                <div className="text-[10px] uppercase font-bold text-blue-400 truncate max-w-[110px]">{war.guildNames?.blue ? `เรา • ${war.guildNames.blue}` : 'เรา (น้ำเงิน)'}</div>
                 <div className="text-xl font-black text-white">{war.currentScore.blue.toLocaleString()}</div>
               </div>
               <div className="w-px h-8 bg-white/10" />
               <div className="text-center">
-                <div className="text-[10px] uppercase font-bold text-rose-400">แดง</div>
+                <div className="text-[10px] uppercase font-bold text-rose-400 truncate max-w-[110px]">{war.guildNames?.red || 'แดง'}</div>
                 <div className="text-lg font-bold text-slate-300">{war.currentScore.red.toLocaleString()}</div>
               </div>
               <div className="w-px h-8 bg-white/10" />
               <div className="text-center">
-                <div className="text-[10px] uppercase font-bold text-amber-400">เหลือง</div>
+                <div className="text-[10px] uppercase font-bold text-amber-400 truncate max-w-[110px]">{war.guildNames?.yellow || 'เหลือง'}</div>
                 <div className="text-lg font-bold text-slate-300">{war.currentScore.yellow.toLocaleString()}</div>
               </div>
             </div>
@@ -428,7 +474,7 @@ export default function GuildWarRoomView({ onNavigate }) {
                     <span className={`text-[10px] px-1.5 py-0.5 rounded font-bold uppercase ${
                       base.remaining === 0 ? 'bg-red-500/20 text-red-400' : 'bg-white/10 text-slate-200'
                     }`}>
-                      {base.remaining}/{base.max} ทีม
+                      {base.max ? `${base.remaining}/${base.max} ทีม` : 'ยังไม่เห็นทีม'}
                     </span>
                   </div>
 
@@ -476,7 +522,7 @@ export default function GuildWarRoomView({ onNavigate }) {
               <div className="flex items-center gap-2">
                 <span className="text-xs text-slate-300">เหลือทีมตั้งรับ:</span>
                 <span className="text-sm font-black text-emerald-400 px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
-                  {selectedBase.remaining} / {selectedBase.max} ทีม
+                  {selectedBase.max ? `${selectedBase.remaining} / ${selectedBase.max} ทีม` : 'ยังไม่เห็นทีม'}
                 </span>
               </div>
             </div>
@@ -496,6 +542,11 @@ export default function GuildWarRoomView({ onNavigate }) {
 
             {/* Defense Slots */}
             <div className="space-y-3 max-h-[460px] overflow-y-auto pr-1">
+              {selectedBase.defenses.length === 0 && (
+                <div className="p-4 rounded-xl border border-dashed border-white/10 text-xs text-slate-400 leading-relaxed">
+                  ยังไม่มีข้อมูลทีมตั้งรับของป้อมนี้ — เปิดป้อมนี้ในเกม (ผ่าน SWEX) ปลั๊กอิน AegisLink จะส่งทีมตั้งรับมาให้ทันที
+                </div>
+              )}
               {selectedBase.defenses.map((def, idx) => {
                 const isDefeated = def.status === 'defeated';
                 const isAttacking = !!def.attacker;

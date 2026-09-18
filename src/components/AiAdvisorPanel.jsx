@@ -1,29 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Sparkles, Loader2, AlertTriangle, RotateCcw } from 'lucide-react';
 import { askAdvisor } from '../services/aiClient';
-
-// Very small markdown: headings (#, **bold** lines), bullets (-, •, 1.), paragraphs.
-function renderAnswer(text) {
-  const lines = String(text).split(/\r?\n/);
-  const out = [];
-  let list = null;
-  const flush = () => { if (list) { out.push(<ul key={`ul-${out.length}`} className="list-disc pl-5 space-y-1">{list}</ul>); list = null; } };
-  const inline = (s) => s.split(/(\*\*[^*]+\*\*)/g).map((part, i) =>
-    part.startsWith('**') ? <strong key={i} className="text-white">{part.slice(2, -2)}</strong> : part
-  );
-  lines.forEach((raw, i) => {
-    const line = raw.trim();
-    if (!line) { flush(); return; }
-    const bullet = line.match(/^(?:[-•*]|\d+[.)])\s+(.*)$/);
-    if (bullet) { (list ||= []).push(<li key={i}>{inline(bullet[1])}</li>); return; }
-    flush();
-    const heading = line.match(/^#{1,4}\s+(.*)$/) || (line.startsWith('**') && line.endsWith('**') && [null, line.slice(2, -2)]);
-    if (heading) out.push(<h4 key={i} className="text-sm font-bold text-amber-300 mt-3 first:mt-0">{heading[1]}</h4>);
-    else out.push(<p key={i} className="leading-relaxed">{inline(line)}</p>);
-  });
-  flush();
-  return out;
-}
+import AiAnswer from './AiAnswer';
 
 /**
  * Button + answer box for the grounded advisor. `buildPayload` is called on click so the
@@ -85,8 +63,8 @@ export default function AiAdvisorPanel({ buildPayload, resetKey, label = 'ให
       )}
 
       {state.status === 'done' && (
-        <div className="mt-3 p-4 rounded-xl bg-[#0a0f18] border border-slate-800 text-sm text-slate-200 space-y-2">
-          {renderAnswer(state.answer)}
+        <div className="mt-3 p-4 rounded-xl bg-[#0a0f18] border border-slate-800">
+          <AiAnswer text={state.answer} />
           <p className="text-[11px] text-slate-500 pt-2 border-t border-white/[0.06]">
             คำตอบสร้างโดย AI จากสกิล/สถิติในฐานข้อมูล SWM — ตรวจสอบก่อนใช้จริง{state.authenticated ? '' : ' • เข้าสู่ระบบเพื่อถามได้ถี่ขึ้น'}
           </p>
