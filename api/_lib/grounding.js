@@ -37,14 +37,16 @@ export async function searchLiveWeb(query, maxSnippets = 4, timeoutMs = 5000) {
   }
 }
 
-/** Determines if a user query requires Live Web Grounding */
+/** Determines if a user query requires Live Web Grounding or Live Data Lookup */
 export function needsLiveGrounding(question) {
   const lower = String(question || '').toLowerCase();
   const triggers = [
+    // Codes
     'โค้ด', 'คูปอง', 'promo', 'code', 'coupon', 'แจก',
-    'แพทช์ล่าสุด', 'แพทล่าสุด', 'แพทช์ใหม่', 'balance patch', 'เนิร์ฟ', 'บัฟ',
-    'อีเวนต์', 'กิจกรรม', 'event', 'อัปเดตล่าสุด', 'อัพเดท', 'swc',
-    'com2us ล่าสุด', 'คอลแลบ', 'collab', 'มอนสเตอร์ใหม่', 'ข่าวสาร'
+    // Patches & Updates
+    'patch', 'แพทช์', 'แพตช์', 'แพท', 'update', 'อัปเดต', 'อัพเดต', 'อัพเดท', 'ปรับบาลานซ์', 'balance', 'nerf', 'buff', 'เนิร์ฟ', 'บัฟ',
+    // Events & Competitions
+    'อีเวนต์', 'กิจกรรม', 'event', 'swc', 'com2us', 'คอลแลบ', 'collab', 'มอนสเตอร์ใหม่', 'ข่าวสาร', 'ล่าสุด'
   ];
 
   return triggers.some(t => lower.includes(t));

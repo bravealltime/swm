@@ -387,16 +387,59 @@ ${facts}
 งาน: วิเคราะห์แมตช์อัพนี้จากมุมมองฝั่งเรา — (1) เกมแพลนหลักของแต่ละฝั่ง (2) ตัวที่ควรแบน/ถูกแบนและเหตุผล (3) ลำดับเทิร์นที่ต้องการและเป้าหมายแรก (4) เงื่อนไขชนะ/แพ้ที่ต้องระวัง`;
 }
 
+/** Check if query asks about Balance Patches or Game Updates */
+function findPatchFacts(text) {
+  const lower = String(text || '').toLowerCase();
+  const triggers = ['patch', 'แพทช์', 'แพตช์', 'แพท', 'ปรับบาลานซ์', 'balance', 'เนิร์ฟ', 'บัฟ', 'อัปเดต', 'อัพเดต', 'อัพเดท'];
+  if (!triggers.some(t => lower.includes(t))) return null;
+
+  const cwd = process.cwd();
+  const patchFile = path.resolve(cwd, 'src/data/balancePatches.json');
+  const detailsFile = path.resolve(cwd, 'src/data/balancePatchDetails.json');
+
+  if (!fs.existsSync(patchFile)) return null;
+
+  try {
+    const patches = JSON.parse(fs.readFileSync(patchFile, 'utf8'));
+    const details = fs.existsSync(detailsFile) ? JSON.parse(fs.readFileSync(detailsFile, 'utf8')) : {};
+
+    const latest = patches.slice(0, 3);
+    const lines = [];
+    lines.push(`[ข้อมูลแพตช์ปรับสมดุล (Balance Patch) จากฐานข้อมูล SWM]:`);
+
+    for (let i = 0; i < latest.length; i++) {
+      const p = latest[i];
+      const match = p.link?.match(/balancePatchID=(\d+)/);
+      const detailId = match ? match[1] : String(p.id);
+      const detailList = details[detailId] || [];
+      const sampleChanges = detailList.slice(0, 5).map(d => `  - ${d.monsterName} (${d.element || ''}): ${d.preview || d.officialText || d.changeType}`).join('\n');
+
+      lines.push(`${i === 0 ? '⭐ แพตช์ล่าสุด' : '• แพตช์ก่อนหน้า'}: วันที่ ${p.date} (ปรับปรุงมอนสเตอร์ ${p.monstersCount} ตัว, สกิล ${p.skillCount} สกิล)`);
+      if (sampleChanges) {
+        lines.push(`  ตัวอย่างการปรับสมดุลเด่น:\n${sampleChanges}`);
+      }
+      if (p.link) {
+        lines.push(`  ลิงก์รายละเอียด: ${p.link}`);
+      }
+    }
+
+    return lines.join('\n');
+  } catch {
+    return null;
+  }
+}
+
 const CHAT_SYSTEM = `คุณคือโค้ช Summoners War: Sky Arena ระดับ Guardian ประจำเว็บ SWM คุยเป็นภาษาไทยแบบเพื่อนร่วมกิลด์ที่เก่งเกม กระชับ ตรงประเด็น
-ขอบเขต: ตอบเฉพาะเรื่อง Summoners War เท่านั้น (มอนสเตอร์ รูน อาร์ติแฟกต์ RTA อารีน่า กิลด์วอร์/Siege ดันเจี้ยน อีเวนต์ การจัดทีม)
+ขอบเขต: ตอบเฉพาะเรื่อง Summoners War เท่านั้น (มอนสเตอร์ รูน อาร์ติแฟกต์ RTA อารีน่า กิลด์วอร์/Siege ดันเจี้ยน อีเวนต์ การจัดทีม แพตช์อัปเดต)
 ถ้าคำถามไม่เกี่ยวกับ Summoners War ให้ตอบสั้น ๆ ประโยคเดียวว่าโค้ชตอบเฉพาะเรื่อง Summoners War แล้วชวนถามเรื่องเกมแทน
 
 ความรู้หลักและแนวทางการตอบ:
 1. การใส่รูนและปั้นตัวละคร: อิงจาก "แนวทางการใส่รูนและสเตตัสเป้าหมาย Guardian" ที่แนบมา บอกเซ็ต (เช่น Violent/Will), ออฟหลักช่อง 2/4/6 (เช่น SPD/CD/ATK%), ซับสเตตัสที่ต้องเน้น, และอาร์ติแฟกต์
 2. การจัดทีมดันเจี้ยน: อิงจาก "ข้อมูลทีมดันเจี้ยน" ที่แนบมา ระบุตัวมอนสเตอร์, ลำดับเทิร์น (Turn Order เช่น บัฟดาบ -> เจาะเกราะ -> ดาเมจกวาดล้าง), และเกณฑ์สปีด
 3. กิลด์วอร์ & 3MDC Siege: อิงจาก "สูตรแก้ทาง 3MDC" ที่แนบมา อธิบายจุดอันตรายของทีมรับ และสเต็ปการเจาะบ้านแบบชัวร์ 100%
-4. ถ้ามี "กล่องของผู้ใช้" แนบมา ให้แนะนำตัวที่ผู้ใช้มีจริงในกล่องก่อนเสมอ
-5. จัดรูปแบบให้อ่านง่าย: เริ่มด้วยคำตอบสั้น 1 บรรทัด แล้วตามด้วยหัวข้อหรือ bullet point ไม่ต้องทักทายเยิ่นเย้อ`;
+4. แพตช์และการอัปเดต (Balance Patch): อิงจาก "ข้อมูลแพตช์ปรับสมดุล" หรือ "ข้อมูลผลการค้นหาเว็บสด" ที่แนบมา บอกวันที่แพตช์ล่าสุด, จำนวนมอนสเตอร์ที่ปรับ, และตัวเด่น ๆ ที่ถูกปรับ/เนิร์ฟ/บัฟ ห้ามตอบว่าไม่มีข้อมูลแพตช์เด็ดขาด
+5. ถ้ามี "กล่องของผู้ใช้" แนบมา ให้แนะนำตัวที่ผู้ใช้มีจริงในกล่องก่อนเสมอ
+6. จัดรูปแบบให้อ่านง่าย: เริ่มด้วยคำตอบสั้น 1 บรรทัด แล้วตามด้วยหัวข้อหรือ bullet point ไม่ต้องทักทายเยิ่นเย้อ`;
 
 async function chatPrompt({ question, context = {}, history = [] }) {
   const q = String(question || '').trim();
@@ -430,6 +473,12 @@ async function chatPrompt({ question, context = {}, history = [] }) {
     parts.push(`ข้อมูลสูตรแก้ทาง 3MDC จาก SWGT:${NL}${mdcFacts}`);
   }
 
+  // Detect Balance Patches
+  const patchFacts = findPatchFacts(q);
+  if (patchFacts) {
+    parts.push(patchFacts);
+  }
+
   // Live Web Grounding for real-time events, promo codes, balance patches
   if (needsLiveGrounding(q)) {
     // If asking about codes, load local verified codes from allPromoCodes.json
@@ -445,7 +494,10 @@ async function chatPrompt({ question, context = {}, history = [] }) {
     }
 
     try {
-      const searchSnippets = await searchLiveWeb(`Summoners War ${q}`, 4, 4000);
+      const searchTarget = (q.includes('patch') || q.includes('แพท') || q.includes('update') || q.includes('อัปเดต'))
+        ? `Summoners War balance patch update notes Com2uS`
+        : `Summoners War ${q}`;
+      const searchSnippets = await searchLiveWeb(searchTarget, 4, 4000);
       if (searchSnippets && searchSnippets.length > 0) {
         parts.push(`[ข้อมูลผลการค้นหาเว็บสด (Live Web Grounding)]:\n${searchSnippets.map((s, i) => `${i + 1}. ${s}`).join('\n')}`);
       }
