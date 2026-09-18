@@ -63,16 +63,24 @@ function RuneDetail({ rune, unitName }) {
       <div className="rounded-xl bg-[#070b14] border border-white/[0.06] divide-y divide-white/[0.05] text-sm">
         <div className="flex justify-between px-3 py-2"><span className="text-slate-400">หลัก</span><span className="font-mono font-bold text-cyan-300">{fmtStat(rune.main[0], rune.main[1])}</span></div>
         {rune.innate && <div className="flex justify-between px-3 py-2"><span className="text-slate-400">ติดตัว</span><span className="font-mono text-slate-200">{fmtStat(rune.innate[0], rune.innate[1])}</span></div>}
-        {(rune.subs || []).map((s, i) => (
-          <div key={i} className="flex justify-between px-3 py-2">
-            <span className="text-slate-400">ซับ {i + 1}</span>
-            <span className="font-mono text-slate-200">
-              {STAT_NAMES[s[0]] || s[0]} +{s[1]}{s[2] ? <span className="text-emerald-400"> (+{s[2]} เจียร)</span> : null}{PCT_STATS.has(s[0]) ? '%' : ''}{s[3] ? <span className="text-fuchsia-300 text-[11px]"> ● อัญมณี</span> : null}
-            </span>
-          </div>
-        ))}
+        {(rune.subs || []).map((s, i) => {
+          const unit = PCT_STATS.has(s[0]) ? '%' : '';
+          const total = (s[1] || 0) + (s[2] || 0);
+          return (
+            <div key={i} className="flex justify-between gap-3 px-3 py-2">
+              <span className="text-slate-400 shrink-0">ซับ {i + 1}{s[3] ? <span className="ml-1 text-[10px] px-1 py-0.5 rounded bg-fuchsia-500/15 text-fuchsia-300 border border-fuchsia-500/30">หินแปลง</span> : null}</span>
+              <span className="font-mono text-right">
+                <span className="text-slate-100 font-bold">{STAT_NAMES[s[0]] || s[0]} +{total}{unit}</span>
+                {s[2] ? <span className="block text-[11px] text-slate-400">= {s[1]}{unit} + <span className="text-emerald-400">{s[2]}{unit} หินขัด</span></span> : null}
+              </span>
+            </div>
+          );
+        })}
       </div>
-      <div className="text-[11px] text-slate-500">ใส่อยู่กับ {unitName}</div>
+      <div className="text-[11px] text-slate-500 space-y-0.5">
+        <div>ใส่อยู่กับ {unitName}</div>
+        <div><span className="text-emerald-400">หินขัด</span> = ค่าที่ขัดเพิ่ม (Grindstone) • <span className="text-fuchsia-300">หินแปลง</span> = ซับที่ถูกเปลี่ยนด้วย Enchanted Gem</div>
+      </div>
     </div>
   );
 }
@@ -183,7 +191,7 @@ export default function MonsterDetailModal({ unit, box, onClose, onNavigate }) {
                 {picked.kind === 'rune' ? <RuneDetail rune={picked.item} unitName={info?.name || ''} /> : <ArtifactDetail artifact={picked.item} />}
               </div>
             ) : (
-              <div className="rounded-2xl border border-white/[0.08] bg-[#070b14] p-4 text-xs text-slate-400 flex items-center gap-2"><Info className="w-4 h-4 shrink-0" /> เลือกรูนทางซ้ายเพื่อดูค่าหลัก / ซับ / เจียร / ประสิทธิภาพ</div>
+              <div className="rounded-2xl border border-white/[0.08] bg-[#070b14] p-4 text-xs text-slate-400 flex items-center gap-2"><Info className="w-4 h-4 shrink-0" /> เลือกรูนทางซ้ายเพื่อดูค่าหลัก / ซับ / หินขัด-หินแปลง / ประสิทธิภาพ</div>
             )}
 
             <div className="rounded-2xl border border-white/[0.08] bg-[#070b14] overflow-hidden">
