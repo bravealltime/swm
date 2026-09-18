@@ -22,6 +22,7 @@ import {
   HelpCircle
 } from 'lucide-react';
 import MonsterAvatar from '../components/MonsterAvatar';
+import AiAdvisorPanel from '../components/AiAdvisorPanel';
 import { MONSTERS } from '../data/monsters';
 import RTA_SYNERGIES from '../data/rtaSynergies.json';
 
@@ -605,6 +606,23 @@ export default function DraftExplorerView({ onNavigate }) {
           </div>
         </div>
       )}
+
+      {/* Grounded AI coach for the current draft */}
+      <AiAdvisorPanel
+        resetKey={[...blueTeam, ...redTeam].map((m) => m?.name || '-').join('|') + `|${blueLeader}|${redLeader}|${blueBan}|${redBan}`}
+        label="ให้ AI วิเคราะห์ดราฟต์นี้"
+        hint="เกมแพลนสองฝั่ง ตัวที่ควรแบน ลำดับเทิร์นและเป้าหมายแรก — อิงสกิลจริงของทั้ง 10 ตัว"
+        buildPayload={() => ({
+          kind: 'draft',
+          blue: blueTeam.filter(Boolean).map((m) => m.name),
+          red: redTeam.filter(Boolean).map((m) => m.name),
+          blueLeader: blueTeam[blueLeader]?.name,
+          redLeader: redTeam[redLeader]?.name,
+          blueBan: redTeam[blueBan]?.name,
+          redBan: blueTeam[redBan]?.name,
+          perspective: 'blue',
+        })}
+      />
 
       {/* 5. Draft Intelligence Insights & AI Advisor */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

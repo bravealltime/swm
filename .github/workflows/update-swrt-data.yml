@@ -21,7 +21,9 @@ concurrency:
 jobs:
   refresh:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 150
+    env:
+      AI_API_KEY: ${{ secrets.AI_API_KEY }}
     steps:
       - uses: actions/checkout@v4
 
@@ -38,6 +40,23 @@ jobs:
 
       - name: Guardian player index, match shards, replay meta
         run: node scripts/fetch_swrt_players.cjs --pages=${{ github.event.inputs.pages || '30' }} --top=100
+
+      # AI enrichment — skipped when the AI_* secrets are not set
+      - name: AI — Thai patch summaries
+        if: ${{ env.AI_API_KEY != '' }}
+        env:
+          AI_BASE_URL: ${{ secrets.AI_BASE_URL }}
+          AI_MODEL: ${{ secrets.AI_MODEL }}
+          AI_API_KEY: ${{ secrets.AI_API_KEY }}
+        run: node scripts/ai_patch_summaries.mjs
+
+      - name: AI — Guardian play-style summaries (top 150, cached)
+        if: ${{ env.AI_API_KEY != '' }}
+        env:
+          AI_BASE_URL: ${{ secrets.AI_BASE_URL }}
+          AI_MODEL: ${{ secrets.AI_MODEL }}
+          AI_API_KEY: ${{ secrets.AI_API_KEY }}
+        run: node scripts/ai_player_summaries.mjs --limit=150
 
       - name: Commit refreshed data
         run: |

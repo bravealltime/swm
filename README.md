@@ -64,3 +64,19 @@
 
 บน Chrome / Edge เดสก์ท็อป กด "เลือกโฟลเดอร์ SWEX" ครั้งเดียว (File System Access API, สิทธิ์อ่านอย่างเดียว) — เว็บจะตรวจไฟล์ `*.json` ที่ใหม่ที่สุดในโฟลเดอร์ทุก 20 วินาทีและตอนกลับมาที่แท็บ
 ถ้าไฟล์ใหม่กว่าที่โหลดไว้จะนำเข้าให้เอง handle ของโฟลเดอร์เก็บใน IndexedDB (เปิดเบราว์เซอร์ใหม่ต้องกดยืนยันสิทธิ์อีกครั้ง 1 คลิก) เบราว์เซอร์อื่นใช้ปุ่ม "นำเข้าใหม่" ตามปกติ
+
+
+## 🤖 AI ในระบบ (ใช้ endpoint แบบ OpenAI-compatible)
+
+ตั้งค่า 3 ตัวแปร (server-side เท่านั้น ห้ามใส่ `VITE_`): `AI_BASE_URL`, `AI_MODEL`, `AI_API_KEY`
+- ในเครื่อง: ใส่ใน `.env` (gitignore แล้ว)
+- Vercel: Project → Settings → Environment Variables (ให้ `/api/ai/advise` ใช้)
+- GitHub: Repository secrets ชื่อเดียวกัน (ให้ cron รันงาน batch)
+
+| ฟีเจอร์ | ที่อยู่ | ทำงานอย่างไร |
+|---|---|---|
+| โค้ช AI อธิบายวิธีแก้ทีม 3MDC / วิเคราะห์ดราฟต์ 5v5 | หน้า 3MDC และ Draft Explorer → ปุ่ม "ให้ AI วิเคราะห์" | เรียก `POST /api/ai/advise` (Vercel function ใน `api/ai/advise.js`) เซิร์ฟเวอร์ใส่สกิล/ลีด/สเตตัสจริงจาก `monsterSkillsData.json` ให้โมเดลแล้วบังคับให้ตอบจากข้อมูลนั้นเท่านั้น จำกัด 3 ครั้ง/นาที (12 เมื่อล็อกอิน) |
+| สรุปแพตช์ภาษาไทย + ใครได้/เสีย + โน้ตรายตัว | หน้า Balance Patch | `node scripts/ai_patch_summaries.mjs` → `balancePatchAi.json` (cache ตาม hash ของแพตช์) |
+| สรุปสไตล์ผู้เล่น Guardian จากรีเพลย์จริง | หน้า Player Tracker (โปรไฟล์จาก SWRT) | `node scripts/ai_player_summaries.mjs --limit=150` → `swrtPlayerSummaries.json` (cache ตาม hash สถิติ) |
+
+ตอน dev ใช้ `npm run dev` ได้เลย — `vite.config.js` มี middleware ให้ `/api/ai/advise` เรียก handler เดียวกับ Vercel

@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import patchesArchive from '../data/balancePatches.json';
 import patchDetailsData from '../data/balancePatchDetails.json';
+import patchAi from '../data/balancePatchAi.json';
 import { MONSTERS } from '../data/monsters';
 import { parsePatchCard, getChangeTypeThai } from '../utils/patchTranslator';
 import { Sparkles, Globe, Languages } from 'lucide-react';
@@ -151,6 +152,30 @@ export default function BalancePatchesView({ onNavigate }) {
 
       {activeTab === 'inspector' ? (
         <>
+          {/* AI overview of the selected patch (grounded in the official text) */}
+          {patchAi.patches?.[selectedPatchId]?.overview && (() => {
+            const ai = patchAi.patches[selectedPatchId];
+            return (
+              <div className="rounded-2xl border border-amber-500/25 bg-gradient-to-br from-amber-500/[0.06] to-transparent p-4 sm:p-5 space-y-3">
+                <div className="flex items-center gap-2 text-sm font-bold text-white">
+                  <Sparkles className="w-4 h-4 text-amber-300" /> สรุปแพตช์ #{selectedPatchId} ภาษาไทย (AI อ่านจากข้อความทางการ)
+                </div>
+                <p className="text-sm text-slate-200 leading-relaxed">{ai.overview}</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                  <div className="p-3 rounded-xl bg-emerald-500/[0.06] border border-emerald-500/25">
+                    <div className="font-bold text-emerald-300 mb-1">ได้ประโยชน์</div>
+                    <div className="flex flex-wrap gap-1.5">{(ai.winners || []).map((n) => <span key={n} className="px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-200">{n}</span>)}</div>
+                  </div>
+                  <div className="p-3 rounded-xl bg-rose-500/[0.06] border border-rose-500/25">
+                    <div className="font-bold text-rose-300 mb-1">ถูกเนิร์ฟ</div>
+                    <div className="flex flex-wrap gap-1.5">{(ai.losers || []).map((n) => <span key={n} className="px-2 py-0.5 rounded-full bg-rose-500/15 text-rose-200">{n}</span>)}</div>
+                  </div>
+                </div>
+                <p className="text-[11px] text-slate-500">สร้างโดย AI เมื่อ {ai.at?.slice(0, 10)} • ตรวจกับข้อความทางการด้านล่างก่อนตัดสินใจ</p>
+              </div>
+            );
+          })()}
+
           {/* Patch Selector Bar */}
           <div className="bg-[#111927] border border-[#1e2a3c] p-3 sm:p-4 rounded-xl flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-2 text-xs text-slate-400 font-medium">
@@ -586,6 +611,12 @@ export default function BalancePatchesView({ onNavigate }) {
                             COM2US OFFICIAL TEXT:
                           </div>
                           {card.preview || card.officialText}
+                        </div>
+                      )}
+                      {patchAi.patches?.[selectedPatchId]?.perMonster?.[card.monsterName] && (
+                        <div className="mt-2 text-xs text-amber-100/90 flex items-start gap-1.5">
+                          <Sparkles className="w-3.5 h-3.5 text-amber-300 shrink-0 mt-0.5" />
+                          <span>{patchAi.patches[selectedPatchId].perMonster[card.monsterName]}</span>
                         </div>
                       )}
                     </div>

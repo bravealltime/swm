@@ -33,6 +33,7 @@ import MonsterAvatar from '../components/MonsterAvatar';
 import playerProfiles from '../data/playerProfiles.json';
 import allMonstersData from '../data/allMonsters.json';
 import swrtPlayersDataset from '../data/swrtPlayersIndex.json';
+import aiSummaries from '../data/swrtPlayerSummaries.json';
 import { buildSwrtProfiles, buildMonsterIndex, loadRecentMatches, SMALL_SAMPLE } from '../data/swrtPlayerAdapter';
 
 // Curated Lucksack profiles first, then every player seen in the SWRT public Guardian
@@ -570,14 +571,34 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
           </div>
         </div>
 
-        {/* Archetype Tactical Explanation */}
-        <div className="mt-5 pt-4 border-t border-slate-800/80 flex items-start gap-2.5 text-xs text-slate-300">
-          <Info className="w-4 h-4 text-blue-400 shrink-0 mt-0.5" />
-          <div>
-            <strong className="text-white font-semibold">การวิเคราะห์ทรงทีม (Archetype Insight): </strong>
-            <span>{activePlayer.archetypeDescription}</span>
-          </div>
-        </div>
+        {/* Archetype Tactical Explanation — AI summary from real replays when available */}
+        {(() => {
+          const ai = activePlayer.swrtId ? aiSummaries.players?.[activePlayer.swrtId] : null;
+          return (
+            <div className="mt-5 pt-4 border-t border-slate-800/80 flex items-start gap-2.5 text-xs text-slate-300">
+              <Info className="w-4 h-4 text-blue-400 shrink-0 mt-0.5" />
+              <div className="space-y-1.5">
+                {ai?.summary ? (
+                  <>
+                    <div>
+                      <strong className="text-white font-semibold">สรุปสไตล์จากรีเพลย์จริง (AI): </strong>
+                      <span>{ai.summary}</span>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      {(ai.tags || []).map((t) => <span key={t} className="px-2 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-200 text-[11px]">{t}</span>)}
+                      <span className="text-[11px] text-slate-500">สร้างโดย AI จากสถิติ {activePlayer.matchesRecorded} แมตช์ • {ai.at?.slice(0, 10)}</span>
+                    </div>
+                  </>
+                ) : (
+                  <div>
+                    <strong className="text-white font-semibold">การวิเคราะห์ทรงทีม (Archetype Insight): </strong>
+                    <span>{activePlayer.archetypeDescription}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          );
+        })()}
       </div>
 
       {/* 4. Navigation Sub-Tabs */}

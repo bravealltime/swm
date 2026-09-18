@@ -23,6 +23,7 @@ import {
   EyeOff
 } from 'lucide-react';
 import MonsterAvatar from '../components/MonsterAvatar';
+import AiAdvisorPanel from '../components/AiAdvisorPanel';
 import ALL_MDC_DATA from '../data/allMdcData.json';
 import { MONSTERS } from '../data/monsters';
 import { loadBox, baseAwakenedId } from '../utils/swexImport';
@@ -588,6 +589,24 @@ export default function MdcView({ search = '' }) {
                   </p>
                 </div>
               </div>
+
+              {/* Grounded AI coach for the selected defense */}
+              <AiAdvisorPanel
+                resetKey={currentDefense.id}
+                label="ให้ AI อธิบายวิธีแก้ทีมนี้"
+                hint="อธิบายว่าทีมตั้งรับนี้อันตรายเพราะสกิลอะไร แล้วเลือกสูตรแก้ทางที่เหมาะสุดพร้อมลำดับเทิร์น"
+                buildPayload={() => ({
+                  kind: 'mdc',
+                  defense: { title: currentDefense.title, monsters: (currentDefense.defenseMonsters || []).map((m) => ({ name: m.name })) },
+                  counters: (displayedCounters || []).slice(0, 5).map((c) => ({
+                    title: c.title,
+                    monsters: (c.monsters || []).map((m) => ({ name: m.name })),
+                    rating: c.rating,
+                    turnOrder: c.turnOrder,
+                    notes: c.notes,
+                  })),
+                })}
+              />
 
               {/* Counter Teams List */}
               <div className="space-y-3">

@@ -50,6 +50,26 @@ function swmSyncServer() {
           return;
         }
 
+        // POST /api/ai/advise — same handler Vercel runs, so the advisor works in dev
+        if (req.method === 'POST' && req.url.startsWith('/api/ai/advise')) {
+          let body = '';
+          req.on('data', (chunk) => { body += chunk; });
+          req.on('end', async () => {
+            res.setHeader('Content-Type', 'application/json; charset=utf-8');
+            try {
+              const { handleAdvise } = await import('./api/ai/advise.js');
+              const token = (req.headers.authorization || '').replace(/^Bearer\s+/i, '');
+              const { status, json } = await handleAdvise({ body: JSON.parse(body || '{}'), ip: req.socket?.remoteAddress, token });
+              res.statusCode = status;
+              return res.end(JSON.stringify(json));
+            } catch (err) {
+              res.statusCode = 500;
+              return res.end(JSON.stringify({ error: err.message }));
+            }
+          });
+          return;
+        }
+
         // POST AegisLink Sync Ingestion endpoint
         if (req.method === 'POST' && (req.url === '/api/sync' || req.url.startsWith('/api/sync'))) {
           let body = '';
