@@ -24,6 +24,7 @@ import {
 } from 'lucide-react';
 import MonsterAvatar from '../components/MonsterAvatar';
 import AiAdvisorPanel from '../components/AiAdvisorPanel';
+import AiChatPanel from '../components/AiChatPanel';
 import ALL_MDC_DATA from '../data/allMdcData.json';
 import { MONSTERS } from '../data/monsters';
 import { loadBox, baseAwakenedId } from '../utils/swexImport';
@@ -605,6 +606,17 @@ export default function MdcView({ search = '' }) {
                     turnOrder: c.turnOrder,
                     notes: c.notes,
                   })),
+                })}
+              />
+
+              <AiChatPanel
+                compact
+                title="ถามต่อเรื่องทีมนี้"
+                placeholder="เช่น ถ้าไม่มี Theomars ใช้ตัวไหนแทน / ต้องสปีดเท่าไหร่ถึงชนะ Perna"
+                suggestions={['ถ้าฉันไม่มีตัวในสูตร ใช้อะไรแทนได้', 'ทีมนี้แพ้ทางอะไรที่สุด', 'ควรแบนตัวไหนถ้าเจอใน Siege']}
+                buildContext={() => ({
+                  defense: `${currentDefense.title} (${(currentDefense.defenseMonsters || []).map((m) => m.name).join(', ')})`,
+                  monsters: [...(currentDefense.defenseMonsters || []).map((m) => m.name), ...((displayedCounters || [])[0]?.monsters || []).map((m) => m.name)],
                 })}
               />
 

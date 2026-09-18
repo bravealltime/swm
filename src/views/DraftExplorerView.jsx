@@ -23,6 +23,7 @@ import {
 } from 'lucide-react';
 import MonsterAvatar from '../components/MonsterAvatar';
 import AiAdvisorPanel from '../components/AiAdvisorPanel';
+import AiChatPanel from '../components/AiChatPanel';
 import { MONSTERS } from '../data/monsters';
 import RTA_SYNERGIES from '../data/rtaSynergies.json';
 
@@ -621,6 +622,17 @@ export default function DraftExplorerView({ onNavigate }) {
           blueBan: redTeam[blueBan]?.name,
           redBan: blueTeam[redBan]?.name,
           perspective: 'blue',
+        })}
+      />
+
+      <AiChatPanel
+        compact
+        title="ถามต่อเรื่องดราฟต์นี้"
+        placeholder="เช่น ถ้าเขาเปิด Oliver ก่อน ฉันควรตอบด้วยอะไร"
+        suggestions={['ตัวไหนของฝั่งแดงอันตรายสุดและทำไม', 'ฉันควรเปลี่ยนลีดเป็นใคร', 'ลำดับสปีดที่ต้องการของฝั่งน้ำเงิน']}
+        buildContext={() => ({
+          draft: `Blue: ${blueTeam.filter(Boolean).map((m) => m.name).join(', ')} | Red: ${redTeam.filter(Boolean).map((m) => m.name).join(', ')}`,
+          monsters: [...blueTeam, ...redTeam].filter(Boolean).map((m) => m.name),
         })}
       />
 

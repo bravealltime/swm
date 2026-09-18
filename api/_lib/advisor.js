@@ -82,16 +82,55 @@ ${facts}
 งาน: วิเคราะห์แมตช์อัพนี้จากมุมมองฝั่งเรา — (1) เกมแพลนหลักของแต่ละฝั่ง (2) ตัวที่ควรแบน/ถูกแบนและเหตุผล (3) ลำดับเทิร์นที่ต้องการและเป้าหมายแรก (4) เงื่อนไขชนะ/แพ้ที่ต้องระวัง`;
 }
 
+/** Monster names mentioned in free text (longest names first so "Dark Stark" wins over "Stark"). */
+let nameList = null;
+function mentionedMonsters(text) {
+  const idx = loadSkills();
+  if (!nameList) nameList = [...new Set([...idx.values()].map((m) => m.name))].filter((n) => n.length >= 3).sort((a, b) => b.length - a.length);
+  const lower = String(text || '').toLowerCase();
+  const found = [];
+  for (const n of nameList) {
+    if (found.length >= 8) break;
+    if (lower.includes(n.toLowerCase())) found.push(n);
+  }
+  return found;
+}
+
+const CHAT_SYSTEM = `คุณคือโค้ช Summoners War ของเว็บ SWM คุยเป็นภาษาไทยแบบเพื่อนที่เก่งเกม กระชับ ตรงประเด็น
+กฎ:
+1. ข้อเท็จจริงเรื่องสกิล/สเตตัส ใช้เฉพาะ "ข้อมูลอ้างอิง" ที่แนบมา ถ้าไม่มีข้อมูลของตัวนั้นให้บอกตรง ๆ ว่าไม่มีในระบบ ห้ามเดา
+2. ถ้ามี "กล่องของผู้ใช้" แนบมา ให้แนะนำจากมอนสเตอร์/รูนที่เขามีจริงเท่านั้น
+3. ตอบเป็นข้อ ๆ เมื่อเป็นแผนหรือรายการ ยาวไม่เกิน ~220 คำ ไม่ต้องทักทาย`;
+
+function chatPrompt({ question, context = {}, history = [] }) {
+  const q = String(question || '').trim();
+  if (!q) throw new Error('empty question');
+  const NL = '\n';
+  const parts = [];
+  if (context.box) parts.push(`กล่องของผู้ใช้ (สรุป):${NL}${String(context.box).slice(0, 6000)}`);
+  if (context.defense) parts.push(`ทีมตั้งรับที่กำลังดูอยู่: ${context.defense}`);
+  if (context.draft) parts.push(`ดราฟต์ที่กำลังดูอยู่: ${context.draft}`);
+  if (context.previousAnswer) parts.push(`คำตอบก่อนหน้าของโค้ช (ย่อ): ${String(context.previousAnswer).slice(0, 1200)}`);
+  const names = [...new Set([...mentionedMonsters(q), ...(context.monsters || []).slice(0, 12)])].slice(0, 14);
+  if (names.length) parts.push(`ข้อมูลอ้างอิงสกิล/สเตตัส:${NL}${names.map(monsterFacts).join(NL)}`);
+  const past = history.slice(-4).map((h) => `${h.role === 'user' ? 'ผู้ใช้' : 'โค้ช'}: ${String(h.text).slice(0, 600)}`).join(NL);
+  if (past) parts.push(`บทสนทนาก่อนหน้า:${NL}${past}`);
+  parts.push(`คำถาม: ${q}`);
+  return parts.join(NL + NL);
+}
+
 /**
- * kind: 'mdc' | 'draft'. Returns { answer, model, usage }.
+ * kind: 'mdc' | 'draft' | 'chat'. Returns { answer, model, usage }.
  */
 export async function advise(payload) {
   const kind = payload?.kind;
   let user;
+  let system = SYSTEM;
   if (kind === 'mdc') user = mdcPrompt(payload);
   else if (kind === 'draft') user = draftPrompt(payload);
+  else if (kind === 'chat') { user = chatPrompt(payload); system = CHAT_SYSTEM; }
   else throw new Error('unknown kind');
   if (user.length > 24000) user = user.slice(0, 24000);
-  const { text, usage, model } = await chat({ system: SYSTEM, user, maxTokens: 900, temperature: 0.3 });
+  const { text, usage, model } = await chat({ system, user, maxTokens: 900, temperature: kind === 'chat' ? 0.4 : 0.3 });
   return { answer: text, usage, model };
 }

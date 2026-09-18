@@ -7,6 +7,8 @@ import {
 import MonsterAvatar from '../components/MonsterAvatar';
 import RuneIcon from '../components/RuneIcon';
 import MonsterDetailModal from '../components/MonsterDetailModal';
+import AiChatPanel from '../components/AiChatPanel';
+import { summarizeBoxForAi, keyMonstersForAi } from '../utils/boxSummary';
 import ArtifactIcon from '../components/ArtifactIcon';
 import allMonstersData from '../data/allMonsters.json';
 import guardianMeta from '../data/swrtGuardianMeta.json';
@@ -591,6 +593,13 @@ function Overview({ box, mdc, owned, onTab, onNavigate, onOpenUnit }) {
       </div>
 
       {mdc?.nextSummons?.length > 0 && <NextSummons list={mdc.nextSummons} />}
+
+      <AiChatPanel
+        title="ถามโค้ช AI เกี่ยวกับกล่องของฉัน"
+        placeholder="เช่น จัดทีม GB12 ที่เร็วสุดจากกล่องฉัน / ควรตกตัวไหนต่อ / Seara ฉันควรใส่รูนอะไร"
+        suggestions={['จัดทีม Giant Abyss Hard ที่เร็วสุดจากกล่องของฉัน', 'ฉันควรตกมอนสเตอร์ตัวไหนต่อเพื่อเล่น RTA', 'ทีม 3MDC ที่ดีที่สุดที่ฉันสร้างได้ตอนนี้', 'มอนสเตอร์ตัวไหนในกล่องรูนแย่สุดและควรแก้ก่อน']}
+        buildContext={() => ({ box: summarizeBoxForAi(box, monsterOf), monsters: keyMonstersForAi(box, monsterOf) })}
+      />
     </div>
   );
 }
