@@ -20,9 +20,11 @@ import {
   Wrench,
   Package,
   Cloud,
+  User,
 } from 'lucide-react';
 import SwmLogo from './SwmLogo';
 import { buildUrl } from '../router';
+import { useAuth } from '../contexts/AuthContext';
 
 const NAV_ITEMS = [
   { id: 'dashboard', label: 'หน้าแรก', icon: Home },
@@ -49,7 +51,8 @@ const TOOL_ITEMS = [
 
 const PRIMARY_IDS = new Set(NAV_ITEMS.flatMap((i) => i.group || [i.id]));
 
-export default function Navbar({ currentView, onNavigate, onOpenSearch, onOpenMenu, onOpenSync }) {
+export default function Navbar({ currentView, onNavigate, onOpenSearch, onOpenMenu, onOpenSync, onOpenAuth }) {
+  const { user } = useAuth();
   const [toolsOpen, setToolsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -172,6 +175,37 @@ export default function Navbar({ currentView, onNavigate, onOpenSearch, onOpenMe
 
           {/* Right actions */}
           <div className="flex items-center gap-2">
+            {/* User Auth Button */}
+            {user ? (
+              <button
+                onClick={onOpenAuth}
+                className="flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-cyan-950/70 hover:bg-cyan-900/70 border border-cyan-400/50 text-white text-xs font-bold transition-all shadow-md cursor-pointer hover:scale-[1.02]"
+                title={`เข้าสู่ระบบด้วย ${user.email} (คลิกเพื่อดูรายละเอียดหรือออกจากระบบ)`}
+                aria-label="โปรไฟล์ผู้ใช้"
+              >
+                <div className="w-5 h-5 rounded-full bg-gradient-to-tr from-cyan-400 to-blue-500 flex items-center justify-center text-[10px] font-bold text-white uppercase shadow-sm">
+                  {user.email ? user.email.slice(0, 1) : 'U'}
+                </div>
+                <span className="hidden md:inline max-w-[90px] truncate text-cyan-200">
+                  {user.user_metadata?.display_name || user.email?.split('@')[0]}
+                </span>
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                </span>
+              </button>
+            ) : (
+              <button
+                onClick={onOpenAuth}
+                className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-gradient-to-r from-blue-600/30 to-cyan-600/30 hover:from-blue-600/40 hover:to-cyan-600/40 border border-cyan-500/40 text-cyan-200 hover:text-white text-xs font-bold transition-all duration-200 cursor-pointer shadow-lg shadow-cyan-500/10 hover:scale-[1.02]"
+                title="เข้าสู่ระบบคลาวด์เพื่อซิงค์ข้อมูลทั่วโลก"
+                aria-label="เข้าสู่ระบบ"
+              >
+                <User className="w-4 h-4 text-cyan-400" />
+                <span className="hidden sm:inline">เข้าสู่ระบบ</span>
+              </button>
+            )}
+
             <button
               onClick={onOpenSync}
               className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 hover:text-white text-xs font-bold transition-all duration-200 cursor-pointer shadow-lg shadow-cyan-500/5 hover:scale-[1.02]"

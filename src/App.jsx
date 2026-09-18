@@ -4,6 +4,8 @@ import Sidebar from './components/Sidebar';
 import ErrorBoundary from './components/ErrorBoundary';
 import SwmLogo from './components/SwmLogo';
 import CloudSyncModal from './components/CloudSyncModal';
+import AuthModal from './components/AuthModal';
+import { AuthProvider } from './contexts/AuthContext';
 import { Home, Shield, Trophy, Search, Menu, Loader2, CheckCircle2 } from 'lucide-react';
 import { buildUrl, parseLocation, normalizeView, titleFor } from './router';
 import { saveBox, loadBox, parseSwexExport } from './utils/swexImport';
@@ -57,11 +59,12 @@ function ViewLoading() {
 
 const RTA_VIEWS = ['rta', 'player-tracker', 'draft-explorer', 'rta-synergies', 'meta-dashboard', 'guardian'];
 
-export default function App() {
+function AppContent() {
   const [route, setRoute] = useState(() => parseLocation());
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isSyncOpen, setIsSyncOpen] = useState(false);
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [syncNotice, setSyncNotice] = useState(null);
 
   // Auto-sync profile across devices via URL param (?sync=...) or LAN auto-fetch
@@ -183,6 +186,7 @@ export default function App() {
         onOpenSearch={() => setIsSearchOpen(true)}
         onOpenMenu={() => setMobileMenuOpen(true)}
         onOpenSync={() => setIsSyncOpen(true)}
+        onOpenAuth={() => setIsAuthOpen(true)}
       />
 
       <div className="flex-1 flex w-full max-w-[1720px] 2xl:max-w-[1850px] mx-auto">
@@ -276,6 +280,19 @@ export default function App() {
           setTimeout(() => setSyncNotice(null), 5000);
         }}
       />
+
+      <AuthModal
+        isOpen={isAuthOpen}
+        onClose={() => setIsAuthOpen(false)}
+      />
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   );
 }
