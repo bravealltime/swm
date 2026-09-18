@@ -4,41 +4,41 @@
   "wizard_info": {
     "wizard_id": 9326961,
     "wizard_name": "PedictU",
-    "wizard_mana": 610327377,
-    "wizard_crystal": 1958,
+    "wizard_mana": 611768653,
+    "wizard_crystal": 2276,
     "wizard_crystal_paid": 17,
-    "wizard_last_login": "2026-09-18 06:04:43",
+    "wizard_last_login": "2026-09-19 02:23:51",
     "wizard_last_country": "TH",
     "wizard_last_lang": "en",
     "wizard_level": 100,
     "experience": 13000386,
-    "wizard_energy": 485,
+    "wizard_energy": 333,
     "energy_max": 500,
     "energy_per_min": 0.26,
-    "next_energy_gain": 110,
+    "next_energy_gain": 208,
     "arena_energy": 10,
     "arena_energy_max": 10,
     "arena_energy_next_gain": 0,
     "ameria_luck_energy": 500,
     "ameria_luck_energy_max": 500,
-    "ameria_luck_energy_next_refill_ts": 1789747200,
+    "ameria_luck_energy_next_refill_ts": 1789833600,
     "unit_slots": {
       "number": 120
     },
     "rep_unit_id": 20625444126,
     "rep_assigned": 1,
     "guild_rep_unit_id": 13259605696,
-    "pvp_event": 0,
+    "pvp_event": 1,
     "mail_box_event": 0,
     "social_point_current": 3000,
     "social_point_max": 3000,
-    "honor_point": 229,
-    "guild_point": 123,
+    "honor_point": 61,
+    "guild_point": 63,
     "darkportal_energy": 3,
     "darkportal_energy_max": 10,
     "costume_point": 58,
     "costume_point_max": 9999,
-    "honor_medal": 51,
+    "honor_medal": 11,
     "honor_mark": 47,
     "event_coin": 80,
     "lobby_master_id": 1019,
@@ -3277,7 +3277,8 @@
     605109,
     60154,
     60152,
-    60153
+    60153,
+    60157
   ],
   "building_list": [
     {
@@ -3385,8 +3386,8 @@
       "pos_y": 6,
       "gain_per_hour": 0.1,
       "harvest_max": 3,
-      "harvest_available": 1,
-      "next_harvest": 6842
+      "harvest_available": 2,
+      "next_harvest": 5694
     },
     {
       "building_id": 102401882,
@@ -3589,8 +3590,8 @@
       "pos_y": 9,
       "gain_per_hour": 0.125,
       "harvest_max": 3,
-      "harvest_available": 1,
-      "next_harvest": 3481
+      "harvest_available": 3,
+      "next_harvest": 16733
     },
     {
       "building_id": 141388229,
@@ -3614,7 +3615,7 @@
       "gain_per_hour": 5,
       "harvest_max": 60,
       "harvest_available": 60,
-      "next_harvest": 78
+      "next_harvest": 370
     },
     {
       "building_id": 148911403,
@@ -4105,8 +4106,8 @@
       "pos_y": 7,
       "gain_per_hour": 0.125,
       "harvest_max": 4,
-      "harvest_available": 2,
-      "next_harvest": 11471
+      "harvest_available": 3,
+      "next_harvest": 24723
     },
     {
       "building_id": 889844763,
@@ -143268,150 +143269,6 @@
       "awakening_info": []
     },
     {
-      "unit_id": 21304329662,
-      "wizard_id": 9326961,
-      "island_id": 2,
-      "pos_x": 19,
-      "pos_y": 16,
-      "building_id": 102978265,
-      "unit_master_id": 25814,
-      "unit_level": 35,
-      "class": 6,
-      "con": 654,
-      "atk": 570,
-      "def": 675,
-      "spd": 103,
-      "resist": 15,
-      "accuracy": 0,
-      "critical_rate": 15,
-      "critical_damage": 50,
-      "experience": 642786,
-      "exp_gained": 0,
-      "exp_gain_rate": 0,
-      "skills": [
-        [
-          15604,
-          5
-        ],
-        [
-          15609,
-          3
-        ],
-        [
-          15614,
-          2
-        ]
-      ],
-      "runes": [],
-      "artifacts": [],
-      "relics": [],
-      "costume_master_id": 0,
-      "trans_items": [],
-      "attribute": 4,
-      "create_time": "2026-07-13 14:43:54",
-      "source": 42,
-      "homunculus": 0,
-      "homunculus_name": "",
-      "unit_index": null,
-      "awakening_info": []
-    },
-    {
-      "unit_id": 16912907513,
-      "wizard_id": 9326961,
-      "island_id": 2,
-      "pos_x": 23,
-      "pos_y": 27,
-      "building_id": 102978265,
-      "unit_master_id": 24915,
-      "unit_level": 35,
-      "class": 6,
-      "con": 654,
-      "atk": 665,
-      "def": 580,
-      "spd": 105,
-      "resist": 15,
-      "accuracy": 25,
-      "critical_rate": 15,
-      "critical_damage": 50,
-      "experience": 592419,
-      "exp_gained": 0,
-      "exp_gain_rate": 0,
-      "skills": [
-        [
-          14805,
-          6
-        ],
-        [
-          14810,
-          5
-        ],
-        [
-          14815,
-          4
-        ]
-      ],
-      "runes": [],
-      "artifacts": [],
-      "relics": [],
-      "costume_master_id": 0,
-      "trans_items": [],
-      "attribute": 5,
-      "create_time": "2024-11-18 10:00:17",
-      "source": 42,
-      "homunculus": 0,
-      "homunculus_name": "",
-      "unit_index": null,
-      "awakening_info": []
-    },
-    {
-      "unit_id": 21304333561,
-      "wizard_id": 9326961,
-      "island_id": 2,
-      "pos_x": 17,
-      "pos_y": 22,
-      "building_id": 102978265,
-      "unit_master_id": 18515,
-      "unit_level": 35,
-      "class": 6,
-      "con": 559,
-      "atk": 718,
-      "def": 464,
-      "spd": 100,
-      "resist": 15,
-      "accuracy": 0,
-      "critical_rate": 15,
-      "critical_damage": 50,
-      "experience": 642786,
-      "exp_gained": 0,
-      "exp_gain_rate": 0,
-      "skills": [
-        [
-          9305,
-          6
-        ],
-        [
-          9310,
-          5
-        ],
-        [
-          9315,
-          5
-        ]
-      ],
-      "runes": [],
-      "artifacts": [],
-      "relics": [],
-      "costume_master_id": 0,
-      "trans_items": [],
-      "attribute": 5,
-      "create_time": "2026-07-13 14:44:41",
-      "source": 42,
-      "homunculus": 0,
-      "homunculus_name": "",
-      "unit_index": null,
-      "awakening_info": []
-    },
-    {
       "unit_id": 20969434802,
       "wizard_id": 9326961,
       "island_id": 7,
@@ -143419,17 +143276,17 @@
       "pos_y": 27,
       "building_id": 102978265,
       "unit_master_id": 24913,
-      "unit_level": 34,
+      "unit_level": 35,
       "class": 6,
-      "con": 618,
-      "atk": 723,
-      "def": 545,
+      "con": 623,
+      "atk": 728,
+      "def": 549,
       "spd": 105,
       "resist": 15,
       "accuracy": 0,
       "critical_rate": 30,
       "critical_damage": 50,
-      "experience": 513036,
+      "experience": 614142,
       "exp_gained": 0,
       "exp_gain_rate": 0,
       "skills": [
@@ -143857,6 +143714,150 @@
       "trans_items": [],
       "attribute": 3,
       "create_time": "2026-06-02 20:51:31",
+      "source": 42,
+      "homunculus": 0,
+      "homunculus_name": "",
+      "unit_index": null,
+      "awakening_info": []
+    },
+    {
+      "unit_id": 21304329662,
+      "wizard_id": 9326961,
+      "island_id": 2,
+      "pos_x": 19,
+      "pos_y": 16,
+      "building_id": 102978265,
+      "unit_master_id": 25814,
+      "unit_level": 35,
+      "class": 6,
+      "con": 654,
+      "atk": 570,
+      "def": 675,
+      "spd": 103,
+      "resist": 15,
+      "accuracy": 0,
+      "critical_rate": 15,
+      "critical_damage": 50,
+      "experience": 642786,
+      "exp_gained": 0,
+      "exp_gain_rate": 0,
+      "skills": [
+        [
+          15604,
+          5
+        ],
+        [
+          15609,
+          3
+        ],
+        [
+          15614,
+          2
+        ]
+      ],
+      "runes": [],
+      "artifacts": [],
+      "relics": [],
+      "costume_master_id": 0,
+      "trans_items": [],
+      "attribute": 4,
+      "create_time": "2026-07-13 14:43:54",
+      "source": 42,
+      "homunculus": 0,
+      "homunculus_name": "",
+      "unit_index": null,
+      "awakening_info": []
+    },
+    {
+      "unit_id": 16912907513,
+      "wizard_id": 9326961,
+      "island_id": 2,
+      "pos_x": 23,
+      "pos_y": 27,
+      "building_id": 102978265,
+      "unit_master_id": 24915,
+      "unit_level": 35,
+      "class": 6,
+      "con": 654,
+      "atk": 665,
+      "def": 580,
+      "spd": 105,
+      "resist": 15,
+      "accuracy": 25,
+      "critical_rate": 15,
+      "critical_damage": 50,
+      "experience": 592419,
+      "exp_gained": 0,
+      "exp_gain_rate": 0,
+      "skills": [
+        [
+          14805,
+          6
+        ],
+        [
+          14810,
+          5
+        ],
+        [
+          14815,
+          4
+        ]
+      ],
+      "runes": [],
+      "artifacts": [],
+      "relics": [],
+      "costume_master_id": 0,
+      "trans_items": [],
+      "attribute": 5,
+      "create_time": "2024-11-18 10:00:17",
+      "source": 42,
+      "homunculus": 0,
+      "homunculus_name": "",
+      "unit_index": null,
+      "awakening_info": []
+    },
+    {
+      "unit_id": 21304333561,
+      "wizard_id": 9326961,
+      "island_id": 2,
+      "pos_x": 17,
+      "pos_y": 22,
+      "building_id": 102978265,
+      "unit_master_id": 18515,
+      "unit_level": 35,
+      "class": 6,
+      "con": 559,
+      "atk": 718,
+      "def": 464,
+      "spd": 100,
+      "resist": 15,
+      "accuracy": 0,
+      "critical_rate": 15,
+      "critical_damage": 50,
+      "experience": 642786,
+      "exp_gained": 0,
+      "exp_gain_rate": 0,
+      "skills": [
+        [
+          9305,
+          6
+        ],
+        [
+          9310,
+          5
+        ],
+        [
+          9315,
+          5
+        ]
+      ],
+      "runes": [],
+      "artifacts": [],
+      "relics": [],
+      "costume_master_id": 0,
+      "trans_items": [],
+      "attribute": 5,
+      "create_time": "2026-07-13 14:44:41",
       "source": 42,
       "homunculus": 0,
       "homunculus_name": "",
@@ -186050,7 +186051,7 @@
     },
     {
       "unit_master_id": 34201,
-      "open": 0
+      "open": 1
     },
     {
       "unit_master_id": 34202,
@@ -186501,7 +186502,7 @@
       ]
     },
     "next_sequence": 202639,
-    "next_remained": 284117,
+    "next_remained": 210969,
     "next_ts": 1789963200
   },
   "island_info": [
@@ -186572,7 +186573,7 @@
       "wizard_id": 9326961,
       "item_master_type": 6,
       "item_master_id": 14,
-      "item_quantity": 8549
+      "item_quantity": 8712
     },
     {
       "rid": 551312220,
@@ -186607,7 +186608,7 @@
       "wizard_id": 9326961,
       "item_master_type": 6,
       "item_master_id": 20,
-      "item_quantity": 1639
+      "item_quantity": 1710
     },
     {
       "rid": 177331327,
@@ -186628,14 +186629,14 @@
       "wizard_id": 9326961,
       "item_master_type": 9,
       "item_master_id": 1,
-      "item_quantity": 1122
+      "item_quantity": 1132
     },
     {
       "rid": 99153215,
       "wizard_id": 9326961,
       "item_master_type": 9,
       "item_master_id": 2,
-      "item_quantity": 13
+      "item_quantity": 0
     },
     {
       "rid": 100205111,
@@ -186691,7 +186692,7 @@
       "wizard_id": 9326961,
       "item_master_type": 9,
       "item_master_id": 10,
-      "item_quantity": 15
+      "item_quantity": 16
     },
     {
       "rid": 124004158,
@@ -186768,7 +186769,7 @@
       "wizard_id": 9326961,
       "item_master_type": 9,
       "item_master_id": 31,
-      "item_quantity": 3
+      "item_quantity": 5
     },
     {
       "rid": 237885872,
@@ -186957,7 +186958,7 @@
       "wizard_id": 9326961,
       "item_master_type": 11,
       "item_master_id": 11006,
-      "item_quantity": 172
+      "item_quantity": 192
     },
     {
       "rid": 99490401,
@@ -186999,7 +187000,7 @@
       "wizard_id": 9326961,
       "item_master_type": 11,
       "item_master_id": 12006,
-      "item_quantity": 365
+      "item_quantity": 375
     },
     {
       "rid": 100526904,
@@ -187041,7 +187042,7 @@
       "wizard_id": 9326961,
       "item_master_type": 11,
       "item_master_id": 13006,
-      "item_quantity": 164
+      "item_quantity": 173
     },
     {
       "rid": 100236240,
@@ -188413,7 +188414,7 @@
       "wizard_id": 9326961,
       "item_master_type": 29,
       "item_master_id": 5004,
-      "item_quantity": 8979
+      "item_quantity": 9402
     },
     {
       "rid": 123369422,
@@ -188427,14 +188428,14 @@
       "wizard_id": 9326961,
       "item_master_type": 29,
       "item_master_id": 6001,
-      "item_quantity": 6819
+      "item_quantity": 6985
     },
     {
       "rid": 122097202,
       "wizard_id": 9326961,
       "item_master_type": 29,
       "item_master_id": 7001,
-      "item_quantity": 7974
+      "item_quantity": 8170
     },
     {
       "rid": 101145982,
@@ -188511,7 +188512,7 @@
       "wizard_id": 9326961,
       "item_master_type": 37,
       "item_master_id": 1,
-      "item_quantity": 13
+      "item_quantity": 14
     },
     {
       "rid": 106241495,
@@ -188679,7 +188680,7 @@
       "wizard_id": 9326961,
       "item_master_type": 61,
       "item_master_id": 151050101,
-      "item_quantity": 15
+      "item_quantity": 17
     },
     {
       "rid": 106080677,
@@ -188728,7 +188729,7 @@
       "wizard_id": 9326961,
       "item_master_type": 75,
       "item_master_id": 1,
-      "item_quantity": 2048
+      "item_quantity": 2068
     },
     {
       "rid": 731790874,
@@ -189552,14 +189553,14 @@
   ],
   "wish_list": {
     "trial_remained": 1,
-    "login_sequence": 5,
-    "wish_sequence": 4,
-    "next_update": 68117,
+    "login_sequence": 6,
+    "wish_sequence": 5,
+    "next_update": 81369,
     "item_list": [
       {
         "wish_id": 1,
         "item_master_type": 25,
-        "item_master_id": 105,
+        "item_master_id": 104,
         "amount": 1
       },
       {
@@ -189589,7 +189590,7 @@
       {
         "wish_id": 6,
         "item_master_type": 25,
-        "item_master_id": 205,
+        "item_master_id": 204,
         "amount": 1
       },
       {
@@ -189602,7 +189603,7 @@
         "wish_id": 8,
         "item_master_type": 6,
         "item_master_id": 102,
-        "amount": 70000
+        "amount": 30000
       },
       {
         "wish_id": 9,
@@ -189614,7 +189615,7 @@
         "wish_id": 10,
         "item_master_type": 6,
         "item_master_id": 1,
-        "amount": 50
+        "amount": 100
       },
       {
         "wish_id": 11,
@@ -189629,7 +189630,7 @@
         "amount": 1
       }
     ],
-    "item_list_version": 2026091800
+    "item_list_version": 2026091900
   },
   "runes": [
     {
@@ -261196,6 +261197,55 @@
       "extra": 5
     },
     {
+      "rune_id": 48687552431,
+      "wizard_id": 9326961,
+      "occupied_type": 2,
+      "occupied_id": 0,
+      "slot_no": 6,
+      "rank": 5,
+      "class": 6,
+      "set_id": 17,
+      "upgrade_limit": 15,
+      "upgrade_curr": 12,
+      "base_value": 592790,
+      "sell_value": 67742,
+      "pri_eff": [
+        11,
+        48
+      ],
+      "prefix_eff": [
+        12,
+        6
+      ],
+      "sec_eff": [
+        [
+          8,
+          21,
+          0,
+          0
+        ],
+        [
+          6,
+          5,
+          0,
+          0
+        ],
+        [
+          2,
+          5,
+          0,
+          0
+        ],
+        [
+          5,
+          30,
+          0,
+          0
+        ]
+      ],
+      "extra": 5
+    },
+    {
       "rune_id": 16684732221,
       "wizard_id": 9326961,
       "occupied_type": 2,
@@ -275376,8 +275426,8 @@
       "craft_type": 1,
       "craft_type_id": 220505,
       "sell_value": 37000,
-      "amount": 2,
-      "update_ts": 1779253509
+      "amount": 3,
+      "update_ts": 1789683104
     },
     {
       "craft_item_id": 685626766,
@@ -275439,8 +275489,8 @@
       "craft_type": 1,
       "craft_type_id": 170404,
       "sell_value": 30000,
-      "amount": 7,
-      "update_ts": 1780269164
+      "amount": 8,
+      "update_ts": 1789683788
     },
     {
       "craft_item_id": 813829030,
@@ -275998,7 +276048,7 @@
       "craft_type_id": 160904,
       "sell_value": 30000,
       "amount": 10,
-      "update_ts": 1784200315
+      "update_ts": 1789683551
     },
     {
       "craft_item_id": 1356988937,
@@ -276061,7 +276111,7 @@
       "craft_type_id": 60604,
       "sell_value": 30000,
       "amount": 6,
-      "update_ts": 1780269164
+      "update_ts": 1789683724
     },
     {
       "craft_item_id": 1379550978,
@@ -276510,8 +276560,8 @@
       "craft_type": 1,
       "craft_type_id": 30404,
       "sell_value": 30000,
-      "amount": 29,
-      "update_ts": 1780269164
+      "amount": 30,
+      "update_ts": 1789682728
     },
     {
       "craft_item_id": 1488909854,
@@ -276556,7 +276606,7 @@
       "craft_type_id": 160404,
       "sell_value": 30000,
       "amount": 10,
-      "update_ts": 1783445997
+      "update_ts": 1789683430
     },
     {
       "craft_item_id": 1488909883,
@@ -276663,8 +276713,8 @@
       "craft_type": 1,
       "craft_type_id": 171005,
       "sell_value": 37000,
-      "amount": 5,
-      "update_ts": 1780183529
+      "amount": 6,
+      "update_ts": 1789682659
     },
     {
       "craft_item_id": 1495371870,
@@ -276672,8 +276722,8 @@
       "craft_type": 1,
       "craft_type_id": 220805,
       "sell_value": 37000,
-      "amount": 4,
-      "update_ts": 1780214456
+      "amount": 6,
+      "update_ts": 1789684486
     },
     {
       "craft_item_id": 1497056331,
@@ -276690,8 +276740,8 @@
       "craft_type": 1,
       "craft_type_id": 170205,
       "sell_value": 37000,
-      "amount": 1,
-      "update_ts": 1780269164
+      "amount": 2,
+      "update_ts": 1789683670
     },
     {
       "craft_item_id": 1497056358,
@@ -276952,7 +277002,7 @@
       "craft_type_id": 31204,
       "sell_value": 30000,
       "amount": 1,
-      "update_ts": 1785517904
+      "update_ts": 1789682980
     },
     {
       "craft_item_id": 1591308850,
@@ -277059,8 +277109,8 @@
       "craft_type": 1,
       "craft_type_id": 170804,
       "sell_value": 30000,
-      "amount": 1,
-      "update_ts": 1788730651
+      "amount": 2,
+      "update_ts": 1789684226
     },
     {
       "craft_item_id": 1636409179,
@@ -277241,6 +277291,24 @@
       "sell_value": 30000,
       "amount": 1,
       "update_ts": 1789632608
+    },
+    {
+      "craft_item_id": 1649110415,
+      "wizard_id": 9326961,
+      "craft_type": 1,
+      "craft_type_id": 30104,
+      "sell_value": 30000,
+      "amount": 1,
+      "update_ts": 1789682853
+    },
+    {
+      "craft_item_id": 1649112895,
+      "wizard_id": 9326961,
+      "craft_type": 1,
+      "craft_type_id": 170204,
+      "sell_value": 30000,
+      "amount": 1,
+      "update_ts": 1789683233
     },
     {
       "craft_item_id": 104205701,
@@ -362122,6 +362190,1194 @@
       "extra": [],
       "date_add": "2026-09-17 15:40:22",
       "date_mod": "2026-09-17 15:40:22"
+    },
+    {
+      "rid": 991351414,
+      "wizard_id": 9326961,
+      "occupied_id": 0,
+      "slot": 0,
+      "type": 2,
+      "attribute": 0,
+      "unit_style": 3,
+      "natural_rank": 4,
+      "rank": 5,
+      "level": 15,
+      "pri_effect": [
+        100,
+        1500,
+        15,
+        0,
+        0
+      ],
+      "sec_effects": [
+        [
+          404,
+          15,
+          2,
+          0,
+          0
+        ],
+        [
+          408,
+          4,
+          0,
+          0,
+          0
+        ],
+        [
+          210,
+          7,
+          1,
+          0,
+          0
+        ],
+        [
+          219,
+          4,
+          0,
+          0,
+          0
+        ]
+      ],
+      "locked": 0,
+      "source": 50001,
+      "extra": [],
+      "date_add": "2026-09-18 06:45:43",
+      "date_mod": "2026-09-18 06:45:43"
+    },
+    {
+      "rid": 991352228,
+      "wizard_id": 9326961,
+      "occupied_id": 0,
+      "slot": 0,
+      "type": 2,
+      "attribute": 0,
+      "unit_style": 4,
+      "natural_rank": 4,
+      "rank": 5,
+      "level": 15,
+      "pri_effect": [
+        100,
+        1500,
+        15,
+        0,
+        0
+      ],
+      "sec_effects": [
+        [
+          218,
+          0.2,
+          0,
+          0,
+          0
+        ],
+        [
+          404,
+          15,
+          2,
+          0,
+          0
+        ],
+        [
+          225,
+          5,
+          1,
+          0,
+          0
+        ],
+        [
+          214,
+          3,
+          0,
+          0,
+          0
+        ]
+      ],
+      "locked": 0,
+      "source": 50001,
+      "extra": [],
+      "date_add": "2026-09-18 06:46:36",
+      "date_mod": "2026-09-18 06:46:36"
+    },
+    {
+      "rid": 991352519,
+      "wizard_id": 9326961,
+      "occupied_id": 0,
+      "slot": 0,
+      "type": 2,
+      "attribute": 0,
+      "unit_style": 4,
+      "natural_rank": 4,
+      "rank": 5,
+      "level": 15,
+      "pri_effect": [
+        101,
+        100,
+        15,
+        0,
+        0
+      ],
+      "sec_effects": [
+        [
+          221,
+          99,
+          2,
+          0,
+          0
+        ],
+        [
+          220,
+          7,
+          1,
+          0,
+          0
+        ],
+        [
+          223,
+          8,
+          0,
+          0,
+          0
+        ],
+        [
+          210,
+          2,
+          0,
+          0,
+          0
+        ]
+      ],
+      "locked": 0,
+      "source": 50001,
+      "extra": [],
+      "date_add": "2026-09-18 06:47:27",
+      "date_mod": "2026-09-18 06:47:27"
+    },
+    {
+      "rid": 991352724,
+      "wizard_id": 9326961,
+      "occupied_id": 0,
+      "slot": 0,
+      "type": 2,
+      "attribute": 0,
+      "unit_style": 3,
+      "natural_rank": 4,
+      "rank": 5,
+      "level": 15,
+      "pri_effect": [
+        102,
+        100,
+        15,
+        0,
+        0
+      ],
+      "sec_effects": [
+        [
+          411,
+          14,
+          2,
+          0,
+          0
+        ],
+        [
+          219,
+          6,
+          1,
+          0,
+          0
+        ],
+        [
+          210,
+          4,
+          0,
+          0,
+          0
+        ],
+        [
+          401,
+          6,
+          0,
+          0,
+          0
+        ]
+      ],
+      "locked": 0,
+      "source": 50001,
+      "extra": [],
+      "date_add": "2026-09-18 06:48:21",
+      "date_mod": "2026-09-18 06:48:21"
+    },
+    {
+      "rid": 991352825,
+      "wizard_id": 9326961,
+      "occupied_id": 0,
+      "slot": 0,
+      "type": 2,
+      "attribute": 0,
+      "unit_style": 2,
+      "natural_rank": 5,
+      "rank": 5,
+      "level": 15,
+      "pri_effect": [
+        102,
+        100,
+        15,
+        0,
+        0
+      ],
+      "sec_effects": [
+        [
+          406,
+          15,
+          2,
+          0,
+          0
+        ],
+        [
+          215,
+          14,
+          1,
+          0,
+          0
+        ],
+        [
+          405,
+          5,
+          0,
+          0,
+          0
+        ],
+        [
+          408,
+          12,
+          1,
+          0,
+          0
+        ]
+      ],
+      "locked": 0,
+      "source": 50001,
+      "extra": [],
+      "date_add": "2026-09-18 06:49:08",
+      "date_mod": "2026-09-18 06:49:08"
+    },
+    {
+      "rid": 991353175,
+      "wizard_id": 9326961,
+      "occupied_id": 0,
+      "slot": 0,
+      "type": 2,
+      "attribute": 0,
+      "unit_style": 3,
+      "natural_rank": 4,
+      "rank": 5,
+      "level": 15,
+      "pri_effect": [
+        100,
+        1500,
+        15,
+        0,
+        0
+      ],
+      "sec_effects": [
+        [
+          215,
+          15,
+          2,
+          0,
+          0
+        ],
+        [
+          405,
+          5,
+          0,
+          0,
+          0
+        ],
+        [
+          401,
+          10,
+          1,
+          0,
+          0
+        ],
+        [
+          410,
+          6,
+          0,
+          0,
+          0
+        ]
+      ],
+      "locked": 0,
+      "source": 50001,
+      "extra": [],
+      "date_add": "2026-09-18 06:50:42",
+      "date_mod": "2026-09-18 06:50:42"
+    },
+    {
+      "rid": 991371129,
+      "wizard_id": 9326961,
+      "occupied_id": 0,
+      "slot": 0,
+      "type": 1,
+      "attribute": 4,
+      "unit_style": 0,
+      "natural_rank": 4,
+      "rank": 5,
+      "level": 15,
+      "pri_effect": [
+        102,
+        100,
+        15,
+        0,
+        0
+      ],
+      "sec_effects": [
+        [
+          223,
+          23,
+          1,
+          0,
+          0
+        ],
+        [
+          219,
+          4,
+          1,
+          0,
+          0
+        ],
+        [
+          206,
+          11,
+          1,
+          0,
+          0
+        ],
+        [
+          220,
+          3,
+          0,
+          0,
+          0
+        ]
+      ],
+      "locked": 0,
+      "source": 50001,
+      "extra": [],
+      "date_add": "2026-09-18 07:37:01",
+      "date_mod": "2026-09-18 07:37:01"
+    },
+    {
+      "rid": 991371573,
+      "wizard_id": 9326961,
+      "occupied_id": 0,
+      "slot": 0,
+      "type": 1,
+      "attribute": 5,
+      "unit_style": 0,
+      "natural_rank": 3,
+      "rank": 5,
+      "level": 15,
+      "pri_effect": [
+        100,
+        1500,
+        15,
+        0,
+        0
+      ],
+      "sec_effects": [
+        [
+          218,
+          0.7,
+          2,
+          0,
+          0
+        ],
+        [
+          306,
+          5,
+          0,
+          0,
+          0
+        ],
+        [
+          219,
+          2,
+          0,
+          0,
+          0
+        ],
+        [
+          221,
+          38,
+          0,
+          0,
+          0
+        ]
+      ],
+      "locked": 0,
+      "source": 50001,
+      "extra": [],
+      "date_add": "2026-09-18 07:37:43",
+      "date_mod": "2026-09-18 07:37:43"
+    },
+    {
+      "rid": 991371830,
+      "wizard_id": 9326961,
+      "occupied_id": 0,
+      "slot": 0,
+      "type": 1,
+      "attribute": 4,
+      "unit_style": 0,
+      "natural_rank": 3,
+      "rank": 5,
+      "level": 15,
+      "pri_effect": [
+        101,
+        100,
+        15,
+        0,
+        0
+      ],
+      "sec_effects": [
+        [
+          309,
+          6,
+          0,
+          0,
+          0
+        ],
+        [
+          307,
+          16,
+          2,
+          0,
+          0
+        ],
+        [
+          226,
+          5,
+          0,
+          0,
+          0
+        ],
+        [
+          219,
+          3,
+          0,
+          0,
+          0
+        ]
+      ],
+      "locked": 0,
+      "source": 50001,
+      "extra": [],
+      "date_add": "2026-09-18 07:38:17",
+      "date_mod": "2026-09-18 07:38:17"
+    },
+    {
+      "rid": 991372456,
+      "wizard_id": 9326961,
+      "occupied_id": 0,
+      "slot": 0,
+      "type": 1,
+      "attribute": 3,
+      "unit_style": 0,
+      "natural_rank": 3,
+      "rank": 5,
+      "level": 15,
+      "pri_effect": [
+        102,
+        100,
+        15,
+        0,
+        0
+      ],
+      "sec_effects": [
+        [
+          226,
+          6,
+          1,
+          0,
+          0
+        ],
+        [
+          307,
+          10,
+          1,
+          0,
+          0
+        ],
+        [
+          221,
+          38,
+          0,
+          0,
+          0
+        ],
+        [
+          214,
+          2,
+          0,
+          0,
+          0
+        ]
+      ],
+      "locked": 0,
+      "source": 50001,
+      "extra": [],
+      "date_add": "2026-09-18 07:39:03",
+      "date_mod": "2026-09-18 07:39:03"
+    },
+    {
+      "rid": 991372691,
+      "wizard_id": 9326961,
+      "occupied_id": 0,
+      "slot": 0,
+      "type": 1,
+      "attribute": 3,
+      "unit_style": 0,
+      "natural_rank": 3,
+      "rank": 5,
+      "level": 15,
+      "pri_effect": [
+        101,
+        100,
+        15,
+        0,
+        0
+      ],
+      "sec_effects": [
+        [
+          308,
+          12,
+          1,
+          0,
+          0
+        ],
+        [
+          224,
+          6,
+          1,
+          0,
+          0
+        ],
+        [
+          221,
+          35,
+          0,
+          0,
+          0
+        ],
+        [
+          302,
+          4,
+          0,
+          0,
+          0
+        ]
+      ],
+      "locked": 0,
+      "source": 50001,
+      "extra": [],
+      "date_add": "2026-09-18 07:39:42",
+      "date_mod": "2026-09-18 07:39:42"
+    },
+    {
+      "rid": 991373305,
+      "wizard_id": 9326961,
+      "occupied_id": 0,
+      "slot": 0,
+      "type": 1,
+      "attribute": 3,
+      "unit_style": 0,
+      "natural_rank": 4,
+      "rank": 5,
+      "level": 15,
+      "pri_effect": [
+        101,
+        100,
+        15,
+        0,
+        0
+      ],
+      "sec_effects": [
+        [
+          225,
+          2,
+          0,
+          0,
+          0
+        ],
+        [
+          226,
+          4,
+          0,
+          0,
+          0
+        ],
+        [
+          302,
+          12,
+          3,
+          0,
+          0
+        ],
+        [
+          215,
+          8,
+          0,
+          0,
+          0
+        ]
+      ],
+      "locked": 0,
+      "source": 50001,
+      "extra": [],
+      "date_add": "2026-09-18 07:40:23",
+      "date_mod": "2026-09-18 07:40:23"
+    },
+    {
+      "rid": 991373900,
+      "wizard_id": 9326961,
+      "occupied_id": 0,
+      "slot": 0,
+      "type": 1,
+      "attribute": 5,
+      "unit_style": 0,
+      "natural_rank": 4,
+      "rank": 5,
+      "level": 15,
+      "pri_effect": [
+        101,
+        100,
+        15,
+        0,
+        0
+      ],
+      "sec_effects": [
+        [
+          221,
+          69,
+          1,
+          0,
+          0
+        ],
+        [
+          226,
+          7,
+          1,
+          0,
+          0
+        ],
+        [
+          206,
+          10,
+          1,
+          0,
+          0
+        ],
+        [
+          225,
+          4,
+          0,
+          0,
+          0
+        ]
+      ],
+      "locked": 0,
+      "source": 50001,
+      "extra": [],
+      "date_add": "2026-09-18 07:41:47",
+      "date_mod": "2026-09-18 07:41:47"
+    },
+    {
+      "rid": 991374298,
+      "wizard_id": 9326961,
+      "occupied_id": 0,
+      "slot": 0,
+      "type": 1,
+      "attribute": 2,
+      "unit_style": 0,
+      "natural_rank": 4,
+      "rank": 5,
+      "level": 15,
+      "pri_effect": [
+        102,
+        100,
+        15,
+        0,
+        0
+      ],
+      "sec_effects": [
+        [
+          222,
+          15,
+          2,
+          0,
+          0
+        ],
+        [
+          306,
+          9,
+          1,
+          0,
+          0
+        ],
+        [
+          309,
+          6,
+          0,
+          0,
+          0
+        ],
+        [
+          301,
+          5,
+          0,
+          0,
+          0
+        ]
+      ],
+      "locked": 0,
+      "source": 50001,
+      "extra": [],
+      "date_add": "2026-09-18 07:42:27",
+      "date_mod": "2026-09-18 07:42:27"
+    },
+    {
+      "rid": 991374716,
+      "wizard_id": 9326961,
+      "occupied_id": 0,
+      "slot": 0,
+      "type": 1,
+      "attribute": 5,
+      "unit_style": 0,
+      "natural_rank": 5,
+      "rank": 5,
+      "level": 15,
+      "pri_effect": [
+        102,
+        100,
+        15,
+        0,
+        0
+      ],
+      "sec_effects": [
+        [
+          219,
+          2,
+          0,
+          0,
+          0
+        ],
+        [
+          304,
+          8,
+          1,
+          0,
+          0
+        ],
+        [
+          206,
+          11,
+          1,
+          0,
+          0
+        ],
+        [
+          302,
+          12,
+          2,
+          0,
+          0
+        ]
+      ],
+      "locked": 0,
+      "source": 50001,
+      "extra": [],
+      "date_add": "2026-09-18 07:43:17",
+      "date_mod": "2026-09-18 07:43:17"
+    },
+    {
+      "rid": 991375132,
+      "wizard_id": 9326961,
+      "occupied_id": 0,
+      "slot": 0,
+      "type": 1,
+      "attribute": 4,
+      "unit_style": 0,
+      "natural_rank": 3,
+      "rank": 5,
+      "level": 15,
+      "pri_effect": [
+        100,
+        1500,
+        15,
+        0,
+        0
+      ],
+      "sec_effects": [
+        [
+          300,
+          5,
+          0,
+          0,
+          0
+        ],
+        [
+          225,
+          9,
+          2,
+          0,
+          0
+        ],
+        [
+          308,
+          5,
+          0,
+          0,
+          0
+        ],
+        [
+          206,
+          4,
+          0,
+          0,
+          0
+        ]
+      ],
+      "locked": 0,
+      "source": 50001,
+      "extra": [],
+      "date_add": "2026-09-18 07:44:05",
+      "date_mod": "2026-09-18 07:44:05"
+    },
+    {
+      "rid": 991375545,
+      "wizard_id": 9326961,
+      "occupied_id": 0,
+      "slot": 0,
+      "type": 1,
+      "attribute": 3,
+      "unit_style": 0,
+      "natural_rank": 4,
+      "rank": 5,
+      "level": 15,
+      "pri_effect": [
+        102,
+        100,
+        15,
+        0,
+        0
+      ],
+      "sec_effects": [
+        [
+          224,
+          9,
+          2,
+          0,
+          0
+        ],
+        [
+          306,
+          4,
+          0,
+          0,
+          0
+        ],
+        [
+          223,
+          20,
+          1,
+          0,
+          0
+        ],
+        [
+          304,
+          5,
+          0,
+          0,
+          0
+        ]
+      ],
+      "locked": 0,
+      "source": 50001,
+      "extra": [],
+      "date_add": "2026-09-18 07:44:43",
+      "date_mod": "2026-09-18 07:44:43"
+    },
+    {
+      "rid": 991375657,
+      "wizard_id": 9326961,
+      "occupied_id": 0,
+      "slot": 0,
+      "type": 1,
+      "attribute": 5,
+      "unit_style": 0,
+      "natural_rank": 3,
+      "rank": 5,
+      "level": 15,
+      "pri_effect": [
+        100,
+        1500,
+        15,
+        0,
+        0
+      ],
+      "sec_effects": [
+        [
+          307,
+          15,
+          2,
+          0,
+          0
+        ],
+        [
+          210,
+          4,
+          0,
+          0,
+          0
+        ],
+        [
+          301,
+          4,
+          0,
+          0,
+          0
+        ],
+        [
+          225,
+          2,
+          0,
+          0,
+          0
+        ]
+      ],
+      "locked": 0,
+      "source": 50001,
+      "extra": [],
+      "date_add": "2026-09-18 07:45:26",
+      "date_mod": "2026-09-18 07:45:26"
+    },
+    {
+      "rid": 991375981,
+      "wizard_id": 9326961,
+      "occupied_id": 0,
+      "slot": 0,
+      "type": 1,
+      "attribute": 1,
+      "unit_style": 0,
+      "natural_rank": 4,
+      "rank": 5,
+      "level": 15,
+      "pri_effect": [
+        102,
+        100,
+        15,
+        0,
+        0
+      ],
+      "sec_effects": [
+        [
+          223,
+          20,
+          1,
+          0,
+          0
+        ],
+        [
+          210,
+          7,
+          1,
+          0,
+          0
+        ],
+        [
+          306,
+          9,
+          1,
+          0,
+          0
+        ],
+        [
+          301,
+          5,
+          0,
+          0,
+          0
+        ]
+      ],
+      "locked": 0,
+      "source": 50001,
+      "extra": [],
+      "date_add": "2026-09-18 07:46:08",
+      "date_mod": "2026-09-18 07:46:08"
+    },
+    {
+      "rid": 991376707,
+      "wizard_id": 9326961,
+      "occupied_id": 0,
+      "slot": 0,
+      "type": 1,
+      "attribute": 3,
+      "unit_style": 0,
+      "natural_rank": 4,
+      "rank": 5,
+      "level": 15,
+      "pri_effect": [
+        101,
+        100,
+        15,
+        0,
+        0
+      ],
+      "sec_effects": [
+        [
+          222,
+          9,
+          1,
+          0,
+          0
+        ],
+        [
+          308,
+          5,
+          0,
+          0,
+          0
+        ],
+        [
+          206,
+          13,
+          2,
+          0,
+          0
+        ],
+        [
+          304,
+          5,
+          0,
+          0,
+          0
+        ]
+      ],
+      "locked": 0,
+      "source": 50001,
+      "extra": [],
+      "date_add": "2026-09-18 07:46:55",
+      "date_mod": "2026-09-18 07:46:55"
+    },
+    {
+      "rid": 991377155,
+      "wizard_id": 9326961,
+      "occupied_id": 0,
+      "slot": 0,
+      "type": 1,
+      "attribute": 5,
+      "unit_style": 0,
+      "natural_rank": 3,
+      "rank": 5,
+      "level": 15,
+      "pri_effect": [
+        100,
+        1500,
+        15,
+        0,
+        0
+      ],
+      "sec_effects": [
+        [
+          302,
+          5,
+          0,
+          0,
+          0
+        ],
+        [
+          226,
+          11,
+          2,
+          0,
+          0
+        ],
+        [
+          206,
+          5,
+          0,
+          0,
+          0
+        ],
+        [
+          225,
+          3,
+          0,
+          0,
+          0
+        ]
+      ],
+      "locked": 0,
+      "source": 50001,
+      "extra": [],
+      "date_add": "2026-09-18 07:48:20",
+      "date_mod": "2026-09-18 07:48:20"
+    },
+    {
+      "rid": 991377446,
+      "wizard_id": 9326961,
+      "occupied_id": 0,
+      "slot": 0,
+      "type": 1,
+      "attribute": 3,
+      "unit_style": 0,
+      "natural_rank": 3,
+      "rank": 5,
+      "level": 15,
+      "pri_effect": [
+        102,
+        100,
+        15,
+        0,
+        0
+      ],
+      "sec_effects": [
+        [
+          301,
+          14,
+          2,
+          0,
+          0
+        ],
+        [
+          221,
+          30,
+          0,
+          0,
+          0
+        ],
+        [
+          302,
+          5,
+          0,
+          0,
+          0
+        ],
+        [
+          210,
+          4,
+          0,
+          0,
+          0
+        ]
+      ],
+      "locked": 0,
+      "source": 50001,
+      "extra": [],
+      "date_add": "2026-09-18 07:48:57",
+      "date_mod": "2026-09-18 07:48:57"
     }
   ],
   "artifact_crafts": [
@@ -363404,7 +364660,7 @@
         "remained_time": 0,
         "purchase_count": 0,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -363412,7 +364668,7 @@
         "remained_time": 0,
         "purchase_count": 1,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -363420,7 +364676,7 @@
         "remained_time": 0,
         "purchase_count": 1,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -363428,7 +364684,7 @@
         "remained_time": 0,
         "purchase_count": 1,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -363436,7 +364692,7 @@
         "remained_time": 0,
         "purchase_count": 1,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -363444,7 +364700,7 @@
         "remained_time": 0,
         "purchase_count": 5,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -363452,7 +364708,7 @@
         "remained_time": 0,
         "purchase_count": 1,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -363460,7 +364716,7 @@
         "remained_time": 0,
         "purchase_count": 2,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -363468,12 +364724,12 @@
         "remained_time": 0,
         "purchase_count": 1,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
         "item_id": 640049,
-        "remained_time": 293050517,
+        "remained_time": 292977369,
         "purchase_count": 1,
         "view_enable": 1,
         "date_end_ts": 2082729600
@@ -363481,8 +364737,8 @@
       {
         "wizard_id": 9326961,
         "item_id": 700002,
-        "remained_time": 240917,
-        "purchase_count": 10,
+        "remained_time": 167769,
+        "purchase_count": 14,
         "view_enable": 1,
         "date_end_ts": 1789920000
       },
@@ -363492,7 +364748,7 @@
         "remained_time": 0,
         "purchase_count": 9,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -363500,7 +364756,7 @@
         "remained_time": 0,
         "purchase_count": 12,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -363508,7 +364764,7 @@
         "remained_time": 0,
         "purchase_count": 4,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -363516,12 +364772,12 @@
         "remained_time": 0,
         "purchase_count": 2,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
         "item_id": 901002,
-        "remained_time": 240917,
+        "remained_time": 167769,
         "purchase_count": 1,
         "view_enable": 1,
         "date_end_ts": 1789920000
@@ -363532,7 +364788,7 @@
         "remained_time": 0,
         "purchase_count": 2,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -363540,12 +364796,12 @@
         "remained_time": 0,
         "purchase_count": 3,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
         "item_id": 901005,
-        "remained_time": 293050517,
+        "remained_time": 292977369,
         "purchase_count": 1,
         "view_enable": 1,
         "date_end_ts": 2082729600
@@ -363556,7 +364812,7 @@
         "remained_time": 0,
         "purchase_count": 1,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -363564,7 +364820,7 @@
         "remained_time": 0,
         "purchase_count": 1,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -363572,7 +364828,7 @@
         "remained_time": 0,
         "purchase_count": 1,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -363580,7 +364836,7 @@
         "remained_time": 0,
         "purchase_count": 1,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -363588,12 +364844,12 @@
         "remained_time": 0,
         "purchase_count": 1,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
         "item_id": 1101831,
-        "remained_time": 293050517,
+        "remained_time": 292977369,
         "purchase_count": 1,
         "view_enable": 1,
         "date_end_ts": 2082729600
@@ -363604,7 +364860,7 @@
         "remained_time": 0,
         "purchase_count": 1,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -363612,21 +364868,21 @@
         "remained_time": 0,
         "purchase_count": 1,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
         "item_id": 1102158,
-        "remained_time": 3869717,
-        "purchase_count": 1,
+        "remained_time": 3796569,
+        "purchase_count": 2,
         "view_enable": 1,
         "date_end_ts": 1793548800
       },
       {
         "wizard_id": 9326961,
         "item_id": 1200001,
-        "remained_time": 240917,
-        "purchase_count": 2,
+        "remained_time": 167769,
+        "purchase_count": 3,
         "view_enable": 1,
         "date_end_ts": 1789920000
       },
@@ -363636,7 +364892,7 @@
         "remained_time": 0,
         "purchase_count": 2,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -363644,7 +364900,7 @@
         "remained_time": 0,
         "purchase_count": 10,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -363652,7 +364908,7 @@
         "remained_time": 0,
         "purchase_count": 10,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -363660,7 +364916,7 @@
         "remained_time": 0,
         "purchase_count": 1,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -363668,7 +364924,7 @@
         "remained_time": 0,
         "purchase_count": 5,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -363676,7 +364932,7 @@
         "remained_time": 0,
         "purchase_count": 7,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -363684,7 +364940,7 @@
         "remained_time": 0,
         "purchase_count": 2,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -363692,7 +364948,7 @@
         "remained_time": 0,
         "purchase_count": 2,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -363700,7 +364956,7 @@
         "remained_time": 0,
         "purchase_count": 2,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -363708,7 +364964,7 @@
         "remained_time": 0,
         "purchase_count": 1,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -363716,7 +364972,7 @@
         "remained_time": 0,
         "purchase_count": 4,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -363724,7 +364980,7 @@
         "remained_time": 0,
         "purchase_count": 2,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -363732,12 +364988,12 @@
         "remained_time": 0,
         "purchase_count": 3,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
         "item_id": 1300010,
-        "remained_time": 240917,
+        "remained_time": 167769,
         "purchase_count": 3,
         "view_enable": 1,
         "date_end_ts": 1789920000
@@ -363745,7 +365001,7 @@
       {
         "wizard_id": 9326961,
         "item_id": 1300011,
-        "remained_time": 240917,
+        "remained_time": 167769,
         "purchase_count": 3,
         "view_enable": 1,
         "date_end_ts": 1789920000
@@ -363753,7 +365009,7 @@
       {
         "wizard_id": 9326961,
         "item_id": 1300012,
-        "remained_time": 240917,
+        "remained_time": 167769,
         "purchase_count": 2,
         "view_enable": 1,
         "date_end_ts": 1789920000
@@ -363761,7 +365017,7 @@
       {
         "wizard_id": 9326961,
         "item_id": 1300016,
-        "remained_time": 240917,
+        "remained_time": 167769,
         "purchase_count": 2,
         "view_enable": 1,
         "date_end_ts": 1789920000
@@ -363772,7 +365028,7 @@
         "remained_time": 0,
         "purchase_count": 7,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -363780,12 +365036,12 @@
         "remained_time": 0,
         "purchase_count": 1,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
         "item_id": 1300019,
-        "remained_time": 240917,
+        "remained_time": 167769,
         "purchase_count": 3,
         "view_enable": 1,
         "date_end_ts": 1789920000
@@ -363793,10 +365049,10 @@
       {
         "wizard_id": 9326961,
         "item_id": 2001001,
-        "remained_time": 0,
-        "purchase_count": 10,
+        "remained_time": 167769,
+        "purchase_count": 1,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789920000
       },
       {
         "wizard_id": 9326961,
@@ -363804,7 +365060,7 @@
         "remained_time": 0,
         "purchase_count": 15,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -363812,7 +365068,7 @@
         "remained_time": 0,
         "purchase_count": 15,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -363820,7 +365076,7 @@
         "remained_time": 0,
         "purchase_count": 15,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -363828,7 +365084,7 @@
         "remained_time": 0,
         "purchase_count": 1,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -363836,7 +365092,7 @@
         "remained_time": 0,
         "purchase_count": 1,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -363844,7 +365100,7 @@
         "remained_time": 0,
         "purchase_count": 3,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -363852,7 +365108,7 @@
         "remained_time": 0,
         "purchase_count": 1,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -363860,7 +365116,7 @@
         "remained_time": 0,
         "purchase_count": 2,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -363868,12 +365124,12 @@
         "remained_time": 0,
         "purchase_count": 4,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
         "item_id": 2101013,
-        "remained_time": 1104917,
+        "remained_time": 1031769,
         "purchase_count": 2,
         "view_enable": 1,
         "date_end_ts": 1790784000
@@ -363884,7 +365140,7 @@
         "remained_time": 0,
         "purchase_count": 1,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -363892,7 +365148,7 @@
         "remained_time": 0,
         "purchase_count": 1,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -363900,7 +365156,7 @@
         "remained_time": 0,
         "purchase_count": 3,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -363908,7 +365164,7 @@
         "remained_time": 0,
         "purchase_count": 1,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -363916,12 +365172,12 @@
         "remained_time": 0,
         "purchase_count": 1,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
         "item_id": 2300005,
-        "remained_time": 1104917,
+        "remained_time": 1031769,
         "purchase_count": 1,
         "view_enable": 1,
         "date_end_ts": 1790784000
@@ -363932,7 +365188,7 @@
         "remained_time": 0,
         "purchase_count": 1,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -363940,7 +365196,7 @@
         "remained_time": 0,
         "purchase_count": 1,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -363948,7 +365204,7 @@
         "remained_time": 0,
         "purchase_count": 1,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -363956,7 +365212,7 @@
         "remained_time": 0,
         "purchase_count": 1,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -363964,7 +365220,7 @@
         "remained_time": 0,
         "purchase_count": 1,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -363972,7 +365228,7 @@
         "remained_time": 0,
         "purchase_count": 5,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -363980,7 +365236,7 @@
         "remained_time": 0,
         "purchase_count": 1,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -363988,7 +365244,7 @@
         "remained_time": 0,
         "purchase_count": 1,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -363996,7 +365252,7 @@
         "remained_time": 0,
         "purchase_count": 1,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -364004,7 +365260,7 @@
         "remained_time": 0,
         "purchase_count": 1,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -364012,7 +365268,7 @@
         "remained_time": 0,
         "purchase_count": 1,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -364020,7 +365276,7 @@
         "remained_time": 0,
         "purchase_count": 2,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -364028,7 +365284,7 @@
         "remained_time": 0,
         "purchase_count": 2,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -364036,7 +365292,7 @@
         "remained_time": 0,
         "purchase_count": 1,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -364044,7 +365300,7 @@
         "remained_time": 0,
         "purchase_count": 1,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -364052,7 +365308,7 @@
         "remained_time": 0,
         "purchase_count": 1,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -364060,7 +365316,7 @@
         "remained_time": 0,
         "purchase_count": 3,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -364068,7 +365324,7 @@
         "remained_time": 0,
         "purchase_count": 5,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -364076,7 +365332,7 @@
         "remained_time": 0,
         "purchase_count": 3,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -364084,7 +365340,7 @@
         "remained_time": 0,
         "purchase_count": 1,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -364092,7 +365348,7 @@
         "remained_time": 0,
         "purchase_count": 1,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -364100,7 +365356,7 @@
         "remained_time": 0,
         "purchase_count": 1,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -364108,7 +365364,7 @@
         "remained_time": 0,
         "purchase_count": 1,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -364116,7 +365372,7 @@
         "remained_time": 0,
         "purchase_count": 1,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -364124,7 +365380,7 @@
         "remained_time": 0,
         "purchase_count": 1,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -364132,7 +365388,7 @@
         "remained_time": 0,
         "purchase_count": 1,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       },
       {
         "wizard_id": 9326961,
@@ -364140,10 +365396,236 @@
         "remained_time": 0,
         "purchase_count": 1,
         "view_enable": 1,
-        "date_end_ts": 1789679083
+        "date_end_ts": 1789752231
       }
     ],
     "triggered_list": [
+      {
+        "wizard_id": 9326961,
+        "item_id": 1100011,
+        "action_item_id": 500009,
+        "items": [
+          [
+            11,
+            [
+              13001
+            ],
+            10,
+            0,
+            0,
+            0
+          ],
+          [
+            11,
+            [
+              13006
+            ],
+            5,
+            0,
+            0,
+            0
+          ],
+          [
+            11,
+            [
+              12001
+            ],
+            20,
+            0,
+            0,
+            0
+          ],
+          [
+            11,
+            [
+              12006
+            ],
+            15,
+            0,
+            0,
+            0
+          ]
+        ],
+        "buy_type": 1,
+        "buy_cost": [
+          300
+        ],
+        "remained_time": 81368,
+        "reopen_count": 0,
+        "notify": 0,
+        "enable": 1,
+        "date_begin_ts": 1789685017,
+        "date_end_ts": 1789833599,
+        "purchase_count_left": 1,
+        "next_trigger_ts": 0
+      },
+      {
+        "wizard_id": 9326961,
+        "item_id": 1100012,
+        "action_item_id": 500008,
+        "items": [
+          [
+            11,
+            [
+              13002
+            ],
+            10,
+            0,
+            0,
+            0
+          ],
+          [
+            11,
+            [
+              13006
+            ],
+            5,
+            0,
+            0,
+            0
+          ],
+          [
+            11,
+            [
+              12002
+            ],
+            20,
+            0,
+            0,
+            0
+          ],
+          [
+            11,
+            [
+              12006
+            ],
+            15,
+            0,
+            0,
+            0
+          ]
+        ],
+        "buy_type": 1,
+        "buy_cost": [
+          300
+        ],
+        "remained_time": 81368,
+        "reopen_count": 0,
+        "notify": 0,
+        "enable": 1,
+        "date_begin_ts": 1789685054,
+        "date_end_ts": 1789833599,
+        "purchase_count_left": 1,
+        "next_trigger_ts": 0
+      },
+      {
+        "wizard_id": 9326961,
+        "item_id": 1100013,
+        "action_item_id": 500010,
+        "items": [
+          [
+            11,
+            [
+              13003
+            ],
+            10,
+            0,
+            0,
+            0
+          ],
+          [
+            11,
+            [
+              13006
+            ],
+            5,
+            0,
+            0,
+            0
+          ],
+          [
+            11,
+            [
+              12003
+            ],
+            20,
+            0,
+            0,
+            0
+          ],
+          [
+            11,
+            [
+              12006
+            ],
+            15,
+            0,
+            0,
+            0
+          ]
+        ],
+        "buy_type": 1,
+        "buy_cost": [
+          300
+        ],
+        "remained_time": 81368,
+        "reopen_count": 0,
+        "notify": 0,
+        "enable": 1,
+        "date_begin_ts": 1789685054,
+        "date_end_ts": 1789833599,
+        "purchase_count_left": 1,
+        "next_trigger_ts": 0
+      },
+      {
+        "wizard_id": 9326961,
+        "item_id": 1100510,
+        "action_item_id": 500510,
+        "items": [
+          [
+            1,
+            [
+              15105
+            ],
+            1,
+            0,
+            1,
+            1
+          ],
+          [
+            1,
+            [
+              18211
+            ],
+            5,
+            0,
+            1,
+            15
+          ],
+          [
+            1,
+            [
+              14314
+            ],
+            3,
+            0,
+            5,
+            1
+          ]
+        ],
+        "buy_type": 1,
+        "buy_cost": [
+          1000
+        ],
+        "remained_time": 81368,
+        "reopen_count": 0,
+        "notify": 0,
+        "enable": 1,
+        "date_begin_ts": 1789685017,
+        "date_end_ts": 1789833599,
+        "purchase_count_left": 1,
+        "next_trigger_ts": 0
+      },
       {
         "wizard_id": 9326961,
         "item_id": 1100555,
@@ -364658,6 +366140,34 @@
         "date_end_ts": 4102412400,
         "purchase_count_left": 1,
         "next_trigger_ts": 0
+      },
+      {
+        "wizard_id": 9326961,
+        "item_id": 1102194,
+        "action_item_id": 502200,
+        "items": [
+          [
+            97,
+            [
+              1008
+            ],
+            1,
+            0,
+            0,
+            0
+          ]
+        ],
+        "buy_type": 3,
+        "buy_cost": [
+          0
+        ],
+        "reopen_count": 0,
+        "notify": 0,
+        "enable": 1,
+        "date_begin_ts": 1789681967,
+        "date_end_ts": 4102412400,
+        "purchase_count_left": 1,
+        "next_trigger_ts": 0
       }
     ],
     "triggered_purchased_list": [
@@ -364709,6 +366219,124 @@
     ],
     "triggered_mission_list": [],
     "event_item_list": [
+      {
+        "item_id": 1100983,
+        "action_item_id": 500983,
+        "items": [
+          [
+            6,
+            [
+              1
+            ],
+            500,
+            0,
+            0,
+            0
+          ],
+          [
+            6,
+            [
+              102
+            ],
+            50000,
+            0,
+            0,
+            0
+          ],
+          [
+            6,
+            [
+              103
+            ],
+            50,
+            0,
+            0,
+            0
+          ],
+          [
+            9,
+            [
+              3
+            ],
+            1,
+            0,
+            0,
+            0
+          ]
+        ],
+        "buy_type": 3,
+        "buy_cost": [
+          0
+        ],
+        "date_begin_ts": 1789704000,
+        "date_end_ts": 1789790399,
+        "purchase_limit": 8,
+        "daily_purchase_limit": 1,
+        "daily_purchase_count": 0,
+        "remained_time": 38168,
+        "purchase_count_left": 8,
+        "notify": 1,
+        "enable": 1
+      },
+      {
+        "item_id": 1100984,
+        "action_item_id": 500984,
+        "items": [
+          [
+            6,
+            [
+              1
+            ],
+            2100,
+            0,
+            0,
+            0
+          ],
+          [
+            6,
+            [
+              102
+            ],
+            200000,
+            0,
+            0,
+            0
+          ],
+          [
+            6,
+            [
+              103
+            ],
+            100,
+            0,
+            0,
+            0
+          ],
+          [
+            9,
+            [
+              3
+            ],
+            4,
+            0,
+            0,
+            0
+          ]
+        ],
+        "buy_type": 3,
+        "buy_cost": [
+          0
+        ],
+        "date_begin_ts": 1789704000,
+        "date_end_ts": 1789790399,
+        "purchase_limit": 8,
+        "daily_purchase_limit": 1,
+        "daily_purchase_count": 0,
+        "remained_time": 38168,
+        "purchase_count_left": 8,
+        "notify": 1,
+        "enable": 1
+      },
       {
         "item_id": 1102188,
         "action_item_id": 502194,
@@ -364793,7 +366421,7 @@
         "purchase_limit": 3,
         "daily_purchase_limit": 0,
         "daily_purchase_count": 0,
-        "remained_time": 1446857,
+        "remained_time": 1373709,
         "purchase_count_left": 3,
         "notify": 2,
         "enable": 1
@@ -364852,7 +366480,7 @@
         "purchase_limit": 1,
         "daily_purchase_limit": 0,
         "daily_purchase_count": 0,
-        "remained_time": 928457,
+        "remained_time": 855309,
         "purchase_count_left": 1,
         "notify": 2,
         "enable": 1
@@ -364911,7 +366539,7 @@
         "purchase_limit": 5,
         "daily_purchase_limit": 0,
         "daily_purchase_count": 0,
-        "remained_time": 928457,
+        "remained_time": 855309,
         "purchase_count_left": 5,
         "notify": 2,
         "enable": 1
@@ -364970,186 +366598,9 @@
         "purchase_limit": 10,
         "daily_purchase_limit": 0,
         "daily_purchase_count": 0,
-        "remained_time": 928457,
+        "remained_time": 855309,
         "purchase_count_left": 10,
         "notify": 2,
-        "enable": 1
-      },
-      {
-        "item_id": 1100750,
-        "action_item_id": 500750,
-        "items": [
-          [
-            9,
-            [
-              39
-            ],
-            17,
-            0,
-            0,
-            0
-          ],
-          [
-            6,
-            [
-              1
-            ],
-            750,
-            0,
-            0,
-            0
-          ],
-          [
-            6,
-            [
-              102
-            ],
-            200000,
-            0,
-            0,
-            0
-          ],
-          [
-            6,
-            [
-              103
-            ],
-            50,
-            0,
-            0,
-            0
-          ]
-        ],
-        "buy_type": 3,
-        "buy_cost": [
-          0
-        ],
-        "date_begin_ts": 1789617600,
-        "date_end_ts": 1789703999,
-        "purchase_limit": 8,
-        "daily_purchase_limit": 1,
-        "daily_purchase_count": 0,
-        "remained_time": 24916,
-        "purchase_count_left": 8,
-        "notify": 1,
-        "enable": 1
-      },
-      {
-        "item_id": 1100751,
-        "action_item_id": 500751,
-        "items": [
-          [
-            9,
-            [
-              39
-            ],
-            40,
-            0,
-            0,
-            0
-          ],
-          [
-            6,
-            [
-              1
-            ],
-            1750,
-            0,
-            0,
-            0
-          ],
-          [
-            6,
-            [
-              102
-            ],
-            500000,
-            0,
-            0,
-            0
-          ],
-          [
-            6,
-            [
-              103
-            ],
-            100,
-            0,
-            0,
-            0
-          ]
-        ],
-        "buy_type": 3,
-        "buy_cost": [
-          0
-        ],
-        "date_begin_ts": 1789617600,
-        "date_end_ts": 1789703999,
-        "purchase_limit": 8,
-        "daily_purchase_limit": 1,
-        "daily_purchase_count": 0,
-        "remained_time": 24916,
-        "purchase_count_left": 8,
-        "notify": 1,
-        "enable": 1
-      },
-      {
-        "item_id": 1100752,
-        "action_item_id": 500752,
-        "items": [
-          [
-            9,
-            [
-              39
-            ],
-            60,
-            0,
-            0,
-            0
-          ],
-          [
-            6,
-            [
-              1
-            ],
-            2500,
-            0,
-            0,
-            0
-          ],
-          [
-            6,
-            [
-              102
-            ],
-            800000,
-            0,
-            0,
-            0
-          ],
-          [
-            6,
-            [
-              103
-            ],
-            200,
-            0,
-            0,
-            0
-          ]
-        ],
-        "buy_type": 3,
-        "buy_cost": [
-          0
-        ],
-        "date_begin_ts": 1789617600,
-        "date_end_ts": 1789703999,
-        "purchase_limit": 8,
-        "daily_purchase_limit": 1,
-        "daily_purchase_count": 0,
-        "remained_time": 24916,
-        "purchase_count_left": 8,
-        "notify": 1,
         "enable": 1
       },
       {
@@ -365206,7 +366657,7 @@
         "purchase_limit": 3,
         "daily_purchase_limit": 0,
         "daily_purchase_count": 0,
-        "remained_time": 928457,
+        "remained_time": 855309,
         "purchase_count_left": 3,
         "notify": 2,
         "enable": 1
@@ -365275,7 +366726,7 @@
         "purchase_limit": 3,
         "daily_purchase_limit": 0,
         "daily_purchase_count": 0,
-        "remained_time": 928457,
+        "remained_time": 855309,
         "purchase_count_left": 3,
         "notify": 2,
         "enable": 1
@@ -365364,7 +366815,7 @@
         "purchase_limit": 3,
         "daily_purchase_limit": 0,
         "daily_purchase_count": 0,
-        "remained_time": 928457,
+        "remained_time": 855309,
         "purchase_count_left": 3,
         "notify": 2,
         "enable": 1
@@ -365453,7 +366904,7 @@
         "purchase_limit": 3,
         "daily_purchase_limit": 0,
         "daily_purchase_count": 0,
-        "remained_time": 928457,
+        "remained_time": 855309,
         "purchase_count_left": 3,
         "notify": 2,
         "enable": 1
@@ -365542,7 +366993,7 @@
         "purchase_limit": 3,
         "daily_purchase_limit": 0,
         "daily_purchase_count": 0,
-        "remained_time": 1014857,
+        "remained_time": 941709,
         "purchase_count_left": 3,
         "notify": 2,
         "enable": 1
@@ -365631,7 +367082,7 @@
         "purchase_limit": 3,
         "daily_purchase_limit": 0,
         "daily_purchase_count": 0,
-        "remained_time": 1014857,
+        "remained_time": 941709,
         "purchase_count_left": 3,
         "notify": 2,
         "enable": 1
@@ -365740,7 +367191,7 @@
         "purchase_limit": 3,
         "daily_purchase_limit": 0,
         "daily_purchase_count": 0,
-        "remained_time": 1014857,
+        "remained_time": 941709,
         "purchase_count_left": 3,
         "notify": 2,
         "enable": 1
@@ -365799,7 +367250,7 @@
         "purchase_limit": 1,
         "daily_purchase_limit": 0,
         "daily_purchase_count": 0,
-        "remained_time": 323657,
+        "remained_time": 250509,
         "purchase_count_left": 1,
         "notify": 2,
         "enable": 1
@@ -365858,7 +367309,7 @@
         "purchase_limit": 5,
         "daily_purchase_limit": 0,
         "daily_purchase_count": 0,
-        "remained_time": 323657,
+        "remained_time": 250509,
         "purchase_count_left": 5,
         "notify": 2,
         "enable": 1
@@ -365917,384 +367368,8 @@
         "purchase_limit": 10,
         "daily_purchase_limit": 0,
         "daily_purchase_count": 0,
-        "remained_time": 323657,
+        "remained_time": 250509,
         "purchase_count_left": 10,
-        "notify": 2,
-        "enable": 1
-      },
-      {
-        "item_id": 1102172,
-        "action_item_id": 502178,
-        "items": [
-          [
-            9,
-            [
-              30
-            ],
-            1,
-            0,
-            0,
-            0
-          ],
-          [
-            9,
-            [
-              3
-            ],
-            1,
-            0,
-            0,
-            0
-          ],
-          [
-            9,
-            [
-              7
-            ],
-            1,
-            0,
-            0,
-            0
-          ],
-          [
-            9,
-            [
-              2
-            ],
-            20,
-            0,
-            0,
-            0
-          ],
-          [
-            6,
-            [
-              103
-            ],
-            100,
-            0,
-            0,
-            0
-          ],
-          [
-            6,
-            [
-              1
-            ],
-            1200,
-            0,
-            0,
-            0
-          ],
-          [
-            6,
-            [
-              102
-            ],
-            300000,
-            0,
-            0,
-            0
-          ]
-        ],
-        "buy_type": 3,
-        "buy_cost": [
-          0
-        ],
-        "date_begin_ts": 1788534000,
-        "date_end_ts": 1789743540,
-        "purchase_limit": 3,
-        "daily_purchase_limit": 0,
-        "daily_purchase_count": 0,
-        "remained_time": 64457,
-        "purchase_count_left": 3,
-        "notify": 2,
-        "enable": 1
-      },
-      {
-        "item_id": 1102173,
-        "action_item_id": 502179,
-        "items": [
-          [
-            9,
-            [
-              30
-            ],
-            1,
-            0,
-            0,
-            0
-          ],
-          [
-            9,
-            [
-              3
-            ],
-            1,
-            0,
-            0,
-            0
-          ],
-          [
-            37,
-            [
-              1
-            ],
-            5,
-            0,
-            0,
-            0
-          ],
-          [
-            9,
-            [
-              2
-            ],
-            20,
-            0,
-            0,
-            0
-          ],
-          [
-            6,
-            [
-              103
-            ],
-            100,
-            0,
-            0,
-            0
-          ],
-          [
-            6,
-            [
-              1
-            ],
-            1200,
-            0,
-            0,
-            0
-          ],
-          [
-            6,
-            [
-              102
-            ],
-            300000,
-            0,
-            0,
-            0
-          ]
-        ],
-        "buy_type": 3,
-        "buy_cost": [
-          0
-        ],
-        "date_begin_ts": 1788534000,
-        "date_end_ts": 1789743540,
-        "purchase_limit": 3,
-        "daily_purchase_limit": 0,
-        "daily_purchase_count": 0,
-        "remained_time": 64457,
-        "purchase_count_left": 3,
-        "notify": 2,
-        "enable": 1
-      },
-      {
-        "item_id": 1102174,
-        "action_item_id": 502180,
-        "items": [
-          [
-            9,
-            [
-              30
-            ],
-            1,
-            0,
-            0,
-            0
-          ],
-          [
-            9,
-            [
-              3
-            ],
-            1,
-            0,
-            0,
-            0
-          ],
-          [
-            1,
-            [
-              15105
-            ],
-            2,
-            0,
-            1,
-            1
-          ],
-          [
-            9,
-            [
-              2
-            ],
-            20,
-            0,
-            0,
-            0
-          ],
-          [
-            6,
-            [
-              103
-            ],
-            100,
-            0,
-            0,
-            0
-          ],
-          [
-            6,
-            [
-              1
-            ],
-            1200,
-            0,
-            0,
-            0
-          ],
-          [
-            6,
-            [
-              102
-            ],
-            300000,
-            0,
-            0,
-            0
-          ]
-        ],
-        "buy_type": 3,
-        "buy_cost": [
-          0
-        ],
-        "date_begin_ts": 1788534000,
-        "date_end_ts": 1789743540,
-        "purchase_limit": 3,
-        "daily_purchase_limit": 0,
-        "daily_purchase_count": 0,
-        "remained_time": 64457,
-        "purchase_count_left": 3,
-        "notify": 2,
-        "enable": 1
-      },
-      {
-        "item_id": 1102175,
-        "action_item_id": 502181,
-        "items": [
-          [
-            9,
-            [
-              30
-            ],
-            3,
-            0,
-            0,
-            0
-          ],
-          [
-            9,
-            [
-              3
-            ],
-            3,
-            0,
-            0,
-            0
-          ],
-          [
-            9,
-            [
-              7
-            ],
-            1,
-            0,
-            0,
-            0
-          ],
-          [
-            1,
-            [
-              15105
-            ],
-            2,
-            0,
-            1,
-            1
-          ],
-          [
-            37,
-            [
-              1
-            ],
-            5,
-            0,
-            0,
-            0
-          ],
-          [
-            9,
-            [
-              2
-            ],
-            60,
-            0,
-            0,
-            0
-          ],
-          [
-            6,
-            [
-              103
-            ],
-            300,
-            0,
-            0,
-            0
-          ],
-          [
-            6,
-            [
-              1
-            ],
-            3600,
-            0,
-            0,
-            0
-          ],
-          [
-            6,
-            [
-              102
-            ],
-            900000,
-            0,
-            0,
-            0
-          ]
-        ],
-        "buy_type": 3,
-        "buy_cost": [
-          0
-        ],
-        "date_begin_ts": 1788534000,
-        "date_end_ts": 1789743540,
-        "purchase_limit": 3,
-        "daily_purchase_limit": 0,
-        "daily_purchase_count": 0,
-        "remained_time": 64457,
-        "purchase_count_left": 3,
         "notify": 2,
         "enable": 1
       },
@@ -366372,7 +367447,7 @@
         "purchase_limit": 1,
         "daily_purchase_limit": 0,
         "daily_purchase_count": 0,
-        "remained_time": 1104857,
+        "remained_time": 1031709,
         "purchase_count_left": 1,
         "notify": 2,
         "enable": 1
@@ -366451,7 +367526,7 @@
         "purchase_limit": 1,
         "daily_purchase_limit": 0,
         "daily_purchase_count": 0,
-        "remained_time": 1104857,
+        "remained_time": 1031709,
         "purchase_count_left": 1,
         "notify": 2,
         "enable": 1
@@ -366520,7 +367595,7 @@
         "purchase_limit": 3,
         "daily_purchase_limit": 0,
         "daily_purchase_count": 0,
-        "remained_time": 237257,
+        "remained_time": 164109,
         "purchase_count_left": 3,
         "notify": 2,
         "enable": 1
@@ -366599,7 +367674,7 @@
         "purchase_limit": 3,
         "daily_purchase_limit": 0,
         "daily_purchase_count": 0,
-        "remained_time": 237257,
+        "remained_time": 164109,
         "purchase_count_left": 3,
         "notify": 2,
         "enable": 1
@@ -366678,7 +367753,7 @@
         "purchase_limit": 3,
         "daily_purchase_limit": 0,
         "daily_purchase_count": 0,
-        "remained_time": 237257,
+        "remained_time": 164109,
         "purchase_count_left": 3,
         "notify": 2,
         "enable": 1
@@ -366757,7 +367832,7 @@
         "purchase_limit": 3,
         "daily_purchase_limit": 0,
         "daily_purchase_count": 0,
-        "remained_time": 237257,
+        "remained_time": 164109,
         "purchase_count_left": 3,
         "notify": 2,
         "enable": 1
@@ -406586,141 +407661,45 @@
         "index": 0,
         "item_id": 1102188,
         "group_id": 1102188,
-        "displayed_time": 21883,
-        "remained_time": 1446857,
+        "displayed_time": 95031,
+        "remained_time": 1373709,
         "order": 250,
         "order_category": 1,
         "override": {
-          "rid": 6179,
-          "date": "2026-09-18",
+          "rid": 6187,
+          "date": "2026-09-19",
           "featured_type": 0,
           "package_id": "932 SWC 전설팩",
           "market": ""
         }
       },
       {
-        "index": 14,
-        "item_id": 1102172,
-        "group_id": 1102172,
-        "displayed_time": 1145083,
-        "remained_time": 64457,
-        "order": 250,
-        "order_category": 2,
-        "override": {
-          "rid": 6180,
-          "date": "2026-09-18",
-          "featured_type": 0,
-          "package_id": "930 중고가팩",
-          "market": ""
-        }
-      },
-      {
-        "index": 15,
-        "item_id": 1102173,
-        "group_id": 1102173,
-        "displayed_time": 1145083,
-        "remained_time": 64457,
-        "order": 250,
-        "order_category": 2,
-        "override": {
-          "rid": 6180,
-          "date": "2026-09-18",
-          "featured_type": 0,
-          "package_id": "930 중고가팩",
-          "market": ""
-        }
-      },
-      {
         "index": 16,
-        "item_id": 1102174,
-        "group_id": 1102174,
-        "displayed_time": 1145083,
-        "remained_time": 64457,
+        "item_id": 1102164,
+        "group_id": 1102164,
+        "displayed_time": 1736631,
+        "remained_time": 164109,
         "order": 250,
         "order_category": 2,
         "override": {
-          "rid": 6180,
-          "date": "2026-09-18",
+          "rid": 6188,
+          "date": "2026-09-19",
           "featured_type": 0,
-          "package_id": "930 중고가팩",
+          "package_id": "930 SWC 고가팩",
           "market": ""
         }
       },
       {
         "index": 17,
-        "item_id": 1102175,
-        "group_id": 1102175,
-        "displayed_time": 1145083,
-        "remained_time": 64457,
+        "item_id": 1102165,
+        "group_id": 1102165,
+        "displayed_time": 1736631,
+        "remained_time": 164109,
         "order": 250,
         "order_category": 2,
         "override": {
-          "rid": 6180,
-          "date": "2026-09-18",
-          "featured_type": 0,
-          "package_id": "930 중고가팩",
-          "market": ""
-        }
-      },
-      {
-        "index": 20,
-        "item_id": 1102164,
-        "group_id": 1102164,
-        "displayed_time": 1663483,
-        "remained_time": 237257,
-        "order": 250,
-        "order_category": 3,
-        "override": {
-          "rid": 6181,
-          "date": "2026-09-18",
-          "featured_type": 0,
-          "package_id": "930 SWC 고가팩",
-          "market": ""
-        }
-      },
-      {
-        "index": 21,
-        "item_id": 1102165,
-        "group_id": 1102165,
-        "displayed_time": 1663483,
-        "remained_time": 237257,
-        "order": 250,
-        "order_category": 3,
-        "override": {
-          "rid": 6181,
-          "date": "2026-09-18",
-          "featured_type": 0,
-          "package_id": "930 SWC 고가팩",
-          "market": ""
-        }
-      },
-      {
-        "index": 22,
-        "item_id": 1102166,
-        "group_id": 1102166,
-        "displayed_time": 1663483,
-        "remained_time": 237257,
-        "order": 250,
-        "order_category": 3,
-        "override": {
-          "rid": 6181,
-          "date": "2026-09-18",
-          "featured_type": 0,
-          "package_id": "930 SWC 고가팩",
-          "market": ""
-        }
-      },
-      {
-        "index": 23,
-        "item_id": 1102167,
-        "group_id": 1102167,
-        "displayed_time": 1663483,
-        "remained_time": 237257,
-        "order": 250,
-        "order_category": 3,
-        "override": {
-          "rid": 6181,
-          "date": "2026-09-18",
+          "rid": 6188,
+          "date": "2026-09-19",
           "featured_type": 0,
           "package_id": "930 SWC 고가팩",
           "market": ""
@@ -406728,31 +407707,63 @@
       },
       {
         "index": 18,
+        "item_id": 1102166,
+        "group_id": 1102166,
+        "displayed_time": 1736631,
+        "remained_time": 164109,
+        "order": 250,
+        "order_category": 2,
+        "override": {
+          "rid": 6188,
+          "date": "2026-09-19",
+          "featured_type": 0,
+          "package_id": "930 SWC 고가팩",
+          "market": ""
+        }
+      },
+      {
+        "index": 19,
+        "item_id": 1102167,
+        "group_id": 1102167,
+        "displayed_time": 1736631,
+        "remained_time": 164109,
+        "order": 250,
+        "order_category": 2,
+        "override": {
+          "rid": 6188,
+          "date": "2026-09-19",
+          "featured_type": 0,
+          "package_id": "930 SWC 고가팩",
+          "market": ""
+        }
+      },
+      {
+        "index": 14,
         "item_id": 1101592,
         "group_id": 1101592,
-        "displayed_time": 1487083,
-        "remained_time": 1104857,
+        "displayed_time": 1560231,
+        "remained_time": 1031709,
         "order": 250,
         "order_category": 3,
         "override": {
-          "rid": 6182,
-          "date": "2026-09-18",
+          "rid": 6189,
+          "date": "2026-09-19",
           "featured_type": 0,
           "package_id": "월간팩",
           "market": ""
         }
       },
       {
-        "index": 19,
+        "index": 15,
         "item_id": 1101593,
         "group_id": 1101593,
-        "displayed_time": 1487083,
-        "remained_time": 1104857,
+        "displayed_time": 1560231,
+        "remained_time": 1031709,
         "order": 250,
         "order_category": 3,
         "override": {
-          "rid": 6182,
-          "date": "2026-09-18",
+          "rid": 6189,
+          "date": "2026-09-19",
           "featured_type": 0,
           "package_id": "월간팩",
           "market": ""
@@ -406762,13 +407773,13 @@
         "index": 4,
         "item_id": 1102176,
         "group_id": 1102176,
-        "displayed_time": 281083,
-        "remained_time": 928457,
+        "displayed_time": 354231,
+        "remained_time": 855309,
         "order": 250,
         "order_category": 3,
         "override": {
-          "rid": 6183,
-          "date": "2026-09-18",
+          "rid": 6190,
+          "date": "2026-09-19",
           "featured_type": 0,
           "package_id": "930 저가팩",
           "market": ""
@@ -406778,13 +407789,13 @@
         "index": 5,
         "item_id": 1102177,
         "group_id": 1102177,
-        "displayed_time": 281083,
-        "remained_time": 928457,
+        "displayed_time": 354231,
+        "remained_time": 855309,
         "order": 250,
         "order_category": 3,
         "override": {
-          "rid": 6183,
-          "date": "2026-09-18",
+          "rid": 6190,
+          "date": "2026-09-19",
           "featured_type": 0,
           "package_id": "930 저가팩",
           "market": ""
@@ -406794,13 +407805,13 @@
         "index": 6,
         "item_id": 1102178,
         "group_id": 1102178,
-        "displayed_time": 281083,
-        "remained_time": 928457,
+        "displayed_time": 354231,
+        "remained_time": 855309,
         "order": 250,
         "order_category": 3,
         "override": {
-          "rid": 6183,
-          "date": "2026-09-18",
+          "rid": 6190,
+          "date": "2026-09-19",
           "featured_type": 0,
           "package_id": "930 저가팩",
           "market": ""
@@ -406810,13 +407821,13 @@
         "index": 7,
         "item_id": 1102179,
         "group_id": 1102179,
-        "displayed_time": 281083,
-        "remained_time": 928457,
+        "displayed_time": 354231,
+        "remained_time": 855309,
         "order": 250,
         "order_category": 3,
         "override": {
-          "rid": 6183,
-          "date": "2026-09-18",
+          "rid": 6190,
+          "date": "2026-09-19",
           "featured_type": 0,
           "package_id": "930 저가팩",
           "market": ""
@@ -406826,13 +407837,13 @@
         "index": 8,
         "item_id": 1102185,
         "group_id": 1102185,
-        "displayed_time": 567283,
-        "remained_time": 1014857,
+        "displayed_time": 640431,
+        "remained_time": 941709,
         "order": 250,
         "order_category": 3,
         "override": {
-          "rid": 6184,
-          "date": "2026-09-18",
+          "rid": 6191,
+          "date": "2026-09-19",
           "featured_type": 0,
           "package_id": "932 중가팩",
           "market": ""
@@ -406842,13 +407853,13 @@
         "index": 9,
         "item_id": 1102186,
         "group_id": 1102186,
-        "displayed_time": 567283,
-        "remained_time": 1014857,
+        "displayed_time": 640431,
+        "remained_time": 941709,
         "order": 250,
         "order_category": 3,
         "override": {
-          "rid": 6184,
-          "date": "2026-09-18",
+          "rid": 6191,
+          "date": "2026-09-19",
           "featured_type": 0,
           "package_id": "932 중가팩",
           "market": ""
@@ -406858,13 +407869,13 @@
         "index": 10,
         "item_id": 1102187,
         "group_id": 1102187,
-        "displayed_time": 567283,
-        "remained_time": 1014857,
+        "displayed_time": 640431,
+        "remained_time": 941709,
         "order": 250,
         "order_category": 3,
         "override": {
-          "rid": 6184,
-          "date": "2026-09-18",
+          "rid": 6191,
+          "date": "2026-09-19",
           "featured_type": 0,
           "package_id": "932 중가팩",
           "market": ""
@@ -406874,13 +407885,13 @@
         "index": 1,
         "item_id": 1101801,
         "group_id": 1101801,
-        "displayed_time": 21883,
-        "remained_time": 928457,
+        "displayed_time": 95031,
+        "remained_time": 855309,
         "order": 400,
         "order_category": 1,
         "override": {
-          "rid": 6185,
-          "date": "2026-09-18",
+          "rid": 6192,
+          "date": "2026-09-19",
           "featured_type": 0,
           "package_id": "917 로테이션1 데빌몬 팩",
           "market": ""
@@ -406890,13 +407901,13 @@
         "index": 2,
         "item_id": 1101802,
         "group_id": 1101802,
-        "displayed_time": 21883,
-        "remained_time": 928457,
+        "displayed_time": 95031,
+        "remained_time": 855309,
         "order": 400,
         "order_category": 1,
         "override": {
-          "rid": 6185,
-          "date": "2026-09-18",
+          "rid": 6192,
+          "date": "2026-09-19",
           "featured_type": 0,
           "package_id": "917 로테이션1 데빌몬 팩",
           "market": ""
@@ -406906,13 +407917,13 @@
         "index": 3,
         "item_id": 1101803,
         "group_id": 1101803,
-        "displayed_time": 21883,
-        "remained_time": 928457,
+        "displayed_time": 95031,
+        "remained_time": 855309,
         "order": 400,
         "order_category": 1,
         "override": {
-          "rid": 6185,
-          "date": "2026-09-18",
+          "rid": 6192,
+          "date": "2026-09-19",
           "featured_type": 0,
           "package_id": "917 로테이션1 데빌몬 팩",
           "market": ""
@@ -406922,13 +407933,13 @@
         "index": 11,
         "item_id": 1101810,
         "group_id": 1101810,
-        "displayed_time": 626683,
-        "remained_time": 323657,
+        "displayed_time": 699831,
+        "remained_time": 250509,
         "order": 400,
         "order_category": 3,
         "override": {
-          "rid": 6186,
-          "date": "2026-09-18",
+          "rid": 6193,
+          "date": "2026-09-19",
           "featured_type": 0,
           "package_id": "917 로테이션1 태고 팩",
           "market": ""
@@ -406938,13 +407949,13 @@
         "index": 12,
         "item_id": 1101811,
         "group_id": 1101811,
-        "displayed_time": 626683,
-        "remained_time": 323657,
+        "displayed_time": 699831,
+        "remained_time": 250509,
         "order": 400,
         "order_category": 3,
         "override": {
-          "rid": 6186,
-          "date": "2026-09-18",
+          "rid": 6193,
+          "date": "2026-09-19",
           "featured_type": 0,
           "package_id": "917 로테이션1 태고 팩",
           "market": ""
@@ -406954,13 +407965,13 @@
         "index": 13,
         "item_id": 1101812,
         "group_id": 1101812,
-        "displayed_time": 626683,
-        "remained_time": 323657,
+        "displayed_time": 699831,
+        "remained_time": 250509,
         "order": 400,
         "order_category": 3,
         "override": {
-          "rid": 6186,
-          "date": "2026-09-18",
+          "rid": 6193,
+          "date": "2026-09-19",
           "featured_type": 0,
           "package_id": "917 로테이션1 태고 팩",
           "market": ""
@@ -406968,6 +407979,28 @@
       }
     ],
     "featured_list_shop": [
+      {
+        "item_id": 1100983,
+        "sort_number": 901,
+        "featured_enable": [
+          0,
+          1,
+          1,
+          30
+        ],
+        "remain_time": 38168
+      },
+      {
+        "item_id": 1100984,
+        "sort_number": 902,
+        "featured_enable": [
+          0,
+          1,
+          1,
+          30
+        ],
+        "remain_time": 38168
+      },
       {
         "item_id": 1102188,
         "sort_number": 196,
@@ -406977,7 +408010,7 @@
           1,
           1
         ],
-        "remain_time": 1446857
+        "remain_time": 1373709
       },
       {
         "item_id": 1101801,
@@ -406988,7 +408021,7 @@
           1,
           10
         ],
-        "remain_time": 928457
+        "remain_time": 855309
       },
       {
         "item_id": 1101802,
@@ -406999,7 +408032,7 @@
           1,
           10
         ],
-        "remain_time": 928457
+        "remain_time": 855309
       },
       {
         "item_id": 1101803,
@@ -407010,40 +408043,7 @@
           1,
           10
         ],
-        "remain_time": 928457
-      },
-      {
-        "item_id": 1100750,
-        "sort_number": 1100,
-        "featured_enable": [
-          0,
-          1,
-          1,
-          30
-        ],
-        "remain_time": 24916
-      },
-      {
-        "item_id": 1100751,
-        "sort_number": 1100,
-        "featured_enable": [
-          0,
-          1,
-          1,
-          30
-        ],
-        "remain_time": 24916
-      },
-      {
-        "item_id": 1100752,
-        "sort_number": 1100,
-        "featured_enable": [
-          0,
-          1,
-          1,
-          30
-        ],
-        "remain_time": 24916
+        "remain_time": 855309
       },
       {
         "item_id": 1102176,
@@ -407054,7 +408054,7 @@
           1,
           1
         ],
-        "remain_time": 928457
+        "remain_time": 855309
       },
       {
         "item_id": 1102177,
@@ -407065,7 +408065,7 @@
           1,
           1
         ],
-        "remain_time": 928457
+        "remain_time": 855309
       },
       {
         "item_id": 1102178,
@@ -407076,7 +408076,7 @@
           1,
           1
         ],
-        "remain_time": 928457
+        "remain_time": 855309
       },
       {
         "item_id": 1102179,
@@ -407087,7 +408087,7 @@
           1,
           1
         ],
-        "remain_time": 928457
+        "remain_time": 855309
       },
       {
         "item_id": 1102185,
@@ -407098,7 +408098,7 @@
           1,
           1
         ],
-        "remain_time": 1014857
+        "remain_time": 941709
       },
       {
         "item_id": 1102186,
@@ -407109,7 +408109,7 @@
           1,
           1
         ],
-        "remain_time": 1014857
+        "remain_time": 941709
       },
       {
         "item_id": 1102187,
@@ -407120,7 +408120,7 @@
           1,
           1
         ],
-        "remain_time": 1014857
+        "remain_time": 941709
       },
       {
         "item_id": 1101810,
@@ -407131,7 +408131,7 @@
           1,
           10
         ],
-        "remain_time": 323657
+        "remain_time": 250509
       },
       {
         "item_id": 1101811,
@@ -407142,7 +408142,7 @@
           1,
           10
         ],
-        "remain_time": 323657
+        "remain_time": 250509
       },
       {
         "item_id": 1101812,
@@ -407153,51 +408153,7 @@
           1,
           10
         ],
-        "remain_time": 323657
-      },
-      {
-        "item_id": 1102172,
-        "sort_number": 200,
-        "featured_enable": [
-          1,
-          1,
-          1,
-          1
-        ],
-        "remain_time": 64457
-      },
-      {
-        "item_id": 1102173,
-        "sort_number": 200,
-        "featured_enable": [
-          1,
-          1,
-          1,
-          1
-        ],
-        "remain_time": 64457
-      },
-      {
-        "item_id": 1102174,
-        "sort_number": 200,
-        "featured_enable": [
-          1,
-          1,
-          1,
-          1
-        ],
-        "remain_time": 64457
-      },
-      {
-        "item_id": 1102175,
-        "sort_number": 200,
-        "featured_enable": [
-          1,
-          1,
-          1,
-          1
-        ],
-        "remain_time": 64457
+        "remain_time": 250509
       },
       {
         "item_id": 1101592,
@@ -407208,7 +408164,7 @@
           1,
           1
         ],
-        "remain_time": 1104857
+        "remain_time": 1031709
       },
       {
         "item_id": 1101593,
@@ -407219,7 +408175,7 @@
           1,
           1
         ],
-        "remain_time": 1104857
+        "remain_time": 1031709
       },
       {
         "item_id": 1102164,
@@ -407230,7 +408186,7 @@
           1,
           1
         ],
-        "remain_time": 237257
+        "remain_time": 164109
       },
       {
         "item_id": 1102165,
@@ -407241,7 +408197,7 @@
           1,
           1
         ],
-        "remain_time": 237257
+        "remain_time": 164109
       },
       {
         "item_id": 1102166,
@@ -407252,7 +408208,7 @@
           1,
           1
         ],
-        "remain_time": 237257
+        "remain_time": 164109
       },
       {
         "item_id": 1102167,
@@ -407263,7 +408219,7 @@
           1,
           1
         ],
-        "remain_time": 237257
+        "remain_time": 164109
       },
       {
         "item_id": 610006,
@@ -407796,26 +408752,6 @@
         "sort_number": 199
       },
       {
-        "item_id": 1102172,
-        "sort_group": 1,
-        "sort_number": 200
-      },
-      {
-        "item_id": 1102173,
-        "sort_group": 1,
-        "sort_number": 200
-      },
-      {
-        "item_id": 1102174,
-        "sort_group": 1,
-        "sort_number": 200
-      },
-      {
-        "item_id": 1102175,
-        "sort_group": 1,
-        "sort_number": 200
-      },
-      {
         "item_id": 1101592,
         "sort_group": 1,
         "sort_number": 201
@@ -407961,19 +408897,14 @@
         "sort_number": 400
       },
       {
-        "item_id": 1100750,
+        "item_id": 1100983,
         "sort_group": 30,
-        "sort_number": 1100
+        "sort_number": 901
       },
       {
-        "item_id": 1100751,
+        "item_id": 1100984,
         "sort_group": 30,
-        "sort_number": 1100
-      },
-      {
-        "item_id": 1100752,
-        "sort_group": 30,
-        "sort_number": 1100
+        "sort_number": 902
       },
       {
         "item_id": 200002,
@@ -408601,7 +409532,7 @@
         ]
       }
     ],
-    "refresh_time_ts": 1789704000,
+    "refresh_time_ts": 1789790400,
     "last_inapp_purchased_time_ts": 1769995239,
     "shop_bonus_event": [
       {
@@ -408681,7 +409612,7 @@
             "reward_additional": []
           }
         ],
-        "remained_time": 1101316
+        "remained_time": 1028168
       }
     ],
     "shop_monthly_first_purchased_reward": {
@@ -408905,21 +409836,21 @@
   "notice_info": [
     {
       "type": 1,
-      "message": "is live! Check it out!",
-      "mercury_id": 328547,
-      "mercury_title": "SWC2026 Scroll Giveaway Event",
-      "link_type": 1,
-      "link_url": 328547,
-      "link_title": "SWC2026 Scroll Giveaway Event"
+      "message": "♥ [Angelmon/Rainbowmon/Devilmon/Mana Stone Dungeon] OPEN! (Sep. 18th - Sep. 20th)",
+      "mercury_id": 0,
+      "mercury_title": "",
+      "link_type": 0,
+      "link_url": "",
+      "link_title": ""
     },
     {
       "type": 1,
       "message": "is live! Check it out!",
-      "mercury_id": 328467,
-      "mercury_title": "Fever Rune Set Crafting Event",
+      "mercury_id": 328468,
+      "mercury_title": "Monster Fever Summon Event",
       "link_type": 1,
-      "link_url": 328467,
-      "link_title": "Fever Rune Set Crafting Event"
+      "link_url": 328468,
+      "link_title": "Monster Fever Summon Event"
     }
   ],
   "push_noti_status": 0,
@@ -409016,10 +409947,10 @@
       "comment": "ยินดีต้อนรับ เข้าสู่กิล OVER  \nกิลเน้นตีแค่ทาทารัส \n1.ทิ้งตะเกียง 1วัน เตะออก ไม่เจาะมั่ว\n2.ออฟ 2 วัน บินออกกิล\n3.ไม่เข้าใจวนไปอ่านข้อ 1ใหม่\nเจอคนดีคนเสียสละควรเกรงใจ ไม่ใช่เอาเปรียบน่ะจ๊ะ",
       "notice": "เน้นทาทารัส วออื่นกันบ้านด้วย",
       "level": 30,
-      "experience": 92692,
+      "experience": 92717,
       "recruit_status": 1,
       "arena_rating_id": 1001,
-      "last_market_refresh_auto": "2026-09-18 01:36:50",
+      "last_market_refresh_auto": "2026-09-19 01:36:50",
       "last_market_refresh_manual": "2026-07-04 09:36:50",
       "last_change_notice": "2023-04-01 04:31:31",
       "master_wizard_name": "ᴋɪᴀʀᴀ࿐™",
@@ -409056,8 +409987,8 @@
           5
         ]
       },
-      "market_refresh_ts": 1789663010,
-      "next_market_refresh_auto_ts": 1789691810,
+      "market_refresh_ts": 1789749410,
+      "next_market_refresh_auto_ts": 1789778210,
       "next_market_refresh_manual_ts": 1783139810,
       "last_change_notice_ts": 1680291091
     },
@@ -409071,9 +410002,9 @@
         "account_last_reset": "2014-10-15 23:35:05",
         "wizard_name": "༺ỾanỾ༻",
         "wizard_level": 100,
-        "rating_id": 2003,
-        "arena_score": 1195,
-        "last_login_timestamp": 1789659501,
+        "rating_id": 3003,
+        "arena_score": 1244,
+        "last_login_timestamp": 1789723690,
         "join_timestamp": 1646551034
       },
       "118533": {
@@ -409085,9 +410016,9 @@
         "account_last_reset": "2014-07-02 08:36:02",
         "wizard_name": "oDeleteo",
         "wizard_level": 100,
-        "rating_id": 1003,
-        "arena_score": 1062,
-        "last_login_timestamp": 1789672581,
+        "rating_id": 1002,
+        "arena_score": 1041,
+        "last_login_timestamp": 1789735959,
         "join_timestamp": 1775452243
       },
       "239628": {
@@ -409100,8 +410031,8 @@
         "wizard_name": "|ZenN™",
         "wizard_level": 100,
         "rating_id": 3003,
-        "arena_score": 1229,
-        "last_login_timestamp": 1789661761,
+        "arena_score": 1213,
+        "last_login_timestamp": 1789748484,
         "join_timestamp": 1788332466
       },
       "331881": {
@@ -409114,8 +410045,8 @@
         "wizard_name": "༺Shiroyasha༻",
         "wizard_level": 100,
         "rating_id": 3003,
-        "arena_score": 1213,
-        "last_login_timestamp": 1789633609,
+        "arena_score": 1237,
+        "last_login_timestamp": 1789749828,
         "join_timestamp": 1646244546
       },
       "1010284": {
@@ -409128,8 +410059,8 @@
         "wizard_name": "TABATAK",
         "wizard_level": 100,
         "rating_id": 2003,
-        "arena_score": 1107,
-        "last_login_timestamp": 1789665999,
+        "arena_score": 1105,
+        "last_login_timestamp": 1789749804,
         "join_timestamp": 1769328730
       },
       "1126796": {
@@ -409141,9 +410072,9 @@
         "account_last_reset": "2015-05-26 02:59:47",
         "wizard_name": "Toen()",
         "wizard_level": 100,
-        "rating_id": 1003,
-        "arena_score": 1097,
-        "last_login_timestamp": 1789648678,
+        "rating_id": 2003,
+        "arena_score": 1173,
+        "last_login_timestamp": 1789744536,
         "join_timestamp": 1775310492
       },
       "1369282": {
@@ -409156,8 +410087,8 @@
         "wizard_name": "-PigChuBBy-",
         "wizard_level": 100,
         "rating_id": 2003,
-        "arena_score": 1125,
-        "last_login_timestamp": 1789659518,
+        "arena_score": 1131,
+        "last_login_timestamp": 1789711022,
         "join_timestamp": 1762125482
       },
       "1696170": {
@@ -409169,9 +410100,9 @@
         "account_last_reset": "2015-05-17 16:02:39",
         "wizard_name": "⭐~WisitGS~⭐",
         "wizard_level": 100,
-        "rating_id": 1002,
-        "arena_score": 1040,
-        "last_login_timestamp": 1789661459,
+        "rating_id": 2003,
+        "arena_score": 1132,
+        "last_login_timestamp": 1789749756,
         "join_timestamp": 1771598458
       },
       "1778561": {
@@ -409185,7 +410116,7 @@
         "wizard_level": 100,
         "rating_id": 1001,
         "arena_score": 1000,
-        "last_login_timestamp": 1789674009,
+        "last_login_timestamp": 1789747076,
         "join_timestamp": 1779513787
       },
       "8271303": {
@@ -409198,8 +410129,8 @@
         "wizard_name": "THürD4Y10",
         "wizard_level": 100,
         "rating_id": 1003,
-        "arena_score": 1071,
-        "last_login_timestamp": 1789631704,
+        "arena_score": 1063,
+        "last_login_timestamp": 1789747748,
         "join_timestamp": 1788697099
       },
       "8551480": {
@@ -409212,7 +410143,7 @@
         "wizard_name": "冰血皇",
         "wizard_level": 100,
         "rating_id": 1003,
-        "arena_score": 1052,
+        "arena_score": 1081,
         "last_login_timestamp": 1789653042,
         "join_timestamp": 1771413801
       },
@@ -409226,8 +410157,8 @@
         "wizard_name": "PedictU",
         "wizard_level": 100,
         "rating_id": 3003,
-        "arena_score": 1223,
-        "last_login_timestamp": 1789678895,
+        "arena_score": 1240,
+        "last_login_timestamp": 1789685630,
         "join_timestamp": 1789447728
       },
       "10280078": {
@@ -409241,7 +410172,7 @@
         "wizard_level": 100,
         "rating_id": 901,
         "arena_score": 1000,
-        "last_login_timestamp": 1789658029,
+        "last_login_timestamp": 1789744594,
         "join_timestamp": 1778679180
       },
       "10282268": {
@@ -409254,8 +410185,8 @@
         "wizard_name": "Amjonut",
         "wizard_level": 100,
         "rating_id": 1002,
-        "arena_score": 1009,
-        "last_login_timestamp": 1789647382,
+        "arena_score": 1005,
+        "last_login_timestamp": 1789748462,
         "join_timestamp": 1789447643
       },
       "10308060": {
@@ -409267,9 +410198,9 @@
         "account_last_reset": "2020-02-24 16:47:36",
         "wizard_name": "haribo9999",
         "wizard_level": 100,
-        "rating_id": 2003,
-        "arena_score": 1114,
-        "last_login_timestamp": 1789659503,
+        "rating_id": 1003,
+        "arena_score": 1098,
+        "last_login_timestamp": 1789744891,
         "join_timestamp": 1648474984
       },
       "10636676": {
@@ -409282,8 +410213,8 @@
         "wizard_name": "ᴋɪᴀʀᴀ࿐™",
         "wizard_level": 100,
         "rating_id": 1001,
-        "arena_score": 839,
-        "last_login_timestamp": 1789656832,
+        "arena_score": 831,
+        "last_login_timestamp": 1789740724,
         "join_timestamp": 1644161375
       },
       "13418743": {
@@ -409294,10 +410225,10 @@
         "country": "US",
         "account_last_reset": "2023-07-27 08:44:43",
         "wizard_name": "Mochi^",
-        "wizard_level": 97,
+        "wizard_level": 98,
         "rating_id": 1003,
-        "arena_score": 1075,
-        "last_login_timestamp": 1789649605,
+        "arena_score": 1085,
+        "last_login_timestamp": 1789732923,
         "join_timestamp": 1788592365
       },
       "14514271": {
@@ -409309,9 +410240,9 @@
         "account_last_reset": "2021-09-16 21:30:46",
         "wizard_name": "~We~Ho~",
         "wizard_level": 100,
-        "rating_id": 2003,
-        "arena_score": 1107,
-        "last_login_timestamp": 1789664863,
+        "rating_id": 1003,
+        "arena_score": 1061,
+        "last_login_timestamp": 1789717125,
         "join_timestamp": 1788417236
       },
       "16737308": {
@@ -409323,9 +410254,9 @@
         "account_last_reset": "2022-12-13 16:03:31",
         "wizard_name": "BeVö",
         "wizard_level": 100,
-        "rating_id": 1003,
-        "arena_score": 1095,
-        "last_login_timestamp": 1789678795,
+        "rating_id": 2003,
+        "arena_score": 1103,
+        "last_login_timestamp": 1789749854,
         "join_timestamp": 1785305612
       },
       "22200675": {
@@ -409339,7 +410270,7 @@
         "wizard_level": 100,
         "rating_id": 1002,
         "arena_score": 1000,
-        "last_login_timestamp": 1789665060,
+        "last_login_timestamp": 1789726929,
         "join_timestamp": 1772188594
       },
       "24102567": {
@@ -409353,7 +410284,7 @@
         "wizard_level": 100,
         "rating_id": 1001,
         "arena_score": 1000,
-        "last_login_timestamp": 1789645420,
+        "last_login_timestamp": 1789729488,
         "join_timestamp": 1760312390
       },
       "42042659": {
@@ -409366,8 +410297,8 @@
         "wizard_name": "ᗩlphamonEẍ",
         "wizard_level": 100,
         "rating_id": 2003,
-        "arena_score": 1111,
-        "last_login_timestamp": 1789678661,
+        "arena_score": 1106,
+        "last_login_timestamp": 1789744485,
         "join_timestamp": 1788332464
       },
       "47798416": {
@@ -409381,7 +410312,7 @@
         "wizard_level": 100,
         "rating_id": 2003,
         "arena_score": 1100,
-        "last_login_timestamp": 1789652109,
+        "last_login_timestamp": 1789736218,
         "join_timestamp": 1756527943
       },
       "50314560": {
@@ -409395,7 +410326,7 @@
         "wizard_level": 100,
         "rating_id": 1001,
         "arena_score": 1000,
-        "last_login_timestamp": 1789632899,
+        "last_login_timestamp": 1789697933,
         "join_timestamp": 1782285506
       },
       "59424258": {
@@ -409408,8 +410339,8 @@
         "wizard_name": "^ระรัว^",
         "wizard_level": 100,
         "rating_id": 1001,
-        "arena_score": 936,
-        "last_login_timestamp": 1789661221,
+        "arena_score": 928,
+        "last_login_timestamp": 1789687202,
         "join_timestamp": 1782626228
       },
       "85239717": {
@@ -409422,8 +410353,8 @@
         "wizard_name": "•нყdɾo™",
         "wizard_level": 100,
         "rating_id": 1001,
-        "arena_score": 973,
-        "last_login_timestamp": 1789675445,
+        "arena_score": 946,
+        "last_login_timestamp": 1789749910,
         "join_timestamp": 1780128738
       },
       "88589131": {
@@ -409437,7 +410368,7 @@
         "wizard_level": 100,
         "rating_id": 811,
         "arena_score": 1000,
-        "last_login_timestamp": 1789658688,
+        "last_login_timestamp": 1789745534,
         "join_timestamp": 1785566721
       },
       "90595684": {
@@ -409448,10 +410379,10 @@
         "country": "TH",
         "account_last_reset": "2026-08-29 08:13:57",
         "wizard_name": "Yoͥdoͣmͫ.ᐟ",
-        "wizard_level": 78,
+        "wizard_level": 81,
         "rating_id": 3003,
-        "arena_score": 1265,
-        "last_login_timestamp": 1789665753,
+        "arena_score": 1203,
+        "last_login_timestamp": 1789749122,
         "join_timestamp": 1788592218
       },
       "91022711": {
@@ -409462,10 +410393,10 @@
         "country": "VN",
         "account_last_reset": "2026-09-05 01:26:36",
         "wizard_name": "ᗪɍᥲℭuℒᥲ",
-        "wizard_level": 49,
-        "rating_id": 823,
-        "arena_score": 1359,
-        "last_login_timestamp": 1789652923,
+        "wizard_level": 51,
+        "rating_id": 831,
+        "arena_score": 1431,
+        "last_login_timestamp": 1789749769,
         "join_timestamp": 1788592363
       },
       "91670574": {
@@ -409476,10 +410407,10 @@
         "country": "TH",
         "account_last_reset": "2026-09-08 16:03:49",
         "wizard_name": "56JRRT",
-        "wizard_level": 50,
+        "wizard_level": 51,
         "rating_id": 813,
         "arena_score": 1100,
-        "last_login_timestamp": 1789652185,
+        "last_login_timestamp": 1789726294,
         "join_timestamp": 1789447644
       }
     },
@@ -409488,7 +410419,7 @@
       {
         "wizard_id": 10308060,
         "guild_id": 143434,
-        "activity_score": 15735
+        "activity_score": 16810
       },
       {
         "wizard_id": 16737308,
@@ -409498,22 +410429,22 @@
       {
         "wizard_id": 1696170,
         "guild_id": 143434,
-        "activity_score": 14650
+        "activity_score": 16000
       },
       {
         "wizard_id": 1126796,
         "guild_id": 143434,
-        "activity_score": 2940
+        "activity_score": 3040
       },
       {
         "wizard_id": 1010284,
         "guild_id": 143434,
-        "activity_score": 7000
+        "activity_score": 7500
       },
       {
         "wizard_id": 44105,
         "guild_id": 143434,
-        "activity_score": 8500
+        "activity_score": 8795
       },
       {
         "wizard_id": 59424258,
@@ -409523,62 +410454,62 @@
       {
         "wizard_id": 118533,
         "guild_id": 143434,
-        "activity_score": 8305
+        "activity_score": 8600
       },
       {
         "wizard_id": 1778561,
         "guild_id": 143434,
-        "activity_score": 13320
+        "activity_score": 14415
       },
       {
         "wizard_id": 47798416,
         "guild_id": 143434,
-        "activity_score": 15435
+        "activity_score": 15730
       },
       {
         "wizard_id": 331881,
         "guild_id": 143434,
-        "activity_score": 7445
+        "activity_score": 7740
       },
       {
         "wizard_id": 88589131,
         "guild_id": 143434,
-        "activity_score": 10125
+        "activity_score": 10420
       },
       {
         "wizard_id": 10636676,
         "guild_id": 143434,
-        "activity_score": 17510
+        "activity_score": 18585
       },
       {
         "wizard_id": 24102567,
         "guild_id": 143434,
-        "activity_score": 8470
+        "activity_score": 8765
       },
       {
         "wizard_id": 85239717,
         "guild_id": 143434,
-        "activity_score": 2480
+        "activity_score": 2775
       },
       {
         "wizard_id": 50314560,
         "guild_id": 143434,
-        "activity_score": 8690
+        "activity_score": 8790
       },
       {
         "wizard_id": 10280078,
         "guild_id": 143434,
-        "activity_score": 5990
+        "activity_score": 6285
       },
       {
         "wizard_id": 42042659,
         "guild_id": 143434,
-        "activity_score": 9010
+        "activity_score": 9480
       },
       {
         "wizard_id": 239628,
         "guild_id": 143434,
-        "activity_score": 14295
+        "activity_score": 15350
       },
       {
         "wizard_id": 8551480,
@@ -409603,32 +410534,32 @@
       {
         "wizard_id": 13418743,
         "guild_id": 143434,
-        "activity_score": 11555
+        "activity_score": 12230
       },
       {
         "wizard_id": 90595684,
         "guild_id": 143434,
-        "activity_score": 8295
+        "activity_score": 8590
       },
       {
         "wizard_id": 91022711,
         "guild_id": 143434,
-        "activity_score": 4600
+        "activity_score": 4995
       },
       {
         "wizard_id": 8271303,
         "guild_id": 143434,
-        "activity_score": 6670
+        "activity_score": 7365
       },
       {
         "wizard_id": 9326961,
         "guild_id": 143434,
-        "activity_score": 495
+        "activity_score": 595
       },
       {
         "wizard_id": 10282268,
         "guild_id": 143434,
-        "activity_score": 1155
+        "activity_score": 1810
       },
       {
         "wizard_id": 91670574,
@@ -425943,11 +426874,11 @@
     "icon_display_begin": 1785740400,
     "icon_display_end": 1788102000,
     "next": 0,
-    "next_begin": 1789679083,
+    "next_begin": 1789752231,
     "next_begin_display": 1,
-    "next_end": 1789679083,
-    "next_icon_display_begin": 1789679083,
-    "next_icon_display_end": 1789679083
+    "next_end": 1789752231,
+    "next_icon_display_begin": 1789752231,
+    "next_icon_display_end": 1789752231
   },
   "rtpvp_draft_season_info": {
     "current_season": 7,
@@ -425972,7 +426903,7 @@
     "win_count": 399,
     "lose_count": 431,
     "draw_count": 0,
-    "rank": 44869,
+    "rank": 45414,
     "is_placement": 0,
     "last_rating_id": 3501,
     "next_penalty_ts": 0,
@@ -426470,7 +427401,7 @@
       "costume_master_id": 0,
       "trans_items": [],
       "attribute": 2,
-      "create_time": "2026-09-18 06:04:43",
+      "create_time": "2026-09-19 02:23:51",
       "source": 0,
       "homunculus": 0,
       "homunculus_name": "",
@@ -426942,7 +427873,7 @@
       "costume_master_id": 0,
       "trans_items": [],
       "attribute": 3,
-      "create_time": "2026-09-18 06:04:43",
+      "create_time": "2026-09-19 02:23:51",
       "source": 0,
       "homunculus": 0,
       "homunculus_name": "",
@@ -427414,7 +428345,7 @@
       "costume_master_id": 0,
       "trans_items": [],
       "attribute": 1,
-      "create_time": "2026-09-18 06:04:43",
+      "create_time": "2026-09-19 02:23:51",
       "source": 0,
       "homunculus": 0,
       "homunculus_name": "",
@@ -427886,7 +428817,7 @@
       "costume_master_id": 0,
       "trans_items": [],
       "attribute": 4,
-      "create_time": "2026-09-18 06:04:43",
+      "create_time": "2026-09-19 02:23:51",
       "source": 0,
       "homunculus": 0,
       "homunculus_name": "",
@@ -428358,7 +429289,7 @@
       "costume_master_id": 43601,
       "trans_items": [],
       "attribute": 1,
-      "create_time": "2026-09-18 06:04:43",
+      "create_time": "2026-09-19 02:23:51",
       "source": 0,
       "homunculus": 0,
       "homunculus_name": "",
@@ -428830,7 +429761,7 @@
       "costume_master_id": 22801,
       "trans_items": [],
       "attribute": 1,
-      "create_time": "2026-09-18 06:04:43",
+      "create_time": "2026-09-19 02:23:51",
       "source": 0,
       "homunculus": 0,
       "homunculus_name": "",
@@ -429302,7 +430233,7 @@
       "costume_master_id": 0,
       "trans_items": [],
       "attribute": 1,
-      "create_time": "2026-09-18 06:04:43",
+      "create_time": "2026-09-19 02:23:51",
       "source": 0,
       "homunculus": 0,
       "homunculus_name": "",
@@ -429774,7 +430705,7 @@
       "costume_master_id": 16402,
       "trans_items": [],
       "attribute": 2,
-      "create_time": "2026-09-18 06:04:43",
+      "create_time": "2026-09-19 02:23:51",
       "source": 0,
       "homunculus": 0,
       "homunculus_name": "",
@@ -430246,7 +431177,7 @@
       "costume_master_id": 0,
       "trans_items": [],
       "attribute": 2,
-      "create_time": "2026-09-18 06:04:43",
+      "create_time": "2026-09-19 02:23:51",
       "source": 0,
       "homunculus": 0,
       "homunculus_name": "",
@@ -430718,7 +431649,7 @@
       "costume_master_id": 28303,
       "trans_items": [],
       "attribute": 3,
-      "create_time": "2026-09-18 06:04:43",
+      "create_time": "2026-09-19 02:23:51",
       "source": 0,
       "homunculus": 0,
       "homunculus_name": "",
@@ -431194,7 +432125,7 @@
       "costume_master_id": 23903,
       "trans_items": [],
       "attribute": 3,
-      "create_time": "2026-09-18 06:04:43",
+      "create_time": "2026-09-19 02:23:51",
       "source": 0,
       "homunculus": 0,
       "homunculus_name": "",
@@ -431666,7 +432597,7 @@
       "costume_master_id": 0,
       "trans_items": [],
       "attribute": 3,
-      "create_time": "2026-09-18 06:04:43",
+      "create_time": "2026-09-19 02:23:51",
       "source": 0,
       "homunculus": 0,
       "homunculus_name": "",
@@ -432138,7 +433069,7 @@
       "costume_master_id": 30101,
       "trans_items": [],
       "attribute": 1,
-      "create_time": "2026-09-18 06:04:43",
+      "create_time": "2026-09-19 02:23:51",
       "source": 0,
       "homunculus": 0,
       "homunculus_name": "",
@@ -432610,7 +433541,7 @@
       "costume_master_id": 16702,
       "trans_items": [],
       "attribute": 2,
-      "create_time": "2026-09-18 06:04:43",
+      "create_time": "2026-09-19 02:23:51",
       "source": 0,
       "homunculus": 0,
       "homunculus_name": "",
@@ -433082,7 +434013,7 @@
       "costume_master_id": 0,
       "trans_items": [],
       "attribute": 3,
-      "create_time": "2026-09-18 06:04:43",
+      "create_time": "2026-09-19 02:23:51",
       "source": 0,
       "homunculus": 0,
       "homunculus_name": "",
@@ -433554,7 +434485,7 @@
       "costume_master_id": 24205,
       "trans_items": [],
       "attribute": 5,
-      "create_time": "2026-09-18 06:04:43",
+      "create_time": "2026-09-19 02:23:51",
       "source": 0,
       "homunculus": 0,
       "homunculus_name": "",
@@ -433929,7 +434860,7 @@
         "costume_master_id": 0,
         "trans_items": [],
         "attribute": 1,
-        "create_time": "2026-09-18 06:04:43",
+        "create_time": "2026-09-19 02:23:51",
         "source": 0,
         "homunculus": 0,
         "homunculus_name": "",
@@ -434308,7 +435239,7 @@
         "costume_master_id": 0,
         "trans_items": [],
         "attribute": 1,
-        "create_time": "2026-09-18 06:04:43",
+        "create_time": "2026-09-19 02:23:51",
         "source": 0,
         "homunculus": 0,
         "homunculus_name": "",
@@ -434683,7 +435614,7 @@
         "costume_master_id": 0,
         "trans_items": [],
         "attribute": 1,
-        "create_time": "2026-09-18 06:04:43",
+        "create_time": "2026-09-19 02:23:51",
         "source": 0,
         "homunculus": 0,
         "homunculus_name": "",
@@ -435058,7 +435989,7 @@
         "costume_master_id": 0,
         "trans_items": [],
         "attribute": 1,
-        "create_time": "2026-09-18 06:04:43",
+        "create_time": "2026-09-19 02:23:51",
         "source": 0,
         "homunculus": 0,
         "homunculus_name": "",
@@ -435433,7 +436364,7 @@
         "costume_master_id": 0,
         "trans_items": [],
         "attribute": 1,
-        "create_time": "2026-09-18 06:04:43",
+        "create_time": "2026-09-19 02:23:51",
         "source": 0,
         "homunculus": 0,
         "homunculus_name": "",
@@ -435812,7 +436743,7 @@
         "costume_master_id": 0,
         "trans_items": [],
         "attribute": 1,
-        "create_time": "2026-09-18 06:04:43",
+        "create_time": "2026-09-19 02:23:51",
         "source": 0,
         "homunculus": 0,
         "homunculus_name": "",
@@ -436187,7 +437118,7 @@
         "costume_master_id": 0,
         "trans_items": [],
         "attribute": 1,
-        "create_time": "2026-09-18 06:04:43",
+        "create_time": "2026-09-19 02:23:51",
         "source": 0,
         "homunculus": 0,
         "homunculus_name": "",
@@ -436562,7 +437493,7 @@
         "costume_master_id": 0,
         "trans_items": [],
         "attribute": 1,
-        "create_time": "2026-09-18 06:04:43",
+        "create_time": "2026-09-19 02:23:51",
         "source": 0,
         "homunculus": 0,
         "homunculus_name": "",
@@ -436937,7 +437868,7 @@
         "costume_master_id": 0,
         "trans_items": [],
         "attribute": 1,
-        "create_time": "2026-09-18 06:04:43",
+        "create_time": "2026-09-19 02:23:51",
         "source": 0,
         "homunculus": 0,
         "homunculus_name": "",
@@ -437312,7 +438243,7 @@
         "costume_master_id": 0,
         "trans_items": [],
         "attribute": 1,
-        "create_time": "2026-09-18 06:04:43",
+        "create_time": "2026-09-19 02:23:51",
         "source": 0,
         "homunculus": 0,
         "homunculus_name": "",
@@ -437687,7 +438618,7 @@
         "costume_master_id": 0,
         "trans_items": [],
         "attribute": 2,
-        "create_time": "2026-09-18 06:04:43",
+        "create_time": "2026-09-19 02:23:51",
         "source": 0,
         "homunculus": 0,
         "homunculus_name": "",
@@ -438062,7 +438993,7 @@
         "costume_master_id": 0,
         "trans_items": [],
         "attribute": 2,
-        "create_time": "2026-09-18 06:04:43",
+        "create_time": "2026-09-19 02:23:51",
         "source": 0,
         "homunculus": 0,
         "homunculus_name": "",
@@ -438437,7 +439368,7 @@
         "costume_master_id": 0,
         "trans_items": [],
         "attribute": 2,
-        "create_time": "2026-09-18 06:04:43",
+        "create_time": "2026-09-19 02:23:51",
         "source": 0,
         "homunculus": 0,
         "homunculus_name": "",
@@ -438812,7 +439743,7 @@
         "costume_master_id": 0,
         "trans_items": [],
         "attribute": 2,
-        "create_time": "2026-09-18 06:04:43",
+        "create_time": "2026-09-19 02:23:51",
         "source": 0,
         "homunculus": 0,
         "homunculus_name": "",
@@ -439187,7 +440118,7 @@
         "costume_master_id": 0,
         "trans_items": [],
         "attribute": 2,
-        "create_time": "2026-09-18 06:04:43",
+        "create_time": "2026-09-19 02:23:51",
         "source": 0,
         "homunculus": 0,
         "homunculus_name": "",
@@ -439562,7 +440493,7 @@
         "costume_master_id": 0,
         "trans_items": [],
         "attribute": 2,
-        "create_time": "2026-09-18 06:04:43",
+        "create_time": "2026-09-19 02:23:51",
         "source": 0,
         "homunculus": 0,
         "homunculus_name": "",
@@ -439937,7 +440868,7 @@
         "costume_master_id": 0,
         "trans_items": [],
         "attribute": 2,
-        "create_time": "2026-09-18 06:04:43",
+        "create_time": "2026-09-19 02:23:51",
         "source": 0,
         "homunculus": 0,
         "homunculus_name": "",
@@ -440312,7 +441243,7 @@
         "costume_master_id": 0,
         "trans_items": [],
         "attribute": 2,
-        "create_time": "2026-09-18 06:04:43",
+        "create_time": "2026-09-19 02:23:51",
         "source": 0,
         "homunculus": 0,
         "homunculus_name": "",
@@ -440687,7 +441618,7 @@
         "costume_master_id": 0,
         "trans_items": [],
         "attribute": 2,
-        "create_time": "2026-09-18 06:04:43",
+        "create_time": "2026-09-19 02:23:51",
         "source": 0,
         "homunculus": 0,
         "homunculus_name": "",
@@ -441062,7 +441993,7 @@
         "costume_master_id": 0,
         "trans_items": [],
         "attribute": 3,
-        "create_time": "2026-09-18 06:04:43",
+        "create_time": "2026-09-19 02:23:51",
         "source": 0,
         "homunculus": 0,
         "homunculus_name": "",
@@ -441437,7 +442368,7 @@
         "costume_master_id": 0,
         "trans_items": [],
         "attribute": 3,
-        "create_time": "2026-09-18 06:04:43",
+        "create_time": "2026-09-19 02:23:51",
         "source": 0,
         "homunculus": 0,
         "homunculus_name": "",
@@ -441812,7 +442743,7 @@
         "costume_master_id": 0,
         "trans_items": [],
         "attribute": 3,
-        "create_time": "2026-09-18 06:04:43",
+        "create_time": "2026-09-19 02:23:51",
         "source": 0,
         "homunculus": 0,
         "homunculus_name": "",
@@ -442187,7 +443118,7 @@
         "costume_master_id": 0,
         "trans_items": [],
         "attribute": 3,
-        "create_time": "2026-09-18 06:04:43",
+        "create_time": "2026-09-19 02:23:51",
         "source": 0,
         "homunculus": 0,
         "homunculus_name": "",
@@ -442562,7 +443493,7 @@
         "costume_master_id": 0,
         "trans_items": [],
         "attribute": 3,
-        "create_time": "2026-09-18 06:04:43",
+        "create_time": "2026-09-19 02:23:51",
         "source": 0,
         "homunculus": 0,
         "homunculus_name": "",
@@ -442937,7 +443868,7 @@
         "costume_master_id": 0,
         "trans_items": [],
         "attribute": 3,
-        "create_time": "2026-09-18 06:04:43",
+        "create_time": "2026-09-19 02:23:51",
         "source": 0,
         "homunculus": 0,
         "homunculus_name": "",
@@ -443312,7 +444243,7 @@
         "costume_master_id": 0,
         "trans_items": [],
         "attribute": 3,
-        "create_time": "2026-09-18 06:04:43",
+        "create_time": "2026-09-19 02:23:51",
         "source": 0,
         "homunculus": 0,
         "homunculus_name": "",
@@ -443687,7 +444618,7 @@
         "costume_master_id": 0,
         "trans_items": [],
         "attribute": 3,
-        "create_time": "2026-09-18 06:04:43",
+        "create_time": "2026-09-19 02:23:51",
         "source": 0,
         "homunculus": 0,
         "homunculus_name": "",
@@ -444066,7 +444997,7 @@
         "costume_master_id": 0,
         "trans_items": [],
         "attribute": 3,
-        "create_time": "2026-09-18 06:04:43",
+        "create_time": "2026-09-19 02:23:51",
         "source": 0,
         "homunculus": 0,
         "homunculus_name": "",
@@ -444441,7 +445372,7 @@
         "costume_master_id": 0,
         "trans_items": [],
         "attribute": 4,
-        "create_time": "2026-09-18 06:04:43",
+        "create_time": "2026-09-19 02:23:51",
         "source": 0,
         "homunculus": 0,
         "homunculus_name": "",
@@ -444816,7 +445747,7 @@
         "costume_master_id": 0,
         "trans_items": [],
         "attribute": 4,
-        "create_time": "2026-09-18 06:04:43",
+        "create_time": "2026-09-19 02:23:51",
         "source": 0,
         "homunculus": 0,
         "homunculus_name": "",
@@ -445191,7 +446122,7 @@
         "costume_master_id": 0,
         "trans_items": [],
         "attribute": 4,
-        "create_time": "2026-09-18 06:04:43",
+        "create_time": "2026-09-19 02:23:51",
         "source": 0,
         "homunculus": 0,
         "homunculus_name": "",
@@ -445566,7 +446497,7 @@
         "costume_master_id": 0,
         "trans_items": [],
         "attribute": 4,
-        "create_time": "2026-09-18 06:04:43",
+        "create_time": "2026-09-19 02:23:51",
         "source": 0,
         "homunculus": 0,
         "homunculus_name": "",
@@ -445941,7 +446872,7 @@
         "costume_master_id": 0,
         "trans_items": [],
         "attribute": 4,
-        "create_time": "2026-09-18 06:04:43",
+        "create_time": "2026-09-19 02:23:51",
         "source": 0,
         "homunculus": 0,
         "homunculus_name": "",
@@ -446316,7 +447247,7 @@
         "costume_master_id": 0,
         "trans_items": [],
         "attribute": 4,
-        "create_time": "2026-09-18 06:04:43",
+        "create_time": "2026-09-19 02:23:51",
         "source": 0,
         "homunculus": 0,
         "homunculus_name": "",
@@ -446691,7 +447622,7 @@
         "costume_master_id": 0,
         "trans_items": [],
         "attribute": 5,
-        "create_time": "2026-09-18 06:04:43",
+        "create_time": "2026-09-19 02:23:51",
         "source": 0,
         "homunculus": 0,
         "homunculus_name": "",
@@ -447066,7 +447997,7 @@
         "costume_master_id": 0,
         "trans_items": [],
         "attribute": 5,
-        "create_time": "2026-09-18 06:04:43",
+        "create_time": "2026-09-19 02:23:51",
         "source": 0,
         "homunculus": 0,
         "homunculus_name": "",
@@ -447441,7 +448372,7 @@
         "costume_master_id": 0,
         "trans_items": [],
         "attribute": 5,
-        "create_time": "2026-09-18 06:04:43",
+        "create_time": "2026-09-19 02:23:51",
         "source": 0,
         "homunculus": 0,
         "homunculus_name": "",
@@ -447816,7 +448747,7 @@
         "costume_master_id": 0,
         "trans_items": [],
         "attribute": 5,
-        "create_time": "2026-09-18 06:04:43",
+        "create_time": "2026-09-19 02:23:51",
         "source": 0,
         "homunculus": 0,
         "homunculus_name": "",
@@ -448191,7 +449122,7 @@
         "costume_master_id": 0,
         "trans_items": [],
         "attribute": 5,
-        "create_time": "2026-09-18 06:04:43",
+        "create_time": "2026-09-19 02:23:51",
         "source": 0,
         "homunculus": 0,
         "homunculus_name": "",
@@ -448566,7 +449497,7 @@
         "costume_master_id": 0,
         "trans_items": [],
         "attribute": 5,
-        "create_time": "2026-09-18 06:04:43",
+        "create_time": "2026-09-19 02:23:51",
         "source": 0,
         "homunculus": 0,
         "homunculus_name": "",
@@ -448662,7 +449593,7 @@
           "reward_additional": []
         }
       ],
-      "remained_time": 1101316
+      "remained_time": 1028168
     }
   ],
   "lobby_proud_unit_id_list": [
@@ -453408,7 +454339,7 @@
   "friend_list": [
     {
       "assist_count": 0,
-      "last_assist_date": "2026-09-18 06:01:35",
+      "last_assist_date": "2026-09-19 02:23:51",
       "max_assist_count": 10,
       "wizard_id": 66750,
       "channel_uid": 55133394,
@@ -453416,18 +454347,18 @@
       "wizard_level": 100,
       "wizard_name": "iFelisヅ",
       "rep_unit_id": 21332494726,
-      "arena_score": 1124,
+      "arena_score": 1134,
       "rating_id": 2003,
       "rep_unit_master_id": 35714,
       "rep_unit_class": 6,
       "rep_unit_level": 40,
       "next_gift_time": 0,
       "next_assist_time": 0,
-      "last_login_timestamp": 1789663396
+      "last_login_timestamp": 1789752014
     },
     {
       "assist_count": 0,
-      "last_assist_date": "2026-09-18 06:01:35",
+      "last_assist_date": "2026-09-19 02:23:51",
       "max_assist_count": 10,
       "wizard_id": 69451,
       "channel_uid": 121694040,
@@ -453435,18 +454366,18 @@
       "wizard_level": 100,
       "wizard_name": "'cooper_",
       "rep_unit_id": 21331331935,
-      "arena_score": 1280,
+      "arena_score": 1210,
       "rating_id": 3003,
       "rep_unit_master_id": 35915,
       "rep_unit_class": 6,
       "rep_unit_level": 40,
       "next_gift_time": 0,
       "next_assist_time": 0,
-      "last_login_timestamp": 1789665294
+      "last_login_timestamp": 1789733287
     },
     {
       "assist_count": 0,
-      "last_assist_date": "2026-09-18 06:01:35",
+      "last_assist_date": "2026-09-19 02:23:51",
       "max_assist_count": 10,
       "wizard_id": 71201,
       "channel_uid": 120037000,
@@ -453461,7 +454392,7 @@
       "rep_unit_level": 40,
       "next_gift_time": 0,
       "next_assist_time": 0,
-      "last_login_timestamp": 1789563618
+      "last_login_timestamp": 1789722876
     },
     {
       "assist_count": 0,
@@ -453473,18 +454404,18 @@
       "wizard_level": 100,
       "wizard_name": "\"AllDAYシ",
       "rep_unit_id": 15879908090,
-      "arena_score": 1138,
+      "arena_score": 1194,
       "rating_id": 2003,
       "rep_unit_master_id": 24514,
       "rep_unit_class": 6,
       "rep_unit_level": 40,
       "next_gift_time": 0,
       "next_assist_time": 0,
-      "last_login_timestamp": 1789618769
+      "last_login_timestamp": 1789733955
     },
     {
       "assist_count": 0,
-      "last_assist_date": "2026-09-18 06:01:35",
+      "last_assist_date": "2026-09-19 02:23:51",
       "max_assist_count": 10,
       "wizard_id": 1469133,
       "channel_uid": 148281062,
@@ -453492,18 +454423,18 @@
       "wizard_level": 100,
       "wizard_name": "YOUNGBU",
       "rep_unit_id": 20081355872,
-      "arena_score": 993,
-      "rating_id": 1001,
+      "arena_score": 1005,
+      "rating_id": 1002,
       "rep_unit_master_id": 34615,
       "rep_unit_class": 6,
       "rep_unit_level": 40,
       "next_gift_time": 0,
       "next_assist_time": 0,
-      "last_login_timestamp": 1789668232
+      "last_login_timestamp": 1789742154
     },
     {
       "assist_count": 0,
-      "last_assist_date": "2026-09-18 06:01:35",
+      "last_assist_date": "2026-09-19 02:23:51",
       "max_assist_count": 10,
       "wizard_id": 2136234,
       "channel_uid": 137508205,
@@ -453511,18 +454442,18 @@
       "wizard_level": 100,
       "wizard_name": "L1ly_",
       "rep_unit_id": 16242082103,
-      "arena_score": 1240,
+      "arena_score": 1265,
       "rating_id": 3003,
       "rep_unit_master_id": 30215,
       "rep_unit_class": 6,
       "rep_unit_level": 40,
       "next_gift_time": 0,
       "next_assist_time": 0,
-      "last_login_timestamp": 1789664458
+      "last_login_timestamp": 1789741342
     },
     {
       "assist_count": 0,
-      "last_assist_date": "2026-09-18 06:01:35",
+      "last_assist_date": "2026-09-19 02:23:51",
       "max_assist_count": 10,
       "wizard_id": 4207619,
       "channel_uid": 177376112,
@@ -453530,18 +454461,18 @@
       "wizard_level": 100,
       "wizard_name": "Up2Me’",
       "rep_unit_id": 21461647639,
-      "arena_score": 1171,
+      "arena_score": 1172,
       "rating_id": 2003,
       "rep_unit_master_id": 35914,
       "rep_unit_class": 6,
       "rep_unit_level": 40,
       "next_gift_time": 0,
       "next_assist_time": 0,
-      "last_login_timestamp": 1789658339
+      "last_login_timestamp": 1789751214
     },
     {
       "assist_count": 0,
-      "last_assist_date": "2026-09-18 06:01:35",
+      "last_assist_date": "2026-09-19 02:23:51",
       "max_assist_count": 10,
       "wizard_id": 4732446,
       "channel_uid": 183096329,
@@ -453560,7 +454491,7 @@
     },
     {
       "assist_count": 0,
-      "last_assist_date": "2026-09-18 06:01:35",
+      "last_assist_date": "2026-09-19 02:23:51",
       "max_assist_count": 10,
       "wizard_id": 5352211,
       "channel_uid": 190088388,
@@ -453568,7 +454499,7 @@
       "wizard_level": 100,
       "wizard_name": "DomTaw",
       "rep_unit_id": 11217750120,
-      "arena_score": 1134,
+      "arena_score": 1127,
       "rating_id": 2003,
       "rep_unit_master_id": 14714,
       "rep_unit_class": 6,
@@ -453579,7 +454510,7 @@
     },
     {
       "assist_count": 0,
-      "last_assist_date": "2026-09-18 06:01:35",
+      "last_assist_date": "2026-09-19 02:23:51",
       "max_assist_count": 10,
       "wizard_id": 5870269,
       "channel_uid": 192333157,
@@ -453587,18 +454518,18 @@
       "wizard_level": 100,
       "wizard_name": "oZaladiNo",
       "rep_unit_id": 21542359313,
-      "arena_score": 1042,
+      "arena_score": 1024,
       "rating_id": 1002,
       "rep_unit_master_id": 16612,
       "rep_unit_class": 6,
       "rep_unit_level": 40,
       "next_gift_time": 0,
       "next_assist_time": 0,
-      "last_login_timestamp": 1789661556
+      "last_login_timestamp": 1789750400
     },
     {
       "assist_count": 0,
-      "last_assist_date": "2026-09-18 06:01:35",
+      "last_assist_date": "2026-09-19 02:23:51",
       "max_assist_count": 10,
       "wizard_id": 9982681,
       "channel_uid": 166550016,
@@ -453606,18 +454537,18 @@
       "wizard_level": 100,
       "wizard_name": "SouŁHuNTeR",
       "rep_unit_id": 21347258343,
-      "arena_score": 1118,
+      "arena_score": 1150,
       "rating_id": 2003,
       "rep_unit_master_id": 35711,
       "rep_unit_class": 6,
       "rep_unit_level": 40,
       "next_gift_time": 0,
       "next_assist_time": 0,
-      "last_login_timestamp": 1789661651
+      "last_login_timestamp": 1789751855
     },
     {
       "assist_count": 0,
-      "last_assist_date": "2026-09-18 06:01:35",
+      "last_assist_date": "2026-09-19 02:23:51",
       "max_assist_count": 10,
       "wizard_id": 10126035,
       "channel_uid": 220537634,
@@ -453625,18 +454556,18 @@
       "wizard_level": 100,
       "wizard_name": "♧INSIZE♧",
       "rep_unit_id": 8233073009,
-      "arena_score": 1072,
+      "arena_score": 1082,
       "rating_id": 1003,
       "rep_unit_master_id": 17911,
       "rep_unit_class": 6,
       "rep_unit_level": 40,
       "next_gift_time": 0,
       "next_assist_time": 0,
-      "last_login_timestamp": 1789660313
+      "last_login_timestamp": 1789742348
     },
     {
       "assist_count": 0,
-      "last_assist_date": "2026-09-18 06:01:35",
+      "last_assist_date": "2026-09-19 02:23:51",
       "max_assist_count": 10,
       "wizard_id": 10520505,
       "channel_uid": 223045680,
@@ -453655,7 +454586,7 @@
     },
     {
       "assist_count": 0,
-      "last_assist_date": "2026-09-18 06:01:35",
+      "last_assist_date": "2026-09-19 02:23:51",
       "max_assist_count": 10,
       "wizard_id": 14757094,
       "channel_uid": 137003513,
@@ -453663,18 +454594,18 @@
       "wizard_level": 100,
       "wizard_name": "KangSW",
       "rep_unit_id": 18934883572,
-      "arena_score": 1158,
+      "arena_score": 1165,
       "rating_id": 2003,
       "rep_unit_master_id": 14614,
       "rep_unit_class": 6,
       "rep_unit_level": 40,
       "next_gift_time": 0,
       "next_assist_time": 0,
-      "last_login_timestamp": 1789651092
+      "last_login_timestamp": 1789746921
     },
     {
       "assist_count": 0,
-      "last_assist_date": "2026-09-18 06:01:35",
+      "last_assist_date": "2026-09-19 02:23:51",
       "max_assist_count": 10,
       "wizard_id": 15122853,
       "channel_uid": 175995991,
@@ -453682,14 +454613,14 @@
       "wizard_level": 100,
       "wizard_name": "☬༒KHiN༒☬",
       "rep_unit_id": 16606973122,
-      "arena_score": 1000,
-      "rating_id": 901,
+      "arena_score": 1043,
+      "rating_id": 1002,
       "rep_unit_master_id": 30314,
       "rep_unit_class": 6,
       "rep_unit_level": 40,
       "next_gift_time": 0,
       "next_assist_time": 0,
-      "last_login_timestamp": 1787644024
+      "last_login_timestamp": 1789750469
     },
     {
       "assist_count": 0,
@@ -453708,11 +454639,11 @@
       "rep_unit_level": 40,
       "next_gift_time": 0,
       "next_assist_time": 0,
-      "last_login_timestamp": 1789651812
+      "last_login_timestamp": 1789739586
     },
     {
       "assist_count": 0,
-      "last_assist_date": "2026-09-18 06:01:35",
+      "last_assist_date": "2026-09-19 02:23:51",
       "max_assist_count": 10,
       "wizard_id": 18741849,
       "channel_uid": 238726569,
@@ -453727,7 +454658,7 @@
       "rep_unit_level": 40,
       "next_gift_time": 0,
       "next_assist_time": 0,
-      "last_login_timestamp": 1789641171
+      "last_login_timestamp": 1789707327
     },
     {
       "assist_count": 0,
@@ -453739,14 +454670,14 @@
       "wizard_level": 100,
       "wizard_name": "ßɭ∆©ƙ™",
       "rep_unit_id": 14427089290,
-      "arena_score": 1044,
+      "arena_score": 1031,
       "rating_id": 1002,
       "rep_unit_master_id": 25715,
       "rep_unit_class": 6,
       "rep_unit_level": 40,
       "next_gift_time": 0,
       "next_assist_time": 0,
-      "last_login_timestamp": 1789675116
+      "last_login_timestamp": 1789747186
     },
     {
       "assist_count": 0,
@@ -453769,7 +454700,7 @@
     },
     {
       "assist_count": 0,
-      "last_assist_date": "2026-09-18 06:01:35",
+      "last_assist_date": "2026-09-19 02:23:51",
       "max_assist_count": 10,
       "wizard_id": 29647558,
       "channel_uid": 244163875,
@@ -453777,18 +454708,18 @@
       "wizard_level": 100,
       "wizard_name": "♤♡POLO◇♧",
       "rep_unit_id": 20514406032,
-      "arena_score": 1000,
-      "rating_id": 1001,
+      "arena_score": 1008,
+      "rating_id": 1002,
       "rep_unit_master_id": 15715,
       "rep_unit_class": 6,
       "rep_unit_level": 40,
       "next_gift_time": 0,
       "next_assist_time": 0,
-      "last_login_timestamp": 1789608808
+      "last_login_timestamp": 1789727708
     },
     {
       "assist_count": 0,
-      "last_assist_date": "2026-09-18 06:01:35",
+      "last_assist_date": "2026-09-19 02:23:51",
       "max_assist_count": 10,
       "wizard_id": 30402393,
       "channel_uid": 244659679,
@@ -453796,14 +454727,14 @@
       "wizard_level": 100,
       "wizard_name": "Ahihi.Bò",
       "rep_unit_id": 20089888437,
-      "arena_score": 1018,
+      "arena_score": 1034,
       "rating_id": 1002,
       "rep_unit_master_id": 21815,
       "rep_unit_class": 6,
       "rep_unit_level": 40,
       "next_gift_time": 0,
       "next_assist_time": 0,
-      "last_login_timestamp": 1789678712
+      "last_login_timestamp": 1789751303
     },
     {
       "assist_count": 0,
@@ -453822,7 +454753,7 @@
       "rep_unit_level": 40,
       "next_gift_time": 0,
       "next_assist_time": 0,
-      "last_login_timestamp": 1789603224
+      "last_login_timestamp": 1789701782
     },
     {
       "assist_count": 0,
@@ -453853,18 +454784,18 @@
       "wizard_level": 100,
       "wizard_name": "Kinokaa",
       "rep_unit_id": 15820288534,
-      "arena_score": 1017,
+      "arena_score": 1023,
       "rating_id": 1002,
       "rep_unit_master_id": 14513,
       "rep_unit_class": 6,
       "rep_unit_level": 40,
       "next_gift_time": 0,
       "next_assist_time": 0,
-      "last_login_timestamp": 1789659210
+      "last_login_timestamp": 1789744174
     },
     {
       "assist_count": 0,
-      "last_assist_date": "2026-09-18 06:01:35",
+      "last_assist_date": "2026-09-19 02:23:51",
       "max_assist_count": 10,
       "wizard_id": 40958545,
       "channel_uid": 248326868,
@@ -453883,7 +454814,7 @@
     },
     {
       "assist_count": 0,
-      "last_assist_date": "2026-09-18 06:01:35",
+      "last_assist_date": "2026-09-19 02:23:51",
       "max_assist_count": 10,
       "wizard_id": 41598723,
       "channel_uid": 248617492,
@@ -453891,18 +454822,18 @@
       "wizard_level": 100,
       "wizard_name": "~Battosai~",
       "rep_unit_id": 17542391138,
-      "arena_score": 1006,
+      "arena_score": 1020,
       "rating_id": 1002,
       "rep_unit_master_id": 31814,
       "rep_unit_class": 6,
       "rep_unit_level": 40,
       "next_gift_time": 0,
       "next_assist_time": 0,
-      "last_login_timestamp": 1789661428
+      "last_login_timestamp": 1789746505
     },
     {
       "assist_count": 0,
-      "last_assist_date": "2026-09-18 06:01:35",
+      "last_assist_date": "2026-09-19 02:23:51",
       "max_assist_count": 10,
       "wizard_id": 43319687,
       "channel_uid": 123333723,
@@ -453917,11 +454848,11 @@
       "rep_unit_level": 40,
       "next_gift_time": 0,
       "next_assist_time": 0,
-      "last_login_timestamp": 1789651246
+      "last_login_timestamp": 1789744573
     },
     {
       "assist_count": 0,
-      "last_assist_date": "2026-09-18 06:01:35",
+      "last_assist_date": "2026-09-19 02:23:51",
       "max_assist_count": 10,
       "wizard_id": 48512844,
       "channel_uid": 251150430,
@@ -453929,18 +454860,18 @@
       "wizard_level": 100,
       "wizard_name": "ᴏᴇɪ",
       "rep_unit_id": 21589330198,
-      "arena_score": 1190,
-      "rating_id": 2003,
+      "arena_score": 1202,
+      "rating_id": 3003,
       "rep_unit_master_id": 35714,
       "rep_unit_class": 6,
-      "rep_unit_level": 5,
+      "rep_unit_level": 30,
       "next_gift_time": 0,
       "next_assist_time": 0,
-      "last_login_timestamp": 1789666888
+      "last_login_timestamp": 1789738454
     },
     {
       "assist_count": 0,
-      "last_assist_date": "2026-09-18 06:01:35",
+      "last_assist_date": "2026-09-19 02:23:51",
       "max_assist_count": 10,
       "wizard_id": 49760807,
       "channel_uid": 252696765,
@@ -453948,18 +454879,18 @@
       "wizard_level": 100,
       "wizard_name": "Göłłüm",
       "rep_unit_id": 19281685284,
-      "arena_score": 1072,
+      "arena_score": 1062,
       "rating_id": 1003,
       "rep_unit_master_id": 33115,
       "rep_unit_class": 6,
       "rep_unit_level": 40,
       "next_gift_time": 0,
       "next_assist_time": 0,
-      "last_login_timestamp": 1789656511
+      "last_login_timestamp": 1789752118
     },
     {
       "assist_count": 0,
-      "last_assist_date": "2026-09-18 06:01:35",
+      "last_assist_date": "2026-09-19 02:23:51",
       "max_assist_count": 10,
       "wizard_id": 53030094,
       "channel_uid": 253791384,
@@ -453967,18 +454898,18 @@
       "wizard_level": 100,
       "wizard_name": "Orange<3",
       "rep_unit_id": 18021934261,
-      "arena_score": 1130,
+      "arena_score": 1178,
       "rating_id": 2003,
       "rep_unit_master_id": 15715,
       "rep_unit_class": 6,
       "rep_unit_level": 40,
       "next_gift_time": 0,
       "next_assist_time": 0,
-      "last_login_timestamp": 1789657470
+      "last_login_timestamp": 1789740599
     },
     {
       "assist_count": 0,
-      "last_assist_date": "2026-09-18 06:01:35",
+      "last_assist_date": "2026-09-19 02:23:51",
       "max_assist_count": 10,
       "wizard_id": 68490180,
       "channel_uid": 255758031,
@@ -453993,11 +454924,11 @@
       "rep_unit_level": 40,
       "next_gift_time": 0,
       "next_assist_time": 0,
-      "last_login_timestamp": 1789639729
+      "last_login_timestamp": 1789723797
     },
     {
       "assist_count": 0,
-      "last_assist_date": "2026-09-18 06:01:35",
+      "last_assist_date": "2026-09-19 02:23:51",
       "max_assist_count": 10,
       "wizard_id": 76050835,
       "channel_uid": 257700307,
@@ -454005,18 +454936,18 @@
       "wizard_level": 100,
       "wizard_name": "I<3Fap",
       "rep_unit_id": 20225639886,
-      "arena_score": 1081,
-      "rating_id": 1003,
+      "arena_score": 1119,
+      "rating_id": 2003,
       "rep_unit_master_id": 20515,
       "rep_unit_class": 6,
       "rep_unit_level": 40,
       "next_gift_time": 0,
       "next_assist_time": 0,
-      "last_login_timestamp": 1789653730
+      "last_login_timestamp": 1789738770
     },
     {
       "assist_count": 0,
-      "last_assist_date": "2026-09-18 06:01:35",
+      "last_assist_date": "2026-09-19 02:23:51",
       "max_assist_count": 10,
       "wizard_id": 76578406,
       "channel_uid": 257434794,
@@ -454024,18 +454955,18 @@
       "wizard_level": 100,
       "wizard_name": "Hiwkhao55.",
       "rep_unit_id": 20140369592,
-      "arena_score": 1000,
+      "arena_score": 991,
       "rating_id": 1001,
       "rep_unit_master_id": 34311,
       "rep_unit_class": 6,
       "rep_unit_level": 40,
       "next_gift_time": 0,
       "next_assist_time": 0,
-      "last_login_timestamp": 1789656000
+      "last_login_timestamp": 1789729138
     },
     {
       "assist_count": 0,
-      "last_assist_date": "2026-09-18 06:01:35",
+      "last_assist_date": "2026-09-19 02:23:51",
       "max_assist_count": 10,
       "wizard_id": 85771375,
       "channel_uid": 258722080,
@@ -454054,7 +454985,7 @@
     },
     {
       "assist_count": 0,
-      "last_assist_date": "2026-09-18 06:01:35",
+      "last_assist_date": "2026-09-19 02:23:51",
       "max_assist_count": 10,
       "wizard_id": 90899313,
       "channel_uid": 259713234,
@@ -454073,7 +455004,7 @@
     },
     {
       "assist_count": 0,
-      "last_assist_date": "2026-09-18 06:01:35",
+      "last_assist_date": "2026-09-19 02:23:51",
       "max_assist_count": 10,
       "wizard_id": 91252467,
       "channel_uid": 259999137,
@@ -454114,7 +455045,7 @@
   "daily_reward_new_user_status": 0,
   "daily_reward_special_status": 0,
   "daily_reward_special_event_status": 0,
-  "daily_reward_special_pass_status": 0,
+  "daily_reward_special_pass_status": 1,
   "daily_reward_list": {
     "reward_list": {
       "1": [
@@ -454515,12 +455446,12 @@
   "daily_reward_info": {
     "month": "2026-09-01",
     "is_checked": 1,
-    "check_count": 16,
+    "check_count": 17,
     "prev_last_check": "2026-09-18",
     "enable": 1,
     "is_bonus_activate": false
   },
-  "daily_reward_checked": 0,
+  "daily_reward_checked": 1,
   "daily_reward_unit_upgrade_info": {
     "reward_exist": 0
   },
@@ -454531,24 +455462,24 @@
     "reward_start_ts": 1788328385,
     "reward_end_ts": 1791302400,
     "reward_last_date_ts": 1789678984,
-    "remain_expire": 1623317,
+    "remain_expire": 1550169,
     "is_bonus_activate": false
   },
   "pvp_info": {
     "wizard_id": 9326961,
-    "arena_win": 25017,
-    "arena_lose": 20755,
-    "arena_score": 1223,
-    "arena_score_update": "2026-09-18 03:34:20",
+    "arena_win": 25023,
+    "arena_lose": 20760,
+    "arena_score": 1240,
+    "arena_score_update": "2026-09-19 01:23:17",
     "win_streak": 0,
     "rating_id": 3003,
     "league_id": 5,
     "league_date_id": 20260914,
     "promo_type": 2,
-    "log_read_id": 185357247,
+    "log_read_id": 185373486,
     "extra": [],
     "win_streak_update_remained": 0,
-    "rating_remained": 845717,
+    "rating_remained": 772569,
     "is_new": 0,
     "prev_rating_id": 0
   },
@@ -454581,23 +455512,23 @@
     "close_time": "2026-09-22 10:10:00",
     "base_hp": 0,
     "open_remained_time": 0,
-    "dead_remained_time": 356717,
-    "close_remained_time": 360317,
-    "daily_battle_init_remained_time": 68117,
+    "dead_remained_time": 283569,
+    "close_remained_time": 287169,
+    "daily_battle_init_remained_time": 81369,
     "open_time_ts": 1789562100,
     "dead_time_ts": 1790035800,
     "close_time_ts": 1790039400,
-    "daily_battle_init_time_ts": 1789743600,
+    "daily_battle_init_time_ts": 1789830000,
     "refresh_term": 300,
-    "hp_rate": 78.45603087328833,
+    "hp_rate": 61.10556072093988,
     "prev_worldboss_id": 10654
   },
   "worldboss_used_unit": [],
   "my_worldboss_ranking": {
-    "ranking": 21091,
+    "ranking": 35857,
     "accumulate_damage": 7395811,
-    "rating_id": 2001,
-    "ranking_rate": 46.1,
+    "rating_id": 1001,
+    "ranking_rate": 70.3,
     "is_reward": false
   },
   "my_worldboss_prev_ranking": {
@@ -454615,8 +455546,8 @@
   "my_worldboss_daily_battle_count": 0,
   "world_boss_best_rank_id": 12,
   "costume_ticket_purchased_list": [],
-  "session_key": "450280af3e7cb8068a580fc68541bf377ea3027e",
-  "session_key_node": "65689470d15d3737496709b7ef5aea6ed9121a2f",
+  "session_key": "0068d28d55922442b0d0a8eff4178ae4ae024f2e",
+  "session_key_node": "587e4c696cbfaa3bed7632d9e030c44b737735f0",
   "raid_info_list": [
     {
       "raid_id": 1001,
@@ -455330,12 +456261,12 @@
   "rtpvp_reward_info": [],
   "rtpvp_contest_reward": [],
   "guild_attend_info": {
-    "reset_ts": 1789747200,
+    "reset_ts": 1789833600,
     "attend": 1,
     "attend_info": {
       "wizard_id": 9326961,
       "guild_id": 143434,
-      "date_attend": "2026-09-18",
+      "date_attend": "2026-09-19",
       "reward_state": 0
     }
   },
@@ -455343,11 +456274,11 @@
     "rid": 193590,
     "wizard_id": 9326961,
     "energy": 1150,
-    "date_energy_gain_start": "2026-09-18 06:02:48",
+    "date_energy_gain_start": "2026-09-19 02:15:18",
     "date_add": "2019-11-01 06:09:29",
     "energy_max": 1150,
     "energy_gain_term_sec": 750,
-    "energy_gain_start_timestamp": 1789678968
+    "energy_gain_start_timestamp": 1789751718
   },
   "notice_popup_info_list": [],
   "reward_buff_info_list": [],
@@ -455453,11 +456384,11 @@
   "tvaluelocal_next_monday": 1789920000,
   "check_login_reward_interval": 3600,
   "wizard_id": 9326961,
-  "ts_val": 1988318051,
-  "tvalue": 1789679083,
-  "tvaluelocal": 1789675483,
+  "ts_val": 1988261167,
+  "tvalue": 1789752231,
+  "tvaluelocal": 1789748631,
   "tzone": "Asia/Shanghai",
   "tzoffset": 28800,
-  "reqid": "d42f4393-e9c9-4770-bba2-4f3d7249a043",
+  "reqid": "7ff988e1-7750-45ce-93fc-620957ab5c6d",
   "this_server_id": 5
 }
