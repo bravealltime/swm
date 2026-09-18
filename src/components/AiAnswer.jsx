@@ -1,12 +1,87 @@
 import React from 'react';
+import { ExternalLink, ArrowRight, Compass } from 'lucide-react';
 
 // Renders the coach's markdown-ish answer as easy-to-scan blocks: section titles with an accent
-// bar, numbered steps as badges, bullets, simple `|` tables and **bold** highlights.
-const inline = (s) => String(s).split(/(\*\*[^*]+\*\*|`[^`]+`)/g).map((part, i) => {
-  if (part.startsWith('**') && part.endsWith('**')) return <strong key={i} className="font-bold text-amber-200">{part.slice(2, -2)}</strong>;
-  if (part.startsWith('`') && part.endsWith('`')) return <code key={i} className="px-1 py-px rounded bg-white/[0.08] text-cyan-200 text-[0.92em]">{part.slice(1, -1)}</code>;
-  return part;
-});
+// bar, numbered steps as badges, bullets, simple `|` tables, **bold** highlights, and interactive internal/external links.
+const inline = (s) => {
+  const tokenRegex = /(\*\*[^*]+\*\*|`[^`]+`|\[[^\]]+\]\([^\)]+\)|https?:\/\/[^\s]+)/g;
+  return String(s).split(tokenRegex).map((part, i) => {
+    if (!part) return null;
+
+    // Bold: **text**
+    if (part.startsWith('**') && part.endsWith('**')) {
+      return <strong key={i} className="font-bold text-amber-200">{part.slice(2, -2)}</strong>;
+    }
+
+    // Code: `code`
+    if (part.startsWith('`') && part.endsWith('`')) {
+      return <code key={i} className="px-1 py-px rounded bg-white/[0.08] text-cyan-200 text-[0.92em]">{part.slice(1, -1)}</code>;
+    }
+
+    // Markdown Link: [label](url)
+    const linkMatch = part.match(/^\[([^\]]+)\]\(([^\)]+)\)$/);
+    if (linkMatch) {
+      const label = linkMatch[1];
+      const url = linkMatch[2].trim();
+
+      // Internal SWM Route (e.g. /balance, /codes, /3mdc, /dungeons, /catalog, /rune)
+      if (url.startsWith('/')) {
+        return (
+          <button
+            key={i}
+            type="button"
+            onClick={() => {
+              const cleanUrl = url.replace(/^\//, '');
+              const [view, queryStr] = cleanUrl.split('?');
+              const params = {};
+              if (queryStr) {
+                new URLSearchParams(queryStr).forEach((v, k) => { params[k] = v; });
+              }
+              window.dispatchEvent(new CustomEvent('swm:navigate', { detail: { view, params } }));
+            }}
+            className="inline-flex items-center gap-1.5 px-2.5 py-1 my-0.5 mx-1 rounded-lg bg-blue-600/25 hover:bg-blue-600/40 text-blue-300 hover:text-white border border-blue-500/40 font-bold transition-all text-xs cursor-pointer shadow-sm group align-middle"
+          >
+            <Compass className="w-3.5 h-3.5 text-blue-400 group-hover:rotate-45 transition-transform" />
+            <span>{label}</span>
+            <ArrowRight className="w-3 h-3 text-blue-400 group-hover:translate-x-0.5 transition-transform" />
+          </button>
+        );
+      }
+
+      // External URL
+      return (
+        <a
+          key={i}
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1 text-sky-400 hover:text-sky-300 underline font-semibold transition-colors mx-0.5"
+        >
+          <span>{label}</span>
+          <ExternalLink className="w-3 h-3 shrink-0 inline" />
+        </a>
+      );
+    }
+
+    // Bare URL: https://...
+    if (/^https?:\/\//.test(part)) {
+      return (
+        <a
+          key={i}
+          href={part}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1 text-sky-400 hover:text-sky-300 underline font-semibold transition-colors mx-0.5 break-all text-xs"
+        >
+          <span>{part.replace(/^https?:\/\/(www\.)?/, '').slice(0, 35)}...</span>
+          <ExternalLink className="w-3 h-3 shrink-0 inline" />
+        </a>
+      );
+    }
+
+    return part;
+  });
+};
 
 function Table({ rows, k }) {
   const cells = (r) => r.replace(/^\||\|$/g, '').split('|').map((c) => c.trim());

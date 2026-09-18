@@ -124,6 +124,17 @@ function AppContent() {
     return () => window.removeEventListener('popstate', onPopState);
   }, []);
 
+  // Custom navigation event from AI answer or internal link buttons
+  useEffect(() => {
+    const onNavigateEvent = (e) => {
+      if (e.detail?.view) {
+        handleNavigate(e.detail.view, e.detail.params || {});
+      }
+    };
+    window.addEventListener('swm:navigate', onNavigateEvent);
+    return () => window.removeEventListener('swm:navigate', onNavigateEvent);
+  }, [handleNavigate]);
+
   useEffect(() => {
     document.title = titleFor(currentView);
   }, [currentView]);
