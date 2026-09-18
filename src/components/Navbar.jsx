@@ -19,6 +19,7 @@ import {
   Home,
   Wrench,
   Package,
+  Cloud,
 } from 'lucide-react';
 import SwmLogo from './SwmLogo';
 import { buildUrl } from '../router';
@@ -48,7 +49,7 @@ const TOOL_ITEMS = [
 
 const PRIMARY_IDS = new Set(NAV_ITEMS.flatMap((i) => i.group || [i.id]));
 
-export default function Navbar({ currentView, onNavigate, onOpenSearch, onOpenMenu }) {
+export default function Navbar({ currentView, onNavigate, onOpenSearch, onOpenMenu, onOpenSync }) {
   const [toolsOpen, setToolsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -171,6 +172,16 @@ export default function Navbar({ currentView, onNavigate, onOpenSearch, onOpenMe
 
           {/* Right actions */}
           <div className="flex items-center gap-2">
+            <button
+              onClick={onOpenSync}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 hover:text-white text-xs font-bold transition-all duration-200 cursor-pointer shadow-lg shadow-cyan-500/5 hover:scale-[1.02]"
+              title="ซิงค์ข้อมูลไอดีข้ามอุปกรณ์ (มือถือ/แท็บเล็ต/PC)"
+              aria-label="ซิงค์ข้อมูลไอดีข้ามอุปกรณ์"
+            >
+              <Cloud className="w-4 h-4 text-cyan-400 animate-pulse" />
+              <span className="hidden sm:inline">ซิงค์ข้ามเครื่อง</span>
+            </button>
+
             <button
               onClick={onOpenSearch}
               className="flex items-center gap-2.5 px-3 py-2 rounded-xl bg-white/[0.05] hover:bg-white/[0.09] border border-white/10 hover:border-white/20 text-slate-300 hover:text-white text-xs font-medium transition-colors cursor-pointer"

@@ -3,8 +3,10 @@ import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
 import ErrorBoundary from './components/ErrorBoundary';
 import SwmLogo from './components/SwmLogo';
-import { Home, Shield, Trophy, Search, Menu, Loader2 } from 'lucide-react';
+import CloudSyncModal from './components/CloudSyncModal';
+import { Home, Shield, Trophy, Search, Menu, Loader2, CheckCircle2 } from 'lucide-react';
 import { buildUrl, parseLocation, normalizeView, titleFor } from './router';
+import { saveBox, loadBox, parseSwexExport } from './utils/swexImport';
 
 // Every view (and the JSON it imports) is its own chunk, so the first paint
 // only downloads the shell + the page that was actually requested.
@@ -59,6 +61,45 @@ export default function App() {
   const [route, setRoute] = useState(() => parseLocation());
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isSyncOpen, setIsSyncOpen] = useState(false);
+  const [syncNotice, setSyncNotice] = useState(null);
+
+  // Auto-sync profile across devices via URL param (?sync=...) or LAN auto-fetch
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const syncParam = params.get('sync');
+    const existingBox = loadBox();
+
+    const doSync = async () => {
+      try {
+        let res = await fetch(`/api/profile${syncParam ? `/${syncParam}` : ''}`).catch(() => null);
+        if (!res || !res.ok) {
+          res = await fetch('/data/my_profile.json').catch(() => null);
+        }
+        if (!res || !res.ok) return;
+
+        const data = await res.json();
+        const parsed = parseSwexExport(data);
+        if (parsed && parsed.units?.length > 0) {
+          saveBox(parsed);
+          const name = parsed.wizard?.name || 'PedictU';
+          setSyncNotice(`✨ ซิงค์ข้อมูลไอดี ${name} (มอนสเตอร์ ${parsed.units.length} ตัว) เข้าสู่อุปกรณ์นี้เรียบร้อยแล้ว!`);
+          setTimeout(() => setSyncNotice(null), 6000);
+        }
+      } catch (err) {
+        console.warn('Auto profile sync warning:', err);
+      }
+    };
+
+    if (syncParam) {
+      doSync();
+      const cleanUrl = window.location.pathname;
+      window.history.replaceState({}, '', cleanUrl);
+    } else if (!existingBox || !existingBox.units || existingBox.units.length === 0) {
+      // First visit on another device on LAN -> auto-sync user's profile seamlessly!
+      doSync();
+    }
+  }, []);
 
   const currentView = route.view;
   const viewParams = route.params;
@@ -117,11 +158,31 @@ export default function App() {
         ข้ามไปเนื้อหาหลัก
       </a>
 
+      {/* Sync Toast Notification */}
+      {syncNotice && (
+        <aside aria-label="แจ้งเตือนการซิงค์" className="fixed top-20 right-4 z-50 max-w-md bg-gradient-to-r from-cyan-950 via-[#0d1b2e] to-blue-950 border border-cyan-400/40 rounded-2xl p-4 shadow-2xl shadow-cyan-500/20 text-white flex items-center gap-3 animate-in fade-in slide-in-from-top-4 duration-300">
+          <div className="p-2 rounded-xl bg-cyan-500/20 text-cyan-400 shrink-0">
+            <CheckCircle2 className="w-5 h-5" />
+          </div>
+          <div className="text-xs font-semibold text-cyan-100 flex-1">
+            {syncNotice}
+          </div>
+          <button
+            onClick={() => setSyncNotice(null)}
+            className="p-1 rounded-lg text-slate-400 hover:text-white"
+            aria-label="ปิดแจ้งเตือน"
+          >
+            ✕
+          </button>
+        </aside>
+      )}
+
       <Navbar
         currentView={currentView}
         onNavigate={handleNavigate}
         onOpenSearch={() => setIsSearchOpen(true)}
         onOpenMenu={() => setMobileMenuOpen(true)}
+        onOpenSync={() => setIsSyncOpen(true)}
       />
 
       <div className="flex-1 flex w-full max-w-[1720px] 2xl:max-w-[1850px] mx-auto">
@@ -205,6 +266,16 @@ export default function App() {
           />
         </Suspense>
       )}
+
+      <CloudSyncModal
+        isOpen={isSyncOpen}
+        onClose={() => setIsSyncOpen(false)}
+        onSynced={(box) => {
+          const name = box?.wizard?.name || 'PedictU';
+          setSyncNotice(`✨ ซิงค์ข้อมูลไอดี ${name} เรียบร้อยแล้ว!`);
+          setTimeout(() => setSyncNotice(null), 5000);
+        }}
+      />
     </div>
   );
 }

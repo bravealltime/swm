@@ -226,6 +226,9 @@ export function isNonSummonableLd5(unitOrMonster) {
 
 export function parseSwexExport(json) {
   if (!json || typeof json !== 'object') throw new Error('ไฟล์ไม่ใช่ JSON ที่อ่านได้');
+  if (Array.isArray(json.units) && json.wizard) {
+    return json;
+  }
   const units = Array.isArray(json.unit_list) ? json.unit_list : null;
   if (!units) throw new Error('ไม่พบ unit_list — ต้องเป็นไฟล์ที่ export จาก SWEX (เมนู Profile → Export)');
 
