@@ -1,5 +1,6 @@
-// Minimal client for an OpenAI-compatible chat/completions endpoint (server-side only).
-// Config comes from AI_BASE_URL / AI_MODEL / AI_API_KEY — never expose these to the browser.
+// Client for AI chat/completions (server-side only).
+// Supports both OpenAI-compatible endpoints (Xaek, OpenRouter, OpenAI)
+// and Google Gemini API (with native Google Search Grounding).
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -23,22 +24,73 @@ export function loadEnv() {
 export function aiConfig() {
   loadEnv();
   const baseUrl = (process.env.AI_BASE_URL || '').replace(/\/+$/, '');
+  const model = process.env.AI_MODEL || '';
+  const apiKey = process.env.AI_API_KEY || process.env.GEMINI_API_KEY || '';
+
+  const isGemini = baseUrl.includes('googleapis.com') || model.toLowerCase().startsWith('gemini');
+
   return {
     baseUrl,
-    model: process.env.AI_MODEL || '',
-    apiKey: process.env.AI_API_KEY || '',
-    configured: Boolean(baseUrl && process.env.AI_MODEL && process.env.AI_API_KEY),
+    model,
+    apiKey,
+    isGemini,
+    configured: Boolean((baseUrl || isGemini) && model && apiKey),
   };
 }
 
 /**
- * One chat completion. Returns { text, usage, model }. Reasoning models return their thinking in
- * `reasoning_content`, which is dropped; `reasoning_effort: low` keeps latency/cost down.
+ * Chat completion with support for OpenAI-compatible and Gemini Native with Search Grounding.
  */
-export async function chat({ system, user, maxTokens = 900, temperature = 0.3, timeoutMs = 45000, retries = 2 }) {
+export async function chat({ system, user, maxTokens = 950, temperature = 0.3, timeoutMs = 45000, retries = 2 }) {
   const cfg = aiConfig();
   if (!cfg.configured) throw new Error('AI provider not configured (AI_BASE_URL / AI_MODEL / AI_API_KEY)');
 
+  let lastErr;
+
+  // 1. Google Gemini API with native Google Search Grounding
+  if (cfg.isGemini) {
+    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${cfg.model}:generateContent?key=${cfg.apiKey}`;
+    const geminiBody = {
+      contents: [
+        { role: 'user', parts: [{ text: user }] }
+      ],
+      systemInstruction: system ? { parts: [{ text: system }] } : undefined,
+      tools: [
+        { googleSearch: {} } // Official Google Search Grounding tool
+      ],
+      generationConfig: {
+        maxOutputTokens: maxTokens,
+        temperature
+      }
+    };
+
+    for (let attempt = 0; attempt <= retries; attempt++) {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), timeoutMs);
+      try {
+        const res = await fetch(geminiUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(geminiBody),
+          signal: controller.signal
+        });
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(`Gemini HTTP ${res.status}: ${json.error?.message || res.statusText}`);
+        const candidate = json.candidates?.[0];
+        const text = candidate?.content?.parts?.map(p => p.text).join('') || '';
+        if (!text) throw new Error('Gemini returned an empty answer');
+        return { text: text.trim(), usage: json.usageMetadata || null, model: cfg.model };
+      } catch (err) {
+        lastErr = err;
+        if (attempt < retries) await new Promise((r) => setTimeout(r, 1500 * (attempt + 1)));
+      } finally {
+        clearTimeout(timer);
+      }
+    }
+    throw lastErr;
+  }
+
+  // 2. OpenAI-compatible endpoint (Xaek, OpenRouter, OpenAI)
   const body = {
     model: cfg.model,
     messages: [
@@ -50,7 +102,6 @@ export async function chat({ system, user, maxTokens = 900, temperature = 0.3, t
     reasoning_effort: 'low',
   };
 
-  let lastErr;
   for (let attempt = 0; attempt <= retries; attempt++) {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), timeoutMs);
@@ -78,8 +129,7 @@ export async function chat({ system, user, maxTokens = 900, temperature = 0.3, t
 }
 
 /**
- * Lenient JSON extraction: strips ``` fences and grabs the outermost object. If the answer was cut
- * off by max_tokens, keeps every complete "key": "value" pair and closes the object.
+ * Lenient JSON extraction: strips ``` fences and grabs the outermost object.
  */
 export function parseJson(text) {
   const cleaned = String(text).replace(/```(?:json)?/gi, '').trim();
@@ -87,7 +137,7 @@ export function parseJson(text) {
   if (start < 0) throw new Error('no JSON object in answer');
   const end = cleaned.lastIndexOf('}');
   if (end > start) {
-    try { return JSON.parse(cleaned.slice(start, end + 1)); } catch { /* fall through to repair */ }
+    try { return JSON.parse(cleaned.slice(start, end + 1)); } catch { /* fall through */ }
   }
   const body = cleaned.slice(start);
   const lastPair = body.lastIndexOf('",');

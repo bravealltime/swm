@@ -5,6 +5,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { chat } from './ai.js';
 import { MONSTER_BUILDS } from '../../src/data/monsterBuilds.js';
+import { searchLiveWeb, needsLiveGrounding } from './grounding.js';
 
 let knowledgeCache = null;
 
@@ -397,7 +398,7 @@ const CHAT_SYSTEM = `คุณคือโค้ช Summoners War: Sky Arena ร
 4. ถ้ามี "กล่องของผู้ใช้" แนบมา ให้แนะนำตัวที่ผู้ใช้มีจริงในกล่องก่อนเสมอ
 5. จัดรูปแบบให้อ่านง่าย: เริ่มด้วยคำตอบสั้น 1 บรรทัด แล้วตามด้วยหัวข้อหรือ bullet point ไม่ต้องทักทายเยิ่นเย้อ`;
 
-function chatPrompt({ question, context = {}, history = [] }) {
+async function chatPrompt({ question, context = {}, history = [] }) {
   const q = String(question || '').trim();
   if (!q) throw new Error('empty question');
   const NL = '\n';
@@ -429,6 +430,28 @@ function chatPrompt({ question, context = {}, history = [] }) {
     parts.push(`ข้อมูลสูตรแก้ทาง 3MDC จาก SWGT:${NL}${mdcFacts}`);
   }
 
+  // Live Web Grounding for real-time events, promo codes, balance patches
+  if (needsLiveGrounding(q)) {
+    // If asking about codes, load local verified codes from allPromoCodes.json
+    if (q.includes('โค้ด') || q.includes('code') || q.includes('คูปอง')) {
+      const promoFile = path.resolve(process.cwd(), 'src/data/allPromoCodes.json');
+      if (fs.existsSync(promoFile)) {
+        try {
+          const promoData = JSON.parse(fs.readFileSync(promoFile, 'utf8'));
+          const activeCodes = promoData.slice(0, 6).map(c => `- โค้ด: ${c.code} (${c.rewards?.map(r => r.title).join(', ')}) [สถานะ: ${c.status}]`);
+          parts.push(`[โค้ดเกมที่บันทึกในระบบ SWM]:\n${activeCodes.join('\n')}`);
+        } catch {}
+      }
+    }
+
+    try {
+      const searchSnippets = await searchLiveWeb(`Summoners War ${q}`, 4, 4000);
+      if (searchSnippets && searchSnippets.length > 0) {
+        parts.push(`[ข้อมูลผลการค้นหาเว็บสด (Live Web Grounding)]:\n${searchSnippets.map((s, i) => `${i + 1}. ${s}`).join('\n')}`);
+      }
+    } catch {}
+  }
+
   const past = history.slice(-4).map((h) => `${h.role === 'user' ? 'ผู้ใช้' : 'โค้ช'}: ${String(h.text).slice(0, 600)}`).join(NL);
   if (past) parts.push(`บทสนทนาก่อนหน้า:${NL}${past}`);
   parts.push(`คำถาม: ${q}`);
@@ -445,7 +468,7 @@ export async function advise(payload) {
   let system = SYSTEM;
   if (kind === 'mdc') user = mdcPrompt(payload);
   else if (kind === 'draft') user = draftPrompt(payload);
-  else if (kind === 'chat') { user = chatPrompt(payload); system = CHAT_SYSTEM; }
+  else if (kind === 'chat') { user = await chatPrompt(payload); system = CHAT_SYSTEM; }
   else throw new Error('unknown kind');
   if (user.length > 24000) user = user.slice(0, 24000);
   const { text, usage, model } = await chat({ system, user, maxTokens: 950, temperature: kind === 'chat' ? 0.35 : 0.25 });
