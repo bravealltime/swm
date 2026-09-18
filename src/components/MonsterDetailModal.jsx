@@ -3,18 +3,10 @@ import { X, Compass, Star, Gem, Sparkles, Info } from 'lucide-react';
 import MonsterAvatar from './MonsterAvatar';
 import RuneIcon from './RuneIcon';
 import ArtifactIcon from './ArtifactIcon';
+import RuneBoard from './RuneBoard';
 import { RUNE_SETS, STAT_NAMES, ARTIFACT_EFFECT_NAMES } from '../utils/swexImport';
 
-// In-game rune screen: six rune slots around the portrait, element artifact left, archetype right.
-// Slot positions (percent of the hex box), clockwise from the top like the game.
-const SLOT_POS = {
-  1: { left: '50%', top: '4%' },
-  2: { left: '90%', top: '27%' },
-  3: { left: '90%', top: '73%' },
-  4: { left: '50%', top: '96%' },
-  5: { left: '10%', top: '73%' },
-  6: { left: '10%', top: '27%' },
-};
+// In-game rune screen: the golden hex plate (RuneBoard) plus a detail panel and the stat sheet.
 
 const PCT_STATS = new Set([2, 4, 6, 9, 10, 11, 12]);
 const fmtStat = (id, v) => `${STAT_NAMES[id] || `#${id}`} +${v}${PCT_STATS.has(id) ? '%' : ''}`;
@@ -130,8 +122,6 @@ export default function MonsterDetailModal({ unit, box, onClose, onNavigate }) {
   const artifacts = useMemo(() => (box?.artifacts || []).filter((a) => unit.uid && a.unit === unit.uid), [box, unit]);
   const stats = useMemo(() => computeStats(unit, runes, artifacts), [unit, runes, artifacts]);
   const bySlot = Object.fromEntries(runes.map((r) => [r.slot, r]));
-  const elementArt = artifacts.find((a) => a.kind === 'element');
-  const archArt = artifacts.find((a) => a.kind === 'archetype');
   const legacy = !unit.uid;
 
   const statRows = [
@@ -176,42 +166,8 @@ export default function MonsterDetailModal({ unit, box, onClose, onNavigate }) {
                 <Info className="w-4 h-4 shrink-0" /> ข้อมูลเวอร์ชันเก่าแยกรูนของมอนสเตอร์ตัวซ้ำไม่ได้ — นำเข้าไฟล์ใหม่เพื่อดูรูนที่ถูกต้องของตัวนี้
               </div>
             )}
-            <div className="relative mx-auto w-full max-w-[520px] aspect-[1.25/1] rounded-3xl bg-[radial-gradient(circle_at_center,rgba(251,191,36,0.10),transparent_60%)] border border-white/[0.06]">
-              {/* element artifact (left) / archetype artifact (right) like the in-game screen */}
-              <div className="absolute left-[1%] top-1/2 -translate-y-1/2 flex flex-col items-center gap-1">
-                {elementArt ? (
-                  <button onClick={() => setPicked({ kind: 'artifact', item: elementArt })} className={`rounded-2xl cursor-pointer ${picked?.item === elementArt ? 'ring-2 ring-amber-400' : ''}`}><ArtifactIcon artifact={elementArt} size={56} /></button>
-                ) : <div className="w-14 h-14 rounded-2xl border-2 border-dashed border-white/10 flex items-center justify-center text-[10px] text-slate-500">ธาตุ</div>}
-                <span className="text-[10px] text-slate-500">อาร์ติแฟกต์ธาตุ</span>
-              </div>
-              <div className="absolute right-[1%] top-1/2 -translate-y-1/2 flex flex-col items-center gap-1">
-                {archArt ? (
-                  <button onClick={() => setPicked({ kind: 'artifact', item: archArt })} className={`rounded-2xl cursor-pointer ${picked?.item === archArt ? 'ring-2 ring-amber-400' : ''}`}><ArtifactIcon artifact={archArt} size={56} /></button>
-                ) : <div className="w-14 h-14 rounded-2xl border-2 border-dashed border-white/10 flex items-center justify-center text-[10px] text-slate-500">ประเภท</div>}
-                <span className="text-[10px] text-slate-500">อาร์ติแฟกต์ประเภท</span>
-              </div>
-
-              {/* hex of runes around the portrait */}
-              <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[62%] aspect-square">
-                <div className="absolute inset-[26%] rounded-full bg-[#0b1220] border border-amber-500/20 shadow-[0_0_40px_rgba(251,191,36,0.15)] flex items-center justify-center">
-                  {info ? <MonsterAvatar monster={info} size="lg" showStars={false} /> : null}
-                </div>
-                {[1, 2, 3, 4, 5, 6].map((slot) => {
-                  const r = bySlot[slot];
-                  const pos = SLOT_POS[slot];
-                  return (
-                    <div key={slot} className="absolute -translate-x-1/2 -translate-y-1/2" style={{ left: pos.left, top: pos.top }}>
-                      {r ? (
-                        <button onClick={() => setPicked({ kind: 'rune', item: r })} className={`rounded-full cursor-pointer transition-transform hover:scale-105 ${picked?.item === r ? 'ring-2 ring-amber-400 ring-offset-2 ring-offset-[#0a0f19]' : ''}`} title={`ช่อง ${slot}`}>
-                          <RuneIcon rune={r} size={60} />
-                        </button>
-                      ) : (
-                        <div className="w-[60px] h-[60px] rounded-full border-2 border-dashed border-white/10 flex items-center justify-center text-xs text-slate-600">{slot}</div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
+            <div className="rounded-3xl p-3 sm:p-5 bg-[radial-gradient(ellipse_at_center,rgba(120,80,20,0.35),rgba(5,7,13,0.9)_70%)] border border-amber-500/15">
+              <RuneBoard info={info} runesBySlot={bySlot} artifacts={artifacts} sets={stats.sets} picked={picked} onPick={setPicked} />
             </div>
             <div className="mt-2 text-[11px] text-slate-500 text-center">คลิกรูนหรืออาร์ติแฟกต์เพื่อดูค่าเต็ม • รูน {runes.length}/6 · อาร์ติแฟกต์ {artifacts.length}/2</div>
           </div>
