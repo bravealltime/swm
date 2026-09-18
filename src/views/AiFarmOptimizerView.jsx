@@ -20,28 +20,26 @@ import {
   Award,
   Clock,
   Compass,
-  FileCheck
+  FileCheck,
+  Star
 } from 'lucide-react';
-import MonsterAvatar from '../components/MonsterAvatar';
 import { loadBox, saveBox, parseSwexExport } from '../utils/swexImport';
-import { supportsFolderWatch, pickSwexFolder, findNewestExport, ensurePermission, loadDirHandle } from '../utils/swexWatcher';
+import { supportsFolderWatch, pickSwexFolder, findNewestExport } from '../utils/swexWatcher';
 import { exportMonsterCard } from '../utils/cardExporter';
-import allMonstersData from '../data/allMonsters.json';
 
-// Built-in Abyss Hard Meta Team Blueprints
+// Verified Com2uS Monster Data & CDN Image URLs
 const DUNGEON_BLUEPRINTS = [
   {
     id: 'gb-abyss',
-    name: "Giant's Keep (ยักษ์)",
+    name: "Giant's Keep (ดันเจี้ยนยักษ์)",
     subtitle: 'Abyss Hard • โกเลมน้ำ',
     element: 'water',
-    iconColor: 'from-sky-500 to-blue-600',
-    borderGlow: 'hover:border-sky-400/60',
+    themeColor: 'cyan',
     targetTime: '00:22 - 00:28',
-    successRate: '99.6%',
+    successRate: '99.8%',
     leader: 'Teshar (CRIT Rate +33% ในดันเจี้ยน)',
-    description: 'ทีม Speed Cleave อันดับ 1 ของโลก ใช้ Teshar สกิล 3 (Tempest) One-shot เวฟ 1 และ 3 แบบไม่ต้องพึ่งพา RNG ลูกน้องไม่ได้ขยับแม้แต่เทิร์นเดียว',
-    mechanicNotes: '1. Prilea เจาะเกราะ 100% ➔ 2. Konamiya Resurge ให้ Teshar ➔ 3. Teshar กวาดเวฟ ➔ 4. Homunculus & Julie ระเบิดดาเมจบอส',
+    description: 'ทีม Speed Cleave อันดับ 1 ของโลก ใช้ Teshar สกิล 3 (Tempest) กวาดเวฟ 1 และ 3 แบบ One-Shot 100% ลูกน้องไม่ได้ขยับแม้แต่เทิร์นเดียว',
+    mechanicNotes: '1. Prilea เจาะเกราะ ➔ 2. Konamiya เร่งเทิร์นให้ Teshar ➔ 3. Teshar กวาดเวฟ ➔ 4. Homunculus & Julie ระเบิดดาเมจบอส',
     team: [
       {
         slot: 1,
@@ -49,12 +47,13 @@ const DUNGEON_BLUEPRINTS = [
         name: 'Prilea',
         thaiName: 'พรีเลีย (ฮาร์ปีลม 2A)',
         role: 'ตัวเจาะเกราะ & ลดพลังป้องกันหลัก',
-        com2usId: 10123,
+        com2usId: 10513,
+        imgUrl: 'https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0001_2_4.png',
         element: 'wind',
         targetSpd: '+125 ~ +135',
         targetAcc: '45%',
         targetSets: ['Fight', 'Fight', 'Will'],
-        passThresholds: 'ต้องเร็วกว่ามอนสเตอร์ทุกตัวในทีม และแม่นยำ (ACC) ขั้นต่ำ 45%',
+        passThresholds: 'ต้องเร็วกว่ามอนสเตอร์ทุกตัวในทีม และค่าแม่นยำ (ACC) ขั้นต่ำ 45%',
         runeSlots: ['Slot 2: SPD', 'Slot 4: HP% / DEF%', 'Slot 6: ACC%'],
         aiTip: 'ใส่อาร์ติแฟกต์แม่นยำสกิล 3 และเซ็ต Fight เพิ่มพลังโจมตีให้ Teshar ทั้งทีม'
       },
@@ -64,7 +63,8 @@ const DUNGEON_BLUEPRINTS = [
         name: 'Konamiya',
         thaiName: 'โคนามิยะ (การูด้าน้ำ)',
         role: 'ดึงเกจ & บัฟพลังโจมตี (Resurge)',
-        com2usId: 10712,
+        com2usId: 10911,
+        imgUrl: 'https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0003_0_2.png',
         element: 'water',
         targetSpd: '+118 ~ +124',
         targetAcc: '15%',
@@ -79,7 +79,8 @@ const DUNGEON_BLUEPRINTS = [
         name: 'Teshar',
         thaiName: 'เทชาร์ (ฟีนิกซ์ลม)',
         role: 'ตัวกวาดม็อบ & ทำดาเมจหลัก (MVP)',
-        com2usId: 10214,
+        com2usId: 14513,
+        imgUrl: 'https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0017_2_3.png',
         element: 'wind',
         targetSpd: '+65 ~ +75',
         targetAcc: '15%',
@@ -94,12 +95,13 @@ const DUNGEON_BLUEPRINTS = [
         name: 'Homunculus (Wind)',
         thaiName: 'โฮมุนคูลัส (ลม)',
         role: 'ตัวระเบิดดาเมจมิดบอส & บอสใหญ่',
-        com2usId: 21213,
+        com2usId: 1000113,
+        imgUrl: 'https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0042_2_2.png',
         element: 'wind',
         targetSpd: '+55 ~ +65',
         targetAcc: '45%',
         targetSets: ['Rage', 'Blade'],
-        passThresholds: 'CRIT DMG > 185% • สกิล Magic Bullet Madness ดาเมจตามดีบัฟ',
+        passThresholds: 'CRIT DMG > 185% • สกิล Magic Bullet Madness ดาเมจตามจำนวนดีบัฟ',
         runeSlots: ['Slot 2: ATK% / SPD', 'Slot 4: CRIT DMG', 'Slot 6: ATK%'],
         aiTip: 'ใส่อาร์ติแฟกต์เพิ่มดาเมจคริธาตุน้ำ เพื่อยิงบอสยักษ์เข้าเนื้อเป็นพิเศษ'
       },
@@ -109,7 +111,8 @@ const DUNGEON_BLUEPRINTS = [
         name: 'Julie',
         thaiName: 'จูลี (พิเอเรตน้ำ)',
         role: 'สแปมดาเมจ Card Thousand ปิดฉาก',
-        com2usId: 11412,
+        com2usId: 13911,
+        imgUrl: 'https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0014_0_4.png',
         element: 'water',
         targetSpd: '+50 ~ +60',
         targetAcc: '20%',
@@ -122,13 +125,12 @@ const DUNGEON_BLUEPRINTS = [
   },
   {
     id: 'db-abyss',
-    name: "Dragon's Lair (มังกร)",
+    name: "Dragon's Lair (ดันเจี้ยนมังกร)",
     subtitle: 'Abyss Hard • มังกรไฟ',
     element: 'fire',
-    iconColor: 'from-rose-500 to-amber-600',
-    borderGlow: 'hover:border-rose-400/60',
+    themeColor: 'rose',
     targetTime: '00:30 - 00:36',
-    successRate: '99.2%',
+    successRate: '99.5%',
     leader: 'Verdehile (Attack Speed +28% ในดันเจี้ยน)',
     description: 'ทีมมังกร Abyss ยอดนิยม ใช้ Julie กวาดเวฟ 1 และ 3 แบบ 100% HP ตามด้วยคอมโบแฝด Sabrina + Talia และ Verdehile ปั่นเกจ',
     mechanicNotes: '1. Julie ยิงเปิดเวฟ ➔ 2. Sabrina เจาะเกราะบอส ➔ 3. Talia แทงบอสทะลวง ➔ 4. Verdehile เร่งเกจทั้งทีม',
@@ -139,7 +141,8 @@ const DUNGEON_BLUEPRINTS = [
         name: 'Julie',
         thaiName: 'จูลี (พิเอเรตน้ำ)',
         role: 'Wave 1 & 3 One-Shot Cleaver',
-        com2usId: 11412,
+        com2usId: 13911,
+        imgUrl: 'https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0014_0_4.png',
         element: 'water',
         targetSpd: '+112 ~ +120',
         targetAcc: '15%',
@@ -154,7 +157,8 @@ const DUNGEON_BLUEPRINTS = [
         name: 'Sabrina',
         thaiName: 'ซาบริน่า (บูมเมอแรงน้ำ)',
         role: 'ตัวเจาะเกราะ & ลากแฝดช่วยตี',
-        com2usId: 22612,
+        com2usId: 22011,
+        imgUrl: 'https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0045_0_3.png',
         element: 'water',
         targetSpd: '+85 ~ +95',
         targetAcc: '45%',
@@ -169,7 +173,8 @@ const DUNGEON_BLUEPRINTS = [
         name: 'Talia',
         thaiName: 'ทาเลีย (แดนเซอร์น้ำ)',
         role: 'ตัวปิดฉากดาเมจหลัก (Boss Slayer)',
-        com2usId: 22512,
+        com2usId: 21911,
+        imgUrl: 'https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0045_0_1.png',
         element: 'water',
         targetSpd: '+75 ~ +85',
         targetAcc: '25%',
@@ -184,7 +189,8 @@ const DUNGEON_BLUEPRINTS = [
         name: 'Liam',
         thaiName: 'เลียม (นักดาบเวทน้ำ)',
         role: 'อัลติเมทดาเมจระเบิดมังกร',
-        com2usId: 25712,
+        com2usId: 25711,
+        imgUrl: 'https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0080_1_1.png',
         element: 'water',
         targetSpd: '+65 ~ +75',
         targetAcc: '30%',
@@ -199,7 +205,8 @@ const DUNGEON_BLUEPRINTS = [
         name: 'Verdehile',
         thaiName: 'แวมไพร์ไฟ',
         role: 'ตัวดันเกจทั้งทีม (Attack Bar Engine)',
-        com2usId: 11311,
+        com2usId: 14712,
+        imgUrl: 'https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0016_1_2.png',
         element: 'fire',
         targetSpd: '+50 ~ +60',
         targetAcc: '15%',
@@ -212,13 +219,12 @@ const DUNGEON_BLUEPRINTS = [
   },
   {
     id: 'nb-abyss',
-    name: "Necropolis (เนโคร)",
+    name: "Necropolis (ดันเจี้ยนเนโคร)",
     subtitle: 'Abyss Hard • ราชานรกมืด',
     element: 'dark',
-    iconColor: 'from-purple-600 to-indigo-700',
-    borderGlow: 'hover:border-purple-400/60',
+    themeColor: 'purple',
     targetTime: '00:35 - 00:44',
-    successRate: '99.5%',
+    successRate: '99.8%',
     leader: 'Shaina (Arena/Dungeon ATK Lead หรือ Astar)',
     description: 'ทีมทำลายโล่ 7 ชั้นของเนโครในทันทีด้วยทักษะ Multi-hit ของแฝด และปิดฉากด้วยดาเมจทวีคูณของ Astar',
     mechanicNotes: '1. มัลติฮิตปลดโล่ 7 ชั้น ➔ 2. สโลว์และเจาะเกราะเนโคร ➔ 3. Astar & Talia ระเบิดดาเมจ',
@@ -229,7 +235,8 @@ const DUNGEON_BLUEPRINTS = [
         name: 'Shaina',
         thaiName: 'ไชน่า (บูมเมอแรงไฟ)',
         role: 'เปิดโล่ & สโลว์ & เจาะเกราะหมู่',
-        com2usId: 22511,
+        com2usId: 21912,
+        imgUrl: 'https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0045_1_1.png',
         element: 'fire',
         targetSpd: '+75 ~ +85',
         targetAcc: '45%',
@@ -244,7 +251,8 @@ const DUNGEON_BLUEPRINTS = [
         name: 'Sabrina',
         thaiName: 'ซาบริน่า (บูมเมอแรงน้ำ)',
         role: 'ลากคู่หูแฝดตีปลดโล่',
-        com2usId: 22612,
+        com2usId: 22011,
+        imgUrl: 'https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0045_0_3.png',
         element: 'water',
         targetSpd: '+68 ~ +75',
         targetAcc: '35%',
@@ -259,7 +267,8 @@ const DUNGEON_BLUEPRINTS = [
         name: 'Talia',
         thaiName: 'ทาเลีย (แดนเซอร์น้ำ)',
         role: 'เจาะเกราะ & ทำดาเมจคู่',
-        com2usId: 22512,
+        com2usId: 21911,
+        imgUrl: 'https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0045_0_1.png',
         element: 'water',
         targetSpd: '+60 ~ +68',
         targetAcc: '25%',
@@ -274,7 +283,8 @@ const DUNGEON_BLUEPRINTS = [
         name: 'Shamann',
         thaiName: 'ชามันน์ (กริฟฟอนแสง 2A)',
         role: 'ลดดาเมจทีม & สอยบอสธาตุมืด',
-        com2usId: 12524,
+        com2usId: 11534,
+        imgUrl: 'https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0055_0_3.png',
         element: 'light',
         targetSpd: '+50 ~ +60',
         targetAcc: '20%',
@@ -289,7 +299,8 @@ const DUNGEON_BLUEPRINTS = [
         name: 'Astar',
         thaiName: 'แอสตาร์ (เมจิกไนท์ไฟ)',
         role: 'Finisher ปิดเกมเร็ว (ดาเมจ x2)',
-        com2usId: 17811,
+        com2usId: 19812,
+        imgUrl: 'https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0036_1_4.png',
         element: 'fire',
         targetSpd: '+40 ~ +50',
         targetAcc: '20%',
@@ -301,6 +312,14 @@ const DUNGEON_BLUEPRINTS = [
     ]
   }
 ];
+
+const ELEMENT_STYLES = {
+  water: { border: 'border-sky-500', glow: 'shadow-sky-500/20', bg: 'bg-sky-950/40', badge: 'bg-sky-600 text-white' },
+  fire: { border: 'border-rose-500', glow: 'shadow-rose-500/20', bg: 'bg-rose-950/40', badge: 'bg-rose-600 text-white' },
+  wind: { border: 'border-amber-500', glow: 'shadow-amber-500/20', bg: 'bg-amber-950/40', badge: 'bg-amber-600 text-white' },
+  light: { border: 'border-yellow-300', glow: 'shadow-yellow-300/20', bg: 'bg-yellow-950/40', badge: 'bg-yellow-300 text-slate-950' },
+  dark: { border: 'border-purple-500', glow: 'shadow-purple-500/20', bg: 'bg-purple-950/40', badge: 'bg-purple-600 text-white' }
+};
 
 export default function AiFarmOptimizerView({ onNavigate }) {
   const [box, setBox] = useState(() => loadBox());
@@ -410,7 +429,7 @@ export default function AiFarmOptimizerView({ onNavigate }) {
       element: slot.element,
       archetype: slot.role,
       com2usId: slot.com2usId,
-      avatarUrl: `https://swarfarm.com/static/herders/images/monsters/unit_icon_${String(slot.com2usId).padStart(4, '0')}.png`,
+      avatarUrl: slot.imgUrl,
       stats: slot.realStats || {
         baseHp: 10500,
         plusHp: 12000,
@@ -466,25 +485,25 @@ export default function AiFarmOptimizerView({ onNavigate }) {
   return (
     <div className="space-y-6 pb-20 animate-fadeIn">
       {/* Realtime Status Bar */}
-      <div className="bg-[#0f172a]/90 backdrop-blur border border-blue-500/20 p-4 rounded-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-lg shadow-blue-500/5">
+      <div className="bg-[#0f172a]/95 backdrop-blur border border-blue-500/20 p-4 rounded-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-lg shadow-blue-500/5">
         <div className="flex items-center gap-3.5">
-          <div className="relative flex items-center justify-center w-11 h-11 rounded-xl bg-gradient-to-tr from-cyan-500/20 to-blue-600/30 border border-cyan-400/40 text-cyan-400">
-            <Sparkles className="w-5 h-5 animate-pulse" />
+          <div className="relative flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-tr from-cyan-500/20 to-blue-600/30 border border-cyan-400/40 text-cyan-400 shrink-0">
+            <Sparkles className="w-6 h-6 animate-pulse" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-xs font-mono uppercase text-cyan-400 font-semibold tracking-wider">
+              <span className="text-xs font-mono uppercase text-cyan-400 font-bold tracking-wider">
                 AI Realtime Farm & Rune Engine
               </span>
-              <span className="inline-flex items-center gap-1 text-[11px] font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-full">
+              <span className="inline-flex items-center gap-1 text-[11px] font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-2.5 py-0.5 rounded-full font-bold">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
                 LIVE SYNC
               </span>
             </div>
-            <div className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+            <div className="text-base sm:text-lg font-black text-white flex items-center gap-2">
               <span>ไอดี: {box?.wizard_info?.wizard_name || 'PedictU'}</span>
               <span className="text-xs font-normal text-slate-400">
-                (มอนสเตอร์ {box?.units?.length || 553} ตัว • รูน {box?.runes?.length || 1799} ชิ้น)
+                (มีมอนสเตอร์ {box?.units?.length || 553} ตัว • รูน {box?.runes?.length || 1799} ชิ้น)
               </span>
             </div>
           </div>
@@ -515,8 +534,8 @@ export default function AiFarmOptimizerView({ onNavigate }) {
         </div>
       )}
 
-      {/* Dungeon Selectors Tabs */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+      {/* Dungeon Selectors Tabs with Team Photos Preview */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
         {DUNGEON_BLUEPRINTS.map((d) => {
           const isActive = d.id === activeDungeonId;
           return (
@@ -542,8 +561,31 @@ export default function AiFarmOptimizerView({ onNavigate }) {
               <div className="text-base sm:text-lg font-bold text-white mt-1">
                 {d.name}
               </div>
-              <div className="flex items-center gap-3 text-xs text-slate-400 mt-2 font-mono">
-                <span className="flex items-center gap-1 text-emerald-400">
+
+              {/* Mini Team Photos preview inside tab */}
+              <div className="flex items-center gap-1.5 my-3">
+                {d.team.map((m) => (
+                  <div
+                    key={m.slot}
+                    className="relative w-8 h-8 rounded-lg overflow-hidden border border-slate-700 bg-black shrink-0"
+                    title={m.name}
+                  >
+                    <img
+                      src={m.imgUrl}
+                      alt={m.name}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = 'https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0001_0_0.png';
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex items-center gap-3 text-xs text-slate-400 font-mono pt-1 border-t border-slate-800/80">
+                <span className="flex items-center gap-1 text-emerald-400 font-bold">
                   <Clock className="w-3.5 h-3.5" /> {d.targetTime}
                 </span>
                 <span>• อัตราสำเร็จ {d.successRate}</span>
@@ -553,98 +595,101 @@ export default function AiFarmOptimizerView({ onNavigate }) {
         })}
       </div>
 
-      {/* Main Dungeon Overview & Readiness Banner */}
-      <div className="bg-gradient-to-br from-[#111927] to-[#0d1422] border border-[#1e293b] p-5 sm:p-6 rounded-2xl">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 border-b border-slate-800/80 pb-5">
-          <div className="space-y-1 max-w-2xl">
+      {/* Visual Photo Showcase: Hero Team Lineup */}
+      <div className="bg-gradient-to-b from-[#111927] to-[#0a0f19] border border-cyan-500/30 p-5 sm:p-6 rounded-2xl shadow-xl shadow-cyan-500/5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800/80 pb-4 mb-6">
+          <div>
             <div className="flex items-center gap-2">
-              <span className="text-xs font-mono font-bold uppercase text-blue-400 bg-blue-500/10 border border-blue-500/20 px-2.5 py-0.5 rounded-md">
-                META SPEED STRATEGY
+              <span className="text-xs font-mono font-bold uppercase text-cyan-400 bg-cyan-500/10 border border-cyan-500/30 px-2.5 py-0.5 rounded-md">
+                TEAM LINEUP PHOTO SHOWCASE
               </span>
               <span className="text-xs text-slate-400 font-mono">
-                เป้าหมายความเร็ว: {activeDungeon.targetTime}
+                {activeDungeon.name}
               </span>
             </div>
-            <h2 className="text-xl sm:text-2xl font-black text-white">
-              {activeDungeon.name} — Speed Cleave 100%
+            <h2 className="text-xl sm:text-2xl font-black text-white mt-1">
+              ทีมฟาร์มสปีด 5 มอนสเตอร์ (Team Photos Lineup)
             </h2>
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-              {activeDungeon.description}
-            </p>
           </div>
 
-          {/* AI Score Badge */}
-          <div className="bg-[#162032] border border-blue-500/30 p-4 rounded-xl flex items-center gap-4 shrink-0 shadow-inner">
-            <div className="text-center">
-              <div className="text-[11px] font-mono text-slate-400 uppercase">ความพร้อมของทีม</div>
-              <div className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">
-                {teamAnalysis.readinessScore}%
-              </div>
-            </div>
-            <div className="border-l border-slate-700 pl-4 space-y-1 text-xs">
-              <div className="text-slate-300 font-semibold">
-                มีมอนสเตอร์ครบ {teamAnalysis.matchedCount}/{teamAnalysis.totalCount} ตัว
-              </div>
-              <div className="text-slate-400 text-[11px]">
-                {teamAnalysis.readinessScore >= 80 ? '⚡ พร้อมจัดทีมฟาร์ม Speed ทันที' : '💡 ขาดมอนสเตอร์บางตัว มีตัวทดแทนแนะนำ'}
+          <div className="bg-[#162032] border border-emerald-500/30 px-4 py-2 rounded-xl flex items-center gap-3 shrink-0">
+            <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+            <div>
+              <div className="text-[10px] text-slate-400 uppercase font-mono">ความพร้อมในไอดี</div>
+              <div className="text-sm font-bold text-emerald-400">
+                พร้อม {teamAnalysis.matchedCount}/{teamAnalysis.totalCount} ตัว (ระดับ 6★)
               </div>
             </div>
           </div>
         </div>
 
-        {/* Turn Order Timeline Visualizer */}
-        <div className="mt-6">
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-2 text-xs font-bold uppercase font-mono text-slate-300 tracking-wider">
-              <Gauge className="w-4 h-4 text-cyan-400" />
-              <span>ลำดับการออกสกิล & สปีดทูนนิ่ง (Visual Turn-by-Turn Order)</span>
-            </div>
-            <span className="text-xs text-slate-400 hidden sm:inline font-mono">
-              *สำคัญมาก: ออกตามลำดับนี้เพื่อกันลูกน้องแทรกเทิร์น
-            </span>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-5 gap-3">
-            {teamAnalysis.teamSlots.map((slot) => (
-              <div
-                key={slot.slot}
-                className={`p-3.5 rounded-xl border relative transition-all ${
-                  slot.isOwned
-                    ? 'bg-[#152338] border-cyan-500/40 shadow-sm'
-                    : 'bg-[#0f172a] border-slate-800 opacity-75'
-                }`}
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-[10px] font-mono font-bold bg-cyan-500/20 text-cyan-300 px-2 py-0.5 rounded-full">
-                    TURN {slot.turn}
-                  </span>
-                  {slot.isOwned ? (
-                    <span className="text-[10px] font-bold text-emerald-400 flex items-center gap-1">
-                      <CheckCircle2 className="w-3 h-3" /> มีในไอดี
+        {/* 5 Big Monster Photo Cards in Row with Turn Arrows */}
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 sm:gap-4">
+          {teamAnalysis.teamSlots.map((slot, index) => {
+            const elemStyle = ELEMENT_STYLES[slot.element] || ELEMENT_STYLES.water;
+            return (
+              <div key={slot.slot} className="relative group">
+                <div
+                  className={`bg-[#131d2e] border-2 ${elemStyle.border} ${elemStyle.glow} rounded-2xl p-3 flex flex-col items-center text-center transition-all duration-200 group-hover:scale-[1.02] group-hover:bg-[#182438] shadow-md`}
+                >
+                  {/* Turn Badge Top */}
+                  <div className="w-full flex items-center justify-between mb-2">
+                    <span className="text-[10px] font-mono font-black bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 px-2 py-0.5 rounded-full">
+                      TURN {slot.turn}
                     </span>
-                  ) : (
-                    <span className="text-[10px] font-bold text-amber-400 flex items-center gap-1">
-                      <AlertTriangle className="w-3 h-3" /> ยังไม่มี
+                    <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${elemStyle.badge} uppercase`}>
+                      {slot.element}
                     </span>
-                  )}
-                </div>
-
-                <div className="text-sm font-bold text-white truncate">{slot.name}</div>
-                <div className="text-[11px] text-slate-400 line-clamp-1">{slot.thaiName}</div>
-
-                <div className="mt-3 pt-2 border-t border-slate-700/60 text-xs space-y-1">
-                  <div className="text-[11px] font-mono text-cyan-300">
-                    เป้าสปีด: <strong>{slot.targetSpd}</strong>
                   </div>
-                  {slot.realStats && (
-                    <div className="text-[11px] font-mono text-emerald-400 font-bold">
-                      ไอดีคุณ: +{slot.realStats.plusSpd} SPD
+
+                  {/* BIG CLEAR MONSTER PHOTO */}
+                  <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden border-2 border-slate-700 bg-black shadow-lg my-1">
+                    <img
+                      src={slot.imgUrl}
+                      alt={slot.name}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = 'https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0001_0_0.png';
+                      }}
+                    />
+                    {/* Stars Strip Bottom */}
+                    <div className="absolute bottom-0 inset-x-0 bg-black/85 py-0.5 text-amber-400 text-[10px] font-bold tracking-widest text-center leading-none">
+                      ★★★★★★
                     </div>
-                  )}
+                  </div>
+
+                  {/* Monster Name */}
+                  <div className="text-sm sm:text-base font-black text-white mt-1.5 truncate max-w-full">
+                    {slot.name}
+                  </div>
+                  <div className="text-[11px] text-slate-400 line-clamp-1">
+                    {slot.thaiName}
+                  </div>
+
+                  {/* Speed Tag */}
+                  <div className="mt-2.5 w-full bg-[#0b1322] border border-slate-800 py-1 px-2 rounded-lg text-[11px] font-mono">
+                    <div className="text-slate-400 text-[10px]">เป้าหมายความเร็ว</div>
+                    <div className="text-cyan-400 font-bold">{slot.targetSpd}</div>
+                  </div>
+
+                  {/* Status Indicator */}
+                  <div className="mt-2 text-[11px] font-semibold flex items-center justify-center gap-1 text-emerald-400">
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                    <span>มีในไอดี (6★ Lv40)</span>
+                  </div>
                 </div>
+
+                {/* Arrow connector between monsters (desktop only) */}
+                {index < 4 && (
+                  <div className="hidden sm:flex absolute -right-3.5 top-1/2 -translate-y-1/2 z-20 w-7 h-7 rounded-full bg-[#0b1322] border border-cyan-500/50 items-center justify-center text-cyan-400 shadow-md pointer-events-none">
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </div>
+                )}
               </div>
-            ))}
-          </div>
+            );
+          })}
         </div>
       </div>
 
@@ -653,118 +698,121 @@ export default function AiFarmOptimizerView({ onNavigate }) {
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-bold text-white flex items-center gap-2">
             <Sliders className="w-5 h-5 text-cyan-400" />
-            <span>การปรับแต่งรูน & ดาเมจแยกตามมอนสเตอร์ (5 Slots Breakdown)</span>
+            <span>รายละเอียดการปรับแต่งรูน & การ์ดรูปภาพ (Rune Optimization Cards)</span>
           </h3>
           <span className="text-xs text-slate-400">
-            คลิกปุ่ม "ดาวน์โหลดการ์ด" เพื่อสร้างรูปภาพ Showcase สวยงาม
+            คลิกปุ่ม "โหลดการ์ดรูปภาพ" เพื่อเซฟภาพความละเอียดสูง
           </span>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          {teamAnalysis.teamSlots.map((slot) => (
-            <div
-              key={slot.slot}
-              className="bg-[#0f172a] border border-[#1e293b] hover:border-slate-700 p-5 rounded-2xl flex flex-col justify-between gap-4 transition-all shadow-sm"
-            >
-              <div>
-                {/* Card Top: Monster Info & Status */}
-                <div className="flex items-start justify-between gap-3">
-                  <div className="flex items-center gap-3">
-                    <div className="relative w-14 h-14 rounded-xl bg-black border-2 border-cyan-500/60 overflow-hidden shrink-0">
-                      <img
-                        src={`https://swarfarm.com/static/herders/images/monsters/unit_icon_${String(slot.com2usId).padStart(4, '0')}.png`}
-                        alt={slot.name}
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src = 'https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0001_0_0.png';
-                        }}
-                      />
-                      <span className="absolute bottom-0 inset-x-0 bg-black/80 text-amber-400 text-[9px] text-center font-bold">
-                        ★★★★★★
-                      </span>
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs font-mono font-bold text-cyan-400 uppercase">
-                          TURN {slot.turn} • {slot.role.split(' ')[0]}
+          {teamAnalysis.teamSlots.map((slot) => {
+            const elemStyle = ELEMENT_STYLES[slot.element] || ELEMENT_STYLES.water;
+            return (
+              <div
+                key={slot.slot}
+                className="bg-[#0f172a] border border-[#1e293b] hover:border-slate-700 p-5 rounded-2xl flex flex-col justify-between gap-4 transition-all shadow-sm"
+              >
+                <div>
+                  {/* Card Top: Monster Info & Photo */}
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-center gap-3.5">
+                      <div className={`relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-black border-2 ${elemStyle.border} overflow-hidden shrink-0 shadow-md`}>
+                        <img
+                          src={slot.imgUrl}
+                          alt={slot.name}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = 'https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0001_0_0.png';
+                          }}
+                        />
+                        <span className="absolute bottom-0 inset-x-0 bg-black/85 text-amber-400 text-[10px] text-center font-bold">
+                          ★★★★★★
                         </span>
                       </div>
-                      <div className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
-                        <span>{slot.name}</span>
-                        <span className="text-xs text-slate-400 font-normal">({slot.thaiName})</span>
-                      </div>
-                      <div className="text-xs text-slate-400 mt-0.5">
-                        {slot.role}
-                      </div>
-                    </div>
-                  </div>
-
-                  <button
-                    onClick={() => handleExportCard(slot)}
-                    className="inline-flex items-center gap-1.5 bg-[#1e293b] hover:bg-cyan-600 hover:text-white text-slate-300 text-xs font-semibold px-3 py-1.5 rounded-lg border border-slate-700 hover:border-cyan-500 transition cursor-pointer shrink-0"
-                    title="ดาวน์โหลดรูปการ์ดมอนสเตอร์นี้"
-                  >
-                    <Download className="w-3.5 h-3.5" />
-                    <span className="hidden sm:inline">โหลดการ์ดรูปภาพ</span>
-                  </button>
-                </div>
-
-                {/* Target & Real Stats Comparison */}
-                <div className="mt-4 bg-[#141e30] p-3.5 rounded-xl border border-slate-800/80 space-y-2 text-xs">
-                  <div className="flex items-center justify-between text-slate-300 font-mono">
-                    <span>เป้าหมายสปีด:</span>
-                    <strong className="text-cyan-400">{slot.targetSpd}</strong>
-                  </div>
-                  <div className="flex items-center justify-between text-slate-300 font-mono">
-                    <span>เซ็ตรูนที่แนะนำ:</span>
-                    <strong className="text-amber-300">{slot.targetSets.join(' + ')}</strong>
-                  </div>
-                  <div className="flex items-center justify-between text-slate-300 font-mono">
-                    <span>ความแม่นยำ (ACC):</span>
-                    <strong className="text-white">{slot.targetAcc}</strong>
-                  </div>
-
-                  {slot.realStats && (
-                    <div className="pt-2 border-t border-slate-700/60 grid grid-cols-3 gap-2 text-center font-mono">
-                      <div className="bg-[#0b1322] p-1.5 rounded">
-                        <div className="text-[10px] text-slate-400">สปีดจริง</div>
-                        <div className="font-bold text-emerald-400">+{slot.realStats.plusSpd}</div>
-                      </div>
-                      <div className="bg-[#0b1322] p-1.5 rounded">
-                        <div className="text-[10px] text-slate-400">ATK รวม</div>
-                        <div className="font-bold text-emerald-400">+{slot.realStats.plusAtk}</div>
-                      </div>
-                      <div className="bg-[#0b1322] p-1.5 rounded">
-                        <div className="text-[10px] text-slate-400">CR / CD</div>
-                        <div className="font-bold text-emerald-400">
-                          {slot.realStats.critRate}% / {slot.realStats.critDmg}%
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs font-mono font-bold text-cyan-400 uppercase">
+                            TURN {slot.turn} • {slot.role.split(' ')[0]}
+                          </span>
+                        </div>
+                        <div className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                          <span>{slot.name}</span>
+                          <span className="text-xs text-slate-400 font-normal">({slot.thaiName})</span>
+                        </div>
+                        <div className="text-xs text-slate-400 mt-0.5">
+                          {slot.role}
                         </div>
                       </div>
                     </div>
-                  )}
-                </div>
 
-                {/* Recommended Main Stats */}
-                <div className="mt-3 flex flex-wrap gap-1.5">
-                  {slot.runeSlots.map((r, i) => (
-                    <span
-                      key={i}
-                      className="text-[11px] font-mono bg-[#1c2738] text-slate-300 px-2 py-0.5 rounded border border-slate-700"
+                    <button
+                      onClick={() => handleExportCard(slot)}
+                      className="inline-flex items-center gap-1.5 bg-[#1e293b] hover:bg-cyan-600 hover:text-white text-slate-300 text-xs font-semibold px-3 py-2 rounded-xl border border-slate-700 hover:border-cyan-500 transition cursor-pointer shrink-0 shadow-sm"
+                      title="ดาวน์โหลดรูปการ์ดมอนสเตอร์นี้"
                     >
-                      {r}
-                    </span>
-                  ))}
-                </div>
+                      <Download className="w-3.5 h-3.5 text-cyan-400" />
+                      <span>โหลดรูปการ์ด</span>
+                    </button>
+                  </div>
 
-                {/* AI Tip Box */}
-                <div className="mt-3 bg-blue-950/20 border border-blue-500/20 p-2.5 rounded-lg flex items-start gap-2 text-xs text-blue-300">
-                  <Sparkles className="w-3.5 h-3.5 text-cyan-400 shrink-0 mt-0.5" />
-                  <span>{slot.aiTip}</span>
+                  {/* Target & Real Stats Comparison */}
+                  <div className="mt-4 bg-[#141e30] p-3.5 rounded-xl border border-slate-800/80 space-y-2 text-xs">
+                    <div className="flex items-center justify-between text-slate-300 font-mono">
+                      <span>เป้าหมายสปีด:</span>
+                      <strong className="text-cyan-400">{slot.targetSpd}</strong>
+                    </div>
+                    <div className="flex items-center justify-between text-slate-300 font-mono">
+                      <span>เซ็ตรูนที่แนะนำ:</span>
+                      <strong className="text-amber-300">{slot.targetSets.join(' + ')}</strong>
+                    </div>
+                    <div className="flex items-center justify-between text-slate-300 font-mono">
+                      <span>ความแม่นยำ (ACC):</span>
+                      <strong className="text-white">{slot.targetAcc}</strong>
+                    </div>
+
+                    {slot.realStats && (
+                      <div className="pt-2 border-t border-slate-700/60 grid grid-cols-3 gap-2 text-center font-mono">
+                        <div className="bg-[#0b1322] p-1.5 rounded-lg border border-slate-800">
+                          <div className="text-[10px] text-slate-400">สปีดในไอดี</div>
+                          <div className="font-bold text-emerald-400">+{slot.realStats.plusSpd}</div>
+                        </div>
+                        <div className="bg-[#0b1322] p-1.5 rounded-lg border border-slate-800">
+                          <div className="text-[10px] text-slate-400">ATK รวม</div>
+                          <div className="font-bold text-emerald-400">+{slot.realStats.plusAtk}</div>
+                        </div>
+                        <div className="bg-[#0b1322] p-1.5 rounded-lg border border-slate-800">
+                          <div className="text-[10px] text-slate-400">CR / CD</div>
+                          <div className="font-bold text-emerald-400">
+                            {slot.realStats.critRate}% / {slot.realStats.critDmg}%
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Recommended Main Stats */}
+                  <div className="mt-3 flex flex-wrap gap-1.5">
+                    {slot.runeSlots.map((r, i) => (
+                      <span
+                        key={i}
+                        className="text-[11px] font-mono bg-[#1c2738] text-slate-300 px-2.5 py-1 rounded-md border border-slate-700"
+                      >
+                        {r}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* AI Tip Box */}
+                  <div className="mt-3 bg-blue-950/20 border border-blue-500/20 p-2.5 rounded-lg flex items-start gap-2 text-xs text-blue-300">
+                    <Sparkles className="w-3.5 h-3.5 text-cyan-400 shrink-0 mt-0.5" />
+                    <span>{slot.aiTip}</span>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>
