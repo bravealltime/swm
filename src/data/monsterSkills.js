@@ -1,17 +1,11 @@
 // Monster skill records are fetched in shards from public/data/skills/<n>.json (generated from
 // monsterSkillsData.json by scripts/build_skill_shards.mjs at dev/build start) so the encyclopedia
 // renders immediately instead of shipping the whole dataset as one 5 MB chunk. Only the small
-// index (ids, names and effect flags for the filter) is bundled.
+// index (ids, names, effect flags for the filter, and the effect table) is bundled; expandRecord()
+// turns a trimmed shard record back into the full shape the components expect.
 import index from './monsterSkillsIndex.json';
 
-const SHARD_COUNT = index.shards;
-
-// keep in sync with shardOf() in scripts/build_skill_shards.mjs
-function shardOf(id) {
-  let h = 0;
-  for (const ch of String(id)) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
-  return h % SHARD_COUNT;
-}
+const shardOf = (id) => index.m[id][5];
 
 // Same matching rules as before: id, then com2usId, then case-insensitive name.
 const byCom2usId = new Map();
@@ -81,8 +75,31 @@ export function peekRecord(id) {
   return (records && records[id]) || null;
 }
 
+// inverse of compactSkill()/compactLeader() in scripts/build_skill_shards.mjs
+function expandSkill(s) {
+  const { icon, ef, ...rest } = s;
+  const out = rest;
+  if (icon !== undefined) out.iconUrl = index.skillIcon + icon;
+  if (out.description === undefined && out.descriptionTh !== undefined) out.description = out.descriptionTh;
+  if (ef) out.effects = ef.map(([i, chance]) => (chance === undefined ? { ...index.effects[i] } : { ...index.effects[i], chance }));
+  return out;
+}
+
+function expandLeader(ls) {
+  if (!ls || ls.icon === undefined) return ls;
+  const { icon, ...rest } = ls;
+  return { ...rest, iconUrl: index.leaderIcon + icon };
+}
+
 export function expandRecord(id, val) {
-  return { id, com2usId: val.cid, name: val.name, baseStats: val.bs, leaderSkill: val.ls, skills: val.sk };
+  return {
+    id,
+    com2usId: val.cid,
+    name: val.name,
+    baseStats: val.bs,
+    leaderSkill: expandLeader(val.ls),
+    skills: val.sk ? val.sk.map(expandSkill) : val.sk,
+  };
 }
 
 /** Synchronous: the expanded record if already fetched, else null (see useMonsterSkills for React). */

@@ -66,8 +66,10 @@ src/
   hooks/useMonsterSkills.js  สกิลรายตัวสำหรับสารานุกรม โหลด shard ตามต้องการ (data/monsterSkills.js เป็น store)
   data/*.json        ชุดข้อมูลที่ bundle มากับเว็บ (ดูข้อ 5)
   data/monsterSkillsIndex.json  (generated, ไม่อยู่ใน git) ดัชนีเล็ก ๆ สำหรับฟิลเตอร์กลไกสกิล
-public/data/skills/<0-15>.json  (generated, ไม่อยู่ใน git) ข้อมูลสกิลแบ่ง 16 shard — สร้างโดย scripts/build_skill_shards.mjs
-                     ตอน vite เริ่ม (dev/build) ผ่าน plugin ใน vite.config.js เมื่อ monsterSkillsData.json ใหม่กว่า
+public/data/skills/<0-15>.json  (generated, ไม่อยู่ใน git) ข้อมูลสกิล 16 shard เรียงตามลำดับหน้าสารานุกรม (หน้าแรก = shard 0)
+                     บีบรูปแบบ: effects เก็บเป็น [idx, chance] อ้างตารางในดัชนี, ไอคอนตัด prefix, ไม่มี description อังกฤษ —
+                     expandRecord() ใน data/monsterSkills.js ประกอบกลับเป็น shape เดิม สร้างโดย scripts/build_skill_shards.mjs
+                     ตอน vite เริ่ม (dev/build) ผ่าน plugin ใน vite.config.js เมื่อ monsterSkillsData.json/allMonsters.json ใหม่กว่า
 api/                 Vercel serverless (ESM) — dev server มี middleware ใน vite.config.js เรียก handler เดียวกัน
   ai/advise.js       POST โค้ช AI (rate limit 3/นาที anon, 12/นาที ล็อกอิน) + ล็อกลง ai_logs
   admin/[action].js  หลังบ้าน: status, settings, logs, runs, actions, me
