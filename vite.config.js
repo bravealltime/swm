@@ -85,9 +85,8 @@ function swmSyncServer() {
           req.on('end', async () => {
             res.setHeader('Content-Type', 'application/json; charset=utf-8');
             try {
-              const { handleAdvise } = await import('./api/ai/advise.js');
-              const token = (req.headers.authorization || '').replace(/^Bearer\s+/i, '');
-              const { status, json } = await handleAdvise({ body: JSON.parse(body || '{}'), ip: req.socket?.remoteAddress, token });
+              const { handleAdvise, requestContext } = await import('./api/ai/advise.js');
+              const { status, json } = await handleAdvise({ body: JSON.parse(body || '{}'), ...requestContext(req) });
               res.statusCode = status;
               return res.end(JSON.stringify(json));
             } catch (err) {

@@ -124,6 +124,9 @@ tests/*.test.js      vitest (`npm test`) — parser SWEX, แพ็กเก็�
 - ขอบเขต: ตอบเฉพาะ Summoners War (นอกเรื่องจะบอกปัด 1 บรรทัด) ห้ามเดาชื่อคล้าย
 - provider เป็น reasoning model: ใช้ `reasoning_effort:'low'` และ `maxTokens` ≥ 300 (ถ้าน้อยจะได้คำตอบว่างเพราะโทเค็นหมดไปกับการคิด); รับได้ 1 คำขอค้าง/คีย์ → สคริปต์ batch ต้อง CONCURRENCY 1; ตอบยาวอาจ 504 → แบ่ง chunk
 - ปิด/เปิดจากหลังบ้าน (`features.ai`) และดูล็อกคำถามได้ที่แท็บ "โค้ช AI"
+- **สิทธิ์ (2026-09-20)**: เฉพาะสมาชิก (`settings.ai.requireLogin`, ค่าเริ่มต้น true) และ **โควตา `settings.ai.dailyLimit` = 3 คำตอบต่อวันไทย นับต่อบัญชี *และ* ต่อ IP** (ตัวไหนถึงก่อนก็ติด) นับจากแถว `ai_logs` ที่ `ok=true` จึงใช้ได้ข้าม instance; แอดมินไม่ติดโควตา; ถ้าอ่านตารางไม่ได้จะปล่อยผ่าน (fail-open) — กติกาอยู่ใน `api/_lib/aiQuota.js` (pure, มีเทสต์) และ `api/ai/advise.js`; ยังมี burst 6 ครั้ง/นาทีในหน่วยความจำ
+- ทุกคำถามบันทึก **IP จริง + ประเทศ/จังหวัด/เมือง/timezone** จาก header ของ Vercel (`x-vercel-ip-*`) ลง `ai_logs` — คอลัมน์เหล่านี้เพิ่มด้วย `supabase/admin_schema.sql` (รันซ้ำได้) ถ้ายังไม่รัน API จะเขียนแถวแบบไม่มี geo ให้แทน และหลังบ้านขึ้นเตือน
+- ฝั่งเว็บ: `aiClient.askAdvisor` โยน Error ที่มี `code` (`LOGIN_REQUIRED` / `DAILY_LIMIT` / `RATE_LIMIT`) + `quota`; แผง AI ทั้งสองใช้ `useOptionalAuth()` แสดงปุ่มเข้าสู่ระบบ (event `swm:open-auth` → App เปิด AuthModal) และ "เหลือ x/3 คำถามวันนี้"
 
 ## 7. AegisLink (เรียลไทม์)
 
@@ -153,6 +156,7 @@ Secrets ที่ต้องมีใน GitHub: `AI_BASE_URL`, `AI_MODEL`, `AI
 4. หมุนคีย์ AI (`xaek_sk_…`) เพราะเคยถูกวางในแชต — อัปเดตทั้ง .env, Vercel, GitHub secrets
 5. (ถ้าอยาก) ล้าง `public/data/my_profile.json` ออกจากประวัติ git ด้วย filter-branch + force-push
 6. ปุ่มการ์ดแชร์: ทดสอบกับกล่องจริง 553 ตัว (ทดสอบแล้วกับกล่องจำลอง 5 ตัว)
+7. **รัน `supabase/admin_schema.sql` ใน Supabase SQL Editor อีกครั้ง** (เพิ่มคอลัมน์ ip/country/region/city/timezone + index ให้ `ai_logs`) — จนกว่าจะรัน ล็อก AI จะไม่มี IP/ประเทศ (โควตาทำงานอยู่แล้ว)
 
 ## 11. เทคนิคที่เจอบ่อย
 

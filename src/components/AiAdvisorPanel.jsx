@@ -1,15 +1,17 @@
 import React, { useState, useRef } from 'react';
-import { Sparkles, Loader2, AlertTriangle, RotateCcw } from 'lucide-react';
-import { askAdvisor } from '../services/aiClient';
+import { Sparkles, Loader2, AlertTriangle, RotateCcw, LogIn } from 'lucide-react';
+import { askAdvisor, requestLogin, quotaLabel } from '../services/aiClient';
 import AiAnswer from './AiAnswer';
+import { useOptionalAuth } from '../contexts/AuthContext';
 
 /**
  * Button + answer box for the grounded advisor. `buildPayload` is called on click so the
  * panel always sends the caller's current state. `resetKey` clears the answer when it changes.
  */
 export default function AiAdvisorPanel({ buildPayload, resetKey, label = 'ให้ AI วิเคราะห์', hint, className = '' }) {
-  const IDLE = { status: 'idle', answer: '', error: '', authenticated: false };
+  const IDLE = { status: 'idle', answer: '', error: '', code: '', quota: null };
   const [state, setState] = useState(IDLE);
+  const { user } = useOptionalAuth();
   const [seenKey, setSeenKey] = useState(resetKey);
   const controllerRef = useRef(null);
 
@@ -29,10 +31,10 @@ export default function AiAdvisorPanel({ buildPayload, resetKey, label = 'ให
     try {
       const res = await askAdvisor(buildPayload(), { signal: controller.signal });
       if (controllerRef.current !== controller || startedFor !== resetKey) return;
-      setState({ status: 'done', answer: res.answer, error: '', authenticated: !!res.authenticated });
+      setState({ status: 'done', answer: res.answer, error: '', code: '', quota: res.quota || null });
     } catch (err) {
       if (err?.name === 'AbortError' || controllerRef.current !== controller) return;
-      setState((s) => ({ ...s, status: 'error', error: err.message || 'AI ไม่ตอบสนอง' }));
+      setState((s) => ({ ...s, status: 'error', error: err.message || 'AI ไม่ตอบสนอง', code: err.code || '', quota: err.quota || s.quota }));
     }
   };
 
@@ -46,19 +48,35 @@ export default function AiAdvisorPanel({ buildPayload, resetKey, label = 'ให
             <div className="text-[11px] text-slate-400">{hint || 'อธิบายกลไก ลำดับเทิร์น และจุดเสี่ยง จากสกิลจริงของมอนสเตอร์ในดราฟต์'}</div>
           </div>
         </div>
-        <button
-          onClick={run}
-          disabled={state.status === 'loading'}
-          className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:opacity-60 text-slate-950 text-xs font-bold flex items-center justify-center gap-2 cursor-pointer shrink-0"
-        >
-          {state.status === 'loading' ? <Loader2 className="w-4 h-4 animate-spin" /> : state.status === 'done' ? <RotateCcw className="w-4 h-4" /> : <Sparkles className="w-4 h-4" />}
-          {state.status === 'loading' ? 'กำลังวิเคราะห์ (อาจใช้เวลาถึง 1 นาที)...' : state.status === 'done' ? 'วิเคราะห์อีกครั้ง' : label}
-        </button>
+        {user ? (
+          <button
+            onClick={run}
+            disabled={state.status === 'loading'}
+            className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:opacity-60 text-slate-950 text-xs font-bold flex items-center justify-center gap-2 cursor-pointer shrink-0"
+          >
+            {state.status === 'loading' ? <Loader2 className="w-4 h-4 animate-spin" /> : state.status === 'done' ? <RotateCcw className="w-4 h-4" /> : <Sparkles className="w-4 h-4" />}
+            {state.status === 'loading' ? 'กำลังวิเคราะห์ (อาจใช้เวลาถึง 1 นาที)...' : state.status === 'done' ? 'วิเคราะห์อีกครั้ง' : label}
+          </button>
+        ) : (
+          <button
+            onClick={requestLogin}
+            className="px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold flex items-center justify-center gap-2 cursor-pointer shrink-0"
+            title="โค้ช AI เปิดให้เฉพาะสมาชิก"
+          >
+            <LogIn className="w-4 h-4" /> เข้าสู่ระบบเพื่อใช้โค้ช AI
+          </button>
+        )}
       </div>
 
+      {!user && state.status === 'idle' && (
+        <p className="mt-2 text-[11px] text-slate-500">สมาชิกถามโค้ช AI ได้วันละไม่กี่คำถาม (นับต่อบัญชีและต่อ IP) — เข้าสู่ระบบฟรีด้วยอีเมล</p>
+      )}
       {state.status === 'error' && (
-        <div role="alert" className="mt-3 p-3 rounded-xl border border-rose-500/30 bg-rose-500/5 text-xs text-rose-200 flex items-center gap-2">
-          <AlertTriangle className="w-4 h-4 shrink-0" /> {state.error}
+        <div role="alert" className="mt-3 p-3 rounded-xl border border-rose-500/30 bg-rose-500/5 text-xs text-rose-200 flex items-center justify-between gap-2 flex-wrap">
+          <span className="flex items-center gap-2"><AlertTriangle className="w-4 h-4 shrink-0" /> {state.error}</span>
+          {state.code === 'LOGIN_REQUIRED' && (
+            <button onClick={requestLogin} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-bold cursor-pointer shrink-0"><LogIn className="w-3 h-3" /> เข้าสู่ระบบ</button>
+          )}
         </div>
       )}
 
@@ -66,7 +84,7 @@ export default function AiAdvisorPanel({ buildPayload, resetKey, label = 'ให
         <div className="mt-3 p-4 rounded-xl bg-[#0a0f18] border border-slate-800">
           <AiAnswer text={state.answer} />
           <p className="text-[11px] text-slate-500 pt-2 border-t border-white/[0.06]">
-            คำตอบสร้างโดย AI จากสกิล/สถิติในฐานข้อมูล SWM — ตรวจสอบก่อนใช้จริง{state.authenticated ? '' : ' • เข้าสู่ระบบเพื่อถามได้ถี่ขึ้น'}
+            คำตอบสร้างโดย AI จากสกิล/สถิติในฐานข้อมูล SWM — ตรวจสอบก่อนใช้จริง{quotaLabel(state.quota) ? ` • ${quotaLabel(state.quota)}` : ''}
           </p>
         </div>
       )}

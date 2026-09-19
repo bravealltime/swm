@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Send, Loader2, AlertTriangle, Trash2, Sparkles, Copy, Check, RotateCcw, MessageCircle } from 'lucide-react';
-import { askAdvisor } from '../services/aiClient';
+import { askAdvisor, requestLogin, quotaLabel } from '../services/aiClient';
+import { useOptionalAuth } from '../contexts/AuthContext';
 import AiAnswer from './AiAnswer';
 
 const DEFAULT_FOLLOW_UPS = ['อธิบายเพิ่มอีกหน่อย', 'ลำดับเทิร์นควรเป็นยังไง', 'มีทางเลือกอื่นไหม'];
@@ -46,7 +47,10 @@ export default function AiChatPanel({
   const [input, setInput] = useState('');
   const [status, setStatus] = useState('idle'); // idle | loading | error
   const [error, setError] = useState('');
+  const [errorCode, setErrorCode] = useState('');
+  const [quota, setQuota] = useState(null);
   const [startedAt, setStartedAt] = useState(0);
+  const { user } = useOptionalAuth();
   const listRef = useRef(null);
   const inputRef = useRef(null);
 
@@ -65,8 +69,10 @@ export default function AiChatPanel({
   const ask = async (question) => {
     const q = String(question || '').trim();
     if (!q || status === 'loading') return;
+    if (!user) { setError('โค้ช AI เปิดให้เฉพาะสมาชิก — เข้าสู่ระบบก่อนแล้วถามได้เลย'); setErrorCode('LOGIN_REQUIRED'); setStatus('error'); return; }
     setInput('');
     setError('');
+    setErrorCode('');
     const history = messages.slice(-4);
     setMessages((m) => [...m, { role: 'user', text: q, at: Date.now() }]);
     const t0 = Date.now();
@@ -75,9 +81,12 @@ export default function AiChatPanel({
     try {
       const res = await askAdvisor({ kind: 'chat', question: q, context: buildContext ? buildContext(q) : {}, history });
       setMessages((m) => [...m, { role: 'ai', text: res.answer, at: Date.now(), seconds: Math.round((Date.now() - t0) / 1000) }]);
+      setQuota(res.quota || null);
       setStatus('idle');
     } catch (err) {
       setError(err.message || 'AI ไม่ตอบสนอง');
+      setErrorCode(err.code || '');
+      if (err.quota) setQuota(err.quota);
       setStatus('error');
     }
   };
@@ -105,7 +114,7 @@ export default function AiChatPanel({
                 {status === 'loading' ? 'กำลังคิด' : 'พร้อม'}
               </span>
             </div>
-            {!compact && <div className="text-[11px] text-slate-400 truncate">{subtitle}</div>}
+            {!compact && <div className="text-[11px] text-slate-400 truncate">{user ? (quotaLabel(quota) ? `${subtitle} • ${quotaLabel(quota)}` : subtitle) : 'เฉพาะสมาชิก — เข้าสู่ระบบก่อนถาม (วันละไม่กี่คำถาม นับต่อบัญชีและต่อ IP)'}</div>}
           </div>
         </div>
         {messages.length > 0 && (
@@ -165,7 +174,11 @@ export default function AiChatPanel({
       {status === 'error' && (
         <div role="alert" className="mx-4 mb-3 p-3 rounded-xl border border-rose-500/30 bg-rose-500/5 text-xs text-rose-200 flex items-center justify-between gap-2">
           <span className="flex items-center gap-2"><AlertTriangle className="w-4 h-4 shrink-0" /> {error}</span>
-          <button onClick={retry} className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-100 cursor-pointer shrink-0"><RotateCcw className="w-3 h-3" /> ลองใหม่</button>
+          {errorCode === 'LOGIN_REQUIRED' ? (
+            <button onClick={requestLogin} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-bold cursor-pointer shrink-0">เข้าสู่ระบบ</button>
+          ) : errorCode === 'DAILY_LIMIT' ? null : (
+            <button onClick={retry} className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-100 cursor-pointer shrink-0"><RotateCcw className="w-3 h-3" /> ลองใหม่</button>
+          )}
         </div>
       )}
 
@@ -198,7 +211,7 @@ export default function AiChatPanel({
           {status === 'loading' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
         </button>
       </form>
-      {!compact && <p className="px-4 pb-3 -mt-2 text-[10px] text-slate-500">ผู้ใช้ทั่วไป 3 คำถาม/นาที • เข้าสู่ระบบได้ 12 คำถาม/นาที</p>}
+      {!compact && <p className="px-4 pb-3 -mt-2 text-[10px] text-slate-500">เฉพาะสมาชิก • โควตาต่อวันนับต่อบัญชีและต่อ IP (ตามเวลาไทย){quotaLabel(quota) ? ` • ${quotaLabel(quota)}` : ''}</p>}
     </div>
   );
 }

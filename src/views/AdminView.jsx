@@ -236,8 +236,9 @@ function AiPanel({ status }) {
           : logs.rows.length === 0 ? <div className="p-6 text-center text-slate-400 text-sm">ยังไม่มีบันทึก</div>
           : (
             <div className="overflow-x-auto">
+              {logs.geo === false && <div className="px-4 py-2 text-[11px] text-amber-200 bg-amber-500/5 border-b border-amber-500/20">ตาราง ai_logs ยังไม่มีคอลัมน์ IP/ประเทศ — รัน <code className="text-white">supabase/admin_schema.sql</code> อีกครั้งใน SQL Editor (เพิ่มคอลัมน์ให้อัตโนมัติ) แล้วคำถามใหม่จะบันทึก IP และประเทศ</div>}
               <table className="w-full text-xs">
-                <thead className="bg-white/[0.03] text-slate-400"><tr><th className="text-left px-3 py-2">เวลา</th><th className="text-left px-3 py-2">ชนิด</th><th className="text-left px-3 py-2">คำถาม</th><th className="text-left px-3 py-2">ผล</th><th className="text-right px-3 py-2">วินาที</th><th className="text-right px-3 py-2">โทเค็น</th><th className="text-left px-3 py-2">ผู้ใช้</th></tr></thead>
+                <thead className="bg-white/[0.03] text-slate-400"><tr><th className="text-left px-3 py-2">เวลา</th><th className="text-left px-3 py-2">ชนิด</th><th className="text-left px-3 py-2">คำถาม</th><th className="text-left px-3 py-2">ผล</th><th className="text-right px-3 py-2">วินาที</th><th className="text-right px-3 py-2">โทเค็น</th><th className="text-left px-3 py-2">ผู้ใช้</th><th className="text-left px-3 py-2">IP</th><th className="text-left px-3 py-2">ประเทศ</th></tr></thead>
                 <tbody>
                   {logs.rows.map((r) => (
                     <tr key={r.id} className="border-t border-white/[0.05] align-top">
@@ -248,6 +249,8 @@ function AiPanel({ status }) {
                       <td className="px-3 py-2 text-right tabular-nums text-slate-300">{(r.ms / 1000).toFixed(1)}</td>
                       <td className="px-3 py-2 text-right tabular-nums text-slate-300">{r.tokens ?? '-'}</td>
                       <td className="px-3 py-2 text-slate-400 font-mono">{r.user_id ? r.user_id.slice(0, 8) : 'anon'}</td>
+                      <td className="px-3 py-2 text-slate-400 font-mono whitespace-nowrap" title={r.ip_hash ? `hash ${r.ip_hash}` : ''}>{r.ip || (r.ip_hash ? `#${r.ip_hash.slice(0, 6)}` : '-')}</td>
+                      <td className="px-3 py-2 text-slate-300 whitespace-nowrap">{r.country ? `${r.country}${r.city ? ` · ${r.city}` : ''}` : '-'}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -302,7 +305,7 @@ function DataPanel({ status, onNavigate }) {
 
 function SettingsPanel({ status, onSaved }) {
   const initial = status.settings;
-  const [form, setForm] = useState(() => ({ announcement: { ...initial.announcement }, maintenance: { ...initial.maintenance }, features: { ...initial.features } }));
+  const [form, setForm] = useState(() => ({ announcement: { ...initial.announcement }, maintenance: { ...initial.maintenance }, features: { ...initial.features }, ai: { requireLogin: true, dailyLimit: 3, ...(initial.ai || {}) } }));
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState(null);
   const storage = initial._meta?.storage;
@@ -356,6 +359,17 @@ function SettingsPanel({ status, onSaved }) {
             <Toggle checked={form.features.liveLink !== false} onChange={(v) => set('features', 'liveLink', v)} label="AegisLink เรียลไทม์" hint="ซ่อนปุ่มเชื่อมต่อ SWEX ในหน้ากล่องของฉัน" />
             <Toggle checked={form.features.cloudSync !== false} onChange={(v) => set('features', 'cloudSync', v)} label="ซิงก์ข้ามอุปกรณ์" hint="ปุ่มซิงก์ข้ามเครื่องบนแถบเมนู" />
             <Toggle checked={form.features.patchNotes !== false} onChange={(v) => set('features', 'patchNotes', v)} label="สรุปแพตช์ AI" hint="แสดงบทสรุปแพตช์ที่สร้างโดย AI" />
+          </div>
+        </div>
+        <div className={`${card} p-4 space-y-3 lg:col-span-2`}>
+          <div className="text-sm font-bold text-white flex items-center gap-2"><Bot className="w-4 h-4 text-amber-300" /> สิทธิ์ใช้โค้ช AI</div>
+          <div className="grid sm:grid-cols-2 gap-3 items-start">
+            <Toggle checked={form.ai.requireLogin !== false} onChange={(v) => set('ai', 'requireLogin', v)} label="ต้องเข้าสู่ระบบก่อนถาม" hint="ปิดแล้วผู้ใช้ทั่วไปถามได้ (โควตายังนับต่อ IP)" />
+            <label className="block text-xs text-slate-300">
+              <span className="font-bold text-white">โควตาต่อวัน (คำถาม)</span>
+              <span className="block text-[11px] text-slate-400 mb-1.5">นับคำตอบที่สำเร็จต่อบัญชีและต่อ IP ตามวันเวลาไทย · 0 = ไม่จำกัด · แอดมินไม่ถูกจำกัด</span>
+              <input type="number" min={0} max={1000} value={form.ai.dailyLimit ?? 3} onChange={(e) => set('ai', 'dailyLimit', Math.max(0, Number(e.target.value) || 0))} className="w-32 bg-[#0d1422] border border-white/10 focus:border-amber-400 rounded-xl px-3 py-2 text-sm text-white focus:outline-none" />
+            </label>
           </div>
         </div>
       </div>

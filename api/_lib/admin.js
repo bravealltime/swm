@@ -93,6 +93,8 @@ export const DEFAULT_SETTINGS = {
   announcement: { enabled: false, text: '', level: 'info', link: '' },
   maintenance: { enabled: false, message: 'ระบบกำลังปรับปรุง กลับมาเร็ว ๆ นี้' },
   features: { ai: true, liveLink: true, cloudSync: true, patchNotes: true },
+  // The coach costs money per call: members only, and a small per-day budget counted per account AND per IP
+  ai: { requireLogin: true, dailyLimit: 3 },
   // contributor ids for the shared guild leaderboards (server-side only, see _lib/guildRankings.js)
   guildRankings: { trusted: [], blocked: [] },
 };
@@ -129,20 +131,29 @@ export async function saveSettings(patch, by) {
 }
 
 // --- AI usage log ---------------------------------------------------------------------------
-const ipHash = (ip) => (ip ? crypto.createHash('sha256').update(String(ip)).digest('hex').slice(0, 16) : null);
+export const ipHash = (ip) => (ip ? crypto.createHash('sha256').update(String(ip)).digest('hex').slice(0, 16) : null);
+
+// Columns added by supabase/admin_schema.sql after the first release; an older table rejects them
+const GEO_COLUMNS = ['ip', 'country', 'region', 'city', 'timezone'];
+const missingColumn = (err) => /column|schema cache/i.test(String(err || ''));
 
 /**
  * Never throws. Returns a promise the caller should await before responding: Vercel freezes the
  * function as soon as the response is sent, so a fire-and-forget insert never reaches Supabase.
  * Capped at 4s so a slow log can't hold up the answer.
  */
-export function logAiCall({ kind, question, userId, ip, ok, ms, model, error, tokens }) {
+export function logAiCall({ kind, question, userId, ip, geo, ok, ms, model, error, tokens }) {
   if (!serviceKey()) return Promise.resolve();
   const row = {
     kind: String(kind || 'unknown').slice(0, 20),
     question: question ? String(question).slice(0, 300) : null,
     user_id: userId || null,
     ip_hash: ipHash(ip),
+    ip: ip ? String(ip).slice(0, 64) : null,
+    country: geo?.country || null,
+    region: geo?.region || null,
+    city: geo?.city || null,
+    timezone: geo?.timezone || null,
     ok: Boolean(ok),
     ms: Number(ms) || 0,
     model: model ? String(model).slice(0, 60) : null,
@@ -151,14 +162,46 @@ export function logAiCall({ kind, question, userId, ip, ok, ms, model, error, to
   };
   let timer;
   const timeout = new Promise((resolve) => { timer = setTimeout(resolve, 4000); });
-  const write = rest('ai_logs', { method: 'POST', body: row }).catch(() => {});
+  const write = rest('ai_logs', { method: 'POST', body: row })
+    .then((res) => {
+      // table not migrated yet: write the row without the geo columns rather than lose it
+      if (!res.ok && missingColumn(res.error)) {
+        const legacy = { ...row };
+        for (const c of GEO_COLUMNS) delete legacy[c];
+        return rest('ai_logs', { method: 'POST', body: legacy });
+      }
+      return res;
+    })
+    .catch(() => {});
   return Promise.race([write, timeout]).finally(() => clearTimeout(timer));
 }
 
+/**
+ * Successful coach calls today by this account and by this IP, for the daily quota.
+ * `{ ok: false }` when the log table is unreachable — the caller decides whether to fail open.
+ */
+export async function aiUsageSince({ since, userId, ip }) {
+  const hash = ipHash(ip);
+  const filters = [userId ? `user_id.eq.${userId}` : '', hash ? `ip_hash.eq.${hash}` : ''].filter(Boolean);
+  if (!filters.length) return { ok: true, byUser: 0, byIp: 0 };
+  const r = await rest('ai_logs', { query: `?select=user_id,ip_hash&ok=eq.true&created_at=gte.${encodeURIComponent(since)}&or=(${filters.join(',')})&limit=1000` });
+  if (!r.ok) return { ok: false, error: r.error, byUser: 0, byIp: 0 };
+  let byUser = 0, byIp = 0;
+  for (const row of r.data || []) {
+    if (userId && row.user_id === userId) byUser += 1;
+    if (hash && row.ip_hash === hash) byIp += 1;
+  }
+  return { ok: true, byUser, byIp };
+}
+
 export async function aiLogs({ limit = 100 } = {}) {
-  const r = await rest('ai_logs', { query: `?select=id,created_at,kind,question,user_id,ok,ms,model,error,tokens&order=created_at.desc&limit=${Math.min(500, limit)}` });
+  const base = 'id,created_at,kind,question,user_id,ip_hash,ok,ms,model,error,tokens';
+  const tail = `&order=created_at.desc&limit=${Math.min(500, limit)}`;
+  let r = await rest('ai_logs', { query: `?select=${base},${GEO_COLUMNS.join(',')}${tail}` });
+  let geo = true;
+  if (!r.ok && missingColumn(r.error)) { geo = false; r = await rest('ai_logs', { query: `?select=${base}${tail}` }); }
   if (!r.ok) return { ok: false, error: r.error, rows: [] };
-  return { ok: true, rows: r.data || [] };
+  return { ok: true, geo, rows: r.data || [] };
 }
 
 export async function aiStats() {

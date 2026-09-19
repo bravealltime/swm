@@ -255,3 +255,8 @@ export function useAuth() {
   }
   return context;
 }
+
+/** For widgets that may render outside the provider (unit tests, embeds): anonymous instead of throwing. */
+export function useOptionalAuth() {
+  return useContext(AuthContext) || { user: null, isAdmin: false, adminMode: false };
+}

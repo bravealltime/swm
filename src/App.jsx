@@ -152,6 +152,13 @@ function AppContent() {
     return () => window.removeEventListener('swm:navigate', onNavigateEvent);
   }, [handleNavigate]);
 
+  // The AI coach is members-only: its panels open the login dialog through this event
+  useEffect(() => {
+    const onOpenAuth = () => setIsAuthOpen(true);
+    window.addEventListener('swm:open-auth', onOpenAuth);
+    return () => window.removeEventListener('swm:open-auth', onOpenAuth);
+  }, []);
+
   useEffect(() => {
     document.title = titleFor(currentView);
   }, [currentView]);
