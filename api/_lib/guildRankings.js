@@ -12,9 +12,13 @@ const AGREE_RATIO = 0.6;
 
 export const snapshotId = (server, kind, contributor) => `${server}:${kind}:${contributor}`;
 
-/** Trusted / blocked contributor ids from site_settings (managed in the back-office). */
-export async function contributorLists() {
-  const s = await getSettings();
+/**
+ * Trusted / blocked contributor ids from site_settings (managed in the back-office).
+ * getSettings() caches for 30s per function instance; pass fresh for the back-office so an
+ * admin sees their own trust/block change right away whichever instance answers.
+ */
+export async function contributorLists({ fresh = false } = {}) {
+  const s = await getSettings({ fresh });
   const g = s.guildRankings || {};
   return { trusted: new Set(g.trusted || []), blocked: new Set(g.blocked || []) };
 }
@@ -100,7 +104,7 @@ export function deleteSnapshot(id) {
 
 /** Back-office listing: every snapshot, rows reduced to a count and the top 3 names. */
 export async function adminSnapshots() {
-  const [r, lists] = await Promise.all([loadSnapshots(), contributorLists()]);
+  const [r, lists] = await Promise.all([loadSnapshots(), contributorLists({ fresh: true })]);
   if (!r.ok) return { ok: false, error: r.error };
   const snapshots = (r.data || []).map((s) => ({
     id: s.id,
