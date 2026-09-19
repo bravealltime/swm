@@ -35,7 +35,7 @@ const NAV_ITEMS = [
 ];
 
 const TOOL_ITEMS = [
-  { id: 'guardian', label: 'อันดับ Guardian คนไทย & เมต้าจริง', desc: 'จากรีเพลย์ Guardian สาธารณะ SWRT', icon: Trophy },
+  { id: 'guardian', label: 'อันดับ Guardian คนไทย & เมต้าจริง', desc: 'จากสถิติการแข่งขันระดับ Guardian จริง', icon: Trophy },
   { id: 'arena', label: 'ทีมบุก & ตั้งรับ Arena (AO/AD)', desc: 'สูตรบุกเร็ว 15 วิ & ถ่วงเวลา Rush Hour', icon: Swords },
   { id: 'my-box', label: 'กล่องมอนสเตอร์ของฉัน', desc: 'นำเข้า SWEX → ทีมที่สร้างได้', icon: Package },
   { id: 'artifact', label: 'ดาเมจเสริมอาร์ติแฟกต์', desc: 'True Damage Optimizer', icon: Sparkles },

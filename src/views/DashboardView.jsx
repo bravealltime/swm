@@ -155,7 +155,7 @@ export default function DashboardView({ onNavigate }) {
   };
 
   // Questions go to the Summoners War coach; short names route to the player / monster pages
-  const [aiQuestion, setAiQuestion] = useState('');
+  const [aiPrompt, setAiPrompt] = useState(null); // { question, ts }
   const coachContext = (question) => {
     const ctx = { scope: 'general' };
     if (boxUnitList.length) {
@@ -184,7 +184,7 @@ export default function DashboardView({ onNavigate }) {
     if (!searchQuery.trim()) return;
     const query = searchQuery.trim();
     if (forceAi || looksLikeQuestion(query)) {
-      setAiQuestion(query);
+      setAiPrompt({ question: query, ts: Date.now() });
       return;
     }
     if (['lest', 'diligent', 'pinkroid', 'ลูกพี่', 'braveheart'].some(p => query.toLowerCase().includes(p))) {
@@ -432,11 +432,11 @@ export default function DashboardView({ onNavigate }) {
             </div>
           </form>
 
-          {aiQuestion && (
+          {aiPrompt && (
               <div className="text-left mt-3 max-w-2xl mx-auto">
                 <AiChatPanel
-                  key={aiQuestion}
-                  initialQuestion={aiQuestion}
+                  initialQuestion={aiPrompt.question}
+                  questionTrigger={aiPrompt.ts}
                   title="โค้ช AI — ตอบเฉพาะเรื่อง Summoners War"
                   placeholder="ถามต่อได้เลย..."
                   buildContext={(q) => coachContext(q)}
@@ -461,7 +461,7 @@ export default function DashboardView({ onNavigate }) {
             <div className="p-3 rounded-2xl bg-white/[0.02] border border-white/[0.04]">
               <div className="text-xs text-slate-400 font-medium">World Arena RTA</div>
               <div className="text-lg sm:text-xl font-black text-white mt-0.5">Season 38</div>
-              <div className="text-xs text-amber-400 font-medium">SWRT Esports Stats</div>
+              <div className="text-xs text-amber-400 font-medium">RTA Season Analytics</div>
             </div>
             <div className="p-3 rounded-2xl bg-white/[0.02] border border-white/[0.04]">
               <div className="text-xs text-slate-400 font-medium">โค้ดไอเทมแจกฟรี</div>
@@ -970,7 +970,7 @@ export default function DashboardView({ onNavigate }) {
               <div>
                 <h3 className="text-sm font-black text-white">🇹🇭 Guardian คนไทยจากรีเพลย์จริง</h3>
                 <p className="text-[11px] text-slate-400">
-                  {thaiGuardians ? `${thaiGuardians.total} คนใน Guardian ตอนนี้ • SWRT ${thaiGuardians.fetchedAt?.slice(0, 10) || ''}` : 'กำลังโหลด...'}
+                  {thaiGuardians ? `${thaiGuardians.total} คนใน Guardian ตอนนี้ • ข้อมูลล่าสุด ${thaiGuardians.fetchedAt?.slice(0, 10) || ''}` : 'กำลังโหลด...'}
                 </p>
               </div>
               <button

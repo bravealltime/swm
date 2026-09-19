@@ -57,7 +57,7 @@ export default function MetaDashboardView({ onNavigate }) {
           <div>
             <div className="flex items-center gap-2 text-xs font-mono text-cyan-400 uppercase tracking-wider mb-1">
               <BarChart3 className="w-4 h-4 text-cyan-400" />
-              <span>Lucksack Meta Dashboard • Season 38 Analytics</span>
+              <span>RTA Meta Dashboard • Season 38 Analytics</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
               เมต้าแดชบอร์ด & การกระจายแรงค์ (Meta Dashboard)
@@ -95,7 +95,7 @@ export default function MetaDashboardView({ onNavigate }) {
           <div className="p-4 rounded-xl bg-[#080d16] border border-[#1b283d] space-y-1">
             <div className="text-xs text-slate-400 font-medium">จำนวนแมตช์ที่เก็บรวบรวม</div>
             <div className="text-xl font-mono font-black text-amber-400">6,842,100 แมตช์</div>
-            <div className="text-xs text-slate-400">บันทึกสดผ่านระบบ SWRT & Lucksack Engine</div>
+            <div className="text-xs text-slate-400">วิเคราะห์สดผ่านระบบสถิติการแข่งขัน RTA Season 38</div>
           </div>
         </div>
       </div>

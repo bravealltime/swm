@@ -150,10 +150,10 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
         <div className="relative z-10 space-y-1">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-400 text-xs font-mono font-bold uppercase">
             <Trophy className="w-3.5 h-3.5" />
-            <span>SWRT Intelligence Core • World Arena RTA Season {tierData.season}</span>
+            <span>RTA Intelligence Core • World Arena Season {tierData.season}</span>
           </div>
           <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight flex items-center gap-2.5">
-            <span>วิเคราะห์ RTA อารีน่าโลก & สถิติ SWRT</span>
+            <span>วิเคราะห์ RTA อารีน่าโลก & สถิติการแข่งขันจริง</span>
             <span className="px-2.5 py-0.5 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 text-xs font-mono font-black">
               S38 LIVE
             </span>
@@ -789,7 +789,7 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
                   </span>
                 )}
                 {liveStatus === 'idle' && <span className="text-slate-400">กำลังดึงข้อมูลสด...</span>}
-                {liveStatus === 'offline' && <span className="text-amber-300/90">ใช้ข้อมูลที่บันทึกไว้ (SWRT ไม่ตอบสนอง)</span>}
+                {liveStatus === 'offline' && <span className="text-amber-300/90">ใช้ข้อมูลออฟไลน์ที่บันทึกไว้ (เซิร์ฟเวอร์สถิติไม่ตอบสนอง)</span>}
                 <span className="text-slate-400">อัปเดต: {nowLine.nowTime || '-'}</span>
               </span>
             </div>

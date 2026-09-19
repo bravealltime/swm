@@ -61,6 +61,10 @@ export function AuthProvider({ children }) {
     if (!supabase) throw new Error('กรุณาตั้งค่าเชื่อมต่อ Supabase ก่อนเข้าสู่ระบบ');
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) throw error;
+    if (data?.session) {
+      setSession(data.session);
+      setUser(data.session.user ?? null);
+    }
     return data;
   }, []);
 
@@ -78,6 +82,10 @@ export function AuthProvider({ children }) {
       },
     });
     if (error) throw error;
+    if (data?.session) {
+      setSession(data.session);
+      setUser(data.session.user ?? null);
+    }
     return data;
   }, []);
 
@@ -258,5 +266,5 @@ export function useAuth() {
 
 /** For widgets that may render outside the provider (unit tests, embeds): anonymous instead of throwing. */
 export function useOptionalAuth() {
-  return useContext(AuthContext) || { user: null, isAdmin: false, adminMode: false };
+  return useContext(AuthContext) || { user: null, session: null, isAdmin: false, adminMode: false };
 }

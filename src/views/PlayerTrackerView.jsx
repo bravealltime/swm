@@ -36,13 +36,25 @@ import swrtPlayersDataset from '../data/swrtPlayersIndex.json';
 import aiSummaries from '../data/swrtPlayerSummaries.json';
 import { buildSwrtProfiles, buildMonsterIndex, loadRecentMatches, SMALL_SAMPLE } from '../data/swrtPlayerAdapter';
 
-// Curated Lucksack profiles first, then every player seen in the SWRT public Guardian
-// replay feed. A curated entry wins when the same name appears in both.
+// Active Season 38 players from the replay dataset are the primary source of truth
 const SWRT_PROFILES = buildSwrtProfiles(swrtPlayersDataset, allMonstersData);
-const CURATED_NAMES = new Set(playerProfiles.map((p) => p.name.toLowerCase()));
+const SWRT_NAME_MAP = new Map(SWRT_PROFILES.map((p) => [p.name.toLowerCase(), p]));
+
+// Curated profiles (Hall of Fame champions like Lest who aren't in current replay dataset)
+const HOF_PROFILES = playerProfiles
+  .filter((p) => !SWRT_NAME_MAP.has(p.name.toLowerCase()))
+  .map((p) => ({
+    ...p,
+    source: 'hof',
+    rankCategory: p.rankCategory || 'legend',
+    rankCategoryThai: 'ระดับ Hall of Fame (แชมป์โลก)',
+    tagline: p.tagline?.replace(/•\s*(?:Verified|Legacy).*$/i, '• Hall of Fame') || p.tagline,
+  }));
+
+// Combined profiles with real Season 38 players first
 const ALL_PROFILES = [
-  ...playerProfiles,
-  ...SWRT_PROFILES.filter((p) => !CURATED_NAMES.has(p.name.toLowerCase())),
+  ...SWRT_PROFILES,
+  ...HOF_PROFILES,
 ];
 const DATASET_META = swrtPlayersDataset.meta || {};
 const ALL_PROFILE_IDS = new Set(ALL_PROFILES.map((p) => p.id));
@@ -59,7 +71,9 @@ const RANK_FILTERS = [
 ];
 
 export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
-  const [selectedPlayerId, setSelectedPlayerId] = useState(initialPlayer || 'lest');
+  // Default to top active player in Season 38 if no initial player is passed
+  const defaultPlayerId = initialPlayer || SWRT_PROFILES[0]?.id || 'swrt-489076';
+  const [selectedPlayerId, setSelectedPlayerId] = useState(defaultPlayerId);
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [matchFilter, setMatchFilter] = useState('all'); // 'all' | 'win' | 'loss'
@@ -84,7 +98,7 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
       .slice(0, 8);
   }, [activePlayer, selectedPlayerId]);
 
-  // SWRT profiles keep their matches in sharded files; fetch on demand
+  // Profiles keep their matches in sharded files; fetch on demand
   const [loadedMatches, setLoadedMatches] = useState({}); // profileId -> matches[]
   const needsFetch = !!activePlayer && activePlayer.source === 'swrt' && !(activePlayer.id in loadedMatches);
   const matchesLoading = needsFetch;
@@ -103,14 +117,13 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
     return activePlayer.recentMatches ?? loadedMatches[activePlayer.id] ?? [];
   }, [activePlayer, loadedMatches]);
 
-  // Filtered player pool for quick shortcuts and autocomplete based on rankCategoryFilter
+  // Filtered player pool for quick shortcuts: active Season 38 players first, sorted by score
   const filteredPlayerList = useMemo(() => {
     const pool = rankCategoryFilter === 'all' ? ALL_PROFILES : ALL_PROFILES.filter(p => p.rankCategory === rankCategoryFilter);
-    // curated profiles first, then the strongest SWRT players
-    return [...pool].sort((a, b) => (a.source === 'swrt') - (b.source === 'swrt') || b.score - a.score);
+    return [...pool].sort((a, b) => (b.source !== 'hof') - (a.source !== 'hof') || b.score - a.score);
   }, [rankCategoryFilter]);
 
-  // Autocomplete search suggestions (Fuzzy match like Lucksack)
+  // Autocomplete search suggestions (Fuzzy match)
   const searchSuggestions = useMemo(() => {
     if (!searchQuery.trim()) return [];
     const q = searchQuery.toLowerCase().trim();
@@ -193,7 +206,7 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
     return 'bg-gradient-to-r from-sky-600 to-blue-500 text-white font-black border-sky-300';
   };
 
-  // Star rating color (Lucksack style)
+  // Star rating color
   const getScoreStarColor = (score) => {
     if (score >= 2000) return 'text-amber-400 fill-amber-400';
     if (score >= 1300) return 'text-rose-500 fill-rose-500';
@@ -218,8 +231,8 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
                 </span>
               </h1>
               <p className="text-xs sm:text-sm text-slate-400 mt-1">
-                โปรไฟล์จาก Lucksack.gg และรีเพลย์ Guardian สาธารณะของ SWRT ({(DATASET_META.replaysScanned || 0).toLocaleString()} แมตช์
-                {DATASET_META.fetchedAt ? `, อัปเดต ${DATASET_META.fetchedAt.slice(0, 10)}` : ''}) — สถิติดราฟต์ 5v5 และมอนสเตอร์คู่ใจ
+                สถิติผู้เล่นระดับสูงและบันทึกดราฟต์ RTA Season 38 ({(DATASET_META.replaysScanned || 0).toLocaleString()} แมตช์
+                {DATASET_META.fetchedAt ? `, ข้อมูลล่าสุด ${DATASET_META.fetchedAt.slice(0, 10)}` : ''}) — สถิติดราฟต์ 5v5 และมอนสเตอร์คู่ใจ
               </p>
             </div>
           </div>
@@ -272,7 +285,7 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
           })}
         </div>
 
-        {/* Search input field with Lucksack style Dropdown */}
+        {/* Search input field with Autocomplete Dropdown */}
         <form onSubmit={handleSearchSubmit} className="relative z-50">
           <div className="relative flex items-center">
             <Search className="absolute left-4 w-5 h-5 text-slate-400" />
@@ -305,7 +318,7 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
             </button>
           </div>
 
-          {/* Autocomplete Dropdown (Lucksack Styled Match List) */}
+          {/* Autocomplete Dropdown Match List */}
           {isSearchFocused && searchQuery.trim() && (
             <div className="absolute top-full left-0 right-0 mt-2 bg-[#0c1322] border border-blue-500/40 rounded-2xl shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9)] z-50 overflow-hidden divide-y divide-slate-800/80 max-h-96 overflow-y-auto ring-1 ring-blue-500/30">
               <div className="px-4 py-2.5 text-xs font-bold text-slate-300 bg-[#080e1a] border-b border-slate-800 flex items-center justify-between">
@@ -341,7 +354,7 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
                       </div>
                     </div>
 
-                    {/* Right: Star + Score (Lucksack Style) */}
+                    {/* Right: Star + Score */}
                     <div className="flex items-center gap-2 shrink-0">
                       <div className="flex items-center gap-1 font-mono font-black text-sm">
                         <Star className={`w-3.5 h-3.5 ${getScoreStarColor(sug.score)}`} />
@@ -355,7 +368,7 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
                 ))
               ) : (
                 <div className="p-4 text-center text-xs text-slate-400">
-                  ไม่พบ "{searchQuery}" ในชุดข้อมูล — ครอบคลุมโปรไฟล์ Lucksack และผู้เล่นที่ปรากฏในรีเพลย์ Guardian ของ SWRT
+                  ไม่พบ "{searchQuery}" ในฐานข้อมูล — ค้นหาได้จากผู้เล่นระดับ Guardian และผู้เล่นระดับสูงใน RTA
                 </div>
               )}
             </div>
@@ -429,9 +442,9 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
           <Search className="w-10 h-10 text-amber-400 mx-auto" />
           <h2 className="text-lg font-bold text-white">ไม่พบผู้เล่น “{selectedPlayerId}” ในชุดข้อมูล</h2>
           <p className="text-sm text-slate-400 max-w-2xl mx-auto leading-relaxed">
-            ชุดข้อมูลครอบคลุมโปรไฟล์ Lucksack.gg และผู้เล่นที่ปรากฏในรีเพลย์ Guardian สาธารณะของ SWRT
+            ฐานข้อมูลครอบคลุมสถิติผู้เล่นระดับ Guardian และการแข่งขันจริงใน RTA World Arena
             {DATASET_META.replaysScanned ? ` (${DATASET_META.replaysScanned.toLocaleString()} แมตช์ล่าสุด)` : ''} —
-            ผู้เล่นระดับต่ำกว่า Guardian หรือที่ไม่ได้เล่นช่วงนี้จะยังไม่มีข้อมูล
+            ผู้เล่นระดับต่ำกว่า Guardian หรือที่ไม่ได้ลงแข่งช่วงนี้จะยังไม่มีบันทึกข้อมูล
           </p>
           {nearMatches.length > 0 && (
             <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
@@ -448,7 +461,7 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
             </div>
           )}
           <button
-            onClick={() => handleSelectPlayer('lest')}
+            onClick={() => handleSelectPlayer(defaultPlayerId)}
             className="text-xs font-bold text-blue-400 hover:text-blue-300 cursor-pointer"
           >
             กลับไปดูผู้เล่นแนะนำ
@@ -517,8 +530,8 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
                   อันดับโลก: <strong className="text-blue-400">#{activePlayer.worldRank.toLocaleString()}</strong>
                 </span>
                 <span className="text-xs text-slate-400">•</span>
-                <span className={`text-xs font-semibold ${activePlayer.source === 'swrt' ? 'text-cyan-300/90' : 'text-emerald-300/90'}`}>
-                  {activePlayer.source === 'swrt' ? 'ที่มา: รีเพลย์สาธารณะ SWRT' : 'ที่มา: Lucksack.gg snapshot'}
+                <span className="text-xs font-semibold text-emerald-300/90">
+                  {activePlayer.source === 'hof' ? 'ทำเนียบแชมป์โลก (Hall of Fame)' : 'สถิติการแข่งขันจริง Season 38'}
                 </span>
               </div>
             </div>

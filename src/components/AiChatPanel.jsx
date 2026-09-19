@@ -42,6 +42,7 @@ function CopyButton({ text }) {
 export default function AiChatPanel({
   buildContext, suggestions = [], followUps = DEFAULT_FOLLOW_UPS, title = 'โค้ช AI', subtitle = 'ตอบเฉพาะเรื่อง Summoners War • อิงสกิล/สถิติในฐานข้อมูล SWM และกล่องของคุณ (ถ้ามี)',
   placeholder = 'พิมพ์คำถาม เช่น จัดทีม GB12 จากกล่องฉัน...', compact = false, className = '', initialQuestion = '',
+  questionTrigger = 0,
 }) {
   const [messages, setMessages] = useState([]); // { role: 'user' | 'ai', text, at, seconds }
   const [input, setInput] = useState('');
@@ -50,26 +51,60 @@ export default function AiChatPanel({
   const [errorCode, setErrorCode] = useState('');
   const [quota, setQuota] = useState(null);
   const [startedAt, setStartedAt] = useState(0);
-  const { user } = useOptionalAuth();
+  const { user, session } = useOptionalAuth();
   const listRef = useRef(null);
   const inputRef = useRef(null);
 
+  const pendingQuestionRef = useRef('');
+
   useEffect(() => { listRef.current?.scrollTo({ top: listRef.current.scrollHeight, behavior: 'smooth' }); }, [messages, status]);
 
-  // A question handed in by the parent (e.g. the home search box) is asked once per value
+  // A question handed in by the parent (e.g. the home search box) is asked once per value or trigger
   const askedRef = useRef('');
+  const lastTriggerRef = useRef(questionTrigger);
   useEffect(() => {
-    if (initialQuestion && askedRef.current !== initialQuestion) {
+    if (!initialQuestion) return;
+    const isNewTrigger = questionTrigger && questionTrigger !== lastTriggerRef.current;
+    if (isNewTrigger || askedRef.current !== initialQuestion) {
+      lastTriggerRef.current = questionTrigger;
       askedRef.current = initialQuestion;
       ask(initialQuestion);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initialQuestion]);
+  }, [initialQuestion, questionTrigger]);
+
+  // When user logs in, auto-clear LOGIN_REQUIRED and resume asking
+  const prevUserRef = useRef(user);
+  useEffect(() => {
+    const prevUser = prevUserRef.current;
+    prevUserRef.current = user;
+
+    if (!prevUser && user) {
+      if (errorCode === 'LOGIN_REQUIRED' || status === 'error') {
+        setError('');
+        setErrorCode('');
+        setStatus('idle');
+        const qToAsk = pendingQuestionRef.current || initialQuestion;
+        if (qToAsk) {
+          pendingQuestionRef.current = '';
+          ask(qToAsk);
+        }
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, errorCode, status, initialQuestion]);
 
   const ask = async (question) => {
     const q = String(question || '').trim();
     if (!q || status === 'loading') return;
-    if (!user) { setError('โค้ช AI เปิดให้เฉพาะสมาชิก — เข้าสู่ระบบก่อนแล้วถามได้เลย'); setErrorCode('LOGIN_REQUIRED'); setStatus('error'); return; }
+    if (!user) {
+      pendingQuestionRef.current = q;
+      setError('โค้ช AI เปิดให้เฉพาะสมาชิก — เข้าสู่ระบบก่อนแล้วถามได้เลย');
+      setErrorCode('LOGIN_REQUIRED');
+      setStatus('error');
+      return;
+    }
+    pendingQuestionRef.current = '';
     setInput('');
     setError('');
     setErrorCode('');
@@ -79,11 +114,18 @@ export default function AiChatPanel({
     setStartedAt(t0);
     setStatus('loading');
     try {
-      const res = await askAdvisor({ kind: 'chat', question: q, context: buildContext ? buildContext(q) : {}, history });
+      const res = await askAdvisor(
+        { kind: 'chat', question: q, context: buildContext ? buildContext(q) : {}, history },
+        { token: session?.access_token }
+      );
       setMessages((m) => [...m, { role: 'ai', text: res.answer, at: Date.now(), seconds: Math.round((Date.now() - t0) / 1000) }]);
       setQuota(res.quota || null);
       setStatus('idle');
     } catch (err) {
+      if (err.code === 'LOGIN_REQUIRED') {
+        pendingQuestionRef.current = q;
+        setMessages((m) => m.filter((msg) => msg.text !== q || msg.role !== 'user'));
+      }
       setError(err.message || 'AI ไม่ตอบสนอง');
       setErrorCode(err.code || '');
       if (err.quota) setQuota(err.quota);
@@ -93,9 +135,12 @@ export default function AiChatPanel({
 
   const retry = () => {
     const lastUser = [...messages].reverse().find((m) => m.role === 'user');
-    if (!lastUser) return;
-    setMessages((m) => m.slice(0, m.lastIndexOf(lastUser)));
-    setTimeout(() => ask(lastUser.text), 0);
+    const qToRetry = lastUser ? lastUser.text : (pendingQuestionRef.current || initialQuestion);
+    if (!qToRetry) return;
+    if (lastUser) {
+      setMessages((m) => m.slice(0, m.lastIndexOf(lastUser)));
+    }
+    setTimeout(() => ask(qToRetry), 0);
   };
 
   const lastIsAi = messages.length > 0 && messages[messages.length - 1].role === 'ai';
@@ -174,7 +219,7 @@ export default function AiChatPanel({
       {status === 'error' && (
         <div role="alert" className="mx-4 mb-3 p-3 rounded-xl border border-rose-500/30 bg-rose-500/5 text-xs text-rose-200 flex items-center justify-between gap-2">
           <span className="flex items-center gap-2"><AlertTriangle className="w-4 h-4 shrink-0" /> {error}</span>
-          {errorCode === 'LOGIN_REQUIRED' ? (
+          {errorCode === 'LOGIN_REQUIRED' && !user ? (
             <button onClick={requestLogin} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-bold cursor-pointer shrink-0">เข้าสู่ระบบ</button>
           ) : errorCode === 'DAILY_LIMIT' ? null : (
             <button onClick={retry} className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-100 cursor-pointer shrink-0"><RotateCcw className="w-3 h-3" /> ลองใหม่</button>

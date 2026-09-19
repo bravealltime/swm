@@ -84,7 +84,7 @@ export default function MetaTeamsFromBox({ box, owned, monsterOf, onNavigate }) 
               <button key={id} onClick={() => setFilter(id)} className={`px-2.5 py-1 rounded-lg font-bold cursor-pointer ${filter === id ? 'bg-white/[0.12] text-white' : 'text-slate-400 hover:text-white'}`}>{label}</button>
             ))}
           </div>
-          <span className="text-[11px] text-slate-500">จากรีเพลย์ Guardian {replays.toLocaleString()} แมตช์ (SWRT) • เรียงตาม พร้อมเล่น → อัตราชนะ (ถ่วงด้วยจำนวนแมตช์)</span>
+          <span className="text-[11px] text-slate-500">จากสถิติการแข่งขันระดับ Guardian {replays.toLocaleString()} แมตช์ • เรียงตาม พร้อมเล่น → อัตราชนะ (ถ่วงด้วยจำนวนแมตช์)</span>
         </div>
 
         {list.length === 0 ? (

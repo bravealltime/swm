@@ -269,7 +269,7 @@ function AppContent() {
           <nav aria-label="ลิงก์ท้ายหน้า" className="flex flex-wrap items-center justify-center gap-4 text-xs font-semibold text-slate-300">
             <a href={buildUrl('dashboard')} onClick={(e) => { e.preventDefault(); handleNavigate('dashboard'); }} className="hover:text-blue-400 transition-colors">หน้าแรก</a>
             <a href={buildUrl('3mdc')} onClick={(e) => { e.preventDefault(); handleNavigate('3mdc'); }} className="hover:text-blue-400 transition-colors">ทีมแก้ทาง 3MDC</a>
-            <a href={buildUrl('rta')} onClick={(e) => { e.preventDefault(); handleNavigate('rta'); }} className="hover:text-amber-400 transition-colors">วิเคราะห์ RTA (SWRT)</a>
+            <a href={buildUrl('rta')} onClick={(e) => { e.preventDefault(); handleNavigate('rta'); }} className="hover:text-amber-400 transition-colors">วิเคราะห์ RTA World Arena</a>
             <a href={buildUrl('trending')} onClick={(e) => { e.preventDefault(); handleNavigate('trending'); }} className="hover:text-blue-400 transition-colors">สถิติทั่วโลก (Trending)</a>
             <a href={buildUrl('dungeons')} onClick={(e) => { e.preventDefault(); handleNavigate('dungeons'); }} className="hover:text-blue-400 transition-colors">ทีมฟาร์มดันเจี้ยน</a>
             <a href={buildUrl('catalog')} onClick={(e) => { e.preventDefault(); handleNavigate('catalog'); }} className="hover:text-blue-400 transition-colors">สารานุกรมสกิลมอนสเตอร์</a>

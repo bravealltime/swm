@@ -36,7 +36,7 @@ export default function GuardianView({ onNavigate, subItem }) {
               Guardian <span className="bg-gradient-to-r from-rose-400 to-amber-300 bg-clip-text text-transparent">จากรีเพลย์จริง</span>
             </h1>
             <p className="text-xs sm:text-sm text-slate-400 mt-1 max-w-3xl">
-              อันดับผู้เล่นและเมต้าที่คำนวณจากรีเพลย์ Guardian สาธารณะของ SWRT {(META.replaysScanned || 0).toLocaleString()} แมตช์
+              อันดับผู้เล่นและเมต้าที่คำนวณจากการแข่งขันระดับ Guardian Season 38 ทั้งหมด {(META.replaysScanned || 0).toLocaleString()} แมตช์
               {REPLAY_META.firstReplay ? ` (${REPLAY_META.firstReplay.slice(0, 10)} ถึง ${REPLAY_META.lastReplay?.slice(0, 10)})` : ''}
               {META.fetchedAt ? ` • อัปเดต ${META.fetchedAt.slice(0, 10)}` : ''}
             </p>

@@ -52,7 +52,7 @@ function getInitialWarState() {
     { id: 5, name: 'ป้อม 5 (Center-W)', guild: 'red', status: 'active', remaining: 3, max: 5, protectedUntil: 0, defenses: [
       { id: '5-1', monsters: ['Clara', 'Savannah', 'Kaki'], status: 'alive', attacker: 'SWM-Zeed', attackedAt: Date.now() - 120000 },
       { id: '5-2', monsters: ['Carcano', 'Vigor', 'Triana'], status: 'defeated', attacker: 'Thai-Master', attackedAt: Date.now() - 600000 },
-      { id: '5-3', monsters: ['Mo Long', 'Bolenus', 'Harmonia'], status: 'defeated', attacker: 'LucksackPro', attackedAt: Date.now() - 480000 },
+      { id: '5-3', monsters: ['Mo Long', 'Bolenus', 'Harmonia'], status: 'defeated', attacker: 'LuckyMaster', attackedAt: Date.now() - 480000 },
       { id: '5-4', monsters: ['Oliver', 'Cheongpung', 'Miles'], status: 'alive', attacker: null, attackedAt: null },
       { id: '5-5', monsters: ['Khmun', 'Skogul', 'Vigor'], status: 'alive', attacker: null, attackedAt: null },
     ]},
@@ -110,7 +110,7 @@ function getInitialWarState() {
   const defaultMembers = [
     { id: 'm1', name: 'SWM-Blade (หัวหน้ากิลด์)', swordsLeft: 24, win: 2, loss: 0, role: 'Leader' },
     { id: 'm2', name: 'Thai-Master (รองหัวหน้า)', swordsLeft: 27, win: 1, loss: 0, role: 'Vice' },
-    { id: 'm3', name: 'LucksackPro', swordsLeft: 27, win: 1, loss: 0, role: 'Member' },
+    { id: 'm3', name: 'LuckyMaster', swordsLeft: 27, win: 1, loss: 0, role: 'Member' },
     { id: 'm4', name: 'SWM-Zeed', swordsLeft: 30, win: 0, loss: 0, role: 'Member' },
     { id: 'm5', name: 'Aegis-Knight', swordsLeft: 30, win: 0, loss: 0, role: 'Member' },
     { id: 'm6', name: 'DemonHunter_TH', swordsLeft: 21, win: 3, loss: 0, role: 'Member' },
@@ -121,7 +121,7 @@ function getInitialWarState() {
   ];
 
   const defaultLogs = [
-    { id: 'log-1', time: '04:50', text: 'LucksackPro ชนะ ป้อม 5 ทีม Mo Long / Bolenus / Harmonia (+100pt)', type: 'win' },
+    { id: 'log-1', time: '04:50', text: 'LuckyMaster ชนะ ป้อม 5 ทีม Mo Long / Bolenus / Harmonia (+100pt)', type: 'win' },
     { id: 'log-2', time: '04:48', text: 'Thai-Master ชนะ ป้อม 5 ทีม Carcano / Vigor / Triana (+100pt)', type: 'win' },
     { id: 'log-3', time: '04:44', text: 'SWM-Blade ชนะ ป้อม 2 ทีม Khmun / Bastet / Odin (+100pt)', type: 'win' },
     { id: 'log-4', time: '04:40', text: 'ป้อม 3 (NE) กิลด์สีเหลืองเข้าสู่สถานะป้องกัน (Protection) อีก 20 นาที', type: 'info' },

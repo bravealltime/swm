@@ -71,7 +71,7 @@ export default function RtaSynergiesView({ onNavigate }) {
           <div>
             <div className="flex items-center gap-2 text-xs font-mono text-cyan-400 uppercase tracking-wider mb-1">
               <Users className="w-4 h-4 text-cyan-400" />
-              <span>Lucksack Duo & Trio Synergy Analytics • Season 38</span>
+              <span>RTA Duo & Trio Synergy Analytics • Season 38</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
               สถิติทีมคอมโบดูโอ้ & ทริโอ้ (RTA Synergies)

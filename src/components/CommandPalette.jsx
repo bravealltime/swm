@@ -8,7 +8,7 @@ import { tierFromLevel, flagFromCountry } from '../data/swrtPlayerAdapter';
 
 // One flat, pre-lowercased list so each keystroke is a cheap scan
 const PLAYERS = [
-  ...curatedProfiles.map((p) => ({ name: p.name, lower: p.name.toLowerCase(), flag: p.flag, badge: p.rankBadge, score: p.score, note: p.displayName !== p.name ? p.displayName : 'Lucksack' })),
+  ...curatedProfiles.map((p) => ({ name: p.name, lower: p.name.toLowerCase(), flag: p.flag, badge: p.rankBadge, score: p.score, note: p.displayName !== p.name ? p.displayName : 'Hall of Fame' })),
   ...(playersIndex.players || []).map((p) => ({ name: p.n, lower: p.n.toLowerCase(), flag: flagFromCountry(p.c), badge: tierFromLevel(p.lv).rankBadge, score: p.s, note: `${p.m} แมตช์` })),
 ];
 
@@ -17,7 +17,7 @@ const QUICK_TOOLS = [
   { id: '3mdc-stats', name: 'ศูนย์สถิติและรายงาน 3MDC (Statistics Hub)', desc: 'รวมรายงานเมต้า, สถิติวินเรท, และ Battle Log Performance', icon: Trophy, view: '3mdc-stats' },
   { id: 'game-guides', name: 'สารบัญคู่มือกลยุทธ์เกม (Game Guides)', desc: 'คู่มือดันเจี้ยน Abyss Hard และแผน Siege', icon: BookOpen, view: 'game-guides' },
   { id: 'siege-calc', name: 'เครื่องคำนวณคะแนน Siege (Siege Calculator)', desc: 'คำนวณแต้มต่อนาทีและเวลาชนะ 20,000 แต้ม', icon: Gauge, view: 'siege-calculator' },
-  { id: 'rta', name: 'วิเคราะห์ RTA & สถิติ SWRT', desc: 'Tier List เมต้า, Pick/Win/Ban, รีเพลย์แข่งสด', icon: Trophy, view: 'rta' },
+  { id: 'rta', name: 'วิเคราะห์ RTA & สถิติการแข่งขัน', desc: 'Tier List เมต้า, Pick/Win/Ban, รีเพลย์แข่งสด', icon: Trophy, view: 'rta' },
   { id: '3mdc', name: 'ค้นหาตัวแก้ทาง 3MDC', desc: 'ค้นหาทีมเจาะหอ 4★ / 5★ พร้อมคะแนนความน่าเชื่อถือ', icon: Shield, view: '3mdc' },
   { id: 'codes', name: 'โค้ดแจกไอเทมล่าสุด', desc: 'คัดลอกโค้ดและกดรับของผ่าน Hive ID', icon: Gift, view: 'codes' },
   { id: 'speed', name: 'เครื่องคำนวณ Speed Tick & จูนสปีด', desc: 'คำนวณช่วงความเร็วและป้องกันโดนแทรกเทิร์น', icon: Gauge, view: 'speed' },

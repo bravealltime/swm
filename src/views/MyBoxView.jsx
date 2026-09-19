@@ -1126,7 +1126,7 @@ function MetaCoverage({ owned }) {
       <div className={`${card} p-4 flex flex-wrap items-center justify-between gap-3`}>
         <div>
           <div className="text-sm font-bold text-white">คุณมีมอนเมต้า Guardian {have} จาก {top.length} ตัวที่ถูกเลือกบ่อยสุด</div>
-          <div className="text-xs text-slate-400">อิงจากรีเพลย์ Guardian สาธารณะ {Math.round(sides / 2).toLocaleString()} แมตช์ (SWRT)</div>
+          <div className="text-xs text-slate-400">อิงจากการแข่งขันระดับ Guardian {Math.round(sides / 2).toLocaleString()} แมตช์ล่าสุด</div>
         </div>
         <div className="w-full sm:w-64 bg-slate-800 h-2 rounded-full overflow-hidden"><div className="bg-rose-500 h-full" style={{ width: `${(have / top.length) * 100}%` }} /></div>
       </div>

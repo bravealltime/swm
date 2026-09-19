@@ -709,7 +709,7 @@ export default function DraftExplorerView({ onNavigate }) {
           </div>
 
           <div className="pt-2 text-xs text-slate-400 leading-relaxed">
-            💡 <strong>คำแนะนำจาก Lucksack Draft Engine:</strong> การแบนตัวที่ขัดขวางคอมโบหลักของคุณ จะช่วยเพิ่ม Win Rate ให้กับทีมได้ถึง +8.5%
+            💡 <strong>คำแนะนำจากระบบ AI Draft Analyzer:</strong> การแบนตัวที่ขัดขวางคอมโบหลักของคุณ จะช่วยเพิ่ม Win Rate ให้กับทีมได้ถึง +8.5%
           </div>
         </div>
 

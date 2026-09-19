@@ -9,7 +9,9 @@ async function sessionToken() {
     const { getSupabase } = await import('./supabaseClient');
     const supabase = await getSupabase();
     const { data } = (await supabase?.auth.getSession()) || {};
-    return data?.session?.access_token || '';
+    if (data?.session?.access_token) return data.session.access_token;
+    const refreshed = await supabase?.auth.refreshSession().catch(() => null);
+    return refreshed?.data?.session?.access_token || '';
   } catch {
     return '';
   }
@@ -34,11 +36,11 @@ export function quotaLabel(quota) {
  * Resolves to { answer, model, usage, authenticated, quota } or throws an Error with a Thai message
  * (plus `code` / `quota` when the server refused).
  */
-export async function askAdvisor(payload, { signal } = {}) {
-  const token = await sessionToken();
+export async function askAdvisor(payload, { signal, token } = {}) {
+  const authToken = token || await sessionToken();
   const res = await fetch('/api/ai/advise', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+    headers: { 'Content-Type': 'application/json', ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}) },
     body: JSON.stringify(payload),
     signal,
   });

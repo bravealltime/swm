@@ -165,7 +165,7 @@ export default function TierListMakerView() {
           <div>
             <div className="flex items-center gap-2 text-xs font-mono text-amber-400 uppercase tracking-wider mb-1">
               <Trophy className="w-4 h-4 text-amber-400" />
-              <span>SWM Tools • Inspired by Lucksack Tier List Maker</span>
+              <span>SWM Tools • RTA Tier List Maker</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
               สร้าง Tier List มอนสเตอร์ของคุณเอง (Tier List Maker)

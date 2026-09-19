@@ -11,7 +11,7 @@ import { useOptionalAuth } from '../contexts/AuthContext';
 export default function AiAdvisorPanel({ buildPayload, resetKey, label = 'ให้ AI วิเคราะห์', hint, className = '' }) {
   const IDLE = { status: 'idle', answer: '', error: '', code: '', quota: null };
   const [state, setState] = useState(IDLE);
-  const { user } = useOptionalAuth();
+  const { user, session } = useOptionalAuth();
   const [seenKey, setSeenKey] = useState(resetKey);
   const controllerRef = useRef(null);
 
@@ -22,6 +22,19 @@ export default function AiAdvisorPanel({ buildPayload, resetKey, label = 'ให
     setState(IDLE);
   }
 
+  // Auto-clear LOGIN_REQUIRED and auto-run when user logs in
+  const prevUserRef = useRef(user);
+  useEffect(() => {
+    const prevUser = prevUserRef.current;
+    prevUserRef.current = user;
+    if (!prevUser && user) {
+      if (state.code === 'LOGIN_REQUIRED') {
+        setState(IDLE);
+        run();
+      }
+    }
+  }, [user, state.code]);
+
   const run = async () => {
     controllerRef.current?.abort();
     const controller = new AbortController();
@@ -29,7 +42,7 @@ export default function AiAdvisorPanel({ buildPayload, resetKey, label = 'ให
     const startedFor = resetKey;
     setState((s) => ({ ...s, status: 'loading', error: '' }));
     try {
-      const res = await askAdvisor(buildPayload(), { signal: controller.signal });
+      const res = await askAdvisor(buildPayload(), { signal: controller.signal, token: session?.access_token });
       if (controllerRef.current !== controller || startedFor !== resetKey) return;
       setState({ status: 'done', answer: res.answer, error: '', code: '', quota: res.quota || null });
     } catch (err) {
@@ -74,8 +87,10 @@ export default function AiAdvisorPanel({ buildPayload, resetKey, label = 'ให
       {state.status === 'error' && (
         <div role="alert" className="mt-3 p-3 rounded-xl border border-rose-500/30 bg-rose-500/5 text-xs text-rose-200 flex items-center justify-between gap-2 flex-wrap">
           <span className="flex items-center gap-2"><AlertTriangle className="w-4 h-4 shrink-0" /> {state.error}</span>
-          {state.code === 'LOGIN_REQUIRED' && (
+          {state.code === 'LOGIN_REQUIRED' && !user ? (
             <button onClick={requestLogin} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-bold cursor-pointer shrink-0"><LogIn className="w-3 h-3" /> เข้าสู่ระบบ</button>
+          ) : (
+            <button onClick={run} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-100 cursor-pointer shrink-0"><RotateCcw className="w-3 h-3" /> ลองใหม่</button>
           )}
         </div>
       )}

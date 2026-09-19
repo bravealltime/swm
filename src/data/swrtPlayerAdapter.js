@@ -1,6 +1,6 @@
 // Turns the compact records in swrtPlayersIndex.json (built by scripts/fetch_swrt_players.cjs)
-// into the profile shape PlayerTrackerView renders, so curated Lucksack profiles and
-// SWRT-derived profiles can live in the same list. Recent matches are NOT in the index;
+// into the profile shape PlayerTrackerView renders, so curated profiles and
+// match-derived profiles can live in the same list. Recent matches are NOT in the index;
 // they are fetched per shard from /data/swrt-matches/<shard>.json when a player is opened.
 
 // Com2uS RTA rating codes -> tier
@@ -88,7 +88,7 @@ export function toProfile(p, byId, season = 38) {
     swrtId: p.id,
     name: p.n,
     displayName: p.n,
-    tagline: `${tier.rankTier.replace(/ ★+$/, '')} • ${p.c || 'GL'} • SWRT S${season}`,
+    tagline: `${tier.rankTier.replace(/ ★+$/, '')} • ${p.c || 'GL'} • RTA Season ${season}`,
     server: 'Global',
     country: p.c || 'GL',
     flag: flagFromCountry(p.c),
@@ -103,10 +103,10 @@ export function toProfile(p, byId, season = 38) {
     smallSample: matches < SMALL_SAMPLE,
     firstPickPreference: matches ? +(((p.fp || 0) / matches) * 100).toFixed(1) : 0,
     archetype: core || 'RTA Guardian',
-    archetypeThai: fromFeed ? 'มอนสเตอร์ที่ใช้บ่อยจากรีเพลย์จริง' : 'ผู้เล่นท็อปประจำมอนสเตอร์ (SWRT)',
+    archetypeThai: fromFeed ? 'มอนสเตอร์ที่ใช้บ่อยจากรีเพลย์จริง' : 'ผู้เล่นท็อปประจำมอนสเตอร์',
     archetypeDescription: fromFeed
-      ? `สถิติจากรีเพลย์ Guardian สาธารณะของ SWRT ${matches} แมตช์ (พบล่าสุด ${p.seen || '-'})`
-      : 'ติดอันดับผู้เล่นที่ใช้มอนสเตอร์ตัวนี้ได้ดีที่สุดในสถิติ SWRT (ไม่มีรีเพลย์ล่าสุดในชุดข้อมูล)',
+      ? `สถิติจากการแข่งขันระดับ Guardian ${matches} แมตช์ (พบล่าสุด ${p.seen || '-'})`
+      : `ติดอันดับผู้เล่นที่ใช้มอนสเตอร์ตัวนี้ได้ดีที่สุดในสถิติ Season ${season}`,
     signatureMonsters,
     recentMatches: null, // loaded on demand, see loadRecentMatches()
     profileAvatar: p.av || `https://api.dicebear.com/7.x/adventurer/svg?seed=${encodeURIComponent(p.n)}`,
