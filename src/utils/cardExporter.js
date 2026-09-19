@@ -292,11 +292,38 @@ function handleCardExport({ canvas, filename, title, preview = true }) {
 
 const num = (n) => Number(n || 0).toLocaleString('en-US');
 
+const RUNE_CDN = `${CDN}rune_icons/`;
+const RUNE_QUALITY_FILE = { normal: 'common', magic: 'magic', rare: 'rare', hero: 'hero', legend: 'legend' };
+const RUNE_QUALITY_COLOUR = { normal: '#94a3b8', magic: '#34d399', rare: '#38bdf8', hero: '#e879f9', legend: '#fbbf24' };
+
+/** The game's layered rune icon (quality plate, slot shape, set symbol) at `size` px, top-left at x,y. */
+async function drawRuneIcon(ctx, { x, y, size, quality, slot, set, ancient }) {
+  const q = String(quality || 'normal').toLowerCase();
+  const [bg, shape, symbol] = await Promise.all([
+    loadImage(`${RUNE_CDN}bg_${RUNE_QUALITY_FILE[q] || 'common'}.png`),
+    loadImage(`${RUNE_CDN}rune${Math.min(6, Math.max(1, slot || 1))}.png`),
+    loadImage(`${RUNE_CDN}${String(set || '').toLowerCase()}.png`),
+  ]);
+  ctx.save();
+  if (ancient) { ctx.shadowColor = 'rgba(251, 191, 36, 0.8)'; ctx.shadowBlur = 10; }
+  if (bg) ctx.drawImage(bg, x, y, size, size);
+  else { ctx.fillStyle = '#1e2740'; ctx.beginPath(); ctx.arc(x + size / 2, y + size / 2, size / 2, 0, Math.PI * 2); ctx.fill(); }
+  ctx.restore();
+  if (shape) ctx.drawImage(shape, x, y, size, size);
+  if (symbol) ctx.drawImage(symbol, x + size * 0.25, y + size * 0.25, size * 0.5, size * 0.5);
+  ctx.save();
+  ctx.strokeStyle = RUNE_QUALITY_COLOUR[q] || RUNE_QUALITY_COLOUR.normal;
+  ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.arc(x + size / 2, y + size / 2, size / 2 + 1, 0, Math.PI * 2); ctx.stroke();
+  ctx.restore();
+}
+
 /**
- * Summoner passport (1200×675): hero portrait + identity, four stat tiles, the LD5 hall with
- * portraits on the right and the fastest monsters along the bottom.
+ * Summoner passport (1200×675): identity + four stat tiles on the left, the LD5 hall on the right,
+ * and along the bottom the box's fastest runes by their own SPD substat — the number as it rolled,
+ * with grinds shown separately and never summed into it.
  */
-export async function exportProfileCard({ wizard, stats = {}, topLd5 = [], heroes = [], preview = true }) {
+export async function exportProfileCard({ wizard, stats = {}, topLd5 = [], heroes = [], speedRunes = [], preview = true }) {
   await ensureFonts();
   const W = 1200, H = 675;
   const canvas = document.createElement('canvas');
@@ -307,7 +334,8 @@ export async function exportProfileCard({ wizard, stats = {}, topLd5 = [], heroe
 
   const name = wizard?.name || 'Summoner';
   const ld = topLd5.slice(0, 8);
-  const hero = ld[0] || heroes[0] || null;
+  // The portrait is the summoner's chosen representative, then the fastest hero, then an LD5
+  const hero = wizard?.repMonster?.avatarUrl ? wizard.repMonster : heroes[0] || ld[0] || null;
 
   // header
   text(ctx, 'SUMMONERS WAR • SUMMONER PASSPORT', 60, 66, { font: `700 13px ${SANS}`, color: '#e9c46a', spacing: 3 });
@@ -317,13 +345,13 @@ export async function exportProfileCard({ wizard, stats = {}, topLd5 = [], heroe
   ctx.beginPath(); ctx.moveTo(60, 80); ctx.lineTo(W - 60, 80); ctx.stroke();
 
   // identity
-  await drawPortrait(ctx, { url: hero?.avatarUrl, cx: 132, cy: 178, r: 68, element: hero?.element, label: name });
-  text(ctx, name, 230, 168, { font: `800 46px ${SANS}`, color: '#ffffff', maxWidth: 330, shadow: 'rgba(245, 197, 66, 0.45)' });
+  await drawPortrait(ctx, { url: hero?.avatarUrl, cx: 128, cy: 172, r: 62, element: hero?.element, label: name });
+  text(ctx, name, 218, 160, { font: `800 44px ${SANS}`, color: '#ffffff', maxWidth: 340, shadow: 'rgba(245, 197, 66, 0.45)' });
   const sub = [`Lv.${wizard?.level || '-'}`, wizard?.guild ? `กิลด์ ${wizard.guild}` : 'ไม่มีกิลด์', wizard?.country ? wizard.country : ''].filter(Boolean).join('  •  ');
-  text(ctx, sub, 230, 200, { font: `500 17px ${THAI}`, color: '#cbd5e1', maxWidth: 330 });
-  let px = 230;
+  text(ctx, sub, 218, 190, { font: `500 16px ${THAI}`, color: '#cbd5e1', maxWidth: 340 });
+  let px = 218;
   for (const [label, colour] of [[`มอนสเตอร์ ${num(stats.totalUnits)}`, '#93c5fd'], [`nat5 ${num(stats.nat5Count)}`, '#fbbf24'], [`อาร์ติแฟกต์ ${num(stats.totalArtifacts)}`, '#5eead4']]) {
-    if (!/\s0$/.test(label)) px += pill(ctx, px, 218, label, { color: colour, bg: 'rgba(255,255,255,0.05)' }) + 8;
+    if (!/\s0$/.test(label)) px += pill(ctx, px, 206, label, { color: colour, bg: 'rgba(255,255,255,0.05)' }) + 8;
   }
 
   // stat tiles
@@ -331,76 +359,79 @@ export async function exportProfileCard({ wizard, stats = {}, topLd5 = [], heroe
     { label: 'มอนสเตอร์ 6 ดาว', val: `${num(stats.total6Star)} ตัว`, color: '#60a5fa' },
     { label: 'แสง-มืด 5★ แท้', val: `${num(stats.ld5Count)} ตัว`, color: '#c084fc' },
     { label: 'ประสิทธิภาพรูนเฉลี่ย', val: stats.avgEff ? `${stats.avgEff}%` : '-', color: '#34d399' },
-    { label: 'รูน SPD ≥ +20', val: `${num(stats.quadSpdCount)} ใบ`, color: '#38bdf8' },
+    { label: 'รูนซับ SPD ≥ +20 (ไม่รวมขัด)', val: `${num(stats.quadSpdCount)} ใบ`, color: '#38bdf8' },
   ];
   tiles.forEach((t, i) => {
-    const x = 60 + (i % 2) * 252, y = 268 + Math.floor(i / 2) * 100;
-    drawPanel(ctx, x, y, 240, 88, { radius: 12 });
+    const x = 60 + (i % 2) * 252, y = 252 + Math.floor(i / 2) * 92;
+    drawPanel(ctx, x, y, 240, 82, { radius: 12 });
     ctx.fillStyle = t.color;
-    roundRect(ctx, x, y + 14, 4, 60, 2); ctx.fill();
-    text(ctx, t.label, x + 20, y + 32, { font: `600 13px ${THAI}`, color: '#94a3b8' });
-    text(ctx, t.val, x + 20, y + 68, { font: `800 30px ${SANS}`, color: t.color, shadow: `${t.color}55` });
+    roundRect(ctx, x, y + 12, 4, 58, 2); ctx.fill();
+    text(ctx, t.label, x + 20, y + 30, { font: `600 12px ${THAI}`, color: '#94a3b8', maxWidth: 210 });
+    text(ctx, t.val, x + 20, y + 64, { font: `800 28px ${SANS}`, color: t.color, shadow: `${t.color}55` });
   });
 
   // LD5 hall
-  const hx = 600, hy = 100, hw = 540, hh = 372;
-  drawPanel(ctx, hx, hy, hw, hh, { titleBar: 52 });
+  const hx = 600, hy = 100, hw = 540, hh = 340;
+  drawPanel(ctx, hx, hy, hw, hh, { titleBar: 48 });
   const hallTitle = ld.length ? 'ทำเนียบมอนสเตอร์แสง-มืด 5★' : 'มอนสเตอร์เด่นในกล่อง';
-  text(ctx, `✦ ${hallTitle}`, hx + 22, hy + 33, { font: `700 19px ${THAI}`, color: '#f5d78a' });
+  text(ctx, `✦ ${hallTitle}`, hx + 22, hy + 31, { font: `700 18px ${THAI}`, color: '#f5d78a' });
   const hallCount = ld.length ? topLd5.length : heroes.length;
-  pill(ctx, hx + hw - 22 - 84, hy + 14, `${hallCount} ตัว`, { color: '#f5d78a', padX: 14 });
+  pill(ctx, hx + hw - 22 - 84, hy + 12, `${hallCount} ตัว`, { color: '#f5d78a', padX: 14 });
   const cells = ld.length ? ld : heroes.slice(0, 8);
-  const cw = 128, ch = 148, gx = (hw - cw * 4) / 5;
+  const cw = 122, ch = 134, gx = (hw - cw * 4) / 5;
   for (let i = 0; i < Math.min(cells.length, 8); i++) {
     const m = cells[i];
-    const cx = hx + gx + (i % 4) * (cw + gx), cy = hy + 66 + Math.floor(i / 4) * (ch + 10);
+    const cx = hx + gx + (i % 4) * (cw + gx), cy = hy + 60 + Math.floor(i / 4) * (ch + 8);
     drawPanel(ctx, cx, cy, cw, ch, { fill: 'rgba(255,255,255,0.03)', stroke: `${ELEMENT_COLOR[m.element] || '#e9c46a'}40`, radius: 12 });
-    await drawPortrait(ctx, { url: m.avatarUrl, cx: cx + cw / 2, cy: cy + 50, r: 38, element: m.element, label: m.name });
-    text(ctx, m.name, cx + cw / 2, cy + 108, { font: `700 13px ${SANS}`, color: '#ffffff', align: 'center', maxWidth: cw - 14 });
-    drawStars(ctx, cx + 12, cy + 128, 5, 4.5, '#fbbf24', 2);
-    if (m.spd) text(ctx, `SPD ${m.spd}`, cx + cw - 10, cy + 132, { font: `700 10px ${SANS}`, color: '#7dd3fc', align: 'right' });
+    await drawPortrait(ctx, { url: m.avatarUrl, cx: cx + cw / 2, cy: cy + 46, r: 34, element: m.element, label: m.name });
+    text(ctx, m.name, cx + cw / 2, cy + 100, { font: `700 12px ${SANS}`, color: '#ffffff', align: 'center', maxWidth: cw - 12 });
+    drawStars(ctx, cx + 10, cy + 118, 5, 4, '#fbbf24', 2);
+    if (m.spd) text(ctx, `SPD ${m.spd}`, cx + cw - 9, cy + 122, { font: `700 10px ${SANS}`, color: '#7dd3fc', align: 'right' });
   }
-  if (topLd5.length > 8) text(ctx, `+ อีก ${topLd5.length - 8} ตัว`, hx + hw - 22, hy + hh - 14, { font: `600 12px ${THAI}`, color: '#94a3b8', align: 'right' });
+  if (topLd5.length > 8) text(ctx, `+ อีก ${topLd5.length - 8} ตัว`, hx + hw - 22, hy + hh - 12, { font: `600 12px ${THAI}`, color: '#94a3b8', align: 'right' });
   if (!cells.length) text(ctx, 'ยังไม่มีมอนสเตอร์แสง-มืด 5 ดาวแท้ในไอดีนี้ — สู้ต่อไป!', hx + hw / 2, hy + hh / 2 + 10, { font: `500 16px ${THAI}`, color: '#94a3b8', align: 'center' });
 
-  // fastest monsters per speed set: Swift / Violent / Despair, top 3 each
-  const sx = 60, sy = 490, sw = W - 120, sh = 150;
-  drawPanel(ctx, sx, sy, sw, sh);
-  text(ctx, '⚡ ตัวเร็วสุดของแต่ละเซ็ต (SPD รวมรูน)', sx + 22, sy + 28, { font: `700 15px ${THAI}`, color: '#7dd3fc' });
-  const groups = [
-    { set: 'Swift', thai: 'สวิฟต์', colour: '#7dd3fc' },
-    { set: 'Violent', thai: 'ไวโอเลนต์', colour: '#f472b6' },
-    { set: 'Despair', thai: 'สตัน', colour: '#c084fc' },
-  ];
-  const gw = (sw - 44) / 3;
-  const rankColour = ['#fbbf24', '#cbd5e1', '#d97706'];
-  for (let g = 0; g < groups.length; g++) {
-    const grp = groups[g];
-    const gx0 = sx + 22 + g * gw;
-    const members = heroes.filter((m) => (m.sets || []).includes(grp.set)).sort((a, b) => b.spd - a.spd).slice(0, 3);
-    const icon = await loadImage(`${CDN}rune_icons/${grp.set.toLowerCase()}.png`);
-    if (icon) ctx.drawImage(icon, gx0, sy + 40, 22, 22);
-    text(ctx, `${grp.set} • ${grp.thai}`, gx0 + (icon ? 28 : 0), sy + 56, { font: `700 13px ${THAI}`, color: grp.colour });
-    if (g > 0) { ctx.strokeStyle = 'rgba(233, 196, 106, 0.18)'; ctx.beginPath(); ctx.moveTo(gx0 - 10, sy + 42); ctx.lineTo(gx0 - 10, sy + sh - 12); ctx.stroke(); }
-    if (!members.length) { text(ctx, 'ยังไม่มีตัวที่ใส่เซ็ตนี้', gx0, sy + 100, { font: `500 12px ${THAI}`, color: '#64748b' }); continue; }
-    for (let i = 0; i < members.length; i++) {
-      const m = members[i];
-      const ry = sy + 80 + i * 24;
-      ctx.fillStyle = rankColour[i];
-      ctx.beginPath(); ctx.arc(gx0 + 9, ry, 8, 0, Math.PI * 2); ctx.fill();
-      text(ctx, String(i + 1), gx0 + 9, ry + 1, { font: `800 10px ${SANS}`, color: '#0b0f1f', align: 'center', baseline: 'middle' });
-      await drawPortrait(ctx, { url: m.avatarUrl, cx: gx0 + 36, cy: ry, r: 11, element: m.element, label: m.name, badge: false });
-      const extra = (m.sets || []).filter((x) => x !== grp.set)[0];
-      text(ctx, m.name, gx0 + 54, ry + 4, { font: `700 12px ${SANS}`, color: '#ffffff', maxWidth: gw - 150 });
-      if (extra) {
-        ctx.save(); ctx.font = `700 12px ${SANS}`; const nw = Math.min(ctx.measureText(m.name).width, gw - 150); ctx.restore();
-        text(ctx, `+${extra}`, gx0 + 54 + nw + 6, ry + 4, { font: `500 10px ${SANS}`, color: '#94a3b8', maxWidth: 60 });
-      }
-      text(ctx, `SPD ${m.spd}`, gx0 + gw - 22, ry + 4, { font: `800 12px ${SANS}`, color: grp.colour, align: 'right' });
+  // fastest runes: the SPD substat as rolled, grind shown separately, wearer underneath
+  const sx = 60, sy = 446, sw = W - 120, sh = 200;
+  drawPanel(ctx, sx, sy, sw, sh, { titleBar: 40 });
+  text(ctx, '⚡ รูนสปีดสูงสุดในกล่อง', sx + 22, sy + 27, { font: `700 16px ${THAI}`, color: '#7dd3fc' });
+  text(ctx, 'ค่าซับ SPD ตามที่ออก · ขัดแสดงแยก ไม่บวกรวม · ไม่รวมสปีดตัวมอน', sx + sw - 22, sy + 27, { font: `500 12px ${THAI}`, color: '#94a3b8', align: 'right' });
+  const runes = speedRunes.slice(0, 6);
+  if (!runes.length) {
+    text(ctx, 'ยังไม่มีข้อมูลรูน — นำเข้าไฟล์ SWEX ใหม่เพื่อให้การ์ดแสดงรูนสปีด', sx + sw / 2, sy + 112, { font: `500 14px ${THAI}`, color: '#64748b', align: 'center' });
+  }
+  const rcGap = 10, rcW = (sw - 44 - rcGap * 5) / 6, rcY = sy + 48, rcH = sh - 60;
+  const rankColour = ['#fbbf24', '#e2e8f0', '#d97706'];
+  for (let i = 0; i < runes.length; i++) {
+    const r = runes[i];
+    const x = sx + 22 + i * (rcW + rcGap);
+    const qColour = RUNE_QUALITY_COLOUR[String(r.quality || '').toLowerCase()] || '#94a3b8';
+    drawPanel(ctx, x, rcY, rcW, rcH, { fill: i === 0 ? 'rgba(251, 191, 36, 0.06)' : 'rgba(255,255,255,0.03)', stroke: i === 0 ? 'rgba(251, 191, 36, 0.45)' : `${qColour}40`, radius: 12 });
+    // rank
+    ctx.fillStyle = rankColour[i] || 'rgba(148, 163, 184, 0.5)';
+    ctx.beginPath(); ctx.arc(x + 14, rcY + 14, 9, 0, Math.PI * 2); ctx.fill();
+    text(ctx, String(i + 1), x + 14, rcY + 15, { font: `800 10px ${SANS}`, color: '#0b0f1f', align: 'center', baseline: 'middle' });
+    // icon on the left, the rolled SPD sub big on the right
+    await drawRuneIcon(ctx, { x: x + 12, y: rcY + 26, size: 48, quality: r.quality, slot: r.slot, set: r.set, ancient: r.ancient });
+    text(ctx, `+${r.spdSub}`, x + rcW - 12, rcY + 62, { font: `800 32px ${SANS}`, color: i === 0 ? '#fde68a' : '#ffffff', align: 'right', shadow: i === 0 ? 'rgba(251, 191, 36, 0.5)' : undefined });
+    text(ctx, 'SPD ซับ', x + rcW - 12, rcY + 77, { font: `600 9px ${THAI}`, color: '#7dd3fc', align: 'right', spacing: 0.5 });
+    // rune identity, then grind / main SPD kept apart from the rolled value
+    text(ctx, `${r.set} · ช่อง ${r.slot} · ${r.stars}★ +${r.level}${r.ancient ? ' · Ancient' : ''}`, x + 12, rcY + 97, { font: `600 11px ${THAI}`, color: '#e2e8f0', maxWidth: rcW - 24 });
+    const extras = [];
+    if (r.spdGrind > 0) extras.push(`ขัด +${r.spdGrind}`);
+    if (r.mainSpd > 0) extras.push(`เมน SPD ${r.mainSpd}`);
+    if (r.innateSpd > 0) extras.push(`ติดตัว +${r.innateSpd}`);
+    text(ctx, extras.length ? extras.join(' · ') : 'ยังไม่ขัด', x + 12, rcY + 112, { font: `500 10px ${THAI}`, color: extras.length ? '#a7f3d0' : '#64748b', maxWidth: rcW - 24 });
+    // wearer
+    if (r.monster) {
+      await drawPortrait(ctx, { url: r.monster.avatarUrl, cx: x + 21, cy: rcY + rcH - 12, r: 8, element: r.monster.element, label: r.monster.name, badge: false });
+      text(ctx, r.monster.name, x + 34, rcY + rcH - 8, { font: `700 10px ${SANS}`, color: '#ffffff', maxWidth: rcW - 46 });
+    } else {
+      text(ctx, 'ยังไม่ได้ใส่ตัวไหน', x + 12, rcY + rcH - 8, { font: `500 10px ${THAI}`, color: '#64748b' });
     }
   }
 
-  text(ctx, 'สร้างจากกล่องจริงของผู้เล่นด้วย SWM (Summoners War Master)', W / 2, H - 30, { font: `500 11px ${THAI}`, color: 'rgba(148, 163, 184, 0.7)', align: 'center' });
+  text(ctx, 'สร้างจากกล่องจริงของผู้เล่นด้วย SWM (Summoners War Master)', W / 2, H - 22, { font: `500 11px ${THAI}`, color: 'rgba(148, 163, 184, 0.7)', align: 'center' });
   const filename = `SWM_Passport_${name.replace(/[^a-zA-Z0-9]/g, '_')}.png`;
   const title = `พาสปอร์ตผู้เรียกอสูร: ${wizard?.name || 'Summoner'}`;
   return handleCardExport({ canvas, filename, title, preview });

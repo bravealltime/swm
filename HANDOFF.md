@@ -48,6 +48,7 @@ src/
   App.jsx            เชลล์แอป: lazy VIEWS map, router, Ctrl+K, แบนเนอร์ประกาศ, autoStart AegisLink
   router.js          path = /<viewId>, query q/tab/player/monster, VIEW_TITLES; /monster/<slug> = สารานุกรมเปิดตัวนั้น (monsterSlug ใช้ร่วมกับตัว prerender)
   views/*View.jsx    หน้าละไฟล์ (Dashboard, MyBox, GuildWarRoom, Admin, Leaderboards, PluginCompanion, Quiz…)
+  views/mybox/       แท็บหนักของกล่องของฉันแยกไฟล์และโหลดเมื่อเปิด (lazy): PokedexCollection (ทำเนียบ LD5 — ระดับ/อัตราชนะดึงจาก swrtTierList ไม่ใช่ตัวเลขแต่ง), ArtifactSearchEngine, RuneEfficiencyAndQuads, SiegeDefenseBuilder, RuneCard; shared.js = monsterOf/ELEMENT_*/card/agoLabel
                      QuizView = "ทายมอนจากสกิล" เกมรายวัน: seed จากวันที่ (เวลาไทย) ใน utils/quiz.js ทุกคนได้โจทย์เดียวกัน, สระ = มอนเมต้า Guardian ที่ถูกเลือก ≥10 ครั้ง, ผล/streak เก็บ localStorage `swm:quiz:*`
   components/        AiChatPanel, AiAnswer, AiAdvisorPanel, MonsterDetailModal, RuneBoard, RuneIcon, Sidebar, Navbar…
   contexts/AuthContext.jsx   Supabase auth + isAdmin + adminMode
@@ -58,11 +59,11 @@ src/
     storageService.js IndexedDB (กล่อง, สถานะกิลด์วอร์) + BroadcastChannel
     supabaseClient.js lazy SDK (getSupabase() คืน Promise)
   utils/
-    swexImport.js    parseSwexExport() ไฟล์/แพ็กเก็ต SWEX → box (BOX_VERSION 5), RUNE_SETS, สูตร SPD/efficiency
+    swexImport.js    parseSwexExport() ไฟล์/แพ็กเก็ต SWEX → box (BOX_VERSION 5), RUNE_SETS, สูตร SPD/efficiency; boxUnits()/boxRunes() อ่านกล่องทุกรูปแบบ; topSpeedRunes() = รูนเรียงตามซับ SPD ตามที่ออก (ขัด/เมน/ติดตัวแยกไว้ ไม่บวก) ให้การ์ดพาสปอร์ต; isNonSummonableLd5() จับ LD5 ฟิวชั่น/แจกฟรีด้วย id และชื่อแบบตรงตัวเท่านั้น
     boxStorage.js    loadBox/saveBox/clearBox (localStorage + IndexedDB) — แยกไว้ให้เชลล์ไม่ต้องโหลดแคตตาล็อก
     siegeLive.js     แกะแพ็กเก็ตกิลด์/Siege → สถานะห้องบัญชาการ
     guildRankings.js แกะแพ็กเก็ตอันดับกิลด์ + serverFromCountry()
-    cardExporter.js  การ์ดแชร์ PNG (พาสปอร์ต, ตู้ LD5, มอนสเตอร์) วาดด้วย Canvas
+    cardExporter.js  การ์ดแชร์ PNG (พาสปอร์ต, ตู้ LD5, มอนสเตอร์) วาดด้วย Canvas — พาสปอร์ตแถวล่างคือรูนสปีดสูงสุด 6 ใบ (ค่าซับตามที่ออก ขัดแสดงแยก) รูปตัวแทนใช้ wizard.repMonster ก่อน
     boxSummary.js    สรุปกล่องแบบย่อส่ง AI (ไม่มี id บัญชี)
     mdcMatch.js      จับทีมตั้งรับในห้องบัญชาการ (ชื่อ 3 ตัว) กับฐาน 3MDC: ตรงเป๊ะ → ใกล้เคียง 2/3 → ไม่มี; จัดอันดับสูตรแก้ที่กล่องมีครบขึ้นก่อน
     metaTeams.js     จับ duo/trio จริงจาก swrtGuardianMeta กับกล่องผู้ใช้ → ทีมที่เล่นได้ / ขาด 1 ตัว / ตัวที่ปลดล็อกทีมมากสุด

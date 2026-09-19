@@ -1,7 +1,7 @@
 // SWEX profile export → compact box (src/utils/swexImport.js). The fixture mirrors the fields
 // the parser reads from a real export; ids are real com2us ids so the catalog lookup works.
 import { describe, it, expect } from 'vitest';
-import { parseSwexExport, baseAwakenedId, isNonSummonableLd5, ownedIdSet, getMonsterCatalogInfo, RUNE_SETS } from '../src/utils/swexImport.js';
+import { parseSwexExport, baseAwakenedId, isNonSummonableLd5, ownedIdSet, getMonsterCatalogInfo, RUNE_SETS, topSpeedRunes } from '../src/utils/swexImport.js';
 import { computeUnitSkillStatus, getMonsterMaxSkills } from '../src/data/monsterSkills.js';
 
 const SPD = 8;
@@ -155,5 +155,43 @@ describe('ids', () => {
   it('knows the Swift and Will set ids used in the fixture', () => {
     expect(RUNE_SETS[3]).toBe('Swift');
     expect(RUNE_SETS[15]).toBe('Will');
+  });
+});
+
+describe('topSpeedRunes (passport card)', () => {
+  // A dump whose runes differ in rolled SPD, grind and main stat, so the ordering rules are visible
+  const dump = {
+    wizard_info: { wizard_name: 'Speedy' },
+    unit_list: [
+      {
+        unit_id: 11, unit_master_id: 13413, class: 6, unit_level: 40, attribute: 3, spd: 103, con: 6000, atk: 900, def: 500,
+        runes: [
+          rune(1, 4, 3, { subs: [[SPD, 28, 0, 4]] }),                 // rolled 28, grind +4 → still ranks by 28
+          rune(2, 2, 3, { pri: [SPD, 42], subs: [[SPD, 12, 0, 0]] }), // slot-2 SPD main 42, rolled 12
+          rune(3, 6, 15, { subs: [[SPD, 30, 0, 0]] }),                // rolled 30, no grind
+        ],
+      },
+    ],
+    runes: [
+      rune(4, 1, 13, { prefix: [SPD, 5], subs: [[SPD, 29, 0, 1], [9, 8, 0, 0]] }), // in storage: innate 5, rolled 29, grind 1
+      rune(5, 3, 13, { subs: [[9, 20, 0, 0]] }),                                    // no SPD sub → excluded
+    ],
+  };
+
+  it('ranks by the SPD substat as rolled and keeps grind / main / innate apart', () => {
+    const top = topSpeedRunes(dump, 8);
+    expect(top.map((r) => r.id)).toEqual([3, 4, 1, 2]);
+    expect(top[0]).toMatchObject({ set: 'Will', slot: 6, spdSub: 30, spdGrind: 0, mainSpd: 0, innateSpd: 0 });
+    expect(top[0].monster?.name).toMatch(/Lushen/i);
+    expect(top[1]).toMatchObject({ spdSub: 29, spdGrind: 1, innateSpd: 5, monster: null }); // unequipped, +4 grind never summed
+    expect(top[2]).toMatchObject({ spdSub: 28, spdGrind: 4 });
+    expect(top[3]).toMatchObject({ spdSub: 12, mainSpd: 42 }); // a SPD main does not make a "fast rune"
+  });
+
+  it('is limited, deduplicated by rune id and works on the stored compact box too', () => {
+    expect(topSpeedRunes(dump, 2).map((r) => r.id)).toEqual([3, 4]);
+    const compact = parseSwexExport(dump);
+    expect(topSpeedRunes(compact, 8).map((r) => r.spdSub)).toEqual([30, 29, 28, 12]);
+    expect(topSpeedRunes(null)).toEqual([]);
   });
 });

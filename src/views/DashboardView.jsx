@@ -7,29 +7,19 @@ import {
   Copy, 
   Check, 
   ArrowRight, 
-  Flame, 
   Zap, 
   Sparkles, 
-  TrendingUp, 
-  Compass, 
-  BookOpen, 
-  Calculator, 
   Swords, 
   Award,
   ChevronRight,
-  ExternalLink,
-  Users,
-  Gauge,
   Cpu,
   Star,
   CheckCircle2,
   Sliders,
-  Crosshair,
   Package,
   Layers,
   UserCheck,
   Upload,
-  RefreshCw,
   Share2,
   Camera,
 } from 'lucide-react';
@@ -39,8 +29,20 @@ import { useGuildRankings } from '../hooks/useGuildRankings';
 import { SERVERS } from '../utils/guildRankings';
 import { getR2AvatarUrl } from '../services/r2Service';
 import { useLocalStorage } from '../hooks/useLocalStorage';
-import { loadBox, saveBox, parseSwexExport, getArtifactsFromBox, loadDemoBox, getMonsterCatalogInfo, isNonSummonableLd5 } from '../utils/swexImport';
-import { loadUserBoxFromDB, saveUserBoxToDB } from '../services/storageService';
+import { loadBox, saveBox, parseSwexExport, getArtifactsFromBox, loadDemoBox, getMonsterCatalogInfo, isNonSummonableLd5, boxUnits, boxRunes, topSpeedRunes } from '../utils/swexImport';
+import { MONSTERS } from '../data/monsters';
+
+// How many nat5 forms the encyclopedia knows — the denominator of the collection bar
+const NAT5_TOTAL = MONSTERS.filter((m) => m.stars === 5).length;
+
+// A summonable light/dark nat5 from boxUnits(): natural 5★, not a fusion / giveaway, not a homunculus
+const isPureLd5 = (u) => {
+  const ele = (u.element || '').toLowerCase();
+  const isLd = ele === 'light' || ele === 'dark';
+  const isNat5 = u.naturalStars === 5 && !u.info?.name?.includes('(Homunculus)');
+  return isNat5 && isLd && !isNonSummonableLd5(u) && (!u.info || !isNonSummonableLd5(u.info));
+};
+import { loadUserBoxFromDB } from '../services/storageService';
 import { exportProfileCard } from '../utils/cardExporter';
 import AiChatPanel from '../components/AiChatPanel';
 import { summarizeBoxForAi, keyMonstersForAi } from '../utils/boxSummary';
@@ -156,7 +158,7 @@ export default function DashboardView({ onNavigate }) {
   const [aiQuestion, setAiQuestion] = useState('');
   const coachContext = (question) => {
     const ctx = { scope: 'general' };
-    if (userBox?.units?.length) {
+    if (boxUnitList.length) {
       ctx.box = summarizeBoxForAi(userBox, getMonsterCatalogInfo);
       ctx.monsters = keyMonstersForAi(userBox, getMonsterCatalogInfo);
     }
@@ -215,65 +217,57 @@ export default function DashboardView({ onNavigate }) {
     }
   };
 
+  // One adapter pass per box change; every stat below reads these, not userBox.units
+  const boxUnitList = useMemo(() => boxUnits(userBox), [userBox]);
+  const boxRuneList = useMemo(() => boxRunes(userBox), [userBox]);
+
   const userProfileStats = useMemo(() => {
     if (!userBox) return null;
-    const units = userBox.units || [];
+    const units = boxUnitList;
     const totalUnits = units.length;
     const sixStarUnits = units.filter((u) => u.stars === 6).length;
     const fastestUnit = [...units].sort((a, b) => b.spd - a.spd)[0] || null;
-    const fastestName = fastestUnit ? (fastestUnit.name || getMonsterCatalogInfo(fastestUnit.masterId)?.name || '') : '';
+    const fastestName = fastestUnit?.name || '';
     const artifacts = getArtifactsFromBox(userBox);
 
-    // Calculate Nat 5 & LD5 counts (แยกตัวเปิดได้เอง vs ฟิวชั่น/แจกฟรี)
+    // Nat 5 & LD5 counts (แยกตัวเปิดได้เอง vs ฟิวชั่น/แจกฟรี)
     let nat5Count = 0;
     let ld5Count = 0;
     let pureLd5Count = 0;
     let freeLd5Count = 0;
-    units.forEach((u) => {
-      const info = getMonsterCatalogInfo(u.masterId);
-      const ele = (u.element || info?.element || '').toLowerCase();
+    const ld5List = [];
+    let sumEff = 0;
+    let countEff = 0;
+    for (const u of units) {
+      const ele = (u.element || '').toLowerCase();
       const isLd = ele === 'light' || ele === 'dark';
-      const isNat5 = (info?.stars === 5 || info?.natural_stars === 5 || u.naturalStars === 5) && !info?.name?.includes('(Homunculus)');
+      const isNat5 = u.naturalStars === 5 && !u.info?.name?.includes('(Homunculus)');
       if (isNat5) {
         nat5Count++;
         if (isLd) {
           ld5Count++;
-          if (isNonSummonableLd5(u) || (info && isNonSummonableLd5(info))) {
-            freeLd5Count++;
-          } else {
+          if (isPureLd5(u)) {
             pureLd5Count++;
+            ld5List.push({ masterId: u.masterId, name: u.name || 'LD 5★', thaiName: u.thaiName, element: ele, spd: u.spd, sets: u.sets, stars: u.stars, avatarUrl: u.avatarUrl });
+          } else {
+            freeLd5Count++;
           }
         }
       }
-    });
-
-    let sumEff = 0;
-    let countEff = 0;
-    const ld5List = [];
-    units.forEach((u) => {
-      const info = getMonsterCatalogInfo(u.masterId);
-      const ele = (u.element || info?.element || '').toLowerCase();
-      const isLd = ele === 'light' || ele === 'dark';
-      const isNat5 = (info?.stars === 5 || info?.natural_stars === 5 || u.naturalStars === 5) && !info?.name?.includes('(Homunculus)');
-      if (isNat5 && isLd && !isNonSummonableLd5(u) && (!info || !isNonSummonableLd5(info))) {
-        ld5List.push({ name: u.name || info?.name || 'LD 5★', element: ele, spd: u.spd, sets: u.sets, avatarUrl: u.avatarUrl || info?.avatarUrl || info?.imageUrl || '' });
-      }
-      if (u.runeEff) {
-        sumEff += Number(u.runeEff);
-        countEff++;
-      }
-    });
-    const avgRuneEff = countEff > 0 ? (sumEff / countEff).toFixed(1) : '85.4';
+      if (u.runeEff) { sumEff += u.runeEff; countEff++; }
+    }
+    // No runes in the box → no average; the card and tile show "-" rather than a made-up figure
+    const avgRuneEff = countEff > 0 ? (sumEff / countEff).toFixed(1) : null;
     const topFastest = [...units].sort((a, b) => b.spd - a.spd).slice(0, 4);
     // portraits for the share card: fastest monsters first, one entry per monster name
     const seenNames = new Set();
-    const cardHeroes = [...units].sort((a, b) => b.spd - a.spd).map((u) => {
-      const info = getMonsterCatalogInfo(u.masterId);
-      return { name: u.name || info?.name || '', element: (u.element || info?.element || '').toLowerCase(), spd: u.spd, sets: u.sets || [], avatarUrl: u.avatarUrl || info?.avatarUrl || info?.imageUrl || '' };
-    }).filter((m) => m.name && !seenNames.has(m.name) && seenNames.add(m.name));
+    const cardHeroes = [...units].sort((a, b) => b.spd - a.spd)
+      .map((u) => ({ name: u.name, element: (u.element || '').toLowerCase(), spd: u.spd, sets: u.sets || [], avatarUrl: u.avatarUrl }))
+      .filter((m) => m.name && !seenNames.has(m.name) && seenNames.add(m.name));
 
-    const runes = userBox.runes || [];
-    const quadSpdCount = runes.filter(r => (r.subs || []).some(s => s[0] === 8 && s[1] >= 20)).length;
+    // SPD substat as rolled (grinds not added) — the same number the passport shows per rune
+    const quadSpdCount = boxRuneList.filter((r) => r.subs.some((sub) => sub.stat === 'SPD' && sub.value >= 20)).length;
+    const speedRunes = topSpeedRunes(userBox, 8);
 
     // Select active profile avatar:
     // 1. User's manually chosen avatar from localStorage
@@ -281,28 +275,14 @@ export default function DashboardView({ onNavigate }) {
     // 3. User's #1 LD 5★ (pureLd5)
     // 4. User's fastest monster (fastestUnit)
     // 5. First unit in box
+    const asAvatar = (u) => (u ? { masterId: u.masterId, name: u.name, thaiName: u.thaiName, avatarUrl: u.avatarUrl, element: u.element, spd: u.spd, stars: u.stars || 6 } : null);
     const activeAvatar = customAvatar
       || (userBox.wizard?.repMonster?.name ? userBox.wizard.repMonster : null)
       || (ld5List.length > 0 ? ld5List[0] : null)
-      || (fastestUnit ? {
-          masterId: fastestUnit.masterId,
-          name: fastestUnit.name,
-          thaiName: fastestUnit.thaiName,
-          avatarUrl: fastestUnit.avatarUrl,
-          element: fastestUnit.element,
-          spd: fastestUnit.spd,
-          stars: fastestUnit.stars || 6,
-        } : null)
-      || (units[0] ? {
-          masterId: units[0].masterId,
-          name: units[0].name,
-          thaiName: units[0].thaiName,
-          avatarUrl: units[0].avatarUrl,
-          element: units[0].element,
-          stars: units[0].stars || 6,
-        } : null);
+      || asAvatar(fastestUnit)
+      || asAvatar(units[0]);
 
-    const nat5Pct = ((nat5Count / 455) * 100).toFixed(1);
+    const nat5Pct = NAT5_TOTAL ? ((nat5Count / NAT5_TOTAL) * 100).toFixed(1) : '0.0';
 
     return {
       name: userBox.wizard?.name || userBox.wizard?.wizard_name || 'ผู้เรียกมอนสเตอร์ของคุณ',
@@ -318,6 +298,7 @@ export default function DashboardView({ onNavigate }) {
       totalArtifacts: artifacts.length,
       topFastest,
       nat5Count,
+      nat5Total: NAT5_TOTAL,
       nat5Pct,
       ld5Count,
       pureLd5Count,
@@ -325,23 +306,18 @@ export default function DashboardView({ onNavigate }) {
       freeLd5Count,
       ld5List,
       quadSpdCount,
+      speedRunes,
       isDemo: !!userBox.isDemo,
     };
-  }, [userBox, customAvatar]);
+  }, [userBox, boxUnitList, boxRuneList, customAvatar]);
 
   const availableAvatarUnits = useMemo(() => {
-    if (!userBox?.units) return [];
+    if (!boxUnitList.length) return [];
     const q = avatarSearch.toLowerCase().trim();
-    let list = userBox.units;
+    let list = boxUnitList;
 
     if (avatarTab === 'ld5') {
-      list = list.filter((u) => {
-        const info = getMonsterCatalogInfo(u.masterId);
-        const ele = (u.element || info?.element || '').toLowerCase();
-        const isLd = ele === 'light' || ele === 'dark';
-        const isNat5 = (info?.stars === 5 || info?.natural_stars === 5 || u.naturalStars === 5) && !info?.name?.includes('(Homunculus)');
-        return isNat5 && isLd && !isNonSummonableLd5(u) && (!info || !isNonSummonableLd5(info));
-      });
+      list = list.filter(isPureLd5);
     } else if (avatarTab === 'fast') {
       list = [...list].sort((a, b) => b.spd - a.spd).slice(0, 30);
     } else if (avatarTab === 'six_star') {
@@ -362,7 +338,7 @@ export default function DashboardView({ onNavigate }) {
       seen.add(key);
       return true;
     }).slice(0, 72);
-  }, [userBox, avatarSearch, avatarTab]);
+  }, [boxUnitList, avatarSearch, avatarTab]);
 
   return (
     <div className="space-y-8 max-w-[1780px] 2xl:max-w-[1880px] mx-auto pb-16 animate-in fade-in duration-300">
@@ -613,6 +589,7 @@ export default function DashboardView({ onNavigate }) {
                       },
                       topLd5: userProfileStats.ld5List || [],
                       heroes: [userProfileStats.activeAvatar, ...(userProfileStats.cardHeroes || [])].filter(Boolean),
+                      speedRunes: userProfileStats.speedRunes || [],
                     });
                   }}
                   className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 hover:from-cyan-400 hover:via-blue-500 hover:to-indigo-500 text-white text-xs font-black shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all cursor-pointer"
@@ -648,7 +625,7 @@ export default function DashboardView({ onNavigate }) {
                     <span className="text-[10px] font-black text-amber-400">{userProfileStats.nat5Pct}%</span>
                   </div>
                   <div className="text-xl font-black text-white mt-1">
-                    {userProfileStats.nat5Count} <span className="text-xs text-slate-400 font-normal">/ 455</span>
+                    {userProfileStats.nat5Count} <span className="text-xs text-slate-400 font-normal">/ {userProfileStats.nat5Total}</span>
                   </div>
                   {/* Progress bar */}
                   <div className="w-full h-1.5 bg-black/40 rounded-full overflow-hidden mt-2">
@@ -716,7 +693,7 @@ export default function DashboardView({ onNavigate }) {
                     <Sliders className="w-3 h-3 text-purple-400" /> คุณภาพรูนเฉลี่ย
                   </div>
                   <div className="text-xl font-black text-purple-200 mt-1">
-                    {userProfileStats.avgRuneEff}%
+                    {userProfileStats.avgRuneEff ? `${userProfileStats.avgRuneEff}%` : '-'}
                   </div>
                 </div>
                 <div className="text-[10px] text-purple-300 font-semibold mt-2.5 pt-2 border-t border-purple-500/15 flex items-center justify-between">
@@ -1384,7 +1361,7 @@ export default function DashboardView({ onNavigate }) {
                     avatarTab === 'all' ? 'bg-cyan-500 text-black font-bold' : 'bg-slate-800 text-slate-400 hover:text-white'
                   }`}
                 >
-                  ทั้งหมด ({userBox?.units?.length || 0})
+                  ทั้งหมด ({boxUnitList.length})
                 </button>
                 <button
                   type="button"

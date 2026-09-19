@@ -253,8 +253,8 @@ export function isNonSummonableLd5(unitOrMonster) {
   const thaiName = String(unitOrMonster.thaiName || '').toLowerCase().trim();
   if (NON_SUMMONABLE_LD5_NAMES.has(name) || NON_SUMMONABLE_LD5_NAMES.has(thaiName)) return true;
   if ((name.includes('homunculus') || thaiName.includes('โฮมุนครุส')) && (unitOrMonster.element === 'light' || unitOrMonster.element === 'dark')) return true;
-  if (name.includes('veromos') || name.includes('jeanne') || name.includes('elsharion') || name.includes('eirgar') || name.includes('altair') || name.includes('altaïr') || name.includes('frederic') || name.includes('sukuna') || name.includes('gapsoo') || name.includes('hayato')) return true;
-  if (thaiName.includes('เวโรโมส') || thaiName.includes('ฌาน') || thaiName.includes('เอลชาริออน') || thaiName.includes('แอร์การ์') || thaiName.includes('อัลแทร์') || thaiName.includes('เฟรเดอริก') || thaiName.includes('สุคุนะ') || thaiName.includes('กัปซู') || thaiName.includes('กับซู') || thaiName.includes('ฮายาโตะ')) return true;
+  // Exact names only (ids above are the primary key) — a substring match would hide a future monster
+  // whose name merely contains one of these, e.g. anything named "…jeanne…".
   return false;
 }
 
@@ -403,6 +403,8 @@ export function boxUnits(box) {
         avatarUrl: u.avatarUrl || info?.avatarUrl || info?.imageUrl || '',
         runes: Number(u.runes) || 0,
         sets: Array.isArray(u.sets) ? u.sets : [],
+        runeEff: Number(u.runeEff) || 0,
+        naturalStars: Number(u.naturalStars) || info?.stars || 0,
         skills: u.skills !== undefined ? u.skills : [],
         info,
       };
@@ -429,6 +431,8 @@ export function boxUnits(box) {
         avatarUrl: info?.avatarUrl || info?.imageUrl || '',
         runes: r.runes.length,
         sets: r.sets.slice(0, 3),
+        runeEff: Number(r.avgEff) || 0,
+        naturalStars: info?.stars || 0,
         skills: Array.isArray(u.skills) ? u.skills.map((s) => Array.isArray(s) ? [Number(s[0]), Number(s[1])] : [Number(s?.id || s?.[0] || 0), Number(s?.level || s?.[1] || 1)]) : [],
         info,
       };
@@ -474,6 +478,7 @@ export function boxRunes(box) {
       mainStat: STAT_NAMES[main[0]] || '',
       mainValue: Number(main[1]) || 0,
       innateStat: innate ? STAT_NAMES[innate[0]] || '' : null,
+      innateValue: innate ? Number(innate[1]) || 0 : 0,
       subs: subs.map((s) => ({ stat: STAT_NAMES[s[0]] || '', value: Number(s[1]) || 0, grind: Number(s[2]) || 0, enchanted: Boolean(s[3]) })),
       spd,
       subSpd,
@@ -486,6 +491,40 @@ export function boxRunes(box) {
 }
 
 /** Set of awakened ids the player can field (dedupes duplicates / 2A / unawakened). */
+/**
+ * The box's fastest runes by their own SPD substat — the number as it rolled, before grinds, main
+ * stat or the wearer are added — for the passport card. Grinds and a slot-2 SPD main are reported
+ * separately so the card can show them without summing anything.
+ */
+export function topSpeedRunes(box, limit = 8) {
+  const seen = new Set();
+  return boxRunes(box)
+    .map((r) => {
+      const spdSubs = r.subs.filter((s) => s.stat === 'SPD');
+      const rolled = spdSubs.reduce((sum, s) => sum + s.value, 0);
+      const grind = spdSubs.reduce((sum, s) => sum + s.grind, 0);
+      const wearer = r.unit ? getMonsterCatalogInfo(r.unit) : null;
+      return {
+        id: r.id,
+        set: r.set,
+        slot: r.slot,
+        stars: r.stars,
+        level: r.level,
+        ancient: r.ancient,
+        quality: r.quality,
+        originalQuality: r.originalQualityName,
+        spdSub: rolled,
+        spdGrind: grind,
+        mainSpd: r.mainStat === 'SPD' ? r.mainValue : 0,
+        innateSpd: r.innateStat === 'SPD' ? r.innateValue : 0,
+        monster: wearer ? { name: wearer.name, thaiName: wearer.thaiName, element: wearer.element, avatarUrl: wearer.avatarUrl || wearer.imageUrl || '' } : null,
+      };
+    })
+    .filter((r) => r.spdSub > 0 && !seen.has(r.id) && seen.add(r.id))
+    .sort((a, b) => b.spdSub - a.spdSub || b.spdGrind - a.spdGrind || b.level - a.level)
+    .slice(0, limit);
+}
+
 export function ownedIdSet(box) {
   const set = new Set();
   for (const u of box?.units || []) {
