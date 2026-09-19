@@ -336,8 +336,11 @@ export default function DashboardView({ onNavigate }) {
 
     if (avatarTab === 'ld5') {
       list = list.filter((u) => {
-        const ele = (u.element || '').toLowerCase();
-        return (ele === 'light' || ele === 'dark') && (u.naturalStars === 5 || u.stars === 5);
+        const info = getMonsterCatalogInfo(u.masterId);
+        const ele = (u.element || info?.element || '').toLowerCase();
+        const isLd = ele === 'light' || ele === 'dark';
+        const isNat5 = (info?.stars === 5 || info?.natural_stars === 5 || u.naturalStars === 5) && !info?.name?.includes('(Homunculus)');
+        return isNat5 && isLd && !isNonSummonableLd5(u) && (!info || !isNonSummonableLd5(info));
       });
     } else if (avatarTab === 'fast') {
       list = [...list].sort((a, b) => b.spd - a.spd).slice(0, 30);
@@ -656,9 +659,9 @@ export default function DashboardView({ onNavigate }) {
                   </div>
                 </div>
                 <div className="text-[10px] text-amber-300/90 font-semibold mt-2.5 pt-2 border-t border-amber-500/15 flex items-center justify-between">
-                  <span>✨ {userProfileStats.pureLd5Count} ตัว LD กาชา</span>
+                  <span>✨ {userProfileStats.pureLd5Count} ตัว LD เปิดเอง</span>
                   {userProfileStats.freeLd5Count > 0 && (
-                    <span className="text-slate-400 font-normal">(+{userProfileStats.freeLd5Count} ฟรี)</span>
+                    <span className="text-slate-400 font-normal">(+{userProfileStats.freeLd5Count} แจกฟรี)</span>
                   )}
                 </div>
               </div>
@@ -1389,8 +1392,9 @@ export default function DashboardView({ onNavigate }) {
                   className={`px-3 py-1.5 rounded-xl font-semibold transition-all shrink-0 cursor-pointer ${
                     avatarTab === 'ld5' ? 'bg-purple-600 text-white font-bold' : 'bg-slate-800 text-slate-400 hover:text-white'
                   }`}
+                  title="แสดงเฉพาะมอนสเตอร์แสง-มืด 5 ดาวแท้ที่เปิดได้เอง (ซ่อนตัวฟิวชั่นและตัวแจกฟรี)"
                 >
-                  ✨ แสง-มืด 5★ ({userProfileStats?.ld5List?.length || 0})
+                  ✨ LD 5★ เปิดเอง ({userProfileStats?.pureLd5Count || 0})
                 </button>
                 <button
                   type="button"

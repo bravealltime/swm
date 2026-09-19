@@ -41,9 +41,9 @@ const monsterOf = (id) => {
 const monsterByName = (name) => BY_NAME.get(String(name || '').replace(/\s*\(.*\)$/, '').toLowerCase()) || BY_NAME.get(String(name || '').toLowerCase()) || null;
 const monsterByImage = (url) => BY_IMAGE.get(String(url || '').split('/').pop()) || null;
 
-const ELEMENT_FILTERS = [['all', 'ทุกธาตุ'], ['water', 'น้ำ'], ['fire', 'ไฟ'], ['wind', 'ลม'], ['light', 'แสง'], ['dark', 'มืด']];
-const ELEMENT_COLOR = { water: 'bg-sky-500', fire: 'bg-rose-500', wind: 'bg-amber-400', light: 'bg-yellow-200', dark: 'bg-purple-500' };
-const ELEMENT_TH = { water: 'น้ำ', fire: 'ไฟ', wind: 'ลม', light: 'แสง', dark: 'มืด' };
+const ELEMENT_FILTERS = [['all', 'ทุกธาตุ'], ['water', 'น้ำ'], ['fire', 'ไฟ'], ['wind', 'ลม'], ['light', 'แสง'], ['dark', 'มืด'], ['ld', '✨ แสง-มืด']];
+const ELEMENT_COLOR = { water: 'bg-sky-500', fire: 'bg-rose-500', wind: 'bg-amber-400', light: 'bg-yellow-200', dark: 'bg-purple-500', ld: 'bg-gradient-to-r from-yellow-200 to-purple-500' };
+const ELEMENT_TH = { water: 'น้ำ', fire: 'ไฟ', wind: 'ลม', light: 'แสง', dark: 'มืด', ld: 'แสง-มืด' };
 
 const TABS = [
   { id: 'overview', label: 'ภาพรวม', icon: LayoutDashboard, color: 'bg-emerald-600 shadow-emerald-600/25' },
@@ -573,8 +573,17 @@ function Overview({ box, mdc, owned, onTab, onNavigate, onOpenUnit }) {
   const fastest = useMemo(() => [...withInfo].filter((u) => u.info).sort((a, b) => b.spd - a.spd).slice(0, 6), [withInfo]);
   const bestRuned = useMemo(() => [...withInfo].filter((u) => u.info && u.runes >= 6).sort((a, b) => (b.runeEff || 0) - (a.runeEff || 0)).slice(0, 5), [withInfo]);
   const elements = useMemo(() => {
-    const c = { water: 0, fire: 0, wind: 0, light: 0, dark: 0 };
-    for (const u of withInfo) if ((u.info?.stars || 0) >= 5) c[u.element] = (c[u.element] || 0) + 1;
+    const c = { water: 0, fire: 0, wind: 0, light: 0, dark: 0, pureLight: 0, pureDark: 0 };
+    for (const u of withInfo) {
+      if ((u.info?.stars || 0) >= 5 && !u.info?.name?.includes('(Homunculus)')) {
+        c[u.element] = (c[u.element] || 0) + 1;
+        const isFree = isNonSummonableLd5(u) || (u.info && isNonSummonableLd5(u.info));
+        if (!isFree) {
+          if (u.element === 'light') c.pureLight++;
+          if (u.element === 'dark') c.pureDark++;
+        }
+      }
+    }
     return c;
   }, [withInfo]);
   const sets = useMemo(() => {
@@ -586,9 +595,15 @@ function Overview({ box, mdc, owned, onTab, onNavigate, onOpenUnit }) {
   const metaHave = metaTop.filter((m) => owned.has(Number(m.id))).length;
   const metaTeams = useMemo(() => teamsFromBox(guardianMeta, owned), [owned]);
   const avgEff = box.runes?.length ? (box.runes.reduce((s, r) => s + r.eff, 0) / box.runes.length).toFixed(1) : null;
-  const nat5Total = Object.values(elements).reduce((a, b) => a + b, 0) || 1;
+  const nat5Total = (elements.water + elements.fire + elements.wind + elements.light + elements.dark) || 1;
   const latestNat5 = useMemo(() => withInfo
-    .filter((u) => u.info && (u.info.stars || 0) >= 5 && u.obtained)
+    .filter((u) => {
+      const isNat5 = u.info && (u.info.stars || 0) >= 5 && !u.info.name?.includes('(Homunculus)') && u.obtained;
+      if (!isNat5) return false;
+      const isLd = u.element === 'light' || u.element === 'dark';
+      if (isLd && (isNonSummonableLd5(u) || isNonSummonableLd5(u.info))) return false;
+      return true;
+    })
     .sort((a, b) => (b.obtained > a.obtained ? 1 : -1))
     .slice(0, 8), [withInfo]);
 
@@ -663,12 +678,22 @@ function Overview({ box, mdc, owned, onTab, onNavigate, onOpenUnit }) {
           <div>
             <h3 className="text-sm font-bold text-white flex items-center gap-2"><Sparkles className="w-4 h-4 text-cyan-400" /> เนเชอรัล 5★ แยกธาตุ</h3>
             <div className="flex h-3 rounded-full overflow-hidden mt-3 bg-slate-800">
-              {Object.entries(elements).map(([el, n]) => n > 0 && <div key={el} className={ELEMENT_COLOR[el]} style={{ width: `${(n / nat5Total) * 100}%` }} title={`${ELEMENT_TH[el]} ${n}`} />)}
+              {Object.entries(elements).filter(([k]) => !k.startsWith('pure')).map(([el, n]) => n > 0 && <div key={el} className={ELEMENT_COLOR[el]} style={{ width: `${(n / nat5Total) * 100}%` }} title={`${ELEMENT_TH[el]} ${n}`} />)}
             </div>
             <div className="flex flex-wrap gap-x-3 gap-y-1 mt-2 text-[11px] text-slate-300">
-              {Object.entries(elements).map(([el, n]) => (
-                <span key={el} className="flex items-center gap-1"><span className={`w-2 h-2 rounded-full ${ELEMENT_COLOR[el]}`} /> {ELEMENT_TH[el]} <span className="font-mono text-white">{n}</span></span>
-              ))}
+              {Object.entries(elements).filter(([k]) => !k.startsWith('pure')).map(([el, n]) => {
+                const pure = el === 'light' ? elements.pureLight : el === 'dark' ? elements.pureDark : null;
+                return (
+                  <span key={el} className="flex items-center gap-1">
+                    <span className={`w-2 h-2 rounded-full ${ELEMENT_COLOR[el]}`} /> {ELEMENT_TH[el]} <span className="font-mono text-white">{n}</span>
+                    {pure !== null && (
+                      <span className="text-[10px] text-amber-300 font-mono font-medium" title={`เปิดได้เองจากคัมภีร์ ${pure} ตัว (ไม่รวมตัวฟิวชั่น/แจกฟรี)`}>
+                        (เปิดเอง {pure})
+                      </span>
+                    )}
+                  </span>
+                );
+              })}
             </div>
           </div>
           {sets.length > 0 && (
@@ -731,19 +756,58 @@ function BoxGrid({ box, onNavigate, onOpenUnit }) {
   const [minStars, setMinStars] = useState(5);
   const [query, setQuery] = useState('');
   const [sort, setSort] = useState('spd');
-  const [hideFreeLd, setHideFreeLd] = useState(false);
+  const [hideFreeLd, setHideFreeLd] = useState(() => {
+    try {
+      const saved = localStorage.getItem('swm:hide-free-ld');
+      return saved !== null ? saved === 'true' : true;
+    } catch {
+      return true;
+    }
+  });
+  const [onlyPureNat5, setOnlyPureNat5] = useState(false);
+
+  const toggleHideFreeLd = () => {
+    setHideFreeLd((prev) => {
+      const next = !prev;
+      try { localStorage.setItem('swm:hide-free-ld', String(next)); } catch {}
+      return next;
+    });
+  };
+
+  const hiddenFreeCount = useMemo(() => {
+    if (!box?.units) return 0;
+    return box.units.filter((u) => {
+      const info = monsterOf(u.masterId) || monsterOf(baseAwakenedId(u.masterId));
+      return isNonSummonableLd5(u) || (info && isNonSummonableLd5(info));
+    }).length;
+  }, [box?.units]);
 
   const rows = useMemo(() => {
     const q = query.trim().toLowerCase();
     const list = box.units
-      .map((u) => ({ ...u, info: monsterOf(u.masterId) || monsterOf(baseAwakenedId(u.masterId)) }))
-      .filter((u) => (element === 'all' || u.element === element) && u.stars >= minStars)
-      .filter((u) => !(hideFreeLd && (isNonSummonableLd5(u) || (u.info && isNonSummonableLd5(u.info)))))
+      .map((u) => {
+        const info = monsterOf(u.masterId) || monsterOf(baseAwakenedId(u.masterId));
+        const isFree = isNonSummonableLd5(u) || (info && isNonSummonableLd5(info));
+        const isNat5 = (u.naturalStars === 5 || info?.stars === 5 || info?.natural_stars === 5) && !info?.name?.includes('(Homunculus)');
+        return { ...u, info, isFree, isNat5 };
+      })
+      .filter((u) => {
+        if (element === 'all') return true;
+        if (element === 'ld') return u.element === 'light' || u.element === 'dark';
+        return u.element === element;
+      })
+      .filter((u) => {
+        if (onlyPureNat5) {
+          return (u.element === 'light' || u.element === 'dark') && u.isNat5 && !u.isFree;
+        }
+        return u.stars >= minStars;
+      })
+      .filter((u) => !(hideFreeLd && u.isFree))
       .filter((u) => !q || (u.info?.name || '').toLowerCase().includes(q) || (u.info?.thaiName || '').includes(q));
     if (sort === 'obtained') return list.sort((a, b) => ((b.obtained || '') > (a.obtained || '') ? 1 : -1));
     const key = sort === 'stars' ? null : sort;
     return list.sort((a, b) => (key ? (b[key] || 0) - (a[key] || 0) : b.stars - a.stars || b.level - a.level || b.spd - a.spd));
-  }, [box, element, minStars, query, sort, hideFreeLd]);
+  }, [box, element, minStars, query, sort, hideFreeLd, onlyPureNat5]);
 
   const chip = (active, color = 'bg-emerald-600') => `px-2.5 py-1.5 rounded-lg font-bold cursor-pointer ${active ? `${color} text-white` : 'bg-white/[0.04] text-slate-300 hover:text-white'}`;
 
@@ -755,19 +819,39 @@ function BoxGrid({ box, onNavigate, onOpenUnit }) {
           <span className="text-slate-600 mx-1">|</span>
           {SORTS.map(([id, label]) => <button key={id} onClick={() => setSort(id)} className={chip(sort === id, 'bg-cyan-600')}>{label}</button>)}
           <span className="text-slate-600 mx-1">|</span>
-          {[6, 5, 4, 1].map((n) => <button key={n} onClick={() => setMinStars(n)} className={chip(minStars === n, 'bg-amber-500 !text-slate-950')}>{n === 1 ? 'ทุกดาว' : `${n}★ ขึ้นไป`}</button>)}
+          {[6, 5, 4, 1].map((n) => <button key={n} onClick={() => { setMinStars(n); setOnlyPureNat5(false); }} className={chip(!onlyPureNat5 && minStars === n, 'bg-amber-500 !text-slate-950')}>{n === 1 ? 'ทุกดาว' : `${n}★ ขึ้นไป`}</button>)}
           <span className="text-slate-600 mx-1">|</span>
+          {/* Quick Filter: Pure LD 5★ */}
           <button
-            onClick={() => setHideFreeLd(!hideFreeLd)}
+            onClick={() => setOnlyPureNat5(!onlyPureNat5)}
+            className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 border ${
+              onlyPureNat5
+                ? 'bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-950 border-amber-400 font-black shadow-md'
+                : 'bg-white/[0.04] text-amber-300 hover:text-white border-amber-500/30'
+            }`}
+            title="กรองแสดงเฉพาะมอนสเตอร์แสง-มืด 5 ดาวแท้ที่เปิดได้เอง (ไม่รวมตัวฟิวชั่น/แจกฟรี)"
+          >
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>LD 5★ เปิดเอง</span>
+          </button>
+          <span className="text-slate-600 mx-1">|</span>
+          {/* Toggle to Hide Non-Summonable / Free LD */}
+          <button
+            onClick={toggleHideFreeLd}
             className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 border ${
               hideFreeLd
                 ? 'bg-purple-600/30 text-purple-300 border-purple-500/40 shadow-sm'
                 : 'bg-white/[0.04] text-slate-400 hover:text-white border-white/5'
             }`}
-            title="ซ่อนมอนสเตอร์แสง-มืดที่เปิดไม่ได้จากคัมภีร์ (Veromos, Jeanne, Elsharion, Eirgar, Homunculus)"
+            title="ซ่อนมอนสเตอร์แสง-มืดที่เปิดไม่ได้จากคัมภีร์ เช่น Veromos, Jeanne, Elsharion, Eirgar, Altaïr, Homunculus"
           >
             {hideFreeLd ? <EyeOff className="w-3.5 h-3.5 text-purple-300" /> : <Eye className="w-3.5 h-3.5" />}
-            <span>{hideFreeLd ? 'ซ่อน LD ฟรี/ฟิวชั่น' : 'ซ่อน LD ฟรี'}</span>
+            <span>{hideFreeLd ? 'ซ่อน LD แจกฟรี (เหลือเปิดเอง)' : 'รวมตัวแจกฟรี'}</span>
+            {hiddenFreeCount > 0 && hideFreeLd && (
+              <span className="px-1.5 py-0.2 rounded-full bg-purple-500/30 text-purple-200 text-[10px] font-mono">
+                -{hiddenFreeCount}
+              </span>
+            )}
           </button>
         </div>
         <div className="relative lg:ml-auto lg:w-64">
@@ -776,7 +860,15 @@ function BoxGrid({ box, onNavigate, onOpenUnit }) {
         </div>
       </div>
 
-      <div className="text-xs text-slate-400">แสดง {rows.length} จาก {box.units.length} ตัว • คลิกเพื่อเปิดหน้ารูน/อาร์ติแฟกต์ของตัวนั้น</div>
+      <div className="text-xs text-slate-400">
+        แสดง {rows.length} จาก {box.units.length} ตัว
+        {hideFreeLd && hiddenFreeCount > 0 && (
+          <span className="text-purple-300 ml-1.5 font-medium">
+            • ซ่อนตัวแจกฟรี/ฟิวชั่น {hiddenFreeCount} ตัว (แสดงเฉพาะเปิดได้เอง)
+          </span>
+        )}
+        {' '}• คลิกเพื่อเปิดหน้ารูน/อาร์ติแฟกต์ของตัวนั้น
+      </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 gap-2">
         {rows.map((u, i) => (
           <button key={`${u.uid || u.masterId}-${i}`} onClick={() => onOpenUnit(u)}

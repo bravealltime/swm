@@ -103,7 +103,17 @@ describe('ids', () => {
     expect(isNonSummonableLd5({ masterId: 19215 })).toBe(true);           // Veromos
     expect(isNonSummonableLd5({ masterId: 19205 })).toBe(true);           // unawakened Veromos
     expect(isNonSummonableLd5({ name: 'Light Homunculus', element: 'light' })).toBe(true);
+    expect(isNonSummonableLd5({ name: 'Jeanne' })).toBe(true);
+    expect(isNonSummonableLd5({ thaiName: 'ฌาน' })).toBe(true);
+    expect(isNonSummonableLd5({ name: 'Elsharion' })).toBe(true);
+    expect(isNonSummonableLd5({ name: 'Eirgar' })).toBe(true);
+    expect(isNonSummonableLd5({ name: 'Altaïr' })).toBe(true);
+    expect(isNonSummonableLd5({ name: 'Frederic' })).toBe(true);
     expect(isNonSummonableLd5({ masterId: 13413, name: 'Lushen' })).toBe(false);
+    // Real summonable LD5s must return false (not non-summonable)
+    expect(isNonSummonableLd5({ masterId: 11115, name: 'Giana' })).toBe(false);
+    expect(isNonSummonableLd5({ masterId: 11715, name: 'Ragdoll' })).toBe(false);
+    expect(isNonSummonableLd5({ masterId: 24614, name: 'Lucifer' })).toBe(false);
     expect(isNonSummonableLd5(null)).toBe(false);
   });
 

@@ -182,22 +182,37 @@ export function baseAwakenedId(masterId) {
 export const NON_SUMMONABLE_LD5_NAMES = new Set([
   'veromos',
   'dark ifrit',
+  'เวโรโมส',
+  'อิฟริตมืด',
   'jeanne',
   'light paladin',
+  'ฌาน',
+  'พาลาดินแสง',
   'elsharion',
   'light ifrit',
+  'เอลชาริออน',
+  'อิฟริตแสง',
   'eirgar',
   'dark vampire lord',
+  'แอร์การ์',
+  'แวมไพร์ลอร์ดมืด',
   'altaïr',
   'altair',
   'frederic',
   'frederic / altair',
   'light assassin',
   'light mercenary',
+  'อัลแทร์',
+  'เฟรเดอริก',
+  'มือสังหารแสง',
+  'ทหารรับจ้างแสง',
   'light homunculus(support)',
   'light homunculus',
   'dark homunculus(support)',
   'dark homunculus',
+  'โฮมุนครุสแสง',
+  'โฮมุนครุสมืด',
+  'โฮมุนครุส',
 ]);
 
 export const NON_SUMMONABLE_LD5_IDS = new Set([
@@ -207,8 +222,8 @@ export const NON_SUMMONABLE_LD5_IDS = new Set([
   23015, 23005, // Eirgar, Dark Vampire Lord
   27314, 27304, // Altaïr
   27814, 27804, // Frederic / Altair
-  1000214,      // Light Homunculus (Support)
-  1000215,      // Dark Homunculus (Support)
+  1000214, 1000204, 1000201, // Light Homunculus (Support)
+  1000215, 1000205,          // Dark Homunculus (Support)
 ]);
 
 export function isNonSummonableLd5(unitOrMonster) {
@@ -218,8 +233,11 @@ export function isNonSummonableLd5(unitOrMonster) {
     return true;
   }
   const name = String(unitOrMonster.name || '').toLowerCase().trim();
-  if (NON_SUMMONABLE_LD5_NAMES.has(name)) return true;
-  if (name.includes('homunculus') && (unitOrMonster.element === 'light' || unitOrMonster.element === 'dark')) return true;
+  const thaiName = String(unitOrMonster.thaiName || '').toLowerCase().trim();
+  if (NON_SUMMONABLE_LD5_NAMES.has(name) || NON_SUMMONABLE_LD5_NAMES.has(thaiName)) return true;
+  if ((name.includes('homunculus') || thaiName.includes('โฮมุนครุส')) && (unitOrMonster.element === 'light' || unitOrMonster.element === 'dark')) return true;
+  if (name.includes('veromos') || name.includes('jeanne') || name.includes('elsharion') || name.includes('eirgar') || name.includes('altair') || name.includes('altaïr') || name.includes('frederic')) return true;
+  if (thaiName.includes('เวโรโมส') || thaiName.includes('ฌาน') || thaiName.includes('เอลชาริออน') || thaiName.includes('แอร์การ์') || thaiName.includes('อัลแทร์') || thaiName.includes('เฟรเดอริก')) return true;
   return false;
 }
 
