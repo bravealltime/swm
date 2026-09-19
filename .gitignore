@@ -33,3 +33,7 @@ swgt_raw/
 
 # Local SWEX export used by the dev-only LAN sync middleware — never commit an account dump
 public/data/my_profile.json
+
+# Generated from src/data/monsterSkillsData.json at dev/build start (scripts/build_skill_shards.mjs)
+public/data/skills/
+src/data/monsterSkillsIndex.json

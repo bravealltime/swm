@@ -2,6 +2,22 @@ import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import fs from 'fs';
 import path from 'path';
+import { buildSkillShards } from './scripts/build_skill_shards.mjs';
+
+// Regenerates public/data/skills/*.json + src/data/monsterSkillsIndex.json from monsterSkillsData.json
+// whenever the source is newer — runs for both `vite` (dev) and `vite build`, so the generated files
+// stay out of git and can never be stale. It has to happen in configResolved: the dev server takes
+// its list of servable public/ files right after this, and anything created later (buildStart) is
+// answered with index.html instead.
+function skillShards() {
+  return {
+    name: 'swm-skill-shards',
+    configResolved(config) {
+      const r = buildSkillShards({ root: config.root });
+      if (!r.skipped) config.logger.info(`[swm] skill shards rebuilt: ${r.monsters} monsters → ${r.shards} files`);
+    },
+  };
+}
 
 // Embedded SWM Relay & Profile Sync Server Plugin
 function swmSyncServer() {
@@ -134,7 +150,7 @@ function swmSyncServer() {
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), swmSyncServer()],
+  plugins: [react(), skillShards(), swmSyncServer()],
   server: {
     host: true
   }

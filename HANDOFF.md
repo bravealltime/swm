@@ -63,7 +63,11 @@ src/
     cardExporter.js  การ์ดแชร์ PNG (พาสปอร์ต, ตู้ LD5, มอนสเตอร์) วาดด้วย Canvas
     boxSummary.js    สรุปกล่องแบบย่อส่ง AI (ไม่มี id บัญชี)
   hooks/useGuildRankings.js  รวมอันดับที่แชร์ (API) + ที่เห็นสดบนเครื่องนี้
+  hooks/useMonsterSkills.js  สกิลรายตัวสำหรับสารานุกรม โหลด shard ตามต้องการ (data/monsterSkills.js เป็น store)
   data/*.json        ชุดข้อมูลที่ bundle มากับเว็บ (ดูข้อ 5)
+  data/monsterSkillsIndex.json  (generated, ไม่อยู่ใน git) ดัชนีเล็ก ๆ สำหรับฟิลเตอร์กลไกสกิล
+public/data/skills/<0-15>.json  (generated, ไม่อยู่ใน git) ข้อมูลสกิลแบ่ง 16 shard — สร้างโดย scripts/build_skill_shards.mjs
+                     ตอน vite เริ่ม (dev/build) ผ่าน plugin ใน vite.config.js เมื่อ monsterSkillsData.json ใหม่กว่า
 api/                 Vercel serverless (ESM) — dev server มี middleware ใน vite.config.js เรียก handler เดียวกัน
   ai/advise.js       POST โค้ช AI (rate limit 3/นาที anon, 12/นาที ล็อกอิน) + ล็อกลง ai_logs
   admin/[action].js  หลังบ้าน: status, settings, logs, runs, actions, me
@@ -87,7 +91,7 @@ supabase/admin_schema.sql  ตารางหลังบ้าน (รันแ
 | เมต้า Guardian (pick/win/ban, duo/trio) | `swrtGuardianMeta.json` | สร้างพร้อมกันจากรีเพลย์ |
 | เส้นแบ่งแรงค์, เมต้า SWRT, tier list | `swrtRankCutoffs.json`, `swrtMetaMonsters.json`, `swrtTierList.json`… | `scripts/extract_swrt_data.cjs` |
 | แคตตาล็อกมอนสเตอร์ 1,192 ตัว (รูปจาก CloudFront ของเกม) | `allMonsters.json` | `scripts/build_all_monsters.cjs`, `fill_missing_monsters.cjs` (swarfarm) |
-| สกิล 940 ตัว แปลไทย 100% | `monsterSkillsData.json` (`descriptionTh`) | `scripts/build_monster_skills.cjs` |
+| สกิล 940 ตัว แปลไทย 100% | `monsterSkillsData.json` (`descriptionTh`) — ฝั่งเว็บ**ไม่ import ไฟล์นี้ตรง ๆ** (7 MB) แต่ใช้ shard ที่ generate จากมัน; ฝั่ง `api/` และสคริปต์ยังอ่านไฟล์เต็ม | `scripts/build_monster_skills.cjs` → shard สร้างเองตอน dev/build (`npm run skills:shards` ถ้าจะบังคับ) |
 | 3MDC, dungeon, patch notes | `allMdcData.json`, `dungeonAbyssData.json`, `balancePatches.json` | สคริปต์ extract/fetch ต่าง ๆ |
 | สรุป AI (แพตช์, สไตล์ผู้เล่น) | `balancePatchAi.json`, `swrtPlayerSummaries.json` | `scripts/ai_patch_summaries.mjs`, `ai_player_summaries.mjs` (cache ด้วย hash; CONCURRENCY 1) |
 | อันดับกิลด์ Siege/WGB | Supabase `guild_rankings` | **ไม่มี API สาธารณะ** → มาจากหน้าอันดับในเกมผ่าน AegisLink แล้วผู้เล่นที่ล็อกอินแชร์ให้ทุกคน |
@@ -146,3 +150,5 @@ Secrets ที่ต้องมีใน GitHub: `AI_BASE_URL`, `AI_MODEL`, `AI
 - เช็ก prod ว่า Supabase ฝั่งเซิร์ฟเวอร์ใช้ได้โดยไม่ต้องล็อกอิน: `GET https://swm-blue.vercel.app/api/guild-rankings` ต้องไม่มีฟิลด์ `error`
 - lint: `npm run lint` (oxlint) — warning `set-state-in-effect`/`no-unused-vars` ที่ค้างเป็นของเดิม ไม่ต้องไล่แก้
 - build: `npm run build` (main bundle ~280 kB gzip 87 kB — อย่า import แคตตาล็อก/Supabase SDK เข้าเชลล์)
+- **อย่า `import monsterSkillsData.json` ใน `src/`** — chunk จะบวม 5 MB ทันที (เคยเป็นแบบนั้นกับหน้าสารานุกรม) ใช้ `useMonsterSkills(monster)` / `loadMonsterSkills()` / `getSkillTags()` จาก `src/data/monsterSkills.js` แทน
+- Vite dev จำรายชื่อไฟล์ใน `public/` ตอนสร้าง server — ไฟล์ที่ plugin สร้างต้องเกิดใน `configResolved` (ไม่ใช่ `buildStart`) และเขียนทับแทนลบ-สร้างใหม่ ไม่งั้น request จะได้ index.html แทนไฟล์

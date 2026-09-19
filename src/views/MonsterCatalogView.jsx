@@ -1,23 +1,98 @@
 import React, { useState, useMemo } from 'react';
-import { 
-  BookOpen, 
-  Search, 
-  Sparkles, 
-  Swords, 
-  Zap, 
-  X,
-  ShieldAlert,
-  Shield,
-  Layers,
-  Filter,
-  Flame,
-  Info
-} from 'lucide-react';
+import { BookOpen, Search, Swords, X, Filter, Info } from 'lucide-react';
 import MonsterAvatar from '../components/MonsterAvatar';
 import SkillTooltip from '../components/SkillTooltip';
 import MonsterSkillsCard from '../components/MonsterSkillsCard';
 import { MONSTERS } from '../data/monsters';
-import { getMonsterSkills } from '../data/monsterSkills';
+import { getSkillTags } from '../data/monsterSkills';
+import { useMonsterSkills } from '../hooks/useMonsterSkills';
+
+const FALLBACK_SKILL_ICON = 'https://do9d4mpqk497d.cloudfront.net/common/images/skills36/skill_icon_0001_0_0.png';
+
+// One grid tile. Skill icons fill in once the monster's shard has been fetched (see useMonsterSkills).
+function MonsterCard({ monster, onSelect }) {
+  const displayName = monster.thaiName || monster.nameTh || monster.name;
+  const engName = monster.name || monster.nameEn || '';
+  const family = monster.thaiFamily || monster.family || '';
+  const role = monster.role || monster.roleTh || '';
+  const skillsData = useMonsterSkills(monster);
+
+  return (
+    <div
+      onClick={() => onSelect(monster)}
+      className="bg-[#101724] p-3 rounded-xl border border-[#1d2b3f] hover:border-blue-500 cursor-pointer transition-all flex flex-col items-center text-center justify-between group shadow-md hover:shadow-blue-500/10 hover:-translate-y-0.5 relative"
+    >
+      {/* Monster Portrait & Name */}
+      <div className="w-full flex flex-col items-center">
+        <MonsterAvatar monster={monster} size="lg" />
+        <h3 className="font-bold text-xs sm:text-sm text-white group-hover:text-blue-400 transition-colors mt-2 truncate max-w-full">
+          {displayName}
+        </h3>
+        <p className="text-xs text-slate-400 truncate max-w-full mt-0.5">
+          {engName !== displayName ? engName : family}
+        </p>
+      </div>
+
+      {/* Interactive Skill Hover Strip */}
+      {skillsData && (
+        <div
+          className="w-full mt-2 pt-2 border-t border-[#182333] flex items-center justify-center gap-1.5 flex-wrap"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Leader Skill Icon */}
+          {skillsData.leaderSkill && (
+            <SkillTooltip leaderSkill={skillsData.leaderSkill}>
+              <div className="relative group/sk cursor-pointer">
+                <img
+                  src={skillsData.leaderSkill.iconUrl}
+                  alt="Leader"
+                  className="w-7 h-7 rounded border border-amber-500/60 bg-black/50 p-0.5 group-hover/sk:border-amber-400 group-hover/sk:scale-110 transition-transform"
+                  onError={(e) => { e.target.style.display = 'none'; }}
+                />
+                <span className="absolute -bottom-1 -right-1 text-[9px] font-bold bg-amber-600 text-white px-0.5 rounded leading-none">
+                  L
+                </span>
+              </div>
+            </SkillTooltip>
+          )}
+
+          {/* Skills (S1, S2, S3/Passive) */}
+          {(skillsData.skills || []).map((sk, sidx) => (
+            <SkillTooltip key={sk.id || sidx} skill={sk}>
+              <div className="relative group/sk cursor-pointer">
+                <img
+                  src={sk.iconUrl}
+                  alt={sk.name}
+                  className={`w-7 h-7 rounded bg-black/50 p-0.5 border group-hover/sk:scale-110 transition-transform ${
+                    sk.isPassive
+                      ? 'border-purple-500/70 group-hover/sk:border-purple-400'
+                      : 'border-blue-500/60 group-hover/sk:border-blue-400'
+                  }`}
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = FALLBACK_SKILL_ICON;
+                  }}
+                />
+                <span className={`absolute -bottom-1 -right-1 text-[9px] font-bold px-0.5 rounded leading-none ${
+                  sk.isPassive ? 'bg-purple-600 text-white' : 'bg-[#182333] text-slate-300 border border-slate-700'
+                }`}>
+                  {sk.slotLabel || `S${sidx + 1}`}
+                </span>
+              </div>
+            </SkillTooltip>
+          ))}
+        </div>
+      )}
+
+      {/* Role label */}
+      <div className="w-full mt-2 pt-1.5 border-t border-[#141d2a]">
+        <span className="text-[11px] text-slate-400 line-clamp-1">
+          {role || (monster.archetype ? `สาย ${monster.archetype}` : 'สายต่อสู้')}
+        </span>
+      </div>
+    </div>
+  );
+}
 
 export default function MonsterCatalogView({ initialSearch = '', onNavigate }) {
   const [searchQuery, setSearchQuery] = useState(initialSearch);
@@ -64,20 +139,17 @@ export default function MonsterCatalogView({ initialSearch = '', onNavigate }) {
       if (selectedElement !== 'all' && m.element !== selectedElement) return false;
       if (selectedStars !== 'all' && m.stars?.toString() !== selectedStars) return false;
 
-      // Skill Effect Filter
+      // Skill Effect Filter — answered from the bundled index, no shard needed
       if (selectedEffect !== 'all') {
-        const skillsInfo = getMonsterSkills(m);
-        if (!skillsInfo || !skillsInfo.skills) return false;
-        
+        const tags = getSkillTags(m);
+        if (!tags) return false;
+
         if (selectedEffect === 'isPassive') {
-          if (!skillsInfo.skills.some(s => s.isPassive)) return false;
+          if (!tags.isPassive) return false;
         } else if (selectedEffect === 'isAoe') {
-          if (!skillsInfo.skills.some(s => s.isAoe)) return false;
-        } else {
-          const hasEffect = skillsInfo.skills.some(s => 
-            (s.effects || []).some(e => e.name === selectedEffect)
-          );
-          if (!hasEffect) return false;
+          if (!tags.isAoe) return false;
+        } else if (!tags.effects.includes(selectedEffect)) {
+          return false;
         }
       }
 
@@ -108,10 +180,7 @@ export default function MonsterCatalogView({ initialSearch = '', onNavigate }) {
     setVisibleCount(prev => prev + 48);
   };
 
-  const selectedMonsterSkills = useMemo(() => {
-    if (!selectedMonster) return null;
-    return getMonsterSkills(selectedMonster);
-  }, [selectedMonster]);
+  const selectedMonsterSkills = useMonsterSkills(selectedMonster);
 
   return (
     <div className="space-y-6 pb-12 animate-fadeIn">
@@ -229,90 +298,9 @@ export default function MonsterCatalogView({ initialSearch = '', onNavigate }) {
 
       {/* Monster Grid with Skill Strips */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3.5 sm:gap-4">
-        {displayedMonsters.map((monster) => {
-          const displayName = monster.thaiName || monster.nameTh || monster.name;
-          const engName = monster.name || monster.nameEn || '';
-          const family = monster.thaiFamily || monster.family || '';
-          const role = monster.role || monster.roleTh || '';
-          const skillsData = getMonsterSkills(monster);
-
-          return (
-            <div
-              key={monster.id}
-              onClick={() => setSelectedMonster(monster)}
-              className="bg-[#101724] p-3 rounded-xl border border-[#1d2b3f] hover:border-blue-500 cursor-pointer transition-all flex flex-col items-center text-center justify-between group shadow-md hover:shadow-blue-500/10 hover:-translate-y-0.5 relative"
-            >
-              {/* Monster Portrait & Name */}
-              <div className="w-full flex flex-col items-center">
-                <MonsterAvatar monster={monster} size="lg" />
-                <h3 className="font-bold text-xs sm:text-sm text-white group-hover:text-blue-400 transition-colors mt-2 truncate max-w-full">
-                  {displayName}
-                </h3>
-                <p className="text-xs text-slate-400 truncate max-w-full mt-0.5">
-                  {engName !== displayName ? engName : family}
-                </p>
-              </div>
-
-              {/* Interactive Skill Hover Strip */}
-              {skillsData && (
-                <div 
-                  className="w-full mt-2 pt-2 border-t border-[#182333] flex items-center justify-center gap-1.5 flex-wrap"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  {/* Leader Skill Icon */}
-                  {skillsData.leaderSkill && (
-                    <SkillTooltip leaderSkill={skillsData.leaderSkill}>
-                      <div className="relative group/sk cursor-pointer">
-                        <img 
-                          src={skillsData.leaderSkill.iconUrl} 
-                          alt="Leader" 
-                          className="w-7 h-7 rounded border border-amber-500/60 bg-black/50 p-0.5 group-hover/sk:border-amber-400 group-hover/sk:scale-110 transition-transform"
-                          onError={(e) => { e.target.style.display = 'none'; }}
-                        />
-                        <span className="absolute -bottom-1 -right-1 text-[9px] font-bold bg-amber-600 text-white px-0.5 rounded leading-none">
-                          L
-                        </span>
-                      </div>
-                    </SkillTooltip>
-                  )}
-
-                  {/* Skills (S1, S2, S3/Passive) */}
-                  {(skillsData.skills || []).map((sk, sidx) => (
-                    <SkillTooltip key={sk.id || sidx} skill={sk}>
-                      <div className="relative group/sk cursor-pointer">
-                        <img 
-                          src={sk.iconUrl} 
-                          alt={sk.name} 
-                          className={`w-7 h-7 rounded bg-black/50 p-0.5 border group-hover/sk:scale-110 transition-transform ${
-                            sk.isPassive 
-                              ? 'border-purple-500/70 group-hover/sk:border-purple-400' 
-                              : 'border-blue-500/60 group-hover/sk:border-blue-400'
-                          }`}
-                          onError={(e) => {
-                            e.target.onerror = null;
-                            e.target.src = 'https://do9d4mpqk497d.cloudfront.net/common/images/skills36/skill_icon_0001_0_0.png';
-                          }}
-                        />
-                        <span className={`absolute -bottom-1 -right-1 text-[9px] font-bold px-0.5 rounded leading-none ${
-                          sk.isPassive ? 'bg-purple-600 text-white' : 'bg-[#182333] text-slate-300 border border-slate-700'
-                        }`}>
-                          {sk.slotLabel || `S${sidx + 1}`}
-                        </span>
-                      </div>
-                    </SkillTooltip>
-                  ))}
-                </div>
-              )}
-
-              {/* Role label */}
-              <div className="w-full mt-2 pt-1.5 border-t border-[#141d2a]">
-                <span className="text-[11px] text-slate-400 line-clamp-1">
-                  {role || (monster.archetype ? `สาย ${monster.archetype}` : 'สายต่อสู้')}
-                </span>
-              </div>
-            </div>
-          );
-        })}
+        {displayedMonsters.map((monster) => (
+          <MonsterCard key={monster.id} monster={monster} onSelect={setSelectedMonster} />
+        ))}
       </div>
 
       {/* Load More Button */}
