@@ -49,10 +49,11 @@ export async function handleAdvise({ body, ip, token }) {
   const question = kind === 'chat' ? body?.question : kind;
   try {
     const result = await advise(body || {});
-    logAiCall({ kind, question, userId, ip, ok: true, ms: Date.now() - t0, model: result.model, tokens: result.usage?.total_tokens });
+    // awaited on purpose: the serverless runtime may freeze right after we return (see logAiCall)
+    await logAiCall({ kind, question, userId, ip, ok: true, ms: Date.now() - t0, model: result.model, tokens: result.usage?.total_tokens });
     return { status: 200, json: { ...result, authenticated: Boolean(userId) } };
   } catch (err) {
-    logAiCall({ kind, question, userId, ip, ok: false, ms: Date.now() - t0, error: err.message });
+    await logAiCall({ kind, question, userId, ip, ok: false, ms: Date.now() - t0, error: err.message });
     return { status: 500, json: { error: err.message || 'AI error' } };
   }
 }

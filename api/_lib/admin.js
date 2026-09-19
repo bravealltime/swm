@@ -64,7 +64,9 @@ export async function tableStatus() {
 async function rest(pathname, { method = 'GET', body, query = '' } = {}) {
   const url = supabaseUrl();
   const key = serviceKey();
-  if (!url || !key) return { ok: false, status: 0, error: 'ไม่มี SUPABASE_SERVICE_ROLE_KEY บนเซิร์ฟเวอร์', data: null };
+  // name the variable that is actually missing — the URL is easy to forget on Vercel because the browser has a built-in default
+  if (!url) return { ok: false, status: 0, error: 'ไม่มี VITE_SUPABASE_URL บนเซิร์ฟเวอร์', data: null };
+  if (!key) return { ok: false, status: 0, error: 'ไม่มี SUPABASE_SERVICE_ROLE_KEY บนเซิร์ฟเวอร์', data: null };
   // The tables live in the `public` schema; the project's Data API may default to another one
   const schema = env('SUPABASE_SCHEMA') || 'public';
   const res = await fetch(`${url}/rest/v1/${pathname}${query}`, {
@@ -127,9 +129,13 @@ export async function saveSettings(patch, by) {
 // --- AI usage log ---------------------------------------------------------------------------
 const ipHash = (ip) => (ip ? crypto.createHash('sha256').update(String(ip)).digest('hex').slice(0, 16) : null);
 
-/** Fire-and-forget; never throws. */
+/**
+ * Never throws. Returns a promise the caller should await before responding: Vercel freezes the
+ * function as soon as the response is sent, so a fire-and-forget insert never reaches Supabase.
+ * Capped at 4s so a slow log can't hold up the answer.
+ */
 export function logAiCall({ kind, question, userId, ip, ok, ms, model, error, tokens }) {
-  if (!serviceKey()) return;
+  if (!serviceKey()) return Promise.resolve();
   const row = {
     kind: String(kind || 'unknown').slice(0, 20),
     question: question ? String(question).slice(0, 300) : null,
@@ -141,7 +147,10 @@ export function logAiCall({ kind, question, userId, ip, ok, ms, model, error, to
     error: error ? String(error).slice(0, 200) : null,
     tokens: Number(tokens) || null,
   };
-  rest('ai_logs', { method: 'POST', body: row }).catch(() => {});
+  let timer;
+  const timeout = new Promise((resolve) => { timer = setTimeout(resolve, 4000); });
+  const write = rest('ai_logs', { method: 'POST', body: row }).catch(() => {});
+  return Promise.race([write, timeout]).finally(() => clearTimeout(timer));
 }
 
 export async function aiLogs({ limit = 100 } = {}) {
