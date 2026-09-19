@@ -22,9 +22,10 @@ import {
 } from 'lucide-react';
 import MonsterAvatar from '../components/MonsterAvatar';
 import ArenaRushHourHub from '../components/ArenaRushHourHub';
+import AiAdvisorPanel from '../components/AiAdvisorPanel';
 import { matchArenaTeams } from '../utils/arenaMatcher';
 import { findArenaCounters } from '../utils/arenaCounter';
-import { loadBox, loadDemoBox } from '../utils/swexImport';
+import { loadBox, loadDemoBox, boxUnits } from '../utils/swexImport';
 import { exportArenaTeamCard } from '../utils/cardExporter';
 import { MONSTERS } from '../data/monsters';
 import { buildUrl } from '../router';
@@ -883,6 +884,31 @@ export default function ArenaMetaView({ onNavigate, subItem, ad }) {
                 )}
                 <div className="text-[11px] text-slate-500">อันดับด้านล่างมาจากการเทียบกลไกสกิลจริง (ล้างบัฟ / ลีด SPD / ชุบ / สวนกลับ / CC…) กับสูตรบุกในแค็ตตาล็อก — เป็นลำดับความเหมาะสม ไม่ใช่ % ชนะ</div>
               </div>
+
+              {/* Grounded AI coach for the selected arena defense */}
+              <AiAdvisorPanel
+                resetKey={enemyQuery.join(',')}
+                label="ให้ AI วิเคราะห์ทีมเจาะ & แนะนำการเล่น"
+                hint="วิเคราะห์จุดเด่นทีมรับ ลำดับการออกสกิล ตัวที่ต้องล็อกเป้าก่อน และการจูนสปีด จากสกิลจริงในระบบ"
+                buildPayload={() => ({
+                  kind: 'arena',
+                  defense: {
+                    leader: counter.enemy.leader,
+                    monsters: counter.enemy.members.map((m) => m.name),
+                  },
+                  counters: counter.results.slice(0, 5).map((c) => ({
+                    name: c.name,
+                    nameTh: c.nameTh,
+                    archetype: c.archetype,
+                    slots: c.slots.map((s) => s.name),
+                    leader: c.leader,
+                    turnOrder: c.turnOrder,
+                    runeGuidance: c.runeGuidance || c.runeBuilds,
+                    isComplete: c.isComplete,
+                  })),
+                  userBox: summary.hasBox ? boxUnits(userBox).map((u) => u.name).filter(Boolean).slice(0, 100) : [],
+                })}
+              />
 
               {/* Results */}
               <div className="flex items-center justify-between gap-3 flex-wrap">

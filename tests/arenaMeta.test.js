@@ -6,6 +6,7 @@ import { buildArenaTeams, buildMonsterTraits } from '../scripts/build_arena_team
 import { monsterTraits, teamTraits } from '../src/utils/arenaTraits.js';
 import { traitsOfName, hasSkill, profileEnemy, matchDefenses, findArenaCounters } from '../src/utils/arenaCounter.js';
 import { exportArenaTeamCard } from '../src/utils/cardExporter.js';
+import { arenaPrompt } from '../api/_lib/advisor.js';
 
 const names = new Set(allMonsters.map((m) => m.name.toLowerCase()));
 const all = [...arenaData.offense, ...arenaData.defense];
@@ -233,6 +234,54 @@ describe('arenaCounter', () => {
 describe('cardExporter', () => {
   it('exports exportArenaTeamCard function', () => {
     expect(typeof exportArenaTeamCard).toBe('function');
+  });
+});
+
+describe('arenaPrompt (AI Grounded Advisor)', () => {
+  it('generates grounded prompt with facts, counter candidates, and guidelines', () => {
+    const prompt = arenaPrompt({
+      defense: {
+        leader: 'Psamathe',
+        monsters: ['Psamathe', 'Clara', 'Savannah', 'Kaki'],
+      },
+      counters: [
+        {
+          name: 'Leo Cleave',
+          nameTh: 'ลีโอ กวาดล้าง',
+          archetype: 'Anti-Speed Cleave',
+          slots: ['Leo', 'Megan', 'Lushen', 'Lushen'],
+          leader: 'Lushen',
+          turnOrder: ['Leo', 'Megan', 'Lushen', 'Lushen'],
+          runeGuidance: 'Leo (Vampire) -> Megan (Swift) -> 2x Lushen (Fatal/Blade)',
+          isComplete: true,
+        },
+      ],
+      userBox: ['Leo', 'Lushen', 'Megan', 'Galleon', 'Tiana'],
+    });
+
+    expect(prompt).toContain('Psamathe');
+    expect(prompt).toContain('Savannah');
+    expect(prompt).toContain('ลีโอ กวาดล้าง');
+    expect(prompt).toContain('Anti-Speed Cleave');
+    expect(prompt).toContain('Leo (Vampire)');
+    expect(prompt).toContain('มอนสเตอร์เด่นในไอดีผู้ใช้: Leo, Lushen, Megan, Galleon, Tiana');
+    expect(prompt).toContain('ลำดับเทิร์น (Turn Order)');
+    expect(prompt).toContain('ล็อกเป้าหมายแรก (First Focus Target)');
+  });
+
+  it('handles guest mode with no userBox gracefully', () => {
+    const prompt = arenaPrompt({
+      defense: {
+        leader: 'Vanessa',
+        monsters: ['Vanessa', 'Camilla', 'Byungchul', 'Triana'],
+      },
+      counters: [],
+    });
+
+    expect(prompt).toContain('Vanessa');
+    expect(prompt).toContain('Camilla');
+    expect(prompt).toContain('(ไม่มีสูตรในระบบ)');
+    expect(prompt).not.toContain('มอนสเตอร์เด่นในไอดีผู้ใช้');
   });
 });
 
