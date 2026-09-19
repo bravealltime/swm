@@ -1,0 +1,41 @@
+name: CI
+
+# Lint, unit tests and a production build on every push and pull request. Vercel deploys
+# main regardless, so this is the signal that tells you a push broke something.
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - '**.md'
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Unit tests
+        run: npm test
+
+      # also regenerates the skill shards from monsterSkillsData.json (vite.config.js)
+      - name: Build
+        run: npm run build

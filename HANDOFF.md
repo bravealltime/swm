@@ -15,7 +15,8 @@ cp .env.example .env      # แล้วกรอกค่าตามข้อ 
 npm run dev               # http://localhost:5173
 ```
 
-ต้องมี Node 20+ (เครื่องเดิมใช้ 26) และ Chrome/Edge สำหรับทดสอบ AegisLink
+ต้องมี Node 20+ (เครื่องเดิมใช้ 26, เครื่องปัจจุบัน 24 LTS, CI ใช้ 22) และ Chrome/Edge สำหรับทดสอบ AegisLink
+เช็กว่าพร้อม: `npm test` ต้องผ่านทั้งหมด และ `npm run build` ต้องเสร็จใน ~10 วิ
 
 ## 2. ตัวแปรลับ (.env — ห้าม commit, .gitignore กันไว้แล้ว)
 
@@ -82,6 +83,8 @@ scripts/             ตัวดึง/สร้างข้อมูล 25 ต
 scripts/_archive/    สคริปต์แกะโค้ด/ลอง API ครั้งเดียว 90 ตัว ไม่ได้ดูแลต่อ
 supabase/admin_schema.sql  ตารางหลังบ้าน (รันแล้วในโปรเจกต์ปัจจุบัน)
 .github/workflows/update-swrt-data.yml  งานรายคืน
+.github/workflows/ci.yml   lint + test + build ทุก push/PR (Vercel deploy ไม่รอผลนี้ — ดูไว้เป็นสัญญาณว่าพัง)
+tests/*.test.js      vitest (`npm test`) — parser SWEX, แพ็กเก็ต siege/อันดับกิลด์, กติกาเลือกกระดาน, handler API, parseJson ของ AI, shard สกิล round-trip
 ```
 
 กติกาเล็ก ๆ: view ใหม่ = เพิ่มใน `VIEWS` (App.jsx) + `VIEW_TITLES` (router.js) + เมนูใน `src/data/navigation.js` (+ `resolveView` ใน Sidebar ถ้า id ไม่ตรง)
@@ -152,6 +155,7 @@ Secrets ที่ต้องมีใน GitHub: `AI_BASE_URL`, `AI_MODEL`, `AI
 - `loadEnv()` ใน `api/_lib/ai.js` อ่าน `.env` ครั้งเดียวต่อ process → แก้ `.env` แล้วต้องรีสตาร์ต `npm run dev`
 - เช็ก prod ว่า Supabase ฝั่งเซิร์ฟเวอร์ใช้ได้โดยไม่ต้องล็อกอิน: `GET https://swm-blue.vercel.app/api/guild-rankings` ต้องไม่มีฟิลด์ `error`
 - lint: `npm run lint` (oxlint) — warning `set-state-in-effect`/`no-unused-vars` ที่ค้างเป็นของเดิม ไม่ต้องไล่แก้
+- test: `npm test` (vitest, ~3 วิ, ไม่ต้องมี .env) / `npm run test:watch` — แก้ parser ใน `src/utils/` หรือ `api/_lib/` แล้วรันก่อน commit; fixture แพ็กเก็ตใน `tests/siegeLive.test.js` เป็นรูปแบบที่*เดา*จากชื่อฟิลด์ พอเจอแพ็กเก็ตจริงให้แก้ fixture ตาม
 - build: `npm run build` (main bundle ~280 kB gzip 87 kB — อย่า import แคตตาล็อก/Supabase SDK เข้าเชลล์)
 - **อย่า `import monsterSkillsData.json` ใน `src/`** — chunk จะบวม 5 MB ทันที (เคยเป็นแบบนั้นกับหน้าสารานุกรม) ใช้ `useMonsterSkills(monster)` / `loadMonsterSkills()` / `getSkillTags()` จาก `src/data/monsterSkills.js` แทน
 - Vite dev จำรายชื่อไฟล์ใน `public/` ตอนสร้าง server — ไฟล์ที่ plugin สร้างต้องเกิดใน `configResolved` (ไม่ใช่ `buildStart`) และเขียนทับแทนลบ-สร้างใหม่ ไม่งั้น request จะได้ index.html แทนไฟล์
