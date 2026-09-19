@@ -52,7 +52,7 @@ const TOOL_ITEMS = [
 const PRIMARY_IDS = new Set(NAV_ITEMS.flatMap((i) => i.group || [i.id]));
 
 export default function Navbar({ currentView, onNavigate, onOpenSearch, onOpenMenu, onOpenSync, onOpenAuth }) {
-  const { user } = useAuth();
+  const { user, isAdmin, adminMode, setAdminMode } = useAuth();
   const [toolsOpen, setToolsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -175,6 +175,18 @@ export default function Navbar({ currentView, onNavigate, onOpenSearch, onOpenMe
 
           {/* Right actions */}
           <div className="flex items-center gap-2">
+            {isAdmin && (
+              <button
+                onClick={() => { const next = !adminMode; setAdminMode(next); if (next) onNavigate('admin'); else if (currentView === 'admin') onNavigate('dashboard'); }}
+                role="switch"
+                aria-checked={adminMode}
+                className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border text-xs font-bold transition-all cursor-pointer ${adminMode ? 'bg-fuchsia-600/25 border-fuchsia-400/60 text-fuchsia-100 shadow-lg shadow-fuchsia-500/20' : 'bg-white/[0.04] border-white/10 text-slate-300 hover:text-white'}`}
+                title={adminMode ? 'กำลังอยู่ในโหมดแอดมิน — คลิกเพื่อกลับหน้าปกติ' : 'สลับไปโหมดแอดมิน (หลังบ้าน)'}
+              >
+                <span className={`w-2 h-2 rounded-full ${adminMode ? 'bg-fuchsia-300 animate-pulse' : 'bg-slate-500'}`} />
+                <span className="hidden sm:inline">{adminMode ? 'โหมดแอดมิน' : 'ผู้ใช้ปกติ'}</span>
+              </button>
+            )}
             {/* User Auth Button */}
             {user ? (
               <button

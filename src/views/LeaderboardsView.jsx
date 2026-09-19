@@ -1,244 +1,126 @@
 import React, { useState, useMemo } from 'react';
-import { 
-  Trophy, 
-  Globe, 
-  Search, 
-  ShieldCheck, 
-  Swords, 
-  Compass, 
-  Flame, 
-  Crown, 
-  Sparkles 
-} from 'lucide-react';
-import { LEADERBOARDS } from '../data/leaderboards';
+import { Trophy, Search, Radio, RefreshCw, Info, Users, Star } from 'lucide-react';
+import { useGuildRankings } from '../hooks/useGuildRankings';
+import { SERVERS } from '../utils/guildRankings';
 
-// Additional mock data for WGB, Labyrinth, and Subjugation to mirror SWGT
-const MODE_DATA = {
-  wgb: {
-    asia: [
-      { rank: 1, name: 'Siam Paragon', score: 31200, winLoss: '28W - 0L', winRate: '100%', rankTier: 'World Legend #1', flag: '🇹🇭' },
-      { rank: 2, name: 'Dragon Nest TW', score: 30450, winLoss: '26W - 2L', winRate: '92.8%', rankTier: 'World Guardian 3', flag: '🇹🇼' },
-      { rank: 3, name: 'Apex Legend TH', score: 29800, winLoss: '25W - 3L', winRate: '89.2%', rankTier: 'World Guardian 3', flag: '🇹🇭' },
-      { rank: 4, name: 'Royal SG', score: 29100, winLoss: '24W - 4L', winRate: '85.7%', rankTier: 'World Guardian 3', flag: '🇸🇬' },
-      { rank: 5, name: 'Bangkhen Knight', score: 28400, winLoss: '23W - 5L', winRate: '82.1%', rankTier: 'World Guardian 2', flag: '🇹🇭' },
-    ],
-    global: [
-      { rank: 1, name: 'SAY SWGT', score: 30900, winLoss: '27W - 1L', winRate: '96.4%', rankTier: 'World Legend #1', flag: '🇺🇸' },
-      { rank: 2, name: 'Malicious', score: 30150, winLoss: '25W - 3L', winRate: '89.2%', rankTier: 'World Guardian 3', flag: '🇺🇸' },
-      { rank: 3, name: 'SSG Gaming', score: 29400, winLoss: '24W - 4L', winRate: '85.7%', rankTier: 'World Guardian 3', flag: '🇨🇦' },
-      { rank: 4, name: 'True Amity', score: 28700, winLoss: '23W - 5L', winRate: '82.1%', rankTier: 'World Guardian 2', flag: '🌐' },
-    ],
-    europe: [
-      { rank: 1, name: 'Dark Phoenix EU', score: 30700, winLoss: '27W - 1L', winRate: '96.4%', rankTier: 'World Legend #1', flag: '🇩🇪' },
-      { rank: 2, name: 'Valhalla FR', score: 29900, winLoss: '25W - 3L', winRate: '89.2%', rankTier: 'World Guardian 3', flag: '🇫🇷' },
-    ],
-    japanKorea: [
-      { rank: 1, name: 'Samurai Soul JP', score: 31050, winLoss: '27W - 1L', winRate: '96.4%', rankTier: 'World Legend #1', flag: '🇯🇵' },
-      { rank: 2, name: 'K-Overlords', score: 30200, winLoss: '25W - 3L', winRate: '89.2%', rankTier: 'World Guardian 3', flag: '🇰🇷' },
-    ]
-  },
-  labyrinth: {
-    asia: [
-      { rank: 1, name: 'Siam Paragon', score: 'Day 2 Clear (01:14:20)', winLoss: 'Rank SSS', winRate: '100%', rankTier: 'Rank SSS Speed', flag: '🇹🇭' },
-      { rank: 2, name: 'Apex Legend TH', score: 'Day 2 Clear (02:45:10)', winLoss: 'Rank SSS', winRate: '100%', rankTier: 'Rank SSS Speed', flag: '🇹🇭' },
-      { rank: 3, name: 'Dragon Nest TW', score: 'Day 2 Clear (03:12:00)', winLoss: 'Rank SSS', winRate: '100%', rankTier: 'Rank SSS Speed', flag: '🇹🇼' },
-    ],
-    global: [
-      { rank: 1, name: 'SAY SWGT', score: 'Day 2 Clear (01:05:40)', winLoss: 'Rank SSS', winRate: '100%', rankTier: 'Rank SSS Speed', flag: '🇺🇸' },
-      { rank: 2, name: 'Malicious', score: 'Day 2 Clear (01:42:15)', winLoss: 'Rank SSS', winRate: '100%', rankTier: 'Rank SSS Speed', flag: '🇺🇸' },
-    ],
-    europe: [
-      { rank: 1, name: 'Dark Phoenix EU', score: 'Day 2 Clear (01:25:30)', winLoss: 'Rank SSS', winRate: '100%', rankTier: 'Rank SSS Speed', flag: '🇩🇪' },
-    ],
-    japanKorea: [
-      { rank: 1, name: 'Samurai Soul JP', score: 'Day 2 Clear (01:10:05)', winLoss: 'Rank SSS', winRate: '100%', rankTier: 'Rank SSS Speed', flag: '🇯🇵' },
-    ]
-  },
-  subjugation: {
-    asia: [
-      { rank: 1, name: 'Siam Paragon', score: 'Score: 4,850,200', winLoss: 'Stage 10 Clear', winRate: '100%', rankTier: 'Guardian 3 (อันดับ 1)', flag: '🇹🇭' },
-      { rank: 2, name: 'Royal SG', score: 'Score: 4,680,100', winLoss: 'Stage 10 Clear', winRate: '100%', rankTier: 'Guardian 3', flag: '🇸🇬' },
-      { rank: 3, name: 'Apex Legend TH', score: 'Score: 4,520,000', winLoss: 'Stage 10 Clear', winRate: '100%', rankTier: 'Guardian 3', flag: '🇹🇭' },
-    ],
-    global: [
-      { rank: 1, name: 'SAY SWGT', score: 'Score: 4,920,400', winLoss: 'Stage 10 Clear', winRate: '100%', rankTier: 'Guardian 3 (อันดับ 1)', flag: '🇺🇸' },
-      { rank: 2, name: 'SSG Gaming', score: 'Score: 4,610,000', winLoss: 'Stage 10 Clear', winRate: '100%', rankTier: 'Guardian 3', flag: '🇨🇦' },
-    ],
-    europe: [
-      { rank: 1, name: 'Dark Phoenix EU', score: 'Score: 4,790,000', winLoss: 'Stage 10 Clear', winRate: '100%', rankTier: 'Guardian 3 (อันดับ 1)', flag: '🇩🇪' },
-    ],
-    japanKorea: [
-      { rank: 1, name: 'Samurai Soul JP', score: 'Score: 4,880,500', winLoss: 'Stage 10 Clear', winRate: '100%', rankTier: 'Guardian 3 (อันดับ 1)', flag: '🇯🇵' },
-    ]
-  }
-};
+// Guild leaderboards have no public data source, so every row here comes from a real in-game
+// ranking screen relayed by the AegisLink plugin and shared through /api/guild-rankings.
+const MODES = [
+  { id: 'siege', name: '🏰 ศึกยึดเกาะ (Siege Battle)', desc: 'อันดับกิลด์จากหน้าอันดับ Siege ในเกม' },
+  { id: 'wgb', name: '⚔️ ศึกกิลด์ข้ามเซิร์ฟ (World Guild Battle)', desc: 'อันดับจากหน้าอันดับ WGB ในเกม' },
+];
 
-export default function LeaderboardsView() {
-  const [selectedMode, setSelectedMode] = useState('siege'); // 'siege', 'wgb', 'labyrinth', 'subjugation'
-  const [selectedServer, setSelectedServer] = useState('asia');
-  const [searchQuery, setSearchQuery] = useState('');
+const fmt = (ms) => new Date(ms).toLocaleString('th-TH', { dateStyle: 'medium', timeStyle: 'short' });
 
-  const modes = [
-    { id: 'siege', name: '🏰 กิลด์ศึกยึดเกาะ (Siege Battle)', desc: 'การแข่งขันยึดเกาะ 3 กิลด์ชิง 20,000 แต้ม' },
-    { id: 'wgb', name: '⚔️ ศึกกิลด์ข้ามเซิร์ฟ (World Guild Battle)', desc: 'กิลด์วอร์แบบ 1v1 ปะทะกิลด์ชั้นนำทั่วโลก' },
-    { id: 'labyrinth', name: '🌀 เขาวงกตทาร์ทารัส (Tartarus Labyrinth)', desc: 'อันดับความเร็วเคลียร์บอสทาร์ทารัสระดับ SSS' },
-    { id: 'subjugation', name: '🐉 ปราบอสูรกิลด์ (Monster Subjugation)', desc: 'ศึกรวมพลังกำจัดบอสปีศาจประจำสัปดาห์' },
-  ];
+export default function LeaderboardsView({ onNavigate }) {
+  const [mode, setMode] = useState('siege');
+  const [server, setServer] = useState('asia');
+  const [query, setQuery] = useState('');
+  const rankings = useGuildRankings();
+  const board = rankings.board(server, mode);
 
-  const servers = [
-    { id: 'asia', name: 'เซิร์ฟเวอร์ Asia (เอเชีย)', flag: '🌏' },
-    { id: 'global', name: 'เซิร์ฟเวอร์ Global (สากล)', flag: '🌐' },
-    { id: 'europe', name: 'เซิร์ฟเวอร์ Europe (ยุโรป)', flag: '🇪🇺' },
-    { id: 'japanKorea', name: 'เซิร์ฟเวอร์ Japan + Korea', flag: '🇯🇵' },
-  ];
+  const rows = useMemo(() => {
+    const list = board?.rows || [];
+    const q = query.trim().toLowerCase();
+    return q ? list.filter((g) => g.name.toLowerCase().includes(q)) : list;
+  }, [board, query]);
 
-  const rawData = useMemo(() => {
-    if (selectedMode === 'siege') {
-      return LEADERBOARDS[selectedServer] || [];
-    }
-    return (MODE_DATA[selectedMode] && MODE_DATA[selectedMode][selectedServer]) || [];
-  }, [selectedMode, selectedServer]);
-
-  const currentGuilds = useMemo(() => {
-    return rawData.filter(g => 
-      g.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-  }, [rawData, searchQuery]);
+  const coverage = SERVERS.map((s) => ({ ...s, has: Boolean(rankings.board(s.id, mode)) }));
 
   return (
     <div className="space-y-6 pb-12 animate-fadeIn">
-      {/* Header */}
       <div className="border-b border-[#1c2738] pb-5">
         <div className="flex items-center gap-2 text-xs font-mono text-amber-400 uppercase tracking-wider mb-1">
-          <Trophy className="w-4 h-4" />
-          SWGT All-Server Guild Leaderboards • 4 โหมดการแข่งขันกิลด์ครบวงจร
+          <Trophy className="w-4 h-4" /> Guild leaderboards • ข้อมูลจริงจากหน้าอันดับในเกม
         </div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-          ตารางจัดอันดับกิลด์ชั้นนำระดับโลก (Guild Leaderboards)
-        </h1>
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">ตารางจัดอันดับกิลด์ (Siege & World Guild Battle)</h1>
         <p className="text-sm text-slate-400 mt-1 max-w-3xl leading-relaxed">
-          เช็คอันดับกิลด์ท็อปเซิร์ฟเวอร์ทั้ง 4 โหมดการแข่งขัน: Siege Battle, World Guild Battle, Tartarus Labyrinth และ Monster Subjugation แยกตามภูมิภาคทั่วโลก
+          อันดับกิลด์ไม่มี API สาธารณะ เว็บนี้จึงไม่แต่งตัวเลขเอง — ทุกแถวมาจากหน้าอันดับในเกมที่ผู้เล่นซึ่งเชื่อมต่อ AegisLink เปิดดู แล้วแชร์ให้ทุกคน
         </p>
       </div>
 
-      {/* Mode Switcher Tabs */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 p-1.5 rounded-2xl bg-[#101724] border border-[#1d2b3f]">
-        {modes.map((m) => (
-          <button
-            key={m.id}
-            onClick={() => setSelectedMode(m.id)}
-            className={`p-3 rounded-xl text-left transition-all cursor-pointer ${
-              selectedMode === m.id
-                ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
-                : 'text-slate-300 hover:text-white hover:bg-[#152030]'
-            }`}
-          >
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 p-1.5 rounded-2xl bg-[#101724] border border-[#1d2b3f]">
+        {MODES.map((m) => (
+          <button key={m.id} onClick={() => setMode(m.id)} className={`p-3 rounded-xl text-left transition-all cursor-pointer ${mode === m.id ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30' : 'text-slate-300 hover:text-white hover:bg-[#152030]'}`}>
             <div className="text-xs sm:text-sm font-black">{m.name}</div>
-            <div className={`text-[11px] mt-0.5 line-clamp-1 ${selectedMode === m.id ? 'text-blue-100' : 'text-slate-400'}`}>
-              {m.desc}
-            </div>
+            <div className={`text-[11px] mt-0.5 ${mode === m.id ? 'text-blue-100' : 'text-slate-400'}`}>{m.desc}</div>
           </button>
         ))}
       </div>
 
-      {/* Server Selection Tabs */}
       <div className="flex flex-wrap gap-2 p-1.5 rounded-xl bg-[#101724] border border-[#1d2b3f]">
-        {servers.map((s) => (
-          <button
-            key={s.id}
-            onClick={() => setSelectedServer(s.id)}
-            className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-bold flex items-center gap-2 transition-colors cursor-pointer ${
-              selectedServer === s.id
-                ? 'bg-amber-500 text-slate-950 font-black shadow-sm'
-                : 'text-slate-300 hover:text-white hover:bg-[#16202f]'
-            }`}
-          >
-            <span>{s.flag}</span>
-            <span>{s.name}</span>
+        {coverage.map((s) => (
+          <button key={s.id} onClick={() => setServer(s.id)} className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-bold flex items-center gap-2 transition-colors cursor-pointer ${server === s.id ? 'bg-amber-500 text-slate-950 font-black shadow-sm' : 'text-slate-300 hover:text-white hover:bg-[#16202f]'}`}>
+            <span className={`w-2 h-2 rounded-full ${s.has ? 'bg-emerald-400' : 'bg-slate-600'}`} />
+            <span>{s.label}</span>
           </button>
         ))}
+        <button onClick={rankings.refresh} className="ml-auto px-3 py-2 rounded-lg text-xs text-slate-400 hover:text-white flex items-center gap-1.5 cursor-pointer"><RefreshCw className="w-3.5 h-3.5" /> โหลดใหม่</button>
       </div>
 
-      {/* Guild Search Bar */}
-      <div className="bg-[#101724] p-3 rounded-xl border border-[#1d2b3f] flex items-center gap-3">
-        <Search className="w-4 h-4 text-slate-400 ml-1 shrink-0" />
-        <input
-          type="text"
-          className="w-full bg-transparent border-none text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none"
-          placeholder="ค้นหาชื่อกิลด์ เช่น Siam Paragon, SAY SWGT, Dragon Slayer, Apex Legend..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-        {searchQuery && (
-          <button onClick={() => setSearchQuery('')} className="text-xs text-slate-400 hover:text-white mr-1">
-            ✕
-          </button>
-        )}
-      </div>
+      {board ? (
+        <>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-slate-400">
+            <span className="flex items-center gap-1.5"><Info className="w-3.5 h-3.5" /> อัปเดต {fmt(board.at)} • {board.source === 'live' ? 'จากเกมบนเครื่องนี้ (AegisLink)' : `แชร์โดยผู้เล่น${board.note ? ` • ${board.note}` : ''}`} • {board.rows.length} กิลด์</span>
+            {board.source === 'live' && (board.shared ? <span className="text-emerald-300">✓ แชร์ให้ทุกคนแล้ว</span> : <span className="text-amber-300">{board.error || 'กำลังแชร์…'}</span>)}
+          </div>
 
-      {/* Leaderboard Table */}
-      <div className="bg-[#101724] border border-[#1d2b3f] rounded-2xl overflow-hidden shadow-xl">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="border-b border-[#1d2b3f] bg-[#0c121c] text-xs font-bold text-slate-400 uppercase tracking-wider">
-                <th className="py-3.5 px-4 text-center w-16">อันดับ</th>
-                <th className="py-3.5 px-4">ชื่อกิลด์</th>
-                <th className="py-3.5 px-4 text-center">ระดับแรงก์</th>
-                <th className="py-3.5 px-4 text-center">ผลงาน / เคลียร์</th>
-                <th className="py-3.5 px-4 text-center">อัตราการชนะ</th>
-                <th className="py-3.5 px-4 text-right">คะแนน / สถิติ</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[#1d2b3f] text-xs sm:text-sm">
-              {currentGuilds.map((guild) => (
-                <tr 
-                  key={guild.rank}
-                  className="hover:bg-[#152030] transition-colors"
-                >
-                  <td className="py-4 px-4 text-center font-mono font-bold">
-                    {guild.rank === 1 ? (
-                      <span className="inline-block px-2.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-extrabold border border-amber-500/40">
-                        👑 #1
-                      </span>
-                    ) : guild.rank === 2 ? (
-                      <span className="inline-block px-2.5 py-0.5 rounded bg-slate-300/20 text-slate-200 font-extrabold border border-slate-400/40">
-                        🥈 #2
-                      </span>
-                    ) : guild.rank === 3 ? (
-                      <span className="inline-block px-2.5 py-0.5 rounded bg-amber-700/20 text-amber-400 font-extrabold border border-amber-700/40">
-                        🥉 #3
-                      </span>
-                    ) : (
-                      <span className="text-slate-400 font-mono">#{guild.rank}</span>
-                    )}
-                  </td>
-                  <td className="py-4 px-4">
-                    <div className="flex items-center gap-2">
-                      <span className="text-base">{guild.flag}</span>
-                      <span className="font-extrabold text-white text-sm">{guild.name}</span>
-                    </div>
-                  </td>
-                  <td className="py-4 px-4 text-center">
-                    <span className="inline-block px-2.5 py-1 rounded text-xs font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30">
-                      {guild.rankTier}
-                    </span>
-                  </td>
-                  <td className="py-4 px-4 text-center font-mono text-slate-300">
-                    {guild.winLoss}
-                  </td>
-                  <td className="py-4 px-4 text-center font-mono font-bold text-emerald-400">
-                    {guild.winRate}
-                  </td>
-                  <td className="py-4 px-4 text-right font-mono font-black text-amber-400 text-sm">
-                    {typeof guild.score === 'number' ? guild.score.toLocaleString() : guild.score}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div className="bg-[#101724] p-3 rounded-xl border border-[#1d2b3f] flex items-center gap-3">
+            <Search className="w-4 h-4 text-slate-400 ml-1 shrink-0" />
+            <input type="text" className="w-full bg-transparent border-none text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none" placeholder="ค้นหาชื่อกิลด์…" value={query} onChange={(e) => setQuery(e.target.value)} />
+            {query && <button onClick={() => setQuery('')} className="text-xs text-slate-400 hover:text-white mr-1 cursor-pointer">✕</button>}
+          </div>
+
+          <div className="bg-[#101724] border border-[#1d2b3f] rounded-2xl overflow-hidden shadow-xl">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="border-b border-[#1d2b3f] bg-[#0c121c] text-xs font-bold text-slate-400 uppercase tracking-wider">
+                    <th className="py-3.5 px-4 text-center w-20">อันดับ</th>
+                    <th className="py-3.5 px-4">ชื่อกิลด์</th>
+                    <th className="py-3.5 px-4 text-center">เรตติ้ง</th>
+                    <th className="py-3.5 px-4 text-center">สมาชิก</th>
+                    <th className="py-3.5 px-4 text-center">เลเวลกิลด์</th>
+                    <th className="py-3.5 px-4 text-right">คะแนน</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[#1d2b3f] text-xs sm:text-sm">
+                  {rows.map((g) => (
+                    <tr key={`${g.rank}-${g.name}`} className="hover:bg-[#152030] transition-colors">
+                      <td className="py-3.5 px-4 text-center font-mono font-bold">
+                        {g.rank === 1 ? <span className="inline-block px-2.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-extrabold border border-amber-500/40">👑 #1</span>
+                          : g.rank === 2 ? <span className="inline-block px-2.5 py-0.5 rounded bg-slate-300/20 text-slate-200 font-extrabold border border-slate-400/40">🥈 #2</span>
+                          : g.rank === 3 ? <span className="inline-block px-2.5 py-0.5 rounded bg-amber-700/20 text-amber-400 font-extrabold border border-amber-700/40">🥉 #3</span>
+                          : <span className="text-slate-400">#{g.rank}</span>}
+                      </td>
+                      <td className="py-3.5 px-4 font-extrabold text-white">{g.name}</td>
+                      <td className="py-3.5 px-4 text-center text-slate-300 font-mono">{g.rating ?? '—'}</td>
+                      <td className="py-3.5 px-4 text-center text-slate-300 font-mono">{g.members != null ? <span className="inline-flex items-center gap-1"><Users className="w-3.5 h-3.5 text-slate-500" />{g.members}</span> : '—'}</td>
+                      <td className="py-3.5 px-4 text-center text-slate-300 font-mono">{g.level != null ? <span className="inline-flex items-center gap-1"><Star className="w-3.5 h-3.5 text-amber-400" />{g.level}</span> : '—'}</td>
+                      <td className="py-3.5 px-4 text-right font-mono font-black text-amber-400">{g.points ? g.points.toLocaleString() : '—'}</td>
+                    </tr>
+                  ))}
+                  {rows.length === 0 && <tr><td colSpan={6} className="py-8 text-center text-slate-500 text-sm">ไม่พบกิลด์ที่ค้นหา</td></tr>}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </>
+      ) : (
+        <div className="p-8 rounded-2xl border border-dashed border-white/10 bg-[#101724] text-center space-y-3">
+          <Radio className="w-8 h-8 text-cyan-400 mx-auto" />
+          <div className="text-white font-bold">
+            {rankings.loading ? 'กำลังโหลด…' : `ยังไม่มีอันดับ ${mode === 'siege' ? 'Siege' : 'WGB'} ของเซิร์ฟเวอร์ ${SERVERS.find((s) => s.id === server)?.label}`}
+          </div>
+          {!rankings.loading && (
+            <p className="text-sm text-slate-400 max-w-2xl mx-auto leading-relaxed">
+              เปิดหน้าอันดับ {mode === 'siege' ? 'Siege' : 'World Guild Battle'} ในเกมขณะเชื่อมต่อ AegisLink 1 ครั้ง อันดับจริงจะขึ้นที่นี่ทันที และถ้าเข้าสู่ระบบไว้ ระบบจะแชร์ให้ผู้เล่นทุกคนเห็นอัตโนมัติ
+              {rankings.error === 'TABLE_MISSING' && <span className="block mt-1 text-amber-300">ผู้ดูแล: ยังไม่ได้สร้างตาราง guild_rankings (supabase/admin_schema.sql)</span>}
+            </p>
+          )}
+          <button onClick={() => onNavigate?.('aegislink')} className="px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold cursor-pointer">วิธีเชื่อมต่อ AegisLink</button>
         </div>
-      </div>
+      )}
     </div>
   );
 }

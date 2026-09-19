@@ -70,6 +70,51 @@ function swmSyncServer() {
           return;
         }
 
+        // /api/guild-rankings — shared guild leaderboards, same handler Vercel runs
+        if (req.url.startsWith('/api/guild-rankings')) {
+          const url = new URL(req.url, 'http://localhost');
+          const query = Object.fromEntries(url.searchParams.entries());
+          let body = '';
+          req.on('data', (chunk) => { body += chunk; });
+          req.on('end', async () => {
+            res.setHeader('Content-Type', 'application/json; charset=utf-8');
+            try {
+              const { handleGuildRankings } = await import('./api/guild-rankings.js');
+              const token = (req.headers.authorization || '').replace(/^Bearer\s+/i, '');
+              const { status, json } = await handleGuildRankings({ method: req.method, query, body: body ? JSON.parse(body) : null, token });
+              res.statusCode = status;
+              return res.end(JSON.stringify(json));
+            } catch (err) {
+              res.statusCode = 500;
+              return res.end(JSON.stringify({ error: err.message }));
+            }
+          });
+          return;
+        }
+
+        // /api/admin/<action> — back-office API, same handler Vercel runs
+        if (req.url.startsWith('/api/admin/')) {
+          const url = new URL(req.url, 'http://localhost');
+          const action = url.pathname.replace('/api/admin/', '').replace(/\/+$/, '');
+          const query = Object.fromEntries(url.searchParams.entries());
+          let body = '';
+          req.on('data', (chunk) => { body += chunk; });
+          req.on('end', async () => {
+            res.setHeader('Content-Type', 'application/json; charset=utf-8');
+            try {
+              const { handleAdmin } = await import('./api/admin/[action].js');
+              const token = (req.headers.authorization || '').replace(/^Bearer\s+/i, '');
+              const { status, json } = await handleAdmin({ action, method: req.method, body: body ? JSON.parse(body) : null, token, query });
+              res.statusCode = status;
+              return res.end(JSON.stringify(json));
+            } catch (err) {
+              res.statusCode = 500;
+              return res.end(JSON.stringify({ error: err.message }));
+            }
+          });
+          return;
+        }
+
         // POST AegisLink Sync Ingestion endpoint
         if (req.method === 'POST' && (req.url === '/api/sync' || req.url.startsWith('/api/sync'))) {
           let body = '';

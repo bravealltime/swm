@@ -43,6 +43,7 @@ export const VIEW_TITLES = {
   recruit: 'กิลด์รับสมัคร',
   aegislink: 'AegisLink',
   'my-box': 'กล่องมอนสเตอร์ของฉัน',
+  admin: 'หลังบ้าน SWM',
   'ai-farm-optimizer': '🤖 AI จัดทีม & รูน Abyss (Realtime)',
   rta: 'วิเคราะห์ RTA',
 };

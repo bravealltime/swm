@@ -1,6 +1,6 @@
 {
   "name": "swm-aegislink",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "AegisLink: real-time account (monsters, runes, artifacts) and guild/siege relay from Summoners War Exporter (SWEX) to the SWM website, served from 127.0.0.1 only.",
   "main": "index.js",
   "author": "SWM Tactical Intelligence Team",

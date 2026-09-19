@@ -3,6 +3,7 @@
 // account, re-parse it into the box shape on every change, persist it and notify listeners.
 import { parseSwexExport } from '../utils/swexImport';
 import { saveBox } from '../utils/boxStorage';
+import { parseRankingPacket, kindFromCommand, serverFromCountry } from '../utils/guildRankings';
 
 export const DEFAULT_PORT = 7391;
 const ENABLED_KEY = 'swm:aegis-live';
@@ -12,6 +13,7 @@ const listeners = new Set();
 let es = null;
 let raw = null; // the account exactly as the game sent it, kept current by applyDelta()
 let retryTimer = null;
+let failures = 0; // consecutive connection errors; after a few we back off to a 30 s retry
 
 const state = {
   status: 'off', // off | connecting | live | error
@@ -23,6 +25,7 @@ const state = {
   lastCommand: '',
   events: 0,
   guild: { packets: {}, battles: [] },
+  rankings: {}, // kind -> { rows, at, server, shared, error } from in-game ranking screens
   port: DEFAULT_PORT,
   recent: [], // last events for the plugin page console: { at, kind, text }
 };
@@ -97,6 +100,52 @@ function publishBox(command) {
   emit('box', box);
 }
 
+// --- guild leaderboards seen in-game → shared with everyone through /api/guild-rankings ---
+async function sessionToken() {
+  try {
+    const { getSupabase } = await import('./supabaseClient');
+    const supabase = await getSupabase();
+    const { data } = (await supabase?.auth.getSession()) || {};
+    return data?.session?.access_token || '';
+  } catch {
+    return '';
+  }
+}
+
+async function shareRankings(kind) {
+  const entry = state.rankings[kind];
+  if (!entry || entry.shared) return;
+  const token = await sessionToken();
+  if (!token) { entry.error = 'เข้าสู่ระบบเพื่อแชร์อันดับนี้ให้ทุกคนเห็น'; emit('rankings', state.rankings); return; }
+  try {
+    const res = await fetch('/api/guild-rankings', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ server: entry.server, kind, rows: entry.rows, note: `AegisLink ${state.wizard?.name || ''}`.trim() }),
+    });
+    const json = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(json.error || `HTTP ${res.status}`);
+    entry.shared = true; entry.error = '';
+    note('guild', `แชร์อันดับกิลด์ ${kind} (${entry.server}) ให้ทุกคนแล้ว`);
+  } catch (err) {
+    entry.error = err.message;
+  }
+  emit('rankings', state.rankings);
+}
+
+function handleRankingPacket(command, resp, at) {
+  const rows = parseRankingPacket(command, resp);
+  if (!rows || rows.length < 3) return;
+  const kind = kindFromCommand(command);
+  const server = serverFromCountry(state.wizard?.country);
+  const prev = state.rankings[kind];
+  if (prev && prev.at === at) return;
+  state.rankings = { ...state.rankings, [kind]: { rows, at: at || Date.now(), server, shared: false, error: '' } };
+  note('guild', `อันดับกิลด์ ${kind}: ${rows.length} กิลด์ (เซิร์ฟเวอร์ ${server})`);
+  emit('rankings', state.rankings);
+  shareRankings(kind);
+}
+
 // --- connection ---------------------------------------------------------------------------
 async function fetchJson(path) {
   const res = await fetch(`${baseUrl()}${path}`, { cache: 'no-store' });
@@ -109,15 +158,20 @@ async function loadInitial() {
     fetchJson('/snapshot').catch(() => null), // 404 until the game has been logged in
     fetchJson('/guild').catch(() => null),
   ]);
-  if (guild) { state.guild = { packets: guild.packets || {}, battles: guild.battles || [] }; emit('guild', state.guild); }
   if (snap?.data) { raw = snap.data; state.seq = snap.seq || 0; publishBox('snapshot'); }
   else patch({ wizard: null, units: 0 });
+  if (guild) {
+    state.guild = { packets: guild.packets || {}, battles: guild.battles || [] };
+    emit('guild', state.guild);
+    for (const [command, p] of Object.entries(state.guild.packets)) if (/Rank/i.test(command)) handleRankingPacket(command, p.resp, p.at);
+  }
 }
 
 export function start() {
   if (es) return;
   try { localStorage.setItem(ENABLED_KEY, '1'); } catch { /* ignore */ }
   clearTimeout(retryTimer);
+  failures = 0;
   patch({ status: 'connecting', error: '', port: getPort() });
   let source;
   try {
@@ -131,6 +185,7 @@ export function start() {
     if (es !== source) return;
     try {
       const hello = JSON.parse(ev.data);
+      failures = 0;
       note('link', `เชื่อมต่อปลั๊กอิน v${hello.version || '?'} ที่ 127.0.0.1:${getPort()}${hello.hasSnapshot ? '' : ' — ยังไม่มีกล่อง (รอเข้าเกม)'}`);
       patch({ status: 'live', error: '', seq: hello.seq || 0 });
       await loadInitial();
@@ -158,15 +213,20 @@ export function start() {
     if (/Result/.test(msg.command)) { state.guild.battles.push({ command: msg.command, at: msg.at, req: msg.req, resp: msg.resp }); if (state.guild.battles.length > 100) state.guild.battles.shift(); }
     patch({ lastEventAt: Date.now(), lastCommand: msg.command, events: state.events + 1 });
     emit('guild', state.guild);
+    if (/Rank/i.test(msg.command)) handleRankingPacket(msg.command, msg.resp, msg.at);
   });
   source.onerror = () => {
     if (es !== source) return;
-    // EventSource retries by itself; surface the state so the UI can explain what to check
-    if (state.status !== 'error') note('error', `ติดต่อ 127.0.0.1:${getPort()} ไม่ได้ — จะลองใหม่อัตโนมัติ`);
-    patch({ status: source.readyState === EventSource.CLOSED ? 'error' : 'connecting', error: 'ไม่พบปลั๊กอิน AegisLink — เปิด SWEX ไว้ เปิดใช้ปลั๊กอิน แล้วเข้าเกม' });
-    if (source.readyState === EventSource.CLOSED) {
+    failures += 1;
+    if (failures === 1) note('error', `ติดต่อ 127.0.0.1:${getPort()} ไม่ได้ — จะลองใหม่อัตโนมัติ`);
+    // EventSource retries every few seconds by itself; after several misses close it and
+    // retry every 30 s instead, so a machine without SWEX running is not hammered
+    const giveUp = source.readyState === EventSource.CLOSED || failures >= 5;
+    patch({ status: giveUp ? 'error' : 'connecting', error: 'ไม่พบปลั๊กอิน AegisLink — เปิด SWEX ไว้ เปิดใช้ปลั๊กอิน แล้วเข้าเกม' });
+    if (giveUp) {
+      source.close();
       es = null;
-      retryTimer = setTimeout(() => { if (isEnabled()) start(); }, 5000);
+      retryTimer = setTimeout(() => { if (isEnabled()) start(); }, 30000);
     }
   };
 }

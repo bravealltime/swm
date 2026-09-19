@@ -21,13 +21,13 @@ const http = require('http');
 const https = require('https');
 
 const pluginName = 'AegisLink';
-const version = '2.0.0';
+const version = '2.1.0';
 
 const DEFAULT_PORT = 7391;
 const ALLOWED_ORIGINS = [/^https:\/\/swm(-[a-z0-9-]+)?\.vercel\.app$/i, /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i];
 
 // Guild / siege / world-guild-battle packets the website wants to see raw
-const GUILD_COMMANDS = /^(GetGuildInfo|GetGuildMemberList|GetGuildSiege|GetServerGuildWar|BattleGuildSiege|BattleServerGuildWar|GetGuildWar|BattleGuildWar|GetGuildMaze|GetGuildRanking)/;
+const GUILD_COMMANDS = /^(GetGuild|GetServerGuild|BattleGuild|BattleServerGuild|GetWorldGuild)/;
 // Commands that sell / remove things: their request lists the ids that disappear
 const REMOVE_COMMANDS = /^(Sell|Sacrifice|Delete|Remove|Unequip)/i;
 

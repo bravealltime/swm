@@ -42,6 +42,7 @@ const VIEWS = {
   'siege-planner': lazy(() => import('./views/SiegePlannerView')),
   'guild-war-room': lazy(() => import('./views/GuildWarRoomView')),
   'ai-farm-optimizer': lazy(() => import('./views/AiFarmOptimizerView')),
+  admin: lazy(() => import('./views/AdminView')),
 };
 
 const CommandPalette = lazy(() => import('./components/CommandPalette'));
@@ -93,6 +94,19 @@ function AppContent() {
       }
     })();
   }, []);
+
+  // Announcement / maintenance banner set from the back-office
+  const [site, setSite] = useState(null);
+  const [bannerClosed, setBannerClosed] = useState(() => { try { return sessionStorage.getItem('swm:banner-closed') || ''; } catch { return ''; } });
+  useEffect(() => {
+    import('./services/adminClient').then((m) => m.loadPublicSettings()).then((s) => { if (s) setSite(s); }).catch(() => {});
+  }, []);
+  const banner = site?.maintenance?.enabled
+    ? { key: `m:${site.maintenance.message}`, text: site.maintenance.message, level: 'danger' }
+    : site?.announcement?.enabled && site.announcement.text
+    ? { key: `a:${site.announcement.text}`, text: site.announcement.text, level: site.announcement.level || 'info', link: site.announcement.link }
+    : null;
+  const closeBanner = () => { if (!banner) return; setBannerClosed(banner.key); try { sessionStorage.setItem('swm:banner-closed', banner.key); } catch { /* ignore */ } };
 
   // Real-time link to the AegisLink SWEX plugin (127.0.0.1) — only loaded when the user turned it on
   useEffect(() => {
@@ -169,6 +183,15 @@ function AppContent() {
         ข้ามไปเนื้อหาหลัก
       </a>
 
+      {banner && bannerClosed !== banner.key && (
+        <div role="status" className={`px-4 py-2 text-xs sm:text-sm font-semibold flex items-center justify-center gap-3 border-b ${
+          banner.level === 'danger' ? 'bg-rose-600/20 border-rose-500/40 text-rose-100' : banner.level === 'warning' ? 'bg-amber-500/15 border-amber-500/40 text-amber-100' : banner.level === 'success' ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-100' : 'bg-blue-600/20 border-blue-500/40 text-blue-100'}`}>
+          <span>{banner.level === 'danger' ? '🛠️' : '📣'} {banner.text}</span>
+          {banner.link && banner.link.startsWith('/') && <button onClick={() => handleNavigate(banner.link.slice(1).split('?')[0])} className="underline cursor-pointer">ดูรายละเอียด</button>}
+          <button onClick={closeBanner} aria-label="ปิดประกาศ" className="ml-2 opacity-70 hover:opacity-100 cursor-pointer">✕</button>
+        </div>
+      )}
+
       {/* Sync Toast Notification */}
       {syncNotice && (
         <aside aria-label="แจ้งเตือนการซิงค์" className="fixed top-20 right-4 z-50 max-w-md bg-gradient-to-r from-cyan-950 via-[#0d1b2e] to-blue-950 border border-cyan-400/40 rounded-2xl p-4 shadow-2xl shadow-cyan-500/20 text-white flex items-center gap-3 animate-in fade-in slide-in-from-top-4 duration-300">
@@ -211,6 +234,7 @@ function AppContent() {
               <View
                 key={viewKey}
                 onNavigate={handleNavigate}
+                onOpenAuth={() => setIsAuthOpen(true)}
                 {...viewParams}
                 initialSearch={viewParams.search || ''}
               />

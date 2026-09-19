@@ -12,6 +12,24 @@ export function AuthProvider({ children }) {
   const [syncStatus, setSyncStatus] = useState('idle'); // 'idle' | 'syncing' | 'synced' | 'error'
   const [syncError, setSyncError] = useState(null);
   const [configured, setConfigured] = useState(() => isSupabaseConfigured());
+  const [isAdmin, setIsAdmin] = useState(false);
+  // Admins can browse as a normal user; admin mode shows the back-office entry points
+  const [adminMode, setAdminModeState] = useState(() => { try { return localStorage.getItem('swm:admin-mode') === '1'; } catch { return false; } });
+  const setAdminMode = useCallback((on) => {
+    setAdminModeState(on);
+    try { localStorage.setItem('swm:admin-mode', on ? '1' : '0'); } catch { /* ignore */ }
+  }, []);
+
+  // Ask the server whether this account is on the admin allowlist (ADMIN_EMAILS)
+  useEffect(() => {
+    let alive = true;
+    if (!session?.access_token) { setIsAdmin(false); return undefined; }
+    fetch('/api/admin/me', { headers: { Authorization: `Bearer ${session.access_token}` }, cache: 'no-store' })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((j) => { if (alive) setIsAdmin(Boolean(j?.admin)); })
+      .catch(() => { if (alive) setIsAdmin(false); });
+    return () => { alive = false; };
+  }, [session?.access_token]);
 
   // Initialize auth state (SDK loads lazily; nothing happens until it resolves)
   useEffect(() => {
@@ -209,6 +227,9 @@ export function AuthProvider({ children }) {
         user,
         session,
         loading,
+        isAdmin,
+        adminMode: isAdmin && adminMode,
+        setAdminMode,
         syncStatus,
         syncError,
         isConfigured: configured,

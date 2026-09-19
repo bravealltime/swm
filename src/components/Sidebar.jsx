@@ -40,6 +40,7 @@ import {
 } from 'lucide-react';
 import { NAVIGATION_CATEGORIES } from '../data/navigation';
 import { buildUrl } from '../router';
+import { useAuth } from '../contexts/AuthContext';
 
 const ICON_MAP = {
   UserCheck, Award, Layers, BookOpen, History, ShieldAlert, Sparkles, TrendingUp,
@@ -69,6 +70,7 @@ export default function Sidebar({
   };
 
   const closeBtnRef = useRef(null);
+  const { adminMode } = useAuth();
 
   // Escape closes, background stops scrolling, focus lands on the close button
   useEffect(() => {
@@ -85,6 +87,7 @@ export default function Sidebar({
   }, [isOpen, onClose]);
 
   const resolveView = (itemId) => {
+    if (itemId === 'admin') return 'admin';
     if (itemId === 'guardian-ladder' || itemId === 'guardian-meta') return 'guardian';
     if (itemId === 'ai-farm-optimizer' || itemId.includes('ai-farm')) return 'ai-farm-optimizer';
     if (itemId === 'my-box') return 'my-box';
@@ -264,6 +267,19 @@ export default function Sidebar({
               </div>
             );
           })}
+
+          {adminMode && (
+            <a
+              href={buildUrl('admin')}
+              onClick={(e) => handleItemClick(e, 'admin')}
+              className={`mt-2 flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-sm font-bold transition-colors cursor-pointer border ${
+                currentView === 'admin' ? 'bg-fuchsia-600/20 text-fuchsia-200 border-fuchsia-500/40' : 'text-fuchsia-300 hover:text-white border-fuchsia-500/20 hover:bg-fuchsia-500/10'
+              }`}
+            >
+              <ShieldAlert className="w-4 h-4" />
+              <span>หลังบ้าน SWM (ผู้ดูแล)</span>
+            </a>
+          )}
         </div>
 
         {/* Sidebar Footer */}

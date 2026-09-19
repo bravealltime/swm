@@ -34,7 +34,8 @@ import {
 } from 'lucide-react';
 import MonsterAvatar from '../components/MonsterAvatar';
 import { PROMO_CODES } from '../data/promoCodes';
-import { LEADERBOARDS } from '../data/leaderboards';
+import { useGuildRankings } from '../hooks/useGuildRankings';
+import { SERVERS } from '../utils/guildRankings';
 import { getR2AvatarUrl } from '../services/r2Service';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { loadBox, saveBox, parseSwexExport, getArtifactsFromBox, loadDemoBox, getMonsterCatalogInfo, isNonSummonableLd5 } from '../utils/swexImport';
@@ -150,7 +151,10 @@ export default function DashboardView({ onNavigate }) {
     }
   };
 
-  const topGuilds = LEADERBOARDS[selectedServer]?.slice(0, 5) || [];
+  const [guildKind, setGuildKind] = useState('siege');
+  const rankings = useGuildRankings();
+  const guildBoard = rankings.board(selectedServer, guildKind);
+  const topGuilds = guildBoard ? guildBoard.rows.slice(0, 5) : [];
 
   const handleQuickUpload = async (e) => {
     const file = e.target.files?.[0];
@@ -975,7 +979,7 @@ export default function DashboardView({ onNavigate }) {
 
       </div>
 
-      {/* 5. TOP GUILDS & LEADERBOARD SPOTLIGHT */}
+      {/* 5. TOP GUILDS — real leaderboards contributed through AegisLink */}
       <section className="rounded-3xl border border-white/[0.08] bg-[#0c121e]/80 backdrop-blur-xl p-6 shadow-xl space-y-5">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-2.5">
@@ -983,57 +987,81 @@ export default function DashboardView({ onNavigate }) {
               <Award className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-base sm:text-lg font-black text-white">อันดับกิลด์ระดับท็อปโลก (Siege & WGB)</h2>
-              <p className="text-xs text-slate-400">อัปเดตคะแนนและผลการแข่งขันจากเซิร์ฟเวอร์หลัก</p>
+              <h2 className="text-base sm:text-lg font-black text-white">อันดับกิลด์ระดับท็อป (Siege & WGB)</h2>
+              <p className="text-xs text-slate-400">
+                {guildBoard
+                  ? `ข้อมูลจริงจากหน้าอันดับในเกม • อัปเดต ${new Date(guildBoard.at).toLocaleString('th-TH', { dateStyle: 'short', timeStyle: 'short' })}${guildBoard.source === 'live' ? ' • จากเครื่องนี้ (AegisLink)' : ''}`
+                  : 'ข้อมูลจริงจากหน้าอันดับในเกม แชร์โดยผู้เล่นที่เชื่อมต่อ AegisLink'}
+              </p>
             </div>
           </div>
 
-          {/* Server Switcher */}
-          <div className="flex items-center gap-1 bg-[#090e18] p-1 rounded-xl border border-white/[0.06] self-start sm:self-auto">
-            {['asia', 'global', 'europe'].map((srv) => (
-              <button
-                key={srv}
-                onClick={() => setSelectedServer(srv)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase transition-all cursor-pointer ${
-                  selectedServer === srv
-                    ? 'bg-blue-600 text-white shadow-sm'
-                    : 'text-slate-400 hover:text-white'
-                }`}
+          <div className="flex flex-wrap items-center gap-2 self-start sm:self-auto">
+            <div className="flex items-center gap-1 bg-[#090e18] p-1 rounded-xl border border-white/[0.06]">
+              {[['siege', 'Siege'], ['wgb', 'WGB']].map(([k, label]) => (
+                <button key={k} onClick={() => setGuildKind(k)} className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${guildKind === k ? 'bg-amber-500 text-slate-950 shadow-sm' : 'text-slate-400 hover:text-white'}`}>{label}</button>
+              ))}
+            </div>
+            <div className="flex items-center gap-1 bg-[#090e18] p-1 rounded-xl border border-white/[0.06]">
+              {SERVERS.map((srv) => (
+                <button
+                  key={srv.id}
+                  onClick={() => setSelectedServer(srv.id)}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase transition-all cursor-pointer ${
+                    selectedServer === srv.id ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  {srv.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {topGuilds.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+            {topGuilds.map((guild, idx) => (
+              <div
+                key={guild.guildId || guild.name}
+                className="p-4 rounded-2xl bg-[#090e18] border border-white/[0.06] hover:border-blue-500/30 transition-all space-y-2"
               >
-                {srv}
-              </button>
+                <div className="flex items-center justify-between">
+                  <span className={`text-xs font-black font-mono px-2 py-0.5 rounded-md ${
+                    idx === 0 ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' :
+                    idx === 1 ? 'bg-slate-300/20 text-slate-200 border border-slate-300/30' :
+                    idx === 2 ? 'bg-amber-700/20 text-amber-600 border border-amber-700/30' :
+                    'bg-white/[0.04] text-slate-400'
+                  }`}>
+                    #{guild.rank}
+                  </span>
+                  <span className="text-[11px] text-slate-400 uppercase">{selectedServer}</span>
+                </div>
+                <div className="font-black text-sm text-white truncate" title={guild.name}>
+                  {guild.name}
+                </div>
+                <div className="flex items-center justify-between text-xs text-slate-400 pt-1 border-t border-white/[0.04]">
+                  <span>คะแนน</span>
+                  <span className="font-mono font-bold text-cyan-400">{guild.points ? guild.points.toLocaleString() : '—'}</span>
+                </div>
+              </div>
             ))}
           </div>
-        </div>
-
-        {/* Guild Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
-          {topGuilds.map((guild, idx) => (
-            <div 
-              key={guild.id || idx}
-              className="p-4 rounded-2xl bg-[#090e18] border border-white/[0.06] hover:border-blue-500/30 transition-all space-y-2"
-            >
-              <div className="flex items-center justify-between">
-                <span className={`text-xs font-black font-mono px-2 py-0.5 rounded-md ${
-                  idx === 0 ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' :
-                  idx === 1 ? 'bg-slate-300/20 text-slate-200 border border-slate-300/30' :
-                  idx === 2 ? 'bg-amber-700/20 text-amber-600 border border-amber-700/30' :
-                  'bg-white/[0.04] text-slate-400'
-                }`}>
-                  #{idx + 1}
-                </span>
-                <span className="text-[11px] text-slate-400 uppercase">{selectedServer}</span>
-              </div>
-              <div className="font-black text-sm text-white truncate" title={guild.name}>
-                {guild.name}
-              </div>
-              <div className="flex items-center justify-between text-xs text-slate-400 pt-1 border-t border-white/[0.04]">
-                <span>คะแนน</span>
-                <span className="font-mono font-bold text-cyan-400">{guild.score ? guild.score.toLocaleString() : '—'}</span>
-              </div>
+        ) : (
+          <div className="p-5 rounded-2xl border border-dashed border-white/10 bg-[#090e18]/60 text-sm text-slate-300 space-y-2">
+            <div className="font-bold text-white">
+              {rankings.loading ? 'กำลังโหลด…' : `ยังไม่มีอันดับ ${guildKind === 'siege' ? 'Siege' : 'WGB'} ของเซิร์ฟเวอร์ ${SERVERS.find((x) => x.id === selectedServer)?.label} — เราไม่แต่งตัวเลขขึ้นเอง`}
             </div>
-          ))}
-        </div>
+            {!rankings.loading && (
+              <p className="text-xs text-slate-400 leading-relaxed">
+                อันดับกิลด์ไม่มีแหล่งข้อมูลสาธารณะ ระบบจึงรับจากหน้าอันดับในเกมโดยตรง: เชื่อมต่อ <button onClick={() => onNavigate('aegislink')} className="text-cyan-300 underline cursor-pointer">AegisLink</button> แล้วเปิดหน้า <strong className="text-white">อันดับ Siege / World Guild Battle</strong> ในเกม 1 ครั้ง — อันดับจะขึ้นที่นี่ทันที และถ้าเข้าสู่ระบบไว้จะถูกแชร์ให้ผู้เล่นทุกคนเห็นด้วย
+                {rankings.error === 'TABLE_MISSING' && <span className="block mt-1 text-amber-300">ผู้ดูแล: ยังไม่ได้สร้างตาราง guild_rankings (supabase/admin_schema.sql)</span>}
+              </p>
+            )}
+          </div>
+        )}
+        {guildBoard?.source === 'live' && guildBoard.error && (
+          <p className="text-[11px] text-amber-300">⚠ {guildBoard.error}</p>
+        )}
       </section>
 
     </div>

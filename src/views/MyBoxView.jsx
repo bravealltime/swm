@@ -17,6 +17,7 @@ import { parseSwexExport, ownedIdSet, loadBox, saveBox, clearBox, baseAwakenedId
 import { supportsFolderWatch, loadDirHandle, clearDirHandle, pickSwexFolder, ensurePermission, findNewestExport } from '../utils/swexWatcher';
 import { exportAllDataAsJSON, importDataFromJSON } from '../services/storageService';
 import * as aegisLive from '../services/aegisLive';
+import { loadPublicSettings } from '../services/adminClient';
 import { exportLdShowcaseCard } from '../utils/cardExporter';
 
 const WATCH_INTERVAL_MS = 20 * 1000;
@@ -171,6 +172,9 @@ export default function MyBoxView({ onNavigate, tab: initialTab, subItem }) {
   }), []);
   const startLive = () => aegisLive.start();
   const stopLive = () => aegisLive.stop();
+  // the back-office can switch the live link off for everyone
+  const [liveAllowed, setLiveAllowed] = useState(true);
+  useEffect(() => { loadPublicSettings().then((s) => { if (s?.features?.liveLink === false) { setLiveAllowed(false); aegisLive.stop({ forget: false }); } }); }, []);
 
   return (
     <div className="space-y-6 max-w-[1780px] 2xl:max-w-[1880px] mx-auto pb-16 animate-in fade-in duration-300">
@@ -253,7 +257,7 @@ export default function MyBoxView({ onNavigate, tab: initialTab, subItem }) {
       )}
 
       {box && <BoxHeader box={box} onNavigate={onNavigate} onClearDemo={reset} onImport={importFile} />}
-      <LiveCard live={live} box={box} onStart={startLive} onStop={stopLive} onNavigate={onNavigate} />
+      {liveAllowed && <LiveCard live={live} box={box} onStart={startLive} onStop={stopLive} onNavigate={onNavigate} />}
       {box && live.status === 'off' && <SyncCard watch={watch} box={box} onStart={startWatching} onGrant={grantAgain} onStop={stopWatching} />}
 
       <div role="tablist" className="flex flex-wrap items-center gap-1.5 p-1.5 rounded-2xl bg-[#0a0f19]/80 border border-white/[0.08] shadow-lg sticky top-[68px] z-30 backdrop-blur-xl">
@@ -269,16 +273,16 @@ export default function MyBoxView({ onNavigate, tab: initialTab, subItem }) {
         })}
       </div>
 
-      {tab === 'overview' && (box ? <Overview box={box} mdc={mdc} owned={owned} onTab={setTab} onNavigate={onNavigate} onOpenUnit={setOpenUnit} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} onLive={startLive} />)}
-      {tab === 'box' && (box ? <BoxGrid box={box} onNavigate={onNavigate} onOpenUnit={setOpenUnit} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} onLive={startLive} />)}
+      {tab === 'overview' && (box ? <Overview box={box} mdc={mdc} owned={owned} onTab={setTab} onNavigate={onNavigate} onOpenUnit={setOpenUnit} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} onLive={liveAllowed ? startLive : null} />)}
+      {tab === 'box' && (box ? <BoxGrid box={box} onNavigate={onNavigate} onOpenUnit={setOpenUnit} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} onLive={liveAllowed ? startLive : null} />)}
       {tab === 'pokedex' && <PokedexCollection box={box} onNavigate={onNavigate} onLoadDemo={handleLoadDemo} />}
       {tab === 'artifacts' && <ArtifactSearchEngine box={box} onNavigate={onNavigate} />}
-      {tab === 'efficiency' && (box ? <RuneEfficiencyAndQuads box={box} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} onLive={startLive} />)}
-      {tab === 'defense' && (box ? <SiegeDefenseBuilder box={box} onNavigate={onNavigate} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} onLive={startLive} />)}
+      {tab === 'efficiency' && (box ? <RuneEfficiencyAndQuads box={box} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} onLive={liveAllowed ? startLive : null} />)}
+      {tab === 'defense' && (box ? <SiegeDefenseBuilder box={box} onNavigate={onNavigate} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} onLive={liveAllowed ? startLive : null} />)}
       {tab === 'teams' && <Teams owned={owned} mdc={mdc} onNavigate={onNavigate} />}
       {tab === 'meta' && <MetaCoverage owned={owned} />}
-      {tab === 'speed' && (box ? <SpeedTuner box={box} onNavigate={onNavigate} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} onLive={startLive} />)}
-      {tab === 'runes' && (box ? <Runes box={box} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} onLive={startLive} />)}
+      {tab === 'speed' && (box ? <SpeedTuner box={box} onNavigate={onNavigate} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} onLive={liveAllowed ? startLive : null} />)}
+      {tab === 'runes' && (box ? <Runes box={box} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} onLive={liveAllowed ? startLive : null} />)}
 
       {openUnit && box && (
         <MonsterDetailModal unit={openUnit} box={box} onClose={() => setOpenUnit(null)} onNavigate={(view, params) => { setOpenUnit(null); onNavigate(view, params); }} />
