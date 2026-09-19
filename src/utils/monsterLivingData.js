@@ -4,6 +4,7 @@ import balancePatchDetails from '../data/balancePatchDetails.json' with { type: 
 import balancePatches from '../data/balancePatches.json' with { type: 'json' };
 import mdcSummary from '../data/monsterMdcSummary.json' with { type: 'json' };
 import dungeonStatsData from '../data/dungeonRealStats.json' with { type: 'json' };
+import arenaData from '../data/arenaMetaTeams.json' with { type: 'json' };
 import { MONSTERS } from '../data/monsters.js';
 import { getMonsterBuild } from '../data/monsterBuilds.js';
 import { getChangeTypeThai, translatePatchSnippet } from './patchTranslator.js';
@@ -227,7 +228,21 @@ export function getMonsterLivingData(monsterInput) {
   // 7. Rune Builds & Benchmarks
   const builds = getMonsterBuild(monName);
 
-  // 8. Thai Summary Text Generator
+  // 8. Arena Meta Comps (AO & AD)
+  const normName = monName.toLowerCase();
+  const arenaOffense = (arenaData.offense || []).filter((t) =>
+    (t.slots || []).some((s) => s.toLowerCase() === normName)
+  );
+  const arenaDefense = (arenaData.defense || []).filter((t) =>
+    (t.slots || []).some((s) => s.toLowerCase() === normName)
+  );
+  const arenaComps = {
+    offense: arenaOffense,
+    defense: arenaDefense,
+    totalComps: arenaOffense.length + arenaDefense.length,
+  };
+
+  // 9. Thai Summary Text Generator
   const summaryParts = [];
   summaryParts.push(`${monThaiName} (${monName}) เป็นมอนสเตอร์ธาตุ${monster.element || ''} ${monster.stars || 5}★`);
 
@@ -242,6 +257,13 @@ export function getMonsterLivingData(monsterInput) {
     summaryParts.push(
       `คู่หูที่เล่นด้วยกันบ่อยที่สุดใน RTA คือ ${topDuo.partnerThaiName} (${topDuo.partnerName}) ดราฟต์คู่กัน ${topDuo.matches.toLocaleString()} แมตช์ อัตราชนะ ${topDuo.winRate}%`
     );
+  }
+
+  if (arenaComps.totalComps > 0) {
+    const parts = [];
+    if (arenaComps.offense.length > 0) parts.push(`ทีมบุก (AO) ${arenaComps.offense.length} ทีม`);
+    if (arenaComps.defense.length > 0) parts.push(`ทีมตั้งรับ (AD) ${arenaComps.defense.length} ทีม`);
+    summaryParts.push(`ในสมรภูมิ Arena ติดเมต้า${parts.join(' และ ')}`);
   }
 
   if (dungeonStats.length > 0) {
@@ -278,6 +300,7 @@ export function getMonsterLivingData(monsterInput) {
     balancePatches: balancePatchesList,
     mdcStats: mdcData,
     builds,
+    arenaComps,
     summaryTextTh,
   };
 }

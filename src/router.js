@@ -11,10 +11,13 @@ const VIEW_ALIASES = {
   'war-room': 'guild-war-room',
   summon: 'summon-simulator',
   'deck-builder': 'siege-planner',
+  'arena-defense': 'arena',
+  'arena-offense': 'arena',
 };
 
 export const VIEW_TITLES = {
   dashboard: 'หน้าแรก',
+  arena: 'ทีมบุก & ตั้งรับ Arena (AO/AD)',
   'guild-war-room': 'ศูนย์บัญชาการกิลด์สด (War Room)',
   '3mdc': 'ค้นหาทีมแก้ทาง 3MDC',
   where2use: 'มอนสเตอร์นี้ใช้ที่ไหน',

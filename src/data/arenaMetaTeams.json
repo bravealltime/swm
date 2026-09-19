@@ -1,0 +1,161 @@
+{
+  "meta": {
+    "title": "Summoners War Arena Meta Teams (AO & AD)",
+    "season": "Current Arena Season",
+    "updatedAt": "2026-09-19"
+  },
+  "offense": [
+    {
+      "id": "ao-tiana-zaiross",
+      "name": "Tiana Zaiross Shield/Will Cleave",
+      "nameTh": "เทียน่า ซาอิรอส (ชิลด์/วิล คลีฟ)",
+      "archetype": "Fast Cleave",
+      "avgClearTime": "15-20 วินาที",
+      "difficulty": "ปานกลาง",
+      "leader": "Zaiross (เพิ่ม ATK 33% ใน Arena)",
+      "slots": ["Zaiross", "Tiana", "Galleon", "Kaki"],
+      "turnOrder": ["Tiana (ล้างบัฟ 100% ไม่สน Res)", "Galleon (เจาะเกราะ AoE + บัฟ ATK)", "Zaiross (รีเซ็ตคูลดาวน์ + ดาเมจ)", "Kaki (กวาดดาเมจซ้ำ)"],
+      "runeGuidance": "Tiana: Swift/Will หรือ Shield/Will SPD 240-270 • Galleon: Shield/Will SPD 230 • Zaiross: Rage/Blade SPD 210+ • Kaki: Fatal/Blade SPD 210+",
+      "bestAgainst": "ทีมตั้งรับช้า, ทีมบัฟภูมิคุ้มกันหนา, ทีมถึกที่ไม่มี Speed Lead 33%",
+      "avoidAgainst": "ทีมสปีดลีด 33% มีตัวตัดเทิร์นเร็ว เช่น Triton, Clara หรือ Amduat",
+      "description": "สูตรคลีฟคลาสสิกที่เร็วและเสถียรที่สุด Tiana ล้างบัฟศัตรูไม่สนความต้านทาน Zaiross ปิดสกิลไม่ให้ศัตรูชุบหรือสวนกลับ"
+    },
+    {
+      "id": "ao-psamathe-lushen",
+      "name": "Psamathe Double Boost Lushen Cleave",
+      "nameTh": "สมาเธ่ ดับเบิ้ลบูสต์ ลูเชนสับกล่อง",
+      "archetype": "Speed Cleave",
+      "avgClearTime": "12-18 วินาที",
+      "difficulty": "ง่าย",
+      "leader": "Psamathe (เพิ่ม SPD 33% ใน Arena)",
+      "slots": ["Psamathe", "Bernard", "Bastet", "Lushen"],
+      "turnOrder": ["Bernard (เร่งเกจ + บัฟสปีด)", "Bastet (เร่งเกจ + บัฟ ATK + เกราะ)", "Lushen (สกิล 3 สับกล่องไม่สนเกราะ)", "Psamathe (ซ้ำดาเมจหรือตายระเบิด)"],
+      "runeGuidance": "Bernard: Swift SPD +210 ขึ้นไป • Bastet: Swift/Will SPD +180 • Lushen: Rage/Blade ATK +2,000, CD 220%+, SPD +80-90 • Psamathe: Despair/Nemesis",
+      "bestAgainst": "ทีมที่ไม่มีตัวตัดเกจ หรือทีมที่ไม่มี Byungchul/Khmun/Abellio หนาจัดๆ",
+      "avoidAgainst": "ทีมที่มี Byungchul + Camilla + Fire Tank ถึกๆ ที่ Lushen สับไม่ตายในชุดเดียว",
+      "description": "ทีมบุกที่เร็วที่สุดในเกม สปีดลีด 33% ช่วยให้ Bernard ออกเทิร์นแรก 100% แล้วดันเกจให้ Lushen สับกล่องตายหมดทีม"
+    },
+    {
+      "id": "ao-leo-double-lushen",
+      "name": "Leo Bastet Double Lushen",
+      "nameTh": "ลีโอ บาสเทต ดับเบิ้ลลูเชน",
+      "archetype": "Leo Setup",
+      "avgClearTime": "18-25 วินาที",
+      "difficulty": "ง่ายมาก",
+      "leader": "Lushen (เพิ่ม ATK 33% ในดันเจี้ยน/อารีน่า) หรือ Bastet",
+      "slots": ["Leo", "Bastet", "Lushen", "Julie"],
+      "turnOrder": ["Leo (ล็อคสปีด 100 + เคาะลดเกจตัวเร็วสุด)", "Bastet (เร่งเกจ + บัฟ ATK)", "Julie (การ์ดกระจาย 6 ใบกวาดเลือด)", "Lushen (สับกล่องเก็บกวาดตัวที่เหลือ)"],
+      "runeGuidance": "Leo: Vampire/Nemesis ATK/CD/HP • Bastet: Will/Fight/Fight SPD +130 • Julie: Rage/Blade ATK+1800 CD 230% • Lushen: Rage/Blade ATK+2100 CD 240%",
+      "bestAgainst": "ทีมตั้งรับสปีดสูงลิ่วที่ไม่มี Will หรือมี Will แค่บางตัว",
+      "avoidAgainst": "ทีมตั้งรับที่มี Nemesis Healer หลายตัว หรือทีม Leo ฝั่งตรงข้าม",
+      "description": "พาสซีฟของ Leo จะล็อคสปีดทุกคนในสนามไม่ให้เกินสปีดของ Leo ทำให้ตัวทำดาเมจของเราไม่ต้องใส่สปีดเยอะ สามารถเทสเตตัสไปที่ ATK และ CRI Dmg ได้เต็มที่ 100%"
+    },
+    {
+      "id": "ao-chiwu-leah",
+      "name": "Chiwu Eshir Galleon Leah",
+      "nameTh": "ชิวู เอเชียร์ กัลเลียน ลีอาห์ทะลวงเวฟ",
+      "archetype": "Speed Leah",
+      "avgClearTime": "15-20 วินาที",
+      "difficulty": "สูง (ต้องใช้สปีดสูง)",
+      "leader": "Chiwu (เพิ่ม SPD 24% ใน Arena)",
+      "slots": ["Chiwu", "Eshir", "Galleon", "Leah"],
+      "turnOrder": ["Eshir (บูสต์เกจ + บัฟสปีดทีม)", "Chiwu (ล้างบัฟ AoE ทั้งหมด)", "Galleon (เจาะเกราะ + บัฟ ATK)", "Leah (สกิล 2 ดาเมจตามสปีดที่เร็วกว่าศัตรู)"],
+      "runeGuidance": "Eshir: Swift SPD +215 ขึ้นไป • Chiwu: Despair/Will หรือ Swift SPD +180 • Galleon: Shield/Will SPD +160 • Leah: Swift/Blade SPD +180 ขึ้นไป, ATK +1400, CD 180%",
+      "bestAgainst": "ทีมตั้งรับแทงค์ช้าๆ ที่สปีดต่ำกว่า 180 ทั้งหมด Leah จะยิงได้ดาเมจคูณ 3-4 เท่าทะลุ 55k+ ต่อตัว",
+      "avoidAgainst": "ทีมที่มี Leo หรือทีมสปีดลีด 33% ที่เร็วสูสีกัน",
+      "description": "Leah มีสกิลพิเศษที่จะทำดาเมจเพิ่มขึ้นมหาศาลหากความเร็วของเธอมากกว่าเป้าหมาย เมื่อรวมกับบัฟสปีดของ Eshir จะทำให้ Leah กวาดทีมหนาๆ ตายในฮิตเดียว"
+    },
+    {
+      "id": "ao-seara-bomb",
+      "name": "Seara Tiana Liebli Bastet Bomb Cleave",
+      "nameTh": "เซียร์ร่า เทียน่า บอมบ์คลีฟ",
+      "archetype": "Bomb Cleave",
+      "avgClearTime": "20-30 วินาที",
+      "difficulty": "ปานกลาง",
+      "leader": "Seara (เพิ่ม SPD 24% ใน Arena)",
+      "slots": ["Seara", "Tiana", "Liebli", "Bastet"],
+      "turnOrder": ["Tiana (ล้างบัฟสนามทั้งหมด)", "Bastet (เร่งเกจ + บัฟ ATK)", "Liebli (วางระเบิด AoE ไม่สนเกราะ)", "Seara (วางระเบิดซ้ำ + จุดชนวนระเบิดทันที)"],
+      "runeGuidance": "Tiana: Swift/Will SPD 250+ • Bastet: Swift/Will SPD 230+ • Liebli: Fatal/Focus ATK+2400 ACC 50%+ • Seara: Violent/Will ATK+1800 SPD 210+",
+      "bestAgainst": "ทีมธาตุไฟหนาๆ, Camilla, Byungchul, Abellio ที่มีเกราะหนาแต่ไม่มีตัวกันระเบิด",
+      "avoidAgainst": "ทีมที่มี Juno (พาสซีฟแก้ดีบัฟฮีลเลือด) หรือ Veromos ที่แก้สถานะทุกเทิร์น",
+      "description": "ดาเมจระเบิดไม่สนใจค่า DEF และไม่ติดแกลนซิ่งจากธาตุ ทำให้ระเบิดทีมธาตุไฟหรือทีมถึกเลือด 50k+ หายไปในพริบตา"
+    },
+    {
+      "id": "ao-bruiser-safe",
+      "name": "Bolverk Mo Long Safe Bruiser",
+      "nameTh": "โบลเวิร์ก โมหลง บรูเซอร์เซฟชัวร์",
+      "archetype": "Bruiser Turn-2",
+      "avgClearTime": "60-90 วินาที",
+      "difficulty": "ง่าย",
+      "leader": "Mo Long (เพิ่ม HP 33% ใน Arena)",
+      "slots": ["Mo Long", "Bolverk", "Aaliyah", "Feng Yan"],
+      "turnOrder": ["Aaliyah (กางบัฟเกราะ + ฮีล)", "Bolverk (สแต็กครบ 5 ดูดเลือด 50%)", "Mo Long (สกิล 3 ยิงตัดเลือด 70%)", "Feng Yan (เจาะเกราะตีตาย)"],
+      "runeGuidance": "Mo Long: Vampire/Will หรือ Vio/Will HP +35k • Bolverk: Vio/Will HP +32k • Aaliyah: Vio/Will SPD +120 • Feng Yan: Vio/Will DEF +1800",
+      "bestAgainst": "ทีมตั้งรับ Halphas, Camilla, Karnal, Rina ที่ทีมคลีฟยิงไม่เข้า",
+      "avoidAgainst": "ทีมคลีฟดาเมจหนักๆ ช่วง Rush Hour (ทีมนี้ใช้เวลาต่อสู้นาน)",
+      "description": "สูตรอัตราชนะ 99.9% สำหรับจัดการทีมรับที่ถึกที่สุดในเกม สกิลของ Mo Long และ Bolverk ลดเลือดเป็นเปอร์เซ็นต์ จึงไม่สนใจเกราะหรือความหนาของศัตรู"
+    }
+  ],
+  "defense": [
+    {
+      "id": "ad-psama-clara-byungchul",
+      "name": "Psamathe Clara Savannah Byungchul (33% Speed Threat)",
+      "nameTh": "สมาเธ่ คลาร่า ซาวันน่า บยองชอล (ดักสปีด 33%)",
+      "archetype": "Speed Threat",
+      "winCondition": "Clara ออกก่อนล้างบัฟและสตัน Savannah เจาะเกราะ Byungchul สอยตายทันที",
+      "leader": "Psamathe (เพิ่ม SPD 33% ใน Arena)",
+      "slots": ["Psamathe", "Clara", "Savannah", "Byungchul"],
+      "runeBuilds": "Clara: Swift/Focus SPD +210+ • Savannah: Vio/Will หรือ Swift SPD +170 • Byungchul: Vio/Nemesis HP +30k, CR 80%, CD 150% • Psamathe: Despair/Nemesis",
+      "counterTips": "บุกด้วย Leo + Double Boost หรือ Tiana Shield/Will ที่สปีดไม่โดนแซง",
+      "description": "ทีมรับยอดนิยมอันดับ 1 ของ Guardian Clara มีโอกาสล้างบัฟและสตันสูงมาก หากทีมบุกไม่มีสปีด 33% มักจะโดนขัดจังหวะจนแพ้"
+    },
+    {
+      "id": "ad-vanessa-camilla-byungchul",
+      "name": "Vanessa Camilla Byungchul Ariel (Stall / Anti-Cleave)",
+      "nameTh": "วาเนสซ่า คามิลล่า บยองชอล อาเรียล (ทีมถึกต้าน Lushen)",
+      "archetype": "Anti-Cleave Stall",
+      "winCondition": "ทนดาเมจ Lushen ได้ทุกตัว Ariel สวนฮีลเต็มหลอด Vanessa ชุบ Byungchul ตีสวน",
+      "leader": "Vanessa (เพิ่ม SPD 33% ใน Arena)",
+      "slots": ["Vanessa", "Camilla", "Byungchul", "Ariel"],
+      "runeBuilds": "Ariel: Double Nemesis/Will HP +35k, DEF +1200 • Camilla: Vio/Nemesis HP +32k, CD 140% • Byungchul: Vio/Destroy HP +35k • Vanessa: Vio/Will SPD +140",
+      "counterTips": "บุกด้วยทีม Bomb Cleave (Seara/Liebli) หรือทีม Bruiser Bolverk Mo Long",
+      "description": "ทีมรับที่ออกแบบมาเพื่อป้องกัน Lushen และ Julie โดยเฉพาะ Ariel ใส่ 2 Nemesis จะได้รับเกจจนแทรกเทิร์นมาฮีล 100% เลือดเต็มหลอดทันที"
+    },
+    {
+      "id": "ad-karnal-camilla-halphas",
+      "name": "Karnal Camilla Abellio Halphas (Rush Hour 15-Min Stall)",
+      "nameTh": "คาร์นัล คามิลล่า อเบลลิโอ ฮาลฟาส (ถ่วงเวลา Rush Hour)",
+      "archetype": "Rush Hour Stall",
+      "winCondition": "เลือดหนา 50k+ ทุกตัว Halphas กางอมตะดูดเลือดเมื่อเลือดต่ำกว่า 50% ทำให้คนไม่กล้ากดตี",
+      "leader": "Karnal (เพิ่ม HP 33% ใน Arena)",
+      "slots": ["Karnal", "Camilla", "Abellio", "Halphas"],
+      "runeBuilds": "Halphas: Despair/Nemesis HP +38k, 100% RES • Camilla: Vio/Destroy HP +34k • Abellio: Vio/Nemesis DEF +1500, HP +28k • Karnal: Despair/Will HP +36k",
+      "counterTips": "ต้องพกตัวล้างบัฟอมตะ เช่น Tiana/Chiwu หรือตัวบล็อกฮีลอย่างหนัก",
+      "description": "ทีมรับที่ดีที่สุดในช่วง 15 นาทีสุดท้ายของ Rush Hour จุดประสงค์ไม่ใช่การฆ่าศัตรู แต่เป็นการทำให้ศัตรูเสียเวลา 2-3 นาทีจนไต่อันดับไม่ทัน"
+    },
+    {
+      "id": "ad-vanessa-triton-savannah",
+      "name": "Vanessa Triton Savannah Byungchul (Fast Strip & Pushback)",
+      "nameTh": "วาเนสซ่า ไตรตัน ซาวันน่า บยองชอล (ล้างบัฟลดเกจเร็วสุด)",
+      "archetype": "Speed Strip Trap",
+      "winCondition": "Triton สปีดพื้นฐาน 116 ออกตัวแรก ล้างบัฟและลดเกจทีมบุก 25%",
+      "leader": "Vanessa (เพิ่ม SPD 33% ใน Arena)",
+      "slots": ["Vanessa", "Triton", "Savannah", "Byungchul"],
+      "runeBuilds": "Triton: Swift/Will SPD +215+ • Savannah: Vio/Will SPD +170 • Byungchul: Vio/Will HP +32k • Vanessa: Vio/Will SPD +135",
+      "counterTips": "ใช้ Leo ขัด Triton หรือบุกด้วยทีม Turn 2 Will+Shield หนาๆ",
+      "description": "Triton เป็นตัวล้างบัฟที่เร็วกว่า Tiana มาก เมื่อจับคู่กับลีด 33% จะออกก่อนเกือบ 100% ทำให้ทีมบุกที่ใส่ Will มาโดนลบและลดเกจจนเสียจังหวะ"
+    },
+    {
+      "id": "ad-leo-fengyan-camilla",
+      "name": "Leo Feng Yan Camilla Abellio (Anti-Speed Bruiser Trap)",
+      "nameTh": "ลีโอ แพนด้าลม คามิลล่า อเบลลิโอ (ดักทีมสปีด)",
+      "archetype": "Anti-Speed Trap",
+      "winCondition": "Leo ล็อคสปีดไม่ให้ทีมบุกได้เปรียบ แล้วแทงค์รับดาเมจสวนกลับ",
+      "leader": "Feng Yan (เพิ่ม DEF 44% ใน Arena)",
+      "slots": ["Feng Yan", "Leo", "Camilla", "Abellio"],
+      "runeBuilds": "Feng Yan: Vio/Will DEF +2000 • Camilla: Vio/Nemesis HP +33k • Abellio: Vio/Will DEF +1600 • Leo: Vampire/Nemesis ATK/CD/HP",
+      "counterTips": "บุกด้วยทีมระเบิด หรือทีมที่มีตัวล้างบัฟและเจาะเกราะหนักๆ เช่น Galleon Tiana Zaiross",
+      "description": "ดักทางคนที่จะเอาทีมบุกสปีดสูงๆ มาฟาร์ม พาสซีฟของ Leo จะทำลายความได้เปรียบเรื่องสปีดของทีมบุกทั้งหมด"
+    }
+  ]
+}

@@ -33,12 +33,18 @@ describe('monsterLivingData', () => {
     expect(data.summaryTextTh).toContain('Guardian');
   });
 
-  it('returns living data with balance patch notes (Psamathe / Morris / Sieq)', () => {
+  it('returns living data with balance patch notes and arena comps (Psamathe / Morris / Sieq)', () => {
     const data = getMonsterLivingData('Psamathe');
     expect(data).toBeDefined();
     expect(data.balancePatches.length).toBeGreaterThan(0);
     expect(data.balancePatches[0].changeTypeTh).toBeDefined();
     expect(data.builds).toBeDefined();
+
+    // Arena Comps
+    expect(data.arenaComps).toBeDefined();
+    expect(data.arenaComps.offense.length).toBeGreaterThan(0);
+    expect(data.arenaComps.defense.length).toBeGreaterThan(0);
+    expect(data.summaryTextTh).toContain('Arena');
   });
 
   it('handles monsters by com2usId or id', () => {

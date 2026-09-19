@@ -48,7 +48,7 @@ export default function MonsterLivingData({
     ? monster 
     : getMonsterLivingData(monster);
 
-  const { guardianStats, duos, synergies, counters, dungeonStats = [], balancePatches, mdcStats, builds, summaryTextTh } = data || {};
+  const { guardianStats, duos, synergies, counters, dungeonStats = [], balancePatches, mdcStats, builds, arenaComps, summaryTextTh } = data || {};
 
   const hasMeta = Boolean(guardianStats);
   const hasDuos = duos && duos.length > 0;
@@ -57,6 +57,7 @@ export default function MonsterLivingData({
   const hasMdc = mdcStats && (mdcStats.defCount > 0 || mdcStats.cntCount > 0);
   const hasPatches = balancePatches && balancePatches.length > 0;
   const hasBuilds = Boolean(builds && builds.benchmarks);
+  const hasArena = arenaComps && arenaComps.totalComps > 0;
 
   // Guardian Readiness Score when actual equipped stats are passed (from Box view)
   const readiness = useMemo(() => {
@@ -214,6 +215,18 @@ export default function MonsterLivingData({
         >
           <Swords className="w-3.5 h-3.5 text-emerald-400" />
           <span>3MDC กิลด์วอร์ {hasMdc && <span className="text-[10px] ml-1 opacity-80">{mdcStats.cntCount + mdcStats.defCount} สูตร</span>}</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('arena')}
+          className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 cursor-pointer ${
+            activeTab === 'arena'
+              ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30'
+              : 'bg-white/[0.04] text-slate-400 hover:text-white hover:bg-white/[0.08]'
+          }`}
+        >
+          <Shield className="w-3.5 h-3.5 text-rose-400" />
+          <span>Arena เมต้า {hasArena && <span className="text-[10px] ml-1 opacity-80">{arenaComps.totalComps} ทีม</span>}</span>
         </button>
 
         <button
@@ -570,6 +583,126 @@ export default function MonsterLivingData({
               ยังไม่มีสูตรแก้ทาง 3MDC ที่ระบุชื่อมอนสเตอร์ตัวนี้โดยตรงในฐานข้อมูล Siege ปัจจุบัน
             </div>
           )}
+        </div>
+      )}
+
+      {/* Tab: Arena Meta (AO & AD) */}
+      {activeTab === 'arena' && (
+        <div className="space-y-3">
+          <div className="grid grid-cols-2 gap-3">
+            <div className="rounded-xl p-3 bg-[#0a101d] border border-white/[0.07] text-center">
+              <div className="text-[11px] text-slate-400 mb-0.5">ทีมบุก Arena (AO)</div>
+              <div className="text-xl font-black text-blue-400 font-mono">
+                {arenaComps?.offense?.length || 0} ทีม
+              </div>
+            </div>
+            <div className="rounded-xl p-3 bg-[#0a101d] border border-white/[0.07] text-center">
+              <div className="text-[11px] text-slate-400 mb-0.5">ทีมตั้งรับ Arena (AD)</div>
+              <div className="text-xl font-black text-rose-400 font-mono">
+                {arenaComps?.defense?.length || 0} ทีม
+              </div>
+            </div>
+          </div>
+
+          {arenaComps?.offense && arenaComps.offense.length > 0 && (
+            <div className="space-y-2">
+              <div className="text-xs font-bold text-blue-400 flex items-center gap-1.5">
+                <Swords className="w-3.5 h-3.5" />
+                <span>ทีมบุก Arena (Offense Cleave / Bruiser) ที่มี {data.monster.name}</span>
+              </div>
+              {arenaComps.offense.map((team) => (
+                <div key={team.id} className="p-3 rounded-xl bg-[#0a101d] border border-white/[0.07] space-y-2">
+                  <div className="flex items-center justify-between gap-2 flex-wrap">
+                    <span className="font-bold text-white text-xs">{team.nameTh} ({team.name})</span>
+                    <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-500/20 text-blue-300 border border-blue-500/30">
+                      {team.archetype} • {team.avgClearTime}
+                    </span>
+                  </div>
+                  <div className="text-xs text-slate-300">
+                    <span className="text-amber-400 font-semibold">ลีดเดอร์:</span> {team.leader}
+                  </div>
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    {team.slots.map((s, idx) => (
+                      <span
+                        key={idx}
+                        className={`px-2 py-0.5 rounded-lg text-xs font-medium border ${
+                          s.toLowerCase() === (data.monster.name || '').toLowerCase()
+                            ? 'bg-blue-500/25 border-blue-500/50 text-blue-200 font-bold'
+                            : 'bg-white/[0.04] border-white/[0.08] text-slate-300'
+                        }`}
+                      >
+                        {idx + 1}. {s}
+                      </span>
+                    ))}
+                  </div>
+                  {team.runeGuidance && (
+                    <div className="text-[11px] text-slate-400 bg-white/[0.02] p-2 rounded-lg border border-white/[0.04]">
+                      <span className="text-slate-300 font-semibold">รูน & สเตตัส:</span> {team.runeGuidance}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {arenaComps?.defense && arenaComps.defense.length > 0 && (
+            <div className="space-y-2">
+              <div className="text-xs font-bold text-rose-400 flex items-center gap-1.5">
+                <Shield className="w-3.5 h-3.5" />
+                <span>ทีมตั้งรับ Arena (Rush Hour Defense) ที่มี {data.monster.name}</span>
+              </div>
+              {arenaComps.defense.map((team) => (
+                <div key={team.id} className="p-3 rounded-xl bg-[#0a101d] border border-white/[0.07] space-y-2">
+                  <div className="flex items-center justify-between gap-2 flex-wrap">
+                    <span className="font-bold text-white text-xs">{team.nameTh} ({team.name})</span>
+                    <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">
+                      {team.archetype}
+                    </span>
+                  </div>
+                  <div className="text-xs text-slate-300">
+                    <span className="text-amber-400 font-semibold">เงื่อนไขชนะ:</span> {team.winCondition}
+                  </div>
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    {team.slots.map((s, idx) => (
+                      <span
+                        key={idx}
+                        className={`px-2 py-0.5 rounded-lg text-xs font-medium border ${
+                          s.toLowerCase() === (data.monster.name || '').toLowerCase()
+                            ? 'bg-rose-500/25 border-rose-500/50 text-rose-200 font-bold'
+                            : 'bg-white/[0.04] border-white/[0.08] text-slate-300'
+                        }`}
+                      >
+                        {s}
+                      </span>
+                    ))}
+                  </div>
+                  {team.counterTips && (
+                    <div className="text-[11px] text-amber-300/90 bg-amber-500/10 p-2 rounded-lg border border-amber-500/20">
+                      <span className="font-semibold text-amber-200">ข้อควรระวัง / วิธีแก้ทาง:</span> {team.counterTips}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {(!arenaComps || arenaComps.totalComps === 0) && (
+            <div className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.05] text-center text-xs text-slate-400 space-y-1.5">
+              <div>ยังไม่อยู่ใน 11 ทีมเมต้าสูตรสำเร็จ Arena (AO/AD) ของ Guardian</div>
+              <div className="text-[11px] text-slate-500">มอนสเตอร์ตัวนี้อาจเหมาะกับ Siege Battle, กิลด์วอร์ หรือ RTA เป็นหลัก</div>
+            </div>
+          )}
+
+          <div className="pt-1 flex justify-center">
+            <button
+              onClick={() => onNavigate && onNavigate('arena')}
+              className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-md shadow-blue-500/20"
+            >
+              <Shield className="w-3.5 h-3.5" />
+              <span>เปิดดูคู่มือทีม Arena (AO/AD) ทั้งหมด</span>
+              <ChevronRight className="w-3 h-3" />
+            </button>
+          </div>
         </div>
       )}
 
