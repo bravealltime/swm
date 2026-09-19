@@ -40,14 +40,43 @@ export function monsterPage({ monster, rec, template, livingData: customLivingDa
   const leader = rec?.ls;
   const bs = rec?.bs || {};
 
-  // Extract living data (RTA, Duos, Highdata, Patches, 3MDC, Rune builds)
+  // Extract living data (RTA, Duos, Highdata, Patches, 3MDC, Rune builds, Dungeon Abyss)
   const living = customLivingData || getMonsterLivingData(monster) || {};
-  const { guardianStats, duos = [], synergies = [], counters = [], balancePatches = [], mdcStats, builds, summaryTextTh } = living;
+  const { guardianStats, duos = [], synergies = [], counters = [], balancePatches = [], mdcStats, builds, dungeonStats = [], summaryTextTh } = living;
 
   const title = `${name}${thai ? ` (${thai})` : ''} — สกิล สเตตัส และวิธีใช้ | SWM`;
   const firstSkill = skills.find((s) => s.descriptionTh);
   const metaSnippet = guardianStats ? `อันดับ #${guardianStats.rank} RTA Guardian (เลือก ${guardianStats.picks.toLocaleString()} ครั้ง ชนะ ${guardianStats.winRate}%) · ` : '';
   const description = clip(`${name}${thai ? ` (${thai})` : ''} มอนสเตอร์ธาตุ${elementTh} ${stars}★ ${metaSnippet}${monster.family ? `ตระกูล ${monster.family}` : ''} — ${skills.length ? `สกิลแปลไทย ${skills.length} สกิล` : 'ข้อมูลสกิล'}${firstSkill ? `: ${firstSkill.name} ${firstSkill.descriptionTh}` : ''}`, 158);
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'BreadcrumbList',
+        'itemListElement': [
+          { '@type': 'ListItem', 'position': 1, 'name': 'หน้าแรก', 'item': `${SITE_URL}/` },
+          { '@type': 'ListItem', 'position': 2, 'name': 'สารานุกรมมอนสเตอร์', 'item': `${SITE_URL}/catalog` },
+          { '@type': 'ListItem', 'position': 3, 'name': name, 'item': url },
+        ],
+      },
+      {
+        '@type': 'ItemPage',
+        '@id': url,
+        'url': url,
+        'name': title,
+        'description': description,
+        'inLanguage': 'th-TH',
+        'mainEntity': {
+          '@type': 'GameCharacter',
+          'name': name,
+          ...(thai ? { 'alternateName': thai } : {}),
+          ...(image ? { 'image': image } : {}),
+          'description': summaryTextTh || description,
+        },
+      },
+    ],
+  };
 
   const head = [
     `<title>${esc(title)}</title>`,
@@ -61,6 +90,7 @@ export function monsterPage({ monster, rec, template, livingData: customLivingDa
     `<meta property="og:url" content="${attr(url)}">`,
     image ? `<meta property="og:image" content="${attr(image)}">` : '',
     `<meta name="twitter:card" content="summary">`,
+    `<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>`,
   ].filter(Boolean).join('\n    ');
 
   const skillHtml = skills.map((s, i) => {
@@ -203,7 +233,45 @@ export function monsterPage({ monster, rec, template, livingData: customLivingDa
       </div>
     </section>` : '';
 
-  // 6. 3MDC Comps HTML
+  // 6. PVE Dungeon Abyss Hard HTML
+  const dungeonHtml = dungeonStats.length > 0 ? `
+    <section class="mt-6">
+      <h2 class="text-lg font-bold text-white">สถิติและทีมสปีดฟาร์มดันเจี้ยน Abyss Hard (PVE)</h2>
+      <div class="mt-2 space-y-3 text-sm">
+        ${dungeonStats.map((d) => `
+          <div class="p-3.5 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
+            <div class="flex justify-between items-center flex-wrap gap-2">
+              <div class="font-bold text-sky-300 text-base">${esc(d.dungeonNameEn)} (${esc(d.dungeonName)})</div>
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-xs font-mono font-bold">ชนะ ${esc(d.successRate)}</span>
+                <span class="px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 text-xs font-mono">เวลาเฉลี่ย ${esc(d.avgTime)} นาที</span>
+                ${d.recordTime ? `<span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 text-xs font-mono font-bold">สถิติ ${esc(d.recordTime)}</span>` : ''}
+              </div>
+            </div>
+            <div class="text-xs text-slate-300">
+              <span class="text-slate-400">บทบาทในทีม:</span> <strong class="text-amber-300">${esc(d.role)}</strong> · <span class="text-slate-400">รูนแนะนำ:</span> <span class="text-slate-200 font-mono">${esc(d.recommendedRune)}</span>
+            </div>
+            ${d.teammates?.length ? `
+              <div class="text-xs text-slate-400">
+                <span>เพื่อนร่วมทีม:</span> <span class="text-slate-200 font-semibold">${esc(d.teammates.join(', '))}</span>
+              </div>
+            ` : ''}
+            ${d.turnOrderTh ? `
+              <div class="text-xs text-slate-400">
+                <span>ลำดับเทิร์น:</span> <span class="text-sky-300 font-mono">${esc(d.turnOrderTh)}</span>
+              </div>
+            ` : ''}
+            ${d.bossMechanicTh ? `
+              <div class="text-xs text-slate-400 italic bg-slate-950/60 p-2 rounded border border-slate-800/80">
+                💡 ${esc(d.bossMechanicTh)}
+              </div>
+            ` : ''}
+          </div>
+        `).join('')}
+      </div>
+    </section>` : '';
+
+  // 7. 3MDC Comps HTML
   const mdcHtml = mdcStats && (mdcStats.defCount > 0 || mdcStats.cntCount > 0) ? `
     <section class="mt-6">
       <h2 class="text-lg font-bold text-white">สถิติในศึกกิลด์วอร์และ Siege Battle (ฐานข้อมูล 3MDC)</h2>
@@ -261,6 +329,7 @@ export function monsterPage({ monster, rec, template, livingData: customLivingDa
       ${duosHtml}
       ${highDataHtml}
       ${buildsHtml}
+      ${dungeonHtml}
       ${mdcHtml}
       ${balanceHtml}
       ${leader ? `<h2 class="text-lg font-bold text-white mt-6">ลีดเดอร์สกิล</h2><p class="text-sm text-slate-200 mt-1">${esc(leader.textTh || leader.textEn || `${leader.attribute || ''} +${leader.amount || ''}%${leader.area ? ` (${leader.area})` : ''}`)}</p>` : ''}

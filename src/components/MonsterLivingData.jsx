@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { 
   Trophy, 
   Swords, 
@@ -8,15 +8,24 @@ import {
   History, 
   Gem, 
   Target, 
-  ExternalLink,
-  ChevronRight,
-  TrendingUp,
-  AlertTriangle,
-  CheckCircle2,
-  Users
+  ChevronRight, 
+  TrendingUp, 
+  AlertTriangle, 
+  CheckCircle2, 
+  Users, 
+  Zap, 
+  Clock, 
+  Share2, 
+  Download, 
+  Bot, 
+  HelpCircle,
+  Award,
+  ArrowUpRight
 } from 'lucide-react';
 import MonsterAvatar from './MonsterAvatar';
-import { getMonsterLivingData } from '../utils/monsterLivingData.js';
+import AiAdvisorPanel from './AiAdvisorPanel';
+import { getMonsterLivingData, calculateGuardianReadiness } from '../utils/monsterLivingData.js';
+import { exportMonsterCard } from '../utils/cardExporter.js';
 
 const IMPACT_BADGES = {
   buff: { label: 'BUFF', bg: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30' },
@@ -24,35 +33,140 @@ const IMPACT_BADGES = {
   adjustment: { label: 'REBALANCE', bg: 'bg-amber-500/15 text-amber-300 border-amber-500/30' },
 };
 
-export default function MonsterLivingData({ monster, onNavigate, onSelectMonster }) {
-  const [activeTab, setActiveTab] = useState('meta'); // 'meta' | 'runes' | 'mdc' | 'patches'
+export default function MonsterLivingData({ 
+  monster, 
+  equippedStats = null, 
+  wizardName = 'Summoner',
+  onNavigate, 
+  onSelectMonster 
+}) {
+  const [activeTab, setActiveTab] = useState('meta'); // 'meta' | 'runes' | 'dungeons' | 'mdc' | 'patches' | 'ai'
+  const [isExporting, setIsExporting] = useState(false);
+  const [aiPromptPreset, setAiPromptPreset] = useState(null);
+
   const data = typeof monster === 'object' && monster.guardianStats !== undefined 
     ? monster 
     : getMonsterLivingData(monster);
 
-  if (!data || !data.monster) return null;
-
-  const { guardianStats, duos, synergies, counters, balancePatches, mdcStats, builds, summaryTextTh } = data;
+  const { guardianStats, duos, synergies, counters, dungeonStats = [], balancePatches, mdcStats, builds, summaryTextTh } = data || {};
 
   const hasMeta = Boolean(guardianStats);
   const hasDuos = duos && duos.length > 0;
   const hasHighData = (synergies && synergies.length > 0) || (counters && counters.length > 0);
+  const hasDungeons = dungeonStats && dungeonStats.length > 0;
   const hasMdc = mdcStats && (mdcStats.defCount > 0 || mdcStats.cntCount > 0);
   const hasPatches = balancePatches && balancePatches.length > 0;
   const hasBuilds = Boolean(builds && builds.benchmarks);
 
+  // Guardian Readiness Score when actual equipped stats are passed (from Box view)
+  const readiness = useMemo(() => {
+    if (!equippedStats || !builds?.benchmarks) return null;
+    return calculateGuardianReadiness(equippedStats, builds.benchmarks);
+  }, [equippedStats, builds]);
+
+  if (!data || !data.monster) return null;
+
+  const handleExportCard = async () => {
+    setIsExporting(true);
+    try {
+      await exportMonsterCard({
+        monster: {
+          ...data.monster,
+          ...equippedStats,
+          runeSets: builds?.sets || ['Violent', 'Will'],
+          sets: builds?.sets || ['Violent', 'Will'],
+        },
+        wizardName,
+      });
+    } catch (e) {
+      console.error('Export card failed:', e);
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
   return (
     <div className="space-y-4 text-slate-200">
-      {/* 1. Summary Header Card */}
-      <div className="rounded-2xl bg-gradient-to-r from-blue-950/40 via-indigo-950/30 to-purple-950/40 border border-blue-500/20 p-3.5 sm:p-4 text-xs sm:text-sm leading-relaxed text-slate-300 shadow-lg">
-        <div className="flex items-center gap-2 mb-1.5 font-bold text-blue-400 text-xs uppercase tracking-wider">
-          <Sparkles className="w-3.5 h-3.5 text-blue-400 shrink-0" />
-          <span>บทวิเคราะห์สถานะ & เมต้า (Living Profile)</span>
+      {/* 1. Summary Header Card + Quick Action Buttons */}
+      <div className="rounded-2xl bg-gradient-to-r from-blue-950/40 via-indigo-950/30 to-purple-950/40 border border-blue-500/20 p-3.5 sm:p-4 text-xs sm:text-sm leading-relaxed text-slate-300 shadow-lg space-y-2.5">
+        <div className="flex items-center justify-between gap-2 flex-wrap">
+          <div className="flex items-center gap-2 font-bold text-blue-400 text-xs uppercase tracking-wider">
+            <Sparkles className="w-3.5 h-3.5 text-blue-400 shrink-0" />
+            <span>บทวิเคราะห์สถานะ & เมต้า (Living Profile)</span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleExportCard}
+              disabled={isExporting}
+              className="px-3 py-1.5 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 text-white text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-all hover:scale-[1.02]"
+              title="สร้างรูปภาพการ์ดพลังมอนสเตอร์สำหรับแชร์ลงโซเชียล"
+            >
+              <Share2 className="w-3.5 h-3.5 text-cyan-400" />
+              <span>{isExporting ? 'กำลังสร้างรูป...' : 'แชร์การ์ด PNG'}</span>
+            </button>
+          </div>
         </div>
-        <p className="text-slate-200">{summaryTextTh}</p>
+        <p className="text-slate-200 leading-relaxed">{summaryTextTh}</p>
       </div>
 
-      {/* 2. Navigation Tabs */}
+      {/* 2. Guardian Readiness Score Bar (Only if user's equipped stats exist) */}
+      {readiness && (
+        <div className="rounded-2xl p-4 bg-gradient-to-r from-amber-950/30 via-slate-900 to-amber-950/20 border border-amber-500/30 space-y-3">
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <Award className="w-4 h-4 text-amber-400 shrink-0" />
+              <span className="text-xs font-bold text-white uppercase tracking-wider">ความพร้อมรูนระดับ Guardian (Readiness Benchmark)</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold text-amber-300">{readiness.gradeLabel}</span>
+              <span className="px-2 py-0.5 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs font-mono font-black">
+                เกรด {readiness.grade} ({readiness.score}%)
+              </span>
+            </div>
+          </div>
+
+          {/* Progress bar */}
+          <div className="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden">
+            <div 
+              className={`h-2.5 rounded-full transition-all duration-500 ${
+                readiness.score >= 85 ? 'bg-gradient-to-r from-emerald-500 to-teal-400' :
+                readiness.score >= 70 ? 'bg-gradient-to-r from-amber-500 to-yellow-400' :
+                'bg-gradient-to-r from-rose-500 to-amber-500'
+              }`}
+              style={{ width: `${readiness.score}%` }}
+            />
+          </div>
+
+          {/* Stat Checklist Chips */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+            {readiness.items.map((item, i) => (
+              <div 
+                key={i} 
+                className={`p-2 rounded-xl border flex items-center justify-between ${
+                  item.passed 
+                    ? 'bg-emerald-500/10 border-emerald-500/25 text-emerald-300' 
+                    : 'bg-amber-500/10 border-amber-500/25 text-amber-200'
+                }`}
+              >
+                <div>
+                  <span className="font-bold">{item.label}</span>
+                  <div className="text-[10px] opacity-75">{item.actual.toLocaleString()}{item.unit} / {item.target.toLocaleString()}{item.unit}</div>
+                </div>
+                {item.passed ? (
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                ) : (
+                  <span className="text-[10px] font-mono font-bold text-amber-400 shrink-0">
+                    {item.diff}{item.unit}
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* 3. Navigation Tabs */}
       <div className="flex items-center gap-1.5 border-b border-white/[0.08] pb-2 overflow-x-auto chip-strip">
         <button
           onClick={() => setActiveTab('meta')}
@@ -79,6 +193,18 @@ export default function MonsterLivingData({ monster, onNavigate, onSelectMonster
         </button>
 
         <button
+          onClick={() => setActiveTab('dungeons')}
+          className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 cursor-pointer ${
+            activeTab === 'dungeons'
+              ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30'
+              : 'bg-white/[0.04] text-slate-400 hover:text-white hover:bg-white/[0.08]'
+          }`}
+        >
+          <Zap className="w-3.5 h-3.5 text-yellow-400" />
+          <span>ดันเจี้ยน Abyss {hasDungeons && <span className="text-[10px] ml-1 opacity-80">{dungeonStats.length} ดัน</span>}</span>
+        </button>
+
+        <button
           onClick={() => setActiveTab('mdc')}
           className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 cursor-pointer ${
             activeTab === 'mdc'
@@ -101,14 +227,25 @@ export default function MonsterLivingData({ monster, onNavigate, onSelectMonster
           <History className="w-3.5 h-3.5 text-purple-400" />
           <span>ประวัติปรับสมดุล {hasPatches && <span className="text-[10px] ml-1 opacity-80">{balancePatches.length} ครั้ง</span>}</span>
         </button>
+
+        <button
+          onClick={() => setActiveTab('ai')}
+          className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 cursor-pointer ${
+            activeTab === 'ai'
+              ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30'
+              : 'bg-white/[0.04] text-slate-400 hover:text-white hover:bg-white/[0.08]'
+          }`}
+        >
+          <Bot className="w-3.5 h-3.5 text-amber-300" />
+          <span>โค้ช AI</span>
+        </button>
       </div>
 
-      {/* 3. Tab Contents */}
+      {/* 4. Tab Contents */}
 
       {/* Tab: Meta & Duos */}
       {activeTab === 'meta' && (
         <div className="space-y-4">
-          {/* Guardian Stats Grid */}
           {hasMeta ? (
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
               <div className="rounded-xl p-3 bg-[#0a101d] border border-white/[0.07] text-center">
@@ -200,7 +337,6 @@ export default function MonsterLivingData({ monster, onNavigate, onSelectMonster
           {/* Synergies & Counters */}
           {hasHighData && (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-              {/* Synergies */}
               {synergies.length > 0 && (
                 <div className="space-y-2">
                   <div className="text-xs font-bold text-emerald-400 flex items-center gap-1.5">
@@ -221,7 +357,6 @@ export default function MonsterLivingData({ monster, onNavigate, onSelectMonster
                 </div>
               )}
 
-              {/* Counters */}
               {counters.length > 0 && (
                 <div className="space-y-2">
                   <div className="text-xs font-bold text-rose-400 flex items-center gap-1.5">
@@ -292,7 +427,6 @@ export default function MonsterLivingData({ monster, onNavigate, onSelectMonster
             )}
           </div>
 
-          {/* Benchmark Stat Target Grid */}
           {builds.benchmarks && (
             <div className="rounded-xl overflow-hidden border border-white/[0.08] bg-[#070b14]">
               <div className="px-3.5 py-2 bg-white/[0.03] text-xs font-bold text-white border-b border-white/[0.06] flex items-center justify-between">
@@ -309,6 +443,69 @@ export default function MonsterLivingData({ monster, onNavigate, onSelectMonster
                 <div className="p-2.5 flex justify-between"><span className="text-slate-400">RES</span><span className="text-slate-200">{builds.benchmarks.res}%</span></div>
                 <div className="p-2.5 flex justify-between"><span className="text-slate-400">ACC</span><span className="text-slate-200">{builds.benchmarks.acc}%</span></div>
               </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Tab: Dungeons Abyss Hard (PVE) */}
+      {activeTab === 'dungeons' && (
+        <div className="space-y-3">
+          {hasDungeons ? (
+            dungeonStats.map((d, i) => (
+              <div key={i} className="p-4 rounded-xl bg-[#0a101d] border border-yellow-500/20 space-y-3">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/[0.06] pb-2.5">
+                  <div>
+                    <span className="text-[10px] font-mono text-amber-400 uppercase font-bold tracking-wider">
+                      {d.dungeonNameEn}
+                    </span>
+                    <h3 className="text-sm font-bold text-white">{d.dungeonName}</h3>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="px-2 py-0.5 rounded bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-xs font-mono font-bold">
+                      ชนะ {d.successRate}
+                    </span>
+                    <span className="px-2 py-0.5 rounded bg-blue-500/15 border border-blue-500/30 text-blue-300 text-xs font-mono">
+                      ⏱️ เฉลี่ย {d.avgTime}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                  <div>
+                    <span className="text-slate-400">บทบาทในทีม:</span>
+                    <span className="text-white font-medium ml-1.5">{d.role}</span>
+                  </div>
+                  <div>
+                    <span className="text-slate-400">เซ็ตรูนแนะนำ:</span>
+                    <span className="text-amber-300 font-mono font-semibold ml-1.5">{d.recommendedRune}</span>
+                  </div>
+                </div>
+
+                {d.teammates && (
+                  <div className="pt-2 border-t border-white/[0.05]">
+                    <div className="text-[11px] text-slate-400 mb-1">สมาชิกในทีมฟาร์ม:</div>
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      {d.teammates.map((tm, idx) => (
+                        <span key={idx} className="text-xs px-2 py-0.5 rounded-lg bg-white/[0.05] border border-white/10 text-slate-200">
+                          {tm}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {d.turnOrderTh && (
+                  <div className="text-xs text-slate-300 bg-black/30 p-2.5 rounded-lg border border-white/[0.04]">
+                    <span className="text-amber-400 font-semibold">ลำดับเทิร์น (Turn Order):</span> {d.turnOrderTh}
+                  </div>
+                )}
+              </div>
+            ))
+          ) : (
+            <div className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.05] text-center text-xs text-slate-400 space-y-1">
+              <div>มอนสเตอร์ตัวนี้ไม่ติดเมต้าทีมสปีด Abyss Hard หลัก</div>
+              <div className="text-[11px] text-slate-500">มักนำไปใช้ใน Siege Battle, กิลด์วอร์ หรือ RTA เป็นหลัก</div>
             </div>
           )}
         </div>
@@ -416,6 +613,57 @@ export default function MonsterLivingData({ monster, onNavigate, onSelectMonster
               ยังไม่มีการปรับเปลี่ยนสกิล/สเตตัสในรอบ 5 แพตช์สมดุลล่าสุด (Patch #88 - #92)
             </div>
           )}
+        </div>
+      )}
+
+      {/* Tab: AI Coach Advisor */}
+      {activeTab === 'ai' && (
+        <div className="space-y-3">
+          <div className="text-xs text-slate-400">
+            เลือกหัวข้อที่ต้องการปรึกษาโค้ช AI เกี่ยวกับ <span className="text-white font-bold">{data.monster.name}</span> ({data.monster.thaiName || ''}):
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+            {[
+              {
+                id: 'counter',
+                label: '⚔️ สูตรแก้ทาง & จุดอ่อน',
+                prompt: `วิเคราะห์จุดอ่อนและขอสูตรแก้ทาง ${data.monster.name} ใน Siege และ RTA แนะนำตัวที่แก้ทางได้ดีที่สุด`,
+              },
+              {
+                id: 'speed',
+                label: '⚡ สปีดจูน & ลำดับเทิร์น',
+                prompt: `แนะนำการจูนสปีดและลำดับการออกเทิร์นของ ${data.monster.name} ให้เข้ากับทีม และสเตตัสเป้าหมายที่ควรทำ`,
+              },
+              {
+                id: 'teams',
+                label: '🛡️ จัดทีมรับ & ดราฟต์ RTA',
+                prompt: `แนะนำคอมโบทีมตั้งรับ Siege และคู่หูดราฟต์ RTA ที่เข้ากับ ${data.monster.name} ได้ดีที่สุด พร้อมอธิบายเหตุผล`,
+              },
+            ].map((preset) => (
+              <button
+                key={preset.id}
+                onClick={() => setAiPromptPreset(preset.prompt)}
+                className={`p-2.5 rounded-xl border text-xs text-left transition-all cursor-pointer ${
+                  aiPromptPreset === preset.prompt
+                    ? 'bg-amber-500/20 border-amber-500/50 text-amber-200'
+                    : 'bg-[#0a101d] border-white/[0.07] text-slate-300 hover:border-amber-500/30'
+                }`}
+              >
+                <div className="font-bold">{preset.label}</div>
+              </button>
+            ))}
+          </div>
+
+          <AiAdvisorPanel
+            resetKey={`${data.monster.name}-${aiPromptPreset || 'default'}`}
+            label="ถามโค้ช AI"
+            hint="โค้ช AI จะวิเคราะห์โดยอิงจากสกิล สเตตัส และข้อมูลเมต้าจริงในระบบ"
+            buildPayload={() => ({
+              kind: 'chat',
+              prompt: aiPromptPreset || `วิเคราะห์มอนสเตอร์ ${data.monster.name} (${data.monster.thaiName || ''}) ธาตุ ${data.monster.element} แนะนำจุดเด่น วิธีการใช้ และสูตรแก้ทาง`,
+            })}
+          />
         </div>
       )}
     </div>

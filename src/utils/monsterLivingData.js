@@ -3,6 +3,7 @@ import monsterHighData from '../data/swrtMonsterHighdata.json' with { type: 'jso
 import balancePatchDetails from '../data/balancePatchDetails.json' with { type: 'json' };
 import balancePatches from '../data/balancePatches.json' with { type: 'json' };
 import mdcSummary from '../data/monsterMdcSummary.json' with { type: 'json' };
+import dungeonStatsData from '../data/dungeonRealStats.json' with { type: 'json' };
 import { MONSTERS } from '../data/monsters.js';
 import { getMonsterBuild } from '../data/monsterBuilds.js';
 import { getChangeTypeThai, translatePatchSnippet } from './patchTranslator.js';
@@ -199,10 +200,34 @@ export function getMonsterLivingData(monsterInput) {
     counterTeams: [],
   };
 
-  // 6. Rune Builds & Benchmarks
+  // 6. Dungeon Abyss Hard Presence (PVE)
+  const dungeonStats = [];
+  for (const d of dungeonStatsData) {
+    const member = (d.recommendedTeam || []).find((m) => {
+      const mn = (m.name || '').replace(/\s*\(.*?\)\s*/g, '').toLowerCase().trim();
+      return mn === monNameLower || (m.name || '').toLowerCase().includes(monNameLower);
+    });
+    if (member) {
+      dungeonStats.push({
+        dungeonId: d.id,
+        dungeonName: d.nameTh,
+        dungeonNameEn: d.nameEn,
+        avgTime: d.avgTime,
+        recordTime: d.recordTime,
+        successRate: d.successRate,
+        role: member.role || 'ตัวทำดาเมจ/ซัพพอร์ตหลัก',
+        recommendedRune: member.rune || 'Rage / Blade',
+        turnOrderTh: d.turnOrderTh,
+        bossMechanicTh: d.bossMechanicTh,
+        teammates: (d.recommendedTeam || []).map((x) => x.name),
+      });
+    }
+  }
+
+  // 7. Rune Builds & Benchmarks
   const builds = getMonsterBuild(monName);
 
-  // 7. Thai Summary Text Generator
+  // 8. Thai Summary Text Generator
   const summaryParts = [];
   summaryParts.push(`${monThaiName} (${monName}) เป็นมอนสเตอร์ธาตุ${monster.element || ''} ${monster.stars || 5}★`);
 
@@ -216,6 +241,13 @@ export function getMonsterLivingData(monsterInput) {
     const topDuo = duos[0];
     summaryParts.push(
       `คู่หูที่เล่นด้วยกันบ่อยที่สุดใน RTA คือ ${topDuo.partnerThaiName} (${topDuo.partnerName}) ดราฟต์คู่กัน ${topDuo.matches.toLocaleString()} แมตช์ อัตราชนะ ${topDuo.winRate}%`
+    );
+  }
+
+  if (dungeonStats.length > 0) {
+    const topDungeon = dungeonStats[0];
+    summaryParts.push(
+      `ในดันเจี้ยน PVE เป็นตัวหลักของทีมสปีดฟาร์ม ${topDungeon.dungeonNameEn} ทำเวลาเฉลี่ย ${topDungeon.avgTime} นาที ด้วยอัตราชนะสูงถึง ${topDungeon.successRate}`
     );
   }
 
@@ -242,10 +274,64 @@ export function getMonsterLivingData(monsterInput) {
     duos,
     synergies,
     counters,
+    dungeonStats,
     balancePatches: balancePatchesList,
     mdcStats: mdcData,
     builds,
     summaryTextTh,
+  };
+}
+
+/**
+ * Calculates readiness percentage and checklist comparing equipped stats vs Guardian benchmarks
+ */
+export function calculateGuardianReadiness(equippedStats, benchmarks) {
+  if (!equippedStats || !benchmarks) return null;
+
+  const checks = [
+    { key: 'hp', label: 'HP รวม', target: benchmarks.hp, actual: equippedStats.hp || 0 },
+    { key: 'atk', label: 'ATK รวม', target: benchmarks.atk, actual: equippedStats.atk || 0 },
+    { key: 'def', label: 'DEF รวม', target: benchmarks.def, actual: equippedStats.def || 0 },
+    { key: 'spd', label: 'SPD รวม', target: benchmarks.spd, actual: equippedStats.spd || 0 },
+    { key: 'cr', label: 'CRI Rate', target: benchmarks.cr, actual: equippedStats.cr || 0, unit: '%' },
+    { key: 'cd', label: 'CRI Dmg', target: benchmarks.cd, actual: equippedStats.cd || 0, unit: '%' },
+    { key: 'res', label: 'Resistance', target: benchmarks.res, actual: equippedStats.res || 0, unit: '%' },
+    { key: 'acc', label: 'Accuracy', target: benchmarks.acc, actual: equippedStats.acc || 0, unit: '%' },
+  ];
+
+  let totalWeight = 0;
+  let earnedScore = 0;
+  const items = [];
+
+  for (const c of checks) {
+    if (!c.target || c.target <= 0) continue;
+    totalWeight += 1;
+    const ratio = Math.min(1.05, c.actual / c.target);
+    earnedScore += ratio;
+    const passed = c.actual >= c.target;
+    const diff = c.actual - c.target;
+    items.push({
+      key: c.key,
+      label: c.label,
+      target: c.target,
+      actual: c.actual,
+      passed,
+      diff,
+      unit: c.unit || '',
+    });
+  }
+
+  const score = totalWeight > 0 ? Math.min(100, Math.round((earnedScore / totalWeight) * 100)) : 0;
+  const grade = score >= 95 ? 'S' : score >= 85 ? 'A' : score >= 75 ? 'B' : score >= 60 ? 'C' : 'D';
+  const gradeLabel = score >= 90 ? 'พร้อมรบระดับ Guardian G2-G3' : score >= 80 ? 'พร้อมรบระดับ Guardian G1' : score >= 70 ? 'ระดับ Conqueror C3 ปรับรูนอีกนิด' : 'ต้องฟาร์มปรับปรุงรูนเพิ่ม';
+
+  return {
+    score,
+    grade,
+    gradeLabel,
+    items,
+    passedCount: items.filter((i) => i.passed).length,
+    totalCount: items.length,
   };
 }
 

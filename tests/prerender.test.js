@@ -56,6 +56,24 @@ describe('monsterPage', () => {
     expect(html).toContain('สถิติในศึกกิลด์วอร์และ Siege Battle');
     expect(html.length).toBeGreaterThan(4500);
   });
+
+  it('injects JSON-LD Schema.org structured data (BreadcrumbList & ItemPage)', () => {
+    expect(html).toContain('<script type="application/ld+json">');
+    expect(html).toContain('"@type":"BreadcrumbList"');
+    expect(html).toContain('"@type":"ItemPage"');
+    expect(html).toContain('"@type":"GameCharacter"');
+  });
+
+  it('renders PVE Dungeon Abyss Hard section when present (e.g. Teshar)', () => {
+    const tesharHtml = monsterPage({
+      monster: monster('m-16713', 'Teshar', { thaiName: 'เทชาร์ (ฟีนิกซ์ลม)' }),
+      rec: rec('Teshar'),
+      template: TEMPLATE,
+    });
+    expect(tesharHtml).toContain('สถิติและทีมสปีดฟาร์มดันเจี้ยน Abyss Hard (PVE)');
+    expect(tesharHtml).toContain("Giant's Keep Abyss Hard");
+    expect(tesharHtml).toContain('เวลาเฉลี่ย');
+  });
 });
 
 describe('prerenderMonsters', () => {

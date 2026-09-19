@@ -198,6 +198,8 @@ export default function MonsterDetailModal({ unit, box, onClose, onNavigate }) {
           <div className="p-4 sm:p-6">
             <MonsterLivingData 
               monster={info || unit.masterId} 
+              equippedStats={stats.total}
+              wizardName={box?.wizardInfo?.wizard_name || 'Summoner'}
               onNavigate={onNavigate} 
             />
           </div>
