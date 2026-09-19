@@ -17,6 +17,8 @@ import {
   X,
   Link as LinkIcon,
   Loader2,
+  Flame,
+  RotateCcw,
 } from 'lucide-react';
 import MonsterAvatar from '../components/MonsterAvatar';
 import ArenaRushHourHub from '../components/ArenaRushHourHub';
@@ -242,144 +244,342 @@ function TeamCard({ team, summary, copied, busy, onCopy, onCard, extra, compact 
   );
 }
 
-/** Four slots + a catalogue search box; the first pick is treated as the enemy leader. */
+/** Four interactive slots + visual monster selector drawer (Guild War / 3MDC style). */
 function EnemyPicker({ picks, onChange, onSearch, onClear, onReorder, presets }) {
-  const [query, setQuery] = useState('');
-  const [open, setOpen] = useState(false);
-  const boxRef = useRef(null);
+  const [activeSlotIdx, setActiveSlotIdx] = useState(null);
+  const [pickerElement, setPickerElement] = useState('all');
+  const [pickerSearch, setPickerSearch] = useState('');
+  const drawerRef = useRef(null);
 
-  useEffect(() => {
-    if (!open) return;
-    const onDown = (e) => { if (boxRef.current && !boxRef.current.contains(e.target)) setOpen(false); };
-    document.addEventListener('mousedown', onDown);
-    return () => document.removeEventListener('mousedown', onDown);
-  }, [open]);
+  // Slots array: always length 4
+  const slots = useMemo(() => [0, 1, 2, 3].map((i) => picks[i] || null), [picks]);
 
-  const suggestions = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    if (!q) return [];
-    const starts = [];
-    const contains = [];
-    for (const m of MONSTERS) {
+  // Top 1-click meta presets
+  const topPresets = useMemo(() => {
+    const ids = [
+      'ad-psamathe-clara-savannah-byungchul',
+      'ad-vanessa-camilla-byungchul-ariel',
+      'ad-karnal-camilla-abellio-halphas',
+      'ad-oliver-giana-nana-perna',
+      'ad-nora-kinki-camilla-byungchul',
+      'ad-seara-clara-savannah-perna',
+      'ad-laima-rakan-skogul-woosa',
+    ];
+    return ids.map((id) => presets.find((p) => p.id === id)).filter(Boolean);
+  }, [presets]);
+
+  const pickerMonsters = useMemo(() => {
+    const q = pickerSearch.trim().toLowerCase();
+    return MONSTERS.filter((m) => {
+      if (pickerElement !== 'all' && m.element !== pickerElement) return false;
+      if (!q) return true;
       const en = (m.name || '').toLowerCase();
       const th = (m.thaiName || '').toLowerCase();
-      if (en.startsWith(q) || th.startsWith(q)) starts.push(m);
-      else if (en.includes(q) || th.includes(q)) contains.push(m);
-      if (starts.length >= 8) break;
-    }
-    return [...starts, ...contains].slice(0, 8);
-  }, [query]);
+      return en.includes(q) || th.includes(q);
+    })
+      .sort((a, b) => {
+        if (q) {
+          const aEn = (a.name || '').toLowerCase();
+          const bEn = (b.name || '').toLowerCase();
+          const aTh = (a.thaiName || '').toLowerCase();
+          const bTh = (b.thaiName || '').toLowerCase();
+          const aStart = aEn.startsWith(q) || aTh.startsWith(q);
+          const bStart = bEn.startsWith(q) || bTh.startsWith(q);
+          if (aStart && !bStart) return -1;
+          if (!aStart && bStart) return 1;
+        }
+        return (b.stars || 0) - (a.stars || 0) || (a.name || '').localeCompare(b.name || '');
+      })
+      .slice(0, 96);
+  }, [pickerElement, pickerSearch]);
 
-  const add = (m) => {
-    if (!m || picks.length >= 4) return;
-    onChange([...picks, m.name]);
-    setQuery('');
-    setOpen(false);
+  const handleSlotClick = (idx) => {
+    setActiveSlotIdx((curr) => (curr === idx ? null : idx));
+    setPickerSearch('');
   };
-  const remove = (i) => onChange(picks.filter((_, idx) => idx !== i));
-  const makeLeader = (i) => {
-    if (i > 0) {
-      const next = [picks[i], ...picks.filter((_, idx) => idx !== i)];
+
+  const handleSelectMonster = (m) => {
+    if (activeSlotIdx === null || !m) return;
+    const next = [...slots];
+    next[activeSlotIdx] = m.name;
+    const cleaned = next.filter(Boolean);
+    onChange(cleaned);
+
+    // Auto-advance to next empty slot
+    const nextEmpty = [0, 1, 2, 3].find((i) => i !== activeSlotIdx && !next[i]);
+    if (nextEmpty !== undefined) {
+      setActiveSlotIdx(nextEmpty);
+      setPickerSearch('');
+    } else {
+      setActiveSlotIdx(null);
+      setPickerSearch('');
+      if (cleaned.length >= 2 && onSearch) onSearch(cleaned);
+    }
+  };
+
+  const handleClearSlot = (slotIdx, e) => {
+    e?.stopPropagation();
+    const next = slots.filter((_, idx) => idx !== slotIdx).filter(Boolean);
+    onChange(next);
+    if (activeSlotIdx === slotIdx) setActiveSlotIdx(null);
+  };
+
+  const makeLeader = (slotIdx, e) => {
+    e?.stopPropagation();
+    if (slotIdx > 0 && slots[slotIdx]) {
+      const leader = slots[slotIdx];
+      const rest = slots.filter((_, idx) => idx !== slotIdx).filter(Boolean);
+      const next = [leader, ...rest];
       onChange(next);
       if (onReorder) onReorder(next);
     }
   };
 
+  const handleSelectPreset = (p) => {
+    const next = [...p.slots];
+    onChange(next);
+    setActiveSlotIdx(null);
+    if (onSearch) onSearch(next);
+  };
+
+  const handleResetAll = () => {
+    onChange([]);
+    setActiveSlotIdx(null);
+    setPickerSearch('');
+    if (onClear) onClear();
+  };
+
+  const hasPicks = picks.some(Boolean);
+
   return (
-    <div className="rounded-3xl border border-white/[0.08] bg-[#0c1220] p-5 sm:p-6 space-y-4 shadow-xl">
+    <div className="rounded-3xl border border-white/[0.08] bg-[#0c1220] p-5 sm:p-6 space-y-5 shadow-xl">
+      {/* Header */}
       <div className="flex items-start justify-between gap-3 flex-wrap">
         <div>
-          <h2 className="text-lg font-black text-white flex items-center gap-2"><Crosshair className="w-5 h-5 text-rose-400" /> เจอทีมรับนี้ บุกด้วยอะไร</h2>
-          <p className="text-xs text-slate-400 mt-1">ใส่ทีมรับของคู่ต่อสู้ 1–4 ตัว (ตัวแรก = ลีดเดอร์) ระบบอ่านสกิลจริงของแต่ละตัว แล้วจัดอันดับสูตรบุกที่ตอบโจทย์ — ถ้ามีกล่อง จะบอกด้วยว่าทีมไหนคุณจัดได้เลย</p>
+          <div className="flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-orange-400 animate-pulse" />
+            <h2 className="text-lg font-black text-white flex items-center gap-2">
+              <Crosshair className="w-5 h-5 text-rose-400" /> เจอทีมรับนี้ บุกด้วยอะไร
+            </h2>
+          </div>
+          <p className="text-xs text-slate-400 mt-1">
+            คลิกที่แต่ละช่องเพื่อเลือกมอนสเตอร์ทีมรับทีละตัว (ช่อง 1 = ลีดเดอร์) ระบบอ่านสกิลจริงของแต่ละตัว แล้วจัดอันดับสูตรบุกที่ตอบโจทย์ที่สุด
+          </p>
         </div>
-        <select
-          className="bg-[#070b14] border border-white/10 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-blue-500 max-w-full"
-          value=""
-          onChange={(e) => {
-            const t = presets.find((p) => p.id === e.target.value);
-            if (t) {
-              const slots = [...t.slots];
-              onChange(slots);
-              onSearch(slots);
-            }
-          }}
-        >
-          <option value="">ใส่จากสูตรทีมรับในแค็ตตาล็อก…</option>
-          {presets.map((t) => <option key={t.id} value={t.id}>{t.name} — {t.archetype}</option>)}
-        </select>
+
+        <div className="flex items-center gap-2 flex-wrap">
+          {hasPicks && (
+            <button
+              onClick={handleResetAll}
+              className="px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500 text-rose-300 hover:text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border border-rose-500/20 cursor-pointer"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span>ล้างตัวเลือก (Reset)</span>
+            </button>
+          )}
+
+          <select
+            className="bg-[#070b14] border border-white/10 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-orange-500 max-w-full"
+            value=""
+            onChange={(e) => {
+              const t = presets.find((p) => p.id === e.target.value);
+              if (t) handleSelectPreset(t);
+            }}
+          >
+            <option value="">เลือกสูตรสำเร็จจากแค็ตตาล็อก…</option>
+            {presets.map((t) => (
+              <option key={t.id} value={t.id}>
+                {t.name} — {t.archetype}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
-      <div className="grid grid-cols-4 gap-2.5 p-3 rounded-2xl bg-[#070b14] border border-white/[0.06]">
-        {[0, 1, 2, 3].map((i) => {
-          const name = picks[i];
+      {/* 4 Interactive Slots (Guild War / 3MDC Style) */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+        {[0, 1, 2, 3].map((slotIdx) => {
+          const name = slots[slotIdx];
+          const isActive = activeSlotIdx === slotIdx;
+
           return (
-            <div key={i} className="flex flex-col items-center text-center relative min-h-[96px] justify-center">
+            <div
+              key={slotIdx}
+              onClick={() => handleSlotClick(slotIdx)}
+              className={`relative rounded-2xl border transition-all p-3 sm:p-4 text-center cursor-pointer flex flex-col items-center justify-center min-h-[145px] shadow-lg select-none ${
+                isActive
+                  ? 'border-orange-400 bg-orange-600/20 shadow-orange-500/25 ring-2 ring-orange-400 scale-[1.02]'
+                  : name
+                  ? 'border-white/15 bg-white/[0.04] hover:border-white/30'
+                  : 'border-dashed border-white/10 bg-white/[0.02] hover:border-orange-400/50 hover:bg-white/[0.04]'
+              }`}
+            >
               {name ? (
                 <>
+                  <button
+                    onClick={(e) => handleClearSlot(slotIdx, e)}
+                    className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-rose-600 hover:bg-rose-500 text-white flex items-center justify-center text-xs font-bold shadow-md z-20 cursor-pointer"
+                    title="เอาตัวนี้ออก"
+                    aria-label={`เอา ${name} ออก`}
+                  >
+                    ✕
+                  </button>
                   <div className="relative">
                     <MonsterAvatar monster={name} size="md" showStars={false} />
-                    {i === 0 && (
+                    {slotIdx === 0 && (
                       <div className="absolute -top-2 -left-1 bg-amber-500 text-slate-950 p-1 rounded-full shadow-md" title="ลีดเดอร์ของทีมรับ">
                         <Crown className="w-3 h-3" />
                       </div>
                     )}
-                    <button onClick={() => remove(i)} className="absolute -top-2 -right-2 bg-rose-600 hover:bg-rose-500 text-white rounded-full p-0.5 cursor-pointer" title="เอาออก" aria-label={`เอา ${name} ออก`}>
-                      <X className="w-3 h-3" />
-                    </button>
                   </div>
-                  <span className="text-xs font-bold text-white truncate max-w-[85px] mt-1.5">{name}</span>
-                  {i > 0 && (
-                    <button onClick={() => makeLeader(i)} className="text-[10px] text-amber-300/80 hover:text-amber-200 cursor-pointer">ตั้งเป็นลีด</button>
+                  <span className="mt-2 text-xs font-bold text-white truncate max-w-full">
+                    {name}
+                  </span>
+                  <span className="text-[11px] text-orange-400 font-mono font-bold">
+                    {slotIdx === 0 ? '👑 Leader' : `มอน #${slotIdx + 1}`}
+                  </span>
+                  {slotIdx > 0 && (
+                    <button
+                      onClick={(e) => makeLeader(slotIdx, e)}
+                      className="mt-1 text-[10px] text-amber-300/80 hover:text-amber-200 underline cursor-pointer"
+                    >
+                      ตั้งเป็นลีด
+                    </button>
                   )}
                 </>
               ) : (
-                <div className="w-14 h-14 rounded-2xl border border-dashed border-white/15 flex items-center justify-center text-slate-600 text-xs font-mono">{i + 1}</div>
+                <div className="flex flex-col items-center gap-1.5 text-slate-400">
+                  <div className="w-10 h-10 rounded-2xl bg-white/[0.05] border border-white/10 flex items-center justify-center text-orange-400 text-xl font-bold transition-transform">
+                    +
+                  </div>
+                  <span className="text-xs font-bold text-slate-300">
+                    {slotIdx === 0 ? 'เลือก Leader' : `เลือกตัวที่ #${slotIdx + 1}`}
+                  </span>
+                  <span className="text-[10px] text-slate-400">กดเพื่อเลือก</span>
+                </div>
               )}
             </div>
           );
         })}
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-2">
-        <div className="relative flex-1" ref={boxRef}>
-          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
-          <input
-            type="text"
-            value={query}
-            disabled={picks.length >= 4}
-            onChange={(e) => { setQuery(e.target.value); setOpen(true); }}
-            onFocus={() => setOpen(true)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') { e.preventDefault(); if (suggestions[0]) add(suggestions[0]); else if (picks.length) onSearch(); }
-              if (e.key === 'Escape') setOpen(false);
-            }}
-            placeholder={picks.length >= 4 ? 'ครบ 4 ตัวแล้ว' : 'พิมพ์ชื่อมอนสเตอร์ (อังกฤษ/ไทย) แล้ว Enter…'}
-            className="w-full bg-[#070b14] border border-white/10 rounded-xl pl-9 pr-3 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 disabled:opacity-50"
-            aria-label="ค้นหามอนสเตอร์ของทีมรับ"
-          />
-          {open && suggestions.length > 0 && (
-            <div className="absolute z-30 mt-1 w-full rounded-2xl border border-white/10 bg-[#0a0f19]/95 backdrop-blur-xl shadow-2xl p-1.5 max-h-80 overflow-y-auto">
-              {suggestions.map((m) => (
-                <button key={m.id} onClick={() => add(m)} className="w-full flex items-center gap-2.5 px-2 py-1.5 rounded-xl hover:bg-white/[0.06] text-left cursor-pointer">
-                  <MonsterAvatar monster={m} size="sm" showStars={false} />
-                  <span className="text-xs font-bold text-white">{m.name}</span>
-                  <span className="text-[11px] text-slate-400 truncate">{m.thaiName !== m.name ? m.thaiName : ''}</span>
-                  <span className="ml-auto text-[10px] font-mono text-slate-500">{m.stars}★</span>
+      {/* Monster Selector Drawer (opens when a slot is clicked) */}
+      {activeSlotIdx !== null && (
+        <div ref={drawerRef} className="bg-[#070b14] border border-orange-500/30 rounded-2xl p-4 sm:p-5 space-y-4 animate-in fade-in shadow-2xl">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/[0.08]">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold text-orange-400">
+                กำลังเลือกตำแหน่ง: {activeSlotIdx === 0 ? '👑 ลีดเดอร์ (Leader)' : `มอนสเตอร์ช่องที่ #${activeSlotIdx + 1}`}
+              </span>
+              <span className="text-slate-500">•</span>
+              <span className="text-xs text-slate-400">คลิกที่มอนสเตอร์ด้านล่างเพื่อเลือก</span>
+            </div>
+            <button
+              onClick={() => setActiveSlotIdx(null)}
+              className="text-xs text-slate-400 hover:text-white flex items-center gap-1 cursor-pointer self-end sm:self-auto"
+            >
+              <span>ปิดหน้าต่างเลือก</span>
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+
+          {/* Elements & Search Filter */}
+          <div className="flex flex-col sm:flex-row gap-3">
+            <div className="flex items-center gap-1 overflow-x-auto pb-1">
+              {[
+                { id: 'all', label: 'ทุกธาตุ' },
+                { id: 'fire', label: '🔥 ไฟ' },
+                { id: 'water', label: '💧 น้ำ' },
+                { id: 'wind', label: '🌪️ ลม' },
+                { id: 'light', label: '✨ แสง' },
+                { id: 'dark', label: '🌑 มืด' },
+              ].map((el) => (
+                <button
+                  key={el.id}
+                  onClick={() => setPickerElement(el.id)}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-colors cursor-pointer ${
+                    pickerElement === el.id
+                      ? 'bg-orange-600 text-white shadow-md shadow-orange-600/30'
+                      : 'bg-white/[0.04] text-slate-400 hover:text-white'
+                  }`}
+                >
+                  {el.label}
                 </button>
               ))}
             </div>
-          )}
+
+            <div className="relative flex-1">
+              <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                value={pickerSearch}
+                onChange={(e) => setPickerSearch(e.target.value)}
+                placeholder="พิมพ์ค้นหามอนสเตอร์ (เช่น Vanessa, Camilla, Psamathe)..."
+                className="w-full bg-white/[0.04] border border-white/10 rounded-xl pl-9 pr-8 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-orange-400"
+                autoFocus
+              />
+              {pickerSearch && (
+                <button
+                  onClick={() => setPickerSearch('')}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white text-xs cursor-pointer"
+                >
+                  ✕
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Monster Grid */}
+          <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-12 gap-2 max-h-64 overflow-y-auto pr-1">
+            {pickerMonsters.map((m) => (
+              <button
+                key={m.id || m.name}
+                onClick={() => handleSelectMonster(m)}
+                className="p-1.5 rounded-xl hover:bg-white/[0.08] flex flex-col items-center gap-1 transition-all cursor-pointer group"
+              >
+                <MonsterAvatar monster={m} size="sm" showStars={false} />
+                <span className="text-[11px] font-bold text-slate-300 truncate w-full group-hover:text-orange-400 text-center">
+                  {m.thaiName || m.name}
+                </span>
+              </button>
+            ))}
+            {pickerMonsters.length === 0 && (
+              <div className="col-span-full py-8 text-center text-xs text-slate-500">
+                ไม่พบมอนสเตอร์ที่ตรงกับเงื่อนไข
+              </div>
+            )}
+          </div>
         </div>
+      )}
+
+      {/* 1-Click Meta Presets + Search Button */}
+      <div className="pt-2 border-t border-white/[0.06] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2 flex-1 min-w-0">
+          <div className="flex items-center gap-1.5 text-xs text-slate-400 font-bold shrink-0">
+            <Flame className="w-3.5 h-3.5 text-rose-400" />
+            <span>สูตรทีมรับยอดนิยม (1-Click Presets):</span>
+          </div>
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 max-w-full">
+            {topPresets.map((p) => (
+              <button
+                key={p.id}
+                onClick={() => handleSelectPreset(p)}
+                className="px-2.5 py-1 rounded-xl bg-white/[0.04] hover:bg-orange-600/20 text-slate-300 hover:text-white border border-white/10 hover:border-orange-500/40 text-[11px] font-semibold transition-all whitespace-nowrap cursor-pointer shrink-0"
+              >
+                {p.name}
+              </button>
+            ))}
+          </div>
+        </div>
+
         <button
           onClick={() => onSearch()}
-          disabled={!picks.length}
-          className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-orange-600 hover:from-rose-500 hover:to-orange-500 text-white font-bold text-sm flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-rose-500/20 disabled:opacity-40 disabled:cursor-not-allowed"
+          disabled={!hasPicks}
+          className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-orange-600 hover:from-rose-500 hover:to-orange-500 text-white font-bold text-sm flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-rose-500/20 disabled:opacity-40 disabled:cursor-not-allowed shrink-0"
         >
-          <Crosshair className="w-4 h-4" /> ค้นหาทีมแก้
+          <Crosshair className="w-4 h-4" />
+          <span>ค้นหาทีมแก้ทาง {hasPicks ? `(${picks.filter(Boolean).length}/4)` : ''}</span>
         </button>
-        {picks.length > 0 && (
-          <button onClick={() => { onChange([]); if (onClear) onClear(); }} className="px-4 py-2.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-slate-300 text-sm font-bold border border-white/10 cursor-pointer">ล้าง</button>
-        )}
       </div>
     </div>
   );
