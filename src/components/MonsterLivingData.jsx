@@ -615,7 +615,7 @@ export default function MonsterLivingData({
                   <div className="flex items-center justify-between gap-2 flex-wrap">
                     <span className="font-bold text-white text-xs">{team.nameTh} ({team.name})</span>
                     <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-500/20 text-blue-300 border border-blue-500/30">
-                      {team.archetype} • {team.avgClearTime}
+                      Tier {team.tier} • {team.archetype}{team.speed ? ` • ${team.speed}` : ''}
                     </span>
                   </div>
                   <div className="text-xs text-slate-300">
@@ -688,7 +688,7 @@ export default function MonsterLivingData({
 
           {(!arenaComps || arenaComps.totalComps === 0) && (
             <div className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.05] text-center text-xs text-slate-400 space-y-1.5">
-              <div>ยังไม่อยู่ใน 11 ทีมเมต้าสูตรสำเร็จ Arena (AO/AD) ของ Guardian</div>
+              <div>ยังไม่อยู่ในสูตรทีมบุก/รับ Arena (AO/AD) ที่คัดไว้ในหน้า /arena</div>
               <div className="text-[11px] text-slate-500">มอนสเตอร์ตัวนี้อาจเหมาะกับ Siege Battle, กิลด์วอร์ หรือ RTA เป็นหลัก</div>
             </div>
           )}

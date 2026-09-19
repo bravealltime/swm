@@ -1,63 +1,104 @@
 import React, { useState, useMemo } from 'react';
-import { 
-  Swords, 
-  Shield, 
-  Sparkles, 
-  Zap, 
-  Clock, 
-  Crown, 
-  CheckCircle2, 
-  AlertTriangle, 
-  Copy, 
-  Check, 
-  Search, 
-  Filter,
-  ArrowRight,
-  Info
+import {
+  Swords,
+  Shield,
+  Sparkles,
+  Clock,
+  Crown,
+  CheckCircle2,
+  Copy,
+  Check,
+  Search,
+  Info,
+  ChevronRight,
+  Repeat,
 } from 'lucide-react';
 import MonsterAvatar from '../components/MonsterAvatar';
 import ArenaRushHourHub from '../components/ArenaRushHourHub';
 import { matchArenaTeams } from '../utils/arenaMatcher';
 import { loadBox, loadDemoBox } from '../utils/swexImport';
 
+const TIER_STYLE = {
+  S: 'bg-amber-500/20 text-amber-300 border-amber-500/40',
+  A: 'bg-sky-500/15 text-sky-300 border-sky-500/30',
+  B: 'bg-white/[0.05] text-slate-300 border-white/10',
+};
+const TIER_LABEL = { S: 'S — สูตรหลักระดับสูง', A: 'A — แข็งแรง ใช้ได้จริง', B: 'B — ประหยัด / เฉพาะทาง' };
+const LD_OPTIONS = [
+  { id: 'all', label: 'ทุกทีม' },
+  { id: 'no-ld', label: 'ไม่ใช้แสง-มืด' },
+  { id: 'ld', label: 'มีแสง-มืด' },
+];
+
+const chip = (active, tone = 'blue') =>
+  `px-2.5 py-1 rounded-lg text-[11px] font-bold border transition cursor-pointer shrink-0 ${
+    active
+      ? tone === 'purple'
+        ? 'bg-fuchsia-600/25 text-fuchsia-200 border-fuchsia-500/40'
+        : 'bg-blue-600/25 text-blue-200 border-blue-500/40'
+      : 'bg-white/[0.03] text-slate-400 border-white/[0.08] hover:text-white'
+  }`;
+
 export default function ArenaMetaView({ onNavigate }) {
   const [activeTab, setActiveTab] = useState('ao'); // 'ao' | 'ad' | 'mybox' | 'rush'
   const [selectedArchetype, setSelectedArchetype] = useState('all');
+  const [tierFilter, setTierFilter] = useState('all'); // 'all' | 'S' | 'A' | 'B'
+  const [ldFilter, setLdFilter] = useState('all'); // 'all' | 'no-ld' | 'ld'
   const [copiedTeamId, setCopiedTeamId] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [userBox, setUserBox] = useState(() => loadBox());
 
   const arenaData = useMemo(() => matchArenaTeams(userBox), [userBox]);
 
-  const { offense, defense, summary } = arenaData;
+  const { offense, defense, summary, meta } = arenaData;
 
   // Active list based on tab
   const rawList = useMemo(() => {
     if (activeTab === 'ao') return offense;
     if (activeTab === 'ad') return defense;
     if (activeTab === 'mybox') {
-      return [...offense.filter(t => t.isComplete), ...defense.filter(t => t.isComplete)];
+      const ready = (t) => t.isComplete || t.readyWithSwaps;
+      return [...offense.filter(ready), ...defense.filter(ready)];
     }
     return offense;
   }, [activeTab, offense, defense]);
 
-  // Filter by archetype and search query
+  const archetypes = useMemo(() => [...new Set(rawList.map((t) => t.archetype))], [rawList]);
+
+  // Filter by tier, light/dark usage, archetype and search query
   const filteredList = useMemo(() => {
     return rawList.filter((team) => {
+      if (tierFilter !== 'all' && team.tier !== tierFilter) return false;
+      if (ldFilter === 'ld' && !team.ld) return false;
+      if (ldFilter === 'no-ld' && team.ld) return false;
       if (selectedArchetype !== 'all' && team.archetype !== selectedArchetype) return false;
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase().trim();
         const matchName = team.name?.toLowerCase().includes(q) || team.nameTh?.toLowerCase().includes(q);
         const matchMonster = team.slots.some(m => m.name.toLowerCase().includes(q) || (m.thaiName && m.thaiName.toLowerCase().includes(q)));
-        return matchName || matchMonster;
+        const matchSwap = Object.values(team.swaps || {}).flat().some((n) => n.toLowerCase().includes(q));
+        return matchName || matchMonster || matchSwap;
       }
       return true;
     });
-  }, [rawList, selectedArchetype, searchQuery]);
+  }, [rawList, tierFilter, ldFilter, selectedArchetype, searchQuery]);
+
+  const switchTab = (tab) => {
+    setActiveTab(tab);
+    setSelectedArchetype('all');
+  };
 
   // Copy team details
   const handleCopyTeam = (team) => {
-    const text = `⚔️ [SWM Arena] ${team.nameTh} (${team.name})\nสมาชิก: ${team.slots.map(s => s.name).join(' + ')}\nลีดเดอร์: ${team.leader}\nรูน: ${team.runeGuidance || team.runeBuilds}`;
+    const swapText = Object.entries(team.swaps || {}).map(([slot, alts]) => `${slot} → ${alts.join(' / ')}`).join(', ');
+    const text = [
+      `⚔️ [SWM Arena] ${team.nameTh} (${team.name}) — Tier ${team.tier}`,
+      `สมาชิก: ${team.slots.map(s => s.name).join(' + ')}`,
+      `ลีดเดอร์: ${team.leader}`,
+      `รูน: ${team.runeGuidance || team.runeBuilds}`,
+      swapText ? `ตัวแทน: ${swapText}` : '',
+      'สูตรคอมมูนิตี้ (ไม่มีสถิติวัดจริง) — swm-blue.vercel.app/arena',
+    ].filter(Boolean).join('\n');
     navigator.clipboard.writeText(text);
     setCopiedTeamId(team.id);
     setTimeout(() => setCopiedTeamId(null), 2500);
@@ -77,7 +118,12 @@ export default function ArenaMetaView({ onNavigate }) {
             สูตรทีมบุก & ตั้งรับอารีน่า (Arena Offense & Defense)
           </h1>
           <p className="text-xs sm:text-sm text-slate-300 max-w-3xl leading-relaxed">
-            รวมสูตรทีมบุกปิดแมตช์เร็วช่วง Rush Hour (15-25 วินาที) และทีมตั้งรับดักทางสปีด 33% / ถ่วงเวลาป้องกันแต้มลด พร้อมวิเคราะห์ว่าในไอดีของคุณจัดทีมไหนได้ทันที
+            ทีมบุก {summary.totalAo} สูตร · ทีมรับ {summary.totalAd} สูตร จากคอมมูนิตี้ระดับสูง รวมสายแสง-มืด {summary.ldTeams} ทีม
+            พร้อมตัวแทนแบบประหยัดทุกสูตร และเช็กได้ว่ากล่องของคุณจัดทีมไหนได้ทันที
+          </p>
+          <p className="text-[11px] text-slate-500 leading-relaxed max-w-3xl">
+            ทุกชื่อและลีดสกิลตรวจกับฐานข้อมูล SWM แล้ว · อารีน่าปกติไม่มีสถิติสาธารณะ จึงไม่มี % อัตราชนะ — Tier คือความเห็นร่วมของคอมมูนิตี้ ไม่ใช่ตัวเลขที่วัดจริง
+            {meta?.updatedAt ? ` · อัปเดต ${meta.updatedAt}` : ''}
           </p>
         </div>
 
@@ -88,11 +134,13 @@ export default function ArenaMetaView({ onNavigate }) {
               <div>
                 <div className="text-slate-400 text-[11px]">ทีมบุกพร้อมรบ (AO)</div>
                 <div className="text-emerald-400 font-bold text-base">{summary.readyAo} / {summary.totalAo} ทีม</div>
+                {summary.swapAo > 0 && <div className="text-[10px] text-amber-300">+{summary.swapAo} ถ้าใช้ตัวแทน</div>}
               </div>
               <div className="w-px h-8 bg-white/10"></div>
               <div>
                 <div className="text-slate-400 text-[11px]">ทีมรับพร้อมรบ (AD)</div>
                 <div className="text-cyan-400 font-bold text-base">{summary.readyAd} / {summary.totalAd} ทีม</div>
+                {summary.swapAd > 0 && <div className="text-[10px] text-amber-300">+{summary.swapAd} ถ้าใช้ตัวแทน</div>}
               </div>
             </div>
           ) : (
@@ -121,7 +169,7 @@ export default function ArenaMetaView({ onNavigate }) {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/[0.08] pb-3">
         <div className="flex items-center gap-2 overflow-x-auto text-xs sm:text-sm font-bold">
           <button
-            onClick={() => { setActiveTab('ao'); setSelectedArchetype('all'); }}
+            onClick={() => switchTab('ao')}
             className={`px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 shrink-0 cursor-pointer ${
               activeTab === 'ao'
                 ? 'bg-rose-600 text-white shadow-lg shadow-rose-600/25'
@@ -129,11 +177,11 @@ export default function ArenaMetaView({ onNavigate }) {
             }`}
           >
             <Swords className="w-4 h-4" />
-            <span>⚔️ ทีมบุกอารีน่า (Arena Offense - AO)</span>
+            <span>⚔️ ทีมบุก (AO) · {summary.totalAo}</span>
           </button>
 
           <button
-            onClick={() => { setActiveTab('ad'); setSelectedArchetype('all'); }}
+            onClick={() => switchTab('ad')}
             className={`px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 shrink-0 cursor-pointer ${
               activeTab === 'ad'
                 ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/25'
@@ -141,11 +189,11 @@ export default function ArenaMetaView({ onNavigate }) {
             }`}
           >
             <Shield className="w-4 h-4" />
-            <span>🛡️ ทีมตั้งรับ & ถ่วงเวลา (Arena Defense - AD)</span>
+            <span>🛡️ ทีมตั้งรับ (AD) · {summary.totalAd}</span>
           </button>
 
           <button
-            onClick={() => { setActiveTab('mybox'); setSelectedArchetype('all'); }}
+            onClick={() => switchTab('mybox')}
             className={`px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 shrink-0 cursor-pointer ${
               activeTab === 'mybox'
                 ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/25'
@@ -155,13 +203,13 @@ export default function ArenaMetaView({ onNavigate }) {
             <CheckCircle2 className="w-4 h-4 text-emerald-300" />
             <span>
               {summary.hasBox
-                ? `⚡ ทีมที่ฉันมีครบ 4 ตัว (${summary.readyAo + summary.readyAd} ทีม)`
+                ? `⚡ ทีมที่ฉันจัดได้ (${summary.readyAo + summary.readyAd + summary.swapAo + summary.swapAd} ทีม)`
                 : '⚡ เช็คทีมจากไอดีของคุณ (SWEX)'}
             </span>
           </button>
 
           <button
-            onClick={() => { setActiveTab('rush'); setSelectedArchetype('all'); }}
+            onClick={() => switchTab('rush')}
             className={`px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 shrink-0 cursor-pointer ${
               activeTab === 'rush'
                 ? 'bg-amber-600 text-white shadow-lg shadow-amber-600/25'
@@ -181,7 +229,7 @@ export default function ArenaMetaView({ onNavigate }) {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="ค้นหาชื่อทีม หรือ มอนสเตอร์..."
+              placeholder="ค้นหาชื่อทีม มอนสเตอร์ หรือตัวแทน..."
               className="w-full bg-[#070b14] border border-white/10 rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500"
             />
           </div>
@@ -193,6 +241,32 @@ export default function ArenaMetaView({ onNavigate }) {
         <ArenaRushHourHub onNavigate={onNavigate} />
       ) : (
         <>
+          {/* Filters: tier, light/dark, archetype */}
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 overflow-x-auto pb-1">
+              <span className="text-[11px] text-slate-500 font-mono shrink-0">Tier</span>
+              <button onClick={() => setTierFilter('all')} className={chip(tierFilter === 'all')}>ทั้งหมด</button>
+              {['S', 'A', 'B'].map((t) => (
+                <button key={t} onClick={() => setTierFilter(t)} className={chip(tierFilter === t)} title={TIER_LABEL[t]}>Tier {t}</button>
+              ))}
+              <span className="w-px h-4 bg-white/10 shrink-0 mx-1" />
+              <span className="text-[11px] text-slate-500 font-mono shrink-0">แสง-มืด</span>
+              {LD_OPTIONS.map((o) => (
+                <button key={o.id} onClick={() => setLdFilter(o.id)} className={chip(ldFilter === o.id, 'purple')}>{o.label}</button>
+              ))}
+            </div>
+            {archetypes.length > 1 && (
+              <div className="flex items-center gap-2 overflow-x-auto pb-1">
+                <span className="text-[11px] text-slate-500 font-mono shrink-0">สไตล์</span>
+                <button onClick={() => setSelectedArchetype('all')} className={chip(selectedArchetype === 'all')}>ทั้งหมด</button>
+                {archetypes.map((a) => (
+                  <button key={a} onClick={() => setSelectedArchetype(a)} className={chip(selectedArchetype === a)}>{a}</button>
+                ))}
+              </div>
+            )}
+            <div className="text-[11px] text-slate-500 font-mono">แสดง {filteredList.length} / {rawList.length} ทีม</div>
+          </div>
+
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
         {filteredList.map((team) => (
           <div
@@ -202,19 +276,29 @@ export default function ArenaMetaView({ onNavigate }) {
             <div className="space-y-4">
               {/* Card Header */}
               <div className="flex items-start justify-between gap-3 flex-wrap">
-                <div>
-                  <div className="flex items-center gap-2">
+                <div className="min-w-0">
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <span className={`px-2 py-0.5 rounded-md border text-[11px] font-black font-mono ${TIER_STYLE[team.tier] || TIER_STYLE.B}`} title={TIER_LABEL[team.tier]}>
+                      Tier {team.tier}
+                    </span>
                     <span className="px-2.5 py-0.5 rounded-full bg-blue-500/15 text-blue-300 border border-blue-500/30 text-[11px] font-bold font-mono">
                       {team.archetype}
                     </span>
-                    {team.avgClearTime && (
+                    {(team.speed || team.style) && (
                       <span className="px-2 py-0.5 rounded-md bg-white/[0.04] text-slate-300 text-[11px] font-mono flex items-center gap-1">
-                        <Clock className="w-3 h-3 text-emerald-400" /> {team.avgClearTime}
+                        <Clock className="w-3 h-3 text-emerald-400" /> {team.speed || team.style}
+                      </span>
+                    )}
+                    {team.ld && (
+                      <span className="px-2 py-0.5 rounded-md bg-fuchsia-500/15 text-fuchsia-300 border border-fuchsia-500/30 text-[11px] font-mono" title={team.ldMembers.join(', ')}>
+                        แสง-มืด: {team.ldMembers.join(', ')}
                       </span>
                     )}
                     <span className={`px-2 py-0.5 rounded-md text-[11px] font-bold font-mono ${
-                      team.isComplete 
-                        ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' 
+                      team.isComplete
+                        ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                        : team.readyWithSwaps
+                        ? 'bg-amber-500/15 text-amber-300 border border-amber-500/30'
                         : summary.hasBox
                         ? 'bg-white/[0.04] text-slate-400'
                         : 'bg-blue-500/15 text-blue-300 border border-blue-500/20'
@@ -265,10 +349,39 @@ export default function ArenaMetaView({ onNavigate }) {
               </div>
 
               {/* Leader Skill */}
-              <div className="text-xs text-amber-300 bg-amber-500/10 border border-amber-500/20 p-2.5 rounded-xl flex items-center gap-2">
+              <div className={`text-xs p-2.5 rounded-xl flex items-center gap-2 border ${
+                team.leaderArena === false
+                  ? 'text-slate-300 bg-white/[0.03] border-white/10'
+                  : 'text-amber-300 bg-amber-500/10 border-amber-500/20'
+              }`}>
                 <Crown className="w-4 h-4 text-amber-400 shrink-0" />
                 <span><strong>ลีดเดอร์:</strong> {team.leader}</span>
               </div>
+
+              {/* Swaps: cheaper / alternative picks per slot */}
+              {team.swaps && Object.keys(team.swaps).length > 0 && (
+                <div className="text-xs text-slate-300 flex flex-wrap items-center gap-x-3 gap-y-1">
+                  <span className="flex items-center gap-1 text-slate-400 font-bold"><Repeat className="w-3.5 h-3.5" /> ตัวแทน:</span>
+                  {Object.entries(team.swaps).map(([slot, alts]) => {
+                    const opt = team.swapOptions?.find((o) => o.slot === slot);
+                    return (
+                      <span key={slot} className="font-mono">
+                        <span className={opt ? 'text-rose-300' : 'text-slate-400'}>{slot}</span>
+                        <span className="text-slate-500"> → </span>
+                        {alts.map((alt, i) => {
+                          const owned = opt?.alts.find((a) => a.name === alt)?.owned;
+                          return (
+                            <span key={alt}>
+                              {i > 0 && <span className="text-slate-600"> / </span>}
+                              <span className={owned ? 'text-emerald-300 font-bold' : ''} title={owned ? 'มีในไอดีแล้ว' : ''}>{alt}{owned ? ' ✓' : ''}</span>
+                            </span>
+                          );
+                        })}
+                      </span>
+                    );
+                  })}
+                </div>
+              )}
 
               {/* Turn Order (AO) OR Win Condition (AD) */}
               {team.turnOrder && (
@@ -278,11 +391,11 @@ export default function ArenaMetaView({ onNavigate }) {
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
                     {team.turnOrder.map((step, i) => (
-                      <div key={i} className="flex items-center gap-2 p-1.5 rounded-lg bg-white/[0.02] border border-white/[0.04]">
-                        <span className="w-4 h-4 rounded-full bg-cyan-500/20 text-cyan-300 font-mono font-bold flex items-center justify-center text-[10px]">
+                      <div key={i} className="flex items-start gap-2 p-1.5 rounded-lg bg-white/[0.02] border border-white/[0.04]">
+                        <span className="w-4 h-4 mt-0.5 rounded-full bg-cyan-500/20 text-cyan-300 font-mono font-bold flex items-center justify-center text-[10px] shrink-0">
                           {i + 1}
                         </span>
-                        <span className="truncate">{step}</span>
+                        <span className="leading-snug">{step}</span>
                       </div>
                     ))}
                   </div>
@@ -340,10 +453,10 @@ export default function ArenaMetaView({ onNavigate }) {
                     ตรวจเช็คทีม Arena จากกล่องมอนสเตอร์ของคุณ (Box Matcher)
                   </h3>
                   <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                    สูตรทั้งหมด 11 ทีมในแท็บ <strong>"ทีมบุก (AO)"</strong> และ <strong>"ทีมรับ (AD)"</strong> สามารถเปิดดูรายละเอียด รูน และลำดับเทิร์นได้ทุกคนโดยไม่ต้องล็อกอิน
+                    สูตรทั้งหมด {summary.totalAo + summary.totalAd} ทีมในแท็บ <strong>"ทีมบุก (AO)"</strong> และ <strong>"ทีมรับ (AD)"</strong> สามารถเปิดดูรายละเอียด รูน และลำดับเทิร์นได้ทุกคนโดยไม่ต้องล็อกอิน
                   </p>
                   <p className="text-xs text-slate-400 leading-relaxed">
-                    หากต้องการให้ระบบวิเคราะห์ว่าไอดีของคุณมีตัวละครพร้อมจัดทีมไหนบ้าง สามารถทดลองกด <strong>"กล่องตัวอย่าง (Demo Box)"</strong> ได้ทันที หรือนำเข้าไฟล์ JSON จาก SWEX
+                    หากต้องการให้ระบบวิเคราะห์ว่าไอดีของคุณมีตัวละครพร้อมจัดทีมไหนบ้าง (รวมทีมที่จัดได้ด้วยตัวแทน) สามารถทดลองกด <strong>"กล่องตัวอย่าง (Demo Box)"</strong> ได้ทันที หรือนำเข้าไฟล์ JSON จาก SWEX
                   </p>
                 </div>
                 <div className="flex items-center justify-center gap-3 flex-wrap pt-2">
@@ -368,8 +481,14 @@ export default function ArenaMetaView({ onNavigate }) {
                 <div className="w-12 h-12 rounded-full bg-slate-800 text-slate-400 flex items-center justify-center mx-auto">
                   <Info className="w-6 h-6" />
                 </div>
-                <h3 className="text-lg font-bold text-white">ไม่พบทีมตามเงื่อนไขที่เลือก</h3>
-                <p className="text-xs text-slate-400">ลองล้างคำค้นหา หรือสลับไปยังแท็บอื่นเพื่อดูทีมเพิ่มเติม</p>
+                <h3 className="text-lg font-bold text-white">
+                  {activeTab === 'mybox' ? 'ยังไม่มีสูตรที่จัดได้ครบจากกล่องนี้' : 'ไม่พบทีมตามเงื่อนไขที่เลือก'}
+                </h3>
+                <p className="text-xs text-slate-400">
+                  {activeTab === 'mybox'
+                    ? 'ดูแท็บ AO/AD — การ์ดจะบอกว่าแต่ละสูตรขาดตัวไหน และตัวแทนตัวไหนที่คุณมีอยู่แล้ว'
+                    : 'ลองล้างคำค้นหา ปรับ Tier / แสง-มืด หรือสลับไปยังแท็บอื่นเพื่อดูทีมเพิ่มเติม'}
+                </p>
               </div>
             )
           )}

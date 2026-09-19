@@ -1,161 +1,1908 @@
 {
   "meta": {
     "title": "Summoners War Arena Meta Teams (AO & AD)",
-    "season": "Current Arena Season",
-    "updatedAt": "2026-09-19"
+    "note": "สูตรจากคอมมูนิตี้ที่ตรวจชื่อ/ลีดสกิล/สกิลกับฐานข้อมูล SWM แล้ว — อารีน่าปกติไม่มีสถิติสาธารณะ จึงไม่มี % อัตราชนะ",
+    "updatedAt": "2026-09-19",
+    "counts": {
+      "offense": 24,
+      "defense": 27,
+      "ld": 15
+    }
   },
   "offense": [
     {
-      "id": "ao-tiana-zaiross",
-      "name": "Tiana Zaiross Shield/Will Cleave",
-      "nameTh": "เทียน่า ซาอิรอส (ชิลด์/วิล คลีฟ)",
+      "id": "ao-zaiross-tiana-galleon-kaki",
+      "side": "ao",
+      "tier": "S",
       "archetype": "Fast Cleave",
-      "avgClearTime": "15-20 วินาที",
-      "difficulty": "ปานกลาง",
-      "leader": "Zaiross (เพิ่ม ATK 33% ใน Arena)",
-      "slots": ["Zaiross", "Tiana", "Galleon", "Kaki"],
-      "turnOrder": ["Tiana (ล้างบัฟ 100% ไม่สน Res)", "Galleon (เจาะเกราะ AoE + บัฟ ATK)", "Zaiross (รีเซ็ตคูลดาวน์ + ดาเมจ)", "Kaki (กวาดดาเมจซ้ำ)"],
-      "runeGuidance": "Tiana: Swift/Will หรือ Shield/Will SPD 240-270 • Galleon: Shield/Will SPD 230 • Zaiross: Rage/Blade SPD 210+ • Kaki: Fatal/Blade SPD 210+",
-      "bestAgainst": "ทีมตั้งรับช้า, ทีมบัฟภูมิคุ้มกันหนา, ทีมถึกที่ไม่มี Speed Lead 33%",
-      "avoidAgainst": "ทีมสปีดลีด 33% มีตัวตัดเทิร์นเร็ว เช่น Triton, Clara หรือ Amduat",
-      "description": "สูตรคลีฟคลาสสิกที่เร็วและเสถียรที่สุด Tiana ล้างบัฟศัตรูไม่สนความต้านทาน Zaiross ปิดสกิลไม่ให้ศัตรูชุบหรือสวนกลับ"
+      "name": "Zaiross Tiana Galleon Kaki",
+      "nameTh": "ซาอิรอส เทียน่า กัลเลียน คาคิ (คลีฟมาตรฐาน)",
+      "speed": "คลีฟเทิร์นแรก",
+      "leader": "Zaiross — ATK +33% (ทุกที่)",
+      "leaderArena": true,
+      "slots": [
+        "Zaiross",
+        "Tiana",
+        "Galleon",
+        "Kaki"
+      ],
+      "ld": false,
+      "ldMembers": [],
+      "ldNote": "",
+      "turnOrder": [
+        "Tiana S3 ล้างบัฟทั้งทีม (ไม่สน RES) + เพิ่มเกจให้ทีมเรา",
+        "Galleon S3 เจาะเกราะ AoE + บัฟ ATK",
+        "Zaiross S3 กวาด AoE ดาเมจเต็ม",
+        "Kaki S2 เก็บงานตัวที่เหลือ"
+      ],
+      "runeGuidance": "Tiana ต้องเร็วที่สุดในทีม (Swift/Will หรือ Shield/Will) → Galleon เร็วรองลงมา (Shield/Will) → Zaiross/Kaki Rage หรือ Fatal/Blade เน้น ATK% CD% ATK%",
+      "bestAgainst": "ทีมรับที่ช้ากว่า Tiana, ทีมพึ่งบัฟ (Woosa/Chloe) เพราะ Tiana ล้างก่อน",
+      "avoidAgainst": "ทีมรับลีด SPD 33% ที่มีตัวตัดเกจก่อน Tiana (Clara/Triton/Amduat) และทีมมี Will ครบพร้อม Nemesis",
+      "description": "สูตรคลีฟที่ใช้กันมากที่สุด: ล้าง → เจาะเกราะ → ระเบิด แพ้เกือบทางเดียวคือถูกแซงเทิร์นแรก",
+      "swaps": {
+        "Kaki": [
+          "Lushen",
+          "Julie"
+        ],
+        "Zaiross": [
+          "Lushen",
+          "Kaki"
+        ],
+        "Galleon": [
+          "Bastet",
+          "Sekhmet"
+        ]
+      },
+      "source": "community"
     },
     {
-      "id": "ao-psamathe-lushen",
-      "name": "Psamathe Double Boost Lushen Cleave",
-      "nameTh": "สมาเธ่ ดับเบิ้ลบูสต์ ลูเชนสับกล่อง",
-      "archetype": "Speed Cleave",
-      "avgClearTime": "12-18 วินาที",
-      "difficulty": "ง่าย",
-      "leader": "Psamathe (เพิ่ม SPD 33% ใน Arena)",
-      "slots": ["Psamathe", "Bernard", "Bastet", "Lushen"],
-      "turnOrder": ["Bernard (เร่งเกจ + บัฟสปีด)", "Bastet (เร่งเกจ + บัฟ ATK + เกราะ)", "Lushen (สกิล 3 สับกล่องไม่สนเกราะ)", "Psamathe (ซ้ำดาเมจหรือตายระเบิด)"],
-      "runeGuidance": "Bernard: Swift SPD +210 ขึ้นไป • Bastet: Swift/Will SPD +180 • Lushen: Rage/Blade ATK +2,000, CD 220%+, SPD +80-90 • Psamathe: Despair/Nemesis",
-      "bestAgainst": "ทีมที่ไม่มีตัวตัดเกจ หรือทีมที่ไม่มี Byungchul/Khmun/Abellio หนาจัดๆ",
-      "avoidAgainst": "ทีมที่มี Byungchul + Camilla + Fire Tank ถึกๆ ที่ Lushen สับไม่ตายในชุดเดียว",
-      "description": "ทีมบุกที่เร็วที่สุดในเกม สปีดลีด 33% ช่วยให้ Bernard ออกเทิร์นแรก 100% แล้วดันเกจให้ Lushen สับกล่องตายหมดทีม"
+      "id": "ao-zaiross-tiana-galleon-lushen",
+      "side": "ao",
+      "tier": "S",
+      "archetype": "Fast Cleave",
+      "name": "Zaiross Tiana Galleon Lushen",
+      "nameTh": "ซาอิรอส เทียน่า กัลเลียน ลูเชน",
+      "speed": "คลีฟเทิร์นแรก",
+      "leader": "Zaiross — ATK +33% (ทุกที่)",
+      "leaderArena": true,
+      "slots": [
+        "Zaiross",
+        "Tiana",
+        "Galleon",
+        "Lushen"
+      ],
+      "ld": false,
+      "ldMembers": [],
+      "ldNote": "",
+      "turnOrder": [
+        "Tiana S3 ล้างบัฟ + เพิ่มเกจ",
+        "Galleon S3 เจาะเกราะ + บัฟ ATK",
+        "Lushen S3 Amputation Magic เจาะ DEF",
+        "Zaiross S3 ปิดเกม"
+      ],
+      "runeGuidance": "เหมือนสูตร Kaki แต่ Lushen ต้องการ ATK% สูงกว่า (Rage/Blade หรือ Fatal/Blade) เพราะไม่มี Passive ช่วย",
+      "bestAgainst": "ทีมรับที่พึ่ง DEF สูง (Skogul/Tractor) เพราะ Lushen เจาะเกราะ",
+      "avoidAgainst": "ทีมรับที่เร็วกว่า Tiana หรือมี Will + ตัวตัดเทิร์น",
+      "description": "สลับ Kaki เป็น Lushen เมื่อเจอกำแพง DEF สูง ดาเมจ Lushen ไม่แคร์เกราะ",
+      "swaps": {
+        "Lushen": [
+          "Kaki"
+        ],
+        "Zaiross": [
+          "Kaki",
+          "Julie"
+        ]
+      },
+      "source": "community"
     },
     {
-      "id": "ao-leo-double-lushen",
-      "name": "Leo Bastet Double Lushen",
-      "nameTh": "ลีโอ บาสเทต ดับเบิ้ลลูเชน",
-      "archetype": "Leo Setup",
-      "avgClearTime": "18-25 วินาที",
-      "difficulty": "ง่ายมาก",
-      "leader": "Lushen (เพิ่ม ATK 33% ในดันเจี้ยน/อารีน่า) หรือ Bastet",
-      "slots": ["Leo", "Bastet", "Lushen", "Julie"],
-      "turnOrder": ["Leo (ล็อคสปีด 100 + เคาะลดเกจตัวเร็วสุด)", "Bastet (เร่งเกจ + บัฟ ATK)", "Julie (การ์ดกระจาย 6 ใบกวาดเลือด)", "Lushen (สับกล่องเก็บกวาดตัวที่เหลือ)"],
-      "runeGuidance": "Leo: Vampire/Nemesis ATK/CD/HP • Bastet: Will/Fight/Fight SPD +130 • Julie: Rage/Blade ATK+1800 CD 230% • Lushen: Rage/Blade ATK+2100 CD 240%",
-      "bestAgainst": "ทีมตั้งรับสปีดสูงลิ่วที่ไม่มี Will หรือมี Will แค่บางตัว",
-      "avoidAgainst": "ทีมตั้งรับที่มี Nemesis Healer หลายตัว หรือทีม Leo ฝั่งตรงข้าม",
-      "description": "พาสซีฟของ Leo จะล็อคสปีดทุกคนในสนามไม่ให้เกินสปีดของ Leo ทำให้ตัวทำดาเมจของเราไม่ต้องใส่สปีดเยอะ สามารถเทสเตตัสไปที่ ATK และ CRI Dmg ได้เต็มที่ 100%"
+      "id": "ao-oberon-tiana-galleon-lushen",
+      "side": "ao",
+      "tier": "S",
+      "archetype": "Fast Cleave",
+      "name": "Oberon Tiana Galleon Lushen",
+      "nameTh": "โอเบอรอน เทียน่า กัลเลียน ลูเชน (ลีดแสง +44%)",
+      "speed": "คลีฟเทิร์นแรก",
+      "leader": "Oberon — ATK +44% (อารีน่า)",
+      "leaderArena": true,
+      "slots": [
+        "Oberon",
+        "Tiana",
+        "Galleon",
+        "Lushen"
+      ],
+      "ld": true,
+      "ldMembers": [
+        "Oberon"
+      ],
+      "ldNote": "ลีดแสง 44% ATK",
+      "turnOrder": [
+        "Tiana S3 ล้างบัฟ + เพิ่มเกจ",
+        "Galleon S3 เจาะเกราะ + บัฟ ATK",
+        "Lushen S3 กวาด",
+        "Oberon S3 Light of Judgement เจาะ DEF เก็บตัวสุดท้าย + ตัวเองอมตะ"
+      ],
+      "runeGuidance": "Oberon ลีด ATK +44% ในอารีน่า (สูงสุดในเกม) ใส่ Swift/Will ให้ทันตาม Galleon ก็พอ ดาเมจมาจาก Lushen/Galleon",
+      "bestAgainst": "ทุกทีมที่ Tiana ทัน — ลีด 44% ทำให้ Lushen ตัวเดียวก็ฆ่าได้",
+      "avoidAgainst": "ทีม SPD 33% ที่แซง Tiana",
+      "description": "อัปเกรดจากสูตร Zaiross: Oberon ให้ลีดอารีน่า ATK 44% แทน 33% และมี S3 เจาะเกราะเก็บงาน",
+      "swaps": {
+        "Oberon": [
+          "Zaiross",
+          "Amduat"
+        ],
+        "Lushen": [
+          "Kaki",
+          "Zaiross"
+        ]
+      },
+      "source": "community"
     },
     {
-      "id": "ao-chiwu-leah",
-      "name": "Chiwu Eshir Galleon Leah",
-      "nameTh": "ชิวู เอเชียร์ กัลเลียน ลีอาห์ทะลวงเวฟ",
-      "archetype": "Speed Leah",
-      "avgClearTime": "15-20 วินาที",
-      "difficulty": "สูง (ต้องใช้สปีดสูง)",
-      "leader": "Chiwu (เพิ่ม SPD 24% ใน Arena)",
-      "slots": ["Chiwu", "Eshir", "Galleon", "Leah"],
-      "turnOrder": ["Eshir (บูสต์เกจ + บัฟสปีดทีม)", "Chiwu (ล้างบัฟ AoE ทั้งหมด)", "Galleon (เจาะเกราะ + บัฟ ATK)", "Leah (สกิล 2 ดาเมจตามสปีดที่เร็วกว่าศัตรู)"],
-      "runeGuidance": "Eshir: Swift SPD +215 ขึ้นไป • Chiwu: Despair/Will หรือ Swift SPD +180 • Galleon: Shield/Will SPD +160 • Leah: Swift/Blade SPD +180 ขึ้นไป, ATK +1400, CD 180%",
-      "bestAgainst": "ทีมตั้งรับแทงค์ช้าๆ ที่สปีดต่ำกว่า 180 ทั้งหมด Leah จะยิงได้ดาเมจคูณ 3-4 เท่าทะลุ 55k+ ต่อตัว",
-      "avoidAgainst": "ทีมที่มี Leo หรือทีมสปีดลีด 33% ที่เร็วสูสีกัน",
-      "description": "Leah มีสกิลพิเศษที่จะทำดาเมจเพิ่มขึ้นมหาศาลหากความเร็วของเธอมากกว่าเป้าหมาย เมื่อรวมกับบัฟสปีดของ Eshir จะทำให้ Leah กวาดทีมหนาๆ ตายในฮิตเดียว"
+      "id": "ao-vanessa-tiana-galleon-zaiross",
+      "side": "ao",
+      "tier": "S",
+      "archetype": "Speed-lead Cleave",
+      "name": "Vanessa Tiana Galleon Zaiross",
+      "nameTh": "วาเนสซ่า เทียน่า กัลเลียน ซาอิรอส (ลีด SPD 33%)",
+      "speed": "คลีฟเทิร์นแรก",
+      "leader": "Vanessa — SPD +33% (อารีน่า)",
+      "leaderArena": true,
+      "slots": [
+        "Vanessa",
+        "Tiana",
+        "Galleon",
+        "Zaiross"
+      ],
+      "ld": false,
+      "ldMembers": [],
+      "ldNote": "",
+      "turnOrder": [
+        "Tiana S3 ล้างบัฟ + เพิ่มเกจ",
+        "Galleon S3 เจาะเกราะ + บัฟ ATK",
+        "Zaiross S3 กวาด",
+        "Vanessa S2 ล้างบัฟ/เจาะเกราะเดี่ยวเก็บงาน (S3 ชุบทีมถ้าพลาด)"
+      ],
+      "runeGuidance": "ใช้เมื่อฝ่ายรับมีลีด SPD 33%: ลีด Vanessa ทำให้ Tiana ยังแซงได้โดยไม่ต้องเพิ่มสปีดรูน Vanessa เอง Vio/Will พอ",
+      "bestAgainst": "ทีมรับลีด SPD 33% (Psamathe/Oliver/Vanessa) ที่สูตร Zaiross ลีดแซงไม่ทัน",
+      "avoidAgainst": "ทีมรับที่ Tiana แซงอยู่แล้ว — เสียลีด ATK ไปเปล่า ๆ",
+      "description": "สลับลีด ATK เป็นลีด SPD 33% เมื่อสงครามสปีดสูสี ยอมเสียดาเมจเพื่อให้ได้เทิร์นแรกชัวร์",
+      "swaps": {
+        "Vanessa": [
+          "Psamathe",
+          "Oliver"
+        ],
+        "Zaiross": [
+          "Lushen",
+          "Kaki"
+        ]
+      },
+      "source": "community"
     },
     {
-      "id": "ao-seara-bomb",
-      "name": "Seara Tiana Liebli Bastet Bomb Cleave",
-      "nameTh": "เซียร์ร่า เทียน่า บอมบ์คลีฟ",
+      "id": "ao-psamathe-tiana-galleon-lushen",
+      "side": "ao",
+      "tier": "A",
+      "archetype": "Speed-lead Cleave",
+      "name": "Psamathe Tiana Galleon Lushen",
+      "nameTh": "ซามาเธ่ เทียน่า กัลเลียน ลูเชน",
+      "speed": "คลีฟเทิร์นแรก",
+      "leader": "Psamathe — SPD +33% (อารีน่า)",
+      "leaderArena": true,
+      "slots": [
+        "Psamathe",
+        "Tiana",
+        "Galleon",
+        "Lushen"
+      ],
+      "ld": false,
+      "ldMembers": [],
+      "ldNote": "",
+      "turnOrder": [
+        "Tiana S3 ล้างบัฟ",
+        "Galleon S3 เจาะเกราะ",
+        "Lushen S3 กวาด",
+        "Psamathe S2 เพิ่มคูลดาวน์ + ลดสปีดตัวรอด (Passive ล้างบัฟ+ชุบถ้าพลาด)"
+      ],
+      "runeGuidance": "Psamathe Vio/Will ใส่เพื่อลีดกับประกันพลาด ไม่ต้องดาเมจ",
+      "bestAgainst": "ทีมรับ SPD 33% และทีมที่พึ่งคูลดาวน์สกิลตัวเดียว",
+      "avoidAgainst": "ทีมกำแพงลากยาวที่คลีฟรอบเดียวไม่ตาย",
+      "description": "ลีด SPD 33% แบบน้ำ พร้อมประกัน: ถ้าคลีฟไม่จบ Psamathe ยืดเกมด้วยคูลดาวน์",
+      "swaps": {
+        "Psamathe": [
+          "Vanessa",
+          "Oliver"
+        ]
+      },
+      "source": "community"
+    },
+    {
+      "id": "ao-oliver-tiana-galleon-kaki",
+      "side": "ao",
+      "tier": "A",
+      "archetype": "Speed-lead Cleave",
+      "name": "Oliver Tiana Galleon Kaki",
+      "nameTh": "โอลิเวอร์ เทียน่า กัลเลียน คาคิ",
+      "speed": "คลีฟเทิร์นแรก",
+      "leader": "Oliver — SPD +33% (อารีน่า)",
+      "leaderArena": true,
+      "slots": [
+        "Oliver",
+        "Tiana",
+        "Galleon",
+        "Kaki"
+      ],
+      "ld": false,
+      "ldMembers": [],
+      "ldNote": "",
+      "turnOrder": [
+        "Tiana S3 ล้างบัฟ",
+        "Galleon S3 เจาะเกราะ",
+        "Kaki S2 กวาด",
+        "Oliver S3 ดันคูลดาวน์ + ดูดเกจตัวรอด"
+      ],
+      "runeGuidance": "Oliver Swift/Will เร็วเป็นอันดับ 3 ของทีม ใช้ล็อกตัวรอดไม่ให้ได้เทิร์น",
+      "bestAgainst": "ทีมรับ SPD 33% ที่มีตัวชุบ (Perna/Nana) — Oliver ดันคูลดาวน์ให้ชุบไม่ทัน",
+      "avoidAgainst": "ทีมกำแพง HP หนามาก",
+      "description": "ลีดสปีดสายลม + Oliver ทำหน้าที่ปิดประตูหลังคลีฟ",
+      "swaps": {
+        "Oliver": [
+          "Psamathe",
+          "Vanessa"
+        ],
+        "Kaki": [
+          "Lushen"
+        ]
+      },
+      "source": "community"
+    },
+    {
+      "id": "ao-amduat-tiana-galleon-lushen",
+      "side": "ao",
+      "tier": "A",
+      "archetype": "Fast Cleave",
+      "name": "Amduat Tiana Galleon Lushen",
+      "nameTh": "อัมดูอัต เทียน่า กัลเลียน ลูเชน (ลีดมืด 4★)",
+      "speed": "คลีฟเทิร์นแรก",
+      "leader": "Amduat — ATK +33% (อารีน่า)",
+      "leaderArena": true,
+      "slots": [
+        "Amduat",
+        "Tiana",
+        "Galleon",
+        "Lushen"
+      ],
+      "ld": true,
+      "ldMembers": [
+        "Amduat"
+      ],
+      "ldNote": "ลีดมืด 4★ ATK 33%",
+      "turnOrder": [
+        "Tiana S3 ล้างบัฟ",
+        "Galleon S3 เจาะเกราะ",
+        "Lushen S3 กวาด",
+        "Amduat S2 ลดเกจ+ลดสปีด AoE ตัวรอด (Passive ได้เกจ+ล้างบัฟเมื่อโดนบัฟ)"
+      ],
+      "runeGuidance": "Amduat Swift/Will หรือ Vio/Will เร็วพอตาม Galleon",
+      "bestAgainst": "ทีมรับที่ชอบเปิดบัฟก่อน (Amduat ได้เกจ+ล้าง)",
+      "avoidAgainst": "ทีมที่แซง Tiana",
+      "description": "ทางเลือกลีด ATK 33% จากมอนแสง-มืด 4★ สำหรับคนไม่มี Zaiross/Oberon",
+      "swaps": {
+        "Amduat": [
+          "Zaiross",
+          "Oberon"
+        ]
+      },
+      "source": "community"
+    },
+    {
+      "id": "ao-bernard-galleon-lushen-lushen",
+      "side": "ao",
+      "tier": "A",
+      "archetype": "Budget Cleave",
+      "name": "Bernard Galleon Lushen Lushen",
+      "nameTh": "เบอร์นาร์ด กัลเลียน ลูเชน ×2 (คลีฟประหยัด)",
+      "speed": "คลีฟเทิร์นแรก",
+      "leader": "Bernard — ATK +30% (เฉพาะธาตุลม)",
+      "leaderArena": true,
+      "slots": [
+        "Bernard",
+        "Galleon",
+        "Lushen",
+        "Lushen"
+      ],
+      "ld": false,
+      "ldMembers": [],
+      "ldNote": "",
+      "turnOrder": [
+        "Bernard S3 เพิ่มเกจ+สปีดทั้งทีม",
+        "Galleon S3 เจาะเกราะ + บัฟ ATK",
+        "Lushen S3",
+        "Lushen S3"
+      ],
+      "runeGuidance": "Bernard Swift/Focus เร็วสุด, Galleon Swift/Will, Lushen ×2 Fatal/Blade หรือ Rage/Blade ATK% CD% ATK% เน้นดาเมจล้วน",
+      "bestAgainst": "ทีมรับที่ไม่มีบัฟป้องกันเปิดก่อน ทีมกำแพง DEF (Lushen เจาะเกราะ)",
+      "avoidAgainst": "ทีมที่มี Will/ภูมิคุ้มกันตั้งแต่เริ่ม (ไม่มีตัวล้างบัฟ) และทีมเร็วกว่า Bernard",
+      "description": "สูตรคลาสสิกไม่ต้องมี nat5: Bernard ลีดธาตุลม +30% ATK ให้ Lushen ทั้งสอง ทำได้ตั้งแต่ระดับกลาง",
+      "swaps": {
+        "Bernard": [
+          "Megan",
+          "Tiana"
+        ],
+        "Galleon": [
+          "Bastet",
+          "Megan"
+        ]
+      },
+      "source": "community"
+    },
+    {
+      "id": "ao-megan-galleon-lushen-kaki",
+      "side": "ao",
+      "tier": "B",
+      "archetype": "Budget Cleave",
+      "name": "Megan Galleon Lushen Kaki",
+      "nameTh": "เมแกน กัลเลียน ลูเชน คาคิ",
+      "speed": "คลีฟเทิร์นแรก",
+      "leader": "Megan — ATK +21% (อารีน่า)",
+      "leaderArena": true,
+      "slots": [
+        "Megan",
+        "Galleon",
+        "Lushen",
+        "Kaki"
+      ],
+      "ld": false,
+      "ldMembers": [],
+      "ldNote": "",
+      "turnOrder": [
+        "Megan S3 เพิ่มเกจ + บัฟ ATK/DEF ทั้งทีม",
+        "Galleon S3 เจาะเกราะ",
+        "Lushen S3",
+        "Kaki S2"
+      ],
+      "runeGuidance": "Megan ลีดอารีน่า ATK 21% + บัฟ ATK ซ้อนกับ Galleon ใส่ Swift/Will เร็วสุด",
+      "bestAgainst": "ทีมรับระดับกลางที่ไม่มีตัวล้างบัฟก่อน",
+      "avoidAgainst": "ทีมรับที่เปิดภูมิคุ้มกัน/Will เพราะสูตรนี้ไม่มีตัวล้าง",
+      "description": "สูตรประหยัดอีกแบบ ใช้ลีดอารีน่าของ Megan (3★) แทน Bernard",
+      "swaps": {
+        "Megan": [
+          "Bernard"
+        ],
+        "Kaki": [
+          "Lushen",
+          "Julie"
+        ]
+      },
+      "source": "community"
+    },
+    {
+      "id": "ao-chloe-galleon-lushen-lushen",
+      "side": "ao",
+      "tier": "A",
+      "archetype": "Immunity Cleave",
+      "name": "Chloe Galleon Lushen Lushen",
+      "nameTh": "โคลอี้ กัลเลียน ลูเชน ×2 (คลีฟอมตะ)",
+      "speed": "คลีฟเทิร์นแรก",
+      "leader": "Chloe — SPD +20% (อารีน่า)",
+      "leaderArena": true,
+      "slots": [
+        "Chloe",
+        "Galleon",
+        "Lushen",
+        "Lushen"
+      ],
+      "ld": false,
+      "ldMembers": [],
+      "ldNote": "",
+      "turnOrder": [
+        "Chloe S3 ภูมิคุ้มกัน + อมตะทั้งทีม",
+        "Galleon S3 เจาะเกราะ",
+        "Lushen S3",
+        "Lushen S3"
+      ],
+      "runeGuidance": "Chloe ลีดอารีน่า SPD 20% ต้องเร็วที่สุด (Swift/Will) ที่เหลือเหมือนสูตร Bernard",
+      "bestAgainst": "ทีมรับที่พึ่งตัวตัดเทิร์น/สตันเร็ว (Clara, Verad) — อมตะกันเทิร์นแรกไว้ก่อน",
+      "avoidAgainst": "ทีมรับที่มีตัวล้างบัฟก่อนเทิร์นเรา (Tiana AD) หรือกำแพง Will+HP หนาที่คลีฟรอบเดียวไม่ตาย",
+      "description": "แทนที่จะแข่งล้างบัฟ สูตรนี้ทำให้ทีมเราตายไม่ได้ 1 เทิร์นแล้วคลีฟ ใช้กับทีมรับสาย CC",
+      "swaps": {
+        "Chloe": [
+          "Fran",
+          "Woosa"
+        ],
+        "Galleon": [
+          "Bastet"
+        ]
+      },
+      "source": "community"
+    },
+    {
+      "id": "ao-leo-galleon-lushen-lushen",
+      "side": "ao",
+      "tier": "S",
+      "archetype": "Anti-speed Cleave",
+      "name": "Leo Galleon Lushen Lushen",
+      "nameTh": "ลีโอ กัลเลียน ลูเชน ×2 (แก้ทีมสปีด)",
+      "speed": "คลีฟเทิร์นแรก",
+      "leader": "Leo — DEF +50% (เฉพาะธาตุลม)",
+      "leaderArena": true,
+      "slots": [
+        "Leo",
+        "Galleon",
+        "Lushen",
+        "Lushen"
+      ],
+      "ld": false,
+      "ldMembers": [],
+      "ldNote": "",
+      "turnOrder": [
+        "Leo Passive ลดเกจศัตรูที่เร็วกว่า Leo ทุกครั้งที่มันได้เทิร์น",
+        "Galleon S3 เจาะเกราะ",
+        "Lushen S3",
+        "Lushen S3 (Leo S2 เจาะ DEF เก็บงาน)"
+      ],
+      "runeGuidance": "Leo ไม่ต้องเร็ว! ตั้งใจให้ช้ากว่าตัวรับเพื่อให้ Passive ทำงาน Vio/Will HP% แล้วให้ Galleon เร็วกว่าฝ่ายรับ ลีด DEF ธาตุลมของ Leo ไม่เกี่ยว",
+      "bestAgainst": "ทีมรับลีด SPD 33% และทีมดักสปีดทุกชนิด (Psamathe/Clara/Savannah)",
+      "avoidAgainst": "ทีมรับที่ช้าอยู่แล้ว (Passive ไม่ทำงาน) และทีมกำแพงลากยาว",
+      "description": "คำตอบมาตรฐานของทีมรับสปีด: Leo ทำให้ความเร็วของฝ่ายรับกลายเป็นโทษ Galleon+Lushen ปิดตามปกติ",
+      "swaps": {
+        "Lushen": [
+          "Kaki",
+          "Zaiross"
+        ],
+        "Galleon": [
+          "Tiana",
+          "Bastet"
+        ]
+      },
+      "source": "community"
+    },
+    {
+      "id": "ao-seara-tiana-liebli-bastet",
+      "side": "ao",
+      "tier": "S",
       "archetype": "Bomb Cleave",
-      "avgClearTime": "20-30 วินาที",
-      "difficulty": "ปานกลาง",
-      "leader": "Seara (เพิ่ม SPD 24% ใน Arena)",
-      "slots": ["Seara", "Tiana", "Liebli", "Bastet"],
-      "turnOrder": ["Tiana (ล้างบัฟสนามทั้งหมด)", "Bastet (เร่งเกจ + บัฟ ATK)", "Liebli (วางระเบิด AoE ไม่สนเกราะ)", "Seara (วางระเบิดซ้ำ + จุดชนวนระเบิดทันที)"],
-      "runeGuidance": "Tiana: Swift/Will SPD 250+ • Bastet: Swift/Will SPD 230+ • Liebli: Fatal/Focus ATK+2400 ACC 50%+ • Seara: Violent/Will ATK+1800 SPD 210+",
-      "bestAgainst": "ทีมธาตุไฟหนาๆ, Camilla, Byungchul, Abellio ที่มีเกราะหนาแต่ไม่มีตัวกันระเบิด",
-      "avoidAgainst": "ทีมที่มี Juno (พาสซีฟแก้ดีบัฟฮีลเลือด) หรือ Veromos ที่แก้สถานะทุกเทิร์น",
-      "description": "ดาเมจระเบิดไม่สนใจค่า DEF และไม่ติดแกลนซิ่งจากธาตุ ทำให้ระเบิดทีมธาตุไฟหรือทีมถึกเลือด 50k+ หายไปในพริบตา"
+      "name": "Seara Tiana Liebli Bastet",
+      "nameTh": "เซอาร่า เทียน่า ลีบลี บาสเต็ต (บอมบ์คลีฟ)",
+      "speed": "คลีฟ 1-2 รอบ",
+      "leader": "Seara — SPD +24% (ทุกที่)",
+      "leaderArena": true,
+      "slots": [
+        "Seara",
+        "Tiana",
+        "Liebli",
+        "Bastet"
+      ],
+      "ld": true,
+      "ldMembers": [
+        "Liebli"
+      ],
+      "ldNote": "Liebli มืด 4★",
+      "turnOrder": [
+        "Tiana S3 ล้างบัฟ + เพิ่มเกจ",
+        "Bastet S3 โล่ + เพิ่มเกจ + บัฟ ATK (S2 เจาะเกราะถ้าจำเป็น)",
+        "Liebli S2 วางบอมบ์ AoE",
+        "Seara S3 จุดบอมบ์ทั้งหมด + ดูดเกจ (S2 วางบอมบ์+ได้เทิร์นเพิ่ม)"
+      ],
+      "runeGuidance": "Tiana เร็วสุด → Bastet → Liebli → Seara (Seara ต้องได้ต่อจาก Liebli ทันที) บอมบ์ไม่สนเกราะ ใช้ HP%/ACC% ได้ ไม่ต้อง CD",
+      "bestAgainst": "ทีมกำแพง DEF สูง, ทีมลากเกม (Camilla/Rina/Chasun), ทีมมี Will ที่คลีฟธรรมดาไม่ตาย",
+      "avoidAgainst": "ทีมที่มีตัวล้างดีบัฟ/ภูมิคุ้มกันซ้ำ (Woosa/Velajuel) และทีมเร็วกว่า Tiana",
+      "description": "ดาเมจบอมบ์ไม่แคร์ DEF/โล่ จึงเป็นคำตอบของทีมรับสายถึก Seara ระเบิดบอมบ์ทั้งกระดานในเทิร์นเดียว",
+      "swaps": {
+        "Liebli": [
+          "Jojo",
+          "Malaka",
+          "Sian"
+        ],
+        "Bastet": [
+          "Galleon",
+          "Megan"
+        ],
+        "Tiana": [
+          "Triton"
+        ]
+      },
+      "source": "community"
     },
     {
-      "id": "ao-bruiser-safe",
-      "name": "Bolverk Mo Long Safe Bruiser",
-      "nameTh": "โบลเวิร์ก โมหลง บรูเซอร์เซฟชัวร์",
-      "archetype": "Bruiser Turn-2",
-      "avgClearTime": "60-90 วินาที",
-      "difficulty": "ง่าย",
-      "leader": "Mo Long (เพิ่ม HP 33% ใน Arena)",
-      "slots": ["Mo Long", "Bolverk", "Aaliyah", "Feng Yan"],
-      "turnOrder": ["Aaliyah (กางบัฟเกราะ + ฮีล)", "Bolverk (สแต็กครบ 5 ดูดเลือด 50%)", "Mo Long (สกิล 3 ยิงตัดเลือด 70%)", "Feng Yan (เจาะเกราะตีตาย)"],
-      "runeGuidance": "Mo Long: Vampire/Will หรือ Vio/Will HP +35k • Bolverk: Vio/Will HP +32k • Aaliyah: Vio/Will SPD +120 • Feng Yan: Vio/Will DEF +1800",
-      "bestAgainst": "ทีมตั้งรับ Halphas, Camilla, Karnal, Rina ที่ทีมคลีฟยิงไม่เข้า",
-      "avoidAgainst": "ทีมคลีฟดาเมจหนักๆ ช่วง Rush Hour (ทีมนี้ใช้เวลาต่อสู้นาน)",
-      "description": "สูตรอัตราชนะ 99.9% สำหรับจัดการทีมรับที่ถึกที่สุดในเกม สกิลของ Mo Long และ Bolverk ลดเลือดเป็นเปอร์เซ็นต์ จึงไม่สนใจเกราะหรือความหนาของศัตรู"
+      "id": "ao-seara-tiana-liebli-malaka",
+      "side": "ao",
+      "tier": "A",
+      "archetype": "Bomb Cleave",
+      "name": "Seara Tiana Liebli Malaka",
+      "nameTh": "เซอาร่า เทียน่า ลีบลี มาลาก้า (บอมบ์คู่)",
+      "speed": "คลีฟ 1-2 รอบ",
+      "leader": "Seara — SPD +24% (ทุกที่)",
+      "leaderArena": true,
+      "slots": [
+        "Seara",
+        "Tiana",
+        "Liebli",
+        "Malaka"
+      ],
+      "ld": true,
+      "ldMembers": [
+        "Liebli"
+      ],
+      "ldNote": "Liebli มืด 4★",
+      "turnOrder": [
+        "Tiana S3 ล้างบัฟ",
+        "Malaka S2 บอมบ์ AoE + เพิ่มเกจทีม",
+        "Liebli S2 บอมบ์ AoE",
+        "Seara S3 จุดบอมบ์ 2 ชั้น"
+      ],
+      "runeGuidance": "Malaka และ Liebli ต้องมี ACC พอติดบอมบ์ (Malaka ลีด ACC ธาตุน้ำไม่ช่วยลม/มืด ใช้รูน Focus)",
+      "bestAgainst": "กำแพง HP หนามากที่บอมบ์ชุดเดียวไม่พอ",
+      "avoidAgainst": "ทีมที่มีตัวล้างดีบัฟก่อน Seara ได้เทิร์น",
+      "description": "บอมบ์สองชั้นสำหรับกำแพงที่หนาเป็นพิเศษ แลกกับไม่มีบัฟป้องกันจาก Bastet",
+      "swaps": {
+        "Malaka": [
+          "Jojo",
+          "Bastet"
+        ],
+        "Liebli": [
+          "Jojo"
+        ]
+      },
+      "source": "community"
+    },
+    {
+      "id": "ao-seara-tiana-jojo-bastet",
+      "side": "ao",
+      "tier": "A",
+      "archetype": "Bomb Cleave",
+      "name": "Seara Tiana Jojo Bastet",
+      "nameTh": "เซอาร่า เทียน่า โจโจ้ บาสเต็ต (บอมบ์ไม่ใช้ LD)",
+      "speed": "คลีฟ 1-2 รอบ",
+      "leader": "Seara — SPD +24% (ทุกที่)",
+      "leaderArena": true,
+      "slots": [
+        "Seara",
+        "Tiana",
+        "Jojo",
+        "Bastet"
+      ],
+      "ld": false,
+      "ldMembers": [],
+      "ldNote": "",
+      "turnOrder": [
+        "Tiana S3 ล้างบัฟ",
+        "Bastet S3 โล่+เกจ+ATK",
+        "Jojo S2 บอมบ์ AoE (S3 ล้างบัฟ+เผาถ้าจำเป็น)",
+        "Seara S3 จุดบอมบ์"
+      ],
+      "runeGuidance": "Jojo แทน Liebli ได้เกือบเท่ากัน (บอมบ์ AoE เหมือนกัน) แต่ไม่มี Passive สวนกลับ",
+      "bestAgainst": "เหมือนสูตร Liebli",
+      "avoidAgainst": "เหมือนสูตร Liebli",
+      "description": "บอมบ์คลีฟฉบับไม่มีมอนมืด: Jojo (ไฟ 4★) วางบอมบ์ AoE ได้เหมือน Liebli",
+      "swaps": {
+        "Jojo": [
+          "Liebli",
+          "Malaka"
+        ]
+      },
+      "source": "community"
+    },
+    {
+      "id": "ao-seara-tiana-galleon-liebli",
+      "side": "ao",
+      "tier": "A",
+      "archetype": "Bomb Cleave",
+      "name": "Seara Tiana Galleon Liebli",
+      "nameTh": "เซอาร่า เทียน่า กัลเลียน ลีบลี",
+      "speed": "คลีฟ 1-2 รอบ",
+      "leader": "Seara — SPD +24% (ทุกที่)",
+      "leaderArena": true,
+      "slots": [
+        "Seara",
+        "Tiana",
+        "Galleon",
+        "Liebli"
+      ],
+      "ld": true,
+      "ldMembers": [
+        "Liebli"
+      ],
+      "ldNote": "Liebli มืด 4★",
+      "turnOrder": [
+        "Tiana S3 ล้างบัฟ",
+        "Galleon S3 เจาะเกราะ + ATK",
+        "Liebli S2 บอมบ์",
+        "Seara S3 จุดบอมบ์ (ดาเมจ Seara เองแรงขึ้นจากเจาะเกราะ)"
+      ],
+      "runeGuidance": "Seara ใส่ ATK% บ้างเพราะ S3 มีดาเมจตรงหลังจุดบอมบ์",
+      "bestAgainst": "ทีมรับผสมถึก+ตัวตี ที่บอมบ์อย่างเดียวช้าไป",
+      "avoidAgainst": "ทีมล้างดีบัฟ",
+      "description": "ลูกผสมบอมบ์+เจาะเกราะ จบเร็วกว่าบอมบ์ล้วนเมื่อกำแพงไม่หนาเกิน",
+      "swaps": {
+        "Liebli": [
+          "Jojo"
+        ],
+        "Galleon": [
+          "Bastet"
+        ]
+      },
+      "source": "community"
+    },
+    {
+      "id": "ao-giana-galleon-lushen-lushen",
+      "side": "ao",
+      "tier": "S",
+      "archetype": "LD Control Cleave",
+      "name": "Giana Galleon Lushen Lushen",
+      "nameTh": "เกียน่า กัลเลียน ลูเชน ×2 (คลีฟสายมืด)",
+      "speed": "คลีฟเทิร์นแรก",
+      "leader": "Giana — ATK +33% (ทุกที่)",
+      "leaderArena": true,
+      "slots": [
+        "Giana",
+        "Galleon",
+        "Lushen",
+        "Lushen"
+      ],
+      "ld": true,
+      "ldMembers": [
+        "Giana"
+      ],
+      "ldNote": "Giana มืด 5★",
+      "turnOrder": [
+        "Giana S3 Critical Error ล้างบัฟ + สตัน AoE",
+        "Galleon S3 เจาะเกราะ + ATK",
+        "Lushen S3",
+        "Lushen S3"
+      ],
+      "runeGuidance": "Giana ลีด ATK 33% ทุกที่ ต้องเร็วสุดและ ACC พอให้สตันติด (Swift/Will หรือ Vio/Will ACC%)",
+      "bestAgainst": "ทีมรับที่พึ่ง Will/ภูมิคุ้มกัน (Giana ล้างแล้วสตันในสกิลเดียว)",
+      "avoidAgainst": "ทีมรับ RES สูง (Katarina ลีด RES 55%) ที่สตันไม่ติด",
+      "description": "Giana ทำงานของ Tiana และตัวสตันพร้อมกัน แถมให้ลีด ATK 33% — คลีฟที่ปลอดภัยที่สุดถ้ามีตัวมืดนี้",
+      "swaps": {
+        "Giana": [
+          "Tiana"
+        ],
+        "Lushen": [
+          "Kaki",
+          "Zaiross"
+        ]
+      },
+      "source": "community"
+    },
+    {
+      "id": "ao-poseidon-tiana-charlotte-zaiross",
+      "side": "ao",
+      "tier": "A",
+      "archetype": "ATB Lock Cleave",
+      "name": "Poseidon Tiana Charlotte Zaiross",
+      "nameTh": "โพไซดอน เทียน่า ชาร์ล็อต ซาอิรอส (ล็อกเกจ)",
+      "speed": "คลีฟ 1-2 รอบ",
+      "leader": "Poseidon — ATK +33% (ทุกที่)",
+      "leaderArena": true,
+      "slots": [
+        "Poseidon",
+        "Tiana",
+        "Charlotte",
+        "Zaiross"
+      ],
+      "ld": false,
+      "ldMembers": [],
+      "ldNote": "",
+      "turnOrder": [
+        "Tiana S3 ล้างบัฟ + เพิ่มเกจ",
+        "Poseidon S3 ลดเกจ + ลดสปีด AoE",
+        "Charlotte S3 ลดเกจ AoE + Glancing + เพิ่มเกจทีมเรา",
+        "Zaiross S3 กวาด แล้ววนลูปกดเกจต่อ"
+      ],
+      "runeGuidance": "Poseidon ลีด ATK 33% ทุกที่ Poseidon/Charlotte Swift/Focus ACC% ให้ลดเกจติด",
+      "bestAgainst": "ทีมรับรูน Nemesis/Revenge และทีมพึ่ง Perna/Nana ชุบ — ฝ่ายรับไม่ได้เทิร์นเลย",
+      "avoidAgainst": "ทีมรับที่มี RES สูงหรือ Will พร้อม Immune ซ้ำ",
+      "description": "แทนที่จะรีบฆ่า สูตรนี้ไม่ให้ฝ่ายรับได้เทิร์น เหมาะกับทีมรับที่ตอบโต้เมื่อโดนตี",
+      "swaps": {
+        "Charlotte": [
+          "Verad",
+          "Ganymede"
+        ],
+        "Zaiross": [
+          "Lushen"
+        ]
+      },
+      "source": "community"
+    },
+    {
+      "id": "ao-ganymede-tiana-galleon-lushen",
+      "side": "ao",
+      "tier": "A",
+      "archetype": "ATB Lock Cleave",
+      "name": "Ganymede Tiana Galleon Lushen",
+      "nameTh": "แกนีมีด เทียน่า กัลเลียน ลูเชน",
+      "speed": "คลีฟ 1-2 รอบ",
+      "leader": "Ganymede — ACC +55% (อารีน่า)",
+      "leaderArena": true,
+      "slots": [
+        "Ganymede",
+        "Tiana",
+        "Galleon",
+        "Lushen"
+      ],
+      "ld": false,
+      "ldMembers": [],
+      "ldNote": "",
+      "turnOrder": [
+        "Tiana S3 ล้างบัฟ",
+        "Ganymede S3 ลดเกจ + เพิ่มคูลดาวน์ AoE (ไม่สน RES)",
+        "Galleon S3 เจาะเกราะ",
+        "Lushen S3"
+      ],
+      "runeGuidance": "Ganymede ลีด ACC 55% อารีน่า (ช่วย Galleon/Tiana ติดแน่น) Swift/Will",
+      "bestAgainst": "ทีมรับที่พึ่งสกิล 3 ตัวเดียว (Woosa S3, Perna) — คูลดาวน์โดนดันจนใช้ไม่ทัน",
+      "avoidAgainst": "ทีมกำแพงที่ไม่พึ่งสกิลคูลดาวน์",
+      "description": "ควบคุมสองชั้น: ล้างบัฟแล้วดันคูลดาวน์ ทำให้ทีมรับใช้สกิลสำคัญไม่ได้ก่อนตาย",
+      "swaps": {
+        "Ganymede": [
+          "Poseidon"
+        ],
+        "Lushen": [
+          "Kaki",
+          "Zaiross"
+        ]
+      },
+      "source": "community"
+    },
+    {
+      "id": "ao-jeogun-galleon-lushen-zaiross",
+      "side": "ao",
+      "tier": "A",
+      "archetype": "Art Master Cleave",
+      "name": "Jeogun Galleon Lushen Zaiross",
+      "nameTh": "จอกึน กัลเลียน ลูเชน ซาอิรอส",
+      "speed": "คลีฟเทิร์นแรก",
+      "leader": "Jeogun — ATK +50% (เฉพาะธาตุไฟ)",
+      "leaderArena": true,
+      "slots": [
+        "Jeogun",
+        "Galleon",
+        "Lushen",
+        "Zaiross"
+      ],
+      "ld": false,
+      "ldMembers": [],
+      "ldNote": "",
+      "turnOrder": [
+        "Jeogun S3 ล้างบัฟ + บัฟ ATK + เพิ่มเกจทั้งทีม (งานของ Tiana+Galleon รวมกัน)",
+        "Galleon S3 เจาะเกราะ",
+        "Zaiross S3 กวาด (ได้ลีดไฟ +50% ATK)",
+        "Lushen S3"
+      ],
+      "runeGuidance": "Jeogun ลีด ATK 50% เฉพาะธาตุไฟ → Zaiross ได้เต็ม Jeogun Swift/Will เร็วสุด ACC%",
+      "bestAgainst": "ทีมรับที่ Tiana ทำงานได้ — สูตรนี้ได้ประโยชน์เดียวกันแต่มีดาเมจ 3 ตัว",
+      "avoidAgainst": "ทีมรับที่เร็วกว่า Jeogun (S3 เป็นดีบัฟ ต้อง ACC)",
+      "description": "ทางเลือกสำหรับคนมี Jeogun ไม่มี Tiana: สกิล 3 ทำครบทั้งล้าง บัฟ และเกจ",
+      "swaps": {
+        "Jeogun": [
+          "Tiana"
+        ],
+        "Lushen": [
+          "Kaki"
+        ]
+      },
+      "source": "community"
+    },
+    {
+      "id": "ao-triton-galleon-lushen-lushen",
+      "side": "ao",
+      "tier": "A",
+      "archetype": "Fast Cleave",
+      "name": "Triton Galleon Lushen Lushen",
+      "nameTh": "ไทรทัน กัลเลียน ลูเชน ×2",
+      "speed": "คลีฟเทิร์นแรก",
+      "leader": "Triton — DEF +33% (ทุกที่)",
+      "leaderArena": true,
+      "slots": [
+        "Triton",
+        "Galleon",
+        "Lushen",
+        "Lushen"
+      ],
+      "ld": false,
+      "ldMembers": [],
+      "ldNote": "",
+      "turnOrder": [
+        "Triton S3 ล้างบัฟ + ลดเกจ AoE",
+        "Galleon S3 เจาะเกราะ",
+        "Lushen S3",
+        "Lushen S3"
+      ],
+      "runeGuidance": "Triton ต้องมี ACC สูงกว่า Tiana เพราะสกิลไม่ทะลุ RES (Swift/Focus ACC%)",
+      "bestAgainst": "ทีมรับที่ไม่ได้ลีด RES และไม่มี Will",
+      "avoidAgainst": "ทีม RES สูง / Will ครบ",
+      "description": "ตัวล้างบัฟแทน Tiana ที่แถมลดเกจ แต่ต้องพึ่ง ACC",
+      "swaps": {
+        "Triton": [
+          "Tiana",
+          "Jeogun"
+        ],
+        "Lushen": [
+          "Kaki",
+          "Zaiross"
+        ]
+      },
+      "source": "community"
+    },
+    {
+      "id": "ao-verad-tiana-galleon-lushen",
+      "side": "ao",
+      "tier": "B",
+      "archetype": "Freeze Cleave",
+      "name": "Verad Tiana Galleon Lushen",
+      "nameTh": "เวราด เทียน่า กัลเลียน ลูเชน",
+      "speed": "คลีฟ 1-2 รอบ",
+      "leader": "Verad — HP +33% (ทุกที่)",
+      "leaderArena": true,
+      "slots": [
+        "Verad",
+        "Tiana",
+        "Galleon",
+        "Lushen"
+      ],
+      "ld": false,
+      "ldMembers": [],
+      "ldNote": "",
+      "turnOrder": [
+        "Tiana S3 ล้างบัฟ",
+        "Verad S3 ลดเกจ + แช่แข็ง AoE",
+        "Galleon S3 เจาะเกราะ",
+        "Lushen S3"
+      ],
+      "runeGuidance": "Verad ลีด HP 33% ทุกที่ ใส่ Despair/Will ACC% ให้แช่แข็งติด",
+      "bestAgainst": "ทีมรับที่คลีฟรอบเดียวไม่ตายแต่ CC ติด",
+      "avoidAgainst": "ทีม RES สูง",
+      "description": "ประกันภัยแบบแช่แข็ง: ถ้าคลีฟไม่จบ ฝ่ายรับก็ยังไม่ได้เทิร์น",
+      "swaps": {
+        "Verad": [
+          "Poseidon",
+          "Ganymede"
+        ]
+      },
+      "source": "community"
+    },
+    {
+      "id": "ao-jeanne-rakan-theomars-camilla",
+      "side": "ao",
+      "tier": "A",
+      "archetype": "Provoke Bruiser",
+      "name": "Jeanne Rakan Theomars Camilla",
+      "nameTh": "ฌานน์ ราคาน ธีโอมาร์ส คามิลล่า (ยั่วยุแล้วทุบ)",
+      "speed": "ลากยาว",
+      "leader": "Jeanne — RES +41% (ทุกที่)",
+      "leaderArena": true,
+      "slots": [
+        "Jeanne",
+        "Rakan",
+        "Theomars",
+        "Camilla"
+      ],
+      "ld": true,
+      "ldMembers": [
+        "Jeanne"
+      ],
+      "ldNote": "Jeanne แสง 5★",
+      "turnOrder": [
+        "Jeanne S3 ยั่วยุ AoE + ได้เทิร์นเพิ่ม → S2 อมตะ",
+        "Rakan S2 บัฟ ATK+ภูมิคุ้มกัน / S3 ยั่วยุ+สวนกลับ",
+        "Theomars S2 เจาะเกราะเก็บทีละตัว",
+        "Camilla S1 ตี+ลดคูลดาวน์ตัวเอง Passive ฟื้นทีม"
+      ],
+      "runeGuidance": "Jeanne ลีด RES 41% ทุกที่ Vio/Will HP% RES%, Rakan Vio/Will HP%, Theomars Vio/Will CD%, Camilla Vio/Will",
+      "bestAgainst": "ทีมรับลากเกม/ฮีล (Chasun, Rina, Praha) และทีมที่พึ่งตัวตีตัวเดียว",
+      "avoidAgainst": "กำแพงชุบซ้ำ ๆ (Perna+Nana+Taranys) — ทุบทีละตัวไม่ทันชุบ",
+      "description": "สำหรับทีมรับที่คลีฟฆ่าไม่ตาย: บังคับให้ตีแต่ Jeanne/Rakan แล้วค่อย ๆ เก็บทีละตัว",
+      "swaps": {
+        "Jeanne": [
+          "Louise",
+          "Ritesh"
+        ],
+        "Camilla": [
+          "Woosa",
+          "Feng Yan"
+        ]
+      },
+      "source": "community"
+    },
+    {
+      "id": "ao-woosa-theomars-perna-tesarion",
+      "side": "ao",
+      "tier": "A",
+      "archetype": "Immunity Bruiser",
+      "name": "Woosa Theomars Perna Tesarion",
+      "nameTh": "วูซ่า ธีโอมาร์ส เพอร์น่า เทซาริออน",
+      "speed": "ลากยาว",
+      "leader": "Woosa — ACC +41% (ทุกที่)",
+      "leaderArena": true,
+      "slots": [
+        "Woosa",
+        "Theomars",
+        "Perna",
+        "Tesarion"
+      ],
+      "ld": false,
+      "ldMembers": [],
+      "ldNote": "",
+      "turnOrder": [
+        "Woosa S3 ภูมิคุ้มกัน + โล่ทั้งทีม",
+        "Theomars S2 เจาะเกราะ",
+        "Tesarion S2 เจาะเกราะ (Passive Oblivion ปิด Passive ศัตรู)",
+        "Perna S2 ล้างบัฟตัวอันตราย, Passive ชุบทีม"
+      ],
+      "runeGuidance": "Woosa ลีด ACC 41% ทุกที่ Vio/Will HP% SPD, Theomars/Tesarion Vio/Will CD%, Perna Vio/Will HP%",
+      "bestAgainst": "ทีมรับสาย CC (Verad/Clara/Charlotte) และทีมพึ่ง Passive (Tesarion ปิด)",
+      "avoidAgainst": "ทีมกำแพงลากยาวที่ฮีลไม่หยุด",
+      "description": "บุกแบบไม่ต้องแข่งสปีด: กันตัวเองก่อนแล้วทุบด้วย Ifrit สองตัว มี Perna ประกันชีวิต",
+      "swaps": {
+        "Tesarion": [
+          "Elsharion",
+          "Rakan"
+        ],
+        "Woosa": [
+          "Chloe",
+          "Laima"
+        ]
+      },
+      "source": "community"
+    },
+    {
+      "id": "ao-elsharion-woosa-perna-theomars",
+      "side": "ao",
+      "tier": "A",
+      "archetype": "LD Bruiser",
+      "name": "Elsharion Woosa Perna Theomars",
+      "nameTh": "เอลชาริออน วูซ่า เพอร์น่า ธีโอมาร์ส",
+      "speed": "ลากยาว",
+      "leader": "Elsharion — ATK +33% (ทุกที่)",
+      "leaderArena": true,
+      "slots": [
+        "Elsharion",
+        "Woosa",
+        "Perna",
+        "Theomars"
+      ],
+      "ld": true,
+      "ldMembers": [
+        "Elsharion"
+      ],
+      "ldNote": "Elsharion แสง 5★",
+      "turnOrder": [
+        "Woosa S3 ภูมิคุ้มกัน + โล่",
+        "Elsharion ตี → Passive ขโมยบัฟ + ดูดเกจ + เพิ่มสปีดตัวเอง",
+        "Theomars S2 เจาะเกราะ",
+        "Perna S2 ล้างบัฟ / ชุบ"
+      ],
+      "runeGuidance": "Elsharion ลีด ATK 33% ทุกที่ Vio/Will ATK% CD% ATK% ตีบ่อยเพื่อขโมยบัฟ",
+      "bestAgainst": "ทีมรับที่พึ่งบัฟ (โล่/ภูมิคุ้มกัน/ATK) — ขโมยมาเป็นของเรา",
+      "avoidAgainst": "ทีมที่ไม่ใช้บัฟเลย (Passive ไม่ได้อะไร)",
+      "description": "อิฟริตแสงเปลี่ยนบัฟของฝ่ายรับเป็นของเรา ยิ่งฝ่ายรับบัฟเยอะยิ่งแพ้เร็ว",
+      "swaps": {
+        "Elsharion": [
+          "Tesarion"
+        ],
+        "Woosa": [
+          "Chloe"
+        ]
+      },
+      "source": "community"
     }
   ],
   "defense": [
     {
-      "id": "ad-psama-clara-byungchul",
-      "name": "Psamathe Clara Savannah Byungchul (33% Speed Threat)",
-      "nameTh": "สมาเธ่ คลาร่า ซาวันน่า บยองชอล (ดักสปีด 33%)",
+      "id": "ad-psamathe-clara-savannah-byungchul",
+      "side": "ad",
+      "tier": "S",
       "archetype": "Speed Threat",
-      "winCondition": "Clara ออกก่อนล้างบัฟและสตัน Savannah เจาะเกราะ Byungchul สอยตายทันที",
-      "leader": "Psamathe (เพิ่ม SPD 33% ใน Arena)",
-      "slots": ["Psamathe", "Clara", "Savannah", "Byungchul"],
-      "runeBuilds": "Clara: Swift/Focus SPD +210+ • Savannah: Vio/Will หรือ Swift SPD +170 • Byungchul: Vio/Nemesis HP +30k, CR 80%, CD 150% • Psamathe: Despair/Nemesis",
-      "counterTips": "บุกด้วย Leo + Double Boost หรือ Tiana Shield/Will ที่สปีดไม่โดนแซง",
-      "description": "ทีมรับยอดนิยมอันดับ 1 ของ Guardian Clara มีโอกาสล้างบัฟและสตันสูงมาก หากทีมบุกไม่มีสปีด 33% มักจะโดนขัดจังหวะจนแพ้"
+      "name": "Psamathe Clara Savannah Byungchul",
+      "nameTh": "ซามาเธ่ คลาร่า ซาวันน่า บยองชอล (ดักสปีด 33%)",
+      "style": "ดักสปีด",
+      "leader": "Psamathe — SPD +33% (อารีน่า)",
+      "leaderArena": true,
+      "slots": [
+        "Psamathe",
+        "Clara",
+        "Savannah",
+        "Byungchul"
+      ],
+      "ld": false,
+      "ldMembers": [],
+      "ldNote": "",
+      "winCondition": "Clara ได้เทิร์นก่อนทีมบุก → S3 ล้างบัฟ + สตัน AoE → Savannah S3 เจาะเกราะ+ลดเกจ → Byungchul S2 ขโมยบัฟ+คริการันตี ทีมบุกที่ไม่มีลีด SPD 33% แซง Clara ยาก",
+      "runeBuilds": "Clara Swift/Focus หรือ Swift/Will เร็วสุด ACC%, Savannah Vio/Will หรือ Swift SPD, Byungchul Vio/Nemesis HP% CD% HP% CR 70%+, Psamathe Despair/Will หรือ Vio/Will",
+      "counterTips": "Leo Galleon Lushen ×2 (Leo ลงโทษความเร็ว), ทีมลีด SPD 33% ที่ Tiana ยังแซง Clara, หรือ Chloe อมตะเทิร์นแรก",
+      "description": "ทีมรับดักสปีดที่พบบ่อยที่สุดในระดับสูง จุดอ่อนคือถ้าโดนแซง Clara ทีมไม่มีกำแพง",
+      "swaps": {
+        "Byungchul": [
+          "Theomars",
+          "Dominic"
+        ],
+        "Savannah": [
+          "Galleon",
+          "Ethna"
+        ],
+        "Psamathe": [
+          "Oliver",
+          "Vanessa"
+        ]
+      },
+      "source": "community"
     },
     {
-      "id": "ad-vanessa-camilla-byungchul",
-      "name": "Vanessa Camilla Byungchul Ariel (Stall / Anti-Cleave)",
-      "nameTh": "วาเนสซ่า คามิลล่า บยองชอล อาเรียล (ทีมถึกต้าน Lushen)",
-      "archetype": "Anti-Cleave Stall",
-      "winCondition": "ทนดาเมจ Lushen ได้ทุกตัว Ariel สวนฮีลเต็มหลอด Vanessa ชุบ Byungchul ตีสวน",
-      "leader": "Vanessa (เพิ่ม SPD 33% ใน Arena)",
-      "slots": ["Vanessa", "Camilla", "Byungchul", "Ariel"],
-      "runeBuilds": "Ariel: Double Nemesis/Will HP +35k, DEF +1200 • Camilla: Vio/Nemesis HP +32k, CD 140% • Byungchul: Vio/Destroy HP +35k • Vanessa: Vio/Will SPD +140",
-      "counterTips": "บุกด้วยทีม Bomb Cleave (Seara/Liebli) หรือทีม Bruiser Bolverk Mo Long",
-      "description": "ทีมรับที่ออกแบบมาเพื่อป้องกัน Lushen และ Julie โดยเฉพาะ Ariel ใส่ 2 Nemesis จะได้รับเกจจนแทรกเทิร์นมาฮีล 100% เลือดเต็มหลอดทันที"
+      "id": "ad-oliver-clara-galleon-theomars",
+      "side": "ad",
+      "tier": "A",
+      "archetype": "Speed Threat",
+      "name": "Oliver Clara Galleon Theomars",
+      "nameTh": "โอลิเวอร์ คลาร่า กัลเลียน ธีโอมาร์ส",
+      "style": "ดักสปีด",
+      "leader": "Oliver — SPD +33% (อารีน่า)",
+      "leaderArena": true,
+      "slots": [
+        "Oliver",
+        "Clara",
+        "Galleon",
+        "Theomars"
+      ],
+      "ld": false,
+      "ldMembers": [],
+      "ldNote": "",
+      "winCondition": "Clara ล้างบัฟ+สตัน → Galleon เจาะเกราะ → Theomars/Oliver เก็บ Oliver S3 ดันคูลดาวน์ตัวรอดไม่ให้ตอบโต้",
+      "runeBuilds": "Clara Swift/Focus, Galleon Swift/Will, Oliver Swift/Will, Theomars Vio/Will CD%",
+      "counterTips": "Leo cleave หรือทีมบุกที่มี Will ครบ + ตัวล้างดีบัฟ (Clara สตันไม่ติด)",
+      "description": "ดักสปีดสายบุกหนัก: ถ้า Clara ติด ทีมบุกตายในรอบเดียว",
+      "swaps": {
+        "Theomars": [
+          "Byungchul",
+          "Lushen"
+        ],
+        "Oliver": [
+          "Psamathe",
+          "Vanessa"
+        ]
+      },
+      "source": "community"
     },
     {
-      "id": "ad-karnal-camilla-halphas",
-      "name": "Karnal Camilla Abellio Halphas (Rush Hour 15-Min Stall)",
-      "nameTh": "คาร์นัล คามิลล่า อเบลลิโอ ฮาลฟาส (ถ่วงเวลา Rush Hour)",
-      "archetype": "Rush Hour Stall",
-      "winCondition": "เลือดหนา 50k+ ทุกตัว Halphas กางอมตะดูดเลือดเมื่อเลือดต่ำกว่า 50% ทำให้คนไม่กล้ากดตี",
-      "leader": "Karnal (เพิ่ม HP 33% ใน Arena)",
-      "slots": ["Karnal", "Camilla", "Abellio", "Halphas"],
-      "runeBuilds": "Halphas: Despair/Nemesis HP +38k, 100% RES • Camilla: Vio/Destroy HP +34k • Abellio: Vio/Nemesis DEF +1500, HP +28k • Karnal: Despair/Will HP +36k",
-      "counterTips": "ต้องพกตัวล้างบัฟอมตะ เช่น Tiana/Chiwu หรือตัวบล็อกฮีลอย่างหนัก",
-      "description": "ทีมรับที่ดีที่สุดในช่วง 15 นาทีสุดท้ายของ Rush Hour จุดประสงค์ไม่ใช่การฆ่าศัตรู แต่เป็นการทำให้ศัตรูเสียเวลา 2-3 นาทีจนไต่อันดับไม่ทัน"
+      "id": "ad-vanessa-clara-savannah-perna",
+      "side": "ad",
+      "tier": "A",
+      "archetype": "Speed Threat",
+      "name": "Vanessa Clara Savannah Perna",
+      "nameTh": "วาเนสซ่า คลาร่า ซาวันน่า เพอร์น่า",
+      "style": "ดักสปีด",
+      "leader": "Vanessa — SPD +33% (อารีน่า)",
+      "leaderArena": true,
+      "slots": [
+        "Vanessa",
+        "Clara",
+        "Savannah",
+        "Perna"
+      ],
+      "ld": false,
+      "ldMembers": [],
+      "ldNote": "",
+      "winCondition": "เหมือนสูตร Psamathe แต่มี Perna ประกัน: ถ้าคลีฟไม่จบ Perna ชุบและ Vanessa S3 ชุบซ้ำได้",
+      "runeBuilds": "Clara Swift/Focus, Savannah Vio/Will, Perna Vio/Will HP%, Vanessa Vio/Will",
+      "counterTips": "บอมบ์คลีฟ (Seara) หรือ Oliver/Ganymede ดันคูลดาวน์ให้ชุบไม่ทัน",
+      "description": "ดักสปีดที่ทนต่อการคลีฟไม่จบ เพราะมีชุบสองชั้น",
+      "swaps": {
+        "Perna": [
+          "Nana",
+          "Taranys"
+        ],
+        "Vanessa": [
+          "Psamathe"
+        ]
+      },
+      "source": "community"
     },
     {
-      "id": "ad-vanessa-triton-savannah",
-      "name": "Vanessa Triton Savannah Byungchul (Fast Strip & Pushback)",
-      "nameTh": "วาเนสซ่า ไตรตัน ซาวันน่า บยองชอล (ล้างบัฟลดเกจเร็วสุด)",
-      "archetype": "Speed Strip Trap",
-      "winCondition": "Triton สปีดพื้นฐาน 116 ออกตัวแรก ล้างบัฟและลดเกจทีมบุก 25%",
-      "leader": "Vanessa (เพิ่ม SPD 33% ใน Arena)",
-      "slots": ["Vanessa", "Triton", "Savannah", "Byungchul"],
-      "runeBuilds": "Triton: Swift/Will SPD +215+ • Savannah: Vio/Will SPD +170 • Byungchul: Vio/Will HP +32k • Vanessa: Vio/Will SPD +135",
-      "counterTips": "ใช้ Leo ขัด Triton หรือบุกด้วยทีม Turn 2 Will+Shield หนาๆ",
-      "description": "Triton เป็นตัวล้างบัฟที่เร็วกว่า Tiana มาก เมื่อจับคู่กับลีด 33% จะออกก่อนเกือบ 100% ทำให้ทีมบุกที่ใส่ Will มาโดนลบและลดเกจจนเสียจังหวะ"
+      "id": "ad-psamathe-giana-woosa-perna",
+      "side": "ad",
+      "tier": "S",
+      "archetype": "LD Speed Threat",
+      "name": "Psamathe Giana Woosa Perna",
+      "nameTh": "ซามาเธ่ เกียน่า วูซ่า เพอร์น่า (ดักสปีดสายมืด)",
+      "style": "ดักสปีด",
+      "leader": "Psamathe — SPD +33% (อารีน่า)",
+      "leaderArena": true,
+      "slots": [
+        "Psamathe",
+        "Giana",
+        "Woosa",
+        "Perna"
+      ],
+      "ld": true,
+      "ldMembers": [
+        "Giana"
+      ],
+      "ldNote": "Giana มืด 5★",
+      "winCondition": "Giana S3 ล้างบัฟ+สตัน AoE ก่อนทีมบุกได้เทิร์น → Woosa ภูมิคุ้มกัน+โล่ → Perna ชุบ ทีมบุกที่ถูกสตันไม่มีทางกลับ",
+      "runeBuilds": "Giana Swift/Will หรือ Vio/Will ACC%, Woosa Vio/Will HP%, Perna Vio/Will, Psamathe Vio/Will",
+      "counterTips": "Katarina ลีด RES / Will ครบ + Chloe อมตะ, หรือ Leo cleave",
+      "description": "Giana ทำงานของ Clara แต่ทนกว่าและมีดาเมจ ทีมนี้ทั้งดักสปีดและกำแพงในเวลาเดียวกัน",
+      "swaps": {
+        "Giana": [
+          "Clara",
+          "Tiana"
+        ],
+        "Woosa": [
+          "Chloe"
+        ]
+      },
+      "source": "community"
     },
     {
-      "id": "ad-leo-fengyan-camilla",
-      "name": "Leo Feng Yan Camilla Abellio (Anti-Speed Bruiser Trap)",
-      "nameTh": "ลีโอ แพนด้าลม คามิลล่า อเบลลิโอ (ดักทีมสปีด)",
-      "archetype": "Anti-Speed Trap",
-      "winCondition": "Leo ล็อคสปีดไม่ให้ทีมบุกได้เปรียบ แล้วแทงค์รับดาเมจสวนกลับ",
-      "leader": "Feng Yan (เพิ่ม DEF 44% ใน Arena)",
-      "slots": ["Feng Yan", "Leo", "Camilla", "Abellio"],
-      "runeBuilds": "Feng Yan: Vio/Will DEF +2000 • Camilla: Vio/Nemesis HP +33k • Abellio: Vio/Will DEF +1600 • Leo: Vampire/Nemesis ATK/CD/HP",
-      "counterTips": "บุกด้วยทีมระเบิด หรือทีมที่มีตัวล้างบัฟและเจาะเกราะหนักๆ เช่น Galleon Tiana Zaiross",
-      "description": "ดักทางคนที่จะเอาทีมบุกสปีดสูงๆ มาฟาร์ม พาสซีฟของ Leo จะทำลายความได้เปรียบเรื่องสปีดของทีมบุกทั้งหมด"
+      "id": "ad-psamathe-tiana-skogul-perna",
+      "side": "ad",
+      "tier": "A",
+      "archetype": "Speed Strip",
+      "name": "Psamathe Tiana Skogul Perna",
+      "nameTh": "ซามาเธ่ เทียน่า สโกกุล เพอร์น่า",
+      "style": "ดักสปีด",
+      "leader": "Psamathe — SPD +33% (อารีน่า)",
+      "leaderArena": true,
+      "slots": [
+        "Psamathe",
+        "Tiana",
+        "Skogul",
+        "Perna"
+      ],
+      "ld": false,
+      "ldMembers": [],
+      "ldNote": "",
+      "winCondition": "Tiana ล้างบัฟทีมบุก (Will/ภูมิคุ้มกันหาย) ก่อนมันได้เทิร์น → Skogul ยืนรับ → Perna ชุบ",
+      "runeBuilds": "Tiana Swift/Will เร็วสุด, Skogul Vio/Will HP% DEF%, Perna Vio/Will, Psamathe Vio/Will",
+      "counterTips": "Leo cleave, หรือทีมบุกที่ไม่พึ่งบัฟตอนเริ่ม (Bernard Lushen บัฟทีหลัง)",
+      "description": "ใช้ Tiana ในฝั่งรับ: ทีมบุกที่พึ่งโล่/ภูมิคุ้มกันจะเปลือยทันที",
+      "swaps": {
+        "Skogul": [
+          "Tractor",
+          "Khmun"
+        ],
+        "Tiana": [
+          "Triton"
+        ]
+      },
+      "source": "community"
+    },
+    {
+      "id": "ad-layla-skogul-woosa-perna",
+      "side": "ad",
+      "tier": "A",
+      "archetype": "Bruiser Wall",
+      "name": "Layla Skogul Woosa Perna",
+      "nameTh": "เลย์ล่า สโกกุล วูซ่า เพอร์น่า (ลีด DEF 44%)",
+      "style": "กำแพง",
+      "leader": "Layla — DEF +44% (อารีน่า)",
+      "leaderArena": true,
+      "slots": [
+        "Layla",
+        "Skogul",
+        "Woosa",
+        "Perna"
+      ],
+      "ld": false,
+      "ldMembers": [],
+      "ldNote": "",
+      "winCondition": "ลีด DEF 44% ทำให้คลีฟฆ่าไม่ตาย → Layla Passive ใบ้ผู้โจมตี + ล้างบัฟ AoE → Woosa/Perna ลากเกมจนทีมบุกหมดแรง",
+      "runeBuilds": "Layla Vio/Will HP% RES%, Skogul Vio/Will DEF% HP%, Woosa Vio/Will HP%, Perna Vio/Will HP%",
+      "counterTips": "บอมบ์คลีฟ (ไม่สน DEF) หรือ Tesarion Oblivion ปิด Passive Layla",
+      "description": "กำแพงที่ลงโทษการตี: ยิ่งตี Layla ยิ่งโดนใบ้",
+      "swaps": {
+        "Layla": [
+          "Miles",
+          "Craka"
+        ],
+        "Skogul": [
+          "Tractor"
+        ]
+      },
+      "source": "community"
+    },
+    {
+      "id": "ad-miles-skogul-woosa-taranys",
+      "side": "ad",
+      "tier": "A",
+      "archetype": "Bruiser Wall",
+      "name": "Miles Skogul Woosa Taranys",
+      "nameTh": "ไมล์ส สโกกุล วูซ่า ทารานีส",
+      "style": "กำแพง",
+      "leader": "Miles — DEF +44% (อารีน่า)",
+      "leaderArena": true,
+      "slots": [
+        "Miles",
+        "Skogul",
+        "Woosa",
+        "Taranys"
+      ],
+      "ld": false,
+      "ldMembers": [],
+      "ldNote": "",
+      "winCondition": "ลีด DEF 44% + Taranys ชุบซ้ำ (S3 ชุบทีม + Passive ชุบตัวเอง) Miles S2 ล้างบัฟ+สตันตัวอันตราย Passive เจาะเกราะ",
+      "runeBuilds": "Miles Vio/Will SPD HP% HP%, Skogul Vio/Will, Woosa Vio/Will, Taranys Vio/Will HP%",
+      "counterTips": "บอมบ์คลีฟ หรือ Oliver/Ganymede ดันคูลดาวน์ Taranys",
+      "description": "กำแพงชุบไม่รู้จบ ทีมบุกต้องฆ่า Taranys ก่อนถึงจะเริ่มเกมได้",
+      "swaps": {
+        "Taranys": [
+          "Perna",
+          "Nana"
+        ],
+        "Miles": [
+          "Layla"
+        ]
+      },
+      "source": "community"
+    },
+    {
+      "id": "ad-craka-skogul-rakan-woosa",
+      "side": "ad",
+      "tier": "A",
+      "archetype": "LD Wall",
+      "name": "Craka Skogul Rakan Woosa",
+      "nameTh": "คราก้า สโกกุล ราคาน วูซ่า (กำแพงสายมืด)",
+      "style": "กำแพง",
+      "leader": "Craka — DEF +44% (อารีน่า)",
+      "leaderArena": true,
+      "slots": [
+        "Craka",
+        "Skogul",
+        "Rakan",
+        "Woosa"
+      ],
+      "ld": true,
+      "ldMembers": [
+        "Craka"
+      ],
+      "ldNote": "Craka มืด 5★",
+      "winCondition": "ลีด DEF 44% + Craka S3 ชุบทั้งทีม/อมตะ + S2 เจาะเกราะขโมยบัฟ Rakan ยั่วยุสวนกลับ Woosa ภูมิคุ้มกัน",
+      "runeBuilds": "Craka Vio/Will HP% DEF%, Rakan Vio/Will HP%, Skogul Vio/Will, Woosa Vio/Will",
+      "counterTips": "บอมบ์คลีฟ หรือ Elsharion ขโมยบัฟ + Tesarion Oblivion",
+      "description": "กำแพงมืดที่ชุบได้ทั้งทีมในสกิลเดียว บุกแบบคลีฟรอบเดียวไม่มีทางจบ",
+      "swaps": {
+        "Craka": [
+          "Layla",
+          "Miles"
+        ],
+        "Rakan": [
+          "Feng Yan"
+        ]
+      },
+      "source": "community"
+    },
+    {
+      "id": "ad-tiana-skogul-woosa-perna",
+      "side": "ad",
+      "tier": "A",
+      "archetype": "Strip Wall",
+      "name": "Tiana Skogul Woosa Perna",
+      "nameTh": "เทียน่า สโกกุล วูซ่า เพอร์น่า (ลีด DEF 44%)",
+      "style": "กำแพง",
+      "leader": "Tiana — DEF +44% (อารีน่า)",
+      "leaderArena": true,
+      "slots": [
+        "Tiana",
+        "Skogul",
+        "Woosa",
+        "Perna"
+      ],
+      "ld": false,
+      "ldMembers": [],
+      "ldNote": "",
+      "winCondition": "ลีด DEF 44% ของ Tiana + S3 ล้างบัฟทีมบุก ทีมบุกที่พึ่งบัฟ (Bernard/Megan/Chloe) ทำอะไรไม่ได้",
+      "runeBuilds": "Tiana Vio/Will เร็วปานกลาง HP%, Skogul Vio/Will, Woosa Vio/Will, Perna Vio/Will",
+      "counterTips": "บอมบ์คลีฟ, Leo cleave, หรือทีมที่ Tiana ฝั่งบุกแซง Tiana ฝั่งรับ",
+      "description": "ใช้ Tiana เป็นลีดกำแพง 44% DEF ไม่ใช่ตัวเร็ว จุดเด่นคือล้างบัฟทีมบุกซ้ำ ๆ",
+      "swaps": {
+        "Skogul": [
+          "Tractor",
+          "Khmun"
+        ],
+        "Perna": [
+          "Nana",
+          "Taranys"
+        ]
+      },
+      "source": "community"
+    },
+    {
+      "id": "ad-brandia-skogul-woosa-perna",
+      "side": "ad",
+      "tier": "B",
+      "archetype": "HP Wall",
+      "name": "Brandia Skogul Woosa Perna",
+      "nameTh": "บรานเดีย สโกกุล วูซ่า เพอร์น่า (ลีด HP 44%)",
+      "style": "กำแพง",
+      "leader": "Brandia — HP +44% (อารีน่า)",
+      "leaderArena": true,
+      "slots": [
+        "Brandia",
+        "Skogul",
+        "Woosa",
+        "Perna"
+      ],
+      "ld": false,
+      "ldMembers": [],
+      "ldNote": "",
+      "winCondition": "ลีด HP 44% อารีน่า + Brandia S2 AoE Glancing/ลด ATK + เพิ่มเกจทีม ทีมบุกดาเมจตกจนฆ่าไม่ตาย",
+      "runeBuilds": "Brandia Vio/Will HP% SPD, ที่เหลือ Vio/Will HP%",
+      "counterTips": "บอมบ์คลีฟ (Glancing/ATK down ไม่มีผลกับบอมบ์)",
+      "description": "กำแพงสาย HP ที่กดดาเมจฝ่ายบุกด้วย Glancing",
+      "swaps": {
+        "Brandia": [
+          "Rigel",
+          "Xiao Lin"
+        ]
+      },
+      "source": "community"
+    },
+    {
+      "id": "ad-katarina-woosa-skogul-theomars",
+      "side": "ad",
+      "tier": "A",
+      "archetype": "Anti-CC Wall",
+      "name": "Katarina Woosa Skogul Theomars",
+      "nameTh": "คาทาริน่า วูซ่า สโกกุล ธีโอมาร์ส (ลีด RES 55%)",
+      "style": "กำแพง",
+      "leader": "Katarina — RES +55% (อารีน่า)",
+      "leaderArena": true,
+      "slots": [
+        "Katarina",
+        "Woosa",
+        "Skogul",
+        "Theomars"
+      ],
+      "ld": false,
+      "ldMembers": [],
+      "ldNote": "",
+      "winCondition": "ลีด RES 55% อารีน่า ทำให้สตัน/แช่แข็ง/ลดเกจของทีมบุกไม่ติด → Woosa ภูมิคุ้มกัน → Katarina S3 เจาะ DEF + S2 อมตะ, Theomars เก็บ",
+      "runeBuilds": "Katarina Vio/Will ATK% CD% ATK% RES%, Woosa Vio/Will HP% RES%, Skogul Vio/Will, Theomars Vio/Will",
+      "counterTips": "Tiana (ล้างบัฟไม่สน RES) + คลีฟดาเมจล้วน หรือบอมบ์ที่มี ACC สูงมาก",
+      "description": "คำตอบของทีมบุกสาย CC/ล็อกเกจ: ดีบัฟติดยากมาก",
+      "swaps": {
+        "Theomars": [
+          "Byungchul",
+          "Dominic"
+        ]
+      },
+      "source": "community"
+    },
+    {
+      "id": "ad-jeanne-rakan-skogul-woosa",
+      "side": "ad",
+      "tier": "S",
+      "archetype": "Provoke Wall",
+      "name": "Jeanne Rakan Skogul Woosa",
+      "nameTh": "ฌานน์ ราคาน สโกกุล วูซ่า (ยั่วยุกำแพง)",
+      "style": "กำแพง",
+      "leader": "Jeanne — RES +41% (ทุกที่)",
+      "leaderArena": true,
+      "slots": [
+        "Jeanne",
+        "Rakan",
+        "Skogul",
+        "Woosa"
+      ],
+      "ld": true,
+      "ldMembers": [
+        "Jeanne"
+      ],
+      "ldNote": "Jeanne แสง 5★",
+      "winCondition": "ลีด RES 41% + Jeanne S3 ยั่วยุ AoE บังคับทีมบุกตี Jeanne ที่อมตะ (S2) → Rakan S3 ยั่วยุ+สวนกลับ → Woosa ภูมิคุ้มกัน ทีมบุกเสียเทิร์นทั้งหมด",
+      "runeBuilds": "Jeanne Vio/Will HP% DEF% HP% SPD, Rakan Vio/Will HP% CD% HP%, Skogul Vio/Will, Woosa Vio/Will",
+      "counterTips": "Katarina/Will ครบ + Tiana ล้างอมตะ, Tesarion Oblivion ปิด Passive Rakan, หรือบอมบ์ที่ไม่สนยั่วยุ",
+      "description": "กำแพงยั่วยุที่แข็งที่สุดถ้ามี Jeanne: ทีมบุกถูกบังคับให้ทำสิ่งที่ไม่อยากทำ",
+      "swaps": {
+        "Jeanne": [
+          "Louise",
+          "Josephine"
+        ],
+        "Rakan": [
+          "Feng Yan",
+          "Zeratu"
+        ]
+      },
+      "source": "community"
+    },
+    {
+      "id": "ad-josephine-zeratu-laika-jager",
+      "side": "ad",
+      "tier": "A",
+      "archetype": "LD Counter Wall",
+      "name": "Josephine Zeratu Laika Jager",
+      "nameTh": "โจเซฟีน เซราตู ไลก้า เยเกอร์ (กำแพงสวนกลับ)",
+      "style": "กำแพง",
+      "leader": "Josephine — ACC +41% (ทุกที่)",
+      "leaderArena": true,
+      "slots": [
+        "Josephine",
+        "Zeratu",
+        "Laika",
+        "Jager"
+      ],
+      "ld": true,
+      "ldMembers": [
+        "Zeratu",
+        "Jager"
+      ],
+      "ldNote": "Josephine/Zeratu/Jager แสง-มืด",
+      "winCondition": "ทุกตัวสวนกลับ: Josephine Passive โล่+สวนกลับ+เทิร์นเพิ่ม, Laika Passive สวนกลับ, Jager Passive สวนกลับ+สะสม ATK, Zeratu Passive ล้างบัฟ+ตีซ้ำ ทีมบุกที่ตีเยอะตายเอง",
+      "runeBuilds": "Josephine Vio/Will HP% ACC%, Zeratu Vio/Will HP% CD%, Laika Vio/Will HP%, Jager Vio/Will DEF%",
+      "counterTips": "บอมบ์คลีฟ (บอมบ์ไม่นับเป็นการโจมตี ไม่โดนสวน) หรือ ATB lock ไม่ให้ได้เทิร์นเลย",
+      "description": "กำแพงแสง-มืดสายสวนกลับ ทีมบุกดาเมจตรงจะโดนสวนจนตายก่อน",
+      "swaps": {
+        "Zeratu": [
+          "Rakan",
+          "Feng Yan"
+        ],
+        "Jager": [
+          "Chow",
+          "Leo"
+        ]
+      },
+      "source": "community"
+    },
+    {
+      "id": "ad-woosa-chasun-rina-camilla",
+      "side": "ad",
+      "tier": "A",
+      "archetype": "Stall",
+      "name": "Woosa Chasun Rina Camilla",
+      "nameTh": "วูซ่า ชาซุน รีน่า คามิลล่า (ลากเกม)",
+      "style": "ลากเกม",
+      "leader": "Woosa — ACC +41% (ทุกที่)",
+      "leaderArena": true,
+      "slots": [
+        "Woosa",
+        "Chasun",
+        "Rina",
+        "Camilla"
+      ],
+      "ld": false,
+      "ldMembers": [],
+      "ldNote": "",
+      "winCondition": "ไม่มีใครตาย: Woosa ภูมิคุ้มกัน+โล่, Chasun ฮีล+ATK+ภูมิคุ้มกัน, Rina โล่ Passive, Camilla ฟื้นตัวเอง+ทีม ทีมบุกหมดเวลา/หมดแรงแล้วแพ้ทางเทคนิค",
+      "runeBuilds": "ทุกตัว Vio/Will HP% (Camilla ใส่ Vio/Nemesis), Rina Vio/Will HP% RES%",
+      "counterTips": "บอมบ์คลีฟ (Seara Tiana) หรือ Provoke bruiser (Jeanne Rakan Theomars) ทุบทีละตัว",
+      "description": "ทีมรับที่ไม่ได้หวังชนะแต่หวังไม่แพ้ ทีมบุกคลีฟธรรมดาจะติดอยู่ที่นี่",
+      "swaps": {
+        "Rina": [
+          "Fran",
+          "Mihael"
+        ],
+        "Chasun": [
+          "Praha",
+          "Harmonia"
+        ]
+      },
+      "source": "community"
+    },
+    {
+      "id": "ad-praha-chasun-rina-jeanne",
+      "side": "ad",
+      "tier": "B",
+      "archetype": "Stall",
+      "name": "Praha Chasun Rina Jeanne",
+      "nameTh": "พราฮา ชาซุน รีน่า ฌานน์",
+      "style": "ลากเกม",
+      "leader": "Praha — RES +41% (ทุกที่)",
+      "leaderArena": true,
+      "slots": [
+        "Praha",
+        "Chasun",
+        "Rina",
+        "Jeanne"
+      ],
+      "ld": true,
+      "ldMembers": [
+        "Jeanne"
+      ],
+      "ldNote": "Jeanne แสง 5★",
+      "winCondition": "Praha S2 ล้างบัฟ AoE + S3 ฮีล/หลับ, Jeanne ยั่วยุ+อมตะ, Chasun/Rina ฮีล ทีมบุกไม่มีจังหวะได้ดาเมจ",
+      "runeBuilds": "Praha Vio/Will HP% ACC%, Jeanne Vio/Will, Chasun Vio/Will, Rina Vio/Will",
+      "counterTips": "บอมบ์คลีฟ หรือ Woosa Theomars Perna Tesarion (ภูมิคุ้มกันกันหลับ + Oblivion)",
+      "description": "ลากเกมแบบมี CC: Praha ทำให้ทีมบุกหลับและเสียบัฟ",
+      "swaps": {
+        "Jeanne": [
+          "Woosa",
+          "Louise"
+        ]
+      },
+      "source": "community"
+    },
+    {
+      "id": "ad-chloe-theomars-perna-camilla",
+      "side": "ad",
+      "tier": "A",
+      "archetype": "Immunity Wall",
+      "name": "Chloe Theomars Perna Camilla",
+      "nameTh": "โคลอี้ ธีโอมาร์ส เพอร์น่า คามิลล่า",
+      "style": "กำแพง",
+      "leader": "Chloe — SPD +20% (อารีน่า)",
+      "leaderArena": true,
+      "slots": [
+        "Chloe",
+        "Theomars",
+        "Perna",
+        "Camilla"
+      ],
+      "ld": false,
+      "ldMembers": [],
+      "ldNote": "",
+      "winCondition": "Chloe S3 อมตะ+ภูมิคุ้มกันก่อนทีมบุกได้เทิร์น (ลีด SPD 20%) → คลีฟรอบแรกสูญเปล่า → Theomars/Camilla ตอบโต้ Perna ชุบ",
+      "runeBuilds": "Chloe Swift/Will เร็วสุด, Theomars Vio/Will, Perna Vio/Will, Camilla Vio/Nemesis",
+      "counterTips": "Tiana (ล้างอมตะไม่สน RES) แล้วคลีฟ หรือทีมบุกที่เร็วกว่า Chloe",
+      "description": "ทีมรับที่ทำให้คลีฟเทิร์นแรกเป็นศูนย์ ถ้าทีมบุกไม่มี Tiana",
+      "swaps": {
+        "Chloe": [
+          "Fran",
+          "Woosa"
+        ],
+        "Camilla": [
+          "Rakan"
+        ]
+      },
+      "source": "community"
+    },
+    {
+      "id": "ad-skogul-nana-perna-taranys",
+      "side": "ad",
+      "tier": "A",
+      "archetype": "Revive Wall",
+      "name": "Skogul Nana Perna Taranys",
+      "nameTh": "สโกกุล นาน่า เพอร์น่า ทารานีส (ชุบสามชั้น)",
+      "style": "กำแพง",
+      "leader": "Skogul — DEF +22% (ทุกที่)",
+      "leaderArena": true,
+      "slots": [
+        "Skogul",
+        "Nana",
+        "Perna",
+        "Taranys"
+      ],
+      "ld": false,
+      "ldMembers": [],
+      "ldNote": "",
+      "winCondition": "ตายแล้วเกิดใหม่: Nana Passive ชุบทีม, Perna Passive ชุบตัวเอง, Taranys S3 ชุบทีม+Passive ชุบตัวเอง ทีมบุกฆ่าไม่หมดใน 1 รอบ = แพ้",
+      "runeBuilds": "Skogul ลีด (DEF 22% ทุกที่ — ลีดของ Nana/Perna ใช้ไม่ได้ในอารีน่า) Vio/Will DEF%, Nana Vio/Will HP%, Perna Vio/Will HP%, Taranys Vio/Will HP%",
+      "counterTips": "Oliver/Ganymede ดันคูลดาวน์ + ATB lock, หรือบอมบ์คลีฟที่ฆ่าครบพร้อมกัน",
+      "description": "กำแพงชุบ 3 ชั้นสำหรับกันคลีฟ: ต้องฆ่าให้ครบ 4 ตัวในรอบเดียวเท่านั้น",
+      "swaps": {
+        "Skogul": [
+          "Woosa",
+          "Rakan"
+        ]
+      },
+      "source": "community"
+    },
+    {
+      "id": "ad-woosa-feng-yan-rakan-camilla",
+      "side": "ad",
+      "tier": "A",
+      "archetype": "Bruiser Wall",
+      "name": "Woosa Feng Yan Rakan Camilla",
+      "nameTh": "วูซ่า เฟิงเยี่ยน ราคาน คามิลล่า",
+      "style": "กำแพง",
+      "leader": "Woosa — ACC +41% (ทุกที่)",
+      "leaderArena": true,
+      "slots": [
+        "Woosa",
+        "Feng Yan",
+        "Rakan",
+        "Camilla"
+      ],
+      "ld": false,
+      "ldMembers": [],
+      "ldNote": "",
+      "winCondition": "Woosa ภูมิคุ้มกัน → Feng Yan Passive ลดดาเมจ+เกจ, S2 ล้างดีบัฟ+สวนกลับ → Rakan ยั่วยุ+สวนกลับ → Camilla ฟื้น ทีมบุกโดนสวนจนหมดแรง",
+      "runeBuilds": "Feng Yan Vio/Will HP% DEF% HP%, Rakan Vio/Will HP% CD% HP%, Woosa Vio/Will, Camilla Vio/Nemesis",
+      "counterTips": "บอมบ์คลีฟ หรือ Tesarion Oblivion ปิด Passive ทั้ง Feng Yan/Rakan",
+      "description": "กำแพงบรุยเซอร์ไม่ใช้แสง-มืด: ทีมบุกสายตีตรงจะโดนสวนกลับตลอด",
+      "swaps": {
+        "Feng Yan": [
+          "Zeratu",
+          "Mo Long"
+        ],
+        "Camilla": [
+          "Perna"
+        ]
+      },
+      "source": "community"
+    },
+    {
+      "id": "ad-leo-skogul-woosa-perna",
+      "side": "ad",
+      "tier": "A",
+      "archetype": "Anti-speed Wall",
+      "name": "Leo Skogul Woosa Perna",
+      "nameTh": "ลีโอ สโกกุล วูซ่า เพอร์น่า (ลงโทษทีมเร็ว)",
+      "style": "กำแพง",
+      "leader": "Leo — DEF +50% (เฉพาะธาตุลม)",
+      "leaderArena": true,
+      "slots": [
+        "Leo",
+        "Skogul",
+        "Woosa",
+        "Perna"
+      ],
+      "ld": false,
+      "ldMembers": [],
+      "ldNote": "",
+      "winCondition": "Leo Passive ลดเกจทีมบุกที่เร็วกว่า Leo ทุกเทิร์น + ลีด DEF 50% ให้ Skogul (ลม) ทีมคลีฟสปีดเสียจังหวะ → Woosa/Perna ลากจนชนะ",
+      "runeBuilds": "Leo Vio/Will HP% DEF% ช้าตั้งใจ, Skogul Vio/Will, Woosa Vio/Will, Perna Vio/Will",
+      "counterTips": "ทีมบุกช้า (Bruiser) ที่ Passive ไม่ทำงาน หรือบอมบ์คลีฟ",
+      "description": "ทีมรับที่กลับด้านสงครามสปีด: ทีมบุกยิ่งเร็วยิ่งเสียเปรียบ",
+      "swaps": {
+        "Leo": [
+          "Chow"
+        ],
+        "Perna": [
+          "Taranys"
+        ]
+      },
+      "source": "community"
+    },
+    {
+      "id": "ad-xiao-lin-skogul-woosa-perna",
+      "side": "ad",
+      "tier": "B",
+      "archetype": "Budget Wall",
+      "name": "Xiao Lin Skogul Woosa Perna",
+      "nameTh": "เสี่ยวหลิน สโกกุล วูซ่า เพอร์น่า (ลีด DEF 33% แบบ 4★)",
+      "style": "กำแพง",
+      "leader": "Xiao Lin — DEF +33% (อารีน่า)",
+      "leaderArena": true,
+      "slots": [
+        "Xiao Lin",
+        "Skogul",
+        "Woosa",
+        "Perna"
+      ],
+      "ld": false,
+      "ldMembers": [],
+      "ldNote": "",
+      "winCondition": "ลีด DEF 33% อารีน่าจากมอน 4★ + Xiao Lin S3 สวนกลับ/เจาะเกราะ Skogul ยืน Woosa/Perna ลาก",
+      "runeBuilds": "Xiao Lin Vio/Will HP% DEF%, ที่เหลือ Vio/Will HP%",
+      "counterTips": "คลีฟลีด ATK 44% (Oberon) หรือบอมบ์",
+      "description": "กำแพงประหยัดสำหรับคนยังไม่มี Layla/Miles/Craka",
+      "swaps": {
+        "Xiao Lin": [
+          "Rigel",
+          "Brandia"
+        ],
+        "Skogul": [
+          "Tractor"
+        ]
+      },
+      "source": "community"
+    },
+    {
+      "id": "ad-rigel-skogul-woosa-taranys",
+      "side": "ad",
+      "tier": "B",
+      "archetype": "Budget Wall",
+      "name": "Rigel Skogul Woosa Taranys",
+      "nameTh": "ริเกล สโกกุล วูซ่า ทารานีส (ลีด HP 33% แบบ 4★)",
+      "style": "กำแพง",
+      "leader": "Rigel — HP +33% (อารีน่า)",
+      "leaderArena": true,
+      "slots": [
+        "Rigel",
+        "Skogul",
+        "Woosa",
+        "Taranys"
+      ],
+      "ld": false,
+      "ldMembers": [],
+      "ldNote": "",
+      "winCondition": "ลีด HP 33% อารีน่า + Rigel Passive ต้านสตัน/แช่แข็ง + เพิ่มเกจเมื่อโดนตี → Taranys ชุบ",
+      "runeBuilds": "Rigel Vio/Will HP% DEF%, Taranys Vio/Will HP%, ที่เหลือ Vio/Will",
+      "counterTips": "บอมบ์คลีฟ หรือ Ganymede ดันคูลดาวน์ Taranys",
+      "description": "กำแพงประหยัดอีกแบบ Rigel (4★) ให้ลีด HP อารีน่า",
+      "swaps": {
+        "Rigel": [
+          "Xiao Lin",
+          "Brandia"
+        ]
+      },
+      "source": "community"
+    },
+    {
+      "id": "ad-irene-skogul-woosa-perna",
+      "side": "ad",
+      "tier": "A",
+      "archetype": "Reflect Wall",
+      "name": "Irene Skogul Woosa Perna",
+      "nameTh": "ไอรีน สโกกุล วูซ่า เพอร์น่า",
+      "style": "กำแพง",
+      "leader": "Irene — ACC +55% (อารีน่า)",
+      "leaderArena": true,
+      "slots": [
+        "Irene",
+        "Skogul",
+        "Woosa",
+        "Perna"
+      ],
+      "ld": false,
+      "ldMembers": [],
+      "ldNote": "",
+      "winCondition": "ลีด ACC 55% อารีน่า + Irene S2 สะท้อนดีบัฟ/ดึงความสนใจ, S3 ล้างบัฟ+ดูดเกจตัวอันตราย Skogul ยืน Woosa/Perna ลาก",
+      "runeBuilds": "Irene Vio/Will HP% SPD ACC%, ที่เหลือ Vio/Will HP%",
+      "counterTips": "บอมบ์คลีฟ หรือคลีฟที่ Tiana เร็วกว่า Irene",
+      "description": "กำแพงที่ทีมบุกสาย CC จะโดนดีบัฟตัวเองสะท้อนกลับ",
+      "swaps": {
+        "Irene": [
+          "Layla"
+        ]
+      },
+      "source": "community"
+    },
+    {
+      "id": "ad-oliver-giana-nana-perna",
+      "side": "ad",
+      "tier": "A",
+      "archetype": "LD Speed Threat",
+      "name": "Oliver Giana Nana Perna",
+      "nameTh": "โอลิเวอร์ เกียน่า นาน่า เพอร์น่า",
+      "style": "ดักสปีด",
+      "leader": "Oliver — SPD +33% (อารีน่า)",
+      "leaderArena": true,
+      "slots": [
+        "Oliver",
+        "Giana",
+        "Nana",
+        "Perna"
+      ],
+      "ld": true,
+      "ldMembers": [
+        "Giana"
+      ],
+      "ldNote": "Giana มืด 5★",
+      "winCondition": "ลีด SPD 33% → Giana ล้างบัฟ+สตัน AoE → Oliver ดันคูลดาวน์+ดูดเกจ → Nana/Perna ชุบถ้าพลาด",
+      "runeBuilds": "Giana Swift/Will ACC%, Oliver Swift/Will, Nana Vio/Will HP%, Perna Vio/Will",
+      "counterTips": "Katarina ลีด RES + Will, หรือ Leo cleave",
+      "description": "ดักสปีดสายมืดที่มีชุบสองชั้น กลับมาชนะได้แม้โดนคลีฟไม่จบ",
+      "swaps": {
+        "Giana": [
+          "Clara"
+        ],
+        "Nana": [
+          "Taranys",
+          "Woosa"
+        ]
+      },
+      "source": "community"
+    },
+    {
+      "id": "ad-ganymede-skogul-woosa-perna",
+      "side": "ad",
+      "tier": "A",
+      "archetype": "ATB Control Wall",
+      "name": "Ganymede Skogul Woosa Perna",
+      "nameTh": "แกนีมีด สโกกุล วูซ่า เพอร์น่า",
+      "style": "กำแพง",
+      "leader": "Ganymede — ACC +55% (อารีน่า)",
+      "leaderArena": true,
+      "slots": [
+        "Ganymede",
+        "Skogul",
+        "Woosa",
+        "Perna"
+      ],
+      "ld": false,
+      "ldMembers": [],
+      "ldNote": "",
+      "winCondition": "ลีด ACC 55% + Ganymede S3 ลดเกจ+ดันคูลดาวน์ AoE ไม่สน RES ทีมบุกใช้สกิล 3 ไม่ได้ → กำแพงลากจนชนะ",
+      "runeBuilds": "Ganymede Vio/Will SPD HP% HP%, ที่เหลือ Vio/Will",
+      "counterTips": "บอมบ์ที่วางได้ก่อน Ganymede ได้เทิร์น หรือคลีฟที่เร็วกว่า Ganymede (ลีด RES ไม่ช่วยกับ S3 Ganymede)",
+      "description": "กำแพงที่ปิดสกิลสำคัญของทีมบุกด้วยการดันคูลดาวน์",
+      "swaps": {
+        "Ganymede": [
+          "Psamathe",
+          "Daphnis"
+        ]
+      },
+      "source": "community"
+    },
+    {
+      "id": "ad-laima-rakan-skogul-woosa",
+      "side": "ad",
+      "tier": "A",
+      "archetype": "LD Immunity Wall",
+      "name": "Laima Rakan Skogul Woosa",
+      "nameTh": "ไลม่า ราคาน สโกกุล วูซ่า (กำแพงแสง)",
+      "style": "กำแพง",
+      "leader": "Laima — ACC +41% (ทุกที่)",
+      "leaderArena": true,
+      "slots": [
+        "Laima",
+        "Rakan",
+        "Skogul",
+        "Woosa"
+      ],
+      "ld": true,
+      "ldMembers": [
+        "Laima"
+      ],
+      "ldNote": "Laima แสง 5★",
+      "winCondition": "Laima S3 ล้างดีบัฟ+ภูมิคุ้มกัน+อมตะทีม (S2 ล้างบัฟ AoE) + Woosa ภูมิคุ้มกันซ้ำ ทีมบุกสาย CC/บอมบ์ไม่ติดเลย Rakan สวนกลับ",
+      "runeBuilds": "Laima Vio/Will HP% SPD, Rakan Vio/Will, Skogul Vio/Will, Woosa Vio/Will",
+      "counterTips": "Tiana ล้างอมตะ/ภูมิคุ้มกันแล้วคลีฟดาเมจล้วน (Lushen ×2)",
+      "description": "กำแพงแสงที่บอมบ์และ CC ทำอะไรไม่ได้ ต้องคลีฟดาเมจดิบผ่าน Tiana เท่านั้น",
+      "swaps": {
+        "Laima": [
+          "Woosa",
+          "Velajuel"
+        ],
+        "Rakan": [
+          "Feng Yan"
+        ]
+      },
+      "source": "community"
+    },
+    {
+      "id": "ad-daphnis-skogul-woosa-perna",
+      "side": "ad",
+      "tier": "B",
+      "archetype": "Strip Wall",
+      "name": "Daphnis Skogul Woosa Perna",
+      "nameTh": "ดาฟนิส สโกกุล วูซ่า เพอร์น่า",
+      "style": "กำแพง",
+      "leader": "Daphnis — CRI Rate +33% (อารีน่า)",
+      "leaderArena": true,
+      "slots": [
+        "Daphnis",
+        "Skogul",
+        "Woosa",
+        "Perna"
+      ],
+      "ld": false,
+      "ldMembers": [],
+      "ldNote": "",
+      "winCondition": "Daphnis S3 ล้างบัฟ+เจาะเกราะเดี่ยว (ยอมเสียเลือดแลกโล่) + S2 ดันคูลดาวน์ AoE/ห้ามฮีล ลีด CR 33% อารีน่าให้ Perna/ตัวตี",
+      "runeBuilds": "Daphnis Vio/Will HP% CD%, ที่เหลือ Vio/Will",
+      "counterTips": "บอมบ์คลีฟ หรือ Tiana cleave ที่เร็วกว่า",
+      "description": "กำแพงที่มีตัวล้างบัฟ+ดันคูลดาวน์ในตัวเดียว",
+      "swaps": {
+        "Daphnis": [
+          "Ganymede",
+          "Psamathe"
+        ]
+      },
+      "source": "community"
+    },
+    {
+      "id": "ad-woosa-charlotte-skogul-perna",
+      "side": "ad",
+      "tier": "B",
+      "archetype": "ATB Control Wall",
+      "name": "Woosa Charlotte Skogul Perna",
+      "nameTh": "วูซ่า ชาร์ล็อต สโกกุล เพอร์น่า",
+      "style": "กำแพง",
+      "leader": "Woosa — ACC +41% (ทุกที่)",
+      "leaderArena": true,
+      "slots": [
+        "Woosa",
+        "Charlotte",
+        "Skogul",
+        "Perna"
+      ],
+      "ld": false,
+      "ldMembers": [],
+      "ldNote": "",
+      "winCondition": "ลีด ACC 41% ของ Woosa ช่วยให้ Charlotte S3 ลดเกจ AoE + Glancing + เพิ่มเกจทีม และ S2 สตัน AoE ติดง่าย ทีมบุกเสียจังหวะ → กำแพงลาก",
+      "runeBuilds": "Charlotte Vio/Will SPD ACC%, ที่เหลือ Vio/Will HP%",
+      "counterTips": "Katarina ลีด RES / Will ครบ หรือคลีฟที่เร็วกว่า Charlotte",
+      "description": "กำแพงสายลดเกจ ทีมบุกที่ไม่ได้เทิร์นเลยคือทีมบุกที่แพ้",
+      "swaps": {
+        "Charlotte": [
+          "Poseidon",
+          "Verad"
+        ]
+      },
+      "source": "community"
     }
   ]
 }

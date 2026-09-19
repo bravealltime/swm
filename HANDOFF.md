@@ -67,6 +67,7 @@ src/
     mdcMatch.js      จับทีมตั้งรับในห้องบัญชาการ (ชื่อ 3 ตัว) กับฐาน 3MDC: ตรงเป๊ะ → ใกล้เคียง 2/3 → ไม่มี; จัดอันดับสูตรแก้ที่กล่องมีครบขึ้นก่อน
     metaTeams.js     จับ duo/trio จริงจาก swrtGuardianMeta กับกล่องผู้ใช้ → ทีมที่เล่นได้ / ขาด 1 ตัว / ตัวที่ปลดล็อกทีมมากสุด
                      (UI: components/MetaTeamsFromBox.jsx ในแท็บ "เมต้า Guardian" ของกล่องของฉัน; ส่ง context.metaTeams ให้โค้ช AI)
+    arenaMatcher.js  จับสูตร AO/AD (data/arenaMetaTeams.json) กับกล่อง: นับจำนวนตัวซ้ำ (Lushen ×2 ต้องมี 2 ตัว), ทีมครบ / ครบถ้าใช้ตัวแทน (swaps) / ขาดกี่ตัว — หน้า /arena (views/ArenaMetaView.jsx)
   hooks/useGuildRankings.js  รวมอันดับที่แชร์ (API) + ที่เห็นสดบนเครื่องนี้
   hooks/useMonsterSkills.js  สกิลรายตัวสำหรับสารานุกรม โหลด shard ตามต้องการ (data/monsterSkills.js เป็น store)
   data/*.json        ชุดข้อมูลที่ bundle มากับเว็บ (ดูข้อ 5)
@@ -106,6 +107,7 @@ tests/*.test.js      vitest (`npm test`) — parser SWEX, แพ็กเก็�
 | สรุป AI (แพตช์, สไตล์ผู้เล่น) | `balancePatchAi.json`, `swrtPlayerSummaries.json` | `scripts/ai_patch_summaries.mjs`, `ai_player_summaries.mjs` (cache ด้วย hash; CONCURRENCY 1) |
 | อันดับกิลด์ Siege/WGB | Supabase `guild_rankings` (1 แถวต่อผู้ส่งต่อกระดาน `server:kind:uuid`) | **ไม่มี API สาธารณะ** → มาจากหน้าอันดับในเกมผ่าน AegisLink แล้วผู้เล่นที่ล็อกอินแชร์ ผู้ส่งเขียนทับกันไม่ได้ เซิร์ฟเวอร์เลือกกระดานที่แสดงใน `api/_lib/guildRankings.js pickBoards()`: ผู้ส่งที่เชื่อถือ (แอดมิน/ที่ติ๊กในหลังบ้าน) → ที่มีผู้ส่งอีกคนเห็นตรงกัน (top-10 ซ้ำ ≥ 60%) → ล่าสุดพร้อมป้าย "ยังไม่ยืนยัน"; ผู้ส่งที่บล็อกถูกตัด; เก่ากว่า 30 วันไม่แสดง รายชื่อ trusted/blocked อยู่ใน `site_settings` id `guildRankings` |
 | กล่องของผู้ใช้ | localStorage `swm:mybox` + IndexedDB (เครื่องผู้ใช้เท่านั้น) | ไฟล์ SWEX / โฟลเดอร์ SWEX / AegisLink |
+| สูตรทีมบุก/รับอารีน่า (AO/AD) 24+27 ทีม | `arenaMetaTeams.json` (**generated** — อย่าแก้ตรง) | **อารีน่าปกติไม่มีสถิติสาธารณะ** (swgt = Siege/3MDC, swranking = RTA) จึงเป็นสูตรคอมมูนิตี้ที่คัดไว้ใน `scripts/build_arena_teams.mjs`: ทุกชื่อ/ตัวแทนต้องมีใน `allMonsters.json`, ข้อความลีดดึงจาก `monsterSkillsData.json` (ตัวสร้าง fail ถ้าสะกดผิด), ธง `ld` คำนวณจากธาตุ; มี `tier` S/A/B เป็นความเห็นร่วม **ไม่มี % อัตราชนะ / เวลาเคลียร์** และ UI บอกไว้ชัด; เทสต์ยืนยันว่าไฟล์ตรงกับที่สคริปต์สร้าง — แก้สูตรแล้วรัน `node scripts/build_arena_teams.mjs` |
 
 รหัสแรงค์ Com2uS: 3001-3003 Fighter, 3501-3503 Conqueror, 4001-4003 Guardian, 5001 Legend
 รหัสมอนสเตอร์ `com2usId` รูปแบบ FFF-A-E (หลักสิบ = ระดับตื่น: 0 ยังไม่ตื่น, 1 = 1A, 3 = 2A)
