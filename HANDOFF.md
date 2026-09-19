@@ -68,6 +68,9 @@ src/
     metaTeams.js     จับ duo/trio จริงจาก swrtGuardianMeta กับกล่องผู้ใช้ → ทีมที่เล่นได้ / ขาด 1 ตัว / ตัวที่ปลดล็อกทีมมากสุด
                      (UI: components/MetaTeamsFromBox.jsx ในแท็บ "เมต้า Guardian" ของกล่องของฉัน; ส่ง context.metaTeams ให้โค้ช AI)
     arenaMatcher.js  จับสูตร AO/AD (data/arenaMetaTeams.json) กับกล่อง: นับจำนวนตัวซ้ำ (Lushen ×2 ต้องมี 2 ตัว), ทีมครบ / ครบถ้าใช้ตัวแทน (swaps) / ขาดกี่ตัว — หน้า /arena (views/ArenaMetaView.jsx)
+    arenaTraits.js   กลไกของมอน (ล้างบัฟ/ชุบ/สวนกลับ/CC/ลดเกจ/บอมบ์/ลีด…) อ่านจาก effects ในสกิลจริง — ไม่มี import ใช้ร่วมกันระหว่างสคริปต์กับเบราว์เซอร์; ผลลัพธ์ทั้ง 848 ตัวอยู่ใน data/arenaMonsterTraits.json (generated)
+    arenaCounter.js  "เจอทีมรับนี้ บุกด้วยอะไร": โปรไฟล์ทีมรับจาก traits (ช่อง 1 = ลีด) → ให้คะแนนสูตร AO ตามกลไกที่ตอบโจทย์ + `counters` ที่ระบุไว้บนสูตร AD ที่ตรง ≥3/4 — คะแนนคือลำดับ ไม่ใช่ % ชนะ; ลิงก์แชร์ /arena?tab=counter&ad=A,B,C,D; มีโค้ช AI (kind 'arena' ใน api/_lib/advisor.js)
+    cardExporter.js  … + exportArenaTeamCard (การ์ดทีม AO/AD 1200×675, พรีวิวก่อนดาวน์โหลด)
   hooks/useGuildRankings.js  รวมอันดับที่แชร์ (API) + ที่เห็นสดบนเครื่องนี้
   hooks/useMonsterSkills.js  สกิลรายตัวสำหรับสารานุกรม โหลด shard ตามต้องการ (data/monsterSkills.js เป็น store)
   data/*.json        ชุดข้อมูลที่ bundle มากับเว็บ (ดูข้อ 5)
