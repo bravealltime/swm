@@ -4,6 +4,7 @@ import MonsterAvatar from './MonsterAvatar';
 import RuneIcon from './RuneIcon';
 import ArtifactIcon from './ArtifactIcon';
 import RuneBoard from './RuneBoard';
+import MonsterLivingData from './MonsterLivingData';
 import { RUNE_SETS, STAT_NAMES, ARTIFACT_EFFECT_NAMES } from '../utils/swexImport';
 
 // In-game rune screen: the golden hex plate (RuneBoard) plus a detail panel and the stat sheet.
@@ -111,6 +112,7 @@ function ArtifactDetail({ artifact }) {
 
 export default function MonsterDetailModal({ unit, box, onClose, onNavigate }) {
   const [picked, setPicked] = useState(null); // { kind: 'rune' | 'artifact', item }
+  const [modalTab, setModalTab] = useState('runes'); // 'runes' | 'living'
 
   useEffect(() => {
     const onKey = (e) => { if (e.key === 'Escape') onClose(); };
@@ -166,14 +168,48 @@ export default function MonsterDetailModal({ unit, box, onClose, onNavigate }) {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 p-4 sm:p-5">
-          {/* rune board */}
-          <div className="lg:col-span-3">
-            {legacy && (
-              <div className="mb-3 p-3 rounded-xl border border-amber-500/30 bg-amber-500/5 text-xs text-amber-200 flex items-center gap-2">
-                <Info className="w-4 h-4 shrink-0" /> ข้อมูลเวอร์ชันเก่าแยกรูนของมอนสเตอร์ตัวซ้ำไม่ได้ — นำเข้าไฟล์ใหม่เพื่อดูรูนที่ถูกต้องของตัวนี้
-              </div>
-            )}
+        {/* View Mode Switcher */}
+        <div className="flex items-center gap-2 px-4 sm:px-5 py-2.5 border-b border-white/[0.06] bg-[#070b14]">
+          <button
+            onClick={() => setModalTab('runes')}
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+              modalTab === 'runes'
+                ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm'
+                : 'text-slate-400 hover:text-white bg-white/[0.03]'
+            }`}
+          >
+            <Gem className="w-3.5 h-3.5" />
+            <span>รูน & อาร์ติแฟกต์ของฉัน</span>
+          </button>
+          <button
+            onClick={() => setModalTab('living')}
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+              modalTab === 'living'
+                ? 'bg-blue-600/25 text-blue-300 border border-blue-500/40 shadow-sm'
+                : 'text-slate-400 hover:text-white bg-white/[0.03]'
+            }`}
+          >
+            <Sparkles className="w-3.5 h-3.5 text-blue-400" />
+            <span>สถิติ Guardian & แนวทางบิลด์ (มีชีวิต)</span>
+          </button>
+        </div>
+
+        {modalTab === 'living' ? (
+          <div className="p-4 sm:p-6">
+            <MonsterLivingData 
+              monster={info || unit.masterId} 
+              onNavigate={onNavigate} 
+            />
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 p-4 sm:p-5">
+            {/* rune board */}
+            <div className="lg:col-span-3">
+              {legacy && (
+                <div className="mb-3 p-3 rounded-xl border border-amber-500/30 bg-amber-500/5 text-xs text-amber-200 flex items-center gap-2">
+                  <Info className="w-4 h-4 shrink-0" /> ข้อมูลเวอร์ชันเก่าแยกรูนของมอนสเตอร์ตัวซ้ำไม่ได้ — นำเข้าไฟล์ใหม่เพื่อดูรูนที่ถูกต้องของตัวนี้
+                </div>
+              )}
             <div className="rounded-3xl p-3 sm:p-5 bg-[radial-gradient(ellipse_at_center,rgba(120,80,20,0.35),rgba(5,7,13,0.9)_70%)] border border-amber-500/15">
               <RuneBoard info={info} runesBySlot={bySlot} artifacts={artifacts} sets={stats.sets} picked={picked} onPick={setPicked} />
             </div>
@@ -218,6 +254,7 @@ export default function MonsterDetailModal({ unit, box, onClose, onNavigate }) {
             )}
           </div>
         </div>
+      )}
       </div>
     </div>
   );

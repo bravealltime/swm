@@ -1,8 +1,8 @@
 // Writes a crawlable HTML page per monster into dist/ after `vite build`:
 //
 //   dist/monster/<slug>.html   title, description, Open Graph, canonical, and the monster's Thai
-//                              skills / stats as plain HTML inside #root — Google reads that, the
-//                              React app then boots on the same URL and opens the inspector
+//                              skills / stats / Guardian RTA stats / duos / synergies / counters /
+//                              rune builds / 3MDC comps / balance patches as plain HTML inside #root
 //   dist/sitemap.xml           every view + every monster page
 //   dist/robots.txt
 //
@@ -13,6 +13,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { monsterSlug, VIEW_TITLES } from '../src/router.js';
+import { getMonsterLivingData } from '../src/utils/monsterLivingData.js';
 
 export const SITE_URL = (process.env.SITE_URL || 'https://swm-blue.vercel.app').replace(/\/+$/, '');
 
@@ -26,7 +27,7 @@ function skillsFor(monster, skills, byName) {
   return skills[monster.id] || byName.get(String(monster.name || '').toLowerCase()) || null;
 }
 
-export function monsterPage({ monster, rec, template }) {
+export function monsterPage({ monster, rec, template, livingData: customLivingData = null }) {
   const name = monster.name;
   // "ลูเชน (โจ๊กเกอร์ลม)" → "ลูเชน · โจ๊กเกอร์ลม" so the title does not nest parentheses
   const thai = monster.thaiName && monster.thaiName !== name ? String(monster.thaiName).replace(/\s*\((.*)\)\s*$/, ' · $1') : '';
@@ -39,9 +40,14 @@ export function monsterPage({ monster, rec, template }) {
   const leader = rec?.ls;
   const bs = rec?.bs || {};
 
+  // Extract living data (RTA, Duos, Highdata, Patches, 3MDC, Rune builds)
+  const living = customLivingData || getMonsterLivingData(monster) || {};
+  const { guardianStats, duos = [], synergies = [], counters = [], balancePatches = [], mdcStats, builds, summaryTextTh } = living;
+
   const title = `${name}${thai ? ` (${thai})` : ''} — สกิล สเตตัส และวิธีใช้ | SWM`;
   const firstSkill = skills.find((s) => s.descriptionTh);
-  const description = clip(`${name}${thai ? ` (${thai})` : ''} มอนสเตอร์ธาตุ${elementTh} ${stars}★ ${monster.family ? `ตระกูล ${monster.family}` : ''} — ${skills.length ? `สกิลแปลไทย ${skills.length} สกิล` : 'ข้อมูลสกิล'}${firstSkill ? `: ${firstSkill.name} ${firstSkill.descriptionTh}` : ''}`, 158);
+  const metaSnippet = guardianStats ? `อันดับ #${guardianStats.rank} RTA Guardian (เลือก ${guardianStats.picks.toLocaleString()} ครั้ง ชนะ ${guardianStats.winRate}%) · ` : '';
+  const description = clip(`${name}${thai ? ` (${thai})` : ''} มอนสเตอร์ธาตุ${elementTh} ${stars}★ ${metaSnippet}${monster.family ? `ตระกูล ${monster.family}` : ''} — ${skills.length ? `สกิลแปลไทย ${skills.length} สกิล` : 'ข้อมูลสกิล'}${firstSkill ? `: ${firstSkill.name} ${firstSkill.descriptionTh}` : ''}`, 158);
 
   const head = [
     `<title>${esc(title)}</title>`,
@@ -79,6 +85,166 @@ export function monsterPage({ monster, rec, template }) {
     .filter(([, v]) => v != null && v !== '')
     .map(([k, v]) => `<tr><th class="text-left pr-4 text-slate-400 font-medium">${k}</th><td class="text-white font-mono">${esc(v)}</td></tr>`).join('');
 
+  // 1. Living Summary HTML
+  const summaryHtml = summaryTextTh ? `
+    <section class="mt-6 p-4 rounded-xl bg-slate-900 border border-blue-900/40 text-slate-200">
+      <h2 class="text-lg font-bold text-blue-300 mb-1.5">บทวิเคราะห์และภาพรวมเมต้า</h2>
+      <p class="text-sm leading-relaxed">${esc(summaryTextTh)}</p>
+    </section>` : '';
+
+  // 2. RTA Guardian Stats HTML
+  const guardianHtml = guardianStats ? `
+    <section class="mt-6">
+      <h2 class="text-lg font-bold text-white">สถิติ RTA Guardian ซีซั่น ${guardianStats.season} (รีเพลย์ระดับสูง)</h2>
+      <div class="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-3 text-sm">
+        <div class="p-3 rounded-xl bg-slate-900 border border-slate-800">
+          <div class="text-xs text-slate-400">อันดับเมต้า</div>
+          <div class="text-xl font-bold text-amber-400 font-mono">#${guardianStats.rank}</div>
+          <div class="text-[11px] text-slate-500">จาก ${guardianStats.totalMonsters} มอนสเตอร์</div>
+        </div>
+        <div class="p-3 rounded-xl bg-slate-900 border border-slate-800">
+          <div class="text-xs text-slate-400">ถูกเลือก (Picks)</div>
+          <div class="text-xl font-bold text-white font-mono">${guardianStats.picks.toLocaleString()}</div>
+          <div class="text-[11px] text-emerald-400 font-semibold">อัตราชนะ ${guardianStats.winRate}%</div>
+        </div>
+        <div class="p-3 rounded-xl bg-slate-900 border border-slate-800">
+          <div class="text-xs text-slate-400">อัตราโดนแบน</div>
+          <div class="text-xl font-bold text-rose-400 font-mono">${guardianStats.banRate}%</div>
+          <div class="text-[11px] text-slate-400">${guardianStats.bans.toLocaleString()} แมตช์</div>
+        </div>
+        <div class="p-3 rounded-xl bg-slate-900 border border-slate-800">
+          <div class="text-xs text-slate-400">First Pick Rate</div>
+          <div class="text-xl font-bold text-purple-300 font-mono">${guardianStats.fpRate}%</div>
+          <div class="text-[11px] text-slate-400">ชนะเมื่อ FP ${guardianStats.fpWinRate}%</div>
+        </div>
+      </div>
+    </section>` : '';
+
+  // 3. Duos HTML
+  const duosHtml = duos.length > 0 ? `
+    <section class="mt-6">
+      <h2 class="text-lg font-bold text-white">คู่หูที่ดราฟต์ร่วมกันบ่อยที่สุดใน RTA Guardian</h2>
+      <ul class="mt-2 space-y-2 text-sm">
+        ${duos.map((d) => `
+          <li class="p-2.5 rounded-lg bg-slate-900 border border-slate-800 flex justify-between items-center">
+            <div>
+              <a href="/monster/${monsterSlug(d.partnerName)}" class="text-blue-400 hover:underline font-bold">${esc(d.partnerThaiName)} (${esc(d.partnerName)})</a>
+              <span class="text-xs text-slate-400 ml-2">ดราฟต์ร่วมกัน ${d.matches.toLocaleString()} แมตช์</span>
+            </div>
+            <span class="text-emerald-400 font-mono font-bold">อัตราชนะ ${d.winRate}%</span>
+          </li>
+        `).join('')}
+      </ul>
+    </section>` : '';
+
+  // 4. Synergies & Counters HTML
+  const highDataHtml = (synergies.length > 0 || counters.length > 0) ? `
+    <section class="mt-6">
+      <h2 class="text-lg font-bold text-white">คอมโบส่งเสริม & ตัวแก้ทาง (Synergies & Counters)</h2>
+      <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+        ${synergies.length > 0 ? `
+          <div class="p-3 rounded-xl bg-slate-900 border border-emerald-500/20">
+            <h3 class="font-bold text-emerald-400 mb-2 text-xs uppercase tracking-wider">คอมโบส่งเสริม (Synergies สูงสุด)</h3>
+            <ul class="space-y-1.5 text-xs">
+              ${synergies.map((s) => `
+                <li class="flex justify-between items-center py-1 border-b border-white/[0.04]">
+                  <a href="/monster/${monsterSlug(s.name)}" class="text-slate-200 hover:text-white">${esc(s.thaiName || s.name)}</a>
+                  <span class="text-emerald-400 font-mono font-bold">${s.winRate}%</span>
+                </li>
+              `).join('')}
+            </ul>
+          </div>` : ''}
+        ${counters.length > 0 ? `
+          <div class="p-3 rounded-xl bg-slate-900 border border-rose-500/20">
+            <h3 class="font-bold text-rose-400 mb-2 text-xs uppercase tracking-wider">ตัวแก้ทางที่ต้องระวัง (Counters)</h3>
+            <ul class="space-y-1.5 text-xs">
+              ${counters.map((c) => `
+                <li class="flex justify-between items-center py-1 border-b border-white/[0.04]">
+                  <a href="/monster/${monsterSlug(c.name)}" class="text-slate-200 hover:text-white">${esc(c.thaiName || c.name)}</a>
+                  <span class="text-rose-400 font-mono font-bold">ชนะ ${c.winRate}%</span>
+                </li>
+              `).join('')}
+            </ul>
+          </div>` : ''}
+      </div>
+    </section>` : '';
+
+  // 5. Rune Builds & Benchmarks HTML
+  const buildsHtml = builds ? `
+    <section class="mt-6">
+      <h2 class="text-lg font-bold text-white">แนวทางการใส่รูนและสเตตัสเป้าหมายระดับ Guardian</h2>
+      <div class="mt-2 p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-3 text-sm">
+        ${builds.sets?.length ? `
+          <div>
+            <span class="text-slate-400">เซ็ตแนะนำ:</span>
+            <span class="text-white font-bold ml-2 font-mono">${esc(builds.sets.join(' หรือ '))}</span>
+          </div>` : ''}
+        ${builds.slots246?.length ? `
+          <div>
+            <span class="text-slate-400">ออฟหลักช่อง 2 / 4 / 6:</span>
+            <span class="text-purple-300 font-bold ml-2 font-mono">${esc(builds.slots246.join(' / '))}</span>
+          </div>` : ''}
+        ${builds.artifacts?.length ? `
+          <div>
+            <span class="text-slate-400">อาร์ติแฟกต์แนะนำ:</span>
+            <span class="text-amber-300 ml-2">${esc(builds.artifacts.join(' · '))}</span>
+          </div>` : ''}
+        ${builds.benchmarks ? `
+          <div class="pt-2 border-t border-slate-800">
+            <h3 class="text-xs font-bold text-slate-300 mb-2">ค่าสเตตัสเป้าหมายระดับการ์เดียน (G1-G3 Benchmark)</h3>
+            <table class="w-full text-xs font-mono">
+              <tr class="border-b border-slate-800"><td class="py-1 text-slate-400">HP</td><td class="text-right text-emerald-400 font-bold">${builds.benchmarks.hp?.toLocaleString()}</td><td class="py-1 pl-4 text-slate-400">SPD</td><td class="text-right text-purple-400 font-bold">+${builds.benchmarks.spd}</td></tr>
+              <tr class="border-b border-slate-800"><td class="py-1 text-slate-400">ATK</td><td class="text-right text-amber-400 font-bold">${builds.benchmarks.atk?.toLocaleString()}</td><td class="py-1 pl-4 text-slate-400">CRI Rate</td><td class="text-right text-slate-200">${builds.benchmarks.cr}%</td></tr>
+              <tr class="border-b border-slate-800"><td class="py-1 text-slate-400">DEF</td><td class="text-right text-sky-400 font-bold">${builds.benchmarks.def?.toLocaleString()}</td><td class="py-1 pl-4 text-slate-400">CRI Dmg</td><td class="text-right text-slate-200">${builds.benchmarks.cd}%</td></tr>
+              <tr><td class="py-1 text-slate-400">RES</td><td class="text-right text-slate-200">${builds.benchmarks.res}%</td><td class="py-1 pl-4 text-slate-400">ACC</td><td class="text-right text-slate-200">${builds.benchmarks.acc}%</td></tr>
+            </table>
+          </div>` : ''}
+        ${builds.tips ? `<p class="text-xs text-slate-300 italic pt-2 border-t border-slate-800">💡 <strong>เทคนิคการเล่น:</strong> ${esc(builds.tips)}</p>` : ''}
+      </div>
+    </section>` : '';
+
+  // 6. 3MDC Comps HTML
+  const mdcHtml = mdcStats && (mdcStats.defCount > 0 || mdcStats.cntCount > 0) ? `
+    <section class="mt-6">
+      <h2 class="text-lg font-bold text-white">สถิติในศึกกิลด์วอร์และ Siege Battle (ฐานข้อมูล 3MDC)</h2>
+      <div class="mt-2 p-4 rounded-xl bg-slate-900 border border-slate-800 text-sm space-y-2">
+        <p class="text-slate-300">ปรากฏในสูตรบุกแก้ทาง <strong>${mdcStats.cntCount}</strong> สูตร ${mdcStats.defCount > 0 ? `และเป็นเสาหลักในทีมตั้งรับ <strong>${mdcStats.defCount}</strong> ทีม` : ''}</p>
+        ${mdcStats.counterTeams?.length ? `
+          <div class="pt-2 border-t border-slate-800">
+            <h3 class="text-xs font-bold text-slate-400 mb-1.5">ตัวอย่างสูตรบุกแก้ทางยอดนิยม:</h3>
+            <ul class="space-y-1.5 text-xs text-slate-300">
+              ${mdcStats.counterTeams.map((c) => `
+                <li class="p-2 rounded bg-slate-950 border border-slate-800 flex justify-between items-center">
+                  <div>
+                    <span class="text-emerald-400 font-bold">${esc(c.team)}</span>
+                    <span class="text-slate-400 ml-2">แก้ทาง: ${esc(c.against)}</span>
+                  </div>
+                  <span class="text-emerald-400 font-mono font-bold">${esc(c.winRate)}</span>
+                </li>
+              `).join('')}
+            </ul>
+          </div>` : ''}
+      </div>
+    </section>` : '';
+
+  // 7. Balance Patches HTML
+  const balanceHtml = balancePatches.length > 0 ? `
+    <section class="mt-6">
+      <h2 class="text-lg font-bold text-white">ประวัติการปรับสมดุล (Balance Patch History)</h2>
+      <div class="mt-2 space-y-2 text-sm">
+        ${balancePatches.map((p) => `
+          <div class="p-3 rounded-lg bg-slate-900 border border-slate-800">
+            <div class="flex justify-between items-center text-xs">
+              <span class="font-bold text-white">แพตช์ #${esc(p.patchId)} · ${esc(p.changeTypeTh)}</span>
+              <span class="text-slate-400">${esc(p.date)}</span>
+            </div>
+            <div class="text-xs font-semibold text-amber-300 mt-1">${esc(p.skillName)}</div>
+            <p class="text-xs text-slate-300 mt-1 leading-relaxed">${esc(p.translatedText || p.preview || p.officialText)}</p>
+          </div>
+        `).join('')}
+      </div>
+    </section>` : '';
+
   const body = `
     <main class="max-w-3xl mx-auto p-4 sm:p-8 text-slate-100">
       <nav class="text-xs text-slate-400"><a href="/" class="hover:text-white">SWM</a> › <a href="/catalog" class="hover:text-white">สารานุกรมมอนสเตอร์</a> › ${esc(name)}</nav>
@@ -90,6 +256,13 @@ export function monsterPage({ monster, rec, template }) {
           ${monster.role ? `<p class="text-sm text-slate-400 mt-1">${esc(monster.role)}</p>` : ''}
         </div>
       </header>
+      ${summaryHtml}
+      ${guardianHtml}
+      ${duosHtml}
+      ${highDataHtml}
+      ${buildsHtml}
+      ${mdcHtml}
+      ${balanceHtml}
       ${leader ? `<h2 class="text-lg font-bold text-white mt-6">ลีดเดอร์สกิล</h2><p class="text-sm text-slate-200 mt-1">${esc(leader.textTh || leader.textEn || `${leader.attribute || ''} +${leader.amount || ''}%${leader.area ? ` (${leader.area})` : ''}`)}</p>` : ''}
       ${skills.length ? `<h2 class="text-lg font-bold text-white mt-6">สกิล (${skills.length})</h2>${skillHtml}` : ''}
       ${statRows ? `<h2 class="text-lg font-bold text-white mt-6">ค่าสถานะพื้นฐาน (6★ เลเวล 40)</h2><table class="text-sm mt-2">${statRows}</table>` : ''}

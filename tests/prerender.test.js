@@ -48,6 +48,14 @@ describe('monsterPage', () => {
     expect(html).toContain('<td class="text-white font-mono">9000</td>');
     expect(html).toContain('href="/3mdc?q=Lushen"');
   });
+
+  it('renders rich living data sections (summary, rune builds, 3MDC comps) expanding text to 5k+ chars', () => {
+    expect(html).toContain('บทวิเคราะห์และภาพรวมเมต้า');
+    expect(html).toContain('แนวทางการใส่รูนและสเตตัสเป้าหมายระดับ Guardian');
+    expect(html).toContain('G1-G3 Benchmark');
+    expect(html).toContain('สถิติในศึกกิลด์วอร์และ Siege Battle');
+    expect(html.length).toBeGreaterThan(4500);
+  });
 });
 
 describe('prerenderMonsters', () => {

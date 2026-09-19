@@ -3,6 +3,7 @@ import { BookOpen, Search, Swords, X, Filter, Info } from 'lucide-react';
 import MonsterAvatar from '../components/MonsterAvatar';
 import SkillTooltip from '../components/SkillTooltip';
 import MonsterSkillsCard from '../components/MonsterSkillsCard';
+import MonsterLivingData from '../components/MonsterLivingData';
 import { MONSTERS } from '../data/monsters';
 import { getSkillTags } from '../data/monsterSkills';
 import { useMonsterSkills } from '../hooks/useMonsterSkills';
@@ -367,7 +368,7 @@ export default function MonsterCatalogView({ initialSearch = '', initialMonster 
           }}
           className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200"
         >
-          <div className="w-full max-w-2xl max-h-[90vh] flex flex-col bg-[#0c121c] border border-slate-700/80 rounded-2xl shadow-2xl relative overflow-hidden ring-1 ring-white/10">
+          <div className="w-full max-w-3xl max-h-[92vh] flex flex-col bg-[#0c121c] border border-slate-700/80 rounded-2xl shadow-2xl relative overflow-hidden ring-1 ring-white/10">
             {/* Modal Header */}
             <div className="flex items-center justify-between p-4 sm:p-5 border-b border-[#1d2b3f] bg-[#0c121c]/80 backdrop-blur-md shrink-0">
               <div className="flex items-center gap-3.5">
@@ -409,11 +410,25 @@ export default function MonsterCatalogView({ initialSearch = '', initialMonster 
             </div>
 
             {/* Modal Scrollable Body */}
-            <div className="p-4 sm:p-5 overflow-y-auto flex-1 space-y-4">
+            <div className="p-4 sm:p-5 overflow-y-auto flex-1 space-y-5">
               <MonsterSkillsCard 
                 monsterData={selectedMonsterSkills || selectedMonster} 
                 enableTooltip={false}
               />
+
+              {/* Living Data Section (RTA Guardian, Duos, Counters, Balance Patches, 3MDC & Rune Builds) */}
+              <div className="pt-3 border-t border-[#1d2b3f]">
+                <MonsterLivingData 
+                  monster={selectedMonster}
+                  onNavigate={onNavigate}
+                  onSelectMonster={(target) => {
+                    const found = MONSTERS.find(
+                      (m) => m.name === target || Number(m.com2usId) === Number(target) || m.id === target
+                    );
+                    if (found) setSelectedMonster(found);
+                  }}
+                />
+              </div>
             </div>
 
             {/* Modal Actions Footer */}
