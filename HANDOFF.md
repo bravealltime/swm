@@ -1,7 +1,7 @@
 # SWM — คู่มือส่งต่องาน (ย้ายเครื่อง / เริ่มเซสชันใหม่)
 
 อ่านไฟล์นี้ก่อนแตะโค้ด ครอบคลุม: ตั้งเครื่องใหม่ใน 5 นาที, โครงสร้างระบบ, ข้อมูลมาจากไหน, ระบบ AI, AegisLink (เรียลไทม์), หลังบ้าน, งานอัตโนมัติ, และสิ่งที่ยังค้าง
-อัปเดตล่าสุด: 2026-09-19 (commit `d15968e`)
+อัปเดตล่าสุด: 2026-09-19 (ตั้งเครื่องใหม่เสร็จ, env บน Vercel ครบ, แก้ล็อก AI บน Vercel)
 
 ---
 
@@ -21,8 +21,8 @@ npm run dev               # http://localhost:5173
 
 | ตัวแปร | ใช้ทำอะไร | อยู่ที่ไหนอีก |
 |---|---|---|
-| `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` | ล็อกอิน / ซิงก์ข้ามเครื่อง (ฝั่งเบราว์เซอร์) | Vercel ✅ |
-| `SUPABASE_SERVICE_ROLE_KEY` | ฝั่งเซิร์ฟเวอร์: หลังบ้านบันทึกตั้งค่า, ล็อก AI, แชร์อันดับกิลด์ | **Vercel ❌ ยังไม่ได้ใส่** (ดูข้อ 10) |
+| `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` | ล็อกอิน / ซิงก์ข้ามเครื่อง (ฝั่งเบราว์เซอร์) **และฝั่งเซิร์ฟเวอร์ด้วย** (`api/_lib/admin.js` ใช้ URL นี้ต่อ Supabase REST + ตรวจ token) — เบราว์เซอร์มี default hard-code แต่ `api/` ไม่มี ถ้าหายบน Vercel หลังบ้าน/ล็อกอินแอดมินพังทั้งที่เว็บดูปกติ | Vercel ✅ (ใส่ 2026-09-19 — ก่อนหน้านั้นไม่มีจริง) |
+| `SUPABASE_SERVICE_ROLE_KEY` | ฝั่งเซิร์ฟเวอร์: หลังบ้านบันทึกตั้งค่า, ล็อก AI, แชร์อันดับกิลด์ (ใช้คีย์รูปแบบใหม่ `sb_secret_…` ได้) | Vercel ✅ (2026-09-19) |
 | `AI_BASE_URL`, `AI_MODEL`, `AI_API_KEY` | โค้ช AI (OpenAI-compatible, ปัจจุบัน `https://ai.xaek.online/v1` + `xaek-coder`) | Vercel ✅, GitHub Actions secrets ✅ |
 | `ADMIN_EMAILS` | เพิ่มผู้ดูแลนอกจาก pedictu@gmail.com (คั่นจุลภาค) | ไม่บังคับ |
 | `ADMIN_DEV_BYPASS=1` | เปิด `/admin` บนเครื่อง dev โดยไม่ล็อกอิน — **ไม่มีผลบน Vercel** (โค้ดเช็ก `VERCEL` env) | เฉพาะเครื่อง |
@@ -127,8 +127,8 @@ Secrets ที่ต้องมีใน GitHub: `AI_BASE_URL`, `AI_MODEL`, `AI
 
 ## 10. สิ่งที่ค้าง / ควรทำต่อ
 
-1. **ใส่ `SUPABASE_SERVICE_ROLE_KEY` ใน Vercel แล้ว Redeploy** — ตอนนี้บนเว็บจริงหลังบ้านบันทึกตั้งค่า/ล็อก AI/แชร์อันดับกิลด์ไม่ได้ (ใช้ค่าเริ่มต้นแทน)
-2. ทดสอบหลังบ้านบนเว็บจริงด้วยบัญชี pedictu@gmail.com (ทดสอบผ่านแล้วบนเครื่อง dev ต่อ Supabase จริง)
+1. ~~ใส่ `SUPABASE_SERVICE_ROLE_KEY` ใน Vercel~~ — ทำแล้ว 2026-09-19 พร้อม `VITE_SUPABASE_*` ตรวจแล้วว่า prod อ่าน/เขียน `site_settings` และ `guild_rankings` ได้
+2. ทดสอบหลังบ้านบนเว็บจริงด้วยบัญชี pedictu@gmail.com — ล็อกอินแล้วเปิด `/admin` ทุกแท็บ + บันทึกตั้งค่า (ทดสอบผ่านแล้วบนเครื่อง dev ด้วย `ADMIN_DEV_BYPASS=1` ต่อ Supabase จริง)
 3. ติดตั้งปลั๊กอิน v2.1 ใน SWEX ของผู้ใช้จริง แล้วเปิดหน้ากิลด์/Siege/อันดับในเกม → ปรับตัวแกะแพ็กเก็ตตามของจริง
 4. หมุนคีย์ AI (`xaek_sk_…`) เพราะเคยถูกวางในแชต — อัปเดตทั้ง .env, Vercel, GitHub secrets
 5. (ถ้าอยาก) ล้าง `public/data/my_profile.json` ออกจากประวัติ git ด้วย filter-branch + force-push
@@ -140,5 +140,9 @@ Secrets ที่ต้องมีใน GitHub: `AI_BASE_URL`, `AI_MODEL`, `AI
 - Windows ไม่มี glyph ธงอีโมจิ → บน Canvas ใช้รหัสประเทศแทน
 - Vite dev: API ทั้งหมดทำงานผ่าน middleware ใน `vite.config.js` (import handler เดียวกับ Vercel) — เพิ่ม endpoint ใหม่ต้องเพิ่ม route ตรงนั้นด้วย
 - ESM ใน `api/`: ต้องใส่นามสกุล `.js` ตอน import และ `with { type: 'json' }` สำหรับ JSON
+- **Vercel freeze ฟังก์ชันทันทีที่ส่ง response** — งานหลัง response แบบ fire-and-forget (เช่น insert ล็อก) จะไม่ถึง Supabase ต้อง `await` ก่อน return (ดู `logAiCall` มี timeout 4 วิ) ในเครื่อง dev ไม่เจอเพราะ process ไม่ freeze
+- Supabase โปรเจกต์นี้ Data API default schema เป็น `api` — ถ้ายิง REST ตรง ๆ ต้องใส่ header `Accept-Profile: public` (โค้ดใน `admin.js rest()` ใส่ให้แล้ว)
+- `loadEnv()` ใน `api/_lib/ai.js` อ่าน `.env` ครั้งเดียวต่อ process → แก้ `.env` แล้วต้องรีสตาร์ต `npm run dev`
+- เช็ก prod ว่า Supabase ฝั่งเซิร์ฟเวอร์ใช้ได้โดยไม่ต้องล็อกอิน: `GET https://swm-blue.vercel.app/api/guild-rankings` ต้องไม่มีฟิลด์ `error`
 - lint: `npm run lint` (oxlint) — warning `set-state-in-effect`/`no-unused-vars` ที่ค้างเป็นของเดิม ไม่ต้องไล่แก้
 - build: `npm run build` (main bundle ~280 kB gzip 87 kB — อย่า import แคตตาล็อก/Supabase SDK เข้าเชลล์)
