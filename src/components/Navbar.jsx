@@ -108,6 +108,7 @@ export default function Navbar({ currentView, onNavigate, onOpenSearch, onOpenMe
                   href={buildUrl(item.id)}
                   onClick={(e) => go(e, item.id)}
                   aria-current={isActive ? 'page' : undefined}
+                  title={item.label}
                   className={`relative flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-colors ${
                     isActive
                       ? 'bg-blue-600/20 text-white border border-blue-500/40'
@@ -115,7 +116,7 @@ export default function Navbar({ currentView, onNavigate, onOpenSearch, onOpenMe
                   }`}
                 >
                   <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-blue-400' : 'text-slate-400'}`} />
-                  <span>{item.label}</span>
+                  <span className="hidden xl:inline">{item.label}</span>
                 </a>
               );
             })}
@@ -126,6 +127,7 @@ export default function Navbar({ currentView, onNavigate, onOpenSearch, onOpenMe
                 onClick={() => setToolsOpen((o) => !o)}
                 aria-haspopup="menu"
                 aria-expanded={toolsOpen}
+                title="เครื่องมือ"
                 className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-colors cursor-pointer ${
                   isToolActive || toolsOpen
                     ? 'bg-white/10 text-white border border-white/20'
@@ -133,7 +135,7 @@ export default function Navbar({ currentView, onNavigate, onOpenSearch, onOpenMe
                 }`}
               >
                 <Wrench className="w-4 h-4 text-slate-400" />
-                <span>เครื่องมือ</span>
+                <span className="hidden xl:inline">เครื่องมือ</span>
                 <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform ${toolsOpen ? 'rotate-180' : ''}`} />
               </button>
 

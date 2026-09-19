@@ -290,11 +290,6 @@ function handleCardExport({ canvas, filename, title, preview = true }) {
   return { dataUrl, filename, title };
 }
 
-function download(canvas, name) {
-  const dataUrl = canvas.toDataURL('image/png');
-  downloadCard(dataUrl, name);
-}
-
 const num = (n) => Number(n || 0).toLocaleString('en-US');
 
 /**
