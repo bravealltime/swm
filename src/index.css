@@ -58,6 +58,14 @@
   background: #364864;
 }
 
+/* Horizontal chip strips on small screens: scrollable, no visible scrollbar */
+.chip-strip {
+  scrollbar-width: none;
+}
+.chip-strip::-webkit-scrollbar {
+  display: none;
+}
+
 /* Solid, human-designed game card surfaces */
 .game-card {
   background-color: #111723;

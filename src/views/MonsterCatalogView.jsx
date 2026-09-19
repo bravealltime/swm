@@ -9,6 +9,10 @@ import { useMonsterSkills } from '../hooks/useMonsterSkills';
 
 const FALLBACK_SKILL_ICON = 'https://do9d4mpqk497d.cloudfront.net/common/images/skills36/skill_icon_0001_0_0.png';
 
+// filter rows: a scrollable single line on phones (bleeding into the card padding), wrapping on wider screens
+const chipStrip = 'flex items-center gap-1.5 overflow-x-auto chip-strip -mx-4 px-4 sm:mx-0 sm:px-0 sm:flex-wrap sm:overflow-visible';
+const chip = 'shrink-0 whitespace-nowrap rounded-lg transition-all cursor-pointer';
+
 // One grid tile. Skill icons fill in once the monster's shard has been fetched (see useMonsterSkills).
 function MonsterCard({ monster, onSelect }) {
   const displayName = monster.thaiName || monster.nameTh || monster.name;
@@ -193,7 +197,8 @@ export default function MonsterCatalogView({ initialSearch = '', onNavigate }) {
         <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
           สารานุกรมมอนสเตอร์ & ระบบตรวจสอบสกิล (Monster Skills Inspector)
         </h1>
-        <p className="text-sm text-slate-400 mt-1 max-w-3xl leading-relaxed">
+        {/* hidden on phones: with the filters below it pushed the first monster under the fold */}
+        <p className="hidden sm:block text-sm text-slate-400 mt-1 max-w-3xl leading-relaxed">
           ฐานข้อมูลสกิลมอนสเตอร์ครบทุกตัว ทุกธาตุ ชี้เมาส์ (Hover) เพื่อดูคำอธิบายสกิล คูลดาวน์ ตัวคูณความเสียหาย ดีบัฟ และคลิกเพื่อเปิดหน้าต่างวิเคราะห์กลยุทธ์ฉบับเต็ม
         </p>
       </div>
@@ -220,18 +225,19 @@ export default function MonsterCatalogView({ initialSearch = '', onNavigate }) {
           )}
         </div>
 
-        {/* Filter Pills */}
+        {/* Filter Pills — one wrapping block on desktop; on phones each row is a horizontal chip strip
+            so the three groups take three lines instead of ten */}
         <div className="flex flex-col gap-3 pt-1 border-t border-[#182333]">
           {/* Element & Star Buttons */}
-          <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center sm:justify-between gap-3">
             {/* Element Buttons */}
-            <div className="flex flex-wrap items-center gap-1.5">
-              <span className="text-xs text-slate-400 font-bold mr-1">ธาตุ:</span>
+            <div className={chipStrip}>
+              <span className="text-xs text-slate-400 font-bold mr-1 shrink-0">ธาตุ:</span>
               {elements.map((elem) => (
                 <button
                   key={elem.id}
                   onClick={() => { setSelectedElement(elem.id); setVisibleCount(48); }}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                  className={`${chip} px-3 py-1.5 text-xs font-bold ${
                     selectedElement === elem.id
                       ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30'
                       : 'bg-[#0c121c] border border-[#1d2b3f] text-slate-300 hover:text-white hover:bg-[#152030]'
@@ -243,13 +249,13 @@ export default function MonsterCatalogView({ initialSearch = '', onNavigate }) {
             </div>
 
             {/* Star Buttons */}
-            <div className="flex flex-wrap items-center gap-1.5">
-              <span className="text-xs text-slate-400 font-bold mr-1">ดาว:</span>
+            <div className={chipStrip}>
+              <span className="text-xs text-slate-400 font-bold mr-1 shrink-0">ดาว:</span>
               {stars.map((star) => (
                 <button
                   key={star.id}
                   onClick={() => { setSelectedStars(star.id); setVisibleCount(48); }}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                  className={`${chip} px-3 py-1.5 text-xs font-bold ${
                     selectedStars === star.id
                       ? 'bg-purple-600 text-white shadow-md shadow-purple-600/30'
                       : 'bg-[#0c121c] border border-[#1d2b3f] text-slate-300 hover:text-white hover:bg-[#152030]'
@@ -262,8 +268,8 @@ export default function MonsterCatalogView({ initialSearch = '', onNavigate }) {
           </div>
 
           {/* Skill Effects Filter */}
-          <div className="flex flex-wrap items-center gap-1.5 pt-2 border-t border-[#182333]/60">
-            <span className="text-xs text-slate-400 font-bold mr-1 flex items-center gap-1">
+          <div className={`${chipStrip} pt-2 border-t border-[#182333]/60`}>
+            <span className="text-xs text-slate-400 font-bold mr-1 flex items-center gap-1 shrink-0">
               <Filter className="w-3.5 h-3.5 text-blue-400" />
               กลไกสกิล:
             </span>
@@ -271,7 +277,7 @@ export default function MonsterCatalogView({ initialSearch = '', onNavigate }) {
               <button
                 key={eff.id}
                 onClick={() => { setSelectedEffect(eff.id); setVisibleCount(48); }}
-                className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                className={`${chip} px-2.5 py-1 text-xs font-semibold ${
                   selectedEffect === eff.id
                     ? 'bg-amber-600 text-white shadow-md shadow-amber-600/30 font-bold'
                     : 'bg-[#0c121c] border border-[#1d2b3f] text-slate-300 hover:text-white hover:bg-[#152030]'
@@ -290,7 +296,7 @@ export default function MonsterCatalogView({ initialSearch = '', onNavigate }) {
           แสดงผล <strong className="text-white font-mono">{displayedMonsters.length}</strong> ตัว จากที่ค้นพบ{' '}
           <strong className="text-purple-400 font-mono">{filteredMonsters.length}</strong> ตัว (รวมทั้งหมด {MONSTERS.length} ตัว)
         </span>
-        <span className="text-blue-400 flex items-center gap-1 bg-blue-950/30 px-2.5 py-1 rounded-lg border border-blue-900/40">
+        <span className="hidden sm:flex text-blue-400 items-center gap-1 bg-blue-950/30 px-2.5 py-1 rounded-lg border border-blue-900/40">
           <Info className="w-3.5 h-3.5" />
           <span>เอาเมาส์ชี้ที่ไอคอนสกิลด้านล่างรูปเพื่อดูรายละเอียด หรือคลิกเพื่อดูหน้าต่างเจาะลึก</span>
         </span>
