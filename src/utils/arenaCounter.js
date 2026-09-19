@@ -9,12 +9,73 @@ import traitsMap from '../data/arenaMonsterTraits.json' with { type: 'json' };
 import arenaData from '../data/arenaMetaTeams.json' with { type: 'json' };
 import { teamTraits, TRAIT_LABEL } from './arenaTraits.js';
 
+const ELEMENT_EN_TH = {
+  water: 'น้ำ',
+  fire: 'ไฟ',
+  wind: 'ลม',
+  light: 'แสง',
+  dark: 'มืด',
+};
+
+const ELEMENT_MAP = {
+  water: 'water',
+  fire: 'fire',
+  wind: 'wind',
+  light: 'light',
+  dark: 'dark',
+  'น้ำ': 'water',
+  'ไฟ': 'fire',
+  'ลม': 'wind',
+  'แสง': 'light',
+  'มืด': 'dark',
+};
+
+const extractElement = (str) => {
+  if (!str) return null;
+  const m = String(str).match(/\b(water|fire|wind|light|dark)\b|\((water|fire|wind|light|dark|น้ำ|ไฟ|ลม|แสง|มืด)\)/i);
+  if (m) {
+    const raw = (m[1] || m[2]).toLowerCase();
+    return ELEMENT_MAP[raw] || raw;
+  }
+  for (const [th, en] of Object.entries(ELEMENT_MAP)) {
+    if (str.includes(`(${th})`) || str.includes(` ${th}`) || str.includes(`${th} `)) return en;
+  }
+  return null;
+};
+
 const norm = (s) => String(s || '').replace(/\s*\(.*?\)\s*/g, '').toLowerCase().trim();
 const traitIndex = new Map();
+
 for (const [name, t] of Object.entries(traitsMap)) {
+  const lowerName = name.toLowerCase().trim();
+  traitIndex.set(lowerName, t);
   traitIndex.set(norm(name), t);
+
   if (name.includes('/')) {
-    name.split('/').forEach((part) => {
+    const parts = name.split('/').map(s => s.trim());
+    const swName = parts[0];
+    const collabName = parts[1];
+
+    traitIndex.set(swName.toLowerCase(), t);
+    traitIndex.set(norm(swName), t);
+
+    // If swName has element prefix (e.g. 'Water Old Wood'), index 'water gandalf', 'gandalf (water)', etc.
+    const elMatch = swName.match(/^(water|fire|wind|light|dark)\s+/i);
+    if (elMatch && collabName) {
+      const el = elMatch[1].toLowerCase();
+      const thEl = ELEMENT_EN_TH[el];
+      const cLower = collabName.toLowerCase();
+
+      traitIndex.set(`${el} ${cLower}`, t);
+      traitIndex.set(`${cLower} ${el}`, t);
+      traitIndex.set(`${cLower} (${el})`, t);
+      if (thEl) {
+        traitIndex.set(`${cLower} (${thEl})`, t);
+        traitIndex.set(`${thEl} ${cLower}`, t);
+      }
+    }
+
+    parts.forEach((part) => {
       const p = norm(part);
       if (p && !traitIndex.has(p)) traitIndex.set(p, t);
     });
@@ -22,22 +83,59 @@ for (const [name, t] of Object.entries(traitsMap)) {
 }
 
 export const traitsOfName = (name) => {
-  const direct = traitIndex.get(norm(name));
-  if (direct) return direct;
-  if (name && name.includes('/')) {
-    for (const part of name.split('/')) {
-      const hit = traitIndex.get(norm(part));
-      if (hit) return hit;
+  if (!name) return [];
+  const lower = String(name).toLowerCase().trim();
+
+  // 1. Direct match on lower string (e.g. 'water old wood / gandalf', 'gandalf (water)')
+  if (traitIndex.has(lower)) return traitIndex.get(lower);
+
+  // 2. Collab element alias resolution (e.g. 'Gandalf (น้ำ)' or 'Gandalf water')
+  const el = extractElement(name);
+  if (el) {
+    const bare = lower
+      .replace(/\s*\(.*?\)\s*/g, ' ')
+      .replace(/\b(water|fire|wind|light|dark)\b/gi, ' ')
+      .replace(/[น้ำไฟลมแสงมืด]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+    if (bare) {
+      if (traitIndex.has(`${el} ${bare}`)) return traitIndex.get(`${el} ${bare}`);
+      if (traitIndex.has(`${bare} (${el})`)) return traitIndex.get(`${bare} (${el})`);
     }
   }
+
+  // 3. Fallback to norm (stripping parentheses if generic)
+  const n = norm(name);
+  if (traitIndex.has(n)) return traitIndex.get(n);
+
+  // 4. Slash split fallback
+  if (name.includes('/')) {
+    for (const part of name.split('/')) {
+      const hit = traitsOfName(part.trim());
+      if (hit.length) return hit;
+    }
+  }
+
   return [];
 };
 
 export const hasSkill = (name) => {
-  const n = norm(name);
-  if (traitIndex.has(n)) return true;
-  if (name && name.includes('/')) {
-    return name.split('/').some((part) => traitIndex.has(norm(part)));
+  if (!name) return false;
+  const lower = String(name).toLowerCase().trim();
+  if (traitIndex.has(lower)) return true;
+  if (traitIndex.has(norm(name))) return true;
+  const el = extractElement(name);
+  if (el) {
+    const bare = lower
+      .replace(/\s*\(.*?\)\s*/g, ' ')
+      .replace(/\b(water|fire|wind|light|dark)\b/gi, ' ')
+      .replace(/[น้ำไฟลมแสงมืด]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+    if (bare && (traitIndex.has(`${el} ${bare}`) || traitIndex.has(`${bare} (${el})`))) return true;
+  }
+  if (name.includes('/')) {
+    return name.split('/').some((part) => hasSkill(part.trim()));
   }
   return false;
 };

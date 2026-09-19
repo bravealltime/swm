@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { MONSTERS } from '../data/monsters';
 
 const ELEMENT_STYLES = {
@@ -50,6 +50,7 @@ const ELEMENT_ICONS = {
 export default function MonsterAvatar({ 
   monster, 
   name,
+  element,
   size = 'md', 
   showName = false, 
   showStars = true,
@@ -64,20 +65,58 @@ export default function MonsterAvatar({
     mon = name;
   }
   
+  const reqElement = (element || (typeof monster === 'object' ? monster?.element : null))?.toLowerCase()?.trim();
+
   if (typeof mon === 'string') {
     const clean = mon.toLowerCase().trim();
-    const found = MONSTERS.find(m => 
-      m.name?.toLowerCase() === clean || 
-      m.thaiName?.toLowerCase() === clean ||
-      m.name?.toLowerCase().includes(clean)
-    );
-    mon = found || { name: mon, element: 'fire', stars: 5 };
+
+    // 1. Exact match with element
+    let found = reqElement
+      ? MONSTERS.find(m => m.element?.toLowerCase() === reqElement && (m.name?.toLowerCase() === clean || m.thaiName?.toLowerCase() === clean))
+      : null;
+
+    // 2. Exact match without element
+    if (!found) {
+      found = MONSTERS.find(m => m.name?.toLowerCase() === clean || m.thaiName?.toLowerCase() === clean);
+    }
+
+    // 3. Collab slash suffix match (e.g. clean = 'gandalf' + reqElement = 'water' -> 'Water Old Wood / Gandalf')
+    if (!found && reqElement) {
+      found = MONSTERS.find(m => 
+        m.element?.toLowerCase() === reqElement &&
+        m.name?.includes('/') &&
+        m.name.toLowerCase().split('/').some(part => part.trim() === clean)
+      );
+    }
+    if (!found) {
+      found = MONSTERS.find(m => 
+        m.name?.includes('/') &&
+        m.name.toLowerCase().split('/').some(part => part.trim() === clean)
+      );
+    }
+
+    // 4. Substring match fallback (with element first, then without)
+    if (!found && reqElement) {
+      found = MONSTERS.find(m => 
+        m.element?.toLowerCase() === reqElement &&
+        (m.name?.toLowerCase().includes(clean) || m.thaiName?.toLowerCase().includes(clean))
+      );
+    }
+    if (!found) {
+      found = MONSTERS.find(m => 
+        m.name?.toLowerCase().includes(clean) || m.thaiName?.toLowerCase().includes(clean)
+      );
+    }
+
+    mon = found || { name: mon, element: reqElement || 'fire', stars: 5 };
   } else if (mon && typeof mon === 'object' && (!mon.avatarUrl && !mon.imageUrl)) {
     const clean = (mon.name || mon.thaiName || '').toLowerCase().trim();
     if (clean) {
       const found = MONSTERS.find(m => 
-        m.name?.toLowerCase() === clean || 
-        m.thaiName?.toLowerCase() === clean
+        (!reqElement || m.element?.toLowerCase() === reqElement) &&
+        (m.name?.toLowerCase() === clean || m.thaiName?.toLowerCase() === clean)
+      ) || MONSTERS.find(m => 
+        m.name?.toLowerCase() === clean || m.thaiName?.toLowerCase() === clean
       );
       if (found) {
         mon = { ...found, ...mon };

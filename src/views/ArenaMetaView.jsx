@@ -302,7 +302,18 @@ function EnemyPicker({ picks, onChange, onSearch, onClear, onReorder, presets })
   const handleSelectMonster = (m) => {
     if (activeSlotIdx === null || !m) return;
     const next = [...slots];
-    next[activeSlotIdx] = m.name;
+
+    // Resolve raw collab monsters (e.g. Gandalf, Aragorn, RYU) to their canonical unique slash name by element
+    let canonicalName = m.name;
+    if (m.name && !m.name.includes('/')) {
+      const clean = m.name.toLowerCase().trim();
+      const slash = MONSTERS.find(
+        (s) => s.name.includes('/') && s.element === m.element && s.name.toLowerCase().includes(clean)
+      );
+      if (slash) canonicalName = slash.name;
+    }
+
+    next[activeSlotIdx] = canonicalName;
     const cleaned = next.filter(Boolean);
     onChange(cleaned);
 
@@ -539,8 +550,10 @@ function EnemyPicker({ picks, onChange, onSearch, onClear, onReorder, presets })
                 className="p-1.5 rounded-xl hover:bg-white/[0.08] flex flex-col items-center gap-1 transition-all cursor-pointer group"
               >
                 <MonsterAvatar monster={m} size="sm" showStars={false} />
-                <span className="text-[11px] font-bold text-slate-300 truncate w-full group-hover:text-orange-400 text-center">
-                  {m.thaiName || m.name}
+                <span className="text-[11px] font-bold text-slate-300 truncate w-full group-hover:text-orange-400 text-center" title={m.thaiName || m.name}>
+                  {m.name && !m.name.includes('/') && m.element && ['gandalf', 'aragorn', 'legolas', 'gollum', 'ryu', 'm. bison', 'dhalsim', 'chun-li', 'geralt', 'ciri', 'yennefer', 'triss', 'satoru gojo', 'yuji itadori', 'megumi fushiguro', 'nobara kugisaki', 'tanjiro kamado', 'nezuko kamado', 'inosuke hashibira', 'zenitsu agatsuma', 'jin kazama', 'hwoarang', 'paul phoenix', 'nina williams', 'pure vanilla cookie', 'hollyberry cookie', 'espresso cookie', 'madeleine cookie', 'ezio', 'bayek', 'kassandra', 'eivor'].includes(m.name.toLowerCase())
+                    ? `${m.name} (${{ fire: 'ไฟ', water: 'น้ำ', wind: 'ลม', light: 'แสง', dark: 'มืด' }[m.element] || m.element})`
+                    : (m.thaiName || m.name)}
                 </span>
               </button>
             ))}

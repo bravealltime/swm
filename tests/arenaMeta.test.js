@@ -283,5 +283,32 @@ describe('arenaPrompt (AI Grounded Advisor)', () => {
     expect(prompt).toContain('(ไม่มีสูตรในระบบ)');
     expect(prompt).not.toContain('มอนสเตอร์เด่นในไอดีผู้ใช้');
   });
+
+  it('correctly resolves collab monsters by element without confusing water with dark (Gandalf bug)', () => {
+    // Water Gandalf / Water Old Wood traits vs Dark Gandalf / Dark Old Wood traits
+    const waterTraits = traitsOfName('Water Old Wood / Gandalf');
+    const darkTraits = traitsOfName('Dark Old Wood / Gandalf');
+
+    expect(waterTraits).toContain('hpLead');
+    expect(waterTraits).toContain('heal');
+    expect(waterTraits).toContain('passive');
+    expect(waterTraits).not.toContain('atkLead');
+
+    expect(darkTraits).toContain('atkLead');
+    expect(darkTraits).toContain('cc');
+    expect(darkTraits).not.toContain('heal');
+
+    // Element-qualified aliases
+    expect(traitsOfName('Water Gandalf')).toEqual(waterTraits);
+    expect(traitsOfName('Gandalf (water)')).toEqual(waterTraits);
+    expect(traitsOfName('Dark Gandalf')).toEqual(darkTraits);
+
+    // Profile enemy with Water Gandalf leader
+    const profileWater = profileEnemy(['Water Old Wood / Gandalf', 'Camilla', 'Byungchul', 'Triana']);
+    expect(profileWater.leader).toBe('Water Old Wood / Gandalf');
+    expect(profileWater.flags.hpLead).toBe(true);
+    expect(profileWater.chips.some((c) => c.key === 'atkLead')).toBe(false);
+    expect(profileWater.chips.some((c) => c.key === 'hpLead')).toBe(true);
+  });
 });
 
