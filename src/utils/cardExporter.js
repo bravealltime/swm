@@ -1,248 +1,429 @@
-// Zero-dependency HTML5 Canvas image exporter for Social Sharing Cards
-// Generates high-resolution PNGs for Summoner Passport and LD5 Showcase
+// Zero-dependency HTML5 Canvas image exporter for social sharing cards
+// (Summoner Passport, LD5 Showcase, Monster Showcase). Styled after the in-game UI:
+// dark navy plate, gold bevel frame, portrait medallions with element rings.
 
-export async function exportProfileCard({ wizard, stats, topLd5 = [] }) {
-  const canvas = document.createElement('canvas');
-  canvas.width = 1200;
-  canvas.height = 630;
-  const ctx = canvas.getContext('2d');
+const SANS = '"Inter", "IBM Plex Sans Thai", "Segoe UI", "Leelawadee UI", sans-serif';
+const THAI = '"IBM Plex Sans Thai", "Inter", "Segoe UI", "Leelawadee UI", sans-serif';
+const CDN = 'https://do9d4mpqk497d.cloudfront.net/common/images/';
+const ELEMENT_ICON = { fire: 'fire', water: 'water', wind: 'wind', light: 'light', dark: 'dark' };
+const ELEMENT_COLOR = { fire: '#fb7185', water: '#38bdf8', wind: '#a3e635', light: '#fde68a', dark: '#c084fc' };
+const GOLD = ['#fff3c4', '#e9c46a', '#b8862b', '#f5d78a'];
 
-  // 1. Dark Gradient Background
-  const bgGrad = ctx.createLinearGradient(0, 0, 1200, 630);
-  bgGrad.addColorStop(0, '#0a0f18');
-  bgGrad.addColorStop(0.5, '#0d1527');
-  bgGrad.addColorStop(1, '#05080e');
-  ctx.fillStyle = bgGrad;
-  ctx.fillRect(0, 0, 1200, 630);
+const imageCache = new Map();
+function loadImage(url, timeoutMs = 6000) {
+  if (!url) return Promise.resolve(null);
+  if (imageCache.has(url)) return imageCache.get(url);
+  const p = new Promise((resolve) => {
+    const img = new Image();
+    // The same art is shown on the page without CORS; a distinct cache key makes the browser
+    // fetch a CORS-enabled copy instead of reusing the cached opaque one (which would taint the canvas).
+    const src = /^https?:/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}swm-card=1` : url;
+    img.crossOrigin = 'anonymous';
+    const done = (ok) => resolve(ok && img.naturalWidth > 0 ? img : null);
+    const t = setTimeout(() => done(false), timeoutMs);
+    img.onload = () => { clearTimeout(t); done(true); };
+    img.onerror = () => { clearTimeout(t); done(false); };
+    img.src = src;
+  });
+  imageCache.set(url, p);
+  return p;
+}
 
-  // 2. Decorative Cyber Grids / Borders
-  ctx.strokeStyle = '#1e293b';
-  ctx.lineWidth = 1;
-  for (let x = 40; x < 1200; x += 60) {
+async function ensureFonts() {
+  try {
+    await Promise.all([
+      document.fonts.load(`800 40px Inter`), document.fonts.load(`700 20px Inter`), document.fonts.load(`600 14px Inter`),
+      document.fonts.load(`700 20px "IBM Plex Sans Thai"`), document.fonts.load(`500 14px "IBM Plex Sans Thai"`),
+    ]);
+  } catch { /* system fonts will do */ }
+}
+
+function roundRect(ctx, x, y, w, h, r) {
+  const rr = Math.min(r, w / 2, h / 2);
+  ctx.beginPath();
+  ctx.moveTo(x + rr, y);
+  ctx.arcTo(x + w, y, x + w, y + h, rr);
+  ctx.arcTo(x + w, y + h, x, y + h, rr);
+  ctx.arcTo(x, y + h, x, y, rr);
+  ctx.arcTo(x, y, x + w, y, rr);
+  ctx.closePath();
+}
+
+function goldGradient(ctx, x0, y0, x1, y1) {
+  const g = ctx.createLinearGradient(x0, y0, x1, y1);
+  g.addColorStop(0, GOLD[0]);
+  g.addColorStop(0.35, GOLD[1]);
+  g.addColorStop(0.7, GOLD[2]);
+  g.addColorStop(1, GOLD[3]);
+  return g;
+}
+
+/** Fits `text` into maxWidth with an ellipsis. */
+function fitText(ctx, text, maxWidth) {
+  let t = String(text ?? '');
+  if (ctx.measureText(t).width <= maxWidth) return t;
+  while (t.length > 1 && ctx.measureText(`${t}…`).width > maxWidth) t = t.slice(0, -1);
+  return `${t}…`;
+}
+
+function text(ctx, str, x, y, { font, color = '#fff', align = 'left', baseline = 'alphabetic', maxWidth, shadow, spacing } = {}) {
+  ctx.save();
+  ctx.font = font;
+  ctx.fillStyle = color;
+  ctx.textAlign = align;
+  ctx.textBaseline = baseline;
+  if (spacing) ctx.letterSpacing = `${spacing}px`;
+  if (shadow) { ctx.shadowColor = shadow; ctx.shadowBlur = 12; ctx.shadowOffsetY = 2; }
+  ctx.fillText(maxWidth ? fitText(ctx, str, maxWidth) : String(str ?? ''), x, y);
+  ctx.restore();
+}
+
+/** Deep navy plate with a soft glow, faint diagonal light and a sprinkle of stars. */
+function drawBackdrop(ctx, w, h, { glow = 'rgba(245, 197, 66, 0.16)', glowAt = [0.82, 0.18], tint = '#141a33' } = {}) {
+  const bg = ctx.createLinearGradient(0, 0, w, h);
+  bg.addColorStop(0, '#0b0f1f');
+  bg.addColorStop(0.5, tint);
+  bg.addColorStop(1, '#06080f');
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, w, h);
+
+  const rad = ctx.createRadialGradient(w * glowAt[0], h * glowAt[1], 20, w * glowAt[0], h * glowAt[1], w * 0.55);
+  rad.addColorStop(0, glow);
+  rad.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = rad;
+  ctx.fillRect(0, 0, w, h);
+
+  // light rays
+  ctx.save();
+  ctx.globalAlpha = 0.05;
+  ctx.strokeStyle = '#ffffff';
+  ctx.lineWidth = 60;
+  for (let i = -2; i < 6; i++) {
     ctx.beginPath();
-    ctx.moveTo(x, 0);
-    ctx.lineTo(x, 630);
+    ctx.moveTo(i * 260, 0);
+    ctx.lineTo(i * 260 + 420, h);
     ctx.stroke();
   }
+  ctx.restore();
 
-  // Outer Glowing Border
-  ctx.strokeStyle = '#3b82f6';
-  ctx.lineWidth = 4;
-  ctx.strokeRect(20, 20, 1160, 590);
-
-  // Corner Accents
-  ctx.fillStyle = '#60a5fa';
-  ctx.fillRect(16, 16, 24, 6);
-  ctx.fillRect(16, 16, 6, 24);
-  ctx.fillRect(1160, 16, 24, 6);
-  ctx.fillRect(1178, 16, 6, 24);
-  ctx.fillRect(16, 604, 24, 6);
-  ctx.fillRect(16, 586, 6, 24);
-  ctx.fillRect(1160, 604, 24, 6);
-  ctx.fillRect(1178, 586, 6, 24);
-
-  // 3. Header
-  ctx.fillStyle = '#93c5fd';
-  ctx.font = 'bold 16px "SF Pro Display", sans-serif';
-  ctx.fillText('SUMMONERS WAR COMPANION • PASSPORT CARD', 60, 70);
-
-  // 4. Summoner Profile Info
-  const summonerName = wizard?.name || 'Summoner';
-  ctx.fillStyle = '#ffffff';
-  ctx.font = 'bold 44px "SF Pro Display", sans-serif';
-  ctx.fillText(summonerName, 60, 130);
-
-  const guildText = wizard?.guild ? `กิลด์: ${wizard.guild}` : 'ไม่มีสังกัดกิลด์';
-  const countryText = wizard?.country ? ` [${wizard.country}]` : '';
-  ctx.fillStyle = '#94a3b8';
-  ctx.font = '20px "SF Pro Display", sans-serif';
-  ctx.fillText(`เลเวล ${wizard?.level || 100} • ${guildText}${countryText}`, 60, 170);
-
-  // 5. Stat Tiles (4 Grid Boxes)
-  const tiles = [
-    { label: 'มอนสเตอร์ 6 ดาว', val: stats?.total6Star ? `${stats.total6Star} ตัว` : 'N/A', color: '#60a5fa' },
-    { label: 'มอนสเตอร์แสง-มืด (LD 5★)', val: stats?.ld5Count ? `${stats.ld5Count} ตัว` : '0 ตัว', color: '#c084fc' },
-    { label: 'ประสิทธิภาพรูนเฉลี่ย', val: stats?.avgEff ? `${stats.avgEff}%` : 'N/A', color: '#34d399' },
-    { label: 'รูน Quad SPD (≥+20)', val: stats?.quadSpdCount ? `${stats.quadSpdCount} ชิ้น` : '0 ชิ้น', color: '#38bdf8' }
-  ];
-
-  tiles.forEach((t, i) => {
-    const x = 60 + (i % 2) * 260;
-    const y = 220 + Math.floor(i / 2) * 110;
-
-    // Tile Box
-    ctx.fillStyle = 'rgba(15, 23, 42, 0.85)';
-    ctx.fillRect(x, y, 240, 90);
-    ctx.strokeStyle = '#334155';
-    ctx.lineWidth = 1.5;
-    ctx.strokeRect(x, y, 240, 90);
-
-    // Label
-    ctx.fillStyle = '#94a3b8';
-    ctx.font = 'bold 13px "SF Pro Display", sans-serif';
-    ctx.fillText(t.label, x + 16, y + 30);
-
-    // Value
-    ctx.fillStyle = t.color;
-    ctx.font = 'bold 28px "SF Pro Display", sans-serif';
-    ctx.fillText(t.val, x + 16, y + 68);
-  });
-
-  // 6. Right Panel: Trophy Showcase / LD Collection Preview
-  const rightX = 620;
-  const rightY = 100;
-  ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
-  ctx.fillRect(rightX, rightY, 520, 440);
-  ctx.strokeStyle = '#475569';
-  ctx.lineWidth = 1.5;
-  ctx.strokeRect(rightX, rightY, 520, 440);
-
-  ctx.fillStyle = '#f59e0b';
-  ctx.font = 'bold 20px "SF Pro Display", sans-serif';
-  ctx.fillText('✨ ทำเนียบมอนสเตอร์แสงมืด (LD 5★)', rightX + 24, rightY + 45);
-
-  ctx.fillStyle = '#94a3b8';
-  ctx.font = '14px "SF Pro Display", sans-serif';
-  ctx.fillText('ครอบครองทั้งหมด: ' + (topLd5.length) + ' ตัว', rightX + 24, rightY + 75);
-
-  // List up to 8 LD5 names with stars
-  topLd5.slice(0, 8).forEach((ld, idx) => {
-    const lx = rightX + 24 + (idx % 2) * 240;
-    const ly = rightY + 120 + Math.floor(idx / 2) * 70;
-
-    ctx.fillStyle = 'rgba(30, 41, 59, 0.8)';
-    ctx.fillRect(lx, ly, 225, 55);
-    ctx.strokeStyle = ld.element === 'light' ? '#fde047' : '#c084fc';
-    ctx.lineWidth = 1;
-    ctx.strokeRect(lx, ly, 225, 55);
-
-    // Element dot
-    ctx.fillStyle = ld.element === 'light' ? '#fef08a' : '#e879f9';
+  // stars (seeded so the card is stable)
+  let seed = 7;
+  const rnd = () => { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
+  for (let i = 0; i < 90; i++) {
+    const x = rnd() * w, y = rnd() * h, r = rnd() * 1.6 + 0.3;
+    ctx.fillStyle = `rgba(255, 244, 214, ${0.15 + rnd() * 0.5})`;
     ctx.beginPath();
-    ctx.arc(lx + 20, ly + 27, 8, 0, Math.PI * 2);
+    ctx.arc(x, y, r, 0, Math.PI * 2);
     ctx.fill();
-
-    // Name
-    ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 15px "SF Pro Display", sans-serif';
-    ctx.fillText(ld.name, lx + 36, ly + 28);
-
-    ctx.fillStyle = '#fbbf24';
-    ctx.font = 'bold 11px "SF Pro Display", sans-serif';
-    ctx.fillText('★★★★★ ' + (ld.element === 'light' ? 'แสง' : 'มืด'), lx + 36, ly + 45);
-  });
-
-  if (topLd5.length === 0) {
-    ctx.fillStyle = '#64748b';
-    ctx.font = 'italic 16px "SF Pro Display", sans-serif';
-    ctx.fillText('ยังไม่มีมอนสเตอร์แสง-มืด 5 ดาวแท้ในไอดีนี้', rightX + 110, rightY + 240);
   }
+}
 
-  // 7. Footer Brand
-  ctx.fillStyle = '#64748b';
-  ctx.font = '13px "SF Pro Display", sans-serif';
-  ctx.fillText('SWM Meta Platform • https://bravealltime.github.io/swm', 60, 585);
-  ctx.fillText(new Date().toLocaleDateString('th-TH'), 1020, 585);
+/** Gold bevel frame with corner ornaments, like the in-game panels. */
+function drawGoldFrame(ctx, w, h, inset = 22) {
+  const x = inset, y = inset, fw = w - inset * 2, fh = h - inset * 2;
+  ctx.save();
+  ctx.shadowColor = 'rgba(245, 197, 66, 0.35)';
+  ctx.shadowBlur = 18;
+  ctx.strokeStyle = goldGradient(ctx, x, y, x + fw, y + fh);
+  ctx.lineWidth = 3.5;
+  roundRect(ctx, x, y, fw, fh, 18);
+  ctx.stroke();
+  ctx.restore();
 
-  // 8. Trigger Download
+  ctx.strokeStyle = 'rgba(233, 196, 106, 0.35)';
+  ctx.lineWidth = 1;
+  roundRect(ctx, x + 9, y + 9, fw - 18, fh - 18, 12);
+  ctx.stroke();
+
+  // corner ornaments: diamond + short flourish
+  const corners = [[x, y, 1, 1], [x + fw, y, -1, 1], [x, y + fh, 1, -1], [x + fw, y + fh, -1, -1]];
+  for (const [cx, cy, sx, sy] of corners) {
+    ctx.save();
+    ctx.translate(cx + sx * 16, cy + sy * 16);
+    ctx.fillStyle = goldGradient(ctx, -8, -8, 8, 8);
+    ctx.beginPath();
+    ctx.moveTo(0, -9); ctx.lineTo(9, 0); ctx.lineTo(0, 9); ctx.lineTo(-9, 0); ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(255, 243, 196, 0.9)';
+    ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(sx * 12, 0); ctx.lineTo(sx * 46, 0); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0, sy * 12); ctx.lineTo(0, sy * 46); ctx.stroke();
+    ctx.restore();
+  }
+}
+
+function drawPanel(ctx, x, y, w, h, { fill = 'rgba(10, 14, 28, 0.78)', stroke = 'rgba(233, 196, 106, 0.28)', radius = 14, titleBar } = {}) {
+  ctx.save();
+  ctx.shadowColor = 'rgba(0,0,0,0.45)';
+  ctx.shadowBlur = 16;
+  ctx.shadowOffsetY = 6;
+  ctx.fillStyle = fill;
+  roundRect(ctx, x, y, w, h, radius);
+  ctx.fill();
+  ctx.restore();
+  ctx.strokeStyle = stroke;
+  ctx.lineWidth = 1.2;
+  roundRect(ctx, x, y, w, h, radius);
+  ctx.stroke();
+  if (titleBar) {
+    ctx.save();
+    roundRect(ctx, x, y, w, h, radius);
+    ctx.clip();
+    const g = ctx.createLinearGradient(x, y, x + w, y);
+    g.addColorStop(0, 'rgba(233, 196, 106, 0.22)');
+    g.addColorStop(1, 'rgba(233, 196, 106, 0.02)');
+    ctx.fillStyle = g;
+    ctx.fillRect(x, y, w, titleBar);
+    ctx.restore();
+  }
+}
+
+function drawStar(ctx, cx, cy, r, color) {
+  ctx.save();
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  for (let i = 0; i < 10; i++) {
+    const rad = i % 2 === 0 ? r : r * 0.45;
+    const a = -Math.PI / 2 + (i * Math.PI) / 5;
+    ctx[i === 0 ? 'moveTo' : 'lineTo'](cx + rad * Math.cos(a), cy + rad * Math.sin(a));
+  }
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+}
+
+function drawStars(ctx, x, y, n, r = 6, color = '#fbbf24', gap = 3) {
+  for (let i = 0; i < n; i++) drawStar(ctx, x + r + i * (r * 2 + gap), y, r, color);
+}
+
+/** Circular portrait with an element-coloured ring, glow and a small element badge. */
+async function drawPortrait(ctx, { img, url, cx, cy, r, element, ring, badge = true, label }) {
+  const image = img || (await loadImage(url));
+  const colour = ring || ELEMENT_COLOR[element] || '#e9c46a';
+  ctx.save();
+  ctx.shadowColor = colour;
+  ctx.shadowBlur = r * 0.45;
+  ctx.fillStyle = '#0a0e1a';
+  ctx.beginPath(); ctx.arc(cx, cy, r + 3, 0, Math.PI * 2); ctx.fill();
+  ctx.restore();
+
+  ctx.save();
+  ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.clip();
+  if (image) {
+    ctx.drawImage(image, cx - r, cy - r, r * 2, r * 2);
+  } else {
+    const g = ctx.createLinearGradient(cx - r, cy - r, cx + r, cy + r);
+    g.addColorStop(0, '#1e2740'); g.addColorStop(1, '#0d1222');
+    ctx.fillStyle = g;
+    ctx.fillRect(cx - r, cy - r, r * 2, r * 2);
+    text(ctx, (label || '?').slice(0, 1).toUpperCase(), cx, cy, { font: `800 ${Math.round(r * 0.9)}px ${SANS}`, color: colour, align: 'center', baseline: 'middle' });
+  }
+  ctx.restore();
+
+  // ring
+  ctx.save();
+  const rg = ctx.createLinearGradient(cx - r, cy - r, cx + r, cy + r);
+  rg.addColorStop(0, '#fff3c4'); rg.addColorStop(0.5, colour); rg.addColorStop(1, '#b8862b');
+  ctx.strokeStyle = rg;
+  ctx.lineWidth = Math.max(2.5, r * 0.07);
+  ctx.beginPath(); ctx.arc(cx, cy, r + 1, 0, Math.PI * 2); ctx.stroke();
+  ctx.restore();
+
+  if (badge && element && ELEMENT_ICON[element]) {
+    const icon = await loadImage(`${CDN}elements/${ELEMENT_ICON[element]}.png`);
+    const br = Math.max(9, r * 0.28);
+    const bx = cx + r * 0.68, by = cy + r * 0.68;
+    ctx.fillStyle = '#0a0e1a';
+    ctx.beginPath(); ctx.arc(bx, by, br + 2, 0, Math.PI * 2); ctx.fill();
+    if (icon) ctx.drawImage(icon, bx - br, by - br, br * 2, br * 2);
+    else { ctx.fillStyle = colour; ctx.beginPath(); ctx.arc(bx, by, br, 0, Math.PI * 2); ctx.fill(); }
+  }
+}
+
+function pill(ctx, x, y, label, { color = '#e9c46a', bg = 'rgba(233, 196, 106, 0.12)', font = `700 12px ${THAI}`, padX = 10, h = 24 } = {}) {
+  ctx.save();
+  ctx.font = font;
+  const w = ctx.measureText(label).width + padX * 2;
+  ctx.fillStyle = bg;
+  roundRect(ctx, x, y, w, h, h / 2);
+  ctx.fill();
+  ctx.strokeStyle = /^#/.test(color) ? `${color}66` : color;
+  ctx.lineWidth = 1;
+  roundRect(ctx, x, y, w, h, h / 2);
+  ctx.stroke();
+  text(ctx, label, x + w / 2, y + h / 2 + 1, { font, color, align: 'center', baseline: 'middle' });
+  ctx.restore();
+  return w;
+}
+
+function download(canvas, name) {
   const link = document.createElement('a');
-  link.download = `SWM_Passport_${summonerName.replace(/[^a-zA-Z0-9]/g, '_')}.png`;
+  link.download = name;
   link.href = canvas.toDataURL('image/png');
   link.click();
 }
 
-export async function exportLdShowcaseCard({ wizardName, ld5List = [] }) {
+const num = (n) => Number(n || 0).toLocaleString('en-US');
+
+/**
+ * Summoner passport (1200×675): hero portrait + identity, four stat tiles, the LD5 hall with
+ * portraits on the right and the fastest monsters along the bottom.
+ */
+export async function exportProfileCard({ wizard, stats = {}, topLd5 = [], heroes = [] }) {
+  await ensureFonts();
+  const W = 1200, H = 675;
   const canvas = document.createElement('canvas');
-  canvas.width = 1200;
-  canvas.height = 700;
+  canvas.width = W; canvas.height = H;
   const ctx = canvas.getContext('2d');
+  drawBackdrop(ctx, W, H);
+  drawGoldFrame(ctx, W, H);
 
-  // Background
-  const bgGrad = ctx.createLinearGradient(0, 0, 1200, 700);
-  bgGrad.addColorStop(0, '#100c1e');
-  bgGrad.addColorStop(0.5, '#15102a');
-  bgGrad.addColorStop(1, '#080511');
-  ctx.fillStyle = bgGrad;
-  ctx.fillRect(0, 0, 1200, 700);
+  const name = wizard?.name || 'Summoner';
+  const ld = topLd5.slice(0, 8);
+  const hero = ld[0] || heroes[0] || null;
 
-  // Outer Border
-  ctx.strokeStyle = '#c084fc';
-  ctx.lineWidth = 3;
-  ctx.strokeRect(20, 20, 1160, 660);
+  // header
+  text(ctx, 'SUMMONERS WAR • SUMMONER PASSPORT', 60, 66, { font: `700 13px ${SANS}`, color: '#e9c46a', spacing: 3 });
+  text(ctx, `SWM • swm-blue.vercel.app   ${new Date().toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric' })}`, W - 60, 66, { font: `500 12px ${THAI}`, color: 'rgba(226, 232, 240, 0.6)', align: 'right' });
+  ctx.strokeStyle = 'rgba(233, 196, 106, 0.25)';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(60, 80); ctx.lineTo(W - 60, 80); ctx.stroke();
 
-  // Header
-  ctx.fillStyle = '#fef08a';
-  ctx.font = 'bold 36px "SF Pro Display", sans-serif';
-  ctx.fillText('✨ ตู้สะสมมอนสเตอร์แสง-มืด 5 ดาวแท้ (LD 5★ Trophy Card)', 50, 75);
-
-  ctx.fillStyle = '#e2e8f0';
-  ctx.font = '18px "SF Pro Display", sans-serif';
-  ctx.fillText(`ผู้ครอบครอง: ${wizardName || 'Summoner'} • รวมทั้งสิ้น ${ld5List.length} ตัวละคร`, 50, 110);
-
-  // Monster Grid (up to 15 monsters in 5 columns x 3 rows)
-  const cols = 5;
-  const itemW = 210;
-  const itemH = 140;
-  const startX = 50;
-  const startY = 140;
-
-  ld5List.slice(0, 15).forEach((m, i) => {
-    const col = i % cols;
-    const row = Math.floor(i / cols);
-    const x = startX + col * 225;
-    const y = startY + row * 155;
-
-    const isLight = m.element === 'light';
-
-    // Card background
-    ctx.fillStyle = isLight ? 'rgba(254, 240, 138, 0.08)' : 'rgba(192, 132, 252, 0.08)';
-    ctx.fillRect(x, y, itemW, itemH);
-    ctx.strokeStyle = isLight ? 'rgba(250, 204, 21, 0.4)' : 'rgba(192, 132, 252, 0.4)';
-    ctx.lineWidth = 1.5;
-    ctx.strokeRect(x, y, itemW, itemH);
-
-    // Glowing badge
-    ctx.fillStyle = isLight ? '#facc15' : '#c084fc';
-    ctx.font = 'bold 12px "SF Pro Display", sans-serif';
-    ctx.fillText(isLight ? 'LIGHT (แสง)' : 'DARK (มืด)', x + 15, y + 30);
-
-    // Name
-    ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 18px "SF Pro Display", sans-serif';
-    ctx.fillText(m.name, x + 15, y + 65);
-
-    // Stars
-    ctx.fillStyle = '#fbbf24';
-    ctx.font = '16px "SF Pro Display", sans-serif';
-    ctx.fillText('★★★★★', x + 15, y + 95);
-
-    // Rune Info if equipped
-    if (m.spd || m.sets) {
-      ctx.fillStyle = '#94a3b8';
-      ctx.font = '11px "SF Pro Display", sans-serif';
-      const spdText = m.spd ? `⚡${m.spd}` : '';
-      const setText = m.sets?.length ? ` • ${m.sets[0]}` : '';
-      ctx.fillText(spdText + setText, x + 15, y + 120);
-    }
-  });
-
-  if (ld5List.length === 0) {
-    ctx.fillStyle = '#94a3b8';
-    ctx.font = '20px "SF Pro Display", sans-serif';
-    ctx.fillText('ไม่พบมอนสเตอร์แสง-มืด 5 ดาวแท้ที่เปิดได้จากคัมภีร์ในไอดีนี้', 400, 360);
+  // identity
+  await drawPortrait(ctx, { url: hero?.avatarUrl, cx: 132, cy: 178, r: 68, element: hero?.element, label: name });
+  text(ctx, name, 230, 168, { font: `800 46px ${SANS}`, color: '#ffffff', maxWidth: 330, shadow: 'rgba(245, 197, 66, 0.45)' });
+  const sub = [`Lv.${wizard?.level || '-'}`, wizard?.guild ? `กิลด์ ${wizard.guild}` : 'ไม่มีกิลด์', wizard?.country ? wizard.country : ''].filter(Boolean).join('  •  ');
+  text(ctx, sub, 230, 200, { font: `500 17px ${THAI}`, color: '#cbd5e1', maxWidth: 330 });
+  let px = 230;
+  for (const [label, colour] of [[`มอนสเตอร์ ${num(stats.totalUnits)}`, '#93c5fd'], [`nat5 ${num(stats.nat5Count)}`, '#fbbf24'], [`อาร์ติแฟกต์ ${num(stats.totalArtifacts)}`, '#5eead4']]) {
+    if (!/\s0$/.test(label)) px += pill(ctx, px, 218, label, { color: colour, bg: 'rgba(255,255,255,0.05)' }) + 8;
   }
 
-  // Footer
-  ctx.fillStyle = '#64748b';
-  ctx.font = '13px "SF Pro Display", sans-serif';
-  ctx.fillText('Generated by SWM • Summoners War Meta Engine', 50, 655);
-  ctx.fillText(new Date().toLocaleDateString('th-TH'), 1050, 655);
+  // stat tiles
+  const tiles = [
+    { label: 'มอนสเตอร์ 6 ดาว', val: `${num(stats.total6Star)} ตัว`, color: '#60a5fa' },
+    { label: 'แสง-มืด 5★ แท้', val: `${num(stats.ld5Count)} ตัว`, color: '#c084fc' },
+    { label: 'ประสิทธิภาพรูนเฉลี่ย', val: stats.avgEff ? `${stats.avgEff}%` : '-', color: '#34d399' },
+    { label: 'รูน SPD ≥ +20', val: `${num(stats.quadSpdCount)} ใบ`, color: '#38bdf8' },
+  ];
+  tiles.forEach((t, i) => {
+    const x = 60 + (i % 2) * 252, y = 268 + Math.floor(i / 2) * 100;
+    drawPanel(ctx, x, y, 240, 88, { radius: 12 });
+    ctx.fillStyle = t.color;
+    roundRect(ctx, x, y + 14, 4, 60, 2); ctx.fill();
+    text(ctx, t.label, x + 20, y + 32, { font: `600 13px ${THAI}`, color: '#94a3b8' });
+    text(ctx, t.val, x + 20, y + 68, { font: `800 30px ${SANS}`, color: t.color, shadow: `${t.color}55` });
+  });
 
-  // Trigger Download
-  const link = document.createElement('a');
-  link.download = `SWM_LD5_Showcase_${(wizardName || 'Player').replace(/[^a-zA-Z0-9]/g, '_')}.png`;
-  link.href = canvas.toDataURL('image/png');
-  link.click();
+  // LD5 hall
+  const hx = 600, hy = 100, hw = 540, hh = 372;
+  drawPanel(ctx, hx, hy, hw, hh, { titleBar: 52 });
+  const hallTitle = ld.length ? 'ทำเนียบมอนสเตอร์แสง-มืด 5★' : 'มอนสเตอร์เด่นในกล่อง';
+  text(ctx, `✦ ${hallTitle}`, hx + 22, hy + 33, { font: `700 19px ${THAI}`, color: '#f5d78a' });
+  const hallCount = ld.length ? topLd5.length : heroes.length;
+  pill(ctx, hx + hw - 22 - 84, hy + 14, `${hallCount} ตัว`, { color: '#f5d78a', padX: 14 });
+  const cells = ld.length ? ld : heroes.slice(0, 8);
+  const cw = 128, ch = 148, gx = (hw - cw * 4) / 5;
+  for (let i = 0; i < Math.min(cells.length, 8); i++) {
+    const m = cells[i];
+    const cx = hx + gx + (i % 4) * (cw + gx), cy = hy + 66 + Math.floor(i / 4) * (ch + 10);
+    drawPanel(ctx, cx, cy, cw, ch, { fill: 'rgba(255,255,255,0.03)', stroke: `${ELEMENT_COLOR[m.element] || '#e9c46a'}40`, radius: 12 });
+    await drawPortrait(ctx, { url: m.avatarUrl, cx: cx + cw / 2, cy: cy + 50, r: 38, element: m.element, label: m.name });
+    text(ctx, m.name, cx + cw / 2, cy + 108, { font: `700 13px ${SANS}`, color: '#ffffff', align: 'center', maxWidth: cw - 14 });
+    drawStars(ctx, cx + 12, cy + 128, 5, 4.5, '#fbbf24', 2);
+    if (m.spd) text(ctx, `SPD ${m.spd}`, cx + cw - 10, cy + 132, { font: `700 10px ${SANS}`, color: '#7dd3fc', align: 'right' });
+  }
+  if (topLd5.length > 8) text(ctx, `+ อีก ${topLd5.length - 8} ตัว`, hx + hw - 22, hy + hh - 14, { font: `600 12px ${THAI}`, color: '#94a3b8', align: 'right' });
+  if (!cells.length) text(ctx, 'ยังไม่มีมอนสเตอร์แสง-มืด 5 ดาวแท้ในไอดีนี้ — สู้ต่อไป!', hx + hw / 2, hy + hh / 2 + 10, { font: `500 16px ${THAI}`, color: '#94a3b8', align: 'center' });
+
+  // fastest monsters per speed set: Swift / Violent / Despair, top 3 each
+  const sx = 60, sy = 490, sw = W - 120, sh = 150;
+  drawPanel(ctx, sx, sy, sw, sh);
+  text(ctx, '⚡ ตัวเร็วสุดของแต่ละเซ็ต (SPD รวมรูน)', sx + 22, sy + 28, { font: `700 15px ${THAI}`, color: '#7dd3fc' });
+  const groups = [
+    { set: 'Swift', thai: 'สวิฟต์', colour: '#7dd3fc' },
+    { set: 'Violent', thai: 'ไวโอเลนต์', colour: '#f472b6' },
+    { set: 'Despair', thai: 'สตัน', colour: '#c084fc' },
+  ];
+  const gw = (sw - 44) / 3;
+  const rankColour = ['#fbbf24', '#cbd5e1', '#d97706'];
+  for (let g = 0; g < groups.length; g++) {
+    const grp = groups[g];
+    const gx0 = sx + 22 + g * gw;
+    const members = heroes.filter((m) => (m.sets || []).includes(grp.set)).sort((a, b) => b.spd - a.spd).slice(0, 3);
+    const icon = await loadImage(`${CDN}rune_icons/${grp.set.toLowerCase()}.png`);
+    if (icon) ctx.drawImage(icon, gx0, sy + 40, 22, 22);
+    text(ctx, `${grp.set} • ${grp.thai}`, gx0 + (icon ? 28 : 0), sy + 56, { font: `700 13px ${THAI}`, color: grp.colour });
+    if (g > 0) { ctx.strokeStyle = 'rgba(233, 196, 106, 0.18)'; ctx.beginPath(); ctx.moveTo(gx0 - 10, sy + 42); ctx.lineTo(gx0 - 10, sy + sh - 12); ctx.stroke(); }
+    if (!members.length) { text(ctx, 'ยังไม่มีตัวที่ใส่เซ็ตนี้', gx0, sy + 100, { font: `500 12px ${THAI}`, color: '#64748b' }); continue; }
+    for (let i = 0; i < members.length; i++) {
+      const m = members[i];
+      const ry = sy + 80 + i * 24;
+      ctx.fillStyle = rankColour[i];
+      ctx.beginPath(); ctx.arc(gx0 + 9, ry, 8, 0, Math.PI * 2); ctx.fill();
+      text(ctx, String(i + 1), gx0 + 9, ry + 1, { font: `800 10px ${SANS}`, color: '#0b0f1f', align: 'center', baseline: 'middle' });
+      await drawPortrait(ctx, { url: m.avatarUrl, cx: gx0 + 36, cy: ry, r: 11, element: m.element, label: m.name, badge: false });
+      const extra = (m.sets || []).filter((x) => x !== grp.set)[0];
+      text(ctx, m.name, gx0 + 54, ry + 4, { font: `700 12px ${SANS}`, color: '#ffffff', maxWidth: gw - 150 });
+      if (extra) {
+        ctx.save(); ctx.font = `700 12px ${SANS}`; const nw = Math.min(ctx.measureText(m.name).width, gw - 150); ctx.restore();
+        text(ctx, `+${extra}`, gx0 + 54 + nw + 6, ry + 4, { font: `500 10px ${SANS}`, color: '#94a3b8', maxWidth: 60 });
+      }
+      text(ctx, `SPD ${m.spd}`, gx0 + gw - 22, ry + 4, { font: `800 12px ${SANS}`, color: grp.colour, align: 'right' });
+    }
+  }
+
+  text(ctx, 'สร้างจากกล่องจริงของผู้เล่นด้วย SWM (Summoners War Master)', W / 2, H - 30, { font: `500 11px ${THAI}`, color: 'rgba(148, 163, 184, 0.7)', align: 'center' });
+  download(canvas, `SWM_Passport_${name.replace(/[^a-zA-Z0-9]/g, '_')}.png`);
+}
+
+/**
+ * LD5 showcase (1200×700): the hall of light & dark 5★ with portraits, stars, SPD and sets.
+ */
+export async function exportLdShowcaseCard({ wizardName, ld5List = [] }) {
+  await ensureFonts();
+  const W = 1200, H = 700;
+  const canvas = document.createElement('canvas');
+  canvas.width = W; canvas.height = H;
+  const ctx = canvas.getContext('2d');
+  drawBackdrop(ctx, W, H, { glow: 'rgba(192, 132, 252, 0.2)', glowAt: [0.5, 0.05], tint: '#171233' });
+  drawGoldFrame(ctx, W, H);
+
+  const list = ld5List.slice(0, 15);
+  const lights = ld5List.filter((m) => m.element === 'light').length;
+  const darks = ld5List.length - lights;
+
+  text(ctx, 'SUMMONERS WAR • LIGHT & DARK HALL OF FAME', 60, 66, { font: `700 13px ${SANS}`, color: '#e9c46a', spacing: 3 });
+  text(ctx, `SWM • swm-blue.vercel.app   ${new Date().toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric' })}`, W - 60, 66, { font: `500 12px ${THAI}`, color: 'rgba(226, 232, 240, 0.6)', align: 'right' });
+  ctx.strokeStyle = 'rgba(233, 196, 106, 0.25)'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(60, 80); ctx.lineTo(W - 60, 80); ctx.stroke();
+
+  await drawPortrait(ctx, { url: list[0]?.avatarUrl, cx: 104, cy: 138, r: 40, element: list[0]?.element, label: wizardName });
+  text(ctx, `ตู้สะสมแสง-มืด 5★ ของ ${wizardName || 'Summoner'}`, 162, 130, { font: `800 30px ${THAI}`, color: '#ffffff', maxWidth: 700, shadow: 'rgba(192, 132, 252, 0.5)' });
+  let px = 162;
+  px += pill(ctx, px, 146, `รวม ${ld5List.length} ตัว`, { color: '#f5d78a', padX: 14 }) + 8;
+  px += pill(ctx, px, 146, `แสง ${lights}`, { color: '#fde68a', bg: 'rgba(253, 230, 138, 0.1)', padX: 12 }) + 8;
+  pill(ctx, px, 146, `มืด ${darks}`, { color: '#c084fc', bg: 'rgba(192, 132, 252, 0.12)', padX: 12 });
+
+  const cols = 5, cw = 208, ch = 150, gx = (W - 120 - cw * cols) / (cols - 1), sy0 = 196;
+  for (let i = 0; i < list.length; i++) {
+    const m = list[i];
+    const x = 60 + (i % cols) * (cw + gx), y = sy0 + Math.floor(i / cols) * (ch + 12);
+    const colour = ELEMENT_COLOR[m.element] || '#e9c46a';
+    drawPanel(ctx, x, y, cw, ch, { fill: m.element === 'light' ? 'rgba(253, 230, 138, 0.06)' : 'rgba(192, 132, 252, 0.07)', stroke: `${colour}55`, radius: 14 });
+    await drawPortrait(ctx, { url: m.avatarUrl, cx: x + 50, cy: y + 58, r: 38, element: m.element, label: m.name });
+    text(ctx, m.name, x + 100, y + 44, { font: `700 15px ${SANS}`, color: '#ffffff', maxWidth: cw - 110 });
+    if (m.thaiName && m.thaiName !== m.name) text(ctx, m.thaiName, x + 100, y + 62, { font: `500 11px ${THAI}`, color: '#94a3b8', maxWidth: cw - 110 });
+    drawStars(ctx, x + 100, y + 80, 5, 5, '#fbbf24', 2.5);
+    text(ctx, m.element === 'light' ? 'LIGHT • แสง' : 'DARK • มืด', x + 100, y + 104, { font: `700 10px ${THAI}`, color: colour, spacing: 1 });
+    const meta = [m.spd ? `SPD ${m.spd}` : '', m.sets?.length ? m.sets.slice(0, 2).join('/') : ''].filter(Boolean).join('  •  ');
+    if (meta) text(ctx, meta, x + 14, y + ch - 14, { font: `600 11px ${SANS}`, color: '#7dd3fc', maxWidth: cw - 28 });
+  }
+  if (!list.length) text(ctx, 'ยังไม่มีมอนสเตอร์แสง-มืด 5 ดาวแท้ในไอดีนี้', W / 2, 380, { font: `500 18px ${THAI}`, color: '#94a3b8', align: 'center' });
+  if (ld5List.length > 15) text(ctx, `+ อีก ${ld5List.length - 15} ตัว`, W - 60, H - 46, { font: `600 12px ${THAI}`, color: '#94a3b8', align: 'right' });
+
+  text(ctx, 'สร้างจากกล่องจริงของผู้เล่นด้วย SWM (Summoners War Master)', W / 2, H - 30, { font: `500 11px ${THAI}`, color: 'rgba(148, 163, 184, 0.7)', align: 'center' });
+  download(canvas, `SWM_LD5_Showcase_${(wizardName || 'Player').replace(/[^a-zA-Z0-9]/g, '_')}.png`);
 }
 
 /**

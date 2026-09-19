@@ -211,7 +211,7 @@ export default function DashboardView({ onNavigate }) {
       const isLd = ele === 'light' || ele === 'dark';
       const isNat5 = (info?.stars === 5 || info?.natural_stars === 5 || u.naturalStars === 5) && !info?.name?.includes('(Homunculus)');
       if (isNat5 && isLd && !isNonSummonableLd5(u) && (!info || !isNonSummonableLd5(info))) {
-        ld5List.push({ name: u.name || info?.name || 'LD 5★', element: ele, spd: u.spd, sets: u.sets });
+        ld5List.push({ name: u.name || info?.name || 'LD 5★', element: ele, spd: u.spd, sets: u.sets, avatarUrl: u.avatarUrl || info?.avatarUrl || info?.imageUrl || '' });
       }
       if (u.runeEff) {
         sumEff += Number(u.runeEff);
@@ -220,6 +220,12 @@ export default function DashboardView({ onNavigate }) {
     });
     const avgRuneEff = countEff > 0 ? (sumEff / countEff).toFixed(1) : '85.4';
     const topFastest = [...units].sort((a, b) => b.spd - a.spd).slice(0, 4);
+    // portraits for the share card: fastest monsters first, one entry per monster name
+    const seenNames = new Set();
+    const cardHeroes = [...units].sort((a, b) => b.spd - a.spd).map((u) => {
+      const info = getMonsterCatalogInfo(u.masterId);
+      return { name: u.name || info?.name || '', element: (u.element || info?.element || '').toLowerCase(), spd: u.spd, sets: u.sets || [], avatarUrl: u.avatarUrl || info?.avatarUrl || info?.imageUrl || '' };
+    }).filter((m) => m.name && !seenNames.has(m.name) && seenNames.add(m.name));
 
     const runes = userBox.runes || [];
     const quadSpdCount = runes.filter(r => (r.subs || []).some(s => s[0] === 8 && s[1] >= 20)).length;
@@ -238,6 +244,7 @@ export default function DashboardView({ onNavigate }) {
       nat5Count,
       ld5Count,
       pureLd5Count,
+      cardHeroes,
       freeLd5Count,
       ld5List,
       quadSpdCount,
@@ -477,8 +484,12 @@ export default function DashboardView({ onNavigate }) {
                       ld5Count: userProfileStats.pureLd5Count,
                       avgEff: userProfileStats.avgRuneEff,
                       quadSpdCount: userProfileStats.quadSpdCount,
+                      totalUnits: userProfileStats.totalUnits,
+                      nat5Count: userProfileStats.nat5Count,
+                      totalArtifacts: userProfileStats.totalArtifacts,
                     },
                     topLd5: userProfileStats.ld5List || [],
+                    heroes: userProfileStats.cardHeroes || [],
                   });
                 }}
                 className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white text-xs font-bold shadow-lg shadow-cyan-600/20 transition-all cursor-pointer"
