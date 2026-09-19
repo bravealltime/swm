@@ -78,7 +78,8 @@ api/                 Vercel serverless (ESM) — dev server มี middleware �
   _lib/advisor.js    prompt ที่ grounded ด้วยสกิลจริง (mdc / draft / chat)
   _lib/admin.js      requireAdmin, Supabase REST (service role), settings, ai_logs, datasetReport, GitHub
 plugins/aegislink/   ปลั๊กอิน SWEX (CommonJS ไฟล์เดียว) — หน้า /aegislink import ด้วย ?raw ให้ดาวน์โหลด
-scripts/             ตัวดึง/สร้างข้อมูล (ดูข้อ 5)
+scripts/             ตัวดึง/สร้างข้อมูล 25 ตัวที่ใช้จริง — แผนที่ทั้ง pipeline อยู่ใน scripts/README.md (ดูข้อ 5)
+scripts/_archive/    สคริปต์แกะโค้ด/ลอง API ครั้งเดียว 90 ตัว ไม่ได้ดูแลต่อ
 supabase/admin_schema.sql  ตารางหลังบ้าน (รันแล้วในโปรเจกต์ปัจจุบัน)
 .github/workflows/update-swrt-data.yml  งานรายคืน
 ```
