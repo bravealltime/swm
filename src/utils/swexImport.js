@@ -232,11 +232,13 @@ export function parseSwexExport(json) {
   if (!units) throw new Error('ไม่พบ unit_list — ต้องเป็นไฟล์ที่ export จาก SWEX (เมนู Profile → Export)');
 
   const w = json.wizard_info || {};
+  const repUnitId = Number(w.rep_unit_id) || 0;
   const wizard = {
     name: w.wizard_name || 'Summoner',
     level: w.wizard_level || 0,
     country: (w.wizard_last_country || '').toUpperCase(),
     guild: json.guild?.guild_info?.name || '',
+    repUnitId,
     // keep only the last 4 digits so the stored profile cannot be used to look the account up
     idHint: w.wizard_id ? String(w.wizard_id).slice(-4) : '',
   };
@@ -293,6 +295,19 @@ export function parseSwexExport(json) {
   // Unequipped artifacts
   for (const a of Array.isArray(json.artifacts) ? json.artifacts : []) {
     if (a) artifacts.push(compactArtifact(a, 0));
+  }
+
+  const repUnit = list.find((u) => u.uid === repUnitId) || null;
+  if (repUnit) {
+    wizard.repMonster = {
+      masterId: repUnit.masterId,
+      name: repUnit.name,
+      thaiName: repUnit.thaiName,
+      avatarUrl: repUnit.avatarUrl,
+      element: repUnit.element,
+      stars: repUnit.stars,
+      spd: repUnit.spd,
+    };
   }
 
   return {
@@ -507,6 +522,14 @@ export function getDemoGuardianBox() {
       country: 'TH',
       guild: 'Legendary TH',
       idHint: '8899',
+      repMonster: {
+        masterId: 21214,
+        name: enrichedUnits[0]?.name || 'Giana',
+        thaiName: enrichedUnits[0]?.thaiName || 'เกียน่า (Oracle มืด)',
+        avatarUrl: enrichedUnits[0]?.avatarUrl || '',
+        element: enrichedUnits[0]?.element || 'dark',
+        stars: 6,
+      },
     },
     units: enrichedUnits,
     runes: [

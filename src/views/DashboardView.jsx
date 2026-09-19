@@ -30,7 +30,8 @@ import {
   UserCheck,
   Upload,
   RefreshCw,
-  Share2
+  Share2,
+  Camera,
 } from 'lucide-react';
 import MonsterAvatar from '../components/MonsterAvatar';
 import { PROMO_CODES } from '../data/promoCodes';
@@ -59,6 +60,46 @@ export default function DashboardView({ onNavigate }) {
   const [selectedServer, setSelectedServer] = useState('asia');
   const [userBox, setUserBox] = useState(() => loadBox());
   const [uploadingProfile, setUploadingProfile] = useState(false);
+  const [customAvatar, setCustomAvatar] = useState(() => {
+    try {
+      const saved = localStorage.getItem('swm:profile-avatar');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+  const [isAvatarPickerOpen, setIsAvatarPickerOpen] = useState(false);
+  const [avatarSearch, setAvatarSearch] = useState('');
+  const [avatarTab, setAvatarTab] = useState('all');
+
+  const handleSelectAvatar = (monster) => {
+    if (!monster) return;
+    const payload = {
+      masterId: monster.masterId,
+      name: monster.name,
+      thaiName: monster.thaiName || monster.name,
+      avatarUrl: monster.avatarUrl,
+      element: monster.element,
+      stars: monster.stars || 6,
+    };
+    setCustomAvatar(payload);
+    try {
+      localStorage.setItem('swm:profile-avatar', JSON.stringify(payload));
+    } catch (e) {
+      console.warn(e);
+    }
+    setIsAvatarPickerOpen(false);
+  };
+
+  const handleResetAvatar = () => {
+    setCustomAvatar(null);
+    try {
+      localStorage.removeItem('swm:profile-avatar');
+    } catch (e) {
+      console.warn(e);
+    }
+    setIsAvatarPickerOpen(false);
+  };
 
   useEffect(() => {
     loadUserBoxFromDB().then((b) => {
@@ -234,10 +275,41 @@ export default function DashboardView({ onNavigate }) {
     const runes = userBox.runes || [];
     const quadSpdCount = runes.filter(r => (r.subs || []).some(s => s[0] === 8 && s[1] >= 20)).length;
 
+    // Select active profile avatar:
+    // 1. User's manually chosen avatar from localStorage
+    // 2. Rep Monster from SWEX (wizard.repMonster)
+    // 3. User's #1 LD 5★ (pureLd5)
+    // 4. User's fastest monster (fastestUnit)
+    // 5. First unit in box
+    const activeAvatar = customAvatar
+      || (userBox.wizard?.repMonster?.name ? userBox.wizard.repMonster : null)
+      || (ld5List.length > 0 ? ld5List[0] : null)
+      || (fastestUnit ? {
+          masterId: fastestUnit.masterId,
+          name: fastestUnit.name,
+          thaiName: fastestUnit.thaiName,
+          avatarUrl: fastestUnit.avatarUrl,
+          element: fastestUnit.element,
+          spd: fastestUnit.spd,
+          stars: fastestUnit.stars || 6,
+        } : null)
+      || (units[0] ? {
+          masterId: units[0].masterId,
+          name: units[0].name,
+          thaiName: units[0].thaiName,
+          avatarUrl: units[0].avatarUrl,
+          element: units[0].element,
+          stars: units[0].stars || 6,
+        } : null);
+
+    const nat5Pct = ((nat5Count / 455) * 100).toFixed(1);
+
     return {
       name: userBox.wizard?.name || userBox.wizard?.wizard_name || 'ผู้เรียกมอนสเตอร์ของคุณ',
-      server: 'Asia Server',
-      level: userBox.wizard?.level || userBox.wizard?.wizard_level || 50,
+      server: userBox.wizard?.country === 'TH' ? 'Asia Server (TH)' : (userBox.wizard?.server || 'Asia Server'),
+      guild: userBox.wizard?.guild || '',
+      level: userBox.wizard?.level || userBox.wizard?.wizard_level || 100,
+      activeAvatar,
       totalUnits,
       sixStarUnits,
       fastestSpd: fastestUnit ? fastestUnit.spd : 0,
@@ -246,6 +318,7 @@ export default function DashboardView({ onNavigate }) {
       totalArtifacts: artifacts.length,
       topFastest,
       nat5Count,
+      nat5Pct,
       ld5Count,
       pureLd5Count,
       cardHeroes,
@@ -254,7 +327,39 @@ export default function DashboardView({ onNavigate }) {
       quadSpdCount,
       isDemo: !!userBox.isDemo,
     };
-  }, [userBox]);
+  }, [userBox, customAvatar]);
+
+  const availableAvatarUnits = useMemo(() => {
+    if (!userBox?.units) return [];
+    const q = avatarSearch.toLowerCase().trim();
+    let list = userBox.units;
+
+    if (avatarTab === 'ld5') {
+      list = list.filter((u) => {
+        const ele = (u.element || '').toLowerCase();
+        return (ele === 'light' || ele === 'dark') && (u.naturalStars === 5 || u.stars === 5);
+      });
+    } else if (avatarTab === 'fast') {
+      list = [...list].sort((a, b) => b.spd - a.spd).slice(0, 30);
+    } else if (avatarTab === 'six_star') {
+      list = list.filter((u) => u.stars === 6);
+    }
+
+    if (q) {
+      list = list.filter((u) =>
+        (u.name && u.name.toLowerCase().includes(q)) ||
+        (u.thaiName && u.thaiName.toLowerCase().includes(q))
+      );
+    }
+
+    const seen = new Set();
+    return list.filter((u) => {
+      const key = `${u.name}-${u.element}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    }).slice(0, 72);
+  }, [userBox, avatarSearch, avatarTab]);
 
   return (
     <div className="space-y-8 max-w-[1780px] 2xl:max-w-[1880px] mx-auto pb-16 animate-in fade-in duration-300">
@@ -389,147 +494,306 @@ export default function DashboardView({ onNavigate }) {
       </section>
 
       {/* 2. MY SUMMONER PROFILE PASSPORT (โปรไฟล์เราเอง เข้าดูง่ายๆ) */}
-      <section className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-r from-[#0c1626] via-[#080d16] to-[#0c1220] p-5 sm:p-7 shadow-2xl backdrop-blur-xl">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+      <section className="relative overflow-hidden rounded-3xl border border-cyan-500/25 bg-gradient-to-br from-[#0c172a] via-[#080e1b] to-[#040710] p-5 sm:p-7 shadow-[0_20px_50px_rgba(0,0,0,0.6)] backdrop-blur-xl">
+        {/* Ambient Glow Orbs */}
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 right-0 w-80 h-80 bg-purple-600/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -top-12 left-10 w-72 h-72 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
 
         {userProfileStats ? (
-          <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-            {/* Left: User Avatar & Identity */}
-            <div className="flex items-start sm:items-center gap-4">
-              <div className="relative">
-                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-tr from-cyan-500 via-blue-600 to-indigo-600 p-0.5 shadow-xl flex items-center justify-center">
-                  <div className="w-full h-full rounded-2xl bg-[#080d16] flex items-center justify-center text-2xl font-black text-cyan-300">
-                    {userProfileStats.name.slice(0, 2).toUpperCase()}
+          <div className="relative z-10 space-y-6">
+            {/* Top Row: Identity & Hero Actions */}
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-white/[0.07]">
+              {/* Left: Real Avatar & Details */}
+              <div className="flex items-center gap-4 sm:gap-5">
+                {/* Clickable Avatar with Element Ring Glow */}
+                <div
+                  onClick={() => setIsAvatarPickerOpen(true)}
+                  className="relative group cursor-pointer shrink-0"
+                  title="คลิกเพื่อเลือกรูปมอนสเตอร์ประจำโปรไฟล์"
+                >
+                  <div className={`p-1 rounded-2xl transition-all duration-300 group-hover:scale-105 ${
+                    userProfileStats.activeAvatar?.element === 'dark'
+                      ? 'bg-gradient-to-tr from-purple-600 via-fuchsia-500 to-indigo-600 shadow-[0_0_25px_rgba(168,85,247,0.35)]'
+                      : userProfileStats.activeAvatar?.element === 'light'
+                      ? 'bg-gradient-to-tr from-amber-400 via-yellow-300 to-orange-400 shadow-[0_0_25px_rgba(251,191,36,0.35)]'
+                      : userProfileStats.activeAvatar?.element === 'water'
+                      ? 'bg-gradient-to-tr from-cyan-400 via-blue-500 to-sky-400 shadow-[0_0_25px_rgba(34,211,238,0.35)]'
+                      : userProfileStats.activeAvatar?.element === 'wind'
+                      ? 'bg-gradient-to-tr from-emerald-400 via-teal-500 to-green-400 shadow-[0_0_25px_rgba(52,211,153,0.35)]'
+                      : 'bg-gradient-to-tr from-rose-500 via-orange-500 to-red-500 shadow-[0_0_25px_rgba(244,63,94,0.35)]'
+                  }`}>
+                    <div className="relative rounded-2xl overflow-hidden bg-[#0a0f1d] flex items-center justify-center">
+                      <MonsterAvatar
+                        monster={userProfileStats.activeAvatar}
+                        size="lg"
+                        showStars={false}
+                      />
+                      {/* Hover Overlay with Camera Icon */}
+                      <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-1 text-white">
+                        <Camera className="w-5 h-5 text-amber-300" />
+                        <span className="text-[10px] font-bold">เปลี่ยนรูป</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Level 100 Badge */}
+                  <span className="absolute -bottom-1 -right-1 px-2 py-0.5 rounded-full bg-emerald-500 text-black text-[10px] font-black shadow-lg ring-2 ring-[#0a0f1d]">
+                    Lv.{userProfileStats.level}
+                  </span>
+                </div>
+
+                {/* Name & Badges */}
+                <div className="space-y-1.5 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 uppercase tracking-wide">
+                      👑 โปรไฟล์ของฉัน (My Profile)
+                    </span>
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-800 text-slate-300 border border-slate-700">
+                      {userProfileStats.server}
+                    </span>
+                    {userProfileStats.guild && (
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                        🛡️ {userProfileStats.guild}
+                      </span>
+                    )}
+                    {userProfileStats.isDemo && (
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                        ⭐ G3 Demo
+                      </span>
+                    )}
+                  </div>
+
+                  <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-2 truncate">
+                    <span>{userProfileStats.name}</span>
+                    <Sparkles className="w-5 h-5 text-amber-400 shrink-0" />
+                  </h2>
+
+                  <div className="flex items-center gap-2 text-xs text-slate-300 flex-wrap">
+                    <span className="font-semibold text-cyan-300">
+                      ตัวแทน: {userProfileStats.activeAvatar?.thaiName || userProfileStats.activeAvatar?.name || 'มอนสเตอร์'}
+                    </span>
+                    <span className="text-slate-500">•</span>
+                    <span className="text-slate-400">
+                      มอนสเตอร์ {userProfileStats.totalUnits} ตัว ({userProfileStats.sixStarUnits} ตัว 6★)
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setIsAvatarPickerOpen(true)}
+                      className="ml-1 text-[11px] text-amber-400 hover:text-amber-300 underline font-medium cursor-pointer inline-flex items-center gap-0.5"
+                    >
+                      <Camera className="w-3 h-3" />
+                      เปลี่ยนรูปตัวแทน
+                    </button>
                   </div>
                 </div>
-                <span className="absolute -bottom-1 -right-1 px-1.5 py-0.5 rounded-full bg-emerald-500 text-black text-[10px] font-black shadow">
-                  Lv.{userProfileStats.level}
-                </span>
               </div>
 
-              <div className="space-y-1">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 uppercase">
-                    โปรไฟล์ของฉัน (My Profile)
-                  </span>
-                  {userProfileStats.isDemo && (
-                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
-                      G3 Demo Account
-                    </span>
-                  )}
-                  <span className="text-xs text-slate-400 font-medium">
-                    {userProfileStats.server}
-                  </span>
-                </div>
-                <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center gap-2">
-                  <span>{userProfileStats.name}</span>
-                </h2>
-                <p className="text-xs text-slate-400">
-                  สถิติมอนสเตอร์ รูน อาร์ติแฟกต์ และตู้สะสมของคุณซิงก์เรียบร้อยแล้ว
-                </p>
-              </div>
-            </div>
-
-            {/* Middle: 5 Quick Stat Badges */}
-            <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
-              <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/5 text-center min-w-[95px]">
-                <div className="text-[10px] text-slate-400 font-bold uppercase">มอนสเตอร์</div>
-                <div className="text-lg font-black text-white mt-0.5">{userProfileStats.totalUnits} <span className="text-xs text-cyan-400">ตัว</span></div>
-                <div className="text-[10px] text-emerald-400 font-semibold">{userProfileStats.sixStarUnits} ตัว 6★</div>
-              </div>
-
-              <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/5 text-center min-w-[95px]">
-                <div className="text-[10px] text-slate-400 font-bold uppercase">สปีดสูงสุด</div>
-                <div className="text-lg font-black text-cyan-300 mt-0.5">{userProfileStats.fastestSpd} <span className="text-xs text-slate-400">SPD</span></div>
-                <div className="text-[10px] text-slate-400 truncate max-w-[85px] mx-auto">{userProfileStats.fastestName}</div>
-              </div>
-
-              <div className="p-3 rounded-2xl bg-white/[0.03] border border-amber-500/20 bg-amber-500/[0.03] text-center min-w-[95px]">
-                <div className="text-[10px] text-amber-300 font-bold uppercase flex items-center justify-center gap-1">
-                  <Trophy className="w-3 h-3 text-amber-400" /> ตู้สะสม Nat 5
-                </div>
-                <div className="text-lg font-black text-amber-300 mt-0.5">{userProfileStats.nat5Count} <span className="text-xs text-slate-400">/ 455</span></div>
-                <div
-                  className="text-[10px] text-yellow-400 font-semibold truncate"
-                  title={
-                    userProfileStats.freeLd5Count > 0
-                      ? `เปิดได้เอง ${userProfileStats.pureLd5Count} ตัว + ฟิวชั่น/แจกฟรี ${userProfileStats.freeLd5Count} ตัว`
-                      : 'มอนสเตอร์ LD 5★ เปิดได้เองจากคัมภีร์'
-                  }
+              {/* Right: Primary Hero Actions */}
+              <div className="flex flex-wrap sm:flex-nowrap items-center gap-2.5 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => {
+                    exportProfileCard({
+                      wizard: {
+                        ...userBox.wizard,
+                        repMonster: userProfileStats.activeAvatar,
+                      },
+                      stats: {
+                        total6Star: userProfileStats.sixStarUnits,
+                        ld5Count: userProfileStats.pureLd5Count,
+                        avgEff: userProfileStats.avgRuneEff,
+                        quadSpdCount: userProfileStats.quadSpdCount,
+                        totalUnits: userProfileStats.totalUnits,
+                        nat5Count: userProfileStats.nat5Count,
+                        totalArtifacts: userProfileStats.totalArtifacts,
+                      },
+                      topLd5: userProfileStats.ld5List || [],
+                      heroes: [userProfileStats.activeAvatar, ...(userProfileStats.cardHeroes || [])].filter(Boolean),
+                    });
+                  }}
+                  className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 hover:from-cyan-400 hover:via-blue-500 hover:to-indigo-500 text-white text-xs font-black shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all cursor-pointer"
+                  title="บันทึกรูป Passport Card เป็นไฟล์ PNG (มีหน้าต่างดูตัวอย่างก่อนดาวน์โหลด)"
                 >
-                  {userProfileStats.pureLd5Count} ตัว LD กาชา
+                  <Share2 className="w-4 h-4" />
+                  <span>บันทึกการ์ดโปรไฟล์ (PNG)</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => onNavigate('my-box')}
+                  className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 text-white text-xs font-bold transition-all cursor-pointer"
+                >
+                  <Package className="w-4 h-4 text-cyan-400" />
+                  <span>เปิดดู My Box</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Middle Row: 5 Command Metric Cards */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+              {/* Card 1: Nat 5 & LD5 Hall */}
+              <div
+                onClick={() => onNavigate('my-box', { tab: 'pokedex' })}
+                className="p-3.5 rounded-2xl bg-gradient-to-b from-amber-500/[0.08] to-amber-500/[0.02] border border-amber-500/25 hover:border-amber-500/40 transition-all cursor-pointer group flex flex-col justify-between"
+              >
+                <div>
+                  <div className="text-[10px] text-amber-300 font-bold uppercase flex items-center justify-between">
+                    <span className="flex items-center gap-1">
+                      <Trophy className="w-3 h-3 text-amber-400" /> ตู้สะสม Nat 5
+                    </span>
+                    <span className="text-[10px] font-black text-amber-400">{userProfileStats.nat5Pct}%</span>
+                  </div>
+                  <div className="text-xl font-black text-white mt-1">
+                    {userProfileStats.nat5Count} <span className="text-xs text-slate-400 font-normal">/ 455</span>
+                  </div>
+                  {/* Progress bar */}
+                  <div className="w-full h-1.5 bg-black/40 rounded-full overflow-hidden mt-2">
+                    <div
+                      className="h-full bg-gradient-to-r from-amber-500 to-yellow-300 rounded-full"
+                      style={{ width: `${Math.min(userProfileStats.nat5Pct, 100)}%` }}
+                    />
+                  </div>
+                </div>
+                <div className="text-[10px] text-amber-300/90 font-semibold mt-2.5 pt-2 border-t border-amber-500/15 flex items-center justify-between">
+                  <span>✨ {userProfileStats.pureLd5Count} ตัว LD กาชา</span>
                   {userProfileStats.freeLd5Count > 0 && (
-                    <span className="text-slate-400 font-normal"> (+{userProfileStats.freeLd5Count})</span>
+                    <span className="text-slate-400 font-normal">(+{userProfileStats.freeLd5Count} ฟรี)</span>
                   )}
                 </div>
               </div>
 
-              <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/5 text-center min-w-[95px]">
-                <div className="text-[10px] text-slate-400 font-bold uppercase">รูนเฉลี่ย</div>
-                <div className="text-lg font-black text-purple-300 mt-0.5">{userProfileStats.avgRuneEff}%</div>
-                <div className="text-[10px] text-slate-400">Efficiency</div>
+              {/* Card 2: Fastest SPD */}
+              <div
+                onClick={() => onNavigate('my-box', { tab: 'speed' })}
+                className="p-3.5 rounded-2xl bg-gradient-to-b from-cyan-500/[0.08] to-cyan-500/[0.02] border border-cyan-500/20 hover:border-cyan-500/40 transition-all cursor-pointer group flex flex-col justify-between"
+              >
+                <div>
+                  <div className="text-[10px] text-cyan-300 font-bold uppercase flex items-center gap-1">
+                    <Zap className="w-3 h-3 text-cyan-400" /> สปีดสูงสุด
+                  </div>
+                  <div className="text-xl font-black text-cyan-300 mt-1 flex items-baseline gap-1">
+                    {userProfileStats.fastestSpd} <span className="text-xs text-slate-400 font-bold">SPD</span>
+                  </div>
+                </div>
+                <div className="mt-2.5 pt-2 border-t border-cyan-500/15 flex items-center justify-between">
+                  <span className="text-[11px] font-bold text-white truncate max-w-[100px]">
+                    {userProfileStats.fastestName || 'ไม่มีข้อมูล'}
+                  </span>
+                  <span className="text-[10px] text-cyan-400 font-medium">เร็วสุดในไอดี</span>
+                </div>
               </div>
 
-              <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/5 text-center min-w-[95px]">
-                <div className="text-[10px] text-slate-400 font-bold uppercase">อาร์ติแฟกต์</div>
-                <div className="text-lg font-black text-teal-300 mt-0.5">{userProfileStats.totalArtifacts} <span className="text-xs text-slate-400">ชิ้น</span></div>
-                <div className="text-[10px] text-teal-400 font-semibold">ในไอดี</div>
+              {/* Card 3: Total Units */}
+              <div
+                onClick={() => onNavigate('my-box')}
+                className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/[0.07] hover:border-white/20 transition-all cursor-pointer group flex flex-col justify-between"
+              >
+                <div>
+                  <div className="text-[10px] text-slate-400 font-bold uppercase flex items-center gap-1">
+                    <Package className="w-3 h-3 text-blue-400" /> มอนสเตอร์ทั้งหมด
+                  </div>
+                  <div className="text-xl font-black text-white mt-1">
+                    {userProfileStats.totalUnits} <span className="text-xs text-slate-400 font-normal">ตัว</span>
+                  </div>
+                </div>
+                <div className="text-[10px] text-emerald-400 font-semibold mt-2.5 pt-2 border-t border-white/[0.05] flex items-center gap-1">
+                  <Star className="w-3 h-3 text-emerald-400 fill-emerald-400" />
+                  <span>{userProfileStats.sixStarUnits} ตัว 6★ พร้อมรบ</span>
+                </div>
+              </div>
+
+              {/* Card 4: Rune Efficiency */}
+              <div
+                onClick={() => onNavigate('my-box', { tab: 'runes' })}
+                className="p-3.5 rounded-2xl bg-gradient-to-b from-purple-500/[0.08] to-purple-500/[0.02] border border-purple-500/20 hover:border-purple-500/40 transition-all cursor-pointer group flex flex-col justify-between"
+              >
+                <div>
+                  <div className="text-[10px] text-purple-300 font-bold uppercase flex items-center gap-1">
+                    <Sliders className="w-3 h-3 text-purple-400" /> คุณภาพรูนเฉลี่ย
+                  </div>
+                  <div className="text-xl font-black text-purple-200 mt-1">
+                    {userProfileStats.avgRuneEff}%
+                  </div>
+                </div>
+                <div className="text-[10px] text-purple-300 font-semibold mt-2.5 pt-2 border-t border-purple-500/15 flex items-center justify-between">
+                  <span>⚡ Quad SPD:</span>
+                  <span className="font-bold text-white">{userProfileStats.quadSpdCount} เม็ด</span>
+                </div>
+              </div>
+
+              {/* Card 5: Artifacts */}
+              <div
+                onClick={() => onNavigate('my-box', { subItem: 'artifacts' })}
+                className="col-span-2 sm:col-span-1 p-3.5 rounded-2xl bg-gradient-to-b from-teal-500/[0.08] to-teal-500/[0.02] border border-teal-500/20 hover:border-teal-500/40 transition-all cursor-pointer group flex flex-col justify-between"
+              >
+                <div>
+                  <div className="text-[10px] text-teal-300 font-bold uppercase flex items-center gap-1">
+                    <Layers className="w-3 h-3 text-teal-400" /> อาร์ติแฟกต์
+                  </div>
+                  <div className="text-xl font-black text-teal-200 mt-1">
+                    {userProfileStats.totalArtifacts} <span className="text-xs text-slate-400 font-normal">ชิ้น</span>
+                  </div>
+                </div>
+                <div className="text-[10px] text-teal-300 font-semibold mt-2.5 pt-2 border-t border-teal-500/15 flex items-center justify-between">
+                  <span>ในไอดี</span>
+                  <span className="text-slate-400 text-[10px]">พร้อมฟาร์ม</span>
+                </div>
               </div>
             </div>
 
-            {/* Right: Quick Navigation Hub */}
-            <div className="flex flex-wrap lg:flex-col gap-2 shrink-0">
-              <button
-                onClick={() => {
-                  exportProfileCard({
-                    wizard: userBox.wizard,
-                    stats: {
-                      total6Star: userProfileStats.sixStarUnits,
-                      ld5Count: userProfileStats.pureLd5Count,
-                      avgEff: userProfileStats.avgRuneEff,
-                      quadSpdCount: userProfileStats.quadSpdCount,
-                      totalUnits: userProfileStats.totalUnits,
-                      nat5Count: userProfileStats.nat5Count,
-                      totalArtifacts: userProfileStats.totalArtifacts,
-                    },
-                    topLd5: userProfileStats.ld5List || [],
-                    heroes: userProfileStats.cardHeroes || [],
-                  });
-                }}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white text-xs font-bold shadow-lg shadow-cyan-600/20 transition-all cursor-pointer"
-                title="บันทึกรูป Passport Card เป็นไฟล์ PNG สำหรับแชร์โซเชียล"
-              >
-                <Share2 className="w-4 h-4" />
-                <span>บันทึกการ์ดโปรไฟล์ (PNG)</span>
-              </button>
-              <button
-                onClick={() => onNavigate('my-box')}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold shadow-lg shadow-blue-600/20 transition-all cursor-pointer"
-              >
-                <Package className="w-4 h-4" />
-                <span>เปิดดู My Box</span>
-              </button>
-              <button
-                onClick={() => onNavigate('my-box', { tab: 'pokedex' })}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-amber-300 text-xs font-bold transition-all cursor-pointer shadow-sm"
-              >
-                <Trophy className="w-4 h-4 text-amber-400" />
-                <span>ตู้สะสม Nat 5 & LD5</span>
-              </button>
-              <button
-                onClick={() => onNavigate('my-box', { subItem: 'artifacts' })}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-teal-500/10 hover:bg-teal-500/20 border border-teal-500/30 text-teal-300 text-xs font-bold transition-all cursor-pointer"
-              >
-                <Layers className="w-4 h-4 text-teal-400" />
-                <span>ค้นหาอาร์ติแฟกต์</span>
-              </button>
-              <button
-                onClick={() => onNavigate('guild-war-room')}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/30 text-indigo-300 text-xs font-bold transition-all cursor-pointer"
-              >
-                <Shield className="w-4 h-4 text-indigo-400" />
-                <span>ห้องบัญชาการกิลด์</span>
-              </button>
+            {/* Bottom Row: Quick Navigation Ribbon */}
+            <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-white/[0.05]">
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => onNavigate('my-box', { tab: 'pokedex' })}
+                  className="px-3 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/25 text-amber-300 text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5"
+                >
+                  <Trophy className="w-3.5 h-3.5 text-amber-400" />
+                  <span>ตู้สะสม Nat 5 & LD5</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => onNavigate('my-box', { subItem: 'artifacts' })}
+                  className="px-3 py-1.5 rounded-xl bg-teal-500/10 hover:bg-teal-500/20 border border-teal-500/25 text-teal-300 text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5"
+                >
+                  <Layers className="w-3.5 h-3.5 text-teal-400" />
+                  <span>ค้นหาอาร์ติแฟกต์</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => onNavigate('guild-war-room')}
+                  className="px-3 py-1.5 rounded-xl bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/25 text-indigo-300 text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5"
+                >
+                  <Shield className="w-3.5 h-3.5 text-indigo-400" />
+                  <span>ห้องบัญชาการกิลด์</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => onNavigate('arena')}
+                  className="px-3 py-1.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/25 text-rose-300 text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5"
+                >
+                  <Swords className="w-3.5 h-3.5 text-rose-400" />
+                  <span>ค้นหาทีมเจาะ Arena</span>
+                </button>
+              </div>
+
+              {/* Upload SWEX quick update button */}
+              <label className="px-3 py-1.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-slate-300 hover:text-white text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5">
+                <Upload className="w-3.5 h-3.5 text-slate-400" />
+                <span>{uploadingProfile ? 'กำลังอัปเดต...' : 'อัปเดตไฟล์ SWEX'}</span>
+                <input
+                  type="file"
+                  accept=".json"
+                  className="hidden"
+                  onChange={handleQuickUpload}
+                  disabled={uploadingProfile}
+                />
+              </label>
             </div>
           </div>
         ) : (
@@ -1063,6 +1327,144 @@ export default function DashboardView({ onNavigate }) {
           <p className="text-[11px] text-amber-300">⚠ {guildBoard.error}</p>
         )}
       </section>
+
+      {/* Avatar Picker Modal */}
+      {isAvatarPickerOpen && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-200"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setIsAvatarPickerOpen(false);
+          }}
+        >
+          <div className="relative w-full max-w-2xl max-h-[90vh] flex flex-col bg-[#0b1120] border border-slate-700/80 rounded-2xl shadow-2xl overflow-hidden">
+            {/* Header */}
+            <div className="px-5 py-4 bg-slate-900/90 border-b border-slate-800 flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="p-2 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-400">
+                  <Camera className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-white">เลือกรูปมอนสเตอร์ประจำโปรไฟล์</h3>
+                  <p className="text-xs text-slate-400">เลือกตัวที่คุณชื่นชอบเพื่อแสดงบนโปรไฟล์และการ์ดแชร์</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsAvatarPickerOpen(false)}
+                className="p-1.5 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] text-slate-400 hover:text-white cursor-pointer"
+                aria-label="ปิด"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Search & Category Tabs */}
+            <div className="p-4 bg-[#090e1a] border-b border-slate-800 space-y-3">
+              <div className="relative">
+                <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                <input
+                  type="text"
+                  value={avatarSearch}
+                  onChange={(e) => setAvatarSearch(e.target.value)}
+                  placeholder="พิมพ์ชื่อมอนสเตอร์เพื่อค้นหา..."
+                  className="w-full pl-9 pr-4 py-2 rounded-xl bg-slate-800/80 border border-slate-700 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
+                />
+              </div>
+
+              <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
+                <button
+                  type="button"
+                  onClick={() => setAvatarTab('all')}
+                  className={`px-3 py-1.5 rounded-xl font-semibold transition-all shrink-0 cursor-pointer ${
+                    avatarTab === 'all' ? 'bg-cyan-500 text-black font-bold' : 'bg-slate-800 text-slate-400 hover:text-white'
+                  }`}
+                >
+                  ทั้งหมด ({userBox?.units?.length || 0})
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setAvatarTab('ld5')}
+                  className={`px-3 py-1.5 rounded-xl font-semibold transition-all shrink-0 cursor-pointer ${
+                    avatarTab === 'ld5' ? 'bg-purple-600 text-white font-bold' : 'bg-slate-800 text-slate-400 hover:text-white'
+                  }`}
+                >
+                  ✨ แสง-มืด 5★ ({userProfileStats?.ld5List?.length || 0})
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setAvatarTab('fast')}
+                  className={`px-3 py-1.5 rounded-xl font-semibold transition-all shrink-0 cursor-pointer ${
+                    avatarTab === 'fast' ? 'bg-cyan-600 text-white font-bold' : 'bg-slate-800 text-slate-400 hover:text-white'
+                  }`}
+                >
+                  ⚡ สปีดสูงสุด
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setAvatarTab('six_star')}
+                  className={`px-3 py-1.5 rounded-xl font-semibold transition-all shrink-0 cursor-pointer ${
+                    avatarTab === 'six_star' ? 'bg-emerald-600 text-white font-bold' : 'bg-slate-800 text-slate-400 hover:text-white'
+                  }`}
+                >
+                  ⭐ 6 ดาว ({userProfileStats?.sixStarUnits || 0})
+                </button>
+              </div>
+            </div>
+
+            {/* Monsters Grid */}
+            <div className="flex-1 overflow-y-auto p-4 max-h-[50vh] bg-[#070b14]">
+              <div className="grid grid-cols-4 sm:grid-cols-6 gap-2.5">
+                {availableAvatarUnits.map((m, idx) => (
+                  <button
+                    key={`${m.masterId || m.name}-${m.element}-${idx}`}
+                    type="button"
+                    onClick={() => handleSelectAvatar(m)}
+                    className="p-2 rounded-xl bg-white/[0.03] hover:bg-cyan-500/20 border border-white/[0.05] hover:border-cyan-400/50 flex flex-col items-center gap-1.5 transition-all group cursor-pointer"
+                  >
+                    <MonsterAvatar monster={m} size="md" showStars={false} />
+                    <span className="text-[10px] font-bold text-slate-300 truncate w-full text-center group-hover:text-cyan-300">
+                      {m.thaiName || m.name}
+                    </span>
+                    {m.spd ? (
+                      <span className="text-[9px] text-slate-400 font-mono">
+                        +{m.spd - (m.baseSpd || 100)} SPD
+                      </span>
+                    ) : null}
+                  </button>
+                ))}
+              </div>
+              {availableAvatarUnits.length === 0 && (
+                <div className="py-12 text-center text-slate-500 text-xs">
+                  ไม่พบมอนสเตอร์ที่ค้นหา
+                </div>
+              )}
+            </div>
+
+            {/* Footer */}
+            <div className="px-5 py-3.5 bg-slate-900/90 border-t border-slate-800 flex items-center justify-between">
+              {customAvatar ? (
+                <button
+                  type="button"
+                  onClick={handleResetAvatar}
+                  className="text-xs text-slate-400 hover:text-rose-400 underline font-medium cursor-pointer"
+                >
+                  รีเซ็ตเป็นตัวแทนเริ่มต้น
+                </button>
+              ) : <span />}
+
+              <button
+                type="button"
+                onClick={() => setIsAvatarPickerOpen(false)}
+                className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-white transition-all cursor-pointer"
+              >
+                ปิด
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );
