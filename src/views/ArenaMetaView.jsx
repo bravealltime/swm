@@ -16,6 +16,7 @@ import {
   Info
 } from 'lucide-react';
 import MonsterAvatar from '../components/MonsterAvatar';
+import ArenaRushHourHub from '../components/ArenaRushHourHub';
 import { matchArenaTeams } from '../utils/arenaMatcher';
 import { loadBox } from '../utils/swexImport';
 
@@ -134,23 +135,41 @@ export default function ArenaMetaView({ onNavigate }) {
             <CheckCircle2 className="w-4 h-4 text-emerald-300" />
             <span>⚡ ทีมที่ฉันมีครบ 4 ตัว ({summary.readyAo + summary.readyAd} ทีม)</span>
           </button>
+
+          <button
+            onClick={() => { setActiveTab('rush'); setSelectedArchetype('all'); }}
+            className={`px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 shrink-0 cursor-pointer ${
+              activeTab === 'rush'
+                ? 'bg-amber-600 text-white shadow-lg shadow-amber-600/25'
+                : 'text-slate-400 hover:text-white bg-white/[0.03]'
+            }`}
+          >
+            <Clock className="w-4 h-4 text-amber-300" />
+            <span>🕒 กลยุทธ์ Rush Hour & สลับทีมรับ</span>
+          </button>
         </div>
 
-        {/* Search Bar */}
-        <div className="relative w-full sm:w-64">
-          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="ค้นหาชื่อทีม หรือ มอนสเตอร์..."
-            className="w-full bg-[#070b14] border border-white/10 rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500"
-          />
-        </div>
+        {/* Search Bar (only in AO/AD/MyBox tabs) */}
+        {activeTab !== 'rush' && (
+          <div className="relative w-full sm:w-64">
+            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="ค้นหาชื่อทีม หรือ มอนสเตอร์..."
+              className="w-full bg-[#070b14] border border-white/10 rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500"
+            />
+          </div>
+        )}
       </div>
 
-      {/* 3. Team Cards Grid */}
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
+      {/* 3. Content: Rush Hour Hub OR Team Cards Grid */}
+      {activeTab === 'rush' ? (
+        <ArenaRushHourHub onNavigate={onNavigate} />
+      ) : (
+        <>
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
         {filteredList.map((team) => (
           <div
             key={team.id}
@@ -284,14 +303,16 @@ export default function ArenaMetaView({ onNavigate }) {
         ))}
       </div>
 
-      {filteredList.length === 0 && (
-        <div className="rounded-3xl border border-white/10 bg-[#0c1220] p-12 text-center space-y-3">
-          <div className="w-12 h-12 rounded-full bg-slate-800 text-slate-400 flex items-center justify-center mx-auto">
-            <Info className="w-6 h-6" />
-          </div>
-          <h3 className="text-lg font-bold text-white">ไม่พบทีมตามเงื่อนไขที่เลือก</h3>
-          <p className="text-xs text-slate-400">ลองล้างคำค้นหา หรือสลับไปยังแท็บอื่นเพื่อดูทีมเพิ่มเติม</p>
-        </div>
+          {filteredList.length === 0 && (
+            <div className="rounded-3xl border border-white/10 bg-[#0c1220] p-12 text-center space-y-3">
+              <div className="w-12 h-12 rounded-full bg-slate-800 text-slate-400 flex items-center justify-center mx-auto">
+                <Info className="w-6 h-6" />
+              </div>
+              <h3 className="text-lg font-bold text-white">ไม่พบทีมตามเงื่อนไขที่เลือก</h3>
+              <p className="text-xs text-slate-400">ลองล้างคำค้นหา หรือสลับไปยังแท็บอื่นเพื่อดูทีมเพิ่มเติม</p>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
