@@ -35,6 +35,7 @@ const TIER_STYLE = {
   A: 'bg-sky-500/15 text-sky-300 border-sky-500/30',
   B: 'bg-white/[0.05] text-slate-300 border-white/10',
 };
+const TIER_RANK = { S: 0, A: 1, B: 2 };
 const TIER_LABEL = { S: 'S — สูตรหลักระดับสูง', A: 'A — แข็งแรง ใช้ได้จริง', B: 'B — ประหยัด / เฉพาะทาง' };
 const LD_OPTIONS = [
   { id: 'all', label: 'ทุกทีม' },
@@ -255,18 +256,13 @@ function EnemyPicker({ picks, onChange, onSearch, onClear, onReorder, presets })
   // Slots array: always length 4
   const slots = useMemo(() => [0, 1, 2, 3].map((i) => picks[i] || null), [picks]);
 
-  // Top 1-click meta presets
+  // 1-click presets: the highest-tier catalogue defenses, one per archetype so the row stays varied
   const topPresets = useMemo(() => {
-    const ids = [
-      'ad-psamathe-clara-savannah-byungchul',
-      'ad-vanessa-camilla-byungchul-ariel',
-      'ad-karnal-camilla-abellio-halphas',
-      'ad-oliver-giana-nana-perna',
-      'ad-nora-kinki-camilla-byungchul',
-      'ad-seara-clara-savannah-perna',
-      'ad-laima-rakan-skogul-woosa',
-    ];
-    return ids.map((id) => presets.find((p) => p.id === id)).filter(Boolean);
+    const seen = new Set();
+    return [...presets]
+      .sort((x, y) => (TIER_RANK[x.tier] ?? 9) - (TIER_RANK[y.tier] ?? 9))
+      .filter((t) => (seen.has(t.archetype) ? false : seen.add(t.archetype)))
+      .slice(0, 7);
   }, [presets]);
 
   const pickerMonsters = useMemo(() => {

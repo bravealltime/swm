@@ -806,6 +806,6 @@ export async function exportArenaTeamCard({ team, preview = true }) {
 
   text(ctx, 'สูตรคอมมูนิตี้ที่ตรวจชื่อ/ลีดกับฐานข้อมูล SWM • ไม่มีสถิติวัดจริง • SWM (Summoners War Master)', W / 2, H - 30, { font: `500 11px ${THAI}`, color: 'rgba(148, 163, 184, 0.7)', align: 'center' });
   const filename = `SWM_Arena_${isAo ? 'AO' : 'AD'}_${String(team.name || team.id).replace(/[^a-zA-Z0-9]+/g, '_')}.png`;
-  const title = `สูตรทีมอารีน่า: ${team.thaiName || team.name || ''}`;
+  const title = `สูตรทีมอารีน่า: ${team.nameTh || team.name || ''}`;
   return handleCardExport({ canvas, filename, title, preview });
 }

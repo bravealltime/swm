@@ -4,7 +4,8 @@
 //
 //   public/data/skills/<0..15>.json   compact records keyed by monster id
 //   src/data/monsterSkillsIndex.json  { shards, skillIcon, leaderIcon, effects: [{name,…}],
-//                                       m: { id: [cid, name, passive, aoe, [effectIdx], shard] } }
+//                                       m: { id: [cid, name, passive, aoe, [effectIdx], shard] },
+//                                       maxSkills: { id: [[skillId, maxLevel], …] } (skill-up tracker) }
 //
 // Shards follow the catalog's default order (allMonsters.json, A→Z), so the first page and a name
 // search touch one shard instead of all of them. Inside a shard the record is trimmed to what the
@@ -39,7 +40,8 @@ export function buildSkillShards({ root = process.cwd(), force = false } = {}) {
   const indexFile = path.join(root, 'src/data/monsterSkillsIndex.json');
   const outDir = path.join(root, 'public/data/skills');
 
-  const sourceMtime = Math.max(fs.statSync(source).mtimeMs, fs.statSync(monstersFile).mtimeMs);
+  // The output format is defined here, so a change to this script must rebuild too (e.g. when maxSkills was added)
+  const sourceMtime = Math.max(fs.statSync(source).mtimeMs, fs.statSync(monstersFile).mtimeMs, fs.statSync(fileURLToPath(import.meta.url)).mtimeMs);
   const shardFiles = Array.from({ length: SHARD_COUNT }, (_, i) => path.join(outDir, `${i}.json`));
   const upToDate = [indexFile, ...shardFiles].every((f) => fs.existsSync(f) && fs.statSync(f).mtimeMs >= sourceMtime);
   if (!force && upToDate) return { skipped: true };

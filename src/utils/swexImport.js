@@ -548,7 +548,7 @@ export function getDemoGuardianBox() {
     // and 2 units are incomplete so users can test unmaxed filtering & Devilmon tracking
     let skills = 'max';
     if (idx === 6) { // Byungchul (Wind Dokkaebi Lord) - partial skills
-      skills = [[3801, 3], [3802, 2], [3803, 1]];
+      skills = [[4008, 3], [4013, 2], [4018, 1]];
     } else if (idx === 14) { // Water Druid (Abellio) - partial skills
       skills = [[1991, 3], [2006, 2], [2011, 2]];
     }

@@ -933,6 +933,11 @@ function BoxGrid({ box, onNavigate, onOpenUnit }) {
             • กรองสถานะสกิล: {skillFilter === 'unmaxed' ? 'ขาดเดวิลมอน' : 'สกิลเต็มแล้ว'}
           </span>
         )}
+        {skillFilter !== 'all' && !box.units.some((u) => Array.isArray(u.skills) ? u.skills.length > 0 : u.skills === 'max') && (
+          <span className="text-rose-300 ml-1.5 font-medium">
+            • กล่องนี้บันทึกก่อนมีข้อมูลสกิล — นำเข้าไฟล์ SWEX ใหม่อีกครั้งเพื่อดูสถานะเดวิลมอน
+          </span>
+        )}
         {' '}• คลิกเพื่อเปิดหน้ารูน/อาร์ติแฟกต์ของตัวนั้น
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 gap-2">
