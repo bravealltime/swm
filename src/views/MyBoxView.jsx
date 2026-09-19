@@ -1914,10 +1914,10 @@ function PokedexCollection({ box, onNavigate, onLoadDemo }) {
                     ? 'bg-amber-500/15 text-amber-300 border-amber-500/40 hover:bg-amber-500/25 shadow-sm'
                     : 'bg-white/[0.04] text-slate-400 border-white/10 hover:text-white'
                 }`}
-                title="ซ่อนมอนสเตอร์แสง-มืดที่ไม่ได้เปิดได้เองจากคัมภีร์ เช่น ตัวผสม/ฟิวชั่น (Veromos, Jeanne), เหรียญโบราณ (Elsharion, Eirgar, Altaïr), และโฮมุนครุส"
+                title="ซ่อนมอนสเตอร์แสง-มืดที่ไม่ได้เปิดได้เองจากคัมภีร์ เช่น ตัวผสม/ฟิวชั่น (Veromos, Jeanne), ตัวแจกกิจกรรม (Ryomen Sukuna, Gapsoo, Altaïr), เหรียญโบราณ (Elsharion, Eirgar), และโฮมุนครุส"
               >
                 {hideNonSummonLd ? <EyeOff className="w-3.5 h-3.5 text-amber-400" /> : <Eye className="w-3.5 h-3.5" />}
-                <span>{hideNonSummonLd ? 'ซ่อนแสงมืดที่ไม่ได้เปิดได้เอง' : 'แสดงแสงมืดทั้งหมด (รวมฟิวชั่น)'}</span>
+                <span>{hideNonSummonLd ? 'ซ่อนแสงมืดที่ไม่ได้เปิดได้เอง' : 'แสดงแสงมืดทั้งหมด (รวมฟิวชั่น/ตัวแจก)'}</span>
                 {freeOwnedLd5s.length > 0 && hideNonSummonLd && (
                   <span className="px-1.5 py-0.2 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-mono">
                     -{freeOwnedLd5s.length}

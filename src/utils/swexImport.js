@@ -206,6 +206,20 @@ export const NON_SUMMONABLE_LD5_NAMES = new Set([
   'เฟรเดอริก',
   'มือสังหารแสง',
   'ทหารรับจ้างแสง',
+  'ryomen sukuna',
+  'sukuna',
+  'dark hayato',
+  'hayato',
+  'dark hayato / ryomen sukuna',
+  'เรียวเมน สุคุนะ',
+  'สุคุนะ',
+  'ฮายาโตะ',
+  'ฮายาโตะมืด',
+  'gapsoo',
+  'dark dokkaebi lord',
+  'กัปซู',
+  'กับซู',
+  'ด็อกแกบีมืด',
   'light homunculus(support)',
   'light homunculus',
   'dark homunculus(support)',
@@ -222,6 +236,9 @@ export const NON_SUMMONABLE_LD5_IDS = new Set([
   23015, 23005, // Eirgar, Dark Vampire Lord
   27314, 27304, // Altaïr
   27814, 27804, // Frederic / Altair
+  30215, 30205, // Ryomen Sukuna (JJK Event Giveaway)
+  30815, 30805, // Dark Hayato / Ryomen Sukuna
+  28915, 28905, // Gapsoo (Dark Dokkaebi Lord)
   1000214, 1000204, 1000201, // Light Homunculus (Support)
   1000215, 1000205,          // Dark Homunculus (Support)
 ]);
@@ -236,8 +253,8 @@ export function isNonSummonableLd5(unitOrMonster) {
   const thaiName = String(unitOrMonster.thaiName || '').toLowerCase().trim();
   if (NON_SUMMONABLE_LD5_NAMES.has(name) || NON_SUMMONABLE_LD5_NAMES.has(thaiName)) return true;
   if ((name.includes('homunculus') || thaiName.includes('โฮมุนครุส')) && (unitOrMonster.element === 'light' || unitOrMonster.element === 'dark')) return true;
-  if (name.includes('veromos') || name.includes('jeanne') || name.includes('elsharion') || name.includes('eirgar') || name.includes('altair') || name.includes('altaïr') || name.includes('frederic')) return true;
-  if (thaiName.includes('เวโรโมส') || thaiName.includes('ฌาน') || thaiName.includes('เอลชาริออน') || thaiName.includes('แอร์การ์') || thaiName.includes('อัลแทร์') || thaiName.includes('เฟรเดอริก')) return true;
+  if (name.includes('veromos') || name.includes('jeanne') || name.includes('elsharion') || name.includes('eirgar') || name.includes('altair') || name.includes('altaïr') || name.includes('frederic') || name.includes('sukuna') || name.includes('gapsoo') || name.includes('hayato')) return true;
+  if (thaiName.includes('เวโรโมส') || thaiName.includes('ฌาน') || thaiName.includes('เอลชาริออน') || thaiName.includes('แอร์การ์') || thaiName.includes('อัลแทร์') || thaiName.includes('เฟรเดอริก') || thaiName.includes('สุคุนะ') || thaiName.includes('กัปซู') || thaiName.includes('กับซู') || thaiName.includes('ฮายาโตะ')) return true;
   return false;
 }
 

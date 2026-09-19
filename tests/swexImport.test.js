@@ -109,6 +109,12 @@ describe('ids', () => {
     expect(isNonSummonableLd5({ name: 'Eirgar' })).toBe(true);
     expect(isNonSummonableLd5({ name: 'Altaïr' })).toBe(true);
     expect(isNonSummonableLd5({ name: 'Frederic' })).toBe(true);
+    expect(isNonSummonableLd5({ name: 'Ryomen Sukuna' })).toBe(true);
+    expect(isNonSummonableLd5({ masterId: 30215 })).toBe(true);
+    expect(isNonSummonableLd5({ name: 'Dark Hayato / Ryomen Sukuna' })).toBe(true);
+    expect(isNonSummonableLd5({ masterId: 30815 })).toBe(true);
+    expect(isNonSummonableLd5({ name: 'Gapsoo' })).toBe(true);
+    expect(isNonSummonableLd5({ masterId: 28915 })).toBe(true);
     expect(isNonSummonableLd5({ masterId: 13413, name: 'Lushen' })).toBe(false);
     // Real summonable LD5s must return false (not non-summonable)
     expect(isNonSummonableLd5({ masterId: 11115, name: 'Giana' })).toBe(false);
