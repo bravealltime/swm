@@ -20,20 +20,20 @@ describe('siegeAutoBuilder', () => {
 
   it('generates 10 decks prioritizing owned units from player box', () => {
     // Mock a box containing popular siege monsters
+    // a raw SWEX dump: no names, real com2us ids — the builder resolves them through the catalog
     const mockBox = {
       unit_list: [
-        { unit_id: 1, unit_master_id: 21312, name: 'Bolverk', class: 6 }, // Bolverk
-        { unit_id: 2, unit_master_id: 17811, name: 'Mo Long', class: 6 }, // Mo Long
-        { unit_id: 3, unit_master_id: 20011, name: 'Amelia', class: 6 }, // Amelia
-        { unit_id: 4, unit_master_id: 13013, name: 'Copper', class: 6 }, // Copper
-        { unit_id: 5, unit_master_id: 19112, name: 'Bulldozer', class: 6 }, // Bulldozer
-        { unit_id: 6, unit_master_id: 19813, name: 'Imesety', class: 6 }, // Imesety
-        { unit_id: 7, unit_master_id: 12111, name: 'Galleon', class: 6 }, // Galleon
-        { unit_id: 8, unit_master_id: 15312, name: 'Clara', class: 6 }, // Clara
-        { unit_id: 9, unit_master_id: 24714, name: 'Leah', class: 6 }, // Leah
-        { unit_id: 10, unit_master_id: 14713, name: 'Seara', class: 6 },
-        { unit_id: 11, unit_master_id: 11115, name: 'Liebli', class: 6 },
-        { unit_id: 12, unit_master_id: 18411, name: 'Bastet', class: 6 },
+        { unit_id: 1, unit_master_id: 22611, class: 6, unit_level: 40, spd: 101 }, // Bolverk
+        { unit_id: 2, unit_master_id: 21211, class: 6, unit_level: 40, spd: 100 }, // Mo Long
+        { unit_id: 3, unit_master_id: 21511, class: 6, unit_level: 40, spd: 103 }, // Amelia
+        { unit_id: 4, unit_master_id: 16513, class: 6 }, // Copper
+        { unit_id: 5, unit_master_id: 20812, class: 6 }, // Bulldozer
+        { unit_id: 6, unit_master_id: 20613, class: 6 }, // Imesety
+        { unit_id: 7, unit_master_id: 19411, class: 6 }, // Galleon
+        { unit_id: 8, unit_master_id: 13912, class: 6 }, // Clara
+        { unit_id: 10, unit_master_id: 15713, class: 6 }, // Seara
+        { unit_id: 11, unit_master_id: 13415, class: 6 }, // Liebli
+        { unit_id: 12, unit_master_id: 20511, class: 6 }, // Bastet
       ],
     };
 
@@ -46,5 +46,23 @@ describe('siegeAutoBuilder', () => {
       d.slots.some((m) => m.name.toLowerCase().includes('mo long'))
     );
     expect(hasBolverkTeam).toBe(true);
+    expect(result.summary.hasBox).toBe(true);
+    expect(result.summary.ownedCount).toBe(11);
+  });
+
+  it('accepts the compact box the site stores and never reports a win rate it did not measure', () => {
+    const compact = { units: [{ masterId: 22611, name: 'Bolverk', stars: 6, spd: 210, baseSpd: 101 }, { masterId: 21211, name: 'Mo Long', stars: 6 }, { masterId: 21511, name: 'Amelia', stars: 6 }] };
+    const result = generate10SiegeDecks(compact);
+    expect(result.summary.ownedCount).toBe(3);
+    for (const d of result.decks) {
+      if (d.winRate) expect(d.notes).toContain('3MDC');
+      else expect(d.notes).not.toMatch(/d+(.d+)?%/); // templates and box fillers carry no invented percentage
+    }
+  });
+
+  it('flags a missing box instead of pretending', () => {
+    const result = generate10SiegeDecks(null);
+    expect(result.summary.hasBox).toBe(false);
+    expect(result.decks).toHaveLength(10);
   });
 });

@@ -323,6 +323,115 @@ export function getArtifactsFromBox(box) {
   ];
 }
 
+const QUALITY_NAMES = { 1: 'Normal', 2: 'Magic', 3: 'Rare', 4: 'Hero', 5: 'Legend' };
+const SPD_STAT = 8;
+
+/**
+ * The units of a box in one shape, whether it is the compact box the site stores (parseSwexExport:
+ * units[]) or a raw SWEX dump (unit_list[]). Feature code should read boxes through this instead
+ * of touching either format: { uid, masterId, baseId, name, thaiName, element, stars, level,
+ * baseSpd, spd (with runes), avatarUrl, runes (count), sets, info (catalog entry or null) }.
+ */
+export function boxUnits(box) {
+  if (!box) return [];
+  if (Array.isArray(box.units)) {
+    return box.units.filter((u) => u && u.masterId).map((u) => {
+      const masterId = Number(u.masterId);
+      const info = getMonsterCatalogInfo(masterId);
+      return {
+        uid: Number(u.uid) || 0,
+        masterId,
+        baseId: baseAwakenedId(masterId),
+        name: u.name || info?.name || `#${masterId}`,
+        thaiName: u.thaiName || info?.thaiName || u.name || '',
+        element: u.element || info?.element || 'fire',
+        stars: Number(u.stars) || 0,
+        level: Number(u.level) || 0,
+        baseSpd: Number(u.baseSpd) || 0,
+        spd: Number(u.spd) || Number(u.baseSpd) || 0,
+        avatarUrl: u.avatarUrl || info?.avatarUrl || info?.imageUrl || '',
+        runes: Number(u.runes) || 0,
+        sets: Array.isArray(u.sets) ? u.sets : [],
+        info,
+      };
+    });
+  }
+  if (Array.isArray(box.unit_list)) {
+    // raw dump: the same speed math parseSwexExport applies
+    return box.unit_list.filter((u) => u && u.unit_master_id).map((u) => {
+      const masterId = Number(u.unit_master_id);
+      const base = Number(u.spd) || 0;
+      const r = runeSummary(u);
+      const info = getMonsterCatalogInfo(masterId);
+      return {
+        uid: Number(u.unit_id) || 0,
+        masterId,
+        baseId: baseAwakenedId(masterId),
+        name: info?.name || `#${masterId}`,
+        thaiName: info?.thaiName || info?.name || '',
+        element: ELEMENTS[u.attribute] || info?.element || 'fire',
+        stars: Number(u.class) || 0,
+        level: Number(u.unit_level) || 0,
+        baseSpd: base,
+        spd: base + r.flatSpd + Math.floor(base * 0.25 * r.swiftSets),
+        avatarUrl: info?.avatarUrl || info?.imageUrl || '',
+        runes: r.runes.length,
+        sets: r.sets.slice(0, 3),
+        info,
+      };
+    });
+  }
+  return [];
+}
+
+/**
+ * The runes of a box in one readable shape (compact box or raw dump): set / stat names instead of
+ * ids, quality names, the flat SPD the rune carries (spd) and the part of it in substats (subSpd),
+ * and the monster it is on.
+ */
+export function boxRunes(box) {
+  if (!box) return [];
+  let compact = [];
+  if (Array.isArray(box.units) && Array.isArray(box.runes)) compact = box.runes;
+  else if (Array.isArray(box.unit_list)) {
+    for (const u of box.unit_list) {
+      const list = Array.isArray(u?.runes) ? u.runes : u?.runes ? Object.values(u.runes) : [];
+      for (const rune of list) if (rune) compact.push({ ...compactRune(rune, Number(u.unit_master_id) || 0), uid: Number(u.unit_id) || 0 });
+    }
+    for (const rune of Array.isArray(box.runes) ? box.runes : []) if (rune && rune.rune_id) compact.push(compactRune(rune, 0));
+  }
+  return compact.filter(Boolean).map((r) => {
+    const main = Array.isArray(r.main) ? r.main : [0, 0];
+    const innate = Array.isArray(r.innate) ? r.innate : null;
+    const subs = Array.isArray(r.subs) ? r.subs : [];
+    // subSpd is what a reappraisal reroll touches (substats + grinds); spd adds main and innate
+    const subSpd = subs.reduce((sum, s) => sum + (s[0] === SPD_STAT ? (Number(s[1]) || 0) + (Number(s[2]) || 0) : 0), 0);
+    const spd = (main[0] === SPD_STAT ? main[1] : 0) + (innate && innate[0] === SPD_STAT ? innate[1] : 0) + subSpd;
+    const info = r.unit ? getMonsterCatalogInfo(r.unit) : null;
+    return {
+      id: r.id,
+      slot: Number(r.slot) || 0,
+      set: RUNE_SETS[r.set] || `Set${r.set}`,
+      stars: Number(r.stars) || 0,
+      ancient: Boolean(r.ancient),
+      level: Number(r.lvl) || 0,
+      quality: QUALITY_NAMES[r.q] || '',
+      originalQuality: Number(r.q0) || 0,
+      originalQualityName: QUALITY_NAMES[r.q0] || '',
+      mainStat: STAT_NAMES[main[0]] || '',
+      mainValue: Number(main[1]) || 0,
+      innateStat: innate ? STAT_NAMES[innate[0]] || '' : null,
+      subs: subs.map((s) => ({ stat: STAT_NAMES[s[0]] || '', value: Number(s[1]) || 0, grind: Number(s[2]) || 0, enchanted: Boolean(s[3]) })),
+      spd,
+      subSpd,
+      eff: Number(r.eff) || 0,
+      unit: Number(r.unit) || 0,
+      uid: Number(r.uid) || 0,
+      monsterName: info?.name || '',
+    };
+  });
+}
+
 /** Set of awakened ids the player can field (dedupes duplicates / 2A / unawakened). */
 export function ownedIdSet(box) {
   const set = new Set();

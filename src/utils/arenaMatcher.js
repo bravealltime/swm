@@ -3,7 +3,7 @@
 
 import arenaData from '../data/arenaMetaTeams.json' with { type: 'json' };
 import { MONSTERS } from '../data/monsters.js';
-import { baseAwakenedId } from './swexImport.js';
+import { getMonsterCatalogInfo } from './swexImport.js';
 
 const norm = (s) => String(s || '').replace(/\s*\(.*?\)\s*/g, '').toLowerCase().trim();
 
@@ -22,8 +22,7 @@ export function matchArenaTeams(userBox) {
   if (hasBox) {
     for (const u of rawUnits) {
       const masterId = Number(u.masterId || u.unit_master_id) || 0;
-      const bId = baseAwakenedId(masterId);
-      const cat = MONSTERS.find((m) => m.id === bId || m.id === masterId) || {};
+      const cat = getMonsterCatalogInfo(masterId) || {};
       const name = u.name || cat.name;
       if (!name) continue;
       const key = norm(name);

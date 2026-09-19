@@ -21,6 +21,7 @@ export const NAVIGATION_CATEGORIES = [
     id: 'rta-rankings',
     title: 'เวิลด์อารีน่า & จัดอันดับ (RTA)',
     items: [
+      { id: 'arena', label: 'ทีมบุก & ตั้งรับ Arena (AO/AD) + Rush Hour', icon: 'Swords', badge: 'ใหม่' },
       { id: 'player-tracker', label: 'ค้นหาสถิติผู้เล่น (Player Tracker)', icon: 'Search' },
       { id: 'guardian-ladder', label: 'อันดับผู้เล่น Guardian (คนไทย & ทั่วโลก)', icon: 'Award', badge: 'จริง' },
       { id: 'guardian-meta', label: 'เมต้า & คอมโบจากรีเพลย์ Guardian', icon: 'Flame', badge: 'จริง' },

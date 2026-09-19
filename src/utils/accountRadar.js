@@ -1,8 +1,7 @@
 // Account Assessment & 6-Axis Power Radar Engine
 // Analyzes a player's box JSON (runes, artifacts, units) and calculates scores from 0 to 100
 
-import { baseAwakenedId } from './swexImport.js';
-import { MONSTERS } from '../data/monsters.js';
+import { baseAwakenedId, getMonsterCatalogInfo } from './swexImport.js';
 import guardianMeta from '../data/swrtGuardianMeta.json' with { type: 'json' };
 
 const PVE_SPEED_FARMERS = new Set(['teshar', 'liam', 'lushen', 'julie', 'shaina', 'deborah', 'kyle', 'brandia', 'prilea']);
@@ -94,7 +93,7 @@ export function calculateAccountRadar(box) {
   // 6. PVE Abyss Mastery (Core speed farm monsters equipped)
   let pveCount = 0;
   for (const u of units) {
-    const cat = MONSTERS.find((m) => m.id === baseAwakenedId(u.masterId) || m.id === u.masterId);
+    const cat = getMonsterCatalogInfo(u.masterId);
     const monName = (cat?.name || u.name || '').toLowerCase();
     if (PVE_SPEED_FARMERS.has(monName) && (u.stars || 0) >= 6) {
       pveCount += 1;

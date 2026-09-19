@@ -1,3 +1,5 @@
+import { boxRunes } from './swexImport.js';
+
 /**
  * Reappraisal Stone (หินรีออปชั่น) Candidate Evaluator & Box Scanner
  * Analyzes whether a 6★ Legend rune is worth using Reappraisal Stones on,
@@ -191,29 +193,23 @@ export function evaluateRuneForReapp({
  * Scans all runes in the player's account box to find the Top N best Reapp candidates
  */
 export function scanBoxForReappCandidates(box, limit = 15) {
-  if (!box || !Array.isArray(box.runes)) return [];
-
   const candidates = [];
 
-  for (const rune of box.runes) {
-    // Only 6 star runes
-    if (Number(rune.stars || rune.class) !== 6) continue;
+  // boxRunes() gives set / stat names, original quality and the rune's flat SPD for both the
+  // compact box the site stores and a raw SWEX dump
+  for (const rune of boxRunes(box)) {
+    if (rune.stars !== 6) continue;                 // only 6★
+    if (rune.originalQuality && rune.originalQuality < 5) continue; // must have dropped as Legend
 
-    // Must be original Legend
-    // In SWEX, original_quality: 5 is Legend, or quality: 5
-    const origQuality = rune.original_quality || rune.orig_quality || rune.quality || 5;
-    if (origQuality < 5) continue;
-
-    // Check if slot 2, 4, 6 has a flat main stat (Flat HP, Flat DEF, Flat ATK)
-    const slot = Number(rune.slot);
-    const mainStatName = rune.mainStatName || rune.main_stat || 'HP%';
+    const slot = rune.slot;
+    const mainStatName = rune.mainStat || '';
     const isFlat246 = [2, 4, 6].includes(slot) && ['HP', 'ATK', 'DEF'].includes(mainStatName);
-    if (isFlat246) continue; // Skip flat 2/4/6
+    if (isFlat246) continue; // flat 2/4/6 is never worth a stone
 
-    const setName = rune.setName || 'Violent';
-    const innateStat = rune.innateStatName || rune.prefix_stat || null;
-    const currentEff = Number(rune.efficiency || rune.eff || 80);
-    const currentSpd = Number(rune.spd || 0);
+    const setName = rune.set;
+    const innateStat = rune.innateStat || null;
+    const currentEff = rune.eff;
+    const currentSpd = rune.subSpd; // reappraisal rerolls substats only; main-stat SPD is not at stake
 
     const evalResult = evaluateRuneForReapp({
       set: setName,
@@ -230,14 +226,14 @@ export function scanBoxForReappCandidates(box, limit = 15) {
     if (evalResult.grade === 'PROTECT' || evalResult.score < 60) continue;
 
     candidates.push({
-      runeId: rune.id || rune.rune_id,
+      runeId: rune.id,
       set: setName,
       slot,
       mainStat: mainStatName,
       innateStat,
       currentEff,
       currentSpd,
-      equippedMonster: rune.monsterName || (rune.uid ? `มอนสเตอร์ #${rune.uid}` : 'คลังเก็บรูน'),
+      equippedMonster: rune.monsterName || (rune.unit ? `มอนสเตอร์ #${rune.unit}` : 'คลังเก็บรูน'),
       ...evalResult
     });
   }

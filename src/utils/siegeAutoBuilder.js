@@ -1,6 +1,6 @@
 import mdcSummary from '../data/monsterMdcSummary.json' with { type: 'json' };
 import { MONSTERS } from '../data/monsters.js';
-import { baseAwakenedId } from './swexImport.js';
+import { boxUnits } from './swexImport.js';
 
 const normName = (n) => String(n || '').replace(/\s*\(.*?\)\s*/g, '').toLowerCase().trim();
 
@@ -10,84 +10,84 @@ const STAPLE_ARCHETYPES = [
     name: 'Bolverk Mo Long Bruiser',
     archetype: 'Bruiser Counter',
     slots: ['Bolverk', 'Mo Long', 'Amelia'],
-    winRate: '96.0%',
+    winRate: null,
     notes: 'Bolverk ดูดเลือด + Mo Long ยิง Reckless Assault เก็บตัวอันตราย',
   },
   {
     name: 'Copper Dozer Snipe',
     archetype: 'Defense Snipe',
     slots: ['Copper', 'Bulldozer', 'Imesety'],
-    winRate: '95.0%',
+    winRate: null,
     notes: 'Imesety เร่งเกจ+บัฟ DEF ให้ Copper สอยตัวเป้าหมาย 60,000+',
   },
   {
     name: 'Feng Yan Sustain Bruiser',
     archetype: 'Sustain Bruiser',
     slots: ['Feng Yan', 'Velajuel', 'Woosa'],
-    winRate: '94.0%',
+    winRate: null,
     notes: 'ภูมิคุ้มกันถาวร แพนด้าลมยืนตีทะลวงเกราะเรื่อยๆ ไม่ตาย',
   },
   {
     name: 'Kahli Chloe Snipe',
     archetype: 'Ignore DEF Snipe',
     slots: ['Kahli', 'Chloe', 'Covenant'],
-    winRate: '93.5%',
+    winRate: null,
     notes: 'Chloe กางอมตะ Kahli ยิงทะลุเกราะ 45k+ Covenant เก็บตัวที่สอง',
   },
   {
     name: 'Fast Cleave Galleon Leah',
     archetype: 'Speed Cleave',
     slots: ['Galleon', 'Clara', 'Leah'],
-    winRate: '94.0%',
+    winRate: null,
     notes: 'Clara ล้างบัฟ Galleon เจาะเกราะ Leah วิ่งไวทะลวงเวฟ',
   },
   {
     name: 'Tractor Windy Bruiser',
     archetype: 'Anti-Debuff Tank',
     slots: ['Tractor', 'Windy', 'Lulu and Friends'],
-    winRate: '95.5%',
+    winRate: null,
     notes: 'รับมือทีมธาตุน้ำ/Carano/Martina ไม่ติดดีบัฟและถึกมาก',
   },
   {
     name: 'Bomb Control Cleave',
     archetype: 'Bomb Cleave',
     slots: ['Seara', 'Liebli', 'Bastet'],
-    winRate: '93.0%',
+    winRate: null,
     notes: 'Bastet บูสต์เกจ Seara + Liebli แปะระเบิดจุดระเบิดทันที',
   },
   {
     name: 'Khmun Vigor Savannah',
     archetype: 'Speed Bruiser',
     slots: ['Khmun', 'Vigor', 'Savannah'],
-    winRate: '92.5%',
+    winRate: null,
     notes: 'Vigor เจาะเกราะเร่งสปีด Savannah ปิดเกจ Khmun ล็อคเป้า',
   },
   {
     name: 'Tesarion Anti-Passive',
     archetype: 'Anti-Passive',
     slots: ['Tesarion', 'Theomars', 'Chasun'],
-    winRate: '91.0%',
+    winRate: null,
     notes: 'Tesarion ปิดพาสซีฟ Theo ยิงฟรี Chasun คอยชุบชีวิตและฮีล',
   },
   {
     name: 'Susano Orion Cleave',
     archetype: 'Water Speed Cleave',
     slots: ['Susano', 'Orion', 'Stella'],
-    winRate: '90.5%',
+    winRate: null,
     notes: 'สปีดลีด 30% เร่งเกจและสอยตัวเดี่ยวอย่างรวดเร็ว',
   },
   {
     name: 'Skogul Rock Slam',
     archetype: 'Fixed HP Bruiser',
     slots: ['Skogul', 'Triana', 'Vigor'],
-    winRate: '92.0%',
+    winRate: null,
     notes: 'Skogul ขว้างหินดาเมจคงที่ Triana ป้องกันตาย Vigor เร่งเกจ',
   },
   {
     name: 'Leo Lushen Cleave',
     archetype: 'Speed Cap Cleave',
     slots: ['Leo', 'Megan', 'Lushen'],
-    winRate: '91.5%',
+    winRate: null,
     notes: 'Leo ล็อคสปีด Megan บัฟ ATK Lushen สับกล่องไม่สนเกราะ',
   },
 ];
@@ -102,31 +102,26 @@ export function generate10SiegeDecks(userBox) {
   const ownedMap = new Map(); // normName -> Array of unit objects
   const ownedCatalogMonsters = new Map(); // normName -> catalog info
 
-  if (userBox?.unit_list) {
-    for (const u of userBox.unit_list) {
-      const bId = baseAwakenedId(u.unit_master_id);
-      const cat = MONSTERS.find((m) => m.id === bId || m.id === u.unit_master_id) || {};
-      const name = cat.name || u.name;
-      if (!name) continue;
-      const key = normName(name);
-
-      if (!ownedMap.has(key)) ownedMap.set(key, []);
-      ownedMap.get(key).push({
-        unitId: u.unit_id,
-        masterId: u.unit_master_id,
-        name: cat.name || name,
-        thaiName: cat.thaiName || name,
-        stars: u.class || 6,
-        level: u.unit_level || 40,
-        avatarUrl: cat.avatarUrl || cat.imageUrl,
-        element: cat.element,
-        runeCount: (u.runes || []).length,
-      });
-
-      if (cat.name && !ownedCatalogMonsters.has(key)) {
-        ownedCatalogMonsters.set(key, cat);
-      }
-    }
+  // the box is read through boxUnits(), which understands both the compact box and a raw SWEX dump
+  for (const u of boxUnits(userBox)) {
+    const name = u.name;
+    if (!name) continue;
+    const key = normName(name);
+    if (!ownedMap.has(key)) ownedMap.set(key, []);
+    ownedMap.get(key).push({
+      unitId: u.uid,
+      masterId: u.masterId,
+      name,
+      thaiName: u.thaiName || name,
+      stars: u.stars || 6,
+      level: u.level || 40,
+      avatarUrl: u.avatarUrl,
+      element: u.element,
+      spd: u.spd,
+      baseSpd: u.baseSpd,
+      runeCount: u.runes,
+    });
+    if (u.info && !ownedCatalogMonsters.has(key)) ownedCatalogMonsters.set(key, u.info);
   }
 
   // 2. Collect candidate teams from 3MDC database
@@ -139,10 +134,10 @@ export function generate10SiegeDecks(userBox) {
     if (seenTeamSigs.has(sortedKey)) return;
     seenTeamSigs.add(sortedKey);
 
-    const winRateVal = parseFloat(winRateStr) || 85.0;
+    const winRateVal = parseFloat(winRateStr) || 0;
     candidateTeams.push({
       slots, // array of 3 monster names
-      winRate: winRateStr || `${winRateVal.toFixed(1)}%`,
+      winRate: winRateStr || null,
       winRateVal,
       against: against || 'General Defense',
       archetype: archetype || 'Meta Counter',
@@ -170,7 +165,7 @@ export function generate10SiegeDecks(userBox) {
   }
 
   // Sort candidates by winRateVal and rating descending
-  candidateTeams.sort((a, b) => (b.winRateVal * b.rating) - (a.winRateVal * a.rating));
+  candidateTeams.sort((a, b) => (b.winRateVal * b.rating) - (a.winRateVal * a.rating) || b.rating - a.rating);
 
   // 3. Greedy selection of 10 non-overlapping decks
   const selectedDecks = [];
@@ -227,7 +222,7 @@ export function generate10SiegeDecks(userBox) {
         winRate: cand.winRate,
         against: cand.against,
         slots: [findMonsterInfo(m1), findMonsterInfo(m2), findMonsterInfo(m3)],
-        notes: `สถิติชนะ ${cand.winRate} ใน 3MDC • เจอกับ ${cand.against}`,
+        notes: cand.winRate ? `สถิติชนะ ${cand.winRate} ใน 3MDC • เจอกับ ${cand.against}` : `สูตรมาตรฐาน ${cand.archetype} (ไม่มีสถิติวัดจริง)`,
         leaderIdx: 0,
       });
     }
@@ -250,10 +245,10 @@ export function generate10SiegeDecks(userBox) {
         id: selectedDecks.length + 1,
         name: `ทีมบุกที่ ${selectedDecks.length + 1}: ทีมผสมจากกล่อง`,
         archetype: 'Custom Box Synergy',
-        winRate: '88.0%',
+        winRate: null,
         against: 'ทีมตั้งรับทั่วไป',
         slots: teamMons,
-        notes: 'จัดจากมอนสเตอร์พร้อมรบที่เหลือในไอดี',
+        notes: 'จัดจากมอนสเตอร์พร้อมรบที่เหลือในไอดี (ไม่มีสถิติ 3MDC)',
         leaderIdx: 0,
       });
     }
@@ -276,8 +271,10 @@ export function generate10SiegeDecks(userBox) {
   }
 
   // Summary statistics
-  const totalWinRateSum = selectedDecks.reduce((sum, d) => sum + (parseFloat(d.winRate) || 88), 0);
-  const avgWinRate = (totalWinRateSum / selectedDecks.length).toFixed(1);
+  // average only over decks that carry a measured 3MDC win rate
+  const measured = selectedDecks.filter((d) => parseFloat(d.winRate) > 0);
+  const avgWinRate = measured.length ? (measured.reduce((sum, d) => sum + parseFloat(d.winRate), 0) / measured.length).toFixed(1) : null;
+  const ownedCount = ownedMap.size;
 
   const archetypesCount = {};
   for (const d of selectedDecks) {
@@ -288,7 +285,10 @@ export function generate10SiegeDecks(userBox) {
     decks: selectedDecks,
     summary: {
       totalDecks: selectedDecks.length,
-      avgWinRate: `${avgWinRate}%`,
+      avgWinRate: avgWinRate ? `${avgWinRate}%` : null,
+      measuredDecks: measured.length,
+      hasBox: ownedCount > 0,
+      ownedCount,
       usedMonstersCount: usedMonsters.size,
       archetypesCount,
     },

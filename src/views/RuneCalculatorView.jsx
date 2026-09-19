@@ -569,6 +569,14 @@ export default function RuneCalculatorView({ onNavigate }) {
                   </div>
                 ))}
               </div>
+            ) : userBox?.runes?.length ? (
+              // runes were scanned, none is worth a stone: every 6★ Legend is either protected or scores under 60
+              <div className="p-8 rounded-xl bg-emerald-500/[0.04] border border-emerald-500/20 text-center space-y-2">
+                <div className="text-sm font-bold text-emerald-300">สแกน {userBox.runes.length} ชิ้นแล้ว — ไม่มีรูนที่คุ้มค่าหินรี</div>
+                <p className="text-xs text-slate-400 max-w-md mx-auto">
+                  รูน 6★ Legend ของคุณเป็นชิ้นที่ควรเก็บไว้ (SPD สูงหรือประสิทธิภาพเกิน 100%) หรือเป็นเซ็ต/ช่องที่รีแล้วไม่คุ้ม ระบบจึงไม่แนะนำให้รีชิ้นไหน — นำเข้าไฟล์ SWEX ใหม่หลังได้รูนเพิ่มแล้วสแกนอีกครั้ง
+                </p>
+              </div>
             ) : (
               <div className="p-8 rounded-xl bg-white/[0.02] border border-white/[0.05] text-center space-y-2">
                 <div className="text-sm font-bold text-slate-300">ยังไม่มีข้อมูลรูนในระบบ</div>

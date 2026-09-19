@@ -85,26 +85,27 @@ describe('reappEvaluator', () => {
     expect(swiftSlot1.score).toBeGreaterThan(energySlot1.score + 30);
   });
 
-  it('scans mock box runes and returns top candidates sorted by score', () => {
-    const mockBox = {
-      runes: [
-        // Candidate 1: Violent slot 4 CD with innate Flat DEF (Score 95+)
-        { id: 101, class: 6, slot: 4, setName: 'Violent', mainStatName: 'CRI Dmg', innateStatName: 'Flat DEF', eff: 79, spd: 4, quality: 5 },
-        // Candidate 2: Swift slot 2 SPD with innate Flat HP (Score 92+)
-        { id: 102, class: 6, slot: 2, setName: 'Swift', mainStatName: 'SPD', innateStatName: 'Flat HP', eff: 81, spd: 0, quality: 5 },
-        // Candidate 3: Flat slot 4 (Skip)
-        { id: 103, class: 6, slot: 4, setName: 'Violent', mainStatName: 'HP', quality: 5 },
-        // Candidate 4: 5 star rune (Skip)
-        { id: 104, class: 5, slot: 6, setName: 'Violent', mainStatName: 'HP%', quality: 5 },
-        // Candidate 5: God rune with 27 spd (Protect)
-        { id: 105, class: 6, slot: 6, setName: 'Violent', mainStatName: 'HP%', eff: 103, spd: 27, quality: 5 }
-      ]
-    };
+  it('scans the compact box (what loadBox() returns) and ranks the candidates', () => {
+    // compact rune: set/main/innate/subs are ids (see swexImport compactRune), q0 = quality when dropped
+    const VIOLENT = 13, SWIFT = 3, HP = 1, HP_PCT = 2, DEF = 5, SPD = 8, CRI_DMG = 10;
+    const box = { units: [{ masterId: 13413, name: 'Lushen' }], runes: [
+      { id: 101, slot: 4, set: VIOLENT, stars: 6, lvl: 15, q: 5, q0: 5, main: [CRI_DMG, 80], innate: [DEF, 20], subs: [[SPD, 4, 0, 0]], eff: 79, unit: 13413 },
+      { id: 102, slot: 2, set: SWIFT, stars: 6, lvl: 12, q: 5, q0: 5, main: [SPD, 42], innate: [HP, 300], subs: [], eff: 81, unit: 0 },
+      { id: 103, slot: 4, set: VIOLENT, stars: 6, lvl: 15, q: 5, q0: 5, main: [HP, 2448], innate: null, subs: [], eff: 70, unit: 0 },   // flat HP in slot 4 → never
+      { id: 104, slot: 6, set: VIOLENT, stars: 5, lvl: 15, q: 5, q0: 5, main: [HP_PCT, 51], innate: null, subs: [], eff: 60, unit: 0 }, // 5★ → skip
+      { id: 105, slot: 6, set: VIOLENT, stars: 6, lvl: 15, q: 5, q0: 5, main: [HP_PCT, 63], innate: null, subs: [[SPD, 22, 5, 0]], eff: 103, unit: 0 }, // already god-tier → protected
+      { id: 106, slot: 2, set: VIOLENT, stars: 6, lvl: 15, q: 5, q0: 4, main: [SPD, 42], innate: null, subs: [], eff: 75, unit: 0 },   // dropped as Hero → not a reapp target
+    ] };
 
-    const candidates = scanBoxForReappCandidates(mockBox, 5);
-    expect(candidates.length).toBe(2);
-    expect(candidates[0].runeId).toBe(101);
-    expect(candidates[1].runeId).toBe(102);
+    const candidates = scanBoxForReappCandidates(box, 10);
+    expect(candidates.map((c) => c.runeId)).toEqual([101, 102]);
+    expect(candidates[0]).toMatchObject({ set: 'Violent', slot: 4, mainStat: 'CRI Dmg', innateStat: 'DEF', currentEff: 79, currentSpd: 4, equippedMonster: 'Lushen' });
+    expect(candidates[1]).toMatchObject({ set: 'Swift', slot: 2, mainStat: 'SPD', currentSpd: 0, equippedMonster: 'คลังเก็บรูน' }); // main-stat SPD does not count as a substat roll
     expect(candidates[0].score).toBeGreaterThanOrEqual(90);
+  });
+
+  it('returns nothing for an empty or missing box', () => {
+    expect(scanBoxForReappCandidates(null)).toEqual([]);
+    expect(scanBoxForReappCandidates({ units: [] })).toEqual([]);
   });
 });

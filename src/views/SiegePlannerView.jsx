@@ -20,7 +20,7 @@ import {
 } from 'lucide-react';
 import MonsterAvatar from '../components/MonsterAvatar';
 import { MONSTERS } from '../data/monsters';
-import { loadBox, baseAwakenedId } from '../utils/swexImport';
+import { loadBox, boxUnits } from '../utils/swexImport';
 import { loadUserBoxFromDB } from '../services/storageService';
 import { generate10SiegeDecks } from '../utils/siegeAutoBuilder';
 
@@ -87,34 +87,19 @@ export default function SiegePlannerView() {
     }
   }, [decks]);
 
-  // Build lookup of owned monsters
-  const ownedUnits = useMemo(() => {
-    if (!userBox?.unit_list) return [];
-    return userBox.unit_list.map(u => {
-      const bId = baseAwakenedId(u.unit_master_id);
-      const catalogMon = MONSTERS.find(m => m.id === bId || m.id === u.unit_master_id) || {};
-      const spdBonus = u.runes?.reduce((acc, r) => {
-        let s = 0;
-        if (r.pri_eff && r.pri_eff[0] === 8) s += r.pri_eff[1];
-        if (r.prefix_eff && r.prefix_eff[0] === 8) s += r.prefix_eff[1];
-        r.sec_eff?.forEach(sec => { if (sec[0] === 8) s += (sec[1] + (sec[3] || 0)); });
-        return acc + s;
-      }, 0) || 0;
-
-      return {
-        unitId: u.unit_id,
-        masterId: u.unit_master_id,
-        baseId: bId,
-        name: catalogMon.name || u.unit_id,
-        element: catalogMon.element || 'neutral',
-        stars: catalogMon.stars || 5,
-        speedBonus: spdBonus,
-        baseSpeed: catalogMon.base_speed || 100,
-        totalSpeed: (catalogMon.base_speed || 100) + spdBonus,
-        image: catalogMon.image || `https://swarfarm.com/static/herders/images/monsters/${bId}.png`
-      };
-    });
-  }, [userBox]);
+  // Owned monsters (compact box or raw SWEX dump) with their real rune-included speed
+  const ownedUnits = useMemo(() => boxUnits(userBox).map((u) => ({
+    unitId: u.uid,
+    masterId: u.masterId,
+    baseId: u.baseId,
+    name: u.name,
+    element: u.element,
+    stars: u.stars || 5,
+    speedBonus: Math.max(0, u.spd - u.baseSpd),
+    baseSpeed: u.baseSpd || 100,
+    totalSpeed: u.spd || u.baseSpd || 100,
+    image: u.avatarUrl,
+  })), [userBox]);
 
   // Count usage of each monster name across all 10 decks
   const monsterUsageCounts = useMemo(() => {
@@ -364,7 +349,8 @@ export default function SiegePlannerView() {
           <div className="flex items-center gap-2.5">
             <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
             <div>
-              <span className="font-bold text-white">AI จัด 10 ทีมบุกสำเร็จ:</span> ใช้มอนสเตอร์ไม่ซ้ำกัน {autoGenSummary.usedMonstersCount} ตัว • อัตราชนะเฉลี่ยใน 3MDC <strong className="text-emerald-300 font-mono text-base">{autoGenSummary.avgWinRate}</strong>
+              <span className="font-bold text-white">จัด 10 ทีมบุกสำเร็จ:</span> ใช้มอนสเตอร์ไม่ซ้ำกัน {autoGenSummary.usedMonstersCount} ตัว{autoGenSummary.avgWinRate ? <> • อัตราชนะเฉลี่ยใน 3MDC <strong className="text-emerald-300 font-mono text-base">{autoGenSummary.avgWinRate}</strong> <span className="text-emerald-400/70">(จาก {autoGenSummary.measuredDecks} ทีมที่มีสถิติ)</span></> : ' • ไม่มีทีมที่มีสถิติ 3MDC'}
+              {!autoGenSummary.hasBox && <div className="text-amber-300 mt-1">ไม่พบกล่องมอนสเตอร์ในเครื่องนี้ — ทีมที่ได้มาจากสูตรเมต้าล้วน นำเข้าไฟล์ SWEX ที่หน้ากล่องของฉันเพื่อให้จัดจากมอนสเตอร์ที่คุณมีจริง</div>}
             </div>
           </div>
           <button onClick={() => setAutoGenSummary(null)} className="text-emerald-400 hover:text-white text-xs cursor-pointer">

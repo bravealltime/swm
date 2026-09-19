@@ -89,6 +89,7 @@ export default function Sidebar({
   const resolveView = (itemId) => {
     if (itemId === 'admin') return 'admin';
     if (itemId === 'quiz') return 'quiz';
+    if (itemId === 'arena') return 'arena';
     if (itemId === 'guardian-ladder' || itemId === 'guardian-meta') return 'guardian';
     if (itemId === 'ai-farm-optimizer' || itemId.includes('ai-farm')) return 'ai-farm-optimizer';
     if (itemId === 'my-box') return 'my-box';
