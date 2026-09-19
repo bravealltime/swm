@@ -2,7 +2,10 @@ import { describe, it, expect } from 'vitest';
 import { matchArenaTeams } from '../src/utils/arenaMatcher.js';
 import arenaData from '../src/data/arenaMetaTeams.json' with { type: 'json' };
 import allMonsters from '../src/data/allMonsters.json' with { type: 'json' };
-import { buildArenaTeams } from '../scripts/build_arena_teams.mjs';
+import { buildArenaTeams, buildMonsterTraits } from '../scripts/build_arena_teams.mjs';
+import { monsterTraits, teamTraits } from '../src/utils/arenaTraits.js';
+import { traitsOfName, hasSkill, profileEnemy, matchDefenses, findArenaCounters } from '../src/utils/arenaCounter.js';
+import { exportArenaTeamCard } from '../src/utils/cardExporter.js';
 
 const names = new Set(allMonsters.map((m) => m.name.toLowerCase()));
 const all = [...arenaData.offense, ...arenaData.defense];
@@ -152,3 +155,84 @@ describe('arenaMatcher', () => {
     expect(r3.summary.readyAo).toBeGreaterThanOrEqual(1);
   });
 });
+
+describe('arenaTraits', () => {
+  it('identifies special passive mechanics like Leo antiSpeed', () => {
+    expect(monsterTraits({ name: 'Leo', ls: null, sk: [] })).toEqual(['antiSpeed']);
+  });
+
+  it('restricts leader traits to slot 0', () => {
+    const traitsOf = (name) => (name === 'Psamathe' ? ['cc', 'revive', 'speedLead'] : ['atb', 'cc']);
+    // Psamathe in slot 0 gives speedLead
+    expect(teamTraits(['Psamathe', 'Clara', 'Savannah', 'Kaki'], traitsOf)).toContain('speedLead');
+    // Psamathe in slot 1 does not give speedLead
+    expect(teamTraits(['Clara', 'Psamathe', 'Savannah', 'Kaki'], traitsOf)).not.toContain('speedLead');
+  });
+
+  it('buildMonsterTraits covers all catalogue monsters with skill records', () => {
+    const traits = buildMonsterTraits();
+    expect(Object.keys(traits).length).toBe(940);
+    expect(traits.Galleon).toBeDefined();
+    expect(traits.Bernard).toBeDefined();
+    expect(traits.Leo).toContain('antiSpeed');
+  });
+});
+
+describe('arenaCounter', () => {
+  it('looks up traits and skill presence with slash support', () => {
+    expect(hasSkill('Psamathe')).toBe(true);
+    expect(hasSkill('Galleon')).toBe(true);
+    expect(hasSkill('Adriana')).toBe(true);
+    expect(hasSkill('Pure Vanilla Cookie')).toBe(true);
+    expect(hasSkill('UnknownImaginaryMon')).toBe(false);
+
+    expect(traitsOfName('Psamathe')).toContain('speedLead');
+    expect(traitsOfName('Adriana')).toEqual(traitsOfName('Adriana / Pure Vanilla Cookie'));
+  });
+
+  it('profiles enemy defenses with correct leader, chips, and unknown flags', () => {
+    const profile = profileEnemy(['Psamathe', 'Clara', 'Savannah', 'Kaki']);
+    expect(profile.leader).toBe('Psamathe');
+    expect(profile.flags.speedLead).toBe(true);
+    expect(profile.groups.cc.length).toBeGreaterThanOrEqual(1);
+    expect(profile.unknown).toHaveLength(0);
+    expect(profile.chips.some((c) => c.key === 'speedLead')).toBe(true);
+
+    const withUnknown = profileEnemy(['Psamathe', 'GhostyNonExistentMon']);
+    expect(withUnknown.unknown).toEqual(['GhostyNonExistentMon']);
+  });
+
+  it('matches catalogue defenses based on overlap and handles slash aliases', () => {
+    const matchedExact = matchDefenses(['Psamathe', 'Clara', 'Savannah', 'Byungchul']);
+    expect(matchedExact.length).toBeGreaterThan(0);
+    expect(matchedExact[0].overlap).toBe(4);
+    expect(matchedExact[0].team.id).toBe('ad-psamathe-clara-savannah-byungchul');
+
+    // 3/4 relative match
+    const matchedVariant = matchDefenses(['Psamathe', 'Clara', 'Savannah', 'Kaki']);
+    expect(matchedVariant[0].overlap).toBe(3);
+    expect(matchedVariant[0].team.id).toBe('ad-psamathe-clara-savannah-byungchul');
+  });
+
+  it('finds and ranks counters against enemy mechanics', () => {
+    const result = findArenaCounters(['Psamathe', 'Clara', 'Savannah', 'Kaki']);
+    expect(result.results.length).toBe(arenaData.offense.length);
+
+    // Leo teams or SPD lead teams score high against Psamathe speed lead
+    const top = result.results.slice(0, 5);
+    const hasLeoOrFast = top.some((t) => t.caps.includes('antiSpeed') || t.caps.includes('speedLead'));
+    expect(hasLeoOrFast).toBe(true);
+
+    // Structured counters should have recommended = true
+    const recommended = result.results.filter((t) => t.recommended);
+    expect(recommended.length).toBeGreaterThanOrEqual(1);
+    expect(recommended[0].reasons.some((r) => r.includes('สูตรแก้ที่ระบุไว้'))).toBe(true);
+  });
+});
+
+describe('cardExporter', () => {
+  it('exports exportArenaTeamCard function', () => {
+    expect(typeof exportArenaTeamCard).toBe('function');
+  });
+});
+

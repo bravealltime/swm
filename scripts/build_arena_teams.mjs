@@ -5,16 +5,20 @@
 // there are no win rates or clear times in it, and the UI says so. What this script guarantees is
 // consistency with our own data: every monster name must exist in allMonsters.json, every leader
 // text is taken from monsterSkillsData.json rather than typed by hand, and the light/dark flags are
-// derived from the catalogue. Run: node scripts/build_arena_teams.mjs
+// derived from the catalogue. It also writes src/data/arenaMonsterTraits.json (name → mechanics such as
+// strip / revive / counter, read off the skill effects via src/utils/arenaTraits.js) for the counter search.
+// Run: node scripts/build_arena_teams.mjs
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { monsterTraits, teamTraits } from '../src/utils/arenaTraits.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const monsters = JSON.parse(fs.readFileSync(path.join(root, 'src/data/allMonsters.json'), 'utf8'));
 const skills = JSON.parse(fs.readFileSync(path.join(root, 'src/data/monsterSkillsData.json'), 'utf8'));
 const byName = new Map(monsters.map((m) => [m.name.toLowerCase(), m]));
 const skillByName = new Map(Object.values(skills).map((r) => [String(r.name || '').toLowerCase(), r]));
+const traitsOf = (name) => monsterTraits(skillByName.get(String(name).toLowerCase()));
 
 const AREA_TH = { Arena: 'อารีน่า', General: 'ทุกที่', Dungeon: 'ดันเจี้ยน', Guild: 'กิลด์', Element: 'ธาตุเดียวกัน' };
 const ATTR_TH = { 'Attack Power': 'ATK', 'Attack Speed': 'SPD', HP: 'HP', Defense: 'DEF', 'Critical Rate': 'CRI Rate', Accuracy: 'ACC', Resistance: 'RES' };
@@ -233,6 +237,7 @@ const AO = [
 
 const AD = [
   { id: 'ad-psamathe-clara-savannah-byungchul', tier: 'S', archetype: 'Speed Threat', style: 'ดักสปีด',
+    counters: ['ao-leo-galleon-lushen-lushen', 'ao-vanessa-tiana-galleon-zaiross', 'ao-chloe-galleon-lushen-lushen'],
     name: 'Psamathe Clara Savannah Byungchul', nameTh: 'ซามาเธ่ คลาร่า ซาวันน่า บยองชอล (ดักสปีด 33%)',
     slots: ['Psamathe', 'Clara', 'Savannah', 'Byungchul'],
     winCondition: 'Clara ได้เทิร์นก่อนทีมบุก → S3 ล้างบัฟ + สตัน AoE → Savannah S3 เจาะเกราะ+ลดเกจ → Byungchul S2 ขโมยบัฟ+คริการันตี ทีมบุกที่ไม่มีลีด SPD 33% แซง Clara ยาก',
@@ -241,6 +246,7 @@ const AD = [
     description: 'ทีมรับดักสปีดที่พบบ่อยที่สุดในระดับสูง จุดอ่อนคือถ้าโดนแซง Clara ทีมไม่มีกำแพง',
     swaps: { Byungchul: ['Theomars', 'Dominic'], Savannah: ['Galleon', 'Ethna'], Psamathe: ['Oliver', 'Vanessa'] } },
   { id: 'ad-oliver-clara-galleon-theomars', tier: 'A', archetype: 'Speed Threat', style: 'ดักสปีด',
+    counters: ['ao-leo-galleon-lushen-lushen', 'ao-vanessa-tiana-galleon-zaiross', 'ao-chloe-galleon-lushen-lushen'],
     name: 'Oliver Clara Galleon Theomars', nameTh: 'โอลิเวอร์ คลาร่า กัลเลียน ธีโอมาร์ส',
     slots: ['Oliver', 'Clara', 'Galleon', 'Theomars'],
     winCondition: 'Clara ล้างบัฟ+สตัน → Galleon เจาะเกราะ → Theomars/Oliver เก็บ Oliver S3 ดันคูลดาวน์ตัวรอดไม่ให้ตอบโต้',
@@ -249,6 +255,7 @@ const AD = [
     description: 'ดักสปีดสายบุกหนัก: ถ้า Clara ติด ทีมบุกตายในรอบเดียว',
     swaps: { Theomars: ['Byungchul', 'Lushen'], Oliver: ['Psamathe', 'Vanessa'] } },
   { id: 'ad-vanessa-clara-savannah-perna', tier: 'A', archetype: 'Speed Threat', style: 'ดักสปีด',
+    counters: ['ao-leo-galleon-lushen-lushen', 'ao-seara-tiana-liebli-bastet', 'ao-oliver-tiana-galleon-kaki', 'ao-ganymede-tiana-galleon-lushen'],
     name: 'Vanessa Clara Savannah Perna', nameTh: 'วาเนสซ่า คลาร่า ซาวันน่า เพอร์น่า',
     slots: ['Vanessa', 'Clara', 'Savannah', 'Perna'],
     winCondition: 'เหมือนสูตร Psamathe แต่มี Perna ประกัน: ถ้าคลีฟไม่จบ Perna ชุบและ Vanessa S3 ชุบซ้ำได้',
@@ -257,6 +264,7 @@ const AD = [
     description: 'ดักสปีดที่ทนต่อการคลีฟไม่จบ เพราะมีชุบสองชั้น',
     swaps: { Perna: ['Nana', 'Taranys'], Vanessa: ['Psamathe'] } },
   { id: 'ad-psamathe-giana-woosa-perna', tier: 'S', archetype: 'LD Speed Threat', style: 'ดักสปีด', ldNote: 'Giana มืด 5★',
+    counters: ['ao-leo-galleon-lushen-lushen', 'ao-vanessa-tiana-galleon-zaiross', 'ao-oliver-tiana-galleon-kaki', 'ao-ganymede-tiana-galleon-lushen'],
     name: 'Psamathe Giana Woosa Perna', nameTh: 'ซามาเธ่ เกียน่า วูซ่า เพอร์น่า (ดักสปีดสายมืด)',
     slots: ['Psamathe', 'Giana', 'Woosa', 'Perna'],
     winCondition: 'Giana S3 ล้างบัฟ+สตัน AoE ก่อนทีมบุกได้เทิร์น → Woosa ภูมิคุ้มกัน+โล่ → Perna ชุบ ทีมบุกที่ถูกสตันไม่มีทางกลับ',
@@ -265,6 +273,7 @@ const AD = [
     description: 'Giana ทำงานของ Clara แต่ทนกว่าและมีดาเมจ ทีมนี้ทั้งดักสปีดและกำแพงในเวลาเดียวกัน',
     swaps: { Giana: ['Clara', 'Tiana'], Woosa: ['Chloe'] } },
   { id: 'ad-psamathe-tiana-skogul-perna', tier: 'A', archetype: 'Speed Strip', style: 'ดักสปีด',
+    counters: ['ao-leo-galleon-lushen-lushen', 'ao-bernard-galleon-lushen-lushen', 'ao-seara-tiana-liebli-bastet'],
     name: 'Psamathe Tiana Skogul Perna', nameTh: 'ซามาเธ่ เทียน่า สโกกุล เพอร์น่า',
     slots: ['Psamathe', 'Tiana', 'Skogul', 'Perna'],
     winCondition: 'Tiana ล้างบัฟทีมบุก (Will/ภูมิคุ้มกันหาย) ก่อนมันได้เทิร์น → Skogul ยืนรับ → Perna ชุบ',
@@ -273,6 +282,7 @@ const AD = [
     description: 'ใช้ Tiana ในฝั่งรับ: ทีมบุกที่พึ่งโล่/ภูมิคุ้มกันจะเปลือยทันที',
     swaps: { Skogul: ['Tractor', 'Khmun'], Tiana: ['Triton'] } },
   { id: 'ad-layla-skogul-woosa-perna', tier: 'A', archetype: 'Bruiser Wall', style: 'กำแพง',
+    counters: ['ao-seara-tiana-liebli-bastet', 'ao-seara-tiana-jojo-bastet', 'ao-woosa-theomars-perna-tesarion', 'ao-zaiross-tiana-galleon-lushen'],
     name: 'Layla Skogul Woosa Perna', nameTh: 'เลย์ล่า สโกกุล วูซ่า เพอร์น่า (ลีด DEF 44%)',
     slots: ['Layla', 'Skogul', 'Woosa', 'Perna'],
     winCondition: 'ลีด DEF 44% ทำให้คลีฟฆ่าไม่ตาย → Layla Passive ใบ้ผู้โจมตี + ล้างบัฟ AoE → Woosa/Perna ลากเกมจนทีมบุกหมดแรง',
@@ -281,6 +291,7 @@ const AD = [
     description: 'กำแพงที่ลงโทษการตี: ยิ่งตี Layla ยิ่งโดนใบ้',
     swaps: { Layla: ['Miles', 'Craka'], Skogul: ['Tractor'] } },
   { id: 'ad-miles-skogul-woosa-taranys', tier: 'A', archetype: 'Bruiser Wall', style: 'กำแพง',
+    counters: ['ao-seara-tiana-liebli-bastet', 'ao-oliver-tiana-galleon-kaki', 'ao-ganymede-tiana-galleon-lushen'],
     name: 'Miles Skogul Woosa Taranys', nameTh: 'ไมล์ส สโกกุล วูซ่า ทารานีส',
     slots: ['Miles', 'Skogul', 'Woosa', 'Taranys'],
     winCondition: 'ลีด DEF 44% + Taranys ชุบซ้ำ (S3 ชุบทีม + Passive ชุบตัวเอง) Miles S2 ล้างบัฟ+สตันตัวอันตราย Passive เจาะเกราะ',
@@ -289,6 +300,7 @@ const AD = [
     description: 'กำแพงชุบไม่รู้จบ ทีมบุกต้องฆ่า Taranys ก่อนถึงจะเริ่มเกมได้',
     swaps: { Taranys: ['Perna', 'Nana'], Miles: ['Layla'] } },
   { id: 'ad-craka-skogul-rakan-woosa', tier: 'A', archetype: 'LD Wall', style: 'กำแพง', ldNote: 'Craka มืด 5★',
+    counters: ['ao-seara-tiana-liebli-bastet', 'ao-elsharion-woosa-perna-theomars', 'ao-woosa-theomars-perna-tesarion'],
     name: 'Craka Skogul Rakan Woosa', nameTh: 'คราก้า สโกกุล ราคาน วูซ่า (กำแพงสายมืด)',
     slots: ['Craka', 'Skogul', 'Rakan', 'Woosa'],
     winCondition: 'ลีด DEF 44% + Craka S3 ชุบทั้งทีม/อมตะ + S2 เจาะเกราะขโมยบัฟ Rakan ยั่วยุสวนกลับ Woosa ภูมิคุ้มกัน',
@@ -297,6 +309,7 @@ const AD = [
     description: 'กำแพงมืดที่ชุบได้ทั้งทีมในสกิลเดียว บุกแบบคลีฟรอบเดียวไม่มีทางจบ',
     swaps: { Craka: ['Layla', 'Miles'], Rakan: ['Feng Yan'] } },
   { id: 'ad-tiana-skogul-woosa-perna', tier: 'A', archetype: 'Strip Wall', style: 'กำแพง',
+    counters: ['ao-seara-tiana-liebli-bastet', 'ao-leo-galleon-lushen-lushen', 'ao-oberon-tiana-galleon-lushen'],
     name: 'Tiana Skogul Woosa Perna', nameTh: 'เทียน่า สโกกุล วูซ่า เพอร์น่า (ลีด DEF 44%)',
     slots: ['Tiana', 'Skogul', 'Woosa', 'Perna'],
     winCondition: 'ลีด DEF 44% ของ Tiana + S3 ล้างบัฟทีมบุก ทีมบุกที่พึ่งบัฟ (Bernard/Megan/Chloe) ทำอะไรไม่ได้',
@@ -305,6 +318,7 @@ const AD = [
     description: 'ใช้ Tiana เป็นลีดกำแพง 44% DEF ไม่ใช่ตัวเร็ว จุดเด่นคือล้างบัฟทีมบุกซ้ำ ๆ',
     swaps: { Skogul: ['Tractor', 'Khmun'], Perna: ['Nana', 'Taranys'] } },
   { id: 'ad-brandia-skogul-woosa-perna', tier: 'B', archetype: 'HP Wall', style: 'กำแพง',
+    counters: ['ao-seara-tiana-liebli-bastet', 'ao-seara-tiana-jojo-bastet', 'ao-seara-tiana-liebli-malaka'],
     name: 'Brandia Skogul Woosa Perna', nameTh: 'บรานเดีย สโกกุล วูซ่า เพอร์น่า (ลีด HP 44%)',
     slots: ['Brandia', 'Skogul', 'Woosa', 'Perna'],
     winCondition: 'ลีด HP 44% อารีน่า + Brandia S2 AoE Glancing/ลด ATK + เพิ่มเกจทีม ทีมบุกดาเมจตกจนฆ่าไม่ตาย',
@@ -313,6 +327,7 @@ const AD = [
     description: 'กำแพงสาย HP ที่กดดาเมจฝ่ายบุกด้วย Glancing',
     swaps: { Brandia: ['Rigel', 'Xiao Lin'] } },
   { id: 'ad-katarina-woosa-skogul-theomars', tier: 'A', archetype: 'Anti-CC Wall', style: 'กำแพง',
+    counters: ['ao-zaiross-tiana-galleon-kaki', 'ao-oberon-tiana-galleon-lushen', 'ao-seara-tiana-liebli-bastet'],
     name: 'Katarina Woosa Skogul Theomars', nameTh: 'คาทาริน่า วูซ่า สโกกุล ธีโอมาร์ส (ลีด RES 55%)',
     slots: ['Katarina', 'Woosa', 'Skogul', 'Theomars'],
     winCondition: 'ลีด RES 55% อารีน่า ทำให้สตัน/แช่แข็ง/ลดเกจของทีมบุกไม่ติด → Woosa ภูมิคุ้มกัน → Katarina S3 เจาะ DEF + S2 อมตะ, Theomars เก็บ',
@@ -321,6 +336,7 @@ const AD = [
     description: 'คำตอบของทีมบุกสาย CC/ล็อกเกจ: ดีบัฟติดยากมาก',
     swaps: { Theomars: ['Byungchul', 'Dominic'] } },
   { id: 'ad-jeanne-rakan-skogul-woosa', tier: 'S', archetype: 'Provoke Wall', style: 'กำแพง', ldNote: 'Jeanne แสง 5★',
+    counters: ['ao-seara-tiana-liebli-bastet', 'ao-woosa-theomars-perna-tesarion', 'ao-oberon-tiana-galleon-lushen'],
     name: 'Jeanne Rakan Skogul Woosa', nameTh: 'ฌานน์ ราคาน สโกกุล วูซ่า (ยั่วยุกำแพง)',
     slots: ['Jeanne', 'Rakan', 'Skogul', 'Woosa'],
     winCondition: 'ลีด RES 41% + Jeanne S3 ยั่วยุ AoE บังคับทีมบุกตี Jeanne ที่อมตะ (S2) → Rakan S3 ยั่วยุ+สวนกลับ → Woosa ภูมิคุ้มกัน ทีมบุกเสียเทิร์นทั้งหมด',
@@ -329,6 +345,7 @@ const AD = [
     description: 'กำแพงยั่วยุที่แข็งที่สุดถ้ามี Jeanne: ทีมบุกถูกบังคับให้ทำสิ่งที่ไม่อยากทำ',
     swaps: { Jeanne: ['Louise', 'Josephine'], Rakan: ['Feng Yan', 'Zeratu'] } },
   { id: 'ad-josephine-zeratu-laika-jager', tier: 'A', archetype: 'LD Counter Wall', style: 'กำแพง', ldNote: 'Josephine/Zeratu/Jager แสง-มืด',
+    counters: ['ao-seara-tiana-liebli-bastet', 'ao-seara-tiana-jojo-bastet', 'ao-poseidon-tiana-charlotte-zaiross'],
     name: 'Josephine Zeratu Laika Jager', nameTh: 'โจเซฟีน เซราตู ไลก้า เยเกอร์ (กำแพงสวนกลับ)',
     slots: ['Josephine', 'Zeratu', 'Laika', 'Jager'],
     winCondition: 'ทุกตัวสวนกลับ: Josephine Passive โล่+สวนกลับ+เทิร์นเพิ่ม, Laika Passive สวนกลับ, Jager Passive สวนกลับ+สะสม ATK, Zeratu Passive ล้างบัฟ+ตีซ้ำ ทีมบุกที่ตีเยอะตายเอง',
@@ -337,6 +354,7 @@ const AD = [
     description: 'กำแพงแสง-มืดสายสวนกลับ ทีมบุกดาเมจตรงจะโดนสวนจนตายก่อน',
     swaps: { Zeratu: ['Rakan', 'Feng Yan'], Jager: ['Chow', 'Leo'] } },
   { id: 'ad-woosa-chasun-rina-camilla', tier: 'A', archetype: 'Stall', style: 'ลากเกม',
+    counters: ['ao-seara-tiana-liebli-bastet', 'ao-jeanne-rakan-theomars-camilla', 'ao-seara-tiana-liebli-malaka'],
     name: 'Woosa Chasun Rina Camilla', nameTh: 'วูซ่า ชาซุน รีน่า คามิลล่า (ลากเกม)',
     slots: ['Woosa', 'Chasun', 'Rina', 'Camilla'],
     winCondition: 'ไม่มีใครตาย: Woosa ภูมิคุ้มกัน+โล่, Chasun ฮีล+ATK+ภูมิคุ้มกัน, Rina โล่ Passive, Camilla ฟื้นตัวเอง+ทีม ทีมบุกหมดเวลา/หมดแรงแล้วแพ้ทางเทคนิค',
@@ -345,6 +363,7 @@ const AD = [
     description: 'ทีมรับที่ไม่ได้หวังชนะแต่หวังไม่แพ้ ทีมบุกคลีฟธรรมดาจะติดอยู่ที่นี่',
     swaps: { Rina: ['Fran', 'Mihael'], Chasun: ['Praha', 'Harmonia'] } },
   { id: 'ad-praha-chasun-rina-jeanne', tier: 'B', archetype: 'Stall', style: 'ลากเกม', ldNote: 'Jeanne แสง 5★',
+    counters: ['ao-seara-tiana-liebli-bastet', 'ao-woosa-theomars-perna-tesarion'],
     name: 'Praha Chasun Rina Jeanne', nameTh: 'พราฮา ชาซุน รีน่า ฌานน์',
     slots: ['Praha', 'Chasun', 'Rina', 'Jeanne'],
     winCondition: 'Praha S2 ล้างบัฟ AoE + S3 ฮีล/หลับ, Jeanne ยั่วยุ+อมตะ, Chasun/Rina ฮีล ทีมบุกไม่มีจังหวะได้ดาเมจ',
@@ -353,6 +372,7 @@ const AD = [
     description: 'ลากเกมแบบมี CC: Praha ทำให้ทีมบุกหลับและเสียบัฟ',
     swaps: { Jeanne: ['Woosa', 'Louise'] } },
   { id: 'ad-chloe-theomars-perna-camilla', tier: 'A', archetype: 'Immunity Wall', style: 'กำแพง',
+    counters: ['ao-zaiross-tiana-galleon-kaki', 'ao-oberon-tiana-galleon-lushen', 'ao-giana-galleon-lushen-lushen'],
     name: 'Chloe Theomars Perna Camilla', nameTh: 'โคลอี้ ธีโอมาร์ส เพอร์น่า คามิลล่า',
     slots: ['Chloe', 'Theomars', 'Perna', 'Camilla'],
     winCondition: 'Chloe S3 อมตะ+ภูมิคุ้มกันก่อนทีมบุกได้เทิร์น (ลีด SPD 20%) → คลีฟรอบแรกสูญเปล่า → Theomars/Camilla ตอบโต้ Perna ชุบ',
@@ -361,6 +381,7 @@ const AD = [
     description: 'ทีมรับที่ทำให้คลีฟเทิร์นแรกเป็นศูนย์ ถ้าทีมบุกไม่มี Tiana',
     swaps: { Chloe: ['Fran', 'Woosa'], Camilla: ['Rakan'] } },
   { id: 'ad-skogul-nana-perna-taranys', tier: 'A', archetype: 'Revive Wall', style: 'กำแพง',
+    counters: ['ao-oliver-tiana-galleon-kaki', 'ao-ganymede-tiana-galleon-lushen', 'ao-poseidon-tiana-charlotte-zaiross', 'ao-seara-tiana-liebli-bastet'],
     name: 'Skogul Nana Perna Taranys', nameTh: 'สโกกุล นาน่า เพอร์น่า ทารานีส (ชุบสามชั้น)',
     slots: ['Skogul', 'Nana', 'Perna', 'Taranys'],
     winCondition: 'ตายแล้วเกิดใหม่: Nana Passive ชุบทีม, Perna Passive ชุบตัวเอง, Taranys S3 ชุบทีม+Passive ชุบตัวเอง ทีมบุกฆ่าไม่หมดใน 1 รอบ = แพ้',
@@ -369,6 +390,7 @@ const AD = [
     description: 'กำแพงชุบ 3 ชั้นสำหรับกันคลีฟ: ต้องฆ่าให้ครบ 4 ตัวในรอบเดียวเท่านั้น',
     swaps: { Skogul: ['Woosa', 'Rakan'] } },
   { id: 'ad-woosa-feng-yan-rakan-camilla', tier: 'A', archetype: 'Bruiser Wall', style: 'กำแพง',
+    counters: ['ao-seara-tiana-liebli-bastet', 'ao-woosa-theomars-perna-tesarion', 'ao-seara-tiana-jojo-bastet'],
     name: 'Woosa Feng Yan Rakan Camilla', nameTh: 'วูซ่า เฟิงเยี่ยน ราคาน คามิลล่า',
     slots: ['Woosa', 'Feng Yan', 'Rakan', 'Camilla'],
     winCondition: 'Woosa ภูมิคุ้มกัน → Feng Yan Passive ลดดาเมจ+เกจ, S2 ล้างดีบัฟ+สวนกลับ → Rakan ยั่วยุ+สวนกลับ → Camilla ฟื้น ทีมบุกโดนสวนจนหมดแรง',
@@ -377,6 +399,7 @@ const AD = [
     description: 'กำแพงบรุยเซอร์ไม่ใช้แสง-มืด: ทีมบุกสายตีตรงจะโดนสวนกลับตลอด',
     swaps: { 'Feng Yan': ['Zeratu', 'Mo Long'], Camilla: ['Perna'] } },
   { id: 'ad-leo-skogul-woosa-perna', tier: 'A', archetype: 'Anti-speed Wall', style: 'กำแพง',
+    counters: ['ao-jeanne-rakan-theomars-camilla', 'ao-woosa-theomars-perna-tesarion', 'ao-seara-tiana-liebli-bastet'],
     name: 'Leo Skogul Woosa Perna', nameTh: 'ลีโอ สโกกุล วูซ่า เพอร์น่า (ลงโทษทีมเร็ว)',
     slots: ['Leo', 'Skogul', 'Woosa', 'Perna'],
     winCondition: 'Leo Passive ลดเกจทีมบุกที่เร็วกว่า Leo ทุกเทิร์น + ลีด DEF 50% ให้ Skogul (ลม) ทีมคลีฟสปีดเสียจังหวะ → Woosa/Perna ลากจนชนะ',
@@ -385,6 +408,7 @@ const AD = [
     description: 'ทีมรับที่กลับด้านสงครามสปีด: ทีมบุกยิ่งเร็วยิ่งเสียเปรียบ',
     swaps: { Leo: ['Chow'], Perna: ['Taranys'] } },
   { id: 'ad-xiao-lin-skogul-woosa-perna', tier: 'B', archetype: 'Budget Wall', style: 'กำแพง',
+    counters: ['ao-oberon-tiana-galleon-lushen', 'ao-seara-tiana-liebli-bastet'],
     name: 'Xiao Lin Skogul Woosa Perna', nameTh: 'เสี่ยวหลิน สโกกุล วูซ่า เพอร์น่า (ลีด DEF 33% แบบ 4★)',
     slots: ['Xiao Lin', 'Skogul', 'Woosa', 'Perna'],
     winCondition: 'ลีด DEF 33% อารีน่าจากมอน 4★ + Xiao Lin S3 สวนกลับ/เจาะเกราะ Skogul ยืน Woosa/Perna ลาก',
@@ -393,6 +417,7 @@ const AD = [
     description: 'กำแพงประหยัดสำหรับคนยังไม่มี Layla/Miles/Craka',
     swaps: { 'Xiao Lin': ['Rigel', 'Brandia'], Skogul: ['Tractor'] } },
   { id: 'ad-rigel-skogul-woosa-taranys', tier: 'B', archetype: 'Budget Wall', style: 'กำแพง',
+    counters: ['ao-seara-tiana-liebli-bastet', 'ao-ganymede-tiana-galleon-lushen'],
     name: 'Rigel Skogul Woosa Taranys', nameTh: 'ริเกล สโกกุล วูซ่า ทารานีส (ลีด HP 33% แบบ 4★)',
     slots: ['Rigel', 'Skogul', 'Woosa', 'Taranys'],
     winCondition: 'ลีด HP 33% อารีน่า + Rigel Passive ต้านสตัน/แช่แข็ง + เพิ่มเกจเมื่อโดนตี → Taranys ชุบ',
@@ -401,6 +426,7 @@ const AD = [
     description: 'กำแพงประหยัดอีกแบบ Rigel (4★) ให้ลีด HP อารีน่า',
     swaps: { Rigel: ['Xiao Lin', 'Brandia'] } },
   { id: 'ad-irene-skogul-woosa-perna', tier: 'A', archetype: 'Reflect Wall', style: 'กำแพง',
+    counters: ['ao-seara-tiana-liebli-bastet', 'ao-zaiross-tiana-galleon-lushen'],
     name: 'Irene Skogul Woosa Perna', nameTh: 'ไอรีน สโกกุล วูซ่า เพอร์น่า',
     slots: ['Irene', 'Skogul', 'Woosa', 'Perna'],
     winCondition: 'ลีด ACC 55% อารีน่า + Irene S2 สะท้อนดีบัฟ/ดึงความสนใจ, S3 ล้างบัฟ+ดูดเกจตัวอันตราย Skogul ยืน Woosa/Perna ลาก',
@@ -409,6 +435,7 @@ const AD = [
     description: 'กำแพงที่ทีมบุกสาย CC จะโดนดีบัฟตัวเองสะท้อนกลับ',
     swaps: { Irene: ['Layla'] } },
   { id: 'ad-oliver-giana-nana-perna', tier: 'A', archetype: 'LD Speed Threat', style: 'ดักสปีด', ldNote: 'Giana มืด 5★',
+    counters: ['ao-leo-galleon-lushen-lushen', 'ao-vanessa-tiana-galleon-zaiross'],
     name: 'Oliver Giana Nana Perna', nameTh: 'โอลิเวอร์ เกียน่า นาน่า เพอร์น่า',
     slots: ['Oliver', 'Giana', 'Nana', 'Perna'],
     winCondition: 'ลีด SPD 33% → Giana ล้างบัฟ+สตัน AoE → Oliver ดันคูลดาวน์+ดูดเกจ → Nana/Perna ชุบถ้าพลาด',
@@ -417,6 +444,7 @@ const AD = [
     description: 'ดักสปีดสายมืดที่มีชุบสองชั้น กลับมาชนะได้แม้โดนคลีฟไม่จบ',
     swaps: { Giana: ['Clara'], Nana: ['Taranys', 'Woosa'] } },
   { id: 'ad-ganymede-skogul-woosa-perna', tier: 'A', archetype: 'ATB Control Wall', style: 'กำแพง',
+    counters: ['ao-seara-tiana-liebli-bastet', 'ao-vanessa-tiana-galleon-zaiross'],
     name: 'Ganymede Skogul Woosa Perna', nameTh: 'แกนีมีด สโกกุล วูซ่า เพอร์น่า',
     slots: ['Ganymede', 'Skogul', 'Woosa', 'Perna'],
     winCondition: 'ลีด ACC 55% + Ganymede S3 ลดเกจ+ดันคูลดาวน์ AoE ไม่สน RES ทีมบุกใช้สกิล 3 ไม่ได้ → กำแพงลากจนชนะ',
@@ -425,6 +453,7 @@ const AD = [
     description: 'กำแพงที่ปิดสกิลสำคัญของทีมบุกด้วยการดันคูลดาวน์',
     swaps: { Ganymede: ['Psamathe', 'Daphnis'] } },
   { id: 'ad-laima-rakan-skogul-woosa', tier: 'A', archetype: 'LD Immunity Wall', style: 'กำแพง', ldNote: 'Laima แสง 5★',
+    counters: ['ao-zaiross-tiana-galleon-lushen', 'ao-oberon-tiana-galleon-lushen'],
     name: 'Laima Rakan Skogul Woosa', nameTh: 'ไลม่า ราคาน สโกกุล วูซ่า (กำแพงแสง)',
     slots: ['Laima', 'Rakan', 'Skogul', 'Woosa'],
     winCondition: 'Laima S3 ล้างดีบัฟ+ภูมิคุ้มกัน+อมตะทีม (S2 ล้างบัฟ AoE) + Woosa ภูมิคุ้มกันซ้ำ ทีมบุกสาย CC/บอมบ์ไม่ติดเลย Rakan สวนกลับ',
@@ -433,6 +462,7 @@ const AD = [
     description: 'กำแพงแสงที่บอมบ์และ CC ทำอะไรไม่ได้ ต้องคลีฟดาเมจดิบผ่าน Tiana เท่านั้น',
     swaps: { Laima: ['Woosa', 'Velajuel'], Rakan: ['Feng Yan'] } },
   { id: 'ad-daphnis-skogul-woosa-perna', tier: 'B', archetype: 'Strip Wall', style: 'กำแพง',
+    counters: ['ao-seara-tiana-liebli-bastet', 'ao-vanessa-tiana-galleon-zaiross'],
     name: 'Daphnis Skogul Woosa Perna', nameTh: 'ดาฟนิส สโกกุล วูซ่า เพอร์น่า',
     slots: ['Daphnis', 'Skogul', 'Woosa', 'Perna'],
     winCondition: 'Daphnis S3 ล้างบัฟ+เจาะเกราะเดี่ยว (ยอมเสียเลือดแลกโล่) + S2 ดันคูลดาวน์ AoE/ห้ามฮีล ลีด CR 33% อารีน่าให้ Perna/ตัวตี',
@@ -441,6 +471,7 @@ const AD = [
     description: 'กำแพงที่มีตัวล้างบัฟ+ดันคูลดาวน์ในตัวเดียว',
     swaps: { Daphnis: ['Ganymede', 'Psamathe'] } },
   { id: 'ad-woosa-charlotte-skogul-perna', tier: 'B', archetype: 'ATB Control Wall', style: 'กำแพง',
+    counters: ['ao-vanessa-tiana-galleon-zaiross', 'ao-zaiross-tiana-galleon-kaki'],
     name: 'Woosa Charlotte Skogul Perna', nameTh: 'วูซ่า ชาร์ล็อต สโกกุล เพอร์น่า',
     slots: ['Woosa', 'Charlotte', 'Skogul', 'Perna'],
     winCondition: 'ลีด ACC 41% ของ Woosa ช่วยให้ Charlotte S3 ลดเกจ AoE + Glancing + เพิ่มเกจทีม และ S2 สตัน AoE ติดง่าย ทีมบุกเสียจังหวะ → กำแพงลาก',
@@ -465,6 +496,7 @@ function build(side, list) {
     }
     const ldMembers = members.filter((m) => m.element === 'light' || m.element === 'dark').map((m) => m.name);
     const leader = leaderOf(t.slots[0]);
+    const traits = teamTraits(t.slots, traitsOf);
     return {
       id: t.id, side, tier: t.tier, archetype: t.archetype, name: t.name, nameTh: t.nameTh,
       ...(t.speed ? { speed: t.speed } : {}), ...(t.style ? { style: t.style } : {}),
@@ -480,9 +512,21 @@ function build(side, list) {
       ...(t.counterTips ? { counterTips: t.counterTips } : {}),
       description: t.description,
       swaps: t.swaps || {},
+      ...(side === 'ao' ? { caps: traits } : { traits, counters: t.counters || [] }),
       source: 'community',
     };
   });
+}
+
+/** name → arena traits for every catalogue monster with a skill record (drives the counter search). */
+export function buildMonsterTraits() {
+  const out = {};
+  for (const rec of Object.values(skills)) {
+    if (!rec?.name || !byName.has(rec.name.toLowerCase())) continue;
+    const tr = monsterTraits(rec);
+    out[rec.name] = tr;
+  }
+  return Object.fromEntries(Object.entries(out).sort(([a], [b]) => a.localeCompare(b)));
 }
 
 export function buildArenaTeams() {
@@ -490,6 +534,8 @@ export function buildArenaTeams() {
   const defense = build('ad', AD);
   const ids = [...offense, ...defense].map((t) => t.id);
   if (new Set(ids).size !== ids.length) throw new Error('duplicate team id');
+  const aoIds = new Set(offense.map((t) => t.id));
+  for (const d of defense) for (const c of d.counters) if (!aoIds.has(c)) throw new Error(`${d.id}: counter "${c}" is not an AO id`);
   return {
     meta: {
       title: 'Summoners War Arena Meta Teams (AO & AD)',
@@ -505,6 +551,9 @@ export function buildArenaTeams() {
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const data = buildArenaTeams();
   fs.writeFileSync(path.join(root, 'src/data/arenaMetaTeams.json'), JSON.stringify(data, null, 2) + '\n');
+  const traits = buildMonsterTraits();
+  fs.writeFileSync(path.join(root, 'src/data/arenaMonsterTraits.json'), JSON.stringify(traits) + '\n');
+  console.log(`monster traits: ${Object.keys(traits).length} monsters`);
   console.log(`arena teams: ${data.meta.counts.offense} AO + ${data.meta.counts.defense} AD (${data.meta.counts.ld} use light/dark)`);
   const noArenaLead = [...data.offense, ...data.defense].filter((t) => !t.leaderArena).map((t) => `${t.id} (${t.leader})`);
   if (noArenaLead.length) console.log('leaders without arena effect (shown with ⚠️):\n  ' + noArenaLead.join('\n  '));

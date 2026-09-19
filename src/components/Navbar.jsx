@@ -175,7 +175,7 @@ export default function Navbar({ currentView, onNavigate, onOpenSearch, onOpenMe
           </nav>
 
           {/* Right actions */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 shrink-0">
             {isAdmin && (
               <button
                 onClick={() => { const next = !adminMode; setAdminMode(next); if (next) onNavigate('admin'); else if (currentView === 'admin') onNavigate('dashboard'); }}
@@ -185,7 +185,7 @@ export default function Navbar({ currentView, onNavigate, onOpenSearch, onOpenMe
                 title={adminMode ? 'กำลังอยู่ในโหมดแอดมิน — คลิกเพื่อกลับหน้าปกติ' : 'สลับไปโหมดแอดมิน (หลังบ้าน)'}
               >
                 <span className={`w-2 h-2 rounded-full ${adminMode ? 'bg-fuchsia-300 animate-pulse' : 'bg-slate-500'}`} />
-                <span className="hidden sm:inline">{adminMode ? 'โหมดแอดมิน' : 'ผู้ใช้ปกติ'}</span>
+                <span className="hidden sm:inline lg:hidden 2xl:inline">{adminMode ? 'โหมดแอดมิน' : 'ผู้ใช้ปกติ'}</span>
               </button>
             )}
             {/* User Auth Button */}
@@ -199,7 +199,7 @@ export default function Navbar({ currentView, onNavigate, onOpenSearch, onOpenMe
                 <div className="w-5 h-5 rounded-full bg-gradient-to-tr from-cyan-400 to-blue-500 flex items-center justify-center text-[10px] font-bold text-white uppercase shadow-sm">
                   {user.email ? user.email.slice(0, 1) : 'U'}
                 </div>
-                <span className="hidden md:inline max-w-[90px] truncate text-cyan-200">
+                <span className="hidden md:inline lg:hidden 2xl:inline max-w-[90px] truncate text-cyan-200">
                   {user.user_metadata?.display_name || user.email?.split('@')[0]}
                 </span>
                 <span className="relative flex h-2 w-2">
@@ -215,7 +215,7 @@ export default function Navbar({ currentView, onNavigate, onOpenSearch, onOpenMe
                 aria-label="เข้าสู่ระบบ"
               >
                 <User className="w-4 h-4 text-cyan-400" />
-                <span className="hidden sm:inline">เข้าสู่ระบบ</span>
+                <span className="hidden sm:inline lg:hidden 2xl:inline">เข้าสู่ระบบ</span>
               </button>
             )}
 
@@ -226,7 +226,7 @@ export default function Navbar({ currentView, onNavigate, onOpenSearch, onOpenMe
               aria-label="ซิงค์ข้อมูลไอดีข้ามอุปกรณ์"
             >
               <Cloud className="w-4 h-4 text-cyan-400 animate-pulse" />
-              <span className="hidden sm:inline">ซิงค์ข้ามเครื่อง</span>
+              <span className="hidden sm:inline lg:hidden 2xl:inline">ซิงค์ข้ามเครื่อง</span>
             </button>
 
             <button
@@ -235,8 +235,8 @@ export default function Navbar({ currentView, onNavigate, onOpenSearch, onOpenMe
               aria-label="ค้นหาด่วน (Ctrl+K)"
             >
               <Search className="w-4 h-4 text-slate-400" />
-              <span className="hidden sm:inline text-slate-400">ค้นหาด่วน...</span>
-              <kbd className="hidden lg:inline-block px-1.5 py-0.5 text-xs font-mono font-bold bg-[#070b12] text-slate-400 border border-white/10 rounded">
+              <span className="hidden sm:inline lg:hidden 2xl:inline text-slate-400">ค้นหาด่วน...</span>
+              <kbd className="hidden 2xl:inline-block px-1.5 py-0.5 text-xs font-mono font-bold bg-[#070b12] text-slate-400 border border-white/10 rounded">
                 Ctrl K
               </kbd>
             </button>
@@ -248,7 +248,7 @@ export default function Navbar({ currentView, onNavigate, onOpenSearch, onOpenMe
               aria-label="เปิดสารบัญระบบทั้งหมด"
             >
               <Menu className="w-4 h-4" />
-              <span className="hidden sm:inline">สารบัญ</span>
+              <span className="hidden sm:inline lg:hidden 2xl:inline">สารบัญ</span>
             </button>
           </div>
 

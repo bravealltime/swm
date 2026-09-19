@@ -1,5 +1,5 @@
 // Zero-dependency HTML5 Canvas image exporter for social sharing cards
-// (Summoner Passport, LD5 Showcase, Monster Showcase). Styled after the in-game UI:
+// (Summoner Passport, LD5 Showcase, Monster Showcase, Arena Team). Styled after the in-game UI:
 // dark navy plate, gold bevel frame, portrait medallions with element rings.
 
 const SANS = '"Inter", "IBM Plex Sans Thai", "Segoe UI", "Leelawadee UI", sans-serif';
@@ -656,3 +656,124 @@ export async function exportMonsterCard({ monster, wizardName = 'Summoner' }) {
   link.click();
 }
 
+
+/** Greedy word wrap that also breaks long Thai runs (no spaces) by measuring characters. */
+function wrapLines(ctx, str, maxWidth, maxLines = 3) {
+  const words = String(str ?? '').split(/\s+/).filter(Boolean);
+  const lines = [];
+  let line = '';
+  const push = (l) => { if (l) lines.push(l); };
+  for (const word of words) {
+    const candidate = line ? `${line} ${word}` : word;
+    if (ctx.measureText(candidate).width <= maxWidth) { line = candidate; continue; }
+    if (line) { push(line); line = ''; }
+    // a single word wider than the line: cut it by characters
+    let chunk = '';
+    for (const ch of word) {
+      if (ctx.measureText(chunk + ch).width > maxWidth) { push(chunk); chunk = ch; } else chunk += ch;
+    }
+    line = chunk;
+  }
+  push(line);
+  if (lines.length > maxLines) {
+    const kept = lines.slice(0, maxLines);
+    kept[maxLines - 1] = fitText(ctx, `${kept[maxLines - 1]} ${lines.slice(maxLines).join(' ')}`, maxWidth);
+    return kept;
+  }
+  return lines;
+}
+
+const TIER_COLOUR = { S: '#fbbf24', A: '#7dd3fc', B: '#cbd5e1' };
+
+/**
+ * Arena team card (1200×675): the four members with the leader crowned, tier / archetype / light-dark
+ * pills, the leader line, then the turn order (AO) or win condition (AD) and the rune line.
+ * `team` is an entry from matchArenaTeams() (slots carry avatarUrl/element/thaiName).
+ */
+export async function exportArenaTeamCard({ team }) {
+  await ensureFonts();
+  const W = 1200, H = 675;
+  const canvas = document.createElement('canvas');
+  canvas.width = W; canvas.height = H;
+  const ctx = canvas.getContext('2d');
+  const isAo = team.side === 'ao' || Boolean(team.turnOrder);
+  drawBackdrop(ctx, W, H, isAo
+    ? { glow: 'rgba(251, 113, 133, 0.18)', glowAt: [0.85, 0.15], tint: '#2a1420' }
+    : { glow: 'rgba(56, 189, 248, 0.18)', glowAt: [0.85, 0.15], tint: '#121c33' });
+  drawGoldFrame(ctx, W, H);
+
+  const kicker = isAo ? 'SUMMONERS WAR • ARENA OFFENSE (AO)' : 'SUMMONERS WAR • ARENA DEFENSE (AD)';
+  text(ctx, kicker, 60, 66, { font: `700 13px ${SANS}`, color: '#e9c46a', spacing: 3 });
+  text(ctx, `SWM • swm-blue.vercel.app/arena   ${new Date().toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric' })}`, W - 60, 66, { font: `500 12px ${THAI}`, color: 'rgba(226, 232, 240, 0.6)', align: 'right' });
+  ctx.strokeStyle = 'rgba(233, 196, 106, 0.25)'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(60, 80); ctx.lineTo(W - 60, 80); ctx.stroke();
+
+  // Title + pills
+  text(ctx, team.nameTh || team.name, 60, 124, { font: `800 30px ${THAI}`, color: '#ffffff', maxWidth: W - 120, shadow: isAo ? 'rgba(251, 113, 133, 0.45)' : 'rgba(56, 189, 248, 0.45)' });
+  text(ctx, team.name, 60, 148, { font: `600 14px ${SANS}`, color: '#94a3b8', maxWidth: W - 120 });
+  let px = 60;
+  const tierColour = TIER_COLOUR[team.tier] || '#cbd5e1';
+  px += pill(ctx, px, 160, `Tier ${team.tier || '-'}`, { color: tierColour, bg: `${tierColour}22`, padX: 12 }) + 8;
+  if (team.archetype) px += pill(ctx, px, 160, team.archetype, { color: '#93c5fd', bg: 'rgba(147, 197, 253, 0.12)', font: `700 12px ${SANS}`, padX: 12 }) + 8;
+  if (team.speed || team.style) px += pill(ctx, px, 160, team.speed || team.style, { color: '#6ee7b7', bg: 'rgba(110, 231, 183, 0.1)', padX: 12 }) + 8;
+  if (team.ld) pill(ctx, px, 160, `แสง-มืด: ${(team.ldMembers || []).join(', ')}`, { color: '#e879f9', bg: 'rgba(232, 121, 249, 0.12)', padX: 12 });
+
+  // Four members
+  const slots = (team.slots || []).slice(0, 4);
+  const cols = 4, cw = 250, ch = 178, gx = (W - 120 - cw * cols) / (cols - 1), sy = 200;
+  for (let i = 0; i < slots.length; i++) {
+    const m = slots[i];
+    const x = 60 + i * (cw + gx);
+    const colour = ELEMENT_COLOR[m.element] || '#e9c46a';
+    drawPanel(ctx, x, sy, cw, ch, { fill: 'rgba(10, 14, 28, 0.72)', stroke: i === 0 ? 'rgba(251, 191, 36, 0.6)' : `${colour}55`, radius: 16 });
+    await drawPortrait(ctx, { url: m.avatarUrl, cx: x + cw / 2, cy: sy + 68, r: 46, element: m.element, label: m.name, ring: i === 0 ? '#fbbf24' : undefined });
+    if (i === 0) {
+      ctx.save();
+      ctx.fillStyle = '#fbbf24';
+      roundRect(ctx, x + cw / 2 - 30, sy + 10, 60, 18, 9);
+      ctx.fill();
+      ctx.restore();
+      text(ctx, 'LEADER', x + cw / 2, sy + 20, { font: `800 10px ${SANS}`, color: '#1e1b4b', align: 'center', baseline: 'middle', spacing: 1 });
+    }
+    text(ctx, m.name, x + cw / 2, sy + 136, { font: `700 17px ${SANS}`, color: '#ffffff', align: 'center', maxWidth: cw - 24 });
+    if (m.thaiName && m.thaiName !== m.name) text(ctx, m.thaiName, x + cw / 2, sy + 158, { font: `500 12px ${THAI}`, color: '#94a3b8', align: 'center', maxWidth: cw - 24 });
+    if (m.isRealOwned) {
+      ctx.fillStyle = '#10b981';
+      ctx.beginPath(); ctx.arc(x + cw - 18, sy + 18, 8, 0, Math.PI * 2); ctx.fill();
+      text(ctx, '✓', x + cw - 18, sy + 19, { font: `800 11px ${SANS}`, color: '#ffffff', align: 'center', baseline: 'middle' });
+    }
+  }
+
+  // Leader line
+  const ly = sy + ch + 18;
+  drawPanel(ctx, 60, ly, W - 120, 34, { fill: 'rgba(251, 191, 36, 0.08)', stroke: 'rgba(251, 191, 36, 0.35)', radius: 10 });
+  text(ctx, `👑 ${team.leader || ''}`, 76, ly + 22, { font: `700 14px ${THAI}`, color: '#fde68a', maxWidth: W - 152 });
+
+  // Turn order (AO) or win condition (AD)
+  const by = ly + 48;
+  const bodyH = 128;
+  drawPanel(ctx, 60, by, W - 120, bodyH, { fill: 'rgba(10, 14, 28, 0.72)', radius: 12, titleBar: 26 });
+  text(ctx, isAo ? 'ลำดับเทิร์น (Turn Order)' : 'เงื่อนไขชัยชนะ', 76, by + 18, { font: `700 12px ${THAI}`, color: '#7dd3fc', spacing: 1 });
+  ctx.font = `500 13px ${THAI}`;
+  if (isAo && Array.isArray(team.turnOrder)) {
+    const colW = (W - 152) / 2;
+    team.turnOrder.slice(0, 4).forEach((step, i) => {
+      const cx = 76 + (i % 2) * colW, cy = by + 46 + Math.floor(i / 2) * 44;
+      ctx.fillStyle = 'rgba(125, 211, 252, 0.2)';
+      ctx.beginPath(); ctx.arc(cx + 9, cy - 4, 9, 0, Math.PI * 2); ctx.fill();
+      text(ctx, String(i + 1), cx + 9, cy - 3, { font: `800 10px ${SANS}`, color: '#7dd3fc', align: 'center', baseline: 'middle' });
+      ctx.font = `500 13px ${THAI}`;
+      wrapLines(ctx, step, colW - 40, 2).forEach((l, li) => text(ctx, l, cx + 26, cy + li * 17, { font: `500 13px ${THAI}`, color: '#e2e8f0' }));
+    });
+  } else {
+    wrapLines(ctx, team.winCondition || team.description || '', W - 152, 5).forEach((l, li) => text(ctx, l, 76, by + 46 + li * 18, { font: `500 13px ${THAI}`, color: '#e2e8f0' }));
+  }
+
+  // Rune line
+  const ry = by + bodyH + 12;
+  ctx.font = `500 12px ${THAI}`;
+  wrapLines(ctx, `รูน: ${team.runeGuidance || team.runeBuilds || ''}`, W - 120, 2).forEach((l, li) => text(ctx, l, 60, ry + 14 + li * 16, { font: `500 12px ${THAI}`, color: '#fcd34d' }));
+
+  text(ctx, 'สูตรคอมมูนิตี้ที่ตรวจชื่อ/ลีดกับฐานข้อมูล SWM • ไม่มีสถิติวัดจริง • SWM (Summoners War Master)', W / 2, H - 30, { font: `500 11px ${THAI}`, color: 'rgba(148, 163, 184, 0.7)', align: 'center' });
+  download(canvas, `SWM_Arena_${isAo ? 'AO' : 'AD'}_${String(team.name || team.id).replace(/[^a-zA-Z0-9]+/g, '_')}.png`);
+}

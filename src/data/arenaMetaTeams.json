@@ -53,6 +53,14 @@
           "Sekhmet"
         ]
       },
+      "caps": [
+        "atkLead",
+        "buffer",
+        "cooldown",
+        "ignoreRes",
+        "passive",
+        "strip"
+      ],
       "source": "community"
     },
     {
@@ -93,6 +101,14 @@
           "Julie"
         ]
       },
+      "caps": [
+        "atkLead",
+        "cc",
+        "cooldown",
+        "ignoreDef",
+        "ignoreRes",
+        "strip"
+      ],
       "source": "community"
     },
     {
@@ -136,6 +152,14 @@
           "Zaiross"
         ]
       },
+      "caps": [
+        "atkLead",
+        "buffer",
+        "cc",
+        "ignoreDef",
+        "ignoreRes",
+        "strip"
+      ],
       "source": "community"
     },
     {
@@ -177,6 +201,13 @@
           "Kaki"
         ]
       },
+      "caps": [
+        "cooldown",
+        "ignoreRes",
+        "revive",
+        "speedLead",
+        "strip"
+      ],
       "source": "community"
     },
     {
@@ -214,6 +245,16 @@
           "Oliver"
         ]
       },
+      "caps": [
+        "cc",
+        "cooldown",
+        "ignoreDef",
+        "ignoreRes",
+        "passive",
+        "revive",
+        "speedLead",
+        "strip"
+      ],
       "source": "community"
     },
     {
@@ -254,6 +295,14 @@
           "Lushen"
         ]
       },
+      "caps": [
+        "buffer",
+        "cooldown",
+        "ignoreRes",
+        "passive",
+        "speedLead",
+        "strip"
+      ],
       "source": "community"
     },
     {
@@ -293,6 +342,15 @@
           "Oberon"
         ]
       },
+      "caps": [
+        "atb",
+        "atkLead",
+        "cc",
+        "ignoreDef",
+        "ignoreRes",
+        "passive",
+        "strip"
+      ],
       "source": "community"
     },
     {
@@ -334,6 +392,10 @@
           "Megan"
         ]
       },
+      "caps": [
+        "cc",
+        "ignoreDef"
+      ],
       "source": "community"
     },
     {
@@ -374,6 +436,14 @@
           "Julie"
         ]
       },
+      "caps": [
+        "atkLead",
+        "buffer",
+        "cc",
+        "ignoreDef",
+        "passive",
+        "strip"
+      ],
       "source": "community"
     },
     {
@@ -414,6 +484,14 @@
           "Bastet"
         ]
       },
+      "caps": [
+        "buffer",
+        "cc",
+        "heal",
+        "ignoreDef",
+        "immunityAoe",
+        "speedLead"
+      ],
       "source": "community"
     },
     {
@@ -455,6 +533,13 @@
           "Bastet"
         ]
       },
+      "caps": [
+        "antiSpeed",
+        "atb",
+        "cc",
+        "ignoreDef",
+        "passive"
+      ],
       "source": "community"
     },
     {
@@ -502,6 +587,16 @@
           "Triton"
         ]
       },
+      "caps": [
+        "atb",
+        "bomb",
+        "buffer",
+        "counter",
+        "ignoreRes",
+        "passive",
+        "speedLead",
+        "strip"
+      ],
       "source": "community"
     },
     {
@@ -544,6 +639,15 @@
           "Jojo"
         ]
       },
+      "caps": [
+        "atb",
+        "bomb",
+        "counter",
+        "ignoreRes",
+        "passive",
+        "speedLead",
+        "strip"
+      ],
       "source": "community"
     },
     {
@@ -581,6 +685,14 @@
           "Malaka"
         ]
       },
+      "caps": [
+        "atb",
+        "bomb",
+        "buffer",
+        "ignoreRes",
+        "speedLead",
+        "strip"
+      ],
       "source": "community"
     },
     {
@@ -622,6 +734,15 @@
           "Bastet"
         ]
       },
+      "caps": [
+        "atb",
+        "bomb",
+        "counter",
+        "ignoreRes",
+        "passive",
+        "speedLead",
+        "strip"
+      ],
       "source": "community"
     },
     {
@@ -664,6 +785,12 @@
           "Zaiross"
         ]
       },
+      "caps": [
+        "atkLead",
+        "cc",
+        "ignoreDef",
+        "strip"
+      ],
       "source": "community"
     },
     {
@@ -704,6 +831,14 @@
           "Lushen"
         ]
       },
+      "caps": [
+        "atb",
+        "atkLead",
+        "cc",
+        "cooldown",
+        "ignoreRes",
+        "strip"
+      ],
       "source": "community"
     },
     {
@@ -744,6 +879,15 @@
           "Zaiross"
         ]
       },
+      "caps": [
+        "accLead",
+        "atb",
+        "cc",
+        "cooldown",
+        "ignoreDef",
+        "ignoreRes",
+        "strip"
+      ],
       "source": "community"
     },
     {
@@ -783,6 +927,12 @@
           "Kaki"
         ]
       },
+      "caps": [
+        "cc",
+        "cooldown",
+        "ignoreDef",
+        "strip"
+      ],
       "source": "community"
     },
     {
@@ -824,6 +974,13 @@
           "Zaiross"
         ]
       },
+      "caps": [
+        "atb",
+        "cc",
+        "defLead",
+        "ignoreDef",
+        "strip"
+      ],
       "source": "community"
     },
     {
@@ -861,6 +1018,14 @@
           "Ganymede"
         ]
       },
+      "caps": [
+        "atb",
+        "cc",
+        "hpLead",
+        "ignoreDef",
+        "ignoreRes",
+        "strip"
+      ],
       "source": "community"
     },
     {
@@ -904,6 +1069,17 @@
           "Feng Yan"
         ]
       },
+      "caps": [
+        "buffer",
+        "cc",
+        "cooldown",
+        "counter",
+        "heal",
+        "passive",
+        "provoke",
+        "resLead",
+        "strip"
+      ],
       "source": "community"
     },
     {
@@ -945,6 +1121,16 @@
           "Laima"
         ]
       },
+      "caps": [
+        "accLead",
+        "buffer",
+        "heal",
+        "immunityAoe",
+        "oblivion",
+        "passive",
+        "revive",
+        "strip"
+      ],
       "source": "community"
     },
     {
@@ -986,6 +1172,16 @@
           "Chloe"
         ]
       },
+      "caps": [
+        "atb",
+        "atkLead",
+        "buffer",
+        "heal",
+        "immunityAoe",
+        "passive",
+        "revive",
+        "strip"
+      ],
       "source": "community"
     }
   ],
@@ -1027,6 +1223,21 @@
           "Vanessa"
         ]
       },
+      "traits": [
+        "atb",
+        "cc",
+        "cooldown",
+        "heal",
+        "passive",
+        "revive",
+        "speedLead",
+        "strip"
+      ],
+      "counters": [
+        "ao-leo-galleon-lushen-lushen",
+        "ao-vanessa-tiana-galleon-zaiross",
+        "ao-chloe-galleon-lushen-lushen"
+      ],
       "source": "community"
     },
     {
@@ -1062,6 +1273,19 @@
           "Vanessa"
         ]
       },
+      "traits": [
+        "buffer",
+        "cc",
+        "cooldown",
+        "passive",
+        "speedLead",
+        "strip"
+      ],
+      "counters": [
+        "ao-leo-galleon-lushen-lushen",
+        "ao-vanessa-tiana-galleon-zaiross",
+        "ao-chloe-galleon-lushen-lushen"
+      ],
       "source": "community"
     },
     {
@@ -1096,6 +1320,22 @@
           "Psamathe"
         ]
       },
+      "traits": [
+        "atb",
+        "cc",
+        "cooldown",
+        "heal",
+        "passive",
+        "revive",
+        "speedLead",
+        "strip"
+      ],
+      "counters": [
+        "ao-leo-galleon-lushen-lushen",
+        "ao-seara-tiana-liebli-bastet",
+        "ao-oliver-tiana-galleon-kaki",
+        "ao-ganymede-tiana-galleon-lushen"
+      ],
       "source": "community"
     },
     {
@@ -1132,6 +1372,23 @@
           "Chloe"
         ]
       },
+      "traits": [
+        "buffer",
+        "cc",
+        "cooldown",
+        "heal",
+        "immunityAoe",
+        "passive",
+        "revive",
+        "speedLead",
+        "strip"
+      ],
+      "counters": [
+        "ao-leo-galleon-lushen-lushen",
+        "ao-vanessa-tiana-galleon-zaiross",
+        "ao-oliver-tiana-galleon-kaki",
+        "ao-ganymede-tiana-galleon-lushen"
+      ],
       "source": "community"
     },
     {
@@ -1166,6 +1423,20 @@
           "Triton"
         ]
       },
+      "traits": [
+        "cooldown",
+        "heal",
+        "ignoreRes",
+        "passive",
+        "revive",
+        "speedLead",
+        "strip"
+      ],
+      "counters": [
+        "ao-leo-galleon-lushen-lushen",
+        "ao-bernard-galleon-lushen-lushen",
+        "ao-seara-tiana-liebli-bastet"
+      ],
       "source": "community"
     },
     {
@@ -1200,6 +1471,22 @@
           "Tractor"
         ]
       },
+      "traits": [
+        "buffer",
+        "cc",
+        "defLead",
+        "heal",
+        "immunityAoe",
+        "passive",
+        "revive",
+        "strip"
+      ],
+      "counters": [
+        "ao-seara-tiana-liebli-bastet",
+        "ao-seara-tiana-jojo-bastet",
+        "ao-woosa-theomars-perna-tesarion",
+        "ao-zaiross-tiana-galleon-lushen"
+      ],
       "source": "community"
     },
     {
@@ -1234,6 +1521,22 @@
           "Layla"
         ]
       },
+      "traits": [
+        "buffer",
+        "cc",
+        "defLead",
+        "heal",
+        "ignoreDef",
+        "immunityAoe",
+        "passive",
+        "revive",
+        "strip"
+      ],
+      "counters": [
+        "ao-seara-tiana-liebli-bastet",
+        "ao-oliver-tiana-galleon-kaki",
+        "ao-ganymede-tiana-galleon-lushen"
+      ],
       "source": "community"
     },
     {
@@ -1270,6 +1573,22 @@
           "Feng Yan"
         ]
       },
+      "traits": [
+        "buffer",
+        "counter",
+        "defLead",
+        "heal",
+        "immunityAoe",
+        "passive",
+        "provoke",
+        "revive",
+        "strip"
+      ],
+      "counters": [
+        "ao-seara-tiana-liebli-bastet",
+        "ao-elsharion-woosa-perna-theomars",
+        "ao-woosa-theomars-perna-tesarion"
+      ],
       "source": "community"
     },
     {
@@ -1305,6 +1624,21 @@
           "Taranys"
         ]
       },
+      "traits": [
+        "buffer",
+        "defLead",
+        "heal",
+        "ignoreRes",
+        "immunityAoe",
+        "passive",
+        "revive",
+        "strip"
+      ],
+      "counters": [
+        "ao-seara-tiana-liebli-bastet",
+        "ao-leo-galleon-lushen-lushen",
+        "ao-oberon-tiana-galleon-lushen"
+      ],
       "source": "community"
     },
     {
@@ -1336,6 +1670,21 @@
           "Xiao Lin"
         ]
       },
+      "traits": [
+        "buffer",
+        "cc",
+        "heal",
+        "hpLead",
+        "immunityAoe",
+        "passive",
+        "revive",
+        "strip"
+      ],
+      "counters": [
+        "ao-seara-tiana-liebli-bastet",
+        "ao-seara-tiana-jojo-bastet",
+        "ao-seara-tiana-liebli-malaka"
+      ],
       "source": "community"
     },
     {
@@ -1367,6 +1716,20 @@
           "Dominic"
         ]
       },
+      "traits": [
+        "buffer",
+        "cooldown",
+        "heal",
+        "ignoreDef",
+        "immunityAoe",
+        "passive",
+        "resLead"
+      ],
+      "counters": [
+        "ao-zaiross-tiana-galleon-kaki",
+        "ao-oberon-tiana-galleon-lushen",
+        "ao-seara-tiana-liebli-bastet"
+      ],
       "source": "community"
     },
     {
@@ -1404,6 +1767,21 @@
           "Zeratu"
         ]
       },
+      "traits": [
+        "buffer",
+        "counter",
+        "heal",
+        "immunityAoe",
+        "passive",
+        "provoke",
+        "resLead",
+        "strip"
+      ],
+      "counters": [
+        "ao-seara-tiana-liebli-bastet",
+        "ao-woosa-theomars-perna-tesarion",
+        "ao-oberon-tiana-galleon-lushen"
+      ],
       "source": "community"
     },
     {
@@ -1442,6 +1820,19 @@
           "Leo"
         ]
       },
+      "traits": [
+        "accLead",
+        "buffer",
+        "counter",
+        "passive",
+        "provoke",
+        "strip"
+      ],
+      "counters": [
+        "ao-seara-tiana-liebli-bastet",
+        "ao-seara-tiana-jojo-bastet",
+        "ao-poseidon-tiana-charlotte-zaiross"
+      ],
       "source": "community"
     },
     {
@@ -1477,6 +1868,20 @@
           "Harmonia"
         ]
       },
+      "traits": [
+        "accLead",
+        "buffer",
+        "cc",
+        "cooldown",
+        "heal",
+        "immunityAoe",
+        "passive"
+      ],
+      "counters": [
+        "ao-seara-tiana-liebli-bastet",
+        "ao-jeanne-rakan-theomars-camilla",
+        "ao-seara-tiana-liebli-malaka"
+      ],
       "source": "community"
     },
     {
@@ -1510,6 +1915,20 @@
           "Louise"
         ]
       },
+      "traits": [
+        "buffer",
+        "cc",
+        "heal",
+        "immunityAoe",
+        "passive",
+        "provoke",
+        "resLead",
+        "strip"
+      ],
+      "counters": [
+        "ao-seara-tiana-liebli-bastet",
+        "ao-woosa-theomars-perna-tesarion"
+      ],
       "source": "community"
     },
     {
@@ -1544,6 +1963,22 @@
           "Rakan"
         ]
       },
+      "traits": [
+        "buffer",
+        "cc",
+        "cooldown",
+        "heal",
+        "immunityAoe",
+        "passive",
+        "revive",
+        "speedLead",
+        "strip"
+      ],
+      "counters": [
+        "ao-zaiross-tiana-galleon-kaki",
+        "ao-oberon-tiana-galleon-lushen",
+        "ao-giana-galleon-lushen-lushen"
+      ],
       "source": "community"
     },
     {
@@ -1575,6 +2010,19 @@
           "Rakan"
         ]
       },
+      "traits": [
+        "defLead",
+        "heal",
+        "passive",
+        "revive",
+        "strip"
+      ],
+      "counters": [
+        "ao-oliver-tiana-galleon-kaki",
+        "ao-ganymede-tiana-galleon-lushen",
+        "ao-poseidon-tiana-charlotte-zaiross",
+        "ao-seara-tiana-liebli-bastet"
+      ],
       "source": "community"
     },
     {
@@ -1609,6 +2057,23 @@
           "Perna"
         ]
       },
+      "traits": [
+        "accLead",
+        "buffer",
+        "cc",
+        "cooldown",
+        "counter",
+        "heal",
+        "immunityAoe",
+        "passive",
+        "provoke",
+        "strip"
+      ],
+      "counters": [
+        "ao-seara-tiana-liebli-bastet",
+        "ao-woosa-theomars-perna-tesarion",
+        "ao-seara-tiana-jojo-bastet"
+      ],
       "source": "community"
     },
     {
@@ -1642,6 +2107,22 @@
           "Taranys"
         ]
       },
+      "traits": [
+        "antiSpeed",
+        "atb",
+        "buffer",
+        "heal",
+        "ignoreDef",
+        "immunityAoe",
+        "passive",
+        "revive",
+        "strip"
+      ],
+      "counters": [
+        "ao-jeanne-rakan-theomars-camilla",
+        "ao-woosa-theomars-perna-tesarion",
+        "ao-seara-tiana-liebli-bastet"
+      ],
       "source": "community"
     },
     {
@@ -1676,6 +2157,20 @@
           "Tractor"
         ]
       },
+      "traits": [
+        "buffer",
+        "counter",
+        "defLead",
+        "heal",
+        "immunityAoe",
+        "passive",
+        "revive",
+        "strip"
+      ],
+      "counters": [
+        "ao-oberon-tiana-galleon-lushen",
+        "ao-seara-tiana-liebli-bastet"
+      ],
       "source": "community"
     },
     {
@@ -1707,6 +2202,19 @@
           "Brandia"
         ]
       },
+      "traits": [
+        "buffer",
+        "cc",
+        "heal",
+        "hpLead",
+        "immunityAoe",
+        "passive",
+        "revive"
+      ],
+      "counters": [
+        "ao-seara-tiana-liebli-bastet",
+        "ao-ganymede-tiana-galleon-lushen"
+      ],
       "source": "community"
     },
     {
@@ -1737,6 +2245,19 @@
           "Layla"
         ]
       },
+      "traits": [
+        "accLead",
+        "buffer",
+        "heal",
+        "immunityAoe",
+        "passive",
+        "revive",
+        "strip"
+      ],
+      "counters": [
+        "ao-seara-tiana-liebli-bastet",
+        "ao-zaiross-tiana-galleon-lushen"
+      ],
       "source": "community"
     },
     {
@@ -1773,6 +2294,19 @@
           "Woosa"
         ]
       },
+      "traits": [
+        "cc",
+        "cooldown",
+        "heal",
+        "passive",
+        "revive",
+        "speedLead",
+        "strip"
+      ],
+      "counters": [
+        "ao-leo-galleon-lushen-lushen",
+        "ao-vanessa-tiana-galleon-zaiross"
+      ],
       "source": "community"
     },
     {
@@ -1804,6 +2338,22 @@
           "Daphnis"
         ]
       },
+      "traits": [
+        "accLead",
+        "atb",
+        "buffer",
+        "cooldown",
+        "heal",
+        "ignoreRes",
+        "immunityAoe",
+        "passive",
+        "revive",
+        "strip"
+      ],
+      "counters": [
+        "ao-seara-tiana-liebli-bastet",
+        "ao-vanessa-tiana-galleon-zaiross"
+      ],
       "source": "community"
     },
     {
@@ -1840,6 +2390,20 @@
           "Feng Yan"
         ]
       },
+      "traits": [
+        "accLead",
+        "buffer",
+        "counter",
+        "heal",
+        "immunityAoe",
+        "passive",
+        "provoke",
+        "strip"
+      ],
+      "counters": [
+        "ao-zaiross-tiana-galleon-lushen",
+        "ao-oberon-tiana-galleon-lushen"
+      ],
       "source": "community"
     },
     {
@@ -1871,6 +2435,20 @@
           "Psamathe"
         ]
       },
+      "traits": [
+        "buffer",
+        "cooldown",
+        "crLead",
+        "heal",
+        "immunityAoe",
+        "passive",
+        "revive",
+        "strip"
+      ],
+      "counters": [
+        "ao-seara-tiana-liebli-bastet",
+        "ao-vanessa-tiana-galleon-zaiross"
+      ],
       "source": "community"
     },
     {
@@ -1902,6 +2480,21 @@
           "Verad"
         ]
       },
+      "traits": [
+        "accLead",
+        "atb",
+        "buffer",
+        "cc",
+        "heal",
+        "immunityAoe",
+        "passive",
+        "revive",
+        "strip"
+      ],
+      "counters": [
+        "ao-vanessa-tiana-galleon-zaiross",
+        "ao-zaiross-tiana-galleon-kaki"
+      ],
       "source": "community"
     }
   ]
