@@ -21,6 +21,7 @@ import {
   TrendingUp,
   Sliders
 } from 'lucide-react';
+import AbyssCalculatorPanel from '../components/AbyssCalculatorPanel';
 
 const ELEMENT_STYLES = {
   Water: { label: 'ธาตุน้ำ', color: '#38bdf8', bg: 'bg-sky-500/15 text-sky-400 border-sky-500/30', icon: Droplets },
@@ -193,7 +194,23 @@ export default function DungeonStatsView({ onNavigate }) {
             <Target className="w-4 h-4" />
             <span>สเตตัสบอส & กลไกแก้ทาง (Boss Mechanics)</span>
           </button>
+          <button
+            onClick={() => setActiveSubTab('calc')}
+            className={`px-3.5 py-1.5 rounded-lg transition-all flex items-center gap-2 cursor-pointer ${
+              activeSubTab === 'calc'
+                ? 'bg-gradient-to-r from-amber-600 to-amber-500 text-white shadow-md shadow-amber-500/20'
+                : 'text-slate-400 hover:text-white bg-[#152030]'
+            }`}
+          >
+            <Sliders className="w-4 h-4 text-amber-300" />
+            <span>🎛️ เครื่องคำนวณวันช็อต & สปีด (Simulator)</span>
+          </button>
         </div>
+
+        {/* TAB 0: Interactive Damage & Speed Simulator */}
+        {activeSubTab === 'calc' && (
+          <AbyssCalculatorPanel />
+        )}
 
         {/* TAB 1: Speed Team & Turn Order */}
         {activeSubTab === 'team' && (

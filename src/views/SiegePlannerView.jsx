@@ -22,6 +22,7 @@ import MonsterAvatar from '../components/MonsterAvatar';
 import { MONSTERS } from '../data/monsters';
 import { loadBox, baseAwakenedId } from '../utils/swexImport';
 import { loadUserBoxFromDB } from '../services/storageService';
+import { generate10SiegeDecks } from '../utils/siegeAutoBuilder';
 
 const STORAGE_KEY = 'swm_siege_10_decks_v1';
 
@@ -265,6 +266,40 @@ export default function SiegePlannerView() {
     });
   }, [pickerTab, ownedUnits, pickerElement, pickerSearch]);
 
+  const [autoGenSummary, setAutoGenSummary] = useState(null);
+
+  // Auto Generate 10 Decks from Box & 3MDC
+  const handleAutoGenerateFromBox = () => {
+    const result = generate10SiegeDecks(userBox);
+    const convertedDecks = result.decks.map((d, i) => {
+      const slots = d.slots.map((mon) => {
+        if (!mon) return null;
+        const owned = ownedUnits.find((u) => u.name?.toLowerCase() === mon.name?.toLowerCase());
+        return {
+          name: mon.name,
+          element: mon.element || 'wind',
+          stars: mon.stars || 5,
+          image: mon.avatarUrl || `https://swarfarm.com/static/herders/images/monsters/${mon.id || 100}.png`,
+          speedBonus: owned?.speedBonus || 0,
+          baseSpeed: mon.base_speed || 100,
+          totalSpeed: owned ? owned.totalSpeed : (mon.base_speed || 100),
+          isOwned: !!owned,
+        };
+      });
+      return {
+        id: i + 1,
+        name: d.name,
+        slots,
+        leaderIdx: 0,
+        notes: d.notes,
+        winRate: d.winRate,
+        archetype: d.archetype,
+      };
+    });
+    setDecks(convertedDecks);
+    setAutoGenSummary(result.summary);
+  };
+
   return (
     <div className="space-y-6 pb-20">
       {/* Header Banner */}
@@ -295,7 +330,15 @@ export default function SiegePlannerView() {
             className="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition shadow-sm cursor-pointer"
           >
             {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4 text-blue-400" />}
-            {copied ? 'คัดลอกแล้ว!' : 'คัดลอกรายชื่อ 10 ทีม'}
+            {copied ? 'คัดลอกแล้ว!' : 'คัดลอก 10 ทีม'}
+          </button>
+
+          <button
+            onClick={handleAutoGenerateFromBox}
+            className="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white shadow-lg shadow-emerald-500/20 transition cursor-pointer"
+          >
+            <Zap className="w-4 h-4 text-amber-300" />
+            ⚡ AI จัด 10 ทีมจากกล่อง (3MDC)
           </button>
 
           <button
@@ -303,7 +346,7 @@ export default function SiegePlannerView() {
             className="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white shadow-lg shadow-amber-500/10 transition cursor-pointer"
           >
             <Sparkles className="w-4 h-4" />
-            โหลด 10 ทีมเมต้า
+            10 ทีมเมต้าทั่วไป
           </button>
 
           <button
@@ -315,6 +358,20 @@ export default function SiegePlannerView() {
           </button>
         </div>
       </div>
+
+      {autoGenSummary && (
+        <div className="rounded-2xl bg-emerald-950/40 border border-emerald-500/30 p-4 text-xs sm:text-sm text-emerald-200 flex items-center justify-between gap-3 shadow-lg">
+          <div className="flex items-center gap-2.5">
+            <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
+            <div>
+              <span className="font-bold text-white">AI จัด 10 ทีมบุกสำเร็จ:</span> ใช้มอนสเตอร์ไม่ซ้ำกัน {autoGenSummary.usedMonstersCount} ตัว • อัตราชนะเฉลี่ยใน 3MDC <strong className="text-emerald-300 font-mono text-base">{autoGenSummary.avgWinRate}</strong>
+            </div>
+          </div>
+          <button onClick={() => setAutoGenSummary(null)} className="text-emerald-400 hover:text-white text-xs cursor-pointer">
+            ปิด
+          </button>
+        </div>
+      )}
 
       {/* Status Bar: Filled Count & Duplicate Alert */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

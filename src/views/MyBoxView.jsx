@@ -19,8 +19,9 @@ import { parseSwexExport, ownedIdSet, loadBox, saveBox, clearBox, baseAwakenedId
 import { supportsFolderWatch, loadDirHandle, clearDirHandle, pickSwexFolder, ensurePermission, findNewestExport } from '../utils/swexWatcher';
 import { exportAllDataAsJSON, importDataFromJSON } from '../services/storageService';
 import * as aegisLive from '../services/aegisLive';
-import { loadPublicSettings } from '../services/adminClient';
 import { exportLdShowcaseCard } from '../utils/cardExporter';
+import AccountRadarChart from '../components/AccountRadarChart';
+import { calculateAccountRadar } from '../utils/accountRadar';
 
 const WATCH_INTERVAL_MS = 20 * 1000;
 
@@ -581,8 +582,12 @@ function Overview({ box, mdc, owned, onTab, onNavigate, onOpenUnit }) {
     .sort((a, b) => (b.obtained > a.obtained ? 1 : -1))
     .slice(0, 8), [withInfo]);
 
+  const radarData = useMemo(() => calculateAccountRadar(box), [box]);
+
   return (
     <div className="space-y-4">
+      {/* 6-Axis Summoner Power Radar */}
+      <AccountRadarChart radarData={radarData} />
       {latestNat5.length > 0 && (
         <div className={`${card} p-4`}>
           <div className="flex items-center justify-between mb-3">
