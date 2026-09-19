@@ -15,7 +15,8 @@
     "players:fetch": "node scripts/fetch_swrt_players.cjs",
     "players:quick": "node scripts/fetch_swrt_players.cjs --quick",
     "sync:data": "node scripts/sync_all_sw_data.mjs",
-    "skills:shards": "node scripts/build_skill_shards.mjs --force"
+    "skills:shards": "node scripts/build_skill_shards.mjs --force",
+    "prerender": "node scripts/prerender_monsters.mjs"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1134.0",

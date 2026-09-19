@@ -62,24 +62,44 @@ export function normalizeView(view) {
   return VIEW_TITLES[id] ? id : DEFAULT_VIEW;
 }
 
+/**
+ * URL slug for a monster name: "Alice / Hollyberry Cookie" → "alice-hollyberry-cookie".
+ * Shared with scripts/prerender_monsters.mjs so /monster/<slug> means the same thing on both sides.
+ */
+export function monsterSlug(name) {
+  return String(name || '')
+    .normalize('NFKD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+// /monster/<slug> is the crawlable, shareable address of a monster in the encyclopedia
+const MONSTER_PATH = /^monster\/([^/]+)$/;
+
 export function buildUrl(view, params = {}) {
   const id = normalizeView(view);
   const qs = new URLSearchParams();
+  let path = id === DEFAULT_VIEW ? '/' : `/${id}`;
   for (const [key, value] of Object.entries(params)) {
     if (value === undefined || value === null || value === '') continue;
+    if (id === 'catalog' && key === 'initialMonster') { path = `/monster/${monsterSlug(value) || encodeURIComponent(value)}`; continue; }
     qs.set(PARAM_KEYS[key] || key, String(value));
   }
   const query = qs.toString();
-  return (id === DEFAULT_VIEW ? '/' : `/${id}`) + (query ? `?${query}` : '');
+  return path + (query ? `?${query}` : '');
 }
 
 export function parseLocation(loc = window.location) {
   const segment = loc.pathname.replace(/^\/+|\/+$/g, '');
-  const view = segment ? normalizeView(segment) : DEFAULT_VIEW;
+  const monster = MONSTER_PATH.exec(segment);
+  const view = monster ? 'catalog' : segment ? normalizeView(segment) : DEFAULT_VIEW;
   const params = {};
   for (const [key, value] of new URLSearchParams(loc.search)) {
     params[QUERY_KEYS[key] || key] = value;
   }
+  if (monster) params.initialMonster = decodeURIComponent(monster[1]);
   return { view, params };
 }
 

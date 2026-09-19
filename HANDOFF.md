@@ -46,7 +46,7 @@ npm run dev               # http://localhost:5173
 ```
 src/
   App.jsx            เชลล์แอป: lazy VIEWS map, router, Ctrl+K, แบนเนอร์ประกาศ, autoStart AegisLink
-  router.js          path = /<viewId>, query q/tab/player/monster, VIEW_TITLES
+  router.js          path = /<viewId>, query q/tab/player/monster, VIEW_TITLES; /monster/<slug> = สารานุกรมเปิดตัวนั้น (monsterSlug ใช้ร่วมกับตัว prerender)
   views/*View.jsx    หน้าละไฟล์ (Dashboard, MyBox, GuildWarRoom, Admin, Leaderboards, PluginCompanion…)
   components/        AiChatPanel, AiAnswer, AiAdvisorPanel, MonsterDetailModal, RuneBoard, RuneIcon, Sidebar, Navbar…
   contexts/AuthContext.jsx   Supabase auth + isAdmin + adminMode
@@ -160,5 +160,6 @@ Secrets ที่ต้องมีใน GitHub: `AI_BASE_URL`, `AI_MODEL`, `AI
 - lint: `npm run lint` (oxlint) — warning `set-state-in-effect`/`no-unused-vars` ที่ค้างเป็นของเดิม ไม่ต้องไล่แก้
 - test: `npm test` (vitest, ~3 วิ, ไม่ต้องมี .env) / `npm run test:watch` — แก้ parser ใน `src/utils/` หรือ `api/_lib/` แล้วรันก่อน commit; fixture แพ็กเก็ตใน `tests/siegeLive.test.js` เป็นรูปแบบที่*เดา*จากชื่อฟิลด์ พอเจอแพ็กเก็ตจริงให้แก้ fixture ตาม
 - build: `npm run build` (main bundle ~280 kB gzip 87 kB — อย่า import แคตตาล็อก/Supabase SDK เข้าเชลล์)
+- **SEO / หน้ามอนสเตอร์:** `vite build` จบแล้ว plugin `swm-prerender` เขียน `dist/monster/<slug>.html` 940 หน้า (title/description/OG/canonical + สกิลไทยเป็น HTML ใน `#root`), `dist/sitemap.xml`, `dist/robots.txt` (`npm run prerender` รันซ้ำบน dist เดิมได้) — Vercel เสิร์ฟไฟล์ static ก่อน SPA rewrite และ `cleanUrls: true` ทำให้ `/monster/lushen` = `lushen.html`; ฝั่ง SPA `router.js` แปลง path นั้นเป็น catalog + เปิด modal และตอนเปิด modal จะ `replaceState` เป็น URL เดียวกัน ถ้าแก้ชื่อมอนสเตอร์ใน `allMonsters.json` URL จะเปลี่ยนตาม (ไม่มี redirect ของเก่า)
 - **อย่า `import monsterSkillsData.json` ใน `src/`** — chunk จะบวม 5 MB ทันที (เคยเป็นแบบนั้นกับหน้าสารานุกรม) ใช้ `useMonsterSkills(monster)` / `loadMonsterSkills()` / `getSkillTags()` จาก `src/data/monsterSkills.js` แทน
 - Vite dev จำรายชื่อไฟล์ใน `public/` ตอนสร้าง server — ไฟล์ที่ plugin สร้างต้องเกิดใน `configResolved` (ไม่ใช่ `buildStart`) และเขียนทับแทนลบ-สร้างใหม่ ไม่งั้น request จะได้ index.html แทนไฟล์

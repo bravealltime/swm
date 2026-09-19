@@ -3,6 +3,18 @@ import { defineConfig } from 'vite';
 import fs from 'fs';
 import path from 'path';
 import { buildSkillShards } from './scripts/build_skill_shards.mjs';
+import { prerenderMonsters } from './scripts/prerender_monsters.mjs';
+
+// After the production bundle is written: one crawlable HTML page per monster + sitemap/robots
+function prerender() {
+  return {
+    name: 'swm-prerender',
+    apply: 'build',
+    closeBundle() {
+      prerenderMonsters({ root: __dirname, log: console.log });
+    },
+  };
+}
 
 // Regenerates public/data/skills/*.json + src/data/monsterSkillsIndex.json from monsterSkillsData.json
 // whenever the source is newer — runs for both `vite` (dev) and `vite build`, so the generated files
@@ -150,7 +162,7 @@ function swmSyncServer() {
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), skillShards(), swmSyncServer()],
+  plugins: [react(), skillShards(), prerender(), swmSyncServer()],
   server: {
     host: true
   }

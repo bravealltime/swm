@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { BookOpen, Search, Swords, X, Filter, Info } from 'lucide-react';
 import MonsterAvatar from '../components/MonsterAvatar';
 import SkillTooltip from '../components/SkillTooltip';
@@ -6,6 +6,20 @@ import MonsterSkillsCard from '../components/MonsterSkillsCard';
 import { MONSTERS } from '../data/monsters';
 import { getSkillTags } from '../data/monsterSkills';
 import { useMonsterSkills } from '../hooks/useMonsterSkills';
+import { monsterSlug } from '../router';
+
+/** Monster for a /monster/<slug> address (also accepts a plain name or catalog id). */
+function monsterFromSlug(slug) {
+  if (!slug) return null;
+  const s = monsterSlug(slug);
+  return MONSTERS.find((m) => monsterSlug(m.name) === s) || MONSTERS.find((m) => m.id === slug || String(m.com2usId) === slug) || null;
+}
+
+// same wording as the prerendered page (scripts/prerender_monsters.mjs): "ลูเชน (โจ๊กเกอร์ลม)" → "ลูเชน · โจ๊กเกอร์ลม"
+const monsterTitle = (m) => {
+  const thai = m.thaiName && m.thaiName !== m.name ? String(m.thaiName).replace(/\s*\((.*)\)\s*$/, ' · $1') : '';
+  return `${m.name}${thai ? ` (${thai})` : ''} — สกิล สเตตัส และวิธีใช้ | SWM`;
+};
 
 const FALLBACK_SKILL_ICON = 'https://do9d4mpqk497d.cloudfront.net/common/images/skills36/skill_icon_0001_0_0.png';
 
@@ -98,13 +112,34 @@ function MonsterCard({ monster, onSelect }) {
   );
 }
 
-export default function MonsterCatalogView({ initialSearch = '', onNavigate }) {
-  const [searchQuery, setSearchQuery] = useState(initialSearch);
+export default function MonsterCatalogView({ initialSearch = '', initialMonster = '', onNavigate }) {
+  const [initial] = useState(() => monsterFromSlug(initialMonster));
+  const [searchQuery, setSearchQuery] = useState(initialSearch || initial?.name || '');
   const [selectedElement, setSelectedElement] = useState('all');
   const [selectedStars, setSelectedStars] = useState('all');
   const [selectedEffect, setSelectedEffect] = useState('all');
-  const [selectedMonster, setSelectedMonster] = useState(null);
+  const [selectedMonster, setSelectedMonster] = useState(initial);
   const [visibleCount, setVisibleCount] = useState(48);
+
+  // While the inspector is open the address bar shows /monster/<slug> — the same URL the
+  // prerendered pages use — so it can be shared, bookmarked and indexed; closing it goes back to /catalog.
+  useEffect(() => {
+    if (selectedMonster) {
+      const url = `/monster/${monsterSlug(selectedMonster.name)}`;
+      if (window.location.pathname !== url) window.history.replaceState(null, '', url);
+      document.title = monsterTitle(selectedMonster);
+    } else if (window.location.pathname.startsWith('/monster/')) {
+      window.history.replaceState(null, '', '/catalog');
+      document.title = 'สารานุกรมมอนสเตอร์ | SWM';
+    }
+  }, [selectedMonster]);
+
+  useEffect(() => {
+    if (!selectedMonster) return undefined;
+    const onKey = (e) => { if (e.key === 'Escape') setSelectedMonster(null); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [selectedMonster]);
 
   const elements = [
     { id: 'all', name: 'ทุกธาตุ' },
