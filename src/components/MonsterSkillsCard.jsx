@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import { 
   Sparkles, 
   Swords, 
@@ -11,12 +10,18 @@ import {
   HelpCircle,
   Activity,
   Heart,
-  Gauge
+  Gauge,
+  CheckCircle2,
+  AlertCircle
 } from 'lucide-react';
 import SkillTooltip from './SkillTooltip';
+import { computeUnitSkillStatus } from '../data/monsterSkills';
 
-export default function MonsterSkillsCard({ monsterData, enableTooltip = false }) {
+export default function MonsterSkillsCard({ monsterData, unit = null, unitSkills = null, enableTooltip = false }) {
   const [activeTab, setActiveTab] = useState('skills'); // 'skills' | 'stats' | 'guide'
+
+  const targetUnit = unit || (unitSkills ? { skills: unitSkills } : null);
+  const skillStatus = computeUnitSkillStatus(targetUnit, monsterData);
 
   if (!monsterData) {
     return (
@@ -72,6 +77,49 @@ export default function MonsterSkillsCard({ monsterData, enableTooltip = false }
       {/* Tab: Skills */}
       {activeTab === 'skills' && (
         <div className="space-y-3">
+          {/* Skill Status Summary Banner */}
+          {skillStatus.hasData && (
+            skillStatus.isMaxSkilled ? (
+              <div className="p-3 sm:p-3.5 rounded-xl bg-gradient-to-r from-emerald-950/40 via-[#0a1f18] to-[#0c121c] border border-emerald-500/30 flex items-center justify-between gap-2.5 flex-wrap">
+                <div className="flex items-center gap-2.5">
+                  <span className="p-1.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                  </span>
+                  <div>
+                    <div className="text-xs font-black text-white flex items-center gap-1.5">
+                      <span>สถานะสกิล: สกิลเต็มทุกท่า (Max Skills)</span>
+                      <span className="px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 text-[10px] font-mono border border-emerald-500/30">
+                        พร้อมใช้งาน 100%
+                      </span>
+                    </div>
+                    <div className="text-[11px] text-slate-300 mt-0.5">
+                      ลดคูลดาวน์และเพิ่มดาเมจ/ผลเอฟเฟกต์เต็มขีดจำกัดแล้ว ไม่ต้องกินเดวิลมอนเพิ่ม
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="p-3 sm:p-3.5 rounded-xl bg-gradient-to-r from-amber-950/40 via-[#261608] to-[#0c121c] border border-amber-500/30 flex items-center justify-between gap-2.5 flex-wrap">
+                <div className="flex items-center gap-2.5">
+                  <span className="p-1.5 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/40">
+                    <AlertCircle className="w-4 h-4 text-amber-400" />
+                  </span>
+                  <div>
+                    <div className="text-xs font-black text-white flex items-center gap-1.5">
+                      <span>สถานะสกิล: ยังไม่เต็ม (Incomplete)</span>
+                      <span className="px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 text-[10px] font-mono font-bold border border-amber-500/30">
+                        ขาดอีก {skillStatus.missingSkillups} ขั้น
+                      </span>
+                    </div>
+                    <div className="text-[11px] text-slate-300 mt-0.5">
+                      ต้องใช้ <span className="text-amber-300 font-bold">เดวิลมอน (Devilmon) {skillStatus.missingSkillups} ตัว</span> เพื่ออัปสกิลให้เต็มประสิทธิภาพ
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )
+          )}
+
           {/* Leader Skill */}
           {leaderSkill && (
             <SkillTooltip leaderSkill={leaderSkill} enabled={enableTooltip}>
@@ -100,141 +148,193 @@ export default function MonsterSkillsCard({ monsterData, enableTooltip = false }
           )}
 
           {/* Active / Passive Skills List */}
-          {skills.map((skill, idx) => (
-            <div 
-              key={skill.id || idx}
-              className="p-3.5 rounded-xl bg-[#0c121c] border border-[#1d2b3f] hover:border-blue-500/50 transition-all space-y-2.5 shadow-sm"
-            >
-              {/* Top Row: Icon, Slot badge, Cooldown, Name */}
-              <div className="flex items-start justify-between gap-3">
-                <div className="flex items-center gap-3">
-                  {/* Skill icon with hover tooltip */}
-                  <SkillTooltip skill={skill} enabled={enableTooltip}>
-                    <div className="relative group">
-                      <img 
-                        src={skill.iconUrl} 
-                        alt={skill.name} 
-                        className="w-11 h-11 rounded-lg bg-black/50 border border-blue-500/40 p-0.5 group-hover:border-blue-400 group-hover:scale-105 transition-all shadow-md"
-                        onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src = 'https://do9d4mpqk497d.cloudfront.net/common/images/skills36/skill_icon_0001_0_0.png';
-                        }}
-                      />
-                      <span className="absolute -bottom-1.5 right-0 text-[10px] font-mono font-bold bg-[#0d1522] border border-[#1d2b3f] text-slate-300 px-1 rounded shadow">
-                        {skill.isPassive ? 'Pass' : `1/${skill.maxLevel || 3}`}
-                      </span>
-                    </div>
-                  </SkillTooltip>
+          {skills.map((skill, idx) => {
+            const skDetail = skillStatus.skills.find((s) => s.id === skill.id) || skillStatus.skills[idx];
+            const currLvl = skDetail?.currentLevel;
+            const maxLvl = skDetail?.maxLevel || skill.maxLevel || (skill.skillups ? skill.skillups.length + 1 : 1);
+            const isMax = skDetail ? skDetail.isMaxed : (currLvl !== null && currLvl !== undefined ? currLvl >= maxLvl : false);
 
-                  <div>
-                    <div className="flex items-center gap-1.5 flex-wrap">
-                      <span className={`px-2 py-0.5 rounded text-[11px] font-extrabold uppercase ${
-                        skill.isPassive 
-                          ? 'bg-purple-500/20 text-purple-300 border border-purple-500/40' 
-                          : skill.slot === 1 
-                          ? 'bg-blue-500/20 text-blue-300 border border-blue-500/40'
-                          : skill.slot === 2
-                          ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40'
-                          : 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
-                      }`}>
-                        {skill.slotLabel}
-                      </span>
-
-                      <span className={`text-[11px] px-2 py-0.5 rounded font-mono font-bold ${
-                        skill.isPassive 
-                          ? 'bg-purple-950/40 text-purple-300 border border-purple-800/40'
-                          : skill.cooldown 
-                          ? 'bg-sky-950/40 text-sky-300 border border-sky-800/40'
-                          : 'bg-slate-800/50 text-slate-400 border border-slate-700/40'
-                      }`}>
-                        {skill.cooldownText}
-                      </span>
-
-                      {skill.isAoe && (
-                        <span className="text-[11px] bg-indigo-950/40 text-indigo-300 px-2 py-0.5 rounded border border-indigo-800/40 font-bold">
-                          โจมตีหมู่ (AOE)
+            return (
+              <div 
+                key={skill.id || idx}
+                className="p-3.5 rounded-xl bg-[#0c121c] border border-[#1d2b3f] hover:border-blue-500/50 transition-all space-y-2.5 shadow-sm"
+              >
+                {/* Top Row: Icon, Slot badge, Cooldown, Name */}
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-center gap-3">
+                    {/* Skill icon with hover tooltip */}
+                    <SkillTooltip skill={skill} enabled={enableTooltip}>
+                      <div className="relative group">
+                        <img 
+                          src={skill.iconUrl} 
+                          alt={skill.name} 
+                          className="w-11 h-11 rounded-lg bg-black/50 border border-blue-500/40 p-0.5 group-hover:border-blue-400 group-hover:scale-105 transition-all shadow-md"
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = 'https://do9d4mpqk497d.cloudfront.net/common/images/skills36/skill_icon_0001_0_0.png';
+                          }}
+                        />
+                        <span className={`absolute -bottom-1.5 right-0 text-[10px] font-mono px-1 rounded shadow border ${
+                          skill.isPassive && maxLvl === 1
+                            ? 'bg-purple-950/90 border-purple-800 text-purple-300 font-bold'
+                            : isMax
+                            ? 'bg-emerald-950 border-emerald-500/60 text-emerald-300 font-black'
+                            : currLvl !== null && currLvl !== undefined
+                            ? 'bg-amber-950 border-amber-500/60 text-amber-300 font-bold'
+                            : 'bg-[#0d1522] border-[#1d2b3f] text-slate-300 font-bold'
+                        }`}>
+                          {skill.isPassive && maxLvl === 1
+                            ? 'Pass'
+                            : currLvl !== null && currLvl !== undefined
+                            ? (isMax ? 'MAX' : `Lv.${currLvl}/${maxLvl}`)
+                            : `Lv.1/${maxLvl}`}
                         </span>
-                      )}
-
-                      {skill.hits > 1 && (
-                        <span className="text-[11px] bg-yellow-950/40 text-yellow-300 px-2 py-0.5 rounded border border-yellow-800/40 font-mono font-bold">
-                          {skill.hits} ฮิต
-                        </span>
-                      )}
-                    </div>
-
-                    <h4 className="text-sm font-bold text-white mt-1">
-                      {skill.name}
-                    </h4>
-                  </div>
-                </div>
-              </div>
-
-              {/* Description in Thai */}
-              <p className="text-xs text-slate-200 leading-relaxed font-sans bg-[#101724] p-2.5 rounded-lg border border-[#162232]">
-                {skill.descriptionTh || skill.description}
-              </p>
-
-              {/* Damage Multiplier & Scaling Formula */}
-              {(skill.multiplier || (skill.scalesWith && skill.scalesWith.length > 0)) && (
-                <div className="flex flex-wrap items-center gap-2 text-xs bg-[#090e17] px-3 py-1.5 rounded-lg border border-[#192537]">
-                  {skill.multiplier && (
-                    <div className="flex items-center gap-1.5 font-mono">
-                      <span className="text-slate-400 text-xs">สูตรดาเมจตัวคูณ:</span>
-                      <span className="text-amber-400 font-bold">{skill.multiplier}</span>
-                    </div>
-                  )}
-                  {skill.scalesWith && skill.scalesWith.length > 0 && (
-                    <div className="flex items-center gap-1.5">
-                      <span className="text-slate-400 text-xs">สเกลตาม:</span>
-                      <span className="text-emerald-400 font-bold font-mono">
-                        {skill.scalesWith.join(' + ')}
-                      </span>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* Debuffs & Buffs Badges */}
-              {skill.effects && skill.effects.length > 0 && (
-                <div className="flex flex-wrap gap-1.5">
-                  {skill.effects.map((eff, i) => (
-                    <span 
-                      key={i}
-                      className={`px-2 py-0.5 rounded-md text-[11px] font-bold border ${eff.badgeClass || 'bg-slate-800 text-slate-300 border-slate-700'}`}
-                    >
-                      {eff.nameTh || eff.name} {eff.chance ? `(${eff.chance}%)` : ''}
-                    </span>
-                  ))}
-                </div>
-              )}
-
-              {/* Tactics & Mechanics Note */}
-              {skill.tactics && (
-                <div className="text-xs text-blue-300/90 bg-blue-950/20 border border-blue-900/30 px-3 py-1.5 rounded-lg leading-relaxed">
-                  {skill.tactics}
-                </div>
-              )}
-
-              {/* Skill-ups */}
-              {skill.skillups && skill.skillups.length > 0 && (
-                <div className="pt-2 border-t border-[#162232]">
-                  <div className="text-[11px] text-slate-400 font-bold mb-1 flex items-center gap-1">
-                    <Layers className="w-3 h-3 text-slate-400" />
-                    อัปเกรดเลเวลสกิล (Skill Ups สูงสุด Lv.{skill.maxLevel || (skill.skillups.length + 1)}):
-                  </div>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-1 text-[11px]">
-                    {skill.skillups.map((u, ui) => (
-                      <div key={ui} className="bg-[#090e17] px-2 py-1 rounded border border-[#162232] text-slate-300 font-mono flex items-center justify-between">
-                        <span className="text-slate-400">Lv.{ui + 2}</span>
-                        <span className="text-slate-200">{u}</span>
                       </div>
+                    </SkillTooltip>
+
+                    <div>
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className={`px-2 py-0.5 rounded text-[11px] font-extrabold uppercase ${
+                          skill.isPassive 
+                            ? 'bg-purple-500/20 text-purple-300 border border-purple-500/40' 
+                            : skill.slot === 1 
+                            ? 'bg-blue-500/20 text-blue-300 border border-blue-500/40'
+                            : skill.slot === 2
+                            ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40'
+                            : 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
+                        }`}>
+                          {skill.slotLabel}
+                        </span>
+
+                        <span className={`text-[11px] px-2 py-0.5 rounded font-mono font-bold ${
+                          skill.isPassive 
+                            ? 'bg-purple-950/40 text-purple-300 border border-purple-800/40'
+                            : skill.cooldown 
+                            ? 'bg-sky-950/40 text-sky-300 border border-sky-800/40'
+                            : 'bg-slate-800/50 text-slate-400 border border-slate-700/40'
+                        }`}>
+                          {skill.cooldownText}
+                        </span>
+
+                        {skill.isAoe && (
+                          <span className="text-[11px] bg-indigo-950/40 text-indigo-300 px-2 py-0.5 rounded border border-indigo-800/40 font-bold">
+                            โจมตีหมู่ (AOE)
+                          </span>
+                        )}
+
+                        {skill.hits > 1 && (
+                          <span className="text-[11px] bg-yellow-950/40 text-yellow-300 px-2 py-0.5 rounded border border-yellow-800/40 font-mono font-bold">
+                            {skill.hits} ฮิต
+                          </span>
+                        )}
+
+                        {currLvl !== null && currLvl !== undefined && !isMax && !(skill.isPassive && maxLvl === 1) && (
+                          <span className="text-[10px] px-1.5 py-0.2 rounded bg-amber-500/15 text-amber-300 border border-amber-500/30 font-semibold font-mono">
+                            ขาดอีก {maxLvl - currLvl} ขั้น
+                          </span>
+                        )}
+                        {currLvl !== null && currLvl !== undefined && isMax && !(skill.isPassive && maxLvl === 1) && (
+                          <span className="text-[10px] px-1.5 py-0.2 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 font-semibold font-mono">
+                            สกิลเต็ม
+                          </span>
+                        )}
+                      </div>
+
+                      <h4 className="text-sm font-bold text-white mt-1">
+                        {skill.name}
+                      </h4>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Description in Thai */}
+                <p className="text-xs text-slate-200 leading-relaxed font-sans bg-[#101724] p-2.5 rounded-lg border border-[#162232]">
+                  {skill.descriptionTh || skill.description}
+                </p>
+
+                {/* Damage Multiplier & Scaling Formula */}
+                {(skill.multiplier || (skill.scalesWith && skill.scalesWith.length > 0)) && (
+                  <div className="flex flex-wrap items-center gap-2 text-xs bg-[#090e17] px-3 py-1.5 rounded-lg border border-[#192537]">
+                    {skill.multiplier && (
+                      <div className="flex items-center gap-1.5 font-mono">
+                        <span className="text-slate-400 text-xs">สูตรดาเมจตัวคูณ:</span>
+                        <span className="text-amber-400 font-bold">{skill.multiplier}</span>
+                      </div>
+                    )}
+                    {skill.scalesWith && skill.scalesWith.length > 0 && (
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-slate-400 text-xs">สเกลตาม:</span>
+                        <span className="text-emerald-400 font-bold font-mono">
+                          {skill.scalesWith.join(' + ')}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Debuffs & Buffs Badges */}
+                {skill.effects && skill.effects.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5">
+                    {skill.effects.map((eff, i) => (
+                      <span 
+                        key={i}
+                        className={`px-2 py-0.5 rounded-md text-[11px] font-bold border ${eff.badgeClass || 'bg-slate-800 text-slate-300 border-slate-700'}`}
+                      >
+                        {eff.nameTh || eff.name} {eff.chance ? `(${eff.chance}%)` : ''}
+                      </span>
                     ))}
                   </div>
-                </div>
-              )}
-            </div>
-          ))}
+                )}
+
+                {/* Tactics & Mechanics Note */}
+                {skill.tactics && (
+                  <div className="text-xs text-blue-300/90 bg-blue-950/20 border border-blue-900/30 px-3 py-1.5 rounded-lg leading-relaxed">
+                    {skill.tactics}
+                  </div>
+                )}
+
+                {/* Skill-ups */}
+                {skill.skillups && skill.skillups.length > 0 && (
+                  <div className="pt-2 border-t border-[#162232]">
+                    <div className="text-[11px] text-slate-400 font-bold mb-1 flex items-center justify-between">
+                      <span className="flex items-center gap-1">
+                        <Layers className="w-3 h-3 text-slate-400" />
+                        อัปเกรดเลเวลสกิล (สูงสุด Lv.{maxLvl}):
+                      </span>
+                      {currLvl !== null && currLvl !== undefined && (
+                        <span className="text-[10px] font-mono text-slate-400">
+                          ปัจจุบัน: <span className={isMax ? 'text-emerald-400 font-bold' : 'text-amber-400 font-bold'}>Lv.{currLvl}</span>
+                        </span>
+                      )}
+                    </div>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-1 text-[11px]">
+                      {skill.skillups.map((u, ui) => {
+                        const stepLevel = ui + 2;
+                        const isUnlocked = currLvl !== null && currLvl !== undefined && currLvl >= stepLevel;
+                        return (
+                          <div 
+                            key={ui} 
+                            className={`px-2 py-1 rounded border font-mono flex items-center justify-between transition-colors ${
+                              isUnlocked
+                                ? 'bg-emerald-950/25 border-emerald-500/40 text-emerald-200'
+                                : currLvl !== null && currLvl !== undefined
+                                ? 'bg-[#090e17] border-[#162232] text-slate-500'
+                                : 'bg-[#090e17] border-[#162232] text-slate-300'
+                            }`}
+                          >
+                            <span className={isUnlocked ? 'text-emerald-400 font-bold flex items-center gap-0.5' : 'text-slate-400'}>
+                              {isUnlocked && '✓ '}Lv.{stepLevel}
+                            </span>
+                            <span className={isUnlocked ? 'text-emerald-300' : 'text-slate-300'}>{u}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       )}
 

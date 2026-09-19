@@ -2,6 +2,7 @@
 // the parser reads from a real export; ids are real com2us ids so the catalog lookup works.
 import { describe, it, expect } from 'vitest';
 import { parseSwexExport, baseAwakenedId, isNonSummonableLd5, ownedIdSet, getMonsterCatalogInfo, RUNE_SETS } from '../src/utils/swexImport.js';
+import { computeUnitSkillStatus, getMonsterMaxSkills } from '../src/data/monsterSkills.js';
 
 const SPD = 8;
 // pri_eff / prefix_eff: [stat, value]; sec_eff: [stat, value, enchanted, grind]
@@ -20,10 +21,11 @@ const EXPORT = {
       unit_id: 1, unit_master_id: 13413, // Lushen (wind Joker, awakened: family 134, stage 1, element 3)
       class: 6, unit_level: 40, attribute: 3, spd: 103, con: 6300, atk: 900, def: 500,
       critical_rate: 15, critical_damage: 50, accuracy: 0, resist: 15, create_time: '2024-01-02 03:04:05',
+      skills: [[710, 6], [717, 5], [724, 5]], // Max skilled Lushen
       runes: [swift(1), swift(2), swift(3), swift(4), will(5), will(6)],
       artifacts: [{ rid: 9001, type: 1, attribute: 3, slot: 1, rank: 5, level: 15, pri_eff: [1, 1500], sec_eff: [[207, 105, 1, 0]] }],
     },
-    { unit_id: 2, unit_master_id: 19215, class: 5, unit_level: 35, attribute: 5, spd: 100, con: 5000, atk: 700, def: 600, runes: {} }, // Veromos
+    { unit_id: 2, unit_master_id: 19215, class: 5, unit_level: 35, attribute: 5, spd: 100, con: 5000, atk: 700, def: 600, skills: [[1116, 2], [1121, 1], [1124, 1]], runes: {} }, // Unmaxed Veromos
     { unit_id: 3, unit_master_id: 0 }, // junk row
   ],
   runes: [rune(999, 2, 13)],
@@ -76,6 +78,27 @@ describe('parseSwexExport', () => {
     expect(box.artifacts).toHaveLength(2);
     expect(box.artifacts[0]).toMatchObject({ kind: 'element', element: 'wind', unit: 1, main: [1, 1500] });
     expect(box.artifacts[1]).toMatchObject({ kind: 'archetype', archetype: 'Support', unit: 0 });
+  });
+
+  it('preserves unit skills and computes maxed vs unmaxed skill status correctly', () => {
+    const lushen = box.units[0];
+    expect(lushen.skills).toEqual([[710, 6], [717, 5], [724, 5]]);
+    const lushenStatus = computeUnitSkillStatus(lushen);
+    expect(lushenStatus.hasData).toBe(true);
+    expect(lushenStatus.isMaxSkilled).toBe(true);
+    expect(lushenStatus.missingSkillups).toBe(0);
+
+    const veromos = box.units[1];
+    expect(veromos.skills).toEqual([[1116, 2], [1121, 1], [1124, 1]]);
+    const veromosStatus = computeUnitSkillStatus(veromos);
+    expect(veromosStatus.hasData).toBe(true);
+    expect(veromosStatus.isMaxSkilled).toBe(false);
+    expect(veromosStatus.missingSkillups).toBeGreaterThan(0);
+
+    // Demo unit with 'max'
+    const demoMaxStatus = computeUnitSkillStatus({ masterId: 13413, skills: 'max' });
+    expect(demoMaxStatus.isMaxSkilled).toBe(true);
+    expect(demoMaxStatus.missingSkillups).toBe(0);
   });
 
   it('stamps the box version and import time', () => {

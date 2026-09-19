@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect, useRef } from 'react';
 import {
   Upload, Package, Shield, Flame, Trash2, RefreshCw, Search, Lock, ChevronRight, Star, CheckCircle2, XCircle,
   Compass, LayoutDashboard, Gauge, Gem, Zap, Castle, X, AlertTriangle, Sparkles, FolderSync, FolderOpen, Pause,
-  Download, Trophy, Award, Check, Layers, Sliders, Crown, Eye, EyeOff, Share2, Radio, Plug, RotateCcw
+  Download, Trophy, Award, Check, Layers, Sliders, Crown, Eye, EyeOff, Share2, Radio, Plug, RotateCcw, Swords
 } from 'lucide-react';
 import MonsterAvatar from '../components/MonsterAvatar';
 import RuneIcon from '../components/RuneIcon';
@@ -23,6 +23,7 @@ import * as aegisLive from '../services/aegisLive';
 import { exportLdShowcaseCard } from '../utils/cardExporter';
 import AccountRadarChart from '../components/AccountRadarChart';
 import { calculateAccountRadar } from '../utils/accountRadar';
+import { computeUnitSkillStatus } from '../data/monsterSkills';
 
 const WATCH_INTERVAL_MS = 20 * 1000;
 
@@ -609,6 +610,23 @@ function Overview({ box, mdc, owned, onTab, onNavigate, onOpenUnit }) {
 
   const radarData = useMemo(() => calculateAccountRadar(box), [box]);
 
+  const skillSummary = useMemo(() => {
+    let tracked = 0;
+    let maxed = 0;
+    let missingTotal = 0;
+    for (const u of box.units || []) {
+      if (u.stars >= 6) {
+        const st = computeUnitSkillStatus(u);
+        if (st.hasData) {
+          tracked++;
+          if (st.isMaxSkilled) maxed++;
+          else missingTotal += st.missingSkillups;
+        }
+      }
+    }
+    return { tracked, maxed, missingTotal };
+  }, [box]);
+
   return (
     <div className="space-y-4">
       {/* 6-Axis Summoner Power Radar */}
@@ -633,11 +651,20 @@ function Overview({ box, mdc, owned, onTab, onNavigate, onOpenUnit }) {
         </div>
       )}
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      <div className={`grid grid-cols-2 ${skillSummary.tracked > 0 ? 'lg:grid-cols-5' : 'lg:grid-cols-4'} gap-3`}>
         <Tile label="สูตรแก้ทาง 3MDC ที่สร้างได้" value={mdc ? `${mdc.buildableTotal.toLocaleString()}` : '…'} sub={mdc ? `แก้หอได้ ${mdc.covered}/${mdc.defenses.length} ทีม` : 'กำลังคำนวณ'} color="text-blue-300" onClick={() => onTab('teams')} />
         <Tile label="ทีมเมต้า Guardian ที่เล่นได้ทันที" value={`${metaTeams.readyTrios.length + metaTeams.readyDuos.length}`} sub={`${metaTeams.readyTrios.length} ทีม 3 ตัว · ${metaTeams.readyDuos.length} คู่ · มีมอนเมต้า ${metaHave}/${metaTop.length}`} color="text-rose-300" onClick={() => onTab('meta')} />
         <Tile label="เร็วที่สุดในกล่อง" value={fastest[0] ? `${fastest[0].spd} SPD` : '-'} sub={fastest[0]?.info?.name || ''} color="text-amber-300" onClick={() => onTab('speed')} />
         <Tile label="ประสิทธิภาพรูนเฉลี่ย" value={avgEff ? `${avgEff}%` : 'นำเข้าใหม่'} sub={`${(box.runes?.length || 0).toLocaleString()} รูน`} color="text-purple-300" onClick={() => onTab('runes')} />
+        {skillSummary.tracked > 0 && (
+          <Tile 
+            label="มอนสเตอร์ 6★ สกิลเต็ม" 
+            value={`${skillSummary.maxed} / ${skillSummary.tracked}`} 
+            sub={skillSummary.missingTotal > 0 ? `ขาดเดวิลมอนรวม ${skillSummary.missingTotal} ตัว` : 'สกิลเต็มครบทุกตัว!'} 
+            color={skillSummary.missingTotal === 0 ? 'text-emerald-300' : 'text-amber-300'} 
+            onClick={() => onTab('box')} 
+          />
+        )}
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
@@ -765,6 +792,7 @@ function BoxGrid({ box, onNavigate, onOpenUnit }) {
     }
   });
   const [onlyPureNat5, setOnlyPureNat5] = useState(false);
+  const [skillFilter, setSkillFilter] = useState('all'); // 'all' | 'unmaxed' | 'max'
 
   const toggleHideFreeLd = () => {
     setHideFreeLd((prev) => {
@@ -789,7 +817,8 @@ function BoxGrid({ box, onNavigate, onOpenUnit }) {
         const info = monsterOf(u.masterId) || monsterOf(baseAwakenedId(u.masterId));
         const isFree = isNonSummonableLd5(u) || (info && isNonSummonableLd5(info));
         const isNat5 = (u.naturalStars === 5 || info?.stars === 5 || info?.natural_stars === 5) && !info?.name?.includes('(Homunculus)');
-        return { ...u, info, isFree, isNat5 };
+        const skillStatus = computeUnitSkillStatus(u);
+        return { ...u, info, isFree, isNat5, skillStatus };
       })
       .filter((u) => {
         if (element === 'all') return true;
@@ -803,11 +832,17 @@ function BoxGrid({ box, onNavigate, onOpenUnit }) {
         return u.stars >= minStars;
       })
       .filter((u) => !(hideFreeLd && u.isFree))
+      .filter((u) => {
+        if (skillFilter === 'all') return true;
+        if (skillFilter === 'unmaxed') return u.skillStatus?.hasData && !u.skillStatus.isMaxSkilled;
+        if (skillFilter === 'max') return u.skillStatus?.hasData && u.skillStatus.isMaxSkilled;
+        return true;
+      })
       .filter((u) => !q || (u.info?.name || '').toLowerCase().includes(q) || (u.info?.thaiName || '').includes(q));
     if (sort === 'obtained') return list.sort((a, b) => ((b.obtained || '') > (a.obtained || '') ? 1 : -1));
     const key = sort === 'stars' ? null : sort;
     return list.sort((a, b) => (key ? (b[key] || 0) - (a[key] || 0) : b.stars - a.stars || b.level - a.level || b.spd - a.spd));
-  }, [box, element, minStars, query, sort, hideFreeLd, onlyPureNat5]);
+  }, [box, element, minStars, query, sort, hideFreeLd, onlyPureNat5, skillFilter]);
 
   const chip = (active, color = 'bg-emerald-600') => `px-2.5 py-1.5 rounded-lg font-bold cursor-pointer ${active ? `${color} text-white` : 'bg-white/[0.04] text-slate-300 hover:text-white'}`;
 
@@ -833,6 +868,32 @@ function BoxGrid({ box, onNavigate, onOpenUnit }) {
           >
             <Sparkles className="w-3.5 h-3.5" />
             <span>LD 5★ เปิดเอง</span>
+          </button>
+          <span className="text-slate-600 mx-1">|</span>
+          {/* Skill Filter: Missing skillups vs Max */}
+          <button
+            onClick={() => setSkillFilter(skillFilter === 'unmaxed' ? 'all' : 'unmaxed')}
+            className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 border ${
+              skillFilter === 'unmaxed'
+                ? 'bg-amber-500/25 text-amber-300 border-amber-500/50 font-black shadow-md'
+                : 'bg-white/[0.04] text-slate-300 hover:text-white border-white/5'
+            }`}
+            title="กรองแสดงเฉพาะมอนสเตอร์ที่สกิลยังไม่เต็ม (ต้องกินเดวิลมอน)"
+          >
+            <Zap className="w-3.5 h-3.5 text-amber-400" />
+            <span>ขาดเดวิลมอน</span>
+          </button>
+          <button
+            onClick={() => setSkillFilter(skillFilter === 'max' ? 'all' : 'max')}
+            className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 border ${
+              skillFilter === 'max'
+                ? 'bg-emerald-500/25 text-emerald-300 border-emerald-500/50 font-black shadow-md'
+                : 'bg-white/[0.04] text-slate-300 hover:text-white border-white/5'
+            }`}
+            title="กรองแสดงเฉพาะมอนสเตอร์ที่สกิลเต็มทุกท่า"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+            <span>สกิลเต็ม</span>
           </button>
           <span className="text-slate-600 mx-1">|</span>
           {/* Toggle to Hide Non-Summonable / Free LD */}
@@ -867,6 +928,11 @@ function BoxGrid({ box, onNavigate, onOpenUnit }) {
             • ซ่อนตัวแจกฟรี/ฟิวชั่น {hiddenFreeCount} ตัว (แสดงเฉพาะเปิดได้เอง)
           </span>
         )}
+        {skillFilter !== 'all' && (
+          <span className="text-amber-300 ml-1.5 font-medium">
+            • กรองสถานะสกิล: {skillFilter === 'unmaxed' ? 'ขาดเดวิลมอน' : 'สกิลเต็มแล้ว'}
+          </span>
+        )}
         {' '}• คลิกเพื่อเปิดหน้ารูน/อาร์ติแฟกต์ของตัวนั้น
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 gap-2">
@@ -875,11 +941,27 @@ function BoxGrid({ box, onNavigate, onOpenUnit }) {
             title={u.info ? `ดูรูน อาร์ติแฟกต์ และสเตตัสของ ${u.info.name}` : `ไม่พบ #${u.masterId} ในสารานุกรม`}
             className={`${card} p-3 hover:border-emerald-500/40 flex items-center gap-3 text-left cursor-pointer`}>
             {u.info ? <MonsterAvatar monster={u.info} size="sm" showStars={false} /> : <div className="w-11 h-11 rounded-xl bg-slate-800 shrink-0" />}
-            <div className="min-w-0">
+            <div className="min-w-0 flex-1">
               <div className="text-xs font-bold text-white truncate">{u.info?.name || `#${u.masterId}`}</div>
-              <div className="text-[11px] text-slate-400 flex items-center gap-1"><Star className="w-3 h-3 text-amber-400 fill-amber-400" /> {u.stars}★ · Lv.{u.level}{u.runeEff ? <span className="text-purple-300 font-mono"> · {u.runeEff}%</span> : null}</div>
-              <div className="text-[11px] font-mono text-cyan-300" title={u.baseSpd ? `พื้นฐาน ${u.baseSpd}` : ''}>
-                SPD {u.spd}{u.sets?.length ? <span className="text-slate-400"> · {u.sets.join('/')}</span> : u.runes ? <span className="text-slate-400"> · {u.runes} รูน</span> : null}
+              <div className="text-[11px] text-slate-400 flex items-center gap-1">
+                <Star className="w-3 h-3 text-amber-400 fill-amber-400" /> {u.stars}★ · Lv.{u.level}
+                {u.runeEff ? <span className="text-purple-300 font-mono"> · {u.runeEff}%</span> : null}
+              </div>
+              <div className="flex items-center justify-between gap-1 mt-0.5">
+                <div className="text-[11px] font-mono text-cyan-300 truncate" title={u.baseSpd ? `พื้นฐาน ${u.baseSpd}` : ''}>
+                  SPD {u.spd}{u.sets?.length ? <span className="text-slate-400"> · {u.sets.join('/')}</span> : u.runes ? <span className="text-slate-400"> · {u.runes} รูน</span> : null}
+                </div>
+                {u.skillStatus?.hasData && (
+                  u.skillStatus.isMaxSkilled ? (
+                    <span className="text-[9px] px-1 py-0.2 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold shrink-0">
+                      เต็ม
+                    </span>
+                  ) : (
+                    <span className="text-[9px] px-1 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold shrink-0">
+                      ขาด {u.skillStatus.missingSkillups}
+                    </span>
+                  )
+                )}
               </div>
               {sort === 'obtained' && u.obtained && <div className="text-[11px] text-amber-300/90">{agoLabel(u.obtained)}</div>}
             </div>

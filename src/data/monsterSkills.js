@@ -118,9 +118,96 @@ export async function loadMonsterSkills(monsterOrId) {
   return records[id] ? expandRecord(id, records[id]) : null;
 }
 
+/** Synchronously get max skill levels for a monster from the index: [[skillId, maxLevel], ...] */
+export function getMonsterMaxSkills(monsterOrId) {
+  const id = resolveSkillId(monsterOrId);
+  if (!id || !index.maxSkills) return null;
+  return index.maxSkills[id] || null;
+}
+
+/**
+ * Calculates skill status for a unit.
+ * unit: { skills: [[skillId, level], ...] | 'max' | undefined, masterId, ... }
+ * optionalSkillsData: expanded skill records if already loaded in component
+ */
+export function computeUnitSkillStatus(unit, optionalSkillsData = null) {
+  if (!unit) return { hasData: false, isMaxSkilled: false, missingSkillups: 0, skills: [] };
+
+  const isDemoMax = unit.skills === 'max';
+  const userSkills = Array.isArray(unit.skills) ? unit.skills : null;
+  const hasUserSkillData = Boolean(isDemoMax || (userSkills && userSkills.length > 0));
+
+  // Try to use optionalSkillsData.skills first, else index.maxSkills
+  const catalogSkills = optionalSkillsData?.skills || null;
+  const maxSkillsList = getMonsterMaxSkills(unit.info || unit.masterId);
+
+  if (!catalogSkills && !maxSkillsList) {
+    return { hasData: hasUserSkillData, isMaxSkilled: false, missingSkillups: 0, skills: [] };
+  }
+
+  let totalMissing = 0;
+  const list = catalogSkills || maxSkillsList.map(([id, maxLevel], idx) => ({
+    id,
+    maxLevel,
+    slot: idx + 1,
+    slotLabel: `S${idx + 1}`,
+  }));
+
+  const details = list.map((sk, sidx) => {
+    const max = Number(sk.maxLevel) || (sk.skillups ? sk.skillups.length + 1 : 1);
+    let curr = 1;
+    if (isDemoMax) {
+      curr = max;
+    } else if (userSkills && userSkills.length > 0) {
+      const match = userSkills.find((s) => {
+        const sid = Array.isArray(s) ? s[0] : s?.id;
+        return Number(sid) === Number(sk.id);
+      });
+      if (match) {
+        curr = Array.isArray(match) ? Number(match[1]) : Number(match.level);
+      } else if (userSkills[sidx]) {
+        const item = userSkills[sidx];
+        curr = Array.isArray(item) ? Number(item[1]) : Number(item?.level || 1);
+      }
+    } else {
+      curr = null;
+    }
+
+    if (curr !== null) {
+      curr = Math.min(Math.max(1, curr), max);
+      const diff = Math.max(0, max - curr);
+      totalMissing += diff;
+      return {
+        ...sk,
+        currentLevel: curr,
+        maxLevel: max,
+        missing: diff,
+        isMaxed: curr >= max,
+      };
+    }
+
+    return {
+      ...sk,
+      currentLevel: null,
+      maxLevel: max,
+      missing: null,
+      isMaxed: null,
+    };
+  });
+
+  return {
+    hasData: hasUserSkillData,
+    isMaxSkilled: hasUserSkillData && totalMissing === 0,
+    missingSkillups: totalMissing,
+    skills: details,
+  };
+}
+
 export default {
   getMonsterSkills,
   loadMonsterSkills,
   getSkillTags,
   resolveSkillId,
+  getMonsterMaxSkills,
+  computeUnitSkillStatus,
 };

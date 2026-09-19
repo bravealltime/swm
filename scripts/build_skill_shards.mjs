@@ -86,6 +86,7 @@ export function buildSkillShards({ root = process.cwd(), force = false } = {}) {
 
   const shards = Array.from({ length: SHARD_COUNT }, () => ({}));
   const m = {};
+  const maxSkills = {};
   ids.forEach((id, i) => {
     const val = data[id];
     const skills = val.sk || [];
@@ -100,6 +101,7 @@ export function buildSkillShards({ root = process.cwd(), force = false } = {}) {
       [...fx].sort((a, b) => a - b),
       shard,
     ];
+    maxSkills[id] = skills.map((s) => [Number(s.id) || 0, Number(s.maxLevel) || (s.skillups ? s.skillups.length + 1 : 1)]);
     shards[shard][id] = { ...val, ls: compactLeader(val.ls), sk: skills.map(compactSkill) };
   });
 
@@ -110,7 +112,7 @@ export function buildSkillShards({ root = process.cwd(), force = false } = {}) {
   for (const f of fs.readdirSync(outDir)) {
     if (/^\d+\.json$/.test(f) && Number(f.slice(0, -5)) >= SHARD_COUNT) fs.unlinkSync(path.join(outDir, f));
   }
-  fs.writeFileSync(indexFile, JSON.stringify({ shards: SHARD_COUNT, skillIcon, leaderIcon, effects, m }));
+  fs.writeFileSync(indexFile, JSON.stringify({ shards: SHARD_COUNT, skillIcon, leaderIcon, effects, m, maxSkills }));
 
   return { skipped: false, monsters: ids.length, effects: effects.length, shards: SHARD_COUNT };
 }

@@ -311,6 +311,7 @@ export function parseSwexExport(json) {
         sets: r.sets.slice(0, 3),
         runeEff: r.avgEff,
         obtained: typeof u.create_time === 'string' ? u.create_time.slice(0, 16) : '',
+        skills: Array.isArray(u.skills) ? u.skills.map((s) => Array.isArray(s) ? [Number(s[0]), Number(s[1])] : [Number(s?.id || s?.[0] || 0), Number(s?.level || s?.[1] || 1)]) : [],
       };
     })
     .sort((a, b) => b.stars - a.stars || b.level - a.level || b.spd - a.spd);
@@ -402,6 +403,7 @@ export function boxUnits(box) {
         avatarUrl: u.avatarUrl || info?.avatarUrl || info?.imageUrl || '',
         runes: Number(u.runes) || 0,
         sets: Array.isArray(u.sets) ? u.sets : [],
+        skills: u.skills !== undefined ? u.skills : [],
         info,
       };
     });
@@ -427,6 +429,7 @@ export function boxUnits(box) {
         avatarUrl: info?.avatarUrl || info?.imageUrl || '',
         runes: r.runes.length,
         sets: r.sets.slice(0, 3),
+        skills: Array.isArray(u.skills) ? u.skills.map((s) => Array.isArray(s) ? [Number(s[0]), Number(s[1])] : [Number(s?.id || s?.[0] || 0), Number(s?.level || s?.[1] || 1)]) : [],
         info,
       };
     });
@@ -539,14 +542,23 @@ export function getDemoGuardianBox() {
     { masterId: 24914, stars: 6, level: 40, element: 'light', baseSpd: 106, spd: 322, hp: 24000, atk: 2250, def: 1100, cr: 100, cd: 165, acc: 30, res: 15, runes: 6, sets: ['Swift', 'Blade'], runeEff: 103.8 },
   ];
 
-  const enrichedUnits = demoUnits.map((u) => {
+  const enrichedUnits = demoUnits.map((u, idx) => {
     const info = getMonsterCatalogInfo(u.masterId);
+    // Give Guardian demo units realistic skill statuses: most are maxed,
+    // and 2 units are incomplete so users can test unmaxed filtering & Devilmon tracking
+    let skills = 'max';
+    if (idx === 6) { // Byungchul (Wind Dokkaebi Lord) - partial skills
+      skills = [[3801, 3], [3802, 2], [3803, 1]];
+    } else if (idx === 14) { // Water Druid (Abellio) - partial skills
+      skills = [[1991, 3], [2006, 2], [2011, 2]];
+    }
     return {
       ...u,
       name: info?.name || '',
       thaiName: info?.thaiName || info?.name || '',
       avatarUrl: info?.avatarUrl || info?.imageUrl || '',
       naturalStars: info?.stars || 5,
+      skills,
     };
   });
 
