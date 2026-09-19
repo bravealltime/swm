@@ -22,7 +22,8 @@ export async function fetchLive(key, { force = false } = {}) {
   const hit = cache.get(key);
   if (!force && hit && Date.now() - hit.at < MAX_AGE_MS) return hit;
   try {
-    const res = await fetch(`/api/live/${encodeURIComponent(key)}`, { cache: force ? 'no-store' : 'default' });
+    // a forced refetch (Realtime said the row changed) must get past the edge cache too, so it uses a fresh URL
+    const res = await fetch(`/api/live/${encodeURIComponent(key)}${force ? `?t=${Date.now()}` : ''}`, { cache: force ? 'no-store' : 'default' });
     if (!res.ok) return null;
     const json = await res.json();
     const entry = { value: unwrap(json.value), updatedAt: json.updatedAt || null, at: Date.now() };

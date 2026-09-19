@@ -11,7 +11,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const args = process.argv.slice(2);
@@ -75,7 +75,7 @@ for (const k of wanted) {
     // first-time seed of the admin-owned code list from the bundled module; never overwrites
     const rows = await rest('live_data?select=key&key=eq.codes&limit=1');
     if (rows?.length) { console.log('codes: already live, not seeded'); continue; }
-    const mod = await import(path.join(root, 'src/data/promoCodes.js'));
+    const mod = await import(pathToFileURL(path.join(root, 'src/data/promoCodes.js')).href);
     await publish('codes', { codes: mod.PROMO_CODES, updatedAt: new Date().toISOString() }, { by: 'seed' });
     console.log('codes: seeded from src/data/promoCodes.js');
     changed += 1;
