@@ -169,22 +169,34 @@ export async function aiStats() {
 }
 
 // --- datasets on disk (bundled with the deployment) -----------------------------------------
-function readJson(rel) {
-  try { return JSON.parse(fs.readFileSync(path.resolve(process.cwd(), rel), 'utf8')); } catch { return null; }
+// Literal path.resolve(process.cwd(), '…') calls are what Vercel's file tracer looks for, so the
+// JSON files get bundled with the function; keep them spelled out here.
+const DATA_FILES = {
+  players: path.resolve(process.cwd(), 'src/data/swrtPlayersIndex.json'),
+  meta: path.resolve(process.cwd(), 'src/data/swrtGuardianMeta.json'),
+  monsters: path.resolve(process.cwd(), 'src/data/allMonsters.json'),
+  skills: path.resolve(process.cwd(), 'src/data/monsterSkillsData.json'),
+  mdc: path.resolve(process.cwd(), 'src/data/allMdcData.json'),
+  patches: path.resolve(process.cwd(), 'src/data/balancePatchAi.json'),
+  summaries: path.resolve(process.cwd(), 'src/data/swrtPlayerSummaries.json'),
+  cutoffs: path.resolve(process.cwd(), 'src/data/swrtRankCutoffs.json'),
+};
+function readJson(file) {
+  try { return JSON.parse(fs.readFileSync(file, 'utf8')); } catch { return null; }
 }
-function fileInfo(rel) {
-  try { const st = fs.statSync(path.resolve(process.cwd(), rel)); return { bytes: st.size, modified: st.mtime.toISOString() }; } catch { return null; }
+function fileInfo(file) {
+  try { const st = fs.statSync(file); return { bytes: st.size, modified: st.mtime.toISOString() }; } catch { return null; }
 }
 
 export function datasetReport() {
-  const players = readJson('src/data/swrtPlayersIndex.json');
-  const meta = readJson('src/data/swrtGuardianMeta.json');
-  const monsters = readJson('src/data/allMonsters.json');
-  const skills = readJson('src/data/monsterSkillsData.json');
-  const mdc = readJson('src/data/allMdcData.json');
-  const patches = readJson('src/data/balancePatchAi.json');
-  const summaries = readJson('src/data/swrtPlayerSummaries.json');
-  const cutoffs = readJson('src/data/swrtRankCutoffs.json');
+  const players = readJson(DATA_FILES.players);
+  const meta = readJson(DATA_FILES.meta);
+  const monsters = readJson(DATA_FILES.monsters);
+  const skills = readJson(DATA_FILES.skills);
+  const mdc = readJson(DATA_FILES.mdc);
+  const patches = readJson(DATA_FILES.patches);
+  const summaries = readJson(DATA_FILES.summaries);
+  const cutoffs = readJson(DATA_FILES.cutoffs);
   const skillList = Array.isArray(skills) ? skills : Object.values(skills || {});
   const monsterList = Array.isArray(monsters) ? monsters : [];
   const translated = skillList.filter((m) => (m.sk || []).length && (m.sk || []).every((s) => /[฀-๿]/.test(s.descriptionTh || ''))).length;
@@ -192,14 +204,14 @@ export function datasetReport() {
   let shards = 0;
   try { shards = fs.readdirSync(path.resolve(process.cwd(), 'public/data/swrt-matches')).filter((f) => f.endsWith('.json')).length; } catch { /* none */ }
   return {
-    players: { ...(players?.meta || {}), file: fileInfo('src/data/swrtPlayersIndex.json') },
-    guardianMeta: { ...(meta?.meta || {}), monsters: Object.keys(meta?.monsters || {}).length, file: fileInfo('src/data/swrtGuardianMeta.json') },
-    monsters: { count: monsterList.length, withoutArt: noArt, file: fileInfo('src/data/allMonsters.json') },
-    skills: { count: skillList.length, translated, file: fileInfo('src/data/monsterSkillsData.json') },
-    mdc: { count: Array.isArray(mdc) ? mdc.length : Object.keys(mdc || {}).length, file: fileInfo('src/data/allMdcData.json') },
-    patches: { count: Object.keys(patches?.patches || {}).length, updatedAt: patches?.meta?.updatedAt || null, model: patches?.meta?.model || null, file: fileInfo('src/data/balancePatchAi.json') },
-    playerSummaries: { count: Object.keys(summaries?.players || {}).length, updatedAt: summaries?.meta?.updatedAt || null, file: fileInfo('src/data/swrtPlayerSummaries.json') },
-    cutoffs: { nowTime: cutoffs?.now?.nowTime || null, file: fileInfo('src/data/swrtRankCutoffs.json') },
+    players: { ...(players?.meta || {}), file: fileInfo(DATA_FILES.players) },
+    guardianMeta: { ...(meta?.meta || {}), monsters: Object.keys(meta?.monsters || {}).length, file: fileInfo(DATA_FILES.meta) },
+    monsters: { count: monsterList.length, withoutArt: noArt, file: fileInfo(DATA_FILES.monsters) },
+    skills: { count: skillList.length, translated, file: fileInfo(DATA_FILES.skills) },
+    mdc: { count: Array.isArray(mdc) ? mdc.length : Object.keys(mdc || {}).length, file: fileInfo(DATA_FILES.mdc) },
+    patches: { count: Object.keys(patches?.patches || {}).length, updatedAt: patches?.meta?.updatedAt || null, model: patches?.meta?.model || null, file: fileInfo(DATA_FILES.patches) },
+    playerSummaries: { count: Object.keys(summaries?.players || {}).length, updatedAt: summaries?.meta?.updatedAt || null, file: fileInfo(DATA_FILES.summaries) },
+    cutoffs: { nowTime: cutoffs?.now?.nowTime || null, file: fileInfo(DATA_FILES.cutoffs) },
     matchShards: shards,
   };
 }
