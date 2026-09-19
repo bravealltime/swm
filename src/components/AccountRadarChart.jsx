@@ -26,7 +26,9 @@ export default function AccountRadarChart({ radarData, onExportCard, isExporting
 
   // Data polygon points
   const dataPolygonPoints = axes.map((axis, i) => {
-    const scale = Math.max(0.1, Math.min(1.0, (axis.score || 50) / 100));
+    const rawScore = Number(axis?.score);
+    const scoreVal = Number.isFinite(rawScore) ? rawScore : 50;
+    const scale = Math.max(0.1, Math.min(1.0, scoreVal / 100));
     const a = angleAt(i);
     const x = cx + Math.cos(a) * (r * scale);
     const y = cy + Math.sin(a) * (r * scale);
@@ -121,7 +123,9 @@ export default function AccountRadarChart({ radarData, onExportCard, isExporting
 
             {/* Vertex points */}
             {axes.map((axis, i) => {
-              const scale = Math.max(0.1, Math.min(1.0, (axis.score || 50) / 100));
+              const rawScore = Number(axis?.score);
+              const scoreVal = Number.isFinite(rawScore) ? rawScore : 50;
+              const scale = Math.max(0.1, Math.min(1.0, scoreVal / 100));
               const a = angleAt(i);
               const px = cx + Math.cos(a) * (r * scale);
               const py = cy + Math.sin(a) * (r * scale);

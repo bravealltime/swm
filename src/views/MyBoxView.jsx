@@ -18,6 +18,7 @@ import { buildMonsterIndex, flagFromCountry } from '../data/swrtPlayerAdapter';
 import { parseSwexExport, ownedIdSet, loadBox, saveBox, clearBox, baseAwakenedId, BOX_VERSION, RUNE_SETS, STAT_NAMES, getArtifactsFromBox, ARTIFACT_EFFECT_NAMES, loadDemoBox, isNonSummonableLd5 } from '../utils/swexImport';
 import { supportsFolderWatch, loadDirHandle, clearDirHandle, pickSwexFolder, ensurePermission, findNewestExport } from '../utils/swexWatcher';
 import { exportAllDataAsJSON, importDataFromJSON } from '../services/storageService';
+import { loadPublicSettings } from '../services/adminClient';
 import * as aegisLive from '../services/aegisLive';
 import { exportLdShowcaseCard } from '../utils/cardExporter';
 import AccountRadarChart from '../components/AccountRadarChart';
@@ -177,7 +178,16 @@ export default function MyBoxView({ onNavigate, tab: initialTab, subItem }) {
   const stopLive = () => aegisLive.stop();
   // the back-office can switch the live link off for everyone
   const [liveAllowed, setLiveAllowed] = useState(true);
-  useEffect(() => { loadPublicSettings().then((s) => { if (s?.features?.liveLink === false) { setLiveAllowed(false); aegisLive.stop({ forget: false }); } }); }, []);
+  useEffect(() => {
+    loadPublicSettings?.()
+      ?.then((s) => {
+        if (s?.features?.liveLink === false) {
+          setLiveAllowed(false);
+          aegisLive.stop({ forget: false });
+        }
+      })
+      ?.catch(() => {});
+  }, []);
 
   return (
     <div className="space-y-6 max-w-[1780px] 2xl:max-w-[1880px] mx-auto pb-16 animate-in fade-in duration-300">
@@ -2460,11 +2470,14 @@ function SiegeDefenseBuilder({ box, onNavigate }) {
           </div>
 
           <div className="grid grid-cols-3 sm:grid-cols-6 md:grid-cols-8 gap-2.5 max-h-[300px] overflow-y-auto pr-1">
-            {availableUnits.map((u) => {
-              const isPicked = slot1?.id === u.id || slot2?.id === u.id || slot3?.id === u.id;
+            {availableUnits.map((u, idx) => {
+              const uKey = u.uid || `${u.masterId}-${idx}`;
+              const isPicked = (slot1?.uid || slot1?.masterId) === (u.uid || u.masterId) || 
+                               (slot2?.uid || slot2?.masterId) === (u.uid || u.masterId) || 
+                               (slot3?.uid || slot3?.masterId) === (u.uid || u.masterId);
               return (
                 <button
-                  key={u.id}
+                  key={uKey}
                   disabled={isPicked}
                   onClick={() => {
                     if (!slot1) setSlot1(u);

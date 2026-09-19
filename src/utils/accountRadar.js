@@ -37,42 +37,44 @@ export function calculateAccountRadar(box) {
   // 1. Swift Speed Cap (Max rune SPD on any Swift monster)
   let maxSwiftSpd = 0;
   for (const u of units) {
+    if (!u) continue;
     // If unit has swift runes, calculate rune speed bonus
-    const monRunes = runes.filter((r) => (r.uid ? r.uid === u.uid : r.unit === u.masterId));
-    const sets = new Set(monRunes.map((r) => r.set));
+    const monRunes = runes.filter((r) => r && (r.uid ? r.uid === u.uid : r.unit === u.masterId));
+    const sets = new Set(monRunes.map((r) => r?.set));
     const hasSwift = sets.has(3); // 3 = Swift
 
     let spd = 0;
     for (const r of monRunes) {
-      if (r.main?.[0] === 8) spd += r.main[1];
-      if (r.innate?.[0] === 8) spd += r.innate[1];
+      if (!r) continue;
+      if (r.main?.[0] === 8) spd += Number(r.main[1]) || 0;
+      if (r.innate?.[0] === 8) spd += Number(r.innate[1]) || 0;
       for (const s of r.subs || []) {
-        if (s[0] === 8) spd += (s[1] || 0) + (s[2] || 0);
+        if (s && s[0] === 8) spd += (Number(s[1]) || 0) + (Number(s[2]) || 0);
       }
     }
     if (hasSwift) {
-      const baseSpd = u.spd || 100;
+      const baseSpd = Number(u.baseSpd || u.spd) || 100;
       const swiftBonus = Math.floor(baseSpd * 0.25);
       const totalRuneSpd = spd + swiftBonus;
-      if (totalRuneSpd > maxSwiftSpd) maxSwiftSpd = totalRuneSpd;
+      if (Number.isFinite(totalRuneSpd) && totalRuneSpd > maxSwiftSpd) maxSwiftSpd = totalRuneSpd;
     } else {
-      if (spd > maxSwiftSpd) maxSwiftSpd = spd;
+      if (Number.isFinite(spd) && spd > maxSwiftSpd) maxSwiftSpd = spd;
     }
   }
 
   // Swift Score: 220+ = 100, 200 = 90, 180 = 80, 160 = 70, 140 = 60
-  const swiftScore = Math.min(100, Math.max(30, Math.round(((maxSwiftSpd - 80) / 140) * 100)));
+  const swiftScore = Math.min(100, Math.max(30, Math.round(((maxSwiftSpd - 80) / 140) * 100))) || 50;
 
   // 2. Violent / Will Bruiser Power (Efficiency and quantity of Violent runes)
-  const vioRunes = runes.filter((r) => r.set === 13); // 13 = Violent
+  const vioRunes = runes.filter((r) => r && r.set === 13); // 13 = Violent
   const avgVioEff = vioRunes.length > 0 
-    ? Math.round(vioRunes.reduce((s, r) => s + (r.eff || 65), 0) / vioRunes.length) 
+    ? Math.round(vioRunes.reduce((s, r) => s + (Number(r?.eff) || 65), 0) / vioRunes.length) 
     : 60;
-  const bruiserScore = Math.min(100, Math.max(30, Math.round(((avgVioEff - 50) / 45) * 100)));
+  const bruiserScore = Math.min(100, Math.max(30, Math.round(((avgVioEff - 50) / 45) * 100))) || 60;
 
   // 3. Artifact Quality (Number of max +15 rank artifacts & total artifacts)
-  const plus15Artifacts = artifacts.filter((a) => (a.lvl || 0) >= 15).length;
-  const artifactScore = Math.min(100, Math.max(25, Math.round((plus15Artifacts / 60) * 100)));
+  const plus15Artifacts = artifacts.filter((a) => a && (Number(a.lvl) || 0) >= 15).length;
+  const artifactScore = Math.min(100, Math.max(25, Math.round((plus15Artifacts / 60) * 100))) || 40;
 
   // 4. Guardian RTA Meta Readiness (Count of top Guardian Nat5s equipped)
   const metaIds = new Set((guardianMeta?.monsters || []).slice(0, 50).map((m) => Number(m.id)));
