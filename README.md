@@ -4,6 +4,8 @@
 
 🌐 **Official Live Website:** [https://swm-blue.vercel.app/](https://swm-blue.vercel.app/)
 
+🧭 **ย้ายเครื่อง / เริ่มงานต่อ:** อ่าน [HANDOFF.md](HANDOFF.md) (ตั้งค่า env, โครงสร้าง, แหล่งข้อมูล, AegisLink, หลังบ้าน, งานที่ค้าง)
+
 ---
 
 ## 🌟 ฟีเจอร์หลักของระบบ (Key Features)
