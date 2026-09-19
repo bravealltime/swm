@@ -51,13 +51,29 @@ export function supabaseInfo() {
 
 export async function supabaseRest(pathname, opts) { return rest(pathname, opts); }
 
+/** Which back-office tables exist (and why not): { site_settings: 'ok' | 'TABLE_MISSING' | '<error>' , ... } */
+export async function tableStatus() {
+  const out = {};
+  for (const t of ['site_settings', 'ai_logs', 'guild_rankings']) {
+    const r = await rest(t, { query: '?select=id&limit=1' });
+    out[t] = r.ok ? 'ok' : `${r.error}${r.detail ? ` — ${r.detail}` : ''}`;
+  }
+  return out;
+}
+
 async function rest(pathname, { method = 'GET', body, query = '' } = {}) {
   const url = supabaseUrl();
   const key = serviceKey();
   if (!url || !key) return { ok: false, status: 0, error: 'ไม่มี SUPABASE_SERVICE_ROLE_KEY บนเซิร์ฟเวอร์', data: null };
+  // The tables live in the `public` schema; the project's Data API may default to another one
+  const schema = env('SUPABASE_SCHEMA') || 'public';
   const res = await fetch(`${url}/rest/v1/${pathname}${query}`, {
     method,
-    headers: { apikey: key, Authorization: `Bearer ${key}`, 'Content-Type': 'application/json', Prefer: method === 'POST' ? 'resolution=merge-duplicates,return=representation' : 'return=representation' },
+    headers: {
+      apikey: key, Authorization: `Bearer ${key}`, 'Content-Type': 'application/json',
+      'Accept-Profile': schema, 'Content-Profile': schema,
+      Prefer: method === 'POST' ? 'resolution=merge-duplicates,return=representation' : 'return=representation',
+    },
     body: body ? JSON.stringify(body) : undefined,
   });
   const text = await res.text();
@@ -66,7 +82,7 @@ async function rest(pathname, { method = 'GET', body, query = '' } = {}) {
   if (!res.ok) {
     const msg = data?.message || data?.hint || String(text).slice(0, 200);
     const missing = res.status === 404 || /relation .* does not exist|Could not find the table/i.test(msg);
-    return { ok: false, status: res.status, error: missing ? 'TABLE_MISSING' : msg, data: null };
+    return { ok: false, status: res.status, error: missing ? 'TABLE_MISSING' : msg, detail: `${res.status} ${msg}`, data: null };
   }
   return { ok: true, status: res.status, data };
 }

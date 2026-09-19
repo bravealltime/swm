@@ -1,7 +1,7 @@
 // /api/admin/<action> — back-office API. Every action except `settings` (public GET) requires an
 // admin (Supabase login + ADMIN_EMAILS). Vercel routes here via the [action] file name; the Vite dev
 // middleware calls handleAdmin() directly with the same arguments.
-import { requireAdmin, userFromToken, supabaseInfo, getSettings, saveSettings, aiLogs, aiStats, datasetReport, deployInfo, githubInfo, workflowRuns, dispatchWorkflow } from '../_lib/admin.js';
+import { requireAdmin, userFromToken, supabaseInfo, tableStatus, getSettings, saveSettings, aiLogs, aiStats, datasetReport, deployInfo, githubInfo, workflowRuns, dispatchWorkflow } from '../_lib/admin.js';
 import { aiConfig, chat } from '../_lib/ai.js';
 
 const PUBLIC_SETTINGS_KEYS = ['announcement', 'maintenance', 'features'];
@@ -25,14 +25,14 @@ export async function handleAdmin({ action, method, body, token, query = {} }) {
   if (!auth.ok) return { status: auth.status, json: { error: auth.reason } };
 
   if (action === 'status') {
-    const [stats, settings] = await Promise.all([aiStats(), getSettings({ fresh: true })]);
+    const [stats, settings, tables] = await Promise.all([aiStats(), getSettings({ fresh: true }), tableStatus()]);
     const cfg = aiConfig();
     return {
       status: 200,
       json: {
         admin: auth.user,
         ai: { configured: cfg.configured, model: cfg.model || null, baseHost: cfg.baseUrl ? safeHost(cfg.baseUrl) : null, stats },
-        supabase: supabaseInfo(),
+        supabase: { ...supabaseInfo(), tables },
         settings,
         data: datasetReport(),
         deploy: deployInfo(),
