@@ -8,6 +8,8 @@ import MonsterAvatar from '../components/MonsterAvatar';
 import RuneIcon from '../components/RuneIcon';
 import MonsterDetailModal from '../components/MonsterDetailModal';
 import AiChatPanel from '../components/AiChatPanel';
+import MetaTeamsFromBox from '../components/MetaTeamsFromBox';
+import { teamsFromBox } from '../utils/metaTeams';
 import { summarizeBoxForAi, keyMonstersForAi } from '../utils/boxSummary';
 import ArtifactIcon from '../components/ArtifactIcon';
 import allMonstersData from '../data/allMonsters.json';
@@ -280,7 +282,9 @@ export default function MyBoxView({ onNavigate, tab: initialTab, subItem }) {
       {tab === 'efficiency' && (box ? <RuneEfficiencyAndQuads box={box} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} onLive={liveAllowed ? startLive : null} />)}
       {tab === 'defense' && (box ? <SiegeDefenseBuilder box={box} onNavigate={onNavigate} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} onLive={liveAllowed ? startLive : null} />)}
       {tab === 'teams' && <Teams owned={owned} mdc={mdc} onNavigate={onNavigate} />}
-      {tab === 'meta' && <MetaCoverage owned={owned} />}
+      {tab === 'meta' && (box
+        ? <div className="space-y-6"><MetaTeamsFromBox box={box} owned={owned} monsterOf={monsterOf} onNavigate={onNavigate} /><MetaCoverage owned={owned} /></div>
+        : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} onLive={liveAllowed ? startLive : null} />)}
       {tab === 'speed' && (box ? <SpeedTuner box={box} onNavigate={onNavigate} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} onLive={liveAllowed ? startLive : null} />)}
       {tab === 'runes' && (box ? <Runes box={box} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} onLive={liveAllowed ? startLive : null} />)}
 
@@ -569,6 +573,7 @@ function Overview({ box, mdc, owned, onTab, onNavigate, onOpenUnit }) {
   }, [box]);
   const metaTop = (guardianMeta.monsters || []).slice(0, 40);
   const metaHave = metaTop.filter((m) => owned.has(Number(m.id))).length;
+  const metaTeams = useMemo(() => teamsFromBox(guardianMeta, owned), [owned]);
   const avgEff = box.runes?.length ? (box.runes.reduce((s, r) => s + r.eff, 0) / box.runes.length).toFixed(1) : null;
   const nat5Total = Object.values(elements).reduce((a, b) => a + b, 0) || 1;
   const latestNat5 = useMemo(() => withInfo
@@ -600,7 +605,7 @@ function Overview({ box, mdc, owned, onTab, onNavigate, onOpenUnit }) {
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         <Tile label="สูตรแก้ทาง 3MDC ที่สร้างได้" value={mdc ? `${mdc.buildableTotal.toLocaleString()}` : '…'} sub={mdc ? `แก้หอได้ ${mdc.covered}/${mdc.defenses.length} ทีม` : 'กำลังคำนวณ'} color="text-blue-300" onClick={() => onTab('teams')} />
-        <Tile label="มอนเมต้า Guardian ที่มี" value={`${metaHave}/${metaTop.length}`} sub="จาก 40 ตัวที่ถูกเลือกบ่อยสุด" color="text-rose-300" onClick={() => onTab('meta')} />
+        <Tile label="ทีมเมต้า Guardian ที่เล่นได้ทันที" value={`${metaTeams.readyTrios.length + metaTeams.readyDuos.length}`} sub={`${metaTeams.readyTrios.length} ทีม 3 ตัว · ${metaTeams.readyDuos.length} คู่ · มีมอนเมต้า ${metaHave}/${metaTop.length}`} color="text-rose-300" onClick={() => onTab('meta')} />
         <Tile label="เร็วที่สุดในกล่อง" value={fastest[0] ? `${fastest[0].spd} SPD` : '-'} sub={fastest[0]?.info?.name || ''} color="text-amber-300" onClick={() => onTab('speed')} />
         <Tile label="ประสิทธิภาพรูนเฉลี่ย" value={avgEff ? `${avgEff}%` : 'นำเข้าใหม่'} sub={`${(box.runes?.length || 0).toLocaleString()} รูน`} color="text-purple-300" onClick={() => onTab('runes')} />
       </div>

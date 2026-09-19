@@ -333,6 +333,7 @@ function Meta() {
         <div className="flex flex-wrap items-center justify-between gap-2 p-3 border-b border-white/[0.06]">
           <h2 className="text-sm font-bold text-white flex items-center gap-2"><Ban className="w-4 h-4 text-purple-400 rotate-45" /> คอมโบที่ถูกดราฟต์ด้วยกันบ่อยที่สุด</h2>
           <div className="flex items-center gap-1.5 text-xs">
+            <button onClick={() => onNavigate?.('my-box', { subItem: 'meta' })} className="px-2.5 py-1 rounded-lg font-bold text-rose-300 hover:text-white bg-rose-500/10 border border-rose-500/30 cursor-pointer mr-1">กล่องฉันเล่นทีมไหนได้? →</button>
             {[['duos', 'คู่ (Duo)'], ['trios', 'สาม (Trio)']].map(([id, label]) => (
               <button
                 key={id}

@@ -463,6 +463,14 @@ async function chatPrompt({ question, context = {}, history = [] }) {
   if (context.box) parts.push(`กล่องของผู้ใช้ (สรุป):${NL}${String(context.box).slice(0, 6000)}`);
   if (context.defense) parts.push(`ทีมตั้งรับที่กำลังดูอยู่: ${context.defense}`);
   if (context.draft) parts.push(`ดราฟต์ที่กำลังดูอยู่: ${context.draft}`);
+  // real Guardian duo/trio combos matched against the user's box (My Box → เมต้า Guardian)
+  const mt = context.metaTeams;
+  if (mt && (Array.isArray(mt.ready) || Array.isArray(mt.oneAway))) {
+    const line = (t) => `- ${(t.team || []).map(String).join(' + ')} (${Number(t.games) || 0} แมตช์, ชนะ ${Number(t.winRate) || 0}%${Array.isArray(t.missing) && t.missing.length ? `, ยังไม่มี ${t.missing.map(String).join(', ')}` : ''})`;
+    const ready = (mt.ready || []).slice(0, 8).map(line).join(NL) || '- (ไม่มี)';
+    const oneAway = (mt.oneAway || []).slice(0, 6).map(line).join(NL) || '- (ไม่มี)';
+    parts.push(`ทีมเมต้า Guardian จากรีเพลย์จริง (SWRT) ที่ผู้ใช้มีสมาชิกครบ เล่นได้ทันที:${NL}${ready}${NL}ทีมที่ผู้ใช้ขาดอีก 1 ตัว:${NL}${oneAway}${NL}(ใช้รายการนี้เป็นฐานเวลาแนะนำทีม RTA — อย่าเสนอทีมที่ผู้ใช้ไม่มีสมาชิกโดยไม่บอกว่าขาดตัวไหน)`);
+  }
   if (Array.isArray(context.players) && context.players.length) {
     parts.push(`ข้อมูลผู้เล่น SWRT (สถิติ RTA สาธารณะ):${NL}${context.players.slice(0, 2).map((p) => `- ${String(p).slice(0, 600)}`).join(NL)}`);
   }

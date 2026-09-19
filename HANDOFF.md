@@ -63,6 +63,8 @@ src/
     guildRankings.js แกะแพ็กเก็ตอันดับกิลด์ + serverFromCountry()
     cardExporter.js  การ์ดแชร์ PNG (พาสปอร์ต, ตู้ LD5, มอนสเตอร์) วาดด้วย Canvas
     boxSummary.js    สรุปกล่องแบบย่อส่ง AI (ไม่มี id บัญชี)
+    metaTeams.js     จับ duo/trio จริงจาก swrtGuardianMeta กับกล่องผู้ใช้ → ทีมที่เล่นได้ / ขาด 1 ตัว / ตัวที่ปลดล็อกทีมมากสุด
+                     (UI: components/MetaTeamsFromBox.jsx ในแท็บ "เมต้า Guardian" ของกล่องของฉัน; ส่ง context.metaTeams ให้โค้ช AI)
   hooks/useGuildRankings.js  รวมอันดับที่แชร์ (API) + ที่เห็นสดบนเครื่องนี้
   hooks/useMonsterSkills.js  สกิลรายตัวสำหรับสารานุกรม โหลด shard ตามต้องการ (data/monsterSkills.js เป็น store)
   data/*.json        ชุดข้อมูลที่ bundle มากับเว็บ (ดูข้อ 5)
