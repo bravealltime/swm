@@ -16,9 +16,9 @@ import {
 import MonsterAvatar from './MonsterAvatar';
 
 const SERVERS = [
-  { id: 'asia', name: 'เซิร์ฟเวอร์ Asia', offset: 7, label: 'เวลาไทย (UTC+7)', closeHour: 22 },
-  { id: 'global', name: 'เซิร์ฟเวอร์ Global', offset: -8, label: 'เวลาแปซิฟิก (PST / UTC-8)', closeHour: 22 },
-  { id: 'europe', name: 'เซิร์ฟเวอร์ Europe', offset: 1, label: 'เวลายุโรป (CET / UTC+1)', closeHour: 22 },
+  { id: 'asia', name: 'เซิร์ฟเวอร์ Asia', offset: 7, label: 'เวลาไทย (UTC+7) ปิด 21:00', closeHour: 21 },
+  { id: 'global', name: 'เซิร์ฟเวอร์ Global', offset: -8, label: 'เวลาแปซิฟิก (PST / UTC-8) ปิด 22:00', closeHour: 22 },
+  { id: 'europe', name: 'เซิร์ฟเวอร์ Europe', offset: 1, label: 'เวลายุโรป (CET / UTC+1) ปิด 22:00', closeHour: 22 },
 ];
 
 const AD_COUNTERS = [
@@ -148,6 +148,10 @@ export default function ArenaRushHourHub({ onNavigate }) {
     };
   }, [currentScore, targetScore, winRate]);
 
+  const currentServer = SERVERS.find(s => s.id === selectedServer) || SERVERS[0];
+  const rushStartHour = currentServer.closeHour - 1;
+  const rushCloseHour = currentServer.closeHour;
+
   return (
     <div className="space-y-6">
       {/* 1. Countdown & Server Timer Card */}
@@ -156,13 +160,13 @@ export default function ArenaRushHourHub({ onNavigate }) {
           <div className="space-y-1">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-mono font-bold">
               <Clock className="w-3.5 h-3.5 text-amber-400" />
-              <span>ARENA RUSH HOUR COUNTDOWN (SUNDAY 21:00 - 22:00)</span>
+              <span>ARENA RUSH HOUR COUNTDOWN (SUNDAY {rushStartHour}:00 - {rushCloseHour}:00)</span>
             </div>
             <h2 className="text-xl sm:text-2xl font-black text-white">
               นับถอยหลังสู่ช่วง Rush Hour ปิดซีซั่นอารีน่า
             </h2>
             <p className="text-xs text-slate-300">
-              Rush Hour คือช่วง 1 ชั่วโมงสุดท้ายของทุกคืนวันอาทิตย์ (21:00 - 22:00) ที่ทุกคนเร่งตีและเปลี่ยนทีมรับเพื่อรักษาแต้ม
+              Rush Hour คือช่วง 1 ชั่วโมงสุดท้ายของทุกคืนวันอาทิตย์ ({rushStartHour}:00 - {rushCloseHour}:00) ที่ทุกคนเร่งตีและเปลี่ยนทีมรับเพื่อรักษาแต้ม
             </p>
           </div>
 
@@ -205,7 +209,7 @@ export default function ArenaRushHourHub({ onNavigate }) {
         </div>
 
         <div className="text-center text-xs text-slate-400 font-mono">
-          เวลาปัจจุบันของเซิร์ฟเวอร์: <span className="text-white font-bold">{countdown.serverTimeStr}</span> • ปิดรอบเวลา 22:00 น.
+          เวลาปัจจุบันของเซิร์ฟเวอร์: <span className="text-white font-bold">{countdown.serverTimeStr}</span> • ปิดรอบเวลา {rushCloseHour}:00 น.
         </div>
       </div>
 
@@ -229,7 +233,7 @@ export default function ArenaRushHourHub({ onNavigate }) {
           <div className="p-4 rounded-2xl bg-[#101726] border border-blue-500/20 space-y-3">
             <div className="flex items-center justify-between">
               <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-blue-500/20 text-blue-300 border border-blue-500/30">
-                ช่วงที่ 1: 21:00 - 21:30
+                ช่วงที่ 1: {rushStartHour}:00 - {rushStartHour}:30
               </span>
               <span className="text-xs text-slate-400 font-semibold">30 นาทีแรก</span>
             </div>
@@ -246,7 +250,7 @@ export default function ArenaRushHourHub({ onNavigate }) {
           <div className="p-4 rounded-2xl bg-[#101726] border border-amber-500/20 space-y-3">
             <div className="flex items-center justify-between">
               <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
-                ช่วงที่ 2: 21:30 - 21:45
+                ช่วงที่ 2: {rushStartHour}:30 - {rushStartHour}:45
               </span>
               <span className="text-xs text-slate-400 font-semibold">15 นาทีถัดมา</span>
             </div>
@@ -263,7 +267,7 @@ export default function ArenaRushHourHub({ onNavigate }) {
           <div className="p-4 rounded-2xl bg-[#101726] border border-rose-500/20 space-y-3">
             <div className="flex items-center justify-between">
               <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">
-                ช่วงที่ 3: 21:45 - 22:00
+                ช่วงที่ 3: {rushStartHour}:45 - {rushCloseHour}:00
               </span>
               <span className="text-xs text-rose-400 font-bold">15 นาทีสุดท้าย</span>
             </div>

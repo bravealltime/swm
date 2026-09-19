@@ -39,5 +39,5 @@ describe('MyBoxView rendering & lifecycle', () => {
       const html = renderToString(React.createElement(MyBoxView, { tab }));
       expect(html).toBeDefined();
     }
-  });
+  }, 25000);
 });

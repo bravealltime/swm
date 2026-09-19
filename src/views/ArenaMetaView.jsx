@@ -18,15 +18,15 @@ import {
 import MonsterAvatar from '../components/MonsterAvatar';
 import ArenaRushHourHub from '../components/ArenaRushHourHub';
 import { matchArenaTeams } from '../utils/arenaMatcher';
-import { loadBox } from '../utils/swexImport';
+import { loadBox, loadDemoBox } from '../utils/swexImport';
 
 export default function ArenaMetaView({ onNavigate }) {
-  const [activeTab, setActiveTab] = useState('ao'); // 'ao' | 'ad' | 'mybox'
+  const [activeTab, setActiveTab] = useState('ao'); // 'ao' | 'ad' | 'mybox' | 'rush'
   const [selectedArchetype, setSelectedArchetype] = useState('all');
   const [copiedTeamId, setCopiedTeamId] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [userBox, setUserBox] = useState(() => loadBox());
 
-  const userBox = useMemo(() => loadBox(), []);
   const arenaData = useMemo(() => matchArenaTeams(userBox), [userBox]);
 
   const { offense, defense, summary } = arenaData;
@@ -83,17 +83,37 @@ export default function ArenaMetaView({ onNavigate }) {
 
         {/* Status KPI */}
         <div className="relative z-10 flex items-center gap-3 shrink-0">
-          <div className="rounded-2xl bg-white/[0.04] border border-white/10 p-3.5 flex items-center gap-4 text-xs font-mono shadow-xl">
-            <div>
-              <div className="text-slate-400 text-[11px]">ทีมบุกพร้อมรบ (AO)</div>
-              <div className="text-emerald-400 font-bold text-base">{summary.readyAo} / {summary.totalAo} ทีม</div>
+          {summary.hasBox ? (
+            <div className="rounded-2xl bg-white/[0.04] border border-white/10 p-3.5 flex items-center gap-4 text-xs font-mono shadow-xl">
+              <div>
+                <div className="text-slate-400 text-[11px]">ทีมบุกพร้อมรบ (AO)</div>
+                <div className="text-emerald-400 font-bold text-base">{summary.readyAo} / {summary.totalAo} ทีม</div>
+              </div>
+              <div className="w-px h-8 bg-white/10"></div>
+              <div>
+                <div className="text-slate-400 text-[11px]">ทีมรับพร้อมรบ (AD)</div>
+                <div className="text-cyan-400 font-bold text-base">{summary.readyAd} / {summary.totalAd} ทีม</div>
+              </div>
             </div>
-            <div className="w-px h-8 bg-white/10"></div>
-            <div>
-              <div className="text-slate-400 text-[11px]">ทีมรับพร้อมรบ (AD)</div>
-              <div className="text-cyan-400 font-bold text-base">{summary.readyAd} / {summary.totalAd} ทีม</div>
+          ) : (
+            <div className="rounded-2xl bg-white/[0.04] border border-emerald-500/20 p-3 flex items-center gap-3 text-xs shadow-xl">
+              <div>
+                <div className="text-slate-400 text-[10px] font-mono">โหมดสูตรสาธารณะ</div>
+                <div className="text-emerald-400 font-bold text-xs flex items-center gap-1">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                  <span>ดูได้ทุกคน ไม่ต้องล็อกอิน ไม่ต้องใช้ JSON</span>
+                </div>
+              </div>
+              <button
+                onClick={() => setUserBox(loadDemoBox())}
+                className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-xs flex items-center gap-1.5 cursor-pointer shadow-md shadow-blue-500/20"
+                title="คลิกเพื่อทดสอบระบบเช็คมอนสเตอร์จากกล่องตัวอย่าง"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                <span>ลองกล่องตัวอย่าง</span>
+              </button>
             </div>
-          </div>
+          )}
         </div>
       </div>
 
@@ -133,7 +153,11 @@ export default function ArenaMetaView({ onNavigate }) {
             }`}
           >
             <CheckCircle2 className="w-4 h-4 text-emerald-300" />
-            <span>⚡ ทีมที่ฉันมีครบ 4 ตัว ({summary.readyAo + summary.readyAd} ทีม)</span>
+            <span>
+              {summary.hasBox
+                ? `⚡ ทีมที่ฉันมีครบ 4 ตัว (${summary.readyAo + summary.readyAd} ทีม)`
+                : '⚡ เช็คทีมจากไอดีของคุณ (SWEX)'}
+            </span>
           </button>
 
           <button
@@ -191,7 +215,9 @@ export default function ArenaMetaView({ onNavigate }) {
                     <span className={`px-2 py-0.5 rounded-md text-[11px] font-bold font-mono ${
                       team.isComplete 
                         ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' 
-                        : 'bg-white/[0.04] text-slate-400'
+                        : summary.hasBox
+                        ? 'bg-white/[0.04] text-slate-400'
+                        : 'bg-blue-500/15 text-blue-300 border border-blue-500/20'
                     }`}>
                       {team.statusLabel}
                     </span>
@@ -222,7 +248,7 @@ export default function ArenaMetaView({ onNavigate }) {
                           <Crown className="w-3 h-3 font-black" />
                         </div>
                       )}
-                      {mon.isOwned && (
+                      {mon.isRealOwned && (
                         <div className="absolute -bottom-1 -right-1 bg-emerald-500 text-white rounded-full p-0.5" title="มีในไอดีแล้ว">
                           <CheckCircle2 className="w-3.5 h-3.5" />
                         </div>
@@ -304,13 +330,48 @@ export default function ArenaMetaView({ onNavigate }) {
       </div>
 
           {filteredList.length === 0 && (
-            <div className="rounded-3xl border border-white/10 bg-[#0c1220] p-12 text-center space-y-3">
-              <div className="w-12 h-12 rounded-full bg-slate-800 text-slate-400 flex items-center justify-center mx-auto">
-                <Info className="w-6 h-6" />
+            activeTab === 'mybox' && !summary.hasBox ? (
+              <div className="rounded-3xl border border-emerald-500/20 bg-gradient-to-r from-[#0c1a14] via-[#09141e] to-[#070b14] p-8 sm:p-12 text-center space-y-4 shadow-2xl">
+                <div className="w-14 h-14 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto border border-emerald-500/30 shadow-lg">
+                  <Sparkles className="w-7 h-7" />
+                </div>
+                <div className="space-y-1.5 max-w-xl mx-auto">
+                  <h3 className="text-xl font-black text-white">
+                    ตรวจเช็คทีม Arena จากกล่องมอนสเตอร์ของคุณ (Box Matcher)
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                    สูตรทั้งหมด 11 ทีมในแท็บ <strong>"ทีมบุก (AO)"</strong> และ <strong>"ทีมรับ (AD)"</strong> สามารถเปิดดูรายละเอียด รูน และลำดับเทิร์นได้ทุกคนโดยไม่ต้องล็อกอิน
+                  </p>
+                  <p className="text-xs text-slate-400 leading-relaxed">
+                    หากต้องการให้ระบบวิเคราะห์ว่าไอดีของคุณมีตัวละครพร้อมจัดทีมไหนบ้าง สามารถทดลองกด <strong>"กล่องตัวอย่าง (Demo Box)"</strong> ได้ทันที หรือนำเข้าไฟล์ JSON จาก SWEX
+                  </p>
+                </div>
+                <div className="flex items-center justify-center gap-3 flex-wrap pt-2">
+                  <button
+                    onClick={() => setUserBox(loadDemoBox())}
+                    className="px-4 py-2.5 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs flex items-center gap-2 cursor-pointer shadow-lg shadow-emerald-500/25"
+                  >
+                    <Sparkles className="w-4 h-4 text-amber-300" />
+                    <span>🎮 ลองใช้กล่องตัวอย่าง (Demo Box)</span>
+                  </button>
+                  <button
+                    onClick={() => onNavigate && onNavigate('my-box')}
+                    className="px-4 py-2.5 rounded-2xl bg-white/10 hover:bg-white/15 text-white font-bold text-xs flex items-center gap-2 cursor-pointer border border-white/10"
+                  >
+                    <span>📁 นำเข้าไฟล์ SWEX ที่หน้า My Box</span>
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
-              <h3 className="text-lg font-bold text-white">ไม่พบทีมตามเงื่อนไขที่เลือก</h3>
-              <p className="text-xs text-slate-400">ลองล้างคำค้นหา หรือสลับไปยังแท็บอื่นเพื่อดูทีมเพิ่มเติม</p>
-            </div>
+            ) : (
+              <div className="rounded-3xl border border-white/10 bg-[#0c1220] p-12 text-center space-y-3">
+                <div className="w-12 h-12 rounded-full bg-slate-800 text-slate-400 flex items-center justify-center mx-auto">
+                  <Info className="w-6 h-6" />
+                </div>
+                <h3 className="text-lg font-bold text-white">ไม่พบทีมตามเงื่อนไขที่เลือก</h3>
+                <p className="text-xs text-slate-400">ลองล้างคำค้นหา หรือสลับไปยังแท็บอื่นเพื่อดูทีมเพิ่มเติม</p>
+              </div>
+            )
           )}
         </>
       )}

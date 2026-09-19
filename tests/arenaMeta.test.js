@@ -46,4 +46,22 @@ describe('arenaMatcher', () => {
     expect(tianaTeam.isComplete).toBe(false);
     expect(tianaTeam.missingMonsters.length).toBeGreaterThan(0);
   });
+
+  it('matches box format stored in localStorage (.units array)', () => {
+    const parsedBox = {
+      units: [
+        { masterId: 18311, name: 'Psamathe', stars: 6 },
+        { masterId: 11013, name: 'Bernard', stars: 6 },
+        { masterId: 18411, name: 'Bastet', stars: 6 },
+        { masterId: 13413, name: 'Lushen', stars: 6 },
+      ],
+    };
+
+    const result = matchArenaTeams(parsedBox);
+    expect(result.summary.hasBox).toBe(true);
+    expect(result.summary.readyAo).toBeGreaterThanOrEqual(1);
+    const psamaTeam = result.offense.find((t) => t.id === 'ao-psamathe-lushen');
+    expect(psamaTeam.isComplete).toBe(true);
+    expect(psamaTeam.statusLabel).toBe('พร้อมรบ (ครบ 4 ตัว)');
+  });
 });

@@ -9,31 +9,36 @@ const norm = (s) => String(s || '').replace(/\s*\(.*?\)\s*/g, '').toLowerCase().
 
 /**
  * Matches player box against Arena Offense and Defense meta teams
- * @param {Object} userBox - SWEX box JSON
+ * @param {Object} userBox - SWEX box JSON (either parsed box with .units or raw dump with .unit_list)
  * @returns {Object} { offense: Array, defense: Array, summary: Object }
  */
 export function matchArenaTeams(userBox) {
+  const rawUnits = userBox?.units || userBox?.unit_list || [];
+  const hasBox = Boolean(rawUnits.length > 0);
+
   // 1. Build owned monsters map
   const ownedNames = new Map(); // normName -> unit info
 
-  if (userBox?.unit_list) {
-    for (const u of userBox.unit_list) {
-      const bId = baseAwakenedId(u.unit_master_id);
-      const cat = MONSTERS.find((m) => m.id === bId || m.id === u.unit_master_id) || {};
-      const name = cat.name || u.name;
+  if (hasBox) {
+    for (const u of rawUnits) {
+      const masterId = Number(u.masterId || u.unit_master_id) || 0;
+      const bId = baseAwakenedId(masterId);
+      const cat = MONSTERS.find((m) => m.id === bId || m.id === masterId) || {};
+      const name = u.name || cat.name;
       if (!name) continue;
       const key = norm(name);
 
       if (!ownedNames.has(key)) {
         ownedNames.set(key, {
-          unitId: u.unit_id,
-          masterId: u.unit_master_id,
+          unitId: u.uid || u.unit_id || 0,
+          masterId,
           name: cat.name || name,
-          thaiName: cat.thaiName || name,
-          stars: u.class || 6,
-          avatarUrl: cat.avatarUrl || cat.imageUrl,
-          element: cat.element,
+          thaiName: cat.thaiName || u.thaiName || name,
+          stars: Number(u.stars || u.class) || 6,
+          avatarUrl: cat.avatarUrl || cat.imageUrl || u.avatarUrl,
+          element: cat.element || u.element,
           isOwned: true,
+          isRealOwned: true,
         });
       }
     }
@@ -41,7 +46,7 @@ export function matchArenaTeams(userBox) {
 
   const findMonster = (name) => {
     const key = norm(name);
-    if (ownedNames.has(key)) {
+    if (hasBox && ownedNames.has(key)) {
       return ownedNames.get(key);
     }
     const cat = MONSTERS.find((m) => norm(m.name) === key) || {};
@@ -51,27 +56,37 @@ export function matchArenaTeams(userBox) {
       avatarUrl: cat.avatarUrl || cat.imageUrl,
       element: cat.element || 'wind',
       stars: cat.stars || 5,
-      isOwned: false,
+      isOwned: hasBox ? false : true, // If no box, show as neutral available slot
+      isRealOwned: hasBox ? Boolean(ownedNames.has(key)) : false,
     };
   };
 
   const processTeams = (teamList) => {
     return teamList.map((team) => {
       const slots = team.slots.map(findMonster);
-      const ownedCount = slots.filter((s) => s.isOwned).length;
-      const missingMonsters = slots.filter((s) => !s.isOwned).map((s) => s.name);
+      const realOwnedCount = slots.filter((s) => s.isRealOwned).length;
+      const missingMonsters = slots.filter((s) => !s.isRealOwned).map((s) => s.name);
+      const isComplete = hasBox ? realOwnedCount === 4 : false;
+
+      let statusLabel = 'สูตรเมต้ามาตรฐาน';
+      if (hasBox) {
+        statusLabel = realOwnedCount === 4 ? 'พร้อมรบ (ครบ 4 ตัว)' : `ขาดอีก ${4 - realOwnedCount} ตัว`;
+      }
 
       return {
         ...team,
         slots,
-        ownedCount,
+        ownedCount: realOwnedCount,
         missingMonsters,
-        isComplete: ownedCount === 4,
-        statusLabel: ownedCount === 4 ? 'พร้อมรบ (ครบ 4 ตัว)' : `ขาดอีก ${4 - ownedCount} ตัว`,
+        isComplete,
+        statusLabel,
       };
     }).sort((a, b) => {
-      if (a.isComplete !== b.isComplete) return b.isComplete ? 1 : -1;
-      return b.ownedCount - a.ownedCount;
+      if (hasBox) {
+        if (a.isComplete !== b.isComplete) return b.isComplete ? 1 : -1;
+        return b.ownedCount - a.ownedCount;
+      }
+      return 0; // maintain meta ordering when no box
     });
   };
 
@@ -89,7 +104,7 @@ export function matchArenaTeams(userBox) {
       readyAo,
       totalAd: defense.length,
       readyAd,
-      hasBox: Boolean(userBox?.unit_list && userBox.unit_list.length > 0),
+      hasBox,
     },
   };
 }
