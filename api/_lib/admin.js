@@ -194,6 +194,24 @@ export async function aiUsageSince({ since, userId, ip }) {
   return { ok: true, byUser, byIp };
 }
 
+/** Successful answers since `since`, grouped by account and by IP — what the daily quota is counting. */
+export async function aiUsageGroups({ since }) {
+  const r = await rest('ai_logs', { query: `?select=user_id,ip_hash,ip,country,created_at&ok=eq.true&created_at=gte.${encodeURIComponent(since)}&order=created_at.desc&limit=2000` });
+  let rows = r.data || [];
+  if (!r.ok && missingColumn(r.error)) {
+    const r2 = await rest('ai_logs', { query: `?select=user_id,ip_hash,created_at&ok=eq.true&created_at=gte.${encodeURIComponent(since)}&order=created_at.desc&limit=2000` });
+    if (!r2.ok) return { ok: false, error: r2.error, users: [], ips: [] };
+    rows = r2.data || [];
+  } else if (!r.ok) return { ok: false, error: r.error, users: [], ips: [] };
+  const users = new Map(), ips = new Map();
+  for (const row of rows) {
+    if (row.user_id) { const u = users.get(row.user_id) || { userId: row.user_id, count: 0, last: row.created_at }; u.count += 1; users.set(row.user_id, u); }
+    if (row.ip_hash) { const i = ips.get(row.ip_hash) || { ipHash: row.ip_hash, ip: row.ip || null, country: row.country || null, count: 0, last: row.created_at }; i.count += 1; if (!i.ip && row.ip) i.ip = row.ip; ips.set(row.ip_hash, i); }
+  }
+  const desc = (a, b) => b.count - a.count;
+  return { ok: true, users: [...users.values()].sort(desc), ips: [...ips.values()].sort(desc) };
+}
+
 export async function aiLogs({ limit = 100 } = {}) {
   const base = 'id,created_at,kind,question,user_id,ip_hash,ok,ms,model,error,tokens';
   const tail = `&order=created_at.desc&limit=${Math.min(500, limit)}`;

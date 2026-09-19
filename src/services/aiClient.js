@@ -36,8 +36,20 @@ export function quotaLabel(quota) {
  * Resolves to { answer, model, usage, authenticated, quota } or throws an Error with a Thai message
  * (plus `code` / `quota` when the server refused).
  */
-export async function askAdvisor(payload, { signal, token } = {}) {
+export async function askAdvisor(payload, { signal, token, busyRetries = 3 } = {}) {
   const authToken = token || await sessionToken();
+  for (let attempt = 0; ; attempt++) {
+    try {
+      return await askOnce(payload, { signal, authToken });
+    } catch (err) {
+      // BUSY: another answer is in flight on the provider; wait and try again before giving up
+      if (err.code !== 'BUSY' || attempt >= busyRetries || signal?.aborted) throw err;
+      await new Promise((r) => setTimeout(r, 5000));
+    }
+  }
+}
+
+async function askOnce(payload, { signal, authToken }) {
   const res = await fetch('/api/ai/advise', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}) },

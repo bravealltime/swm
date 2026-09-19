@@ -4,13 +4,22 @@
 // from ai_logs, so the quota holds across function instances). A per-minute burst limit stays in
 // memory on top of that. Every call is logged with the IP and Vercel's geo headers.
 import { advise } from '../_lib/advisor.js';
-import { aiConfig } from '../_lib/ai.js';
-import { getSettings, logAiCall, userFromToken, adminEmails, aiUsageSince } from '../_lib/admin.js';
+import { aiConfig, isProviderBusy } from '../_lib/ai.js';
+import { getSettings, logAiCall, userFromToken, adminEmails, aiUsageSince, ipHash } from '../_lib/admin.js';
 import { bangkokDay, decideQuota, geoFromHeaders } from '../_lib/aiQuota.js';
 
 const WINDOW_MS = 60 * 1000;
 const LIMIT_PER_MINUTE = 6;
 const buckets = new Map(); // key -> [timestamps]
+
+// The provider takes one request per key at a time: calls that land on the same function instance
+// wait their turn here instead of racing each other into a 429.
+let lane = Promise.resolve();
+function serialize(fn) {
+  const run = lane.then(fn, fn);
+  lane = run.catch(() => {});
+  return run;
+}
 
 function allow(key, limit) {
   const now = Date.now();
@@ -24,7 +33,8 @@ function allow(key, limit) {
 
 export async function handleAdvise({ body, ip, token, geo = {} }) {
   if (!aiConfig().configured) return { status: 503, json: { error: 'ยังไม่ได้ตั้งค่า AI provider บนเซิร์ฟเวอร์' } };
-  const settings = await getSettings().catch(() => null);
+  // fresh: a quota reset or a limit change in the back-office must apply to the very next question
+  const settings = await getSettings({ fresh: true }).catch(() => null);
   if (settings && settings.features?.ai === false) return { status: 503, json: { error: 'ผู้ดูแลปิดใช้งานโค้ช AI ชั่วคราว' } };
   const aiRules = { requireLogin: true, dailyLimit: 3, ...(settings?.ai || {}) };
 
@@ -34,16 +44,20 @@ export async function handleAdvise({ body, ip, token, geo = {} }) {
     return { status: 401, json: { error: 'โค้ช AI เปิดให้เฉพาะสมาชิก — เข้าสู่ระบบก่อนแล้วถามได้เลย', code: 'LOGIN_REQUIRED' } };
   }
 
+  const isAdmin = Boolean(user?.email && adminEmails().includes(user.email));
   const key = userId ? `u:${userId}` : `ip:${ip || 'unknown'}`;
-  if (!allow(key, LIMIT_PER_MINUTE)) {
+  if (!isAdmin && !allow(key, LIMIT_PER_MINUTE)) {
     return { status: 429, json: { error: 'ถามถี่เกินไป รอสักครู่แล้วลองใหม่', code: 'RATE_LIMIT' } };
   }
 
   // Daily quota: admins are exempt; if the log table cannot be read the quota cannot be counted, so
-  // the call goes through (the log write below will surface the same problem in the back-office)
+  // the call goes through (the log write below will surface the same problem in the back-office).
+  // A reset from the back-office (settings.ai.resets) moves the counting window forward for that
+  // account / IP / everyone, so earlier answers stop counting.
   const day = bangkokDay();
-  const isAdmin = Boolean(user?.email && adminEmails().includes(user.email));
-  const usage = aiRules.dailyLimit > 0 && !isAdmin ? await aiUsageSince({ since: day.start, userId, ip }) : { ok: true, byUser: 0, byIp: 0 };
+  const resets = aiRules.resets || {};
+  const since = [day.start, resets.all, userId ? resets[`u:${userId}`] : null, ip ? resets[`ip:${ipHash(ip)}`] : null].filter(Boolean).sort().pop();
+  const usage = aiRules.dailyLimit > 0 && !isAdmin ? await aiUsageSince({ since, userId, ip }) : { ok: true, byUser: 0, byIp: 0 };
   const quota = decideQuota({ byUser: usage.byUser, byIp: usage.byIp, limit: aiRules.dailyLimit, unlimited: isAdmin || !usage.ok });
   const quotaJson = (extraUsed = 0) => (quota.unlimited
     ? { limit: quota.limit, unlimited: true, resetsAt: day.end }
@@ -63,12 +77,15 @@ export async function handleAdvise({ body, ip, token, geo = {} }) {
   const kind = body?.kind;
   const question = kind === 'chat' ? body?.question : kind;
   try {
-    const result = await advise(body || {});
+    const result = await serialize(() => advise(body || {}));
     // awaited on purpose: the serverless runtime may freeze right after we return (see logAiCall)
     await logAiCall({ kind, question, userId, ip, geo, ok: true, ms: Date.now() - t0, model: result.model, tokens: result.usage?.total_tokens });
     return { status: 200, json: { ...result, authenticated: Boolean(userId), quota: quotaJson(1) } };
   } catch (err) {
     await logAiCall({ kind, question, userId, ip, geo, ok: false, ms: Date.now() - t0, error: err.message });
+    if (isProviderBusy(err)) {
+      return { status: 503, json: { error: 'โค้ชกำลังตอบคำถามของคนอื่นอยู่ — ระบบจะลองใหม่ให้ในอีกไม่กี่วินาที', code: 'BUSY' } };
+    }
     return { status: 500, json: { error: err.message || 'AI error' } };
   }
 }

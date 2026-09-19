@@ -228,6 +228,7 @@ function AiPanel({ status }) {
         </div>
         <button onClick={doPing} disabled={busy || !status.ai.configured} className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:opacity-50 text-slate-950 text-xs font-bold cursor-pointer flex items-center gap-1.5 shrink-0">{busy ? <Loader2 className="w-4 h-4 animate-spin" /> : <Zap className="w-4 h-4" />} ทดสอบโมเดล</button>
       </div>
+      <QuotaPanel />
       <div className={`${card} overflow-hidden`}>
         <div className="px-4 py-3 border-b border-white/[0.06] flex items-center justify-between">
           <div className="text-sm font-bold text-white flex items-center gap-2"><Clock className="w-4 h-4 text-slate-400" /> คำถามล่าสุด</div>
@@ -260,6 +261,58 @@ function AiPanel({ status }) {
             </div>
           )}
       </div>
+    </div>
+  );
+}
+
+// --- today's AI quota per account / IP, with resets -----------------------------------------------
+function QuotaPanel() {
+  const [q, setQ] = useState(null);
+  const [busy, setBusy] = useState('');
+  const [msg, setMsg] = useState(null);
+  const load = useCallback(async () => {
+    try { setQ(await adminFetch('ai-quota')); } catch (err) { setQ({ ok: false, error: err.message, users: [], ips: [] }); }
+  }, []);
+  useEffect(() => { load(); }, [load]);
+  const reset = async (target, label) => {
+    if (!window.confirm(`รีเซ็ตโควตาของ ${label} ตอนนี้? คำถามที่ถามไปแล้ววันนี้จะไม่ถูกนับ`)) return;
+    setBusy(target); setMsg(null);
+    try { await adminFetch('ai-quota', { method: 'POST', body: { target } }); setMsg({ ok: true, text: `รีเซ็ต ${label} แล้ว — มีผลกับคำถามถัดไปทันที` }); await load(); }
+    catch (err) { setMsg({ ok: false, text: err.message }); }
+    finally { setBusy(''); }
+  };
+  const limit = q?.limit ?? 3;
+  const Row = ({ id, label, sub, count, resetAt }) => (
+    <tr className="border-t border-white/[0.05]">
+      <td className="px-3 py-2 font-mono text-slate-200">{label}{sub && <div className="text-[10px] text-slate-500">{sub}</div>}</td>
+      <td className="px-3 py-2 tabular-nums"><span className={count >= limit && limit > 0 ? 'text-rose-300 font-bold' : 'text-slate-200'}>{count}</span><span className="text-slate-500"> / {limit || '∞'}</span>{resetAt && <div className="text-[10px] text-emerald-300">รีเซ็ตแล้ว {fmtTime(resetAt)}</div>}</td>
+      <td className="px-3 py-2 text-right"><button onClick={() => reset(id, label)} disabled={busy === id} className="px-2.5 py-1 rounded-lg bg-white/[0.05] hover:bg-emerald-500/20 text-slate-300 hover:text-emerald-200 text-xs font-bold cursor-pointer disabled:opacity-50">รีเซ็ต</button></td>
+    </tr>
+  );
+  return (
+    <div className={`${card} overflow-hidden`}>
+      <div className="px-4 py-3 border-b border-white/[0.06] flex items-center justify-between gap-3 flex-wrap">
+        <div>
+          <div className="text-sm font-bold text-white flex items-center gap-2"><Users className="w-4 h-4 text-cyan-300" /> โควตาวันนี้ (ตั้งแต่ {q?.day ? fmtTime(q.day.start) : '…'})</div>
+          <div className="text-[11px] text-slate-400">นับคำตอบที่สำเร็จต่อบัญชีและต่อ IP · แอดมินไม่ถูกนับ · รีเซ็ตแล้วเริ่มนับใหม่ตั้งแต่วินาทีนั้น</div>
+          {msg && <div className={`text-xs mt-1 ${msg.ok ? 'text-emerald-300' : 'text-rose-300'}`}>{msg.text}</div>}
+        </div>
+        <div className="flex items-center gap-2">
+          <button onClick={load} className="text-[11px] text-slate-400 hover:text-white cursor-pointer flex items-center gap-1"><RefreshCw className="w-3 h-3" /> โหลดใหม่</button>
+          <button onClick={() => reset('all', 'ทุกคน')} disabled={busy === 'all'} className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white text-xs font-bold cursor-pointer">รีเซ็ตทุกคนตอนนี้</button>
+        </div>
+      </div>
+      {!q ? <div className="p-6 text-center text-slate-400 text-sm">กำลังโหลด…</div>
+        : !q.ok ? <div className="p-4 text-xs text-amber-200">{q.error === 'TABLE_MISSING' ? 'ยังไม่ได้สร้างตาราง ai_logs' : q.error}</div>
+        : (q.users.length === 0 && q.ips.length === 0) ? <div className="p-6 text-center text-slate-400 text-sm">ยังไม่มีใครถามวันนี้{q.resets?.all ? ` (รีเซ็ตทุกคนเมื่อ ${fmtTime(q.resets.all)})` : ''}</div>
+        : (
+          <div className="grid lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-white/[0.06]">
+            <table className="w-full text-xs"><thead className="bg-white/[0.03] text-slate-400"><tr><th className="text-left px-3 py-2">บัญชี</th><th className="text-left px-3 py-2">ใช้ไป</th><th className="px-3 py-2"></th></tr></thead>
+              <tbody>{q.users.map((u) => <Row key={u.userId} id={`u:${u.userId}`} label={u.userId.slice(0, 8)} sub={`ล่าสุด ${fmtTime(u.last)}`} count={u.count} resetAt={u.resetAt} />)}</tbody></table>
+            <table className="w-full text-xs"><thead className="bg-white/[0.03] text-slate-400"><tr><th className="text-left px-3 py-2">IP</th><th className="text-left px-3 py-2">ใช้ไป</th><th className="px-3 py-2"></th></tr></thead>
+              <tbody>{q.ips.map((i) => <Row key={i.ipHash} id={`ip:${i.ipHash}`} label={i.ip || `#${i.ipHash.slice(0, 8)}`} sub={[i.country, `ล่าสุด ${fmtTime(i.last)}`].filter(Boolean).join(' · ')} count={i.count} resetAt={i.resetAt} />)}</tbody></table>
+          </div>
+        )}
     </div>
   );
 }

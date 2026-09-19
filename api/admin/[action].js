@@ -1,7 +1,8 @@
 // /api/admin/<action> — back-office API. Every action except `settings` (public GET) requires an
 // admin (Supabase login + ADMIN_EMAILS). Vercel routes here via the [action] file name; the Vite dev
 // middleware calls handleAdmin() directly with the same arguments.
-import { requireAdmin, userFromToken, supabaseInfo, tableStatus, getSettings, saveSettings, aiLogs, aiStats, datasetReport, deployInfo, githubInfo, workflowRuns, dispatchWorkflow } from '../_lib/admin.js';
+import { requireAdmin, userFromToken, supabaseInfo, tableStatus, getSettings, saveSettings, aiLogs, aiStats, aiUsageGroups, datasetReport, deployInfo, githubInfo, workflowRuns, dispatchWorkflow } from '../_lib/admin.js';
+import { bangkokDay } from '../_lib/aiQuota.js';
 import { aiConfig, chat } from '../_lib/ai.js';
 import { adminSnapshots, setContributorFlag, deleteSnapshot } from '../_lib/guildRankings.js';
 import { listLive, getLive, setLive, deleteLive, listSubmissions, resolveSubmission, LIVE_KEY } from '../_lib/liveData.js';
@@ -52,6 +53,29 @@ export async function handleAdmin({ action, method, body, token, query = {} }) {
   }
 
   if (action === 'logs') return { status: 200, json: await aiLogs({ limit: Number(query.limit) || 100 }) };
+
+  // today's AI quota per account / IP, and resets ("all", "u:<uuid>", "ip:<hash>") that restart the count now
+  if (action === 'ai-quota' && method === 'GET') {
+    const settings = await getSettings({ fresh: true });
+    const day = bangkokDay();
+    const resets = settings.ai?.resets || {};
+    const since = [day.start, resets.all].filter(Boolean).sort().pop();
+    const usage = await aiUsageGroups({ since });
+    const after = (k) => (resets[k] && resets[k] > since ? resets[k] : null);
+    return { status: 200, json: { ...usage, day, limit: settings.ai?.dailyLimit ?? 3, resets, users: usage.users.map((u) => ({ ...u, resetAt: after(`u:${u.userId}`) })), ips: usage.ips.map((i) => ({ ...i, resetAt: after(`ip:${i.ipHash}`) })) } };
+  }
+  if (action === 'ai-quota' && method === 'POST') {
+    const target = String(body?.target || '');
+    if (!/^(all|u:[0-9a-f-]{36}|ip:[0-9a-f]{16})$/i.test(target)) return { status: 400, json: { error: 'target ต้องเป็น all, u:<uuid> หรือ ip:<hash>' } };
+    const settings = await getSettings({ fresh: true });
+    const ai = { ...(settings.ai || {}) };
+    delete ai._meta;
+    const now = new Date().toISOString();
+    // a global reset makes the per-target entries redundant
+    const resets = target === 'all' ? { all: now } : { ...(ai.resets || {}), [target]: now };
+    const r = await saveSettings({ ai: { ...ai, resets } }, auth.user.email);
+    return r.ok ? { status: 200, json: { ok: true, resetAt: now } } : { status: 400, json: { error: r.error } };
+  }
 
   if (action === 'runs') return { status: 200, json: await workflowRuns(Number(query.limit) || 8) };
 

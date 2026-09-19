@@ -41,7 +41,11 @@ export function aiConfig() {
 /**
  * Chat completion with support for OpenAI-compatible and Gemini Native with Search Grounding.
  */
-export async function chat({ system, user, maxTokens = 950, temperature = 0.3, timeoutMs = 45000, retries = 2 }) {
+/** The provider queues one request per key; a second one is refused with this until the first finishes. */
+export const isProviderBusy = (err) => /HTTP 429|waiting queue|waiting request|rate limit/i.test(String(err?.message || err || ''));
+
+export async function chat({ system, user, maxTokens = 950, temperature = 0.3, timeoutMs = 45000, retries = 2, deadlineMs = 54000 }) {
+  const startedAt = Date.now();
   const cfg = aiConfig();
   if (!cfg.configured) throw new Error('AI provider not configured (AI_BASE_URL / AI_MODEL / AI_API_KEY)');
 
@@ -102,9 +106,13 @@ export async function chat({ system, user, maxTokens = 950, temperature = 0.3, t
     reasoning_effort: 'low',
   };
 
-  for (let attempt = 0; attempt <= retries; attempt++) {
+  // `attempt` counts real failures; a busy provider only costs waiting time, bounded by deadlineMs
+  // (the Vercel function has 60 s in total, see vercel.json)
+  for (let attempt = 0; attempt <= retries; ) {
+    const remaining = deadlineMs - (Date.now() - startedAt);
+    if (remaining < 8000) break;
     const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    const timer = setTimeout(() => controller.abort(), Math.min(timeoutMs, remaining));
     try {
       const res = await fetch(`${cfg.baseUrl}/chat/completions`, {
         method: 'POST',
@@ -120,7 +128,13 @@ export async function chat({ system, user, maxTokens = 950, temperature = 0.3, t
       return { text, usage: json.usage || null, model: json.model || cfg.model };
     } catch (err) {
       lastErr = err;
-      if (attempt < retries) await new Promise((r) => setTimeout(r, 1500 * (attempt + 1)));
+      if (isProviderBusy(err)) {
+        // someone else's answer is in flight on this key: poll again in a few seconds
+        if (deadlineMs - (Date.now() - startedAt) > 12000) { await new Promise((r) => setTimeout(r, 4000)); continue; }
+        break;
+      }
+      attempt += 1;
+      if (attempt <= retries) await new Promise((r) => setTimeout(r, 1500 * attempt));
     } finally {
       clearTimeout(timer);
     }

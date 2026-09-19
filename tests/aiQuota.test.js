@@ -34,25 +34,28 @@ describe('geoFromHeaders', () => {
 });
 
 // --- the endpoint's gate, with the model / Supabase mocked -------------------------------------
-vi.mock('../api/_lib/advisor.js', () => ({ advise: vi.fn(async () => ({ answer: 'ok', model: 'test', usage: { total_tokens: 10 } })) }));
-vi.mock('../api/_lib/ai.js', () => ({ aiConfig: () => ({ configured: true }), loadEnv: () => {} }));
+const model = vi.hoisted(() => ({ fail: null }));
+vi.mock('../api/_lib/advisor.js', () => ({ advise: vi.fn(async () => { if (model.fail) throw new Error(model.fail); return { answer: 'ok', model: 'test', usage: { total_tokens: 10 } }; }) }));
+vi.mock('../api/_lib/ai.js', () => ({ aiConfig: () => ({ configured: true }), loadEnv: () => {}, isProviderBusy: (err) => /HTTP 429|waiting queue|waiting request|rate limit/i.test(String(err?.message || err || '')) }));
 const admin = vi.hoisted(() => ({
   settings: { features: { ai: true }, ai: { requireLogin: true, dailyLimit: 3 } },
   user: null,
   usage: { ok: true, byUser: 0, byIp: 0 },
   logged: [],
+  sinceSeen: null,
 }));
 vi.mock('../api/_lib/admin.js', () => ({
   getSettings: async () => admin.settings,
   userFromToken: async (token) => (token === 'member' ? { id: 'u1', email: 'member@example.com' } : token === 'owner' ? { id: 'u0', email: 'pedictu@gmail.com' } : null),
   adminEmails: () => ['pedictu@gmail.com'],
-  aiUsageSince: async () => admin.usage,
+  aiUsageSince: async ({ since }) => { admin.sinceSeen = since; return admin.usage; },
   logAiCall: async (row) => { admin.logged.push(row); },
+  ipHash: (ip) => (ip ? `h-${ip}` : null),
 }));
 const { handleAdvise } = await import('../api/ai/advise.js');
 
 describe('handleAdvise gate', () => {
-  beforeEach(() => { admin.usage = { ok: true, byUser: 0, byIp: 0 }; admin.logged = []; admin.settings.ai = { requireLogin: true, dailyLimit: 3 }; });
+  beforeEach(() => { admin.usage = { ok: true, byUser: 0, byIp: 0 }; admin.logged = []; admin.settings.ai = { requireLogin: true, dailyLimit: 3 }; admin.sinceSeen = null; model.fail = null; });
 
   it('refuses anonymous callers with LOGIN_REQUIRED', async () => {
     const r = await handleAdvise({ body: { kind: 'chat', question: 'x' }, ip: '1.2.3.4', token: '' });
@@ -90,5 +93,29 @@ describe('handleAdvise gate', () => {
     const r = await handleAdvise({ body: { kind: 'chat', question: 'x' }, ip: '1.1.1.1', token: '' });
     expect(r.status).toBe(200);
     expect(r.json.authenticated).toBe(false);
+  });
+
+  it('counts only answers after a back-office reset for that account, IP or everyone', async () => {
+    admin.settings.ai = { requireLogin: true, dailyLimit: 3, resets: { 'u:u1': '2099-01-01T00:00:00.000Z' } };
+    await handleAdvise({ body: { kind: 'chat', question: 'x' }, ip: '1.2.3.4', token: 'member' });
+    expect(admin.sinceSeen).toBe('2099-01-01T00:00:00.000Z');
+    admin.settings.ai = { requireLogin: true, dailyLimit: 3, resets: { all: '2098-06-01T00:00:00.000Z', 'ip:h-1.2.3.4': '2098-07-01T00:00:00.000Z' } };
+    await handleAdvise({ body: { kind: 'chat', question: 'x' }, ip: '1.2.3.4', token: 'member' });
+    expect(admin.sinceSeen).toBe('2098-07-01T00:00:00.000Z'); // the latest applicable reset wins
+  });
+
+  it("turns the provider's one-request-at-a-time refusal into a BUSY 503 the client retries", async () => {
+    model.fail = 'AI HTTP 429: The local waiting queue is full; only one waiting request per owner is allowed.';
+    const r = await handleAdvise({ body: { kind: 'chat', question: 'x' }, ip: '1.2.3.4', token: 'member' });
+    expect(r.status).toBe(503);
+    expect(r.json.code).toBe('BUSY');
+    expect(admin.logged[0].ok).toBe(false); // a failed call never spends quota
+  });
+
+  it('lets the owner ask more than the per-minute burst limit', async () => {
+    for (let i = 0; i < 8; i++) {
+      const r = await handleAdvise({ body: { kind: 'chat', question: 'x' }, ip: '7.7.7.7', token: 'owner' });
+      expect(r.status).toBe(200);
+    }
   });
 });
