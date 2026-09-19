@@ -320,10 +320,10 @@ async function drawRuneIcon(ctx, { x, y, size, quality, slot, set, ancient }) {
 
 /**
  * Summoner passport (1200×675): identity + four stat tiles on the left, the LD5 hall on the right,
- * and along the bottom the box's fastest runes by their own SPD substat — the number as it rolled,
- * with grinds shown separately and never summed into it.
+ * and along the bottom the fastest rune of each set by its own SPD substat — the number as it rolled,
+ * with grinds shown separately and never summed into it (and no wearer: the card is about the runes).
  */
-export async function exportProfileCard({ wizard, stats = {}, topLd5 = [], heroes = [], speedRunes = [], preview = true }) {
+export async function exportProfileCard({ wizard, stats = {}, topLd5 = [], heroes = [], speedRuneSets = [], preview = true }) {
   await ensureFonts();
   const W = 1200, H = 675;
   const canvas = document.createElement('canvas');
@@ -391,44 +391,43 @@ export async function exportProfileCard({ wizard, stats = {}, topLd5 = [], heroe
   if (topLd5.length > 8) text(ctx, `+ อีก ${topLd5.length - 8} ตัว`, hx + hw - 22, hy + hh - 12, { font: `600 12px ${THAI}`, color: '#94a3b8', align: 'right' });
   if (!cells.length) text(ctx, 'ยังไม่มีมอนสเตอร์แสง-มืด 5 ดาวแท้ในไอดีนี้ — สู้ต่อไป!', hx + hw / 2, hy + hh / 2 + 10, { font: `500 16px ${THAI}`, color: '#94a3b8', align: 'center' });
 
-  // fastest runes: the SPD substat as rolled, grind shown separately, wearer underneath
+  // fastest rune of each set: the SPD substat as rolled, grind shown separately, the set's runners-up under it
   const sx = 60, sy = 446, sw = W - 120, sh = 200;
   drawPanel(ctx, sx, sy, sw, sh, { titleBar: 40 });
-  text(ctx, '⚡ รูนสปีดสูงสุดในกล่อง', sx + 22, sy + 27, { font: `700 16px ${THAI}`, color: '#7dd3fc' });
+  text(ctx, '⚡ รูนสปีดสูงสุดของแต่ละเซ็ต', sx + 22, sy + 27, { font: `700 16px ${THAI}`, color: '#7dd3fc' });
   text(ctx, 'ค่าซับ SPD ตามที่ออก · ขัดแสดงแยก ไม่บวกรวม · ไม่รวมสปีดตัวมอน', sx + sw - 22, sy + 27, { font: `500 12px ${THAI}`, color: '#94a3b8', align: 'right' });
-  const runes = speedRunes.slice(0, 6);
-  if (!runes.length) {
+  const sets = speedRuneSets.slice(0, 6);
+  if (!sets.length) {
     text(ctx, 'ยังไม่มีข้อมูลรูน — นำเข้าไฟล์ SWEX ใหม่เพื่อให้การ์ดแสดงรูนสปีด', sx + sw / 2, sy + 112, { font: `500 14px ${THAI}`, color: '#64748b', align: 'center' });
   }
   const rcGap = 10, rcW = (sw - 44 - rcGap * 5) / 6, rcY = sy + 48, rcH = sh - 60;
   const rankColour = ['#fbbf24', '#e2e8f0', '#d97706'];
-  for (let i = 0; i < runes.length; i++) {
-    const r = runes[i];
+  for (let i = 0; i < sets.length; i++) {
+    const g = sets[i];
+    const r = g.best;
     const x = sx + 22 + i * (rcW + rcGap);
     const qColour = RUNE_QUALITY_COLOUR[String(r.quality || '').toLowerCase()] || '#94a3b8';
     drawPanel(ctx, x, rcY, rcW, rcH, { fill: i === 0 ? 'rgba(251, 191, 36, 0.06)' : 'rgba(255,255,255,0.03)', stroke: i === 0 ? 'rgba(251, 191, 36, 0.45)' : `${qColour}40`, radius: 12 });
-    // rank
+    // rank + set name across the top
     ctx.fillStyle = rankColour[i] || 'rgba(148, 163, 184, 0.5)';
     ctx.beginPath(); ctx.arc(x + 14, rcY + 14, 9, 0, Math.PI * 2); ctx.fill();
     text(ctx, String(i + 1), x + 14, rcY + 15, { font: `800 10px ${SANS}`, color: '#0b0f1f', align: 'center', baseline: 'middle' });
+    text(ctx, g.set, x + 30, rcY + 18, { font: `800 13px ${SANS}`, color: i === 0 ? '#fde68a' : '#ffffff', maxWidth: rcW - 76 });
+    text(ctx, `${g.count} ใบ`, x + rcW - 12, rcY + 18, { font: `600 10px ${THAI}`, color: '#94a3b8', align: 'right' });
     // icon on the left, the rolled SPD sub big on the right
-    await drawRuneIcon(ctx, { x: x + 12, y: rcY + 26, size: 48, quality: r.quality, slot: r.slot, set: r.set, ancient: r.ancient });
-    text(ctx, `+${r.spdSub}`, x + rcW - 12, rcY + 62, { font: `800 32px ${SANS}`, color: i === 0 ? '#fde68a' : '#ffffff', align: 'right', shadow: i === 0 ? 'rgba(251, 191, 36, 0.5)' : undefined });
-    text(ctx, 'SPD ซับ', x + rcW - 12, rcY + 77, { font: `600 9px ${THAI}`, color: '#7dd3fc', align: 'right', spacing: 0.5 });
+    await drawRuneIcon(ctx, { x: x + 12, y: rcY + 30, size: 46, quality: r.quality, slot: r.slot, set: r.set, ancient: r.ancient });
+    text(ctx, `+${r.spdSub}`, x + rcW - 12, rcY + 64, { font: `800 32px ${SANS}`, color: i === 0 ? '#fde68a' : '#ffffff', align: 'right', shadow: i === 0 ? 'rgba(251, 191, 36, 0.5)' : undefined });
+    text(ctx, 'SPD ซับ', x + rcW - 12, rcY + 79, { font: `600 9px ${THAI}`, color: '#7dd3fc', align: 'right', spacing: 0.5 });
     // rune identity, then grind / main SPD kept apart from the rolled value
-    text(ctx, `${r.set} · ช่อง ${r.slot} · ${r.stars}★ +${r.level}${r.ancient ? ' · Ancient' : ''}`, x + 12, rcY + 97, { font: `600 11px ${THAI}`, color: '#e2e8f0', maxWidth: rcW - 24 });
+    text(ctx, `ช่อง ${r.slot} · ${r.stars}★ +${r.level}${r.ancient ? ' · Ancient' : ''}`, x + 12, rcY + 99, { font: `600 11px ${THAI}`, color: '#e2e8f0', maxWidth: rcW - 24 });
     const extras = [];
     if (r.spdGrind > 0) extras.push(`ขัด +${r.spdGrind}`);
     if (r.mainSpd > 0) extras.push(`เมน SPD ${r.mainSpd}`);
     if (r.innateSpd > 0) extras.push(`ติดตัว +${r.innateSpd}`);
-    text(ctx, extras.length ? extras.join(' · ') : 'ยังไม่ขัด', x + 12, rcY + 112, { font: `500 10px ${THAI}`, color: extras.length ? '#a7f3d0' : '#64748b', maxWidth: rcW - 24 });
-    // wearer
-    if (r.monster) {
-      await drawPortrait(ctx, { url: r.monster.avatarUrl, cx: x + 21, cy: rcY + rcH - 12, r: 8, element: r.monster.element, label: r.monster.name, badge: false });
-      text(ctx, r.monster.name, x + 34, rcY + rcH - 8, { font: `700 10px ${SANS}`, color: '#ffffff', maxWidth: rcW - 46 });
-    } else {
-      text(ctx, 'ยังไม่ได้ใส่ตัวไหน', x + 12, rcY + rcH - 8, { font: `500 10px ${THAI}`, color: '#64748b' });
-    }
+    text(ctx, extras.length ? extras.join(' · ') : 'ยังไม่ขัด', x + 12, rcY + 114, { font: `500 10px ${THAI}`, color: extras.length ? '#a7f3d0' : '#64748b', maxWidth: rcW - 24 });
+    // the set's next-best rolls, so one lucky rune does not stand for the whole set
+    const next = g.runnersUp.length ? `รองลงมา ${g.runnersUp.map((v) => `+${v}`).join(', ')}` : 'มีใบเดียวที่ติดซับ SPD';
+    text(ctx, next, x + 12, rcY + rcH - 9, { font: `500 10px ${THAI}`, color: '#94a3b8', maxWidth: rcW - 24 });
   }
 
   text(ctx, 'สร้างจากกล่องจริงของผู้เล่นด้วย SWM (Summoners War Master)', W / 2, H - 22, { font: `500 11px ${THAI}`, color: 'rgba(148, 163, 184, 0.7)', align: 'center' });

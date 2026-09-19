@@ -1,7 +1,7 @@
 // SWEX profile export → compact box (src/utils/swexImport.js). The fixture mirrors the fields
 // the parser reads from a real export; ids are real com2us ids so the catalog lookup works.
 import { describe, it, expect } from 'vitest';
-import { parseSwexExport, baseAwakenedId, isNonSummonableLd5, ownedIdSet, getMonsterCatalogInfo, RUNE_SETS, topSpeedRunes } from '../src/utils/swexImport.js';
+import { parseSwexExport, baseAwakenedId, isNonSummonableLd5, ownedIdSet, getMonsterCatalogInfo, RUNE_SETS, topSpeedRunes, topSpeedRunesBySet } from '../src/utils/swexImport.js';
 import { computeUnitSkillStatus, getMonsterMaxSkills } from '../src/data/monsterSkills.js';
 
 const SPD = 8;
@@ -186,6 +186,16 @@ describe('topSpeedRunes (passport card)', () => {
     expect(top[1]).toMatchObject({ spdSub: 29, spdGrind: 1, innateSpd: 5, monster: null }); // unequipped, +4 grind never summed
     expect(top[2]).toMatchObject({ spdSub: 28, spdGrind: 4 });
     expect(top[3]).toMatchObject({ spdSub: 12, mainSpd: 42 }); // a SPD main does not make a "fast rune"
+  });
+
+  it('groups the fastest rune per set, best set first, with the set\x27s runners-up', () => {
+    const sets = topSpeedRunesBySet(dump, 6);
+    expect(sets.map((g) => g.set)).toEqual(['Will', 'Violent', 'Swift']); // Will 30 > Violent 29 (set 13, the stored slot-1 rune) > Swift 28
+    expect(sets[0]).toMatchObject({ count: 1, runnersUp: [] });
+    expect(sets[0].best.spdSub).toBe(30);
+    expect(sets[2]).toMatchObject({ count: 2, runnersUp: [12] }); // Swift: +28 best, the slot-2 rune\x27s +12 as runner-up
+    expect(topSpeedRunesBySet(dump, 1)).toHaveLength(1);
+    expect(topSpeedRunesBySet(null)).toEqual([]);
   });
 
   it('is limited, deduplicated by rune id and works on the stored compact box too', () => {

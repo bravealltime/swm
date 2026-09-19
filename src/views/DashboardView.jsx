@@ -29,7 +29,7 @@ import { useGuildRankings } from '../hooks/useGuildRankings';
 import { SERVERS } from '../utils/guildRankings';
 import { getR2AvatarUrl } from '../services/r2Service';
 import { useLocalStorage } from '../hooks/useLocalStorage';
-import { loadBox, saveBox, parseSwexExport, getArtifactsFromBox, loadDemoBox, getMonsterCatalogInfo, isNonSummonableLd5, boxUnits, boxRunes, topSpeedRunes } from '../utils/swexImport';
+import { loadBox, saveBox, parseSwexExport, getArtifactsFromBox, loadDemoBox, getMonsterCatalogInfo, isNonSummonableLd5, boxUnits, boxRunes, topSpeedRunesBySet } from '../utils/swexImport';
 import { MONSTERS } from '../data/monsters';
 
 // How many nat5 forms the encyclopedia knows — the denominator of the collection bar
@@ -267,7 +267,7 @@ export default function DashboardView({ onNavigate }) {
 
     // SPD substat as rolled (grinds not added) — the same number the passport shows per rune
     const quadSpdCount = boxRuneList.filter((r) => r.subs.some((sub) => sub.stat === 'SPD' && sub.value >= 20)).length;
-    const speedRunes = topSpeedRunes(userBox, 8);
+    const speedRuneSets = topSpeedRunesBySet(userBox, 6);
 
     // Select active profile avatar:
     // 1. User's manually chosen avatar from localStorage
@@ -306,7 +306,7 @@ export default function DashboardView({ onNavigate }) {
       freeLd5Count,
       ld5List,
       quadSpdCount,
-      speedRunes,
+      speedRuneSets,
       isDemo: !!userBox.isDemo,
     };
   }, [userBox, boxUnitList, boxRuneList, customAvatar]);
@@ -589,7 +589,7 @@ export default function DashboardView({ onNavigate }) {
                       },
                       topLd5: userProfileStats.ld5List || [],
                       heroes: [userProfileStats.activeAvatar, ...(userProfileStats.cardHeroes || [])].filter(Boolean),
-                      speedRunes: userProfileStats.speedRunes || [],
+                      speedRuneSets: userProfileStats.speedRuneSets || [],
                     });
                   }}
                   className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 hover:from-cyan-400 hover:via-blue-500 hover:to-indigo-500 text-white text-xs font-black shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all cursor-pointer"
@@ -881,7 +881,7 @@ export default function DashboardView({ onNavigate }) {
       {/* 3. CORE TACTICAL BENTO GRID (4 MODERN PILLARS) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         
-        {/* PILLAR 1: RTA World Arena & Player Tracker (7 Cols) - 100% Real Lucksack Data */}
+        {/* PILLAR 1: RTA World Arena & Player Tracker (7 Cols) - Real Season 38 Data */}
         <section className="lg:col-span-7 rounded-3xl border border-white/[0.08] bg-[#0c121e]/80 backdrop-blur-xl p-6 shadow-xl flex flex-col justify-between space-y-6 hover:border-amber-500/30 transition-all duration-300">
           <div className="space-y-4">
             <div className="flex items-center justify-between">
@@ -891,7 +891,7 @@ export default function DashboardView({ onNavigate }) {
                 </div>
                 <div>
                   <h2 className="text-base sm:text-lg font-black text-white">World Arena (RTA) Top Players</h2>
-                  <p className="text-xs text-slate-400">ข้อมูลจริงจากระบบแรงกิ้ง SWRT & Lucksack.gg</p>
+                  <p className="text-xs text-slate-400">ข้อมูลสถิติจริงจากระบบจัดอันดับและการแข่งขัน RTA Season 38</p>
                 </div>
               </div>
               <button
@@ -1011,14 +1011,14 @@ export default function DashboardView({ onNavigate }) {
               className="flex-1 sm:flex-initial px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 transition-all cursor-pointer"
             >
               <Search className="w-4 h-4" />
-              <span>ค้นหาสถิติผู้เล่น RTA (Lucksack + รีเพลย์ SWRT)</span>
+              <span>ค้นหาสถิติผู้เล่น RTA (Player Tracker)</span>
             </button>
             <button
               onClick={() => onNavigate('rta')}
               className="flex-1 sm:flex-initial px-4 py-2.5 rounded-xl bg-white/[0.06] hover:bg-white/[0.1] border border-white/10 text-white font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer"
             >
               <Trophy className="w-4 h-4 text-amber-400" />
-              <span>สรุปเมต้า SWRT RTA S38</span>
+              <span>สรุปเมต้า World Arena RTA S38</span>
             </button>
           </div>
         </section>

@@ -525,6 +525,22 @@ export function topSpeedRunes(box, limit = 8) {
     .slice(0, limit);
 }
 
+/**
+ * The fastest SPD substat per rune set — one card per set on the passport, best set first.
+ * Each entry: { set, count, best (a topSpeedRunes row), runnersUp: [spdSub, …] } — no wearer, the
+ * card is about the runes themselves.
+ */
+export function topSpeedRunesBySet(box, limit = 6) {
+  const bySet = new Map();
+  for (const r of topSpeedRunes(box, Infinity)) {
+    const g = bySet.get(r.set) || { set: r.set, count: 0, best: null, runnersUp: [] };
+    g.count += 1;
+    if (!g.best) g.best = r; else if (g.runnersUp.length < 2) g.runnersUp.push(r.spdSub);
+    bySet.set(r.set, g);
+  }
+  return [...bySet.values()].sort((a, b) => b.best.spdSub - a.best.spdSub || b.count - a.count).slice(0, limit);
+}
+
 export function ownedIdSet(box) {
   const set = new Set();
   for (const u of box?.units || []) {
