@@ -63,6 +63,7 @@ src/
     guildRankings.js แกะแพ็กเก็ตอันดับกิลด์ + serverFromCountry()
     cardExporter.js  การ์ดแชร์ PNG (พาสปอร์ต, ตู้ LD5, มอนสเตอร์) วาดด้วย Canvas
     boxSummary.js    สรุปกล่องแบบย่อส่ง AI (ไม่มี id บัญชี)
+    mdcMatch.js      จับทีมตั้งรับในห้องบัญชาการ (ชื่อ 3 ตัว) กับฐาน 3MDC: ตรงเป๊ะ → ใกล้เคียง 2/3 → ไม่มี; จัดอันดับสูตรแก้ที่กล่องมีครบขึ้นก่อน
     metaTeams.js     จับ duo/trio จริงจาก swrtGuardianMeta กับกล่องผู้ใช้ → ทีมที่เล่นได้ / ขาด 1 ตัว / ตัวที่ปลดล็อกทีมมากสุด
                      (UI: components/MetaTeamsFromBox.jsx ในแท็บ "เมต้า Guardian" ของกล่องของฉัน; ส่ง context.metaTeams ให้โค้ช AI)
   hooks/useGuildRankings.js  รวมอันดับที่แชร์ (API) + ที่เห็นสดบนเครื่องนี้
@@ -121,7 +122,7 @@ tests/*.test.js      vitest (`npm test`) — parser SWEX, แพ็กเก็�
 
 - ปลั๊กอิน v2.1: เก็บกล่องตอน `HubUserLogin` แล้วอัปเดตตามทุกแพ็กเก็ตที่มี `unit_info/rune/artifact` (จับจากชื่อฟิลด์ ไม่ผูกชื่อคำสั่ง) เปิดเซิร์ฟเวอร์ `http://127.0.0.1:7391` (`/status`, `/snapshot`, `/guild`, `/events` SSE) ตอบเฉพาะ Origin ของ swm-blue.vercel.app / localhost
 - ฝั่งเว็บ `aegisLive.js`: เปิดไว้ = localStorage `swm:aegis-live=1` (App autoStart), พอร์ตใน `swm:aegis-port`; หลุด 5 ครั้งจะรอ 30 วิ
-- ห้องบัญชาการกิลด์: พอมีแพ็กเก็ตจริงจะ**ล้างข้อมูลตัวอย่าง**ทิ้ง (`siegeLive.js applyLiveToWar`)
+- ห้องบัญชาการกิลด์: พอมีแพ็กเก็ตจริงจะ**ล้างข้อมูลตัวอย่าง**ทิ้ง (`siegeLive.js applyLiveToWar`); ใต้ทีมตั้งรับทุกทีมมีสูตรแก้จากฐาน 3MDC จริง (`mdcMatch.js`, โหลด `allMdcData.json` แบบ lazy) — ฐานมี 29 ทีมรับ ถ้าไม่ตรงจะให้ปุ่มค้นหาแทน
 - ทดสอบโดยไม่ต้องมีเกม: สคริปต์จำลองอยู่นอก repo (scratchpad `plugin_sim.cjs`) — แนวคิดคือ `require('plugins/aegislink/index.js')` แล้ว `init()` ด้วย proxy ปลอมที่ `emit('apiCommand', req, resp)`
 - **ยังไม่เคยเจอแพ็กเก็ตจริง**: รูปแบบ Siege/อันดับกิลด์แกะจากชื่อฟิลด์มาตรฐาน ถ้าผู้ใช้จริงเปิดหน้า Siege แล้วส่วนไหนว่าง ให้ดูชื่อคำสั่งจากคอนโซลหน้า /aegislink แล้วปรับ `siegeLive.js` / `guildRankings.js`
 

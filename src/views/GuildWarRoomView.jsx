@@ -6,12 +6,17 @@ import {
 } from 'lucide-react';
 import MonsterAvatar from '../components/MonsterAvatar';
 import { loadGuildWarState, saveGuildWarState, subscribeToSync, exportAllDataAsJSON } from '../services/storageService';
-import { loadBox, getMonsterCatalogInfo } from '../utils/swexImport';
+import { loadBox, getMonsterCatalogInfo, ownedIdSet } from '../utils/swexImport';
 import allMonstersData from '../data/allMonsters.json';
 import * as aegisLive from '../services/aegisLive';
 import { applyLiveToWar } from '../utils/siegeLive';
+import { buildMdcIndex, matchDefense, rankCounters } from '../utils/mdcMatch';
 
 const nameOfMaster = (id) => getMonsterCatalogInfo(id)?.name || `#${id}`;
+
+// The 3MDC dataset is 2.8 MB, so it is fetched once on demand rather than bundled with this view
+let mdcIndexPromise = null;
+const loadMdcIndex = () => (mdcIndexPromise ||= import('../data/allMdcData.json').then((m) => buildMdcIndex(m.default)));
 
 // Seed initial default 12-base siege state if no state in IndexedDB
 function getInitialWarState() {
@@ -134,28 +139,19 @@ function getInitialWarState() {
   };
 }
 
-// Curated 3MDC common counters for swift lookups
-const KNOWN_COUNTERS = {
-  'Carcano': [
-    { leader: 'Galleon', team: ['Galleon', 'Clara', 'Yen'], winRate: '88.4%', note: 'ชิงสปีดคลีนทีม' },
-    { leader: 'Khmun', team: ['Khmun', 'Tractor', 'Lulu'], winRate: '92.1%', note: 'ทีมปลอดภัย ล่อธาตุไฟ' },
-  ],
-  'Seara': [
-    { leader: 'Chun-Li', team: ['Chun-Li', 'Eshir', 'Kaki'], winRate: '91.2%', note: 'วันช็อตบอมบ์ก่อนออกเทิร์น' },
-    { leader: 'Fran', team: ['Fran', 'Loren', 'Verdehile'], winRate: '84.0%', note: 'ล็อกเทิร์นด้วย Loren' },
-  ],
-  'Khmun': [
-    { leader: 'Tovenant', team: ['Covenant', 'Kahli', 'Chloe'], winRate: '94.5%', note: 'เกราะอมตะ + สไนเปอร์เจาะเกราะ' },
-  ],
-  'Clara': [
-    { leader: 'Susano', team: ['Susano', 'Orion', 'Garo'], winRate: '87.3%', note: 'ชิงสปีดธาตุน้ำหลบไฟ' },
-  ],
-};
-
 export default function GuildWarRoomView({ onNavigate }) {
   const [war, setWar] = useState(null);
   const [selectedBaseId, setSelectedBaseId] = useState(2); // default selected base
   const [userBox, setUserBox] = useState(() => loadBox());
+  const owned = useMemo(() => (userBox ? ownedIdSet(userBox) : null), [userBox]);
+
+  // 3MDC index for the per-defense counter lookup (loaded once the page is open)
+  const [mdcIndex, setMdcIndex] = useState(null);
+  useEffect(() => {
+    let alive = true;
+    loadMdcIndex().then((idx) => { if (alive) setMdcIndex(idx); }).catch(() => {});
+    return () => { alive = false; };
+  }, []);
   const [copiedCode, setCopiedCode] = useState(false);
   const [now, setNow] = useState(Date.now());
   const [filterMember, setFilterMember] = useState('');
@@ -330,12 +326,6 @@ export default function GuildWarRoomView({ onNavigate }) {
     }));
     setLogText('');
   };
-
-  // Check if player owns monsters in My Box
-  const ownedNames = useMemo(() => {
-    if (!userBox?.units) return new Set();
-    return new Set(userBox.units.map((u) => u.name?.toLowerCase() || ''));
-  }, [userBox]);
 
   if (!war) {
     return (
@@ -552,9 +542,9 @@ export default function GuildWarRoomView({ onNavigate }) {
                 const isAttacking = !!def.attacker;
                 const isMe = def.attacker === war.myPlayerName;
 
-                // Recommend counter from 3MDC known list
-                const leadMon = def.monsters[0];
-                const suggestedCounters = KNOWN_COUNTERS[leadMon] || [];
+                // Real 3MDC counters for this exact (or closest) defense, the ones this box can field first
+                const mdcMatch = mdcIndex ? matchDefense(mdcIndex, def.monsters) : null;
+                const mdcCounters = mdcMatch ? rankCounters(mdcMatch.def, owned, 3) : null;
 
                 return (
                   <div
@@ -645,22 +635,44 @@ export default function GuildWarRoomView({ onNavigate }) {
                       </div>
                     )}
 
-                    {/* Instant 3MDC Counter Recommendation */}
-                    {suggestedCounters.length > 0 && !isDefeated && (
+                    {/* 3MDC counters for this defense (real SWGT data, matched by monster names) */}
+                    {!isDefeated && (
                       <div className="mt-3 p-2.5 rounded-xl bg-black/40 border border-white/5 space-y-1.5">
-                        <div className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-1">
-                          <Zap className="w-3 h-3 text-yellow-400" />
-                          สูตรแก้ทางยอดนิยม (3MDC):
-                        </div>
-                        {suggestedCounters.map((ctr, cIdx) => (
-                          <div key={cIdx} className="flex items-center justify-between text-xs text-slate-300">
-                            <div className="flex items-center gap-1.5 font-medium">
-                              <span>{ctr.team.join(' + ')}</span>
-                              <span className="text-[10px] text-slate-500">({ctr.note})</span>
-                            </div>
-                            <span className="text-emerald-400 font-bold text-[11px]">{ctr.winRate}</span>
+                        {!mdcIndex ? (
+                          <div className="text-[11px] text-slate-500">กำลังโหลดฐานสูตรแก้ทาง 3MDC…</div>
+                        ) : !mdcMatch ? (
+                          <div className="flex items-center justify-between gap-2 text-[11px] text-slate-400">
+                            <span>ไม่มีทีมนี้ในฐาน 3MDC ({mdcIndex.length} ทีมรับ)</span>
+                            <button onClick={() => onNavigate?.('3mdc', { search: def.monsters.join(' ') })} className="text-cyan-400 hover:text-white font-bold cursor-pointer">ค้นหาใน 3MDC →</button>
                           </div>
-                        ))}
+                        ) : (
+                          <>
+                            <div className="flex items-center justify-between gap-2">
+                              <div className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-1">
+                                <Zap className="w-3 h-3 text-yellow-400" />
+                                สูตรแก้ทาง 3MDC {mdcMatch.kind === 'exact' ? '(ตรงเป๊ะ)' : `(ใกล้เคียง ตรง ${mdcMatch.sharedCount}/${mdcMatch.total})`}
+                              </div>
+                              <span className="text-[10px] text-slate-500">
+                                {mdcCounters.total} สูตร{mdcMatch.def.winRateDefense ? ` · ทีมรับชนะ ${mdcMatch.def.winRateDefense}` : ''}{owned ? ` · คุณเล่นได้ ${mdcCounters.playableTotal}` : ''}
+                              </span>
+                            </div>
+                            {mdcMatch.kind === 'partial' && (
+                              <div className="text-[10px] text-amber-300">ฐานมีทีม {mdcMatch.def.title} — ต่างกันที่ {def.monsters.filter((n) => !mdcMatch.shared.includes(String(n).toLowerCase())).join(', ') || '-'}</div>
+                            )}
+                            {mdcCounters.counters.map((ctr) => (
+                              <div key={ctr.id} className="flex items-center justify-between gap-2 text-xs text-slate-300" title={ctr.turnOrder || ''}>
+                                <div className="min-w-0 flex items-center gap-1.5 font-medium">
+                                  <span className="truncate">{ctr.names.join(' + ')}</span>
+                                  {ctr.playable
+                                    ? <span className="shrink-0 text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">คุณมีครบ</span>
+                                    : ctr.missing.length > 0 && owned && <span className="shrink-0 text-[10px] text-slate-500">ขาด {ctr.missing.join(', ')}</span>}
+                                </div>
+                                <span className="shrink-0 text-[11px] font-bold"><span className="text-amber-300">{'★'.repeat(Math.round(ctr.rating))}</span> <span className="text-emerald-400">{ctr.winRate}%</span></span>
+                              </div>
+                            ))}
+                            <button onClick={() => onNavigate?.('3mdc', { search: mdcMatch.def.title })} className="text-[11px] text-cyan-400 hover:text-white font-bold cursor-pointer flex items-center gap-1">ดูทั้ง {mdcCounters.total} สูตรใน 3MDC <ChevronRight className="w-3 h-3" /></button>
+                          </>
+                        )}
                       </div>
                     )}
                   </div>
