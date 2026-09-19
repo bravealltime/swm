@@ -32,7 +32,7 @@ export function useGuildRankings() {
     const remote = shared.boards.find((b) => b.server === server && b.kind === kind);
     const remoteAt = remote ? new Date(remote.updatedAt).getTime() : 0;
     if (local && local.server === server && local.at >= remoteAt) return { rows: local.rows, at: local.at, source: 'live', shared: local.shared, error: local.error };
-    if (remote) return { rows: remote.rows, at: remoteAt, source: 'shared', note: remote.note };
+    if (remote) return { rows: remote.rows, at: remoteAt, source: 'shared', note: remote.note, verified: remote.verified, sources: remote.sources, contributors: remote.contributors };
     return null;
   }, [live, shared.boards]);
 

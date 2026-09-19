@@ -93,6 +93,8 @@ export const DEFAULT_SETTINGS = {
   announcement: { enabled: false, text: '', level: 'info', link: '' },
   maintenance: { enabled: false, message: 'ระบบกำลังปรับปรุง กลับมาเร็ว ๆ นี้' },
   features: { ai: true, liveLink: true, cloudSync: true, patchNotes: true },
+  // contributor ids for the shared guild leaderboards (server-side only, see _lib/guildRankings.js)
+  guildRankings: { trusted: [], blocked: [] },
 };
 
 let settingsCache = { at: 0, value: null };

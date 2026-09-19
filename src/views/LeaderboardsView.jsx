@@ -63,6 +63,9 @@ export default function LeaderboardsView({ onNavigate }) {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-slate-400">
             <span className="flex items-center gap-1.5"><Info className="w-3.5 h-3.5" /> อัปเดต {fmt(board.at)} • {board.source === 'live' ? 'จากเกมบนเครื่องนี้ (AegisLink)' : `แชร์โดยผู้เล่น${board.note ? ` • ${board.note}` : ''}`} • {board.rows.length} กิลด์</span>
             {board.source === 'live' && (board.shared ? <span className="text-emerald-300">✓ แชร์ให้ทุกคนแล้ว</span> : <span className="text-amber-300">{board.error || 'กำลังแชร์…'}</span>)}
+            {board.source === 'shared' && (board.verified
+              ? <span className="text-emerald-300" title="ตรงกับผู้ส่งที่เชื่อถือได้ หรือผู้ส่งอีกคนเห็นเหมือนกัน">✓ ยืนยันแล้ว{board.sources > 1 ? ` (${board.sources} แหล่ง)` : ''}</span>
+              : <span className="text-amber-300" title="มีผู้ส่งคนเดียว ยังไม่มีใครยืนยันซ้ำ">ยังไม่ยืนยัน • 1 แหล่ง</span>)}
           </div>
 
           <div className="bg-[#101724] p-3 rounded-xl border border-[#1d2b3f] flex items-center gap-3">

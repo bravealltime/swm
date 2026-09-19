@@ -3,6 +3,7 @@
 // middleware calls handleAdmin() directly with the same arguments.
 import { requireAdmin, userFromToken, supabaseInfo, tableStatus, getSettings, saveSettings, aiLogs, aiStats, datasetReport, deployInfo, githubInfo, workflowRuns, dispatchWorkflow } from '../_lib/admin.js';
 import { aiConfig, chat } from '../_lib/ai.js';
+import { adminSnapshots, setContributorFlag, deleteSnapshot } from '../_lib/guildRankings.js';
 
 const PUBLIC_SETTINGS_KEYS = ['announcement', 'maintenance', 'features'];
 
@@ -51,6 +52,24 @@ export async function handleAdmin({ action, method, body, token, query = {} }) {
   if (action === 'logs') return { status: 200, json: await aiLogs({ limit: Number(query.limit) || 100 }) };
 
   if (action === 'runs') return { status: 200, json: await workflowRuns(Number(query.limit) || 8) };
+
+  // shared guild leaderboards: every contributor's snapshot, plus trust / block / delete
+  if (action === 'guild-rankings' && method === 'GET') return { status: 200, json: await adminSnapshots() };
+  if (action === 'guild-rankings' && method === 'POST') {
+    const op = body?.op;
+    const contributor = String(body?.contributor || '');
+    const uuid = /^[0-9a-f-]{36}$/i.test(contributor);
+    if (op === 'delete') {
+      const id = String(body?.id || '');
+      if (!id) return { status: 400, json: { error: 'ไม่มี id' } };
+      const r = await deleteSnapshot(id);
+      return r.ok ? { status: 200, json: { ok: true } } : { status: 500, json: { error: r.error } };
+    }
+    const flag = { trust: ['trusted', true], untrust: ['trusted', false], block: ['blocked', true], unblock: ['blocked', false] }[op];
+    if (!flag || !uuid) return { status: 400, json: { error: 'unknown op' } };
+    const r = await setContributorFlag(flag[0], contributor, flag[1], auth.user.email);
+    return r.ok ? { status: 200, json: { ok: true } } : { status: 500, json: { error: r.error } };
+  }
 
   if (action === 'actions' && method === 'POST') {
     const what = body?.action;

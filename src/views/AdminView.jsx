@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   ShieldCheck, RefreshCw, Activity, Database, Settings, Bot, PlayCircle, AlertTriangle, CheckCircle2, XCircle,
-  Server, Cloud, GitBranch, Megaphone, Wrench, Radio, Lock, ExternalLink, Save, Loader2, Clock, Users, Zap,
+  Server, Cloud, GitBranch, Megaphone, Wrench, Radio, Lock, ExternalLink, Save, Loader2, Clock, Users, Zap, Trophy, ShieldOff, Trash2,
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { adminFetch } from '../services/adminClient';
@@ -24,6 +24,7 @@ const TABS = [
   { id: 'ai', label: 'โค้ช AI', icon: Bot },
   { id: 'data', label: 'ข้อมูล', icon: Database },
   { id: 'settings', label: 'ตั้งค่าเว็บ', icon: Settings },
+  { id: 'guilds', label: 'อันดับกิลด์', icon: Trophy },
   { id: 'jobs', label: 'งานอัตโนมัติ', icon: PlayCircle },
 ];
 
@@ -145,6 +146,7 @@ export default function AdminView({ onNavigate, onOpenAuth }) {
           {tab === 'ai' && <AiPanel status={status} />}
           {tab === 'data' && <DataPanel status={status} onNavigate={onNavigate} />}
           {tab === 'settings' && <SettingsPanel status={status} onSaved={load} />}
+          {tab === 'guilds' && <GuildRankingsPanel />}
           {tab === 'jobs' && <JobsPanel status={status} />}
         </>
       )}
@@ -362,6 +364,97 @@ function SettingsPanel({ status, onSaved }) {
         {msg && <span className={`text-xs ${msg.ok ? 'text-emerald-300' : 'text-rose-300'}`}>{msg.text}</span>}
         {initial._meta?.updatedAt && <span className="text-[11px] text-slate-500 ml-auto">บันทึกล่าสุด {fmtTime(initial._meta.updatedAt)}</span>}
       </div>
+    </div>
+  );
+}
+
+const KIND_LABEL = { siege: 'Siege', wgb: 'WGB', guild: 'Guild' };
+
+// Every contributor's leaderboard snapshot, and the knobs that decide which one the site shows:
+// trusted contributors always win, blocked ones are ignored (see api/_lib/guildRankings.js).
+function GuildRankingsPanel() {
+  const [data, setData] = useState(null);
+  const [busy, setBusy] = useState('');
+  const [msg, setMsg] = useState(null);
+
+  const load = useCallback(async () => {
+    try { setData(await adminFetch('guild-rankings')); } catch (err) { setData({ ok: false, error: err.message }); }
+  }, []);
+  useEffect(() => { load(); }, [load]);
+
+  const act = async (op, snap) => {
+    const label = { trust: 'เชื่อถือ', untrust: 'เลิกเชื่อถือ', block: 'บล็อก', unblock: 'เลิกบล็อก', delete: 'ลบ snapshot' }[op];
+    if ((op === 'block' || op === 'delete') && !window.confirm(`${label} — ${op === 'block' ? 'ทุก snapshot ของผู้ส่งนี้จะหายจากหน้าอันดับ และส่งใหม่ไม่ได้' : 'ลบแถวนี้ออกจากฐานข้อมูล'} ยืนยัน?`)) return;
+    setBusy(snap.id + op); setMsg(null);
+    try {
+      await adminFetch('guild-rankings', { method: 'POST', body: { op, contributor: snap.contributor, id: snap.id } });
+      setMsg({ ok: true, text: `${label}แล้ว` });
+      await load();
+    } catch (err) {
+      setMsg({ ok: false, text: err.message });
+    } finally {
+      setBusy('');
+    }
+  };
+
+  const btn = 'px-2 py-1 rounded-lg text-[11px] font-bold cursor-pointer disabled:opacity-50 border';
+  return (
+    <div className="space-y-4">
+      <div className="p-3 rounded-xl border border-white/10 bg-white/[0.03] text-xs text-slate-300 leading-relaxed">
+        ผู้ส่งแต่ละคนมี snapshot ของตัวเองต่อเซิร์ฟเวอร์+โหมด ไม่มีใครเขียนทับของคนอื่นได้ หน้าอันดับจะแสดง: snapshot ล่าสุดจากผู้ส่งที่<span className="text-emerald-300">เชื่อถือ</span> → ถ้าไม่มี ใช้ตัวที่มีผู้ส่งอีกคนเห็นตรงกัน (top-10 ซ้ำ ≥ 60%) → ถ้าไม่มี ใช้ตัวล่าสุดพร้อมป้าย “ยังไม่ยืนยัน” ผู้ส่งที่<span className="text-rose-300">ถูกบล็อก</span>จะถูกตัดออกทั้งหมด (แอดมินถูกนับว่าเชื่อถือโดยอัตโนมัติเมื่อแชร์ครั้งแรก)
+      </div>
+
+      {msg && <div className={`text-xs ${msg.ok ? 'text-emerald-300' : 'text-rose-300'}`}>{msg.text}</div>}
+
+      {!data ? <div className="p-6 text-center text-slate-400 text-sm">กำลังโหลด…</div>
+        : !data.ok ? <div className="p-4 text-xs text-amber-200">{data.error === 'TABLE_MISSING' ? 'ยังไม่ได้สร้างตาราง guild_rankings — รัน supabase/admin_schema.sql' : data.error}</div>
+        : (
+          <>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+              <Stat label="snapshot ทั้งหมด" value={data.snapshots.length} tone="text-amber-300" />
+              <Stat label="กระดานที่แสดงอยู่" value={data.boards.length} sub={data.boards.filter((b) => !b.verified).length ? `${data.boards.filter((b) => !b.verified).length} ยังไม่ยืนยัน` : 'ยืนยันครบ'} tone="text-cyan-300" />
+              <Stat label="ผู้ส่งที่เชื่อถือ" value={data.trusted.length} tone="text-emerald-300" />
+              <Stat label="ผู้ส่งที่บล็อก" value={data.blocked.length} tone={data.blocked.length ? 'text-rose-300' : 'text-white'} />
+            </div>
+
+            <div className={`${card} overflow-hidden`}>
+              <div className="px-4 py-3 border-b border-white/[0.06] flex items-center justify-between">
+                <div className="text-sm font-bold text-white flex items-center gap-2"><Trophy className="w-4 h-4 text-amber-300" /> snapshot จากผู้เล่น</div>
+                <button onClick={load} className="text-[11px] text-slate-400 hover:text-white cursor-pointer flex items-center gap-1"><RefreshCw className="w-3 h-3" /> โหลดใหม่</button>
+              </div>
+              {data.snapshots.length === 0 ? <div className="p-6 text-center text-slate-400 text-sm">ยังไม่มีใครแชร์อันดับ — เปิดหน้าอันดับในเกมขณะเชื่อมต่อ AegisLink</div> : (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-xs">
+                    <thead className="bg-white/[0.03] text-slate-400"><tr><th className="text-left px-3 py-2">อัปเดต</th><th className="text-left px-3 py-2">เซิร์ฟ / โหมด</th><th className="text-left px-3 py-2">ผู้ส่ง</th><th className="text-left px-3 py-2">กิลด์ top 3</th><th className="text-right px-3 py-2">แถว</th><th className="text-left px-3 py-2">สถานะ</th><th className="text-right px-3 py-2">จัดการ</th></tr></thead>
+                    <tbody>
+                      {data.snapshots.map((s) => {
+                        const shown = data.boards.find((b) => b.server === s.server && b.kind === s.kind && b.updatedAt === s.updatedAt);
+                        return (
+                          <tr key={s.id} className={`border-t border-white/[0.05] align-top ${s.blocked ? 'opacity-50' : ''}`}>
+                            <td className="px-3 py-2 whitespace-nowrap text-slate-400">{fmtTime(s.updatedAt)}<div className="text-slate-600">{ago(s.updatedAt)}</div></td>
+                            <td className="px-3 py-2 whitespace-nowrap text-white font-bold">{s.server} • {KIND_LABEL[s.kind] || s.kind}</td>
+                            <td className="px-3 py-2"><span className="font-mono text-slate-300">{s.contributor?.slice(0, 8)}</span>{s.note && <div className="text-slate-500 truncate max-w-[180px]">{s.note}</div>}</td>
+                            <td className="px-3 py-2 text-slate-300">{s.top.join(', ') || '-'}</td>
+                            <td className="px-3 py-2 text-right tabular-nums text-slate-300">{s.rowCount}</td>
+                            <td className="px-3 py-2 whitespace-nowrap">
+                              {s.blocked ? <span className="text-rose-300">บล็อก</span> : s.trusted ? <span className="text-emerald-300">เชื่อถือ</span> : <span className="text-slate-400">ทั่วไป</span>}
+                              {shown && <div className={shown.verified ? 'text-emerald-400' : 'text-amber-300'}>{shown.verified ? `แสดงอยู่ ✓ (${shown.sources} แหล่ง)` : 'แสดงอยู่ • ยังไม่ยืนยัน'}</div>}
+                            </td>
+                            <td className="px-3 py-2 text-right whitespace-nowrap space-x-1">
+                              <button onClick={() => act(s.trusted ? 'untrust' : 'trust', s)} disabled={Boolean(busy) || s.blocked} className={`${btn} ${s.trusted ? 'border-white/10 text-slate-300 hover:text-white' : 'border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/10'}`}>{s.trusted ? 'เลิกเชื่อถือ' : 'เชื่อถือ'}</button>
+                              <button onClick={() => act(s.blocked ? 'unblock' : 'block', s)} disabled={Boolean(busy)} className={`${btn} ${s.blocked ? 'border-white/10 text-slate-300 hover:text-white' : 'border-rose-500/40 text-rose-300 hover:bg-rose-500/10'}`}><ShieldOff className="w-3 h-3 inline -mt-0.5" /> {s.blocked ? 'เลิกบล็อก' : 'บล็อก'}</button>
+                              <button onClick={() => act('delete', s)} disabled={Boolean(busy)} className={`${btn} border-white/10 text-slate-400 hover:text-rose-300`}><Trash2 className="w-3 h-3 inline -mt-0.5" /> ลบ</button>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+          </>
+        )}
     </div>
   );
 }

@@ -96,7 +96,7 @@ supabase/admin_schema.sql  ตารางหลังบ้าน (รันแ
 | สกิล 940 ตัว แปลไทย 100% | `monsterSkillsData.json` (`descriptionTh`) — ฝั่งเว็บ**ไม่ import ไฟล์นี้ตรง ๆ** (7 MB) แต่ใช้ shard ที่ generate จากมัน; ฝั่ง `api/` และสคริปต์ยังอ่านไฟล์เต็ม | `scripts/build_monster_skills.cjs` → shard สร้างเองตอน dev/build (`npm run skills:shards` ถ้าจะบังคับ) |
 | 3MDC, dungeon, patch notes | `allMdcData.json`, `dungeonAbyssData.json`, `balancePatches.json` | สคริปต์ extract/fetch ต่าง ๆ |
 | สรุป AI (แพตช์, สไตล์ผู้เล่น) | `balancePatchAi.json`, `swrtPlayerSummaries.json` | `scripts/ai_patch_summaries.mjs`, `ai_player_summaries.mjs` (cache ด้วย hash; CONCURRENCY 1) |
-| อันดับกิลด์ Siege/WGB | Supabase `guild_rankings` | **ไม่มี API สาธารณะ** → มาจากหน้าอันดับในเกมผ่าน AegisLink แล้วผู้เล่นที่ล็อกอินแชร์ให้ทุกคน |
+| อันดับกิลด์ Siege/WGB | Supabase `guild_rankings` (1 แถวต่อผู้ส่งต่อกระดาน `server:kind:uuid`) | **ไม่มี API สาธารณะ** → มาจากหน้าอันดับในเกมผ่าน AegisLink แล้วผู้เล่นที่ล็อกอินแชร์ ผู้ส่งเขียนทับกันไม่ได้ เซิร์ฟเวอร์เลือกกระดานที่แสดงใน `api/_lib/guildRankings.js pickBoards()`: ผู้ส่งที่เชื่อถือ (แอดมิน/ที่ติ๊กในหลังบ้าน) → ที่มีผู้ส่งอีกคนเห็นตรงกัน (top-10 ซ้ำ ≥ 60%) → ล่าสุดพร้อมป้าย "ยังไม่ยืนยัน"; ผู้ส่งที่บล็อกถูกตัด; เก่ากว่า 30 วันไม่แสดง รายชื่อ trusted/blocked อยู่ใน `site_settings` id `guildRankings` |
 | กล่องของผู้ใช้ | localStorage `swm:mybox` + IndexedDB (เครื่องผู้ใช้เท่านั้น) | ไฟล์ SWEX / โฟลเดอร์ SWEX / AegisLink |
 
 รหัสแรงค์ Com2uS: 3001-3003 Fighter, 3501-3503 Conqueror, 4001-4003 Guardian, 5001 Legend
@@ -123,7 +123,7 @@ supabase/admin_schema.sql  ตารางหลังบ้าน (รันแ
 
 - ผู้ดูแลในตัว: `pedictu@gmail.com` (hard-code ใน `api/_lib/admin.js` `OWNER_EMAILS`) + `ADMIN_EMAILS`
 - ล็อกอินแล้วมีสวิตช์บนแถบเมนู "ผู้ใช้ปกติ ⇄ โหมดแอดมิน" (จำใน localStorage `swm:admin-mode`) เปิดแล้วเมนู "หลังบ้าน SWM" โผล่
-- แท็บ: ภาพรวม (สุขภาพระบบ), โค้ช AI (สถิติ+ล็อก+ทดสอบโมเดล), ข้อมูล (ความสด/ขนาดทุกชุด), ตั้งค่าเว็บ (ประกาศ, โหมดปรับปรุง, สวิตช์ฟีเจอร์), งานอัตโนมัติ (GitHub Actions)
+- แท็บ: ภาพรวม (สุขภาพระบบ), โค้ช AI (สถิติ+ล็อก+ทดสอบโมเดล), ข้อมูล (ความสด/ขนาดทุกชุด), ตั้งค่าเว็บ (ประกาศ, โหมดปรับปรุง, สวิตช์ฟีเจอร์), อันดับกิลด์ (snapshot ทุกผู้ส่ง + เชื่อถือ/บล็อก/ลบ), งานอัตโนมัติ (GitHub Actions)
 - ตาราง Supabase (schema `public`): `site_settings`, `ai_logs`, `guild_rankings` — RLS เปิดโดยไม่มี policy = เบราว์เซอร์อ่านไม่ได้ เซิร์ฟเวอร์ (service role) เท่านั้น
 
 ## 9. งานอัตโนมัติ

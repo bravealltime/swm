@@ -27,8 +27,9 @@ create index if not exists ai_logs_created_at_idx on public.ai_logs (created_at 
 alter table public.ai_logs enable row level security;
 
 -- Real guild leaderboards shared by players whose AegisLink saw the in-game ranking screen.
+-- One row per contributor and board; the server picks which snapshot to show (api/_lib/guildRankings.js).
 create table if not exists public.guild_rankings (
-  id text primary key,            -- "<server>:<kind>", e.g. asia:siege
+  id text primary key,            -- "<server>:<kind>:<contributor uuid>", e.g. asia:siege:6f1c…
   server text not null,
   kind text not null,
   rows jsonb not null default '[]'::jsonb,
