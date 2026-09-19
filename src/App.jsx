@@ -50,6 +50,7 @@ const VIEWS = {
 const CommandPalette = lazy(() => import('./components/CommandPalette'));
 const CloudSyncModal = lazy(() => import('./components/CloudSyncModal'));
 const AuthModal = lazy(() => import('./components/AuthModal'));
+const CardPreviewModal = lazy(() => import('./components/CardPreviewModal'));
 
 function ViewLoading() {
   return (
@@ -322,11 +323,15 @@ function AppContent() {
       {isAuthOpen && (
         <Suspense fallback={null}>
           <AuthModal
-        isOpen={isAuthOpen}
-        onClose={() => setIsAuthOpen(false)}
+            isOpen={isAuthOpen}
+            onClose={() => setIsAuthOpen(false)}
           />
         </Suspense>
       )}
+
+      <Suspense fallback={null}>
+        <CardPreviewModal />
+      </Suspense>
     </div>
   );
 }

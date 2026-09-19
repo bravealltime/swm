@@ -256,11 +256,43 @@ function pill(ctx, x, y, label, { color = '#e9c46a', bg = 'rgba(233, 196, 106, 0
   return w;
 }
 
-function download(canvas, name) {
+export function downloadCard(dataUrl, filename) {
+  if (typeof document === 'undefined') return;
   const link = document.createElement('a');
-  link.download = name;
-  link.href = canvas.toDataURL('image/png');
+  link.download = filename || 'SWM_Card.png';
+  link.href = dataUrl;
+  document.body.appendChild(link);
   link.click();
+  document.body.removeChild(link);
+}
+
+export function showCardPreview({ dataUrl, filename, title }) {
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(
+      new CustomEvent('swm:card-preview', {
+        detail: {
+          dataUrl,
+          filename,
+          title,
+        },
+      })
+    );
+  }
+}
+
+function handleCardExport({ canvas, filename, title, preview = true }) {
+  const dataUrl = canvas.toDataURL('image/png');
+  if (preview && typeof window !== 'undefined') {
+    showCardPreview({ dataUrl, filename, title });
+  } else {
+    downloadCard(dataUrl, filename);
+  }
+  return { dataUrl, filename, title };
+}
+
+function download(canvas, name) {
+  const dataUrl = canvas.toDataURL('image/png');
+  downloadCard(dataUrl, name);
 }
 
 const num = (n) => Number(n || 0).toLocaleString('en-US');
@@ -269,7 +301,7 @@ const num = (n) => Number(n || 0).toLocaleString('en-US');
  * Summoner passport (1200×675): hero portrait + identity, four stat tiles, the LD5 hall with
  * portraits on the right and the fastest monsters along the bottom.
  */
-export async function exportProfileCard({ wizard, stats = {}, topLd5 = [], heroes = [] }) {
+export async function exportProfileCard({ wizard, stats = {}, topLd5 = [], heroes = [], preview = true }) {
   await ensureFonts();
   const W = 1200, H = 675;
   const canvas = document.createElement('canvas');
@@ -374,13 +406,15 @@ export async function exportProfileCard({ wizard, stats = {}, topLd5 = [], heroe
   }
 
   text(ctx, 'สร้างจากกล่องจริงของผู้เล่นด้วย SWM (Summoners War Master)', W / 2, H - 30, { font: `500 11px ${THAI}`, color: 'rgba(148, 163, 184, 0.7)', align: 'center' });
-  download(canvas, `SWM_Passport_${name.replace(/[^a-zA-Z0-9]/g, '_')}.png`);
+  const filename = `SWM_Passport_${name.replace(/[^a-zA-Z0-9]/g, '_')}.png`;
+  const title = `พาสปอร์ตผู้เรียกอสูร: ${wizard?.name || 'Summoner'}`;
+  return handleCardExport({ canvas, filename, title, preview });
 }
 
 /**
  * LD5 showcase (1200×700): the hall of light & dark 5★ with portraits, stars, SPD and sets.
  */
-export async function exportLdShowcaseCard({ wizardName, ld5List = [] }) {
+export async function exportLdShowcaseCard({ wizardName, ld5List = [], preview = true }) {
   await ensureFonts();
   const W = 1200, H = 700;
   const canvas = document.createElement('canvas');
@@ -423,14 +457,16 @@ export async function exportLdShowcaseCard({ wizardName, ld5List = [] }) {
   if (ld5List.length > 15) text(ctx, `+ อีก ${ld5List.length - 15} ตัว`, W - 60, H - 46, { font: `600 12px ${THAI}`, color: '#94a3b8', align: 'right' });
 
   text(ctx, 'สร้างจากกล่องจริงของผู้เล่นด้วย SWM (Summoners War Master)', W / 2, H - 30, { font: `500 11px ${THAI}`, color: 'rgba(148, 163, 184, 0.7)', align: 'center' });
-  download(canvas, `SWM_LD5_Showcase_${(wizardName || 'Player').replace(/[^a-zA-Z0-9]/g, '_')}.png`);
+  const filename = `SWM_LD5_Showcase_${(wizardName || 'Player').replace(/[^a-zA-Z0-9]/g, '_')}.png`;
+  const title = `การ์ดตู้สะสมแสง-มืด 5★ (${wizardName || 'Player'})`;
+  return handleCardExport({ canvas, filename, title, preview });
 }
 
 /**
  * High-Resolution Monster Showcase Card Exporter (PNG)
  * Exports a monster with real stats, rune sets, 6 slots, and artifacts
  */
-export async function exportMonsterCard({ monster, wizardName = 'Summoner' }) {
+export async function exportMonsterCard({ monster, wizardName = 'Summoner', preview = true }) {
   if (!monster) return;
 
   const canvas = document.createElement('canvas');
@@ -648,12 +684,11 @@ export async function exportMonsterCard({ monster, wizardName = 'Summoner' }) {
   ctx.fillText('SWM Tactical Platform • Summoners War Master AI Engine', 50, 615);
   ctx.fillText(new Date().toLocaleDateString('th-TH'), 950, 615);
 
-  // Trigger Download
-  const link = document.createElement('a');
+  // Trigger Download / Preview
   const safeName = (monster.name || 'Monster').replace(/[^a-zA-Z0-9]/g, '_');
-  link.download = `SWM_Showcase_${safeName}_${wizardName}.png`;
-  link.href = canvas.toDataURL('image/png');
-  link.click();
+  const filename = `SWM_Showcase_${safeName}_${wizardName}.png`;
+  const title = `การ์ดมอนสเตอร์: ${monster.thaiName || monster.name || 'Monster'} (${wizardName})`;
+  return handleCardExport({ canvas, filename, title, preview });
 }
 
 
@@ -690,7 +725,7 @@ const TIER_COLOUR = { S: '#fbbf24', A: '#7dd3fc', B: '#cbd5e1' };
  * pills, the leader line, then the turn order (AO) or win condition (AD) and the rune line.
  * `team` is an entry from matchArenaTeams() (slots carry avatarUrl/element/thaiName).
  */
-export async function exportArenaTeamCard({ team }) {
+export async function exportArenaTeamCard({ team, preview = true }) {
   await ensureFonts();
   const W = 1200, H = 675;
   const canvas = document.createElement('canvas');
@@ -775,5 +810,7 @@ export async function exportArenaTeamCard({ team }) {
   wrapLines(ctx, `รูน: ${team.runeGuidance || team.runeBuilds || ''}`, W - 120, 2).forEach((l, li) => text(ctx, l, 60, ry + 14 + li * 16, { font: `500 12px ${THAI}`, color: '#fcd34d' }));
 
   text(ctx, 'สูตรคอมมูนิตี้ที่ตรวจชื่อ/ลีดกับฐานข้อมูล SWM • ไม่มีสถิติวัดจริง • SWM (Summoners War Master)', W / 2, H - 30, { font: `500 11px ${THAI}`, color: 'rgba(148, 163, 184, 0.7)', align: 'center' });
-  download(canvas, `SWM_Arena_${isAo ? 'AO' : 'AD'}_${String(team.name || team.id).replace(/[^a-zA-Z0-9]+/g, '_')}.png`);
+  const filename = `SWM_Arena_${isAo ? 'AO' : 'AD'}_${String(team.name || team.id).replace(/[^a-zA-Z0-9]+/g, '_')}.png`;
+  const title = `สูตรทีมอารีน่า: ${team.thaiName || team.name || ''}`;
+  return handleCardExport({ canvas, filename, title, preview });
 }
