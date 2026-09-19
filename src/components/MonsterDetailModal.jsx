@@ -233,20 +233,45 @@ export default function MonsterDetailModal({ unit, box, onClose, onNavigate }) {
             )}
 
             <div className="rounded-2xl border border-white/[0.08] bg-[#070b14] overflow-hidden">
-              <div className="px-4 py-2.5 text-xs font-bold text-white border-b border-white/[0.06] flex items-center gap-2"><Star className="w-3.5 h-3.5 text-amber-400" /> สเตตัสรวม (พื้นฐาน → รวมรูน/เซ็ต/อาร์ติแฟกต์)</div>
+              <div className="px-4 py-2.5 text-xs font-bold text-white border-b border-white/[0.06] flex items-center justify-between">
+                <span className="flex items-center gap-2">
+                  <Star className="w-3.5 h-3.5 text-amber-400" /> สเตตัส (พื้นฐาน + บวกเพิ่ม = รวม)
+                </span>
+                <span className="text-[10px] text-cyan-400 font-mono font-semibold">+สเตตัสรูน</span>
+              </div>
               <table className="w-full text-xs">
+                <thead>
+                  <tr className="text-[10px] text-slate-400 uppercase tracking-wider border-b border-white/[0.06] bg-white/[0.02]">
+                    <th className="px-3.5 py-2 text-left font-semibold">สเตตัส</th>
+                    <th className="px-2 py-2 text-right font-semibold">พื้นฐาน</th>
+                    <th className="px-2 py-2 text-right font-semibold text-cyan-300">บวกเพิ่ม (+)</th>
+                    <th className="px-3.5 py-2 text-right font-semibold text-emerald-300">รวมทั้งหมด</th>
+                  </tr>
+                </thead>
                 <tbody className="divide-y divide-white/[0.05]">
-                  {statRows.map(([label, k]) => (
-                    <tr key={k}>
-                      <td className="px-4 py-1.5 text-slate-400">{label}</td>
-                      <td className="px-2 py-1.5 text-right font-mono text-slate-500">{stats.base[k]}{isPct(k) ? '%' : ''}</td>
-                      <td className="px-2 py-1.5 text-center text-slate-600">→</td>
-                      <td className={`px-4 py-1.5 text-right font-mono font-bold ${stats.total[k] > stats.base[k] ? 'text-emerald-300' : 'text-slate-200'}`}>{stats.total[k].toLocaleString()}{isPct(k) ? '%' : ''}</td>
-                    </tr>
-                  ))}
+                  {statRows.map(([label, k]) => {
+                    const baseVal = Number(stats.base[k]) || 0;
+                    const totalVal = Number(stats.total[k]) || 0;
+                    const bonusVal = totalVal - baseVal;
+                    const pct = isPct(k) ? '%' : '';
+                    return (
+                      <tr key={k} className="hover:bg-white/[0.02] transition-colors">
+                        <td className="px-3.5 py-1.5 text-slate-300 font-medium">{label}</td>
+                        <td className="px-2 py-1.5 text-right font-mono text-slate-400">{baseVal.toLocaleString()}{pct}</td>
+                        <td className={`px-2 py-1.5 text-right font-mono font-semibold ${bonusVal > 0 ? 'text-cyan-400' : 'text-slate-600'}`}>
+                          {bonusVal > 0 ? `+${bonusVal.toLocaleString()}` : bonusVal === 0 ? `+0` : bonusVal.toLocaleString()}{pct}
+                        </td>
+                        <td className={`px-3.5 py-1.5 text-right font-mono font-bold ${totalVal > baseVal ? 'text-emerald-300' : 'text-slate-200'}`}>
+                          {totalVal.toLocaleString()}{pct}
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
-              <p className="px-4 py-2 text-[10px] text-slate-500 border-t border-white/[0.06]">ค่าที่คำนวณจากรูน/เซ็ต/อาร์ติแฟกต์หลัก ยังไม่รวมโบนัสอาคาร ลีด และซับสเตตัสอาร์ติแฟกต์</p>
+              <p className="px-4 py-2 text-[10px] text-slate-500 border-t border-white/[0.06]">
+                ค่าบวกเพิ่มคำนวณจากรูน ออฟเซ็ต และอาร์ติแฟกต์หลัก (ยังไม่รวมโบนัสอาคาร ลีด และเอฟเฟกต์ย่อยอาร์ติแฟกต์)
+              </p>
             </div>
 
             {info && (
