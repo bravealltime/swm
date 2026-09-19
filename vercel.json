@@ -12,9 +12,9 @@
     "api/**/*.js": {
       "maxDuration": 60
     },
-    "api/admin/[action].js": {
+    "api/admin/*.js": {
       "maxDuration": 60,
-      "includeFiles": "src/data/{swrtPlayersIndex,swrtGuardianMeta,allMonsters,monsterSkillsData,allMdcData,balancePatchAi,swrtPlayerSummaries,swrtRankCutoffs}.json"
+      "includeFiles": "src/data/*.json"
     }
   }
 }
