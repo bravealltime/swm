@@ -128,7 +128,7 @@ Secrets ที่ต้องมีใน GitHub: `AI_BASE_URL`, `AI_MODEL`, `AI
 ## 10. สิ่งที่ค้าง / ควรทำต่อ
 
 1. ~~ใส่ `SUPABASE_SERVICE_ROLE_KEY` ใน Vercel~~ — ทำแล้ว 2026-09-19 พร้อม `VITE_SUPABASE_*` ตรวจแล้วว่า prod อ่าน/เขียน `site_settings` และ `guild_rankings` ได้
-2. ทดสอบหลังบ้านบนเว็บจริงด้วยบัญชี pedictu@gmail.com — ล็อกอินแล้วเปิด `/admin` ทุกแท็บ + บันทึกตั้งค่า (ทดสอบผ่านแล้วบนเครื่อง dev ด้วย `ADMIN_DEV_BYPASS=1` ต่อ Supabase จริง)
+2. ~~ทดสอบหลังบ้านบนเว็บจริงด้วยบัญชี pedictu@gmail.com~~ — ผ่านแล้ว 2026-09-19: ล็อกอินจริง → โหมดแอดมิน → ทั้ง 5 แท็บ, ทดสอบโมเดล, บันทึกตั้งค่าลง Supabase และคืนค่า
 3. ติดตั้งปลั๊กอิน v2.1 ใน SWEX ของผู้ใช้จริง แล้วเปิดหน้ากิลด์/Siege/อันดับในเกม → ปรับตัวแกะแพ็กเก็ตตามของจริง
 4. หมุนคีย์ AI (`xaek_sk_…`) เพราะเคยถูกวางในแชต — อัปเดตทั้ง .env, Vercel, GitHub secrets
 5. (ถ้าอยาก) ล้าง `public/data/my_profile.json` ออกจากประวัติ git ด้วย filter-branch + force-push
