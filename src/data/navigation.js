@@ -46,6 +46,7 @@ export const NAVIGATION_CATEGORIES = [
       { id: 'game-guides', label: 'สารบัญคู่มือกลยุทธ์ดันเจี้ยน', icon: 'BookOpen' },
       { id: 'dungeon-stats', label: 'ทีมฟาร์ม Abyss Hard Speed', icon: 'Compass' },
       { id: 'monster-catalog', label: 'สารานุกรมสกิลมอนสเตอร์', icon: 'BookOpen' },
+      { id: 'quiz', label: 'ทายมอนจากสกิล (เกมรายวัน)', icon: 'Sparkles', badge: 'เกม' },
       { id: 'game-codes', label: 'โค้ดแจกไอเทม (Active Codes)', icon: 'Gift', badge: 'ฟรี' },
       { id: 'balance-patch', label: 'ประวัติแพตช์ปรับสมดุล', icon: 'History' },
       { id: 'rune-calculator', label: 'คำนวณประสิทธิภาพรูน & หินขัด', icon: 'Calculator' },

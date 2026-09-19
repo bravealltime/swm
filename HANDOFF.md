@@ -47,7 +47,8 @@ npm run dev               # http://localhost:5173
 src/
   App.jsx            เชลล์แอป: lazy VIEWS map, router, Ctrl+K, แบนเนอร์ประกาศ, autoStart AegisLink
   router.js          path = /<viewId>, query q/tab/player/monster, VIEW_TITLES; /monster/<slug> = สารานุกรมเปิดตัวนั้น (monsterSlug ใช้ร่วมกับตัว prerender)
-  views/*View.jsx    หน้าละไฟล์ (Dashboard, MyBox, GuildWarRoom, Admin, Leaderboards, PluginCompanion…)
+  views/*View.jsx    หน้าละไฟล์ (Dashboard, MyBox, GuildWarRoom, Admin, Leaderboards, PluginCompanion, Quiz…)
+                     QuizView = "ทายมอนจากสกิล" เกมรายวัน: seed จากวันที่ (เวลาไทย) ใน utils/quiz.js ทุกคนได้โจทย์เดียวกัน, สระ = มอนเมต้า Guardian ที่ถูกเลือก ≥10 ครั้ง, ผล/streak เก็บ localStorage `swm:quiz:*`
   components/        AiChatPanel, AiAnswer, AiAdvisorPanel, MonsterDetailModal, RuneBoard, RuneIcon, Sidebar, Navbar…
   contexts/AuthContext.jsx   Supabase auth + isAdmin + adminMode
   services/

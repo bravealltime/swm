@@ -36,6 +36,7 @@ export const VIEW_TITLES = {
   codes: 'โค้ดแจกไอเทม',
   leaderboards: 'ตารางอันดับกิลด์',
   catalog: 'สารานุกรมมอนสเตอร์',
+  quiz: 'ทายมอนจากสกิล',
   speed: 'จูนสปีด',
   rune: 'คำนวณรูน',
   artifact: 'ดาเมจเสริมอาร์ติแฟกต์',

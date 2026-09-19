@@ -31,6 +31,7 @@ const VIEWS = {
   codes: lazy(() => import('./views/PromoCodesView')),
   leaderboards: lazy(() => import('./views/LeaderboardsView')),
   catalog: lazy(() => import('./views/MonsterCatalogView')),
+  quiz: lazy(() => import('./views/QuizView')),
   speed: lazy(() => import('./views/SpeedCalculatorView')),
   rune: lazy(() => import('./views/RuneCalculatorView')),
   artifact: lazy(() => import('./views/ArtifactOptimizerView')),

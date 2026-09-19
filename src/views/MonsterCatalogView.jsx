@@ -229,9 +229,12 @@ export default function MonsterCatalogView({ initialSearch = '', initialMonster 
           <BookOpen className="w-4 h-4" />
           SWM Complete Monster Encyclopedia & Skills Breakdown • ({MONSTERS.length} ตัว)
         </div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-          สารานุกรมมอนสเตอร์ & ระบบตรวจสอบสกิล (Monster Skills Inspector)
-        </h1>
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+            สารานุกรมมอนสเตอร์ & ระบบตรวจสอบสกิล (Monster Skills Inspector)
+          </h1>
+          <button onClick={() => onNavigate?.('quiz')} className="shrink-0 self-start px-3.5 py-2 rounded-xl bg-fuchsia-600/90 hover:bg-fuchsia-500 text-white text-xs font-bold shadow-lg shadow-fuchsia-600/30 cursor-pointer">🎯 เล่นทายมอนจากสกิล</button>
+        </div>
         {/* hidden on phones: with the filters below it pushed the first monster under the fold */}
         <p className="hidden sm:block text-sm text-slate-400 mt-1 max-w-3xl leading-relaxed">
           ฐานข้อมูลสกิลมอนสเตอร์ครบทุกตัว ทุกธาตุ ชี้เมาส์ (Hover) เพื่อดูคำอธิบายสกิล คูลดาวน์ ตัวคูณความเสียหาย ดีบัฟ และคลิกเพื่อเปิดหน้าต่างวิเคราะห์กลยุทธ์ฉบับเต็ม
