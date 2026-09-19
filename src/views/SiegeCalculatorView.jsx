@@ -100,7 +100,7 @@ export default function SiegeCalculatorView() {
       <div className="border-b border-[#1c2738] pb-5">
         <div className="flex items-center gap-2 text-xs font-mono text-cyan-400 uppercase tracking-wider mb-1">
           <Calculator className="w-4 h-4" />
-          SWGT Siege Calculator & Victory Prediction • เครื่องคำนวณยุทธวิธีชิง 20,000 แต้ม
+          Siege Calculator & Victory Prediction • เครื่องคำนวณยุทธวิธีชิง 20,000 แต้ม
         </div>
         <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
           เครื่องคำนวณคะแนนศึกยึดเกาะ (Siege Battle Calculator)

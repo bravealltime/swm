@@ -6,10 +6,13 @@ import { baseAwakenedId, isNonSummonableLd5 } from '../../utils/swexImport';
 import { exportLdShowcaseCard } from '../../utils/cardExporter';
 import { monsterOf, monsterByName, ELEMENT_FILTERS, ELEMENT_COLOR, ELEMENT_TH, card } from './shared';
 import swrtTierList from '../../data/swrtTierList.json';
+import { useLiveData } from '../../hooks/useLiveData';
 
-// The hall of fame's tier and rates come from the current RTA tier list (swranking.com), not from opinion
-const RTA_SEASON = swrtTierList.season;
-const RTA_BY_ID = new Map(Object.entries(swrtTierList.tiers || {}).flatMap(([tier, list]) => (list || []).map((m) => [Number(m.monsterId), { tier, winRate: m.winRate, pickTotal: m.pickTotal }])));
+// The hall of fame's tier and rates come from the current RTA tier list (live, bundled as fallback), not from opinion
+const indexTierList = (doc) => ({
+  season: doc?.season,
+  byId: new Map(Object.entries(doc?.tiers || {}).flatMap(([tier, list]) => (list || []).map((m) => [Number(m.monsterId), { tier, winRate: m.winRate, pickTotal: m.pickTotal }]))),
+});
 const TOP_TIERS = new Set(['SS', 'S']);
 
 // ---------------------------------------------------------------------------
@@ -60,6 +63,8 @@ const TOP_LD5_HALL_OF_FAME = [
 ];
 
 export default function PokedexCollection({ box, onNavigate, onLoadDemo }) {
+  const tierList = useLiveData('rta-tierlist', swrtTierList);
+  const { season: RTA_SEASON, byId: RTA_BY_ID } = useMemo(() => indexTierList(tierList.data), [tierList.data]);
   const [eleFilter, setEleFilter] = useState('all');
   const [ownershipFilter, setOwnershipFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -225,7 +230,7 @@ export default function PokedexCollection({ box, onNavigate, onLoadDemo }) {
         ownedUnit,
       };
     });
-  }, [checkIsOwned, units]);
+  }, [checkIsOwned, units, RTA_BY_ID]);
 
   const filteredHof = useMemo(() => {
     return hallOfFameMonsters.filter((item) => {
@@ -584,7 +589,7 @@ export default function PokedexCollection({ box, onNavigate, onLoadDemo }) {
               {/* Filter Chips */}
               <div className="flex flex-wrap items-center justify-between gap-2.5">
                 <div className="text-xs text-slate-400 font-medium">
-                  แสดง {filteredHof.length} จาก {hallOfFameMonsters.length} — ระดับและอัตราชนะจาก RTA Tier List ซีซั่น {RTA_SEASON} (swranking)
+                  แสดง {filteredHof.length} จาก {hallOfFameMonsters.length} — ระดับและอัตราชนะจาก RTA Tier List ซีซั่น {RTA_SEASON}{tierList.live ? ' · อัปเดตล่าสุด ' + new Date(tierList.updatedAt).toLocaleString('th-TH', { dateStyle: 'short', timeStyle: 'short' }) : ''}
                 </div>
                 <div className="flex items-center gap-1.5 flex-wrap">
                   {[

@@ -145,6 +145,14 @@ tests/*.test.js      vitest (`npm test`) — parser SWEX, แพ็กเก็�
 
 ## 9. งานอัตโนมัติ
 
+**ชั้นข้อมูลสด (2026-09-20)** — ข้อมูลที่เปลี่ยนบ่อยไม่ต้องรอ deploy: งานเขียนเอกสาร JSON ลง Supabase `live_data(key, value)` → เว็บอ่าน `/api/live/<key>` (edge cache 5 นาที) ผ่าน hook `useLiveData(key, bundledFallback)` และแท็บที่เปิดอยู่รับการเปลี่ยนแปลงผ่าน Supabase Realtime (`src/services/liveData.js`); JSON ใน `src/data` ยังเป็นค่าสำรอง/ตอนโหลดครั้งแรก
+- `.github/workflows/update-live-data.yml` **ทุกชั่วโมง** (นาที 17): `extract_swrt_data.cjs` → `scripts/publish_live_data.mjs` (เขียนเฉพาะ key ที่ hash เปลี่ยน) ไม่ commit ไม่ deploy — ต้องมี secret `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` ใน GitHub
+- งานคืน (`update-swrt-data.yml`) ยัง commit เหมือนเดิม + publish ทุก key (รวม guardian-meta, patches)
+- key ที่มี: `rta-tierlist`, `rta-cutoffs`, `rta-meta`, `guardian-meta`, `patches`, `patches-ai`, `codes` (ของแอดมิน — สคริปต์ seed ครั้งแรกจาก `promoCodes.js` แล้วไม่ทับ)
+- หน้าที่ต่อแล้ว: โค้ดแจกไอเทม (`codes` + ผู้ใช้ส่งโค้ดเข้าคิว `code_submissions` วันละ 5/IP → แอดมินอนุมัติในแท็บ "ข้อมูลสด & โค้ด" ขึ้นเว็บทันที), ทำเนียบ LD5 ในกล่องของฉัน (`rta-tierlist`), Where to Use (`rta-meta`); **ยังไม่ต่อ**: RtaAnalyticsView / MetaTeamsFromBox / GuardianView (อีก session แก้ไฟล์เหล่านี้ค้างอยู่ตอนทำ) — ต่อด้วย `useLiveData` บรรทัดเดียวต่อชุดข้อมูล
+- ประกาศ/โหมดปรับปรุงจากหลังบ้านถึงแท็บที่เปิดอยู่ทันที (Realtime บน `site_settings` → โหลด public settings ใหม่)
+- **ไม่แสดงชื่อแหล่งข้อมูลภายนอกบนหน้าเว็บ** (นโยบายเจ้าของ 2026-09-20) — ใช้คำว่า "สถิติการแข่งขันจริง / RTA World Arena" แทน
+
 `update-swrt-data.yml` รันทุกคืน 03:00 (ไทย) หรือกดเองใน GitHub → Actions: extract_swrt_data → fetch_more_replays → fetch_swrt_players → (ถ้ามี AI secrets) ai_patch_summaries + ai_player_summaries → commit → Vercel deploy
 Secrets ที่ต้องมีใน GitHub: `AI_BASE_URL`, `AI_MODEL`, `AI_API_KEY`
 
@@ -156,7 +164,8 @@ Secrets ที่ต้องมีใน GitHub: `AI_BASE_URL`, `AI_MODEL`, `AI
 4. หมุนคีย์ AI (`xaek_sk_…`) เพราะเคยถูกวางในแชต — อัปเดตทั้ง .env, Vercel, GitHub secrets
 5. (ถ้าอยาก) ล้าง `public/data/my_profile.json` ออกจากประวัติ git ด้วย filter-branch + force-push
 6. ปุ่มการ์ดแชร์: ทดสอบกับกล่องจริง 553 ตัว (ทดสอบแล้วกับกล่องจำลอง 5 ตัว)
-7. **รัน `supabase/admin_schema.sql` ใน Supabase SQL Editor อีกครั้ง** (เพิ่มคอลัมน์ ip/country/region/city/timezone + index ให้ `ai_logs`) — จนกว่าจะรัน ล็อก AI จะไม่มี IP/ประเทศ (โควตาทำงานอยู่แล้ว)
+7. **รัน `supabase/admin_schema.sql` ใน Supabase SQL Editor อีกครั้ง** — เพิ่มคอลัมน์ geo ให้ `ai_logs` **และสร้าง `live_data` + `code_submissions` + เปิด Realtime** (จนกว่าจะรัน: หน้าเว็บใช้ JSON ในตัวเหมือนเดิม, ส่งโค้ดจะบอกว่าระบบยังไม่พร้อม)
+8. ใส่ secret `SUPABASE_URL` และ `SUPABASE_SERVICE_ROLE_KEY` ใน GitHub → Settings → Secrets → Actions แล้วกด Run workflow "Update live data" (หรือปุ่ม "รีเฟรชข้อมูลสดตอนนี้" ในหลังบ้าน ถ้ามี `GITHUB_TOKEN`) — ครั้งแรกจะ seed โค้ดด้วย
 
 ## 11. เทคนิคที่เจอบ่อย
 

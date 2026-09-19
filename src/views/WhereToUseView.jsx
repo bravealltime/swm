@@ -19,6 +19,7 @@ import ALL_MDC_DATA from '../data/allMdcData.json';
 import { MONSTERS } from '../data/monsters';
 import DUNGEON_DATA from '../data/dungeonRealStats.json';
 import RTA_META from '../data/swrtMetaMonsters.json';
+import { useLiveData } from '../hooks/useLiveData';
 import { getMonsterBuild } from '../data/monsterBuilds';
 import { loadBox, baseAwakenedId } from '../utils/swexImport';
 import { loadUserBoxFromDB } from '../services/storageService';
@@ -157,14 +158,16 @@ export default function WhereToUseView({ onNavigate, initialMonster = 'Byungchul
     return matches;
   }, [selectedMonster]);
 
-  // 4. RTA Meta info
+  // 4. RTA Meta info (live document, bundled fallback)
+  const rtaMeta = useLiveData('rta-meta', RTA_META);
   const rtaMatch = useMemo(() => {
     const target = selectedMonster.name.toLowerCase();
-    return RTA_META.find(r => 
-      r.name.toLowerCase().includes(target) || 
+    const list = Array.isArray(rtaMeta.data) ? rtaMeta.data : RTA_META;
+    return list.find(r =>
+      r.name.toLowerCase().includes(target) ||
       target.includes(r.name.toLowerCase())
     );
-  }, [selectedMonster]);
+  }, [selectedMonster, rtaMeta.data]);
 
   return (
     <div className="space-y-6 pb-12 animate-fadeIn">
@@ -172,7 +175,7 @@ export default function WhereToUseView({ onNavigate, initialMonster = 'Byungchul
       <div className="border-b border-[#1c2738] pb-5">
         <div className="flex items-center gap-2 text-xs font-mono text-amber-400 uppercase tracking-wider mb-1">
           <Compass className="w-4 h-4" />
-          SWGT Where to Use System • วิเคราะห์การใช้งานมอนสเตอร์แบบ All-in-One
+          Where to Use • วิเคราะห์การใช้งานมอนสเตอร์แบบ All-in-One
         </div>
         <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
           ใช้มอนสเตอร์ตัวนี้ที่ไหนดี? (Where to Use?)

@@ -83,7 +83,7 @@ export default function SpeedCalculatorView() {
       <div className="border-b border-[#1c2738] pb-5">
         <div className="flex items-center gap-2 text-xs font-mono text-cyan-400 uppercase tracking-wider mb-1">
           <Gauge className="w-4 h-4" />
-          SWGT Speed Tick & Anti-Cut Calculator • ระบบคำนวณสปีดทิกและจูนความเร็ว
+          Speed Tick & Anti-Cut Calculator • ระบบคำนวณสปีดทิกและจูนความเร็ว
         </div>
         <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
           เครื่องคำนวณความเร็วจริงในสนามต่อสู้ (Combat Speed & Tick Calculator)

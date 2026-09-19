@@ -195,7 +195,7 @@ export default function GameGuidesView({ onNavigate }) {
       <div className="border-b border-[#1c2738] pb-5">
         <div className="flex items-center gap-2 text-xs font-mono text-emerald-400 uppercase tracking-wider mb-1">
           <BookOpen className="w-4 h-4" />
-          SWGT Tactical Game Guides • สารบัญคู่มือกลยุทธ์ฉบับสมบูรณ์
+          Tactical Game Guides • สารบัญคู่มือกลยุทธ์ฉบับสมบูรณ์
         </div>
         <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
           คู่มือการเล่นและเจาะดันเจี้ยน (Game Guides & Walkthroughs)

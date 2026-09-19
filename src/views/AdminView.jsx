@@ -26,6 +26,7 @@ const TABS = [
   { id: 'settings', label: 'ตั้งค่าเว็บ', icon: Settings },
   { id: 'guilds', label: 'อันดับกิลด์', icon: Trophy },
   { id: 'jobs', label: 'งานอัตโนมัติ', icon: PlayCircle },
+  { id: 'live', label: 'ข้อมูลสด & โค้ด', icon: Radio },
 ];
 
 function Dot({ ok, warn }) {
@@ -148,6 +149,7 @@ export default function AdminView({ onNavigate, onOpenAuth }) {
           {tab === 'settings' && <SettingsPanel status={status} onSaved={load} />}
           {tab === 'guilds' && <GuildRankingsPanel />}
           {tab === 'jobs' && <JobsPanel status={status} />}
+          {tab === 'live' && <LivePanel />}
         </>
       )}
     </div>
@@ -164,7 +166,7 @@ function Overview({ status, onTab }) {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         <Stat label="คำถาม AI (24 ชม.)" value={s ? s.calls : '-'} sub={s ? `ผิดพลาด ${s.errors} • เฉลี่ย ${(s.avgMs / 1000).toFixed(1)} วิ` : ai.stats?.error === 'TABLE_MISSING' ? 'ยังไม่ได้สร้างตาราง ai_logs' : ai.stats?.error || ''} tone="text-amber-300" />
         <Stat label="ผู้ใช้ที่ถาม AI (24 ชม.)" value={s ? s.users : '-'} sub="เฉพาะที่เข้าสู่ระบบ" tone="text-cyan-300" />
-        <Stat label="ผู้เล่น SWRT ในระบบ" value={data.players?.players?.toLocaleString?.() || '-'} sub={data.players?.fetchedAt ? `ดึงเมื่อ ${ago(data.players.fetchedAt)}` : '-'} tone="text-emerald-300" />
+        <Stat label="ผู้เล่น RTA ในระบบ" value={data.players?.players?.toLocaleString?.() || '-'} sub={data.players?.fetchedAt ? `ดึงเมื่อ ${ago(data.players.fetchedAt)}` : '-'} tone="text-emerald-300" />
         <Stat label="มอนสเตอร์ / สกิลแปลไทย" value={`${data.monsters?.count || 0} / ${data.skills?.translated || 0}`} sub={`ไม่มีรูป ${data.monsters?.withoutArt || 0} ตัว`} tone="text-fuchsia-300" />
       </div>
 
@@ -174,7 +176,7 @@ function Overview({ status, onTab }) {
           action={<button onClick={() => onTab('ai')} className="mt-2 text-[11px] text-amber-300 hover:text-white cursor-pointer">ดูรายละเอียด →</button>} />
         <Health icon={Cloud} title="Supabase (บัญชี / ซิงก์ / หลังบ้าน)" ok={supabase.configured && supabase.serviceRole} warn={supabase.configured && !supabase.serviceRole}
           lines={[supabase.host || 'ยังไม่ได้ตั้งค่า', supabase.serviceRole ? 'service role: พร้อม (บันทึกตั้งค่า/ล็อกได้)' : 'ไม่มี SUPABASE_SERVICE_ROLE_KEY — บันทึกตั้งค่าและล็อก AI ไม่ได้', `ที่เก็บตั้งค่า: ${settings._meta?.storage}`]} />
-        <Health icon={Database} title="ชุดข้อมูล SWRT" ok={playersAge != null && playersAge < 36} warn={playersAge != null && playersAge < 96}
+        <Health icon={Database} title="ชุดข้อมูล RTA" ok={playersAge != null && playersAge < 36} warn={playersAge != null && playersAge < 96}
           lines={[`ผู้เล่น ${data.players?.players || 0} • รีเพลย์ ${data.players?.replaysScanned || 0} • ซีซั่น ${data.players?.season || '-'}`, `ดึงล่าสุด ${fmtTime(data.players?.fetchedAt)} (${ago(data.players?.fetchedAt)})`, `เมต้า Guardian ${data.guardianMeta?.monsters || 0} ตัว • สรุปผู้เล่น AI ${data.playerSummaries?.count || 0}`]}
           action={<button onClick={() => onTab('data')} className="mt-2 text-[11px] text-amber-300 hover:text-white cursor-pointer">ดูทั้งหมด →</button>} />
         <Health icon={Server} title="Deploy" ok={deploy.env === 'production'} warn={deploy.env !== 'production'}
@@ -265,7 +267,7 @@ function AiPanel({ status }) {
 function DataPanel({ status, onNavigate }) {
   const d = status.data;
   const rows = [
-    ['ดัชนีผู้เล่น SWRT', `${d.players?.players || 0} คน • ${d.players?.replaysScanned || 0} รีเพลย์ • ${d.matchShards} shards`, d.players?.fetchedAt, d.players?.file],
+    ['ดัชนีผู้เล่น RTA', `${d.players?.players || 0} คน • ${d.players?.replaysScanned || 0} รีเพลย์ • ${d.matchShards} shards`, d.players?.fetchedAt, d.players?.file],
     ['เมต้า Guardian (เลือก/ชนะ/แบน)', `${d.guardianMeta?.monsters || 0} มอนสเตอร์`, d.guardianMeta?.fetchedAt, d.guardianMeta?.file],
     ['เส้นแบ่งแรงค์ RTA', d.cutoffs?.nowTime ? `ณ ${d.cutoffs.nowTime}` : '-', null, d.cutoffs?.file],
     ['แคตตาล็อกมอนสเตอร์', `${d.monsters?.count || 0} ตัว • ไม่มีรูป ${d.monsters?.withoutArt || 0}`, null, d.monsters?.file],
@@ -473,6 +475,127 @@ function GuildRankingsPanel() {
   );
 }
 
+// --- live data: what the hourly job publishes + redeem-code moderation ------------------------------
+function LivePanel() {
+  const [live, setLive] = useState(null);
+  const [pending, setPending] = useState(null);
+  const [busy, setBusy] = useState('');
+  const [msg, setMsg] = useState(null);
+  const [newCode, setNewCode] = useState('');
+  const [newRewards, setNewRewards] = useState('');
+  const [rewardsById, setRewardsById] = useState({});
+
+  const load = useCallback(async () => {
+    try { setLive(await adminFetch('live-data')); } catch (err) { setLive({ ok: false, error: err.message, rows: [] }); }
+    try { setPending(await adminFetch('code-submissions', { query: { status: 'pending' } })); } catch (err) { setPending({ ok: false, error: err.message, rows: [] }); }
+  }, []);
+  useEffect(() => { load(); }, [load]);
+
+  const run = async (key, fn) => {
+    setBusy(key); setMsg(null);
+    try { const r = await fn(); setMsg({ ok: true, text: r?.message || 'เรียบร้อย' }); await load(); }
+    catch (err) { setMsg({ ok: false, text: err.message }); }
+    finally { setBusy(''); }
+  };
+  const refreshLive = () => run('refresh', () => adminFetch('actions', { method: 'POST', body: { action: 'refresh-live' } }));
+  const resolve = (id, op) => run(`sub-${id}`, () => adminFetch('code-submissions', { method: 'POST', body: { id, op, rewards: rewardsById[id] || '' } }));
+  const addCode = async (e) => {
+    e.preventDefault();
+    const code = newCode.trim().toUpperCase().replace(/\s+/g, '');
+    if (!code) return;
+    await run('add', async () => {
+      const cur = await adminFetch('live-data', { query: { key: 'codes' } }).catch(() => null);
+      const codes = Array.isArray(cur?.value?.codes) ? cur.value.codes.filter((c) => String(c.code).toUpperCase() !== code) : [];
+      codes.unshift({ id: `code-${code.toLowerCase()}`, code, dateAdded: new Date().toISOString().slice(0, 10), expiry: 'มีผลใช้งานอยู่', status: 'active', rewardsText: newRewards.trim(), rewards: [], redeemUrl: `http://withhive.me/313/${code}` });
+      await adminFetch('live-data', { method: 'POST', body: { key: 'codes', value: { codes, updatedAt: new Date().toISOString() } } });
+      setNewCode(''); setNewRewards('');
+      return { message: `โค้ด ${code} ขึ้นเว็บแล้ว` };
+    });
+  };
+  const removeCode = (code) => run(`rm-${code}`, async () => {
+    const cur = await adminFetch('live-data', { query: { key: 'codes' } });
+    const codes = (cur?.value?.codes || []).filter((c) => String(c.code).toUpperCase() !== code);
+    await adminFetch('live-data', { method: 'POST', body: { key: 'codes', value: { codes, updatedAt: new Date().toISOString() } } });
+    return { message: `ลบโค้ด ${code} แล้ว` };
+  });
+  const [codesDoc, setCodesDoc] = useState(null);
+  useEffect(() => { adminFetch('live-data', { query: { key: 'codes' } }).then(setCodesDoc).catch(() => setCodesDoc(null)); }, [live]);
+
+  const tableMissing = live && !live.ok && live.error === 'TABLE_MISSING';
+  return (
+    <div className="space-y-4">
+      {tableMissing && (
+        <div className="p-3 rounded-xl border border-amber-500/30 bg-amber-500/5 text-xs text-amber-200 flex items-start gap-2">
+          <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
+          <div>ยังไม่มีตาราง <code className="text-white">live_data</code> — รัน <code className="text-white">supabase/admin_schema.sql</code> ใน SQL Editor ครั้งเดียว แล้วใส่ secret <code className="text-white">SUPABASE_URL</code> + <code className="text-white">SUPABASE_SERVICE_ROLE_KEY</code> ใน GitHub Actions</div>
+        </div>
+      )}
+      <div className={`${card} p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3`}>
+        <div className="text-sm">
+          <div className="font-bold text-white flex items-center gap-2"><Radio className="w-4 h-4 text-emerald-300" /> ข้อมูลสด (อัปเดตโดยไม่ต้อง deploy)</div>
+          <div className="text-xs text-slate-400 mt-0.5">งานรายชั่วโมงเขียน tier list / เมต้า / cutoff ลงที่นี่ หน้าเว็บอ่านจาก <code>/api/live/&lt;key&gt;</code> และแท็บที่เปิดอยู่รับการเปลี่ยนแปลงทันที</div>
+          {msg && <div className={`text-xs mt-1 ${msg.ok ? 'text-emerald-300' : 'text-rose-300'}`}>{msg.text}</div>}
+        </div>
+        <button onClick={refreshLive} disabled={busy === 'refresh'} className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white text-xs font-bold cursor-pointer flex items-center gap-1.5 shrink-0">{busy === 'refresh' ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />} รีเฟรชข้อมูลสดตอนนี้</button>
+      </div>
+
+      <div className={`${card} overflow-hidden`}>
+        <div className="px-4 py-3 border-b border-white/[0.06] text-sm font-bold text-white flex items-center gap-2"><Database className="w-4 h-4 text-slate-400" /> เอกสารที่อยู่บนเว็บตอนนี้</div>
+        {!live ? <div className="p-6 text-center text-slate-400 text-sm">กำลังโหลด…</div>
+          : !live.ok ? <div className="p-4 text-xs text-amber-200">{tableMissing ? 'ยังไม่มีตาราง' : live.error}</div>
+          : live.rows.length === 0 ? <div className="p-6 text-center text-slate-400 text-sm">ยังไม่มีข้อมูล — กด "รีเฟรชข้อมูลสดตอนนี้" หรือรอรอบชั่วโมง</div>
+          : (
+            <table className="w-full text-xs">
+              <thead className="bg-white/[0.03] text-slate-400"><tr><th className="text-left px-3 py-2">key</th><th className="text-left px-3 py-2">อัปเดตล่าสุด</th><th className="text-left px-3 py-2">โดย</th></tr></thead>
+              <tbody>{live.rows.map((r) => (
+                <tr key={r.key} className="border-t border-white/[0.05]"><td className="px-3 py-2 font-mono text-slate-200">{r.key}</td><td className="px-3 py-2 text-slate-300">{fmtTime(r.updated_at)} <span className="text-slate-500">({ago(r.updated_at)})</span></td><td className="px-3 py-2 text-slate-400">{r.updated_by || '-'}</td></tr>
+              ))}</tbody>
+            </table>
+          )}
+      </div>
+
+      <div className="grid lg:grid-cols-2 gap-4">
+        <div className={`${card} p-4 space-y-3`}>
+          <div className="text-sm font-bold text-white flex items-center gap-2"><Zap className="w-4 h-4 text-amber-300" /> เพิ่มโค้ดแจกไอเทม (ขึ้นเว็บทันที)</div>
+          <form onSubmit={addCode} className="flex flex-col sm:flex-row gap-2">
+            <input value={newCode} onChange={(e) => setNewCode(e.target.value)} placeholder="โค้ด เช่น SW2026GIFT" className="flex-1 bg-[#0d1422] border border-white/10 focus:border-amber-400 rounded-xl px-3 py-2 text-sm text-white font-mono uppercase placeholder-slate-500 focus:outline-none" />
+            <input value={newRewards} onChange={(e) => setNewRewards(e.target.value)} placeholder="ของรางวัล เช่น Energy x100, Scroll x3" className="flex-1 bg-[#0d1422] border border-white/10 focus:border-amber-400 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none" />
+            <button type="submit" disabled={busy === 'add'} className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:opacity-50 text-slate-950 text-xs font-bold cursor-pointer">{busy === 'add' ? '…' : 'เพิ่ม'}</button>
+          </form>
+          <div className="space-y-1 max-h-72 overflow-y-auto">
+            {(codesDoc?.value?.codes || []).map((c) => (
+              <div key={c.code} className="flex items-center justify-between gap-2 px-3 py-1.5 rounded-lg bg-white/[0.03] text-xs">
+                <span className="font-mono font-bold text-emerald-300">{c.code}</span>
+                <span className="text-slate-400 truncate flex-1">{c.rewardsText || (c.rewards || []).map((r) => `${r.name} x${r.amount}`).join(', ')}</span>
+                <span className="text-slate-500 shrink-0">{c.dateAdded}</span>
+                <button onClick={() => removeCode(String(c.code).toUpperCase())} disabled={busy === `rm-${String(c.code).toUpperCase()}`} className="p-1 rounded text-slate-500 hover:text-rose-300 cursor-pointer" title="ลบออกจากเว็บ"><Trash2 className="w-3.5 h-3.5" /></button>
+              </div>
+            ))}
+            {codesDoc && !(codesDoc.value?.codes || []).length && <div className="text-xs text-slate-500">ยังไม่มีโค้ดบนเว็บ — รัน <code>node scripts/publish_live_data.mjs codes-seed</code> หรือเพิ่มด้านบน</div>}
+          </div>
+        </div>
+        <div className={`${card} p-4 space-y-3`}>
+          <div className="text-sm font-bold text-white flex items-center gap-2"><Users className="w-4 h-4 text-cyan-300" /> โค้ดที่ผู้ใช้ส่งมา รอตรวจ {pending?.rows?.length ? `(${pending.rows.length})` : ''}</div>
+          {!pending ? <div className="text-xs text-slate-400">กำลังโหลด…</div>
+            : !pending.ok ? <div className="text-xs text-amber-200">{pending.error === 'TABLE_MISSING' ? 'ยังไม่มีตาราง code_submissions (รัน admin_schema.sql)' : pending.error}</div>
+            : pending.rows.length === 0 ? <div className="text-xs text-slate-500">ไม่มีรายการรอตรวจ</div>
+            : pending.rows.map((s) => (
+              <div key={s.id} className="p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.06] space-y-2">
+                <div className="flex items-center justify-between gap-2 text-xs"><span className="font-mono font-bold text-white">{s.code}</span><span className="text-slate-500">{fmtTime(s.created_at)}</span></div>
+                {s.note && <div className="text-[11px] text-slate-400">หมายเหตุผู้ส่ง: {s.note}</div>}
+                <div className="flex gap-2">
+                  <input value={rewardsById[s.id] ?? s.note ?? ''} onChange={(e) => setRewardsById((m) => ({ ...m, [s.id]: e.target.value }))} placeholder="ของรางวัล (แสดงบนเว็บ)" className="flex-1 bg-[#0d1422] border border-white/10 rounded-lg px-2.5 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400" />
+                  <button onClick={() => resolve(s.id, 'approve')} disabled={busy === `sub-${s.id}`} className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white text-xs font-bold cursor-pointer">อนุมัติ</button>
+                  <button onClick={() => resolve(s.id, 'reject')} disabled={busy === `sub-${s.id}`} className="px-3 py-1.5 rounded-lg bg-white/[0.05] hover:bg-rose-500/20 text-slate-300 hover:text-rose-200 text-xs font-bold cursor-pointer">ปฏิเสธ</button>
+                </div>
+              </div>
+            ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function JobsPanel({ status }) {
   const [runs, setRuns] = useState(null);
   const [busy, setBusy] = useState(false);
@@ -484,7 +607,7 @@ function JobsPanel({ status }) {
   }, [gh.configured]);
   useEffect(() => { loadRuns(); }, [loadRuns]);
   const dispatch = async () => {
-    if (!window.confirm('สั่งรันอัปเดตข้อมูล SWRT ตอนนี้? ใช้เวลาราว 15–40 นาที และจะ commit + deploy อัตโนมัติ')) return;
+    if (!window.confirm('สั่งรันอัปเดตข้อมูล RTA ตอนนี้? ใช้เวลาราว 15–40 นาที และจะ commit + deploy อัตโนมัติ')) return;
     setBusy(true); setMsg(null);
     try { const r = await adminFetch('actions', { method: 'POST', body: { action: 'refresh-data', pages: 30 } }); setMsg({ ok: true, text: r.message }); setTimeout(loadRuns, 4000); }
     catch (err) { setMsg({ ok: false, text: err.message }); }
@@ -495,7 +618,7 @@ function JobsPanel({ status }) {
     <div className="space-y-4">
       <div className={`${card} p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3`}>
         <div className="text-sm">
-          <div className="font-bold text-white flex items-center gap-2"><GitBranch className="w-4 h-4 text-cyan-300" /> อัปเดตข้อมูล SWRT + สรุป AI (ทุกคืน 03:00)</div>
+          <div className="font-bold text-white flex items-center gap-2"><GitBranch className="w-4 h-4 text-cyan-300" /> อัปเดตข้อมูล RTA + สรุป AI (ทุกคืน 03:00)</div>
           <div className="text-xs text-slate-400 mt-0.5">GitHub Actions: ดึงผู้เล่น/รีเพลย์/เมต้า → สร้างสรุป AI → commit → Vercel deploy • {gh.repo}</div>
           {msg && <div className={`text-xs mt-1 ${msg.ok ? 'text-emerald-300' : 'text-rose-300'}`}>{msg.text}</div>}
         </div>
@@ -528,7 +651,7 @@ function JobsPanel({ status }) {
       <div className={`${card} p-4 text-xs text-slate-400 space-y-1`}>
         <div className="font-bold text-white flex items-center gap-2"><Users className="w-4 h-4 text-slate-400" /> เช็กลิสต์ดูแลรายสัปดาห์</div>
         <ul className="list-disc pl-5 space-y-0.5">
-          <li>ข้อมูล SWRT ต้องไม่เก่ากว่า 36 ชม. (ภาพรวม → ชุดข้อมูล เป็นสีเขียว)</li>
+          <li>ข้อมูล RTA ต้องไม่เก่ากว่า 36 ชม. (ภาพรวม → ชุดข้อมูล เป็นสีเขียว)</li>
           <li>คำถาม AI ผิดพลาดควรต่ำกว่า 5% — ถ้าสูง ลอง “ทดสอบโมเดล” และดูข้อความผิดพลาดในแท็บโค้ช AI</li>
           <li>ตรวจว่า Vercel env (AI_*, SUPABASE_*, ADMIN_EMAILS) ยังครบหลังหมุนคีย์</li>
           <li>เมื่อมีแพตช์ใหม่: สั่งรันงานอัตโนมัติ แล้วเปิดประกาศบนเว็บ</li>

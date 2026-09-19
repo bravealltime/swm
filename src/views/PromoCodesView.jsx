@@ -9,15 +9,23 @@ import {
   Plus, 
   HelpCircle, 
   Clock,
-  CheckCircle2,
-  Sparkles,
-  Info
+  CheckCircle2
 } from 'lucide-react';
 import { PROMO_CODES } from '../data/promoCodes';
 import { useLocalSet } from '../hooks/useLocalStorage';
+import { useLiveData } from '../hooks/useLiveData';
+import { submitPromoCode } from '../services/liveData';
+
+// The live list is admin-curated (visitor submissions are approved in the back-office); the
+// bundled PROMO_CODES only show until the first live version arrives.
+const pickCodes = (doc) => (Array.isArray(doc?.codes) ? doc.codes : null);
 
 export default function PromoCodesView() {
-  const [codes, setCodes] = useState(PROMO_CODES);
+  const live = useLiveData('codes', PROMO_CODES, { pick: pickCodes });
+  // local up/down votes on top of the live list (votes stay on this device)
+  const [voteDelta, setVoteDelta] = useState({});
+  const codes = live.data.map((c) => ({ ...c, upvotes: (c.upvotes || 0) + (voteDelta[c.id]?.up || 0), downvotes: (c.downvotes || 0) + (voteDelta[c.id]?.down || 0) }));
+  const [submitting, setSubmitting] = useState(false);
   const [copiedCode, setCopiedCode] = useState(null);
   const [showAddModal, setShowAddModal] = useState(false);
   const [newCodeInput, setNewCodeInput] = useState('');
@@ -46,46 +54,27 @@ export default function PromoCodesView() {
   };
 
   const handleVote = (codeId, type) => {
-    setCodes(prev => prev.map(c => {
-      if (c.id === codeId) {
-        return {
-          ...c,
-          upvotes: type === 'up' ? c.upvotes + 1 : c.upvotes,
-          downvotes: type === 'down' ? c.downvotes + 1 : c.downvotes
-        };
-      }
-      return c;
-    }));
+    setVoteDelta((d) => ({ ...d, [codeId]: { ...(d[codeId] || {}), [type]: ((d[codeId] || {})[type] || 0) + 1 } }));
     showToast('ขอบคุณสำหรับการร่วมโหวตสถานะโค้ด!');
   };
 
-  const handleAddCode = (e) => {
+  // A submitted code goes to the moderation queue; it appears for everyone once an admin approves it
+  const handleAddCode = async (e) => {
     e.preventDefault();
-    if (!newCodeInput.trim()) return;
-
-    const newEntry = {
-      id: `code-${Date.now()}`,
-      code: newCodeInput.trim().toUpperCase(),
-      dateAdded: 'วันนี้',
-      expiry: 'มีผลใช้งานอยู่',
-      status: 'active',
-      upvotes: 1,
-      downvotes: 0,
-      rewards: [
-        { 
-          name: newRewardInput.trim() || 'ของขวัญพิเศษ (Gift)', 
-          amount: '1', 
-          imageUrl: 'https://do9d4mpqk497d.cloudfront.net/common/images/summoners_war_query_jp/scroll_mystical.png' 
-        }
-      ],
-      redeemUrl: `http://withhive.me/313/${newCodeInput.trim().toUpperCase()}`
-    };
-
-    setCodes([newEntry, ...codes]);
-    setNewCodeInput('');
-    setNewRewardInput('');
-    setShowAddModal(false);
-    showToast(`เพิ่มโค้ด "${newEntry.code}" สำเร็จแล้ว!`);
+    const code = newCodeInput.trim().toUpperCase();
+    if (!code || submitting) return;
+    setSubmitting(true);
+    try {
+      const res = await submitPromoCode(code, newRewardInput.trim());
+      setNewCodeInput('');
+      setNewRewardInput('');
+      setShowAddModal(false);
+      showToast(res.live ? `โค้ด "${code}" อยู่ในรายการแล้ว` : res.duplicate ? `โค้ด "${code}" มีคนส่งมาแล้ว กำลังรอตรวจ` : `ส่งโค้ด "${code}" แล้ว — จะขึ้นให้ทุกคนเห็นทันทีที่ตรวจเสร็จ ขอบคุณ!`);
+    } catch (err) {
+      showToast(err.message || 'ส่งโค้ดไม่สำเร็จ');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -189,7 +178,10 @@ export default function PromoCodesView() {
 
               {/* Reward item badges */}
               <div className="flex flex-wrap items-center gap-2.5 flex-1">
-                {item.rewards.map((reward, rIdx) => (
+                {item.rewardsText && !item.rewards?.length && (
+                  <div className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-[#0c121c] border border-[#1f2c3f] text-xs sm:text-sm font-semibold text-slate-200">{item.rewardsText}</div>
+                )}
+                {(item.rewards || []).map((reward, rIdx) => (
                   <div
                     key={rIdx}
                     className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-[#0c121c] border border-[#1f2c3f] text-xs sm:text-sm font-semibold text-slate-200"
@@ -327,9 +319,10 @@ export default function PromoCodesView() {
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all shadow-sm"
+                  disabled={submitting}
+                  className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 disabled:opacity-60 text-white text-xs font-bold transition-all shadow-sm cursor-pointer"
                 >
-                  บันทึกโค้ด
+                  {submitting ? 'กำลังส่ง…' : 'ส่งโค้ดให้ตรวจ'}
                 </button>
               </div>
             </form>

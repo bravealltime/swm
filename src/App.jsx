@@ -102,7 +102,12 @@ function AppContent() {
   const [site, setSite] = useState(null);
   const [bannerClosed, setBannerClosed] = useState(() => { try { return sessionStorage.getItem('swm:banner-closed') || ''; } catch { return ''; } });
   useEffect(() => {
-    import('./services/adminClient').then((m) => m.loadPublicSettings()).then((s) => { if (s) setSite(s); }).catch(() => {});
+    const load = (fresh) => import('./services/adminClient').then((m) => m.loadPublicSettings({ fresh })).then((s) => { if (s) setSite(s); }).catch(() => {});
+    load(false);
+    // a banner / flag saved in the back-office reaches open tabs right away (Supabase Realtime on site_settings)
+    let off = () => {};
+    import('./services/liveData').then((m) => { off = m.subscribeSettingsChanges(() => load(true)); }).catch(() => {});
+    return () => off();
   }, []);
   const banner = site?.maintenance?.enabled
     ? { key: `m:${site.maintenance.message}`, text: site.maintenance.message, level: 'danger' }

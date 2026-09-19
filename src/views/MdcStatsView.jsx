@@ -60,7 +60,7 @@ export default function MdcStatsView({ onNavigate }) {
       <div className="border-b border-[#1c2738] pb-5">
         <div className="flex items-center gap-2 text-xs font-mono text-cyan-400 uppercase tracking-wider mb-1">
           <BarChart3 className="w-4 h-4" />
-          SWGT 3MDC Statistics & Analytics Hub • ศูนย์รวมรายงานและแนวโน้มการแข่งขัน
+          3MDC Statistics & Analytics Hub • ศูนย์รวมรายงานและแนวโน้มการแข่งขัน
         </div>
         <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
           สถิติและรายงานผล 3MDC (3MDC Statistics)
@@ -113,7 +113,7 @@ export default function MdcStatsView({ onNavigate }) {
           <div className="text-2xl sm:text-3xl font-mono font-black text-purple-400 mt-1">
             100%
           </div>
-          <div className="text-xs text-slate-400 mt-1">SWGT Authentic Certified</div>
+          <div className="text-xs text-slate-400 mt-1">ข้อมูลการแข่งขันจริง</div>
         </div>
       </div>
 
@@ -204,7 +204,7 @@ export default function MdcStatsView({ onNavigate }) {
                   Monster Defense Trending (Tier List 202 ตัว)
                 </h3>
                 <p className="text-xs text-slate-400 mt-1">
-                  จัดอันดับ Tier List มอนสเตอร์สายป้องกัน SSS ถึง F ตามข้อมูล Bayesian แท้ 1:1 ของ SWGT
+                  จัดอันดับ Tier List มอนสเตอร์สายป้องกัน SSS ถึง F ตามสถิติการแข่งขันจริง (Bayesian)
                 </p>
               </div>
               <div className="pt-2 text-xs font-bold text-blue-400 flex items-center gap-1">

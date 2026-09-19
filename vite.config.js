@@ -119,6 +119,28 @@ function swmSyncServer() {
           return;
         }
 
+        // /api/live/<key> — live documents + code submissions, same handler Vercel runs
+        if (req.url.startsWith('/api/live/')) {
+          const url = new URL(req.url, 'http://localhost');
+          const key = url.pathname.replace('/api/live/', '').replace(/\/+$/, '');
+          let body = '';
+          req.on('data', (chunk) => { body += chunk; });
+          req.on('end', async () => {
+            res.setHeader('Content-Type', 'application/json; charset=utf-8');
+            try {
+              const { handleLive } = await import('./api/live/[key].js');
+              const { status, json, cache } = await handleLive({ key, method: req.method, body: body ? JSON.parse(body) : null, ip: req.socket?.remoteAddress });
+              res.statusCode = status;
+              if (cache) res.setHeader('Cache-Control', cache);
+              return res.end(JSON.stringify(json));
+            } catch (err) {
+              res.statusCode = 500;
+              return res.end(JSON.stringify({ error: err.message }));
+            }
+          });
+          return;
+        }
+
         // /api/admin/<action> — back-office API, same handler Vercel runs
         if (req.url.startsWith('/api/admin/')) {
           const url = new URL(req.url, 'http://localhost');

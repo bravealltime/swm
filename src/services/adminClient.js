@@ -28,8 +28,8 @@ export async function adminFetch(action, { method = 'GET', body, query } = {}) {
 
 let publicSettings = null;
 /** Announcement / maintenance / feature flags for everyone (cached for the session). */
-export async function loadPublicSettings() {
-  if (publicSettings) return publicSettings;
+export async function loadPublicSettings({ fresh = false } = {}) {
+  if (publicSettings && !fresh) return publicSettings;
   try {
     const res = await fetch('/api/admin/settings', { cache: 'no-store' });
     publicSettings = res.ok ? await res.json() : null;

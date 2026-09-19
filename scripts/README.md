@@ -56,6 +56,7 @@ node scripts/fill_missing_monsters.cjs         # เติมมอนสเต�
 | `fetch_ss_highdata.cjs` | swranking `monster/highdata` ต่อมอนสเตอร์ใน tier list → `swrtMonsterHighdata.json` (ซีซั่นระบุในไฟล์ ต้องแก้เมื่อเปลี่ยนซีซั่น) |
 | `syncToR2.js` (`npm run r2:sync`, `--dry-run`) | อัปโหลดรูป/ไฟล์ไป Cloudflare R2 ต้องมี `R2_*` ใน `.env` — เว็บมีโค้ดรองรับ (`src/services/r2Service.js` เปิดเมื่อตั้ง `VITE_R2_PUBLIC_URL`) แต่ตอนนี้ยังไม่ได้ตั้งค่าทั้งเครื่องนี้และ Vercel จึงยังใช้ CloudFront ของเกมตรง ๆ |
 | `sync_all_sw_data.mjs` (`npm run sync:data`) | **แค่รายงาน**: เช็กว่าต่อ swarfarm ได้, นับทีม 3MDC และ % สกิลแปลไทย — ไม่ได้ดึงหรือเขียนอะไร |
+| `publish_live_data.mjs` | เขียน JSON ที่สร้างแล้ว (tier list / cutoff / เมต้า / guardian-meta / แพตช์) ลง Supabase `live_data` ให้เว็บอ่านสดผ่าน `/api/live/<key>` โดยไม่ต้อง deploy — เขียนเฉพาะ key ที่เนื้อหาเปลี่ยน (`--force` เขียนทั้งหมด, `codes-seed` ใส่โค้ดครั้งแรก) ต้องมี `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY`; GitHub Actions รันให้ทุกชั่วโมง (`update-live-data.yml`) และหลังงานคืน |
 | `build_arena_teams.mjs` | สูตรทีมบุก/รับอารีน่า (AO/AD) ที่คัดจากคอมมูนิตี้ เขียนไว้ในไฟล์นี้เอง → `src/data/arenaMetaTeams.json` ตรวจทุกชื่อ/ตัวแทนกับ `allMonsters.json` และดึงข้อความลีดจาก `monsterSkillsData.json` (fail ถ้าสะกดผิด) ไม่มีแหล่งสถิติอารีน่าสาธารณะ จึงไม่มี % ในไฟล์ — แก้สูตรแล้วรันใหม่ (เทสต์เช็กว่า JSON ตรงกับสคริปต์) |
 
 ## กติกา

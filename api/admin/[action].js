@@ -4,6 +4,8 @@
 import { requireAdmin, userFromToken, supabaseInfo, tableStatus, getSettings, saveSettings, aiLogs, aiStats, datasetReport, deployInfo, githubInfo, workflowRuns, dispatchWorkflow } from '../_lib/admin.js';
 import { aiConfig, chat } from '../_lib/ai.js';
 import { adminSnapshots, setContributorFlag, deleteSnapshot } from '../_lib/guildRankings.js';
+import { listLive, getLive, setLive, deleteLive, listSubmissions, resolveSubmission, LIVE_KEY } from '../_lib/liveData.js';
+import { LIVE_WORKFLOW } from '../_lib/admin.js';
 
 const PUBLIC_SETTINGS_KEYS = ['announcement', 'maintenance', 'features'];
 
@@ -71,6 +73,25 @@ export async function handleAdmin({ action, method, body, token, query = {} }) {
     return r.ok ? { status: 200, json: { ok: true } } : { status: 500, json: { error: r.error } };
   }
 
+  // live data documents (what the hourly job and the code moderation write)
+  if (action === 'live-data' && method === 'GET') {
+    if (query.key) { const r = await getLive(String(query.key)); return { status: r.ok ? 200 : 404, json: r }; }
+    return { status: 200, json: await listLive() };
+  }
+  if (action === 'live-data' && method === 'POST') {
+    const key = String(body?.key || '');
+    if (!LIVE_KEY.test(key)) return { status: 400, json: { error: 'key ต้องเป็น a-z 0-9 - ยาว 2–40' } };
+    if (body?.op === 'delete') { const r = await deleteLive(key); return r.ok ? { status: 200, json: { ok: true } } : { status: 500, json: { error: r.error } }; }
+    if (body?.value === undefined || body.value === null || typeof body.value !== 'object') return { status: 400, json: { error: 'value ต้องเป็น JSON object/array' } };
+    const r = await setLive(key, body.value, auth.user.email);
+    return r.ok ? { status: 200, json: { ok: true, updatedAt: r.updatedAt } } : { status: 500, json: { error: r.error } };
+  }
+  if (action === 'code-submissions' && method === 'GET') return { status: 200, json: await listSubmissions({ status: String(query.status || 'pending'), limit: Number(query.limit) || 100 }) };
+  if (action === 'code-submissions' && method === 'POST') {
+    const r = await resolveSubmission({ id: body?.id, op: body?.op, by: auth.user.email, rewards: body?.rewards });
+    return r.ok ? { status: 200, json: { ok: true } } : { status: 400, json: { error: r.error } };
+  }
+
   if (action === 'actions' && method === 'POST') {
     const what = body?.action;
     if (what === 'ping-ai') {
@@ -82,6 +103,10 @@ export async function handleAdmin({ action, method, body, token, query = {} }) {
       } catch (err) {
         return { status: 200, json: { ok: false, ms: Date.now() - t0, error: err.message } };
       }
+    }
+    if (what === 'refresh-live') {
+      const r = await dispatchWorkflow({}, LIVE_WORKFLOW);
+      return { status: r.ok ? 200 : 400, json: r.ok ? { ok: true, message: 'สั่งรีเฟรชข้อมูลสดแล้ว — ปกติเสร็จใน 2–3 นาที หน้าเว็บอัปเดตเองโดยไม่ต้อง deploy' } : { error: r.error } };
     }
     if (what === 'refresh-data') {
       const r = await dispatchWorkflow({ pages: String(body?.pages || 30) });

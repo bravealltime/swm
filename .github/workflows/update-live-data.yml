@@ -1,0 +1,37 @@
+name: Update live data
+
+# Hourly: refresh the small RTA datasets (tier list, meta pick/win/ban, rank cutoffs) and publish
+# them to Supabase `live_data`. Nothing is committed and nothing is deployed — the site reads
+# /api/live/<key> and open tabs pick the change up through Supabase Realtime. The heavy player
+# index still comes from the nightly "Update SWRT data" job.
+on:
+  schedule:
+    - cron: '17 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: update-live-data
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      - name: Tier list, meta stats, rank cutoffs
+        run: node scripts/extract_swrt_data.cjs
+
+      - name: Publish to live_data (only keys whose content changed)
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: node scripts/publish_live_data.mjs rta-tierlist rta-cutoffs rta-meta codes-seed

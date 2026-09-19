@@ -314,7 +314,10 @@ export async function workflowRuns(limit = 8) {
   };
 }
 
-export async function dispatchWorkflow(inputs = {}) {
-  const { workflow } = githubInfo();
+export async function dispatchWorkflow(inputs = {}, workflowFile) {
+  const workflow = workflowFile || githubInfo().workflow;
   return gh(`/actions/workflows/${workflow}/dispatches`, { method: 'POST', body: { ref: 'main', inputs } });
 }
+
+/** The hourly job that refreshes live_data without a commit (see .github/workflows/update-live-data.yml). */
+export const LIVE_WORKFLOW = 'update-live-data.yml';

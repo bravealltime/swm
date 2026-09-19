@@ -305,7 +305,7 @@ export default function MonsterTierListView({
             <div className="p-3 bg-[#0c121c] rounded-xl border border-[#1b283d] text-xs text-slate-300 space-y-1">
               <div className="font-bold text-blue-400 flex items-center gap-1.5">
                 <Info className="w-4 h-4" />
-                <span>เกณฑ์การจัดอันดับของ SWGT:</span>
+                <span>เกณฑ์การจัดอันดับ:</span>
               </div>
               <p className="text-xs text-slate-400 leading-relaxed">
                 จัดอยู่ใน <strong>Tier {selectedMonster.tierId}</strong> จากการเปรียบเทียบ Pick Rate ({selectedMonster.pickShare}) คู่กับ 2x Win Rate ({selectedMonster.winRate}) ผ่านสูตร Bayesian Theorem เพื่อตัดมอนสเตอร์ที่ชนะฟลุกแต่คนเล่นน้อยออกอย่างเป็นธรรม

@@ -58,6 +58,15 @@ jobs:
           AI_API_KEY: ${{ secrets.AI_API_KEY }}
         run: node scripts/ai_player_summaries.mjs --limit=150
 
+      # The same documents go live immediately; the commit below keeps the bundled fallback fresh
+      - name: Publish to live_data
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          if [ -z "$SUPABASE_SERVICE_ROLE_KEY" ]; then echo "no SUPABASE secrets — skipped"; exit 0; fi
+          node scripts/publish_live_data.mjs
+
       - name: Commit refreshed data
         run: |
           git config user.name "swm-data-bot"
