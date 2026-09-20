@@ -58,9 +58,9 @@ describe('monsterLivingData', () => {
   });
 
   it('returns safe fallback values for non-meta monsters without crashing', () => {
-    const data = getMonsterLivingData('Lapis');
+    const data = getMonsterLivingData('Alicia');
     expect(data).toBeDefined();
-    expect(data.monster.name).toBe('Lapis');
+    expect(data.monster.name).toBe('Alicia');
     expect(data.guardianStats).toBeNull();
     expect(data.duos).toHaveLength(0);
     expect(data.builds).toBeDefined();
