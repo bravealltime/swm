@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Sparkles, Loader2, AlertTriangle, RotateCcw, LogIn } from 'lucide-react';
 import { askAdvisor, requestLogin, quotaLabel } from '../services/aiClient';
 import AiAnswer from './AiAnswer';

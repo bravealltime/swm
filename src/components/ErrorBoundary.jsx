@@ -4,10 +4,15 @@ import { AlertTriangle, RotateCcw } from 'lucide-react';
 // Keeps a crash inside one view from blanking the whole app.
 // The parent passes a `key` per route so navigating away resets it.
 export default class ErrorBoundary extends React.Component {
-  state = { error: null };
+  state = { error: null, errorInfo: null };
 
   static getDerivedStateFromError(error) {
     return { error };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error('[ErrorBoundary caught error]:', error, errorInfo);
+    this.setState({ errorInfo });
   }
 
   render() {
@@ -18,6 +23,11 @@ export default class ErrorBoundary extends React.Component {
         <AlertTriangle className="w-10 h-10 text-rose-400 mx-auto" />
         <h2 className="text-lg font-bold text-white">หน้านี้เกิดข้อผิดพลาด</h2>
         <p className="text-sm text-slate-400">ลองโหลดหน้าใหม่ หรือกลับไปหน้าแรกแล้วลองอีกครั้ง</p>
+        {this.state.error?.message && (
+          <div className="text-left bg-black/40 border border-rose-500/20 rounded-xl p-3 text-xs text-rose-300 font-mono overflow-x-auto">
+            {this.state.error.message}
+          </div>
+        )}
         <div className="flex items-center justify-center gap-3">
           <button
             onClick={() => window.location.reload()}
