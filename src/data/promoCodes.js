@@ -1,5 +1,27 @@
 export const PROMO_CODES = [
   {
+    id: 'code-s38l3gendleggo',
+    code: 'S38L3GENDLEGGO',
+    dateAdded: '20 ก.ย. 2026',
+    expiry: 'มีผลใช้งานอยู่',
+    status: 'active',
+    upvotes: 185,
+    downvotes: 3,
+    rewards: [
+      { 
+        name: 'พลังงาน (Energy)', 
+        amount: '100', 
+        imageUrl: 'https://do9d4mpqk497d.cloudfront.net/common/images/summoners_war_query_jp/energy.png' 
+      },
+      { 
+        name: 'คัมภีร์เวทมนตร์ (Mystical Scroll)', 
+        amount: '5', 
+        imageUrl: 'https://do9d4mpqk497d.cloudfront.net/common/images/summoners_war_query_jp/scroll_mystical.png' 
+      },
+    ],
+    redeemUrl: 'http://withhive.me/313/S38L3GENDLEGGO'
+  },
+  {
     id: 'code-1',
     code: '11DINGSHANGJIAN14',
     dateAdded: '12 ก.ย. 2026',

@@ -50,9 +50,14 @@ export async function deleteLive(key) {
 const CODE_RE = /^[A-Z0-9]{4,40}$/;
 const ipHash = (ip) => (ip ? crypto.createHash('sha256').update(String(ip)).digest('hex').slice(0, 16) : null);
 
-/** Normalises a submitted code: upper-case, no spaces; null when it cannot be a redeem code. */
+/** Normalises a submitted code: extracts from URL if needed, upper-case, no spaces; null when invalid. */
 export function normalizeCode(input) {
-  const code = String(input || '').trim().toUpperCase().replace(/\s+/g, '');
+  let text = String(input || '').trim();
+  const hive = text.match(/(?:https?:\/\/)?(?:www\.)?withhive\.me\/313\/([a-zA-Z0-9_-]+)/i);
+  if (hive) text = hive[1];
+  const swq = text.match(/(?:https?:\/\/)?(?:www\.)?swq\.jp\/[^\s]*[?&]s=([a-zA-Z0-9_-]+)/i);
+  if (swq) text = swq[1];
+  const code = text.toUpperCase().replace(/\s+/g, '');
   return CODE_RE.test(code) ? code : null;
 }
 

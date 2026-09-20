@@ -1,5 +1,22 @@
 [
   {
+    "code": "S38L3GENDLEGGO",
+    "hiveUrl": "http://withhive.me/313/S38L3GENDLEGGO",
+    "upvotes": 185,
+    "downvotes": 3,
+    "rewards": [
+      {
+        "title": "Energy x100",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/summoners_war_query_jp/energy.png"
+      },
+      {
+        "title": "Mystical Scroll x5",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/summoners_war_query_jp/scroll_mystical.png"
+      }
+    ],
+    "status": "Active (ใช้งานได้)"
+  },
+  {
     "code": "11DINGSHANGJIAN14",
     "hiveUrl": "http://withhive.me/313/11DINGSHANGJIAN14",
     "upvotes": 126,

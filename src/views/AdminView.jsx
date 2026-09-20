@@ -6,6 +6,7 @@ import {
 import { useAuth } from '../contexts/AuthContext';
 import { adminFetch } from '../services/adminClient';
 import * as aegisLive from '../services/aegisLive';
+import { extractPromoCode, normalizeRewardText, parsePromoInput, QUICK_REWARD_PRESETS } from '../utils/promoCodeParser';
 
 const card = 'rounded-2xl border border-white/[0.08] bg-[#0a0f19]/80';
 const fmtTime = (iso) => (iso ? new Date(iso).toLocaleString('th-TH', { dateStyle: 'short', timeStyle: 'short' }) : '-');
@@ -552,24 +553,72 @@ function LivePanel() {
   };
   const refreshLive = () => run('refresh', () => adminFetch('actions', { method: 'POST', body: { action: 'refresh-live' } }));
   const resolve = (id, op) => run(`sub-${id}`, () => adminFetch('code-submissions', { method: 'POST', body: { id, op, rewards: rewardsById[id] || '' } }));
+  const handleCodeChange = (val) => {
+    if (val.includes('/') || val.includes(':') || val.includes('-') || val.includes('withhive') || val.includes('swq')) {
+      const parsed = parsePromoInput(val);
+      if (parsed.code) {
+        setNewCode(parsed.code);
+        if (parsed.rewardsText && !newRewards) {
+          setNewRewards(parsed.rewardsText);
+        }
+        return;
+      }
+    }
+    setNewCode(val);
+  };
+
+  const handleCodePaste = (e) => {
+    const text = e.clipboardData?.getData('text') || '';
+    if (text.includes('withhive.me') || text.includes('swq.jp') || text.includes('/313/')) {
+      e.preventDefault();
+      const parsed = parsePromoInput(text);
+      if (parsed.code) {
+        setNewCode(parsed.code);
+        if (parsed.rewardsText) {
+          setNewRewards(parsed.rewardsText);
+        }
+      }
+    }
+  };
+
+  const addPresetReward = (presetText) => {
+    setNewRewards((prev) => {
+      const trimmed = prev.trim();
+      if (!trimmed) return presetText;
+      if (trimmed.includes(presetText)) return trimmed;
+      return `${trimmed}, ${presetText}`;
+    });
+  };
+
   const addCode = async (e) => {
     e.preventDefault();
-    const code = newCode.trim().toUpperCase().replace(/\s+/g, '');
+    const code = extractPromoCode(newCode);
     if (!code) return;
+    const cleanRewards = normalizeRewardText(newRewards) || newRewards.trim();
     await run('add', async () => {
       const cur = await adminFetch('live-data', { query: { key: 'codes' } }).catch(() => null);
-      const codes = Array.isArray(cur?.value?.codes) ? cur.value.codes.filter((c) => String(c.code).toUpperCase() !== code) : [];
-      codes.unshift({ id: `code-${code.toLowerCase()}`, code, dateAdded: new Date().toISOString().slice(0, 10), expiry: 'มีผลใช้งานอยู่', status: 'active', rewardsText: newRewards.trim(), rewards: [], redeemUrl: `http://withhive.me/313/${code}` });
+      const codes = Array.isArray(cur?.value?.codes) ? cur.value.codes.filter((c) => extractPromoCode(c.code) !== code) : [];
+      codes.unshift({
+        id: `code-${code.toLowerCase()}`,
+        code,
+        dateAdded: new Date().toISOString().slice(0, 10),
+        expiry: 'มีผลใช้งานอยู่',
+        status: 'active',
+        rewardsText: cleanRewards,
+        rewards: [],
+        redeemUrl: `http://withhive.me/313/${code}`
+      });
       await adminFetch('live-data', { method: 'POST', body: { key: 'codes', value: { codes, updatedAt: new Date().toISOString() } } });
       setNewCode(''); setNewRewards('');
       return { message: `โค้ด ${code} ขึ้นเว็บแล้ว` };
     });
   };
   const removeCode = (code) => run(`rm-${code}`, async () => {
+    const cleanTarget = extractPromoCode(code);
     const cur = await adminFetch('live-data', { query: { key: 'codes' } });
-    const codes = (cur?.value?.codes || []).filter((c) => String(c.code).toUpperCase() !== code);
+    const codes = (cur?.value?.codes || []).filter((c) => c.code !== code && extractPromoCode(c.code) !== cleanTarget);
     await adminFetch('live-data', { method: 'POST', body: { key: 'codes', value: { codes, updatedAt: new Date().toISOString() } } });
-    return { message: `ลบโค้ด ${code} แล้ว` };
+    return { message: `ลบโค้ด ${cleanTarget || code} แล้ว` };
   });
   const [codesDoc, setCodesDoc] = useState(null);
   useEffect(() => { adminFetch('live-data', { query: { key: 'codes' } }).then(setCodesDoc).catch(() => setCodesDoc(null)); }, [live]);
@@ -610,20 +659,56 @@ function LivePanel() {
       <div className="grid lg:grid-cols-2 gap-4">
         <div className={`${card} p-4 space-y-3`}>
           <div className="text-sm font-bold text-white flex items-center gap-2"><Zap className="w-4 h-4 text-amber-300" /> เพิ่มโค้ดแจกไอเทม (ขึ้นเว็บทันที)</div>
-          <form onSubmit={addCode} className="flex flex-col sm:flex-row gap-2">
-            <input value={newCode} onChange={(e) => setNewCode(e.target.value)} placeholder="โค้ด เช่น SW2026GIFT" className="flex-1 bg-[#0d1422] border border-white/10 focus:border-amber-400 rounded-xl px-3 py-2 text-sm text-white font-mono uppercase placeholder-slate-500 focus:outline-none" />
-            <input value={newRewards} onChange={(e) => setNewRewards(e.target.value)} placeholder="ของรางวัล เช่น Energy x100, Scroll x3" className="flex-1 bg-[#0d1422] border border-white/10 focus:border-amber-400 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none" />
-            <button type="submit" disabled={busy === 'add'} className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:opacity-50 text-slate-950 text-xs font-bold cursor-pointer">{busy === 'add' ? '…' : 'เพิ่ม'}</button>
+          <div className="text-xs text-slate-400">💡 วางลิงก์ WithHive (เช่น <code>http://withhive.me/313/S38L3GENDLEGGO</code>) หรือข้อความโพสต์ ระบบจะตัดรหัสและของรางวัลให้อัตโนมัติ</div>
+          <form onSubmit={addCode} className="space-y-2">
+            <div className="flex flex-col sm:flex-row gap-2">
+              <input
+                value={newCode}
+                onChange={(e) => handleCodeChange(e.target.value)}
+                onPaste={handleCodePaste}
+                placeholder="วางลิงก์ WithHive หรือพิมพ์โค้ด"
+                className="flex-1 bg-[#0d1422] border border-white/10 focus:border-amber-400 rounded-xl px-3 py-2 text-sm text-white font-mono uppercase placeholder-slate-500 focus:outline-none"
+              />
+              <input
+                value={newRewards}
+                onChange={(e) => setNewRewards(e.target.value)}
+                placeholder="ของรางวัล เช่น Energy x100, Scroll x5"
+                className="flex-1 bg-[#0d1422] border border-white/10 focus:border-amber-400 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none"
+              />
+              <button
+                type="submit"
+                disabled={busy === 'add'}
+                className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:opacity-50 text-slate-950 text-xs font-bold cursor-pointer shrink-0"
+              >
+                {busy === 'add' ? '…' : 'เพิ่ม'}
+              </button>
+            </div>
+            <div className="flex flex-wrap items-center gap-1.5 pt-0.5 text-[11px]">
+              <span className="text-slate-400 mr-0.5">เลือกรางวัลคลิกเดียว:</span>
+              {QUICK_REWARD_PRESETS.map((p) => (
+                <button
+                  key={p.label}
+                  type="button"
+                  onClick={() => addPresetReward(p.text)}
+                  className="px-2 py-0.5 rounded-md bg-white/[0.04] hover:bg-amber-400/20 text-slate-300 hover:text-amber-200 border border-white/[0.08] transition-colors cursor-pointer"
+                >
+                  {p.label}
+                </button>
+              ))}
+            </div>
           </form>
           <div className="space-y-1 max-h-72 overflow-y-auto">
-            {(codesDoc?.value?.codes || []).map((c) => (
-              <div key={c.code} className="flex items-center justify-between gap-2 px-3 py-1.5 rounded-lg bg-white/[0.03] text-xs">
-                <span className="font-mono font-bold text-emerald-300">{c.code}</span>
-                <span className="text-slate-400 truncate flex-1">{c.rewardsText || (c.rewards || []).map((r) => `${r.name} x${r.amount}`).join(', ')}</span>
-                <span className="text-slate-500 shrink-0">{c.dateAdded}</span>
-                <button onClick={() => removeCode(String(c.code).toUpperCase())} disabled={busy === `rm-${String(c.code).toUpperCase()}`} className="p-1 rounded text-slate-500 hover:text-rose-300 cursor-pointer" title="ลบออกจากเว็บ"><Trash2 className="w-3.5 h-3.5" /></button>
-              </div>
-            ))}
+            {(codesDoc?.value?.codes || []).map((c) => {
+              const displayCode = extractPromoCode(c.code) || c.code;
+              return (
+                <div key={c.code} className="flex items-center justify-between gap-2 px-3 py-1.5 rounded-lg bg-white/[0.03] text-xs">
+                  <span className="font-mono font-bold text-emerald-300">{displayCode}</span>
+                  <span className="text-slate-400 truncate flex-1">{c.rewardsText || (c.rewards || []).map((r) => `${r.name} x${r.amount}`).join(', ') || '(ไม่มีของรางวัล)'}</span>
+                  <span className="text-slate-500 shrink-0">{c.dateAdded}</span>
+                  <button onClick={() => removeCode(c.code)} disabled={busy === `rm-${c.code}`} className="p-1 rounded text-slate-500 hover:text-rose-300 cursor-pointer" title="ลบออกจากเว็บ"><Trash2 className="w-3.5 h-3.5" /></button>
+                </div>
+              );
+            })}
             {codesDoc && !(codesDoc.value?.codes || []).length && <div className="text-xs text-slate-500">ยังไม่มีโค้ดบนเว็บ — รัน <code>node scripts/publish_live_data.mjs codes-seed</code> หรือเพิ่มด้านบน</div>}
           </div>
         </div>

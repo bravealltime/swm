@@ -15,6 +15,7 @@ import { PROMO_CODES } from '../data/promoCodes';
 import { useLocalSet } from '../hooks/useLocalStorage';
 import { useLiveData } from '../hooks/useLiveData';
 import { submitPromoCode } from '../services/liveData';
+import { extractPromoCode, normalizeRewardText, parsePromoInput, QUICK_REWARD_PRESETS } from '../utils/promoCodeParser';
 
 // The live list is admin-curated (visitor submissions are approved in the back-office); the
 // bundled PROMO_CODES only show until the first live version arrives.
@@ -61,11 +62,12 @@ export default function PromoCodesView() {
   // A submitted code goes to the moderation queue; it appears for everyone once an admin approves it
   const handleAddCode = async (e) => {
     e.preventDefault();
-    const code = newCodeInput.trim().toUpperCase();
+    const code = extractPromoCode(newCodeInput);
     if (!code || submitting) return;
     setSubmitting(true);
+    const cleanRewards = normalizeRewardText(newRewardInput) || newRewardInput.trim();
     try {
-      const res = await submitPromoCode(code, newRewardInput.trim());
+      const res = await submitPromoCode(code, cleanRewards);
       setNewCodeInput('');
       setNewRewardInput('');
       setShowAddModal(false);
@@ -75,6 +77,43 @@ export default function PromoCodesView() {
     } finally {
       setSubmitting(false);
     }
+  };
+
+  const handleCodeInputChange = (val) => {
+    if (val.includes('/') || val.includes(':') || val.includes('-') || val.includes('withhive') || val.includes('swq')) {
+      const parsed = parsePromoInput(val);
+      if (parsed.code) {
+        setNewCodeInput(parsed.code);
+        if (parsed.rewardsText && !newRewardInput) {
+          setNewRewardInput(parsed.rewardsText);
+        }
+        return;
+      }
+    }
+    setNewCodeInput(val);
+  };
+
+  const handleCodeInputPaste = (e) => {
+    const text = e.clipboardData?.getData('text') || '';
+    if (text.includes('withhive.me') || text.includes('swq.jp') || text.includes('/313/')) {
+      e.preventDefault();
+      const parsed = parsePromoInput(text);
+      if (parsed.code) {
+        setNewCodeInput(parsed.code);
+        if (parsed.rewardsText) {
+          setNewRewardInput(parsed.rewardsText);
+        }
+      }
+    }
+  };
+
+  const addPresetReward = (presetText) => {
+    setNewRewardInput((prev) => {
+      const trimmed = prev.trim();
+      if (!trimmed) return presetText;
+      if (trimmed.includes(presetText)) return trimmed;
+      return `${trimmed}, ${presetText}`;
+    });
   };
 
   return (
@@ -284,15 +323,16 @@ export default function PromoCodesView() {
             <form onSubmit={handleAddCode} className="space-y-4">
               <div>
                 <label className="block text-xs font-bold text-slate-300 mb-1">
-                  รหัสโค้ด (Code):
+                  รหัสโค้ด (หรือวางลิงก์ WithHive เช่น http://withhive.me/313/...):
                 </label>
                 <input
                   type="text"
                   required
                   className="w-full bg-[#0c121c] border border-[#1d2b3f] rounded-xl px-3.5 py-2.5 text-base text-white uppercase placeholder-slate-500 focus:outline-none focus:border-blue-500 font-mono font-bold"
-                  placeholder="เช่น SW2026SPECIAL"
+                  placeholder="เช่น SW2026SPECIAL หรือวางลิงก์ WithHive"
                   value={newCodeInput}
-                  onChange={(e) => setNewCodeInput(e.target.value)}
+                  onChange={(e) => handleCodeInputChange(e.target.value)}
+                  onPaste={handleCodeInputPaste}
                 />
               </div>
 
@@ -303,10 +343,23 @@ export default function PromoCodesView() {
                 <input
                   type="text"
                   className="w-full bg-[#0c121c] border border-[#1d2b3f] rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500"
-                  placeholder="เช่น คัมภีร์เวทมนตร์ 3 ใบ"
+                  placeholder="เช่น คัมภีร์เวทมนตร์ 5 ใบ หรือเลือกด้านล่าง"
                   value={newRewardInput}
                   onChange={(e) => setNewRewardInput(e.target.value)}
                 />
+                <div className="flex flex-wrap items-center gap-1.5 pt-2 text-[11px]">
+                  <span className="text-slate-400">เลือกด่วน:</span>
+                  {QUICK_REWARD_PRESETS.map((p) => (
+                    <button
+                      key={p.label}
+                      type="button"
+                      onClick={() => addPresetReward(p.text)}
+                      className="px-2 py-0.5 rounded-md bg-white/[0.05] hover:bg-blue-500/20 text-slate-300 hover:text-blue-200 border border-white/10 transition-colors cursor-pointer"
+                    >
+                      {p.label}
+                    </button>
+                  ))}
+                </div>
               </div>
 
               <div className="flex items-center justify-end gap-2.5 pt-2">
