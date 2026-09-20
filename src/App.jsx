@@ -5,7 +5,7 @@ import ErrorBoundary from './components/ErrorBoundary';
 import SwmLogo from './components/SwmLogo';
 import { AuthProvider } from './contexts/AuthContext';
 import { Home, Shield, Trophy, Search, Menu, Loader2, CheckCircle2 } from 'lucide-react';
-import { buildUrl, parseLocation, normalizeView, titleFor } from './router';
+import { buildUrl, parseLocation, normalizeView, titleFor, descriptionFor } from './router';
 import { saveBox } from './utils/boxStorage';
 
 // Every view (and the JSON it imports) is its own chunk, so the first paint
@@ -165,7 +165,15 @@ function AppContent() {
   }, []);
 
   useEffect(() => {
-    document.title = titleFor(currentView);
+    const title = titleFor(currentView);
+    const desc = descriptionFor(currentView);
+    document.title = title;
+    const descEl = document.querySelector('meta[name="description"]');
+    if (descEl) descEl.setAttribute('content', desc);
+    const ogTitleEl = document.querySelector('meta[property="og:title"]');
+    if (ogTitleEl) ogTitleEl.setAttribute('content', title);
+    const ogDescEl = document.querySelector('meta[property="og:description"]');
+    if (ogDescEl) ogDescEl.setAttribute('content', desc);
   }, [currentView]);
 
   // Global shortcut: Ctrl/Cmd + K toggles quick search
