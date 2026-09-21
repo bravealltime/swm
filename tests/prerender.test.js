@@ -11,6 +11,9 @@ const TEMPLATE = `<!doctype html>
     <title>SWM site</title>
     <meta name="description" content="site-wide description">
     <meta property="og:title" content="site og">
+    <link rel="canonical" href="${SITE_URL}/" />
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="site twitter title">
     <script type="module" src="/assets/index-abc.js"></script>
   </head><body><div id="root"></div></body></html>`;
 
@@ -29,7 +32,11 @@ describe('monsterPage', () => {
     expect(html.match(/<meta name="description"/g)).toHaveLength(1);
     expect(html).not.toContain('site-wide description');
     expect(html).not.toContain('site og');
+    expect(html).not.toContain('site twitter title');
+    // exactly one canonical — the monster's; the template's site-root canonical must be gone
+    expect(html.match(/<link rel="canonical"/g)).toHaveLength(1);
     expect(html).toContain(`<link rel="canonical" href="${SITE_URL}/monster/lushen">`);
+    expect(html.match(/name="twitter:/g)).toHaveLength(1);
     expect(html).toContain('<meta property="og:image" content="https://cdn/x.png">');
   });
 

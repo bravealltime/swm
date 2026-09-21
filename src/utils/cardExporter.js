@@ -591,8 +591,8 @@ export async function exportMonsterCard({ monster, wizardName = 'Summoner', prev
     ctx.fillText(`(ชื่อไทย: ${monster.thaiName})`, startX, 500);
   }
 
-  // Rune Sets Banner
-  const sets = monster.runeSets || monster.sets || ['Violent', 'Will'];
+  // Rune Sets Banner — only show sets that are actually known, never invent a recommendation
+  const sets = monster.runeSets || monster.sets || [];
   ctx.fillStyle = '#1e293b';
   ctx.fillRect(startX, 530, 260, 48);
   ctx.strokeStyle = '#334155';
@@ -602,7 +602,7 @@ export async function exportMonsterCard({ monster, wizardName = 'Summoner', prev
   ctx.font = 'bold 14px "SF Pro Display", sans-serif';
   ctx.fillText('RUNE SETS:', startX + 15, 560);
   ctx.fillStyle = '#ffffff';
-  ctx.fillText(sets.join(' / '), startX + 105, 560);
+  ctx.fillText(sets.length ? sets.join(' / ') : 'ยังไม่ระบุ', startX + 105, 560);
 
   // Right Column - Stats Grid (340 to 1040)
   const statX = 350;

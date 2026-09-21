@@ -90,7 +90,7 @@ export function monsterPage({ monster, rec, template, livingData: customLivingDa
     `<meta property="og:url" content="${attr(url)}">`,
     image ? `<meta property="og:image" content="${attr(image)}">` : '',
     `<meta name="twitter:card" content="summary">`,
-    `<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>`,
+    `<script type="application/ld+json">${JSON.stringify(jsonLd).replace(/</g, '\\u003c')}</script>`,
   ].filter(Boolean).join('\n    ');
 
   const skillHtml = skills.map((s, i) => {
@@ -345,8 +345,10 @@ export function monsterPage({ monster, rec, template, livingData: customLivingDa
     </main>`;
 
   return template
-    // the site-wide description / Open Graph tags give way to the monster's own
-    .replace(/\s*<meta (?:name|property)="(?:description|og:[^"]+|twitter:card)"[^>]*>/g, '')
+    // the site-wide description / Open Graph / twitter / canonical tags give way to the monster's own
+    // (leaving the template's <link rel="canonical"> in place would emit two conflicting canonicals)
+    .replace(/\s*<meta (?:name|property)="(?:description|og:[^"]+|twitter:[^"]+)"[^>]*>/g, '')
+    .replace(/\s*<link rel="canonical"[^>]*\/?>/g, '')
     .replace(/<title>[\s\S]*?<\/title>/, head)
     .replace('<div id="root"></div>', `<div id="root">${body}\n    </div>`);
 }

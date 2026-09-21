@@ -50,7 +50,7 @@ export default function QuizView({ onNavigate }) {
   const [i, setI] = useState(0);
   const [results, setResults] = useState([]);
   const [picked, setPicked] = useState(null);
-  const [saved] = useState(() => storage.get(`swm:quiz:daily:${today}`, null));
+  const [saved, setSaved] = useState(() => storage.get(`swm:quiz:daily:${today}`, null));
   const [streak, setStreak] = useState(() => storage.get('swm:quiz:streak', { last: '', count: 0 }));
   const [copied, setCopied] = useState(false);
 
@@ -67,6 +67,7 @@ export default function QuizView({ onNavigate }) {
 
   // the daily result is stored once when the last answer lands, and the day streak with it
   const recordDaily = (finalResults) => {
+    setSaved({ results: finalResults });
     storage.set(`swm:quiz:daily:${today}`, { results: finalResults });
     setStreak((s) => {
       if (s.last === today) return s;

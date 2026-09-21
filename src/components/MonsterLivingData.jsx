@@ -74,8 +74,8 @@ export default function MonsterLivingData({
         monster: {
           ...data.monster,
           ...equippedStats,
-          runeSets: builds?.sets || ['Violent', 'Will'],
-          sets: builds?.sets || ['Violent', 'Will'],
+          runeSets: builds?.sets || [],
+          sets: builds?.sets || [],
         },
         wizardName,
       });
@@ -743,7 +743,7 @@ export default function MonsterLivingData({
             })
           ) : (
             <div className="rounded-xl p-4 bg-white/[0.02] border border-white/[0.05] text-center text-xs text-slate-400">
-              ยังไม่มีการปรับเปลี่ยนสกิล/สเตตัสในรอบ 5 แพตช์สมดุลล่าสุด (Patch #88 - #92)
+              ยังไม่มีประวัติการปรับสมดุลของมอนสเตอร์นี้ในชุดข้อมูลแพตช์ล่าสุด
             </div>
           )}
         </div>

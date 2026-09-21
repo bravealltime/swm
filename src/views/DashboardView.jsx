@@ -25,6 +25,7 @@ import {
 } from 'lucide-react';
 import MonsterAvatar from '../components/MonsterAvatar';
 import { PROMO_CODES } from '../data/promoCodes';
+import { useLiveData } from '../hooks/useLiveData';
 import { useGuildRankings } from '../hooks/useGuildRankings';
 import { SERVERS } from '../utils/guildRankings';
 import { getR2AvatarUrl } from '../services/r2Service';
@@ -109,9 +110,11 @@ export default function DashboardView({ onNavigate }) {
     });
   }, []);
 
+  const activeCodesLive = useLiveData('codes', PROMO_CODES, { pick: (doc) => (Array.isArray(doc?.codes) ? doc.codes : null) });
   const activeCodes = useMemo(() => {
-    return PROMO_CODES.filter(c => c.status === 'active').slice(0, 4);
-  }, []);
+    return activeCodesLive.data.filter((c) => c.status === 'active').slice(0, 4);
+  }, [activeCodesLive.data]);
+  const activeCodeCount = useMemo(() => activeCodesLive.data.filter((c) => c.status === 'active').length, [activeCodesLive.data]);
 
   // The big datasets are only needed for two preview widgets, so they are
   // fetched after first paint instead of being part of the home-page bundle.
@@ -465,7 +468,7 @@ export default function DashboardView({ onNavigate }) {
             </div>
             <div className="p-3 rounded-2xl bg-white/[0.02] border border-white/[0.04]">
               <div className="text-xs text-slate-400 font-medium">โค้ดไอเทมแจกฟรี</div>
-              <div className="text-lg sm:text-xl font-black text-white mt-0.5">5 โค้ดแอคทีฟ</div>
+              <div className="text-lg sm:text-xl font-black text-white mt-0.5">{activeCodeCount} โค้ดแอคทีฟ</div>
               <div className="text-xs text-purple-400 font-medium">รับได้ทันทีในเกม</div>
             </div>
           </div>
@@ -1117,8 +1120,8 @@ export default function DashboardView({ onNavigate }) {
                     </span>
                   </div>
                 ) : (
-                  <div className="text-xs text-slate-300 p-2 bg-white/[0.03] rounded-xl">
-                    Galleon + Clara + Leah (Speed Cleave 95%)
+                  <div className="text-xs text-slate-400 p-2 bg-white/[0.03] rounded-xl">
+                    ยังไม่มีสูตรแก้ทางจากฐานข้อมูล 3MDC สำหรับทีมนี้ — ลองค้นหาในหน้า 3MDC ด้านล่าง
                   </div>
                 )}
               </div>

@@ -69,16 +69,23 @@ async function rest(pathname, { method = 'GET', body, query = '' } = {}) {
   if (!key) return { ok: false, status: 0, error: 'ไม่มี SUPABASE_SERVICE_ROLE_KEY บนเซิร์ฟเวอร์', data: null };
   // The tables live in the `public` schema; the project's Data API may default to another one
   const schema = env('SUPABASE_SCHEMA') || 'public';
-  const res = await fetch(`${url}/rest/v1/${pathname}${query}`, {
-    method,
-    headers: {
-      apikey: key, Authorization: `Bearer ${key}`, 'Content-Type': 'application/json',
-      'Accept-Profile': schema, 'Content-Profile': schema,
-      Prefer: method === 'POST' ? 'resolution=merge-duplicates,return=representation' : 'return=representation',
-    },
-    body: body ? JSON.stringify(body) : undefined,
-  });
-  const text = await res.text();
+  // fetch() rejects on DNS/connection failures — every caller expects an {ok:false} object, not a
+  // thrown error, so a network blip must degrade like any other failed call instead of a 500.
+  let res, text;
+  try {
+    res = await fetch(`${url}/rest/v1/${pathname}${query}`, {
+      method,
+      headers: {
+        apikey: key, Authorization: `Bearer ${key}`, 'Content-Type': 'application/json',
+        'Accept-Profile': schema, 'Content-Profile': schema,
+        Prefer: method === 'POST' ? 'resolution=merge-duplicates,return=representation' : 'return=representation',
+      },
+      body: body ? JSON.stringify(body) : undefined,
+    });
+    text = await res.text();
+  } catch (err) {
+    return { ok: false, status: 0, error: 'SUPABASE_UNREACHABLE', detail: `network: ${err?.message || err}`, data: null };
+  }
   let data = null;
   try { data = text ? JSON.parse(text) : null; } catch { data = text; }
   if (!res.ok) {

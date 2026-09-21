@@ -490,7 +490,7 @@ function EmptyState({ onFile, onWatch, onLoadDemo, onLive }) {
 
 function BoxHeader({ box, onNavigate }) {
   const units = box?.units || [];
-  const wizard = box?.wizard || { name: 'PedictU', level: 100, country: 'TH' };
+  const wizard = box?.wizard || {};
   const nat5 = units.filter((u) => (monsterOf(u.masterId)?.stars || u.naturalStars || 0) >= 5).length;
   const six = units.filter((u) => u.stars === 6).length;
   const runes = box?.runes?.length || 0;
@@ -500,8 +500,8 @@ function BoxHeader({ box, onNavigate }) {
         <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-2xl">{flagFromCountry(wizard.country)}</div>
         <div>
           <div className="text-xl sm:text-2xl font-black text-white flex items-center gap-2 flex-wrap">
-            {wizard.name}
-            <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-white/[0.05] border border-white/10 text-slate-300">Lv.{wizard.level}</span>
+            {wizard.name || 'ผู้เล่นของฉัน'}
+            <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-white/[0.05] border border-white/10 text-slate-300">Lv.{wizard.level ?? '—'}</span>
             {wizard.guild && <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-300">{wizard.guild}</span>}
             {box?.isDemo && (
               <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 flex items-center gap-1">
@@ -529,8 +529,9 @@ function BoxHeader({ box, onNavigate }) {
           </div>
         ))}
       </div>
-      <button onClick={() => onNavigate('player-tracker', { initialPlayer: box.wizard.name })}
-        className="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold flex items-center justify-center gap-2 cursor-pointer shrink-0">
+      <button onClick={() => wizard.name && onNavigate('player-tracker', { initialPlayer: wizard.name })}
+        disabled={!wizard.name}
+        className="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:opacity-40 disabled:hover:bg-amber-500 text-slate-950 text-xs font-bold flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed shrink-0">
         <Search className="w-4 h-4" /> ดูสถิติ RTA ของฉัน <ChevronRight className="w-4 h-4" />
       </button>
     </div>

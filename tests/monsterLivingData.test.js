@@ -1,5 +1,17 @@
 import { describe, it, expect } from 'vitest';
 import { getMonsterLivingData, calculateGuardianReadiness } from '../src/utils/monsterLivingData.js';
+import { MONSTERS } from '../src/data/monsters.js';
+import guardianMeta from '../src/data/swrtGuardianMeta.json' with { type: 'json' };
+
+// หามอนสเตอร์ที่ไม่อยู่ในเมต้า Guardian ณ ตอนรัน — ข้อมูลเมต้ารีเฟรชทุกคืน
+// ห้าม hardcode ชื่อ เพราะมอนสเตอร์ที่เคยไม่ติดเมต้าวันหนึ่งอาจติด
+function findNonMetaMonster() {
+  const metaIds = new Set((guardianMeta.monsters || []).map((m) => Number(m.id)));
+  const duoIds = new Set((guardianMeta.duos || []).flatMap((d) => d.ids || []).map(Number));
+  return MONSTERS.find(
+    (m) => m.com2usId && !metaIds.has(Number(m.com2usId)) && !duoIds.has(Number(m.com2usId))
+  );
+}
 
 describe('monsterLivingData', () => {
   it('returns comprehensive living data for a top meta monster (Oliver)', () => {
@@ -58,9 +70,11 @@ describe('monsterLivingData', () => {
   });
 
   it('returns safe fallback values for non-meta monsters without crashing', () => {
-    const data = getMonsterLivingData('Alicia');
+    const fallbackMonster = findNonMetaMonster();
+    expect(fallbackMonster).toBeDefined();
+    const data = getMonsterLivingData(fallbackMonster.name);
     expect(data).toBeDefined();
-    expect(data.monster.name).toBe('Alicia');
+    expect(data.monster.name).toBe(fallbackMonster.name);
     expect(data.guardianStats).toBeNull();
     expect(data.duos).toHaveLength(0);
     expect(data.builds).toBeDefined();

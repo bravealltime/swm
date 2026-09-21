@@ -27,7 +27,14 @@ function allow(key, limit) {
   if (hits.length >= limit) return false;
   hits.push(now);
   buckets.set(key, hits);
-  if (buckets.size > 5000) buckets.clear();
+  // when the map grows too big evict only expired keys — clearing everything would let a flood of
+  // fresh keys reset the limiter for every caller on this instance
+  if (buckets.size > 5000) {
+    for (const [k, ts] of buckets) {
+      if (ts.every((t) => now - t >= WINDOW_MS)) buckets.delete(k);
+      if (buckets.size <= 2500) break;
+    }
+  }
   return true;
 }
 
@@ -86,7 +93,9 @@ export async function handleAdvise({ body, ip, token, geo = {} }) {
     if (isProviderBusy(err)) {
       return { status: 503, json: { error: 'โค้ชกำลังตอบคำถามของคนอื่นอยู่ — ระบบจะลองใหม่ให้ในอีกไม่กี่วินาที', code: 'BUSY' } };
     }
-    return { status: 500, json: { error: err.message || 'AI error' } };
+    // keep the provider's own message out of the response (it leaks quota/provider internals) —
+    // the full error is already in ai_logs above for the back-office
+    return { status: 500, json: { error: 'โค้ช AI ขัดข้องชั่วคราว ลองใหม่อีกครั้งนะ', code: 'AI_ERROR' } };
   }
 }
 

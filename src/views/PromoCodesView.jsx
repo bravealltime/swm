@@ -172,7 +172,10 @@ export default function PromoCodesView() {
           </div>
           <span className="text-xs text-slate-400 flex items-center gap-1.5">
             <Clock className="w-4 h-4 text-emerald-400" />
-            ตรวจสอบล่าสุด: วันนี้
+            ตรวจสอบล่าสุด: {live.updatedAt ? new Date(live.updatedAt).toLocaleString('th-TH', { dateStyle: 'short', timeStyle: 'short' }) : '—'}
+            {!live.live && (
+              <span className="px-1.5 py-0.5 rounded bg-amber-500/15 border border-amber-500/30 text-amber-300 font-bold">ข้อมูลสำรอง</span>
+            )}
           </span>
         </div>
 

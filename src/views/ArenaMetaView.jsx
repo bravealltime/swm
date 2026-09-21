@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import {
   Swords,
   Shield,
@@ -252,6 +252,17 @@ function EnemyPicker({ picks, onChange, onSearch, onClear, onReorder, presets })
   const [pickerElement, setPickerElement] = useState('all');
   const [pickerSearch, setPickerSearch] = useState('');
   const drawerRef = useRef(null);
+
+  // clicking outside the open drawer closes it (mousedown fires before click, so a click on a slot
+  // still opens that slot's picker afterwards)
+  useEffect(() => {
+    if (activeSlotIdx === null) return;
+    const onPointerDown = (e) => {
+      if (drawerRef.current && !drawerRef.current.contains(e.target)) setActiveSlotIdx(null);
+    };
+    document.addEventListener('mousedown', onPointerDown);
+    return () => document.removeEventListener('mousedown', onPointerDown);
+  }, [activeSlotIdx]);
 
   // Slots array: always length 4
   const slots = useMemo(() => [0, 1, 2, 3].map((i) => picks[i] || null), [picks]);
