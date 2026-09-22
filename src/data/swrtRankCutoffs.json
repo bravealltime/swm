@@ -1,15 +1,15 @@
 {
   "now": {
-    "nowTime": "2026-09-22 06:55:39",
+    "nowTime": "2026-09-23 06:32:26",
     "c1": {
       "level": 3001,
-      "rank": 0,
+      "rank": 60000,
       "score": 0
     },
     "c2": {
-      "level": 3001,
-      "rank": 0,
-      "score": 1
+      "level": 3002,
+      "rank": 60000,
+      "score": 0
     },
     "c3": {
       "level": 3002,
@@ -23,18 +23,18 @@
     },
     "s2": {
       "level": 3501,
-      "rank": 7510,
-      "score": 1219
+      "rank": 7601,
+      "score": 1212
     },
     "s3": {
       "level": 3502,
-      "rank": 5002,
-      "score": 1313
+      "rank": 5633,
+      "score": 1258
     },
     "g1": {
       "level": 3503,
-      "rank": 3001,
-      "score": 1343
+      "rank": 3049,
+      "score": 1327
     },
     "g2": {
       "level": 4001,
