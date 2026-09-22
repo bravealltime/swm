@@ -205,8 +205,8 @@ export default function PluginCompanionView({ onNavigate }) {
             </label>
             <div className="flex flex-wrap gap-2">
               <button onClick={testConnection} className="px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-200 text-xs font-bold flex items-center gap-1.5 cursor-pointer"><RefreshCw className="w-3.5 h-3.5" /> ทดสอบการเชื่อมต่อ</button>
-              {live.status === 'off' || live.status === 'error' ? (
-                <button onClick={() => { aegisLive.setPort(port); if (live.status === 'error') aegisLive.stop(); aegisLive.start(); }} className="px-3 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold flex items-center gap-1.5 cursor-pointer"><Radio className="w-3.5 h-3.5" /> เชื่อมต่อและจำไว้</button>
+              {live.status !== 'live' ? (
+                <button onClick={() => { aegisLive.setPort(port); aegisLive.stop({ forget: false }); aegisLive.start(); }} className="px-3 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold flex items-center gap-1.5 cursor-pointer"><Radio className="w-3.5 h-3.5" /> เชื่อมต่อและจำไว้</button>
               ) : null}
             </div>
             {probe && (
