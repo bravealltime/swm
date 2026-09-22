@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { Search, Zap, Sparkles } from 'lucide-react';
 import MonsterAvatar from '../../components/MonsterAvatar';
 import ArtifactIcon from '../../components/ArtifactIcon';
-import { getArtifactsFromBox, ARTIFACT_EFFECT_NAMES } from '../../utils/swexImport';
+import { ARTIFACT_EFFECT_NAMES } from '../../utils/swexImport';
 import { monsterOf, ELEMENT_TH, card } from './shared';
 
 // ---------------------------------------------------------------------------
@@ -18,7 +18,11 @@ export default function ArtifactSearchEngine({ box }) {
   const [whereFilter, setWhereFilter] = useState('all'); // 'all', 'equipped', 'inventory'
   const [minVal, setMinVal] = useState(0);
 
-  const artifacts = useMemo(() => getArtifactsFromBox(box), [box]);
+  // Only a box that actually carries artifacts (real import or the labeled demo) may show this tab —
+  // getArtifactsFromBox() fabricates placeholder items when the list is empty and those must never
+  // be presented as the user's inventory
+  const hasArtifacts = Array.isArray(box?.artifacts) && box.artifacts.length > 0;
+  const artifacts = useMemo(() => (hasArtifacts ? box.artifacts : []), [hasArtifacts, box]);
 
   const PRESETS = [
     { id: 'all', label: 'ทั้งหมด' },
@@ -73,6 +77,21 @@ export default function ArtifactSearchEngine({ box }) {
       return true;
     });
   }, [artifacts, selectedSlot, selectedElement, selectedArchetype, whereFilter, activePreset, minVal, searchKeyword]);
+
+  if (!hasArtifacts) {
+    return (
+      <div className="py-16 text-center space-y-3">
+        <div className="text-4xl">🔍</div>
+        <div className="text-sm font-bold text-white">ยังไม่มีข้อมูลอาร์ติแฟกต์ในเครื่องนี้</div>
+        <p className="text-xs text-slate-400 max-w-md mx-auto leading-relaxed">
+          นำเข้าไฟล์ SWEX ที่มีข้อมูลอาร์ติแฟกต์ แล้วหน้านี้จะค้นหาออปชั่นเด็ด (ดาเมจตามสปีด, ดูดเลือด, ฟื้นฟู ฯลฯ) จากอาร์ติแฟกต์จริงของคุณได้ทันที
+        </p>
+        <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="px-4 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold cursor-pointer">
+          ขึ้นไปนำเข้าไฟล์ด้านบน
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -230,7 +249,7 @@ export default function ArtifactSearchEngine({ box }) {
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-bold text-white truncate">{label}</span>
                       <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30">
-                        +15 ★★★★★
+                        +{art.lvl ?? 0} {art.rank ? '★'.repeat(art.rank) : ''}
                       </span>
                     </div>
                     <div className="text-xs font-mono text-cyan-300 font-bold mt-1 bg-white/[0.02] px-2 py-0.5 rounded border border-white/5 inline-block">

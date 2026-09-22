@@ -26,6 +26,7 @@ import {
 import MonsterAvatar from '../components/MonsterAvatar';
 import { PROMO_CODES } from '../data/promoCodes';
 import { useLiveData } from '../hooks/useLiveData';
+import { copyText } from '../utils/clipboard';
 import { useGuildRankings } from '../hooks/useGuildRankings';
 import { SERVERS } from '../utils/guildRankings';
 import { getR2AvatarUrl } from '../services/r2Service';
@@ -63,6 +64,7 @@ export default function DashboardView({ onNavigate }) {
   const [selectedServer, setSelectedServer] = useState('asia');
   const [userBox, setUserBox] = useState(() => loadBox());
   const [uploadingProfile, setUploadingProfile] = useState(false);
+  const [cardBusy, setCardBusy] = useState(false);
   const [customAvatar, setCustomAvatar] = useState(() => {
     try {
       const saved = localStorage.getItem('swm:profile-avatar');
@@ -151,10 +153,11 @@ export default function DashboardView({ onNavigate }) {
     return match || mdcData[0];
   }, [mdcData, selectedPreset]);
 
-  const handleCopy = (code) => {
-    navigator.clipboard.writeText(code);
-    setCopiedCode(code);
-    setTimeout(() => setCopiedCode(null), 2500);
+  const handleCopy = async (code) => {
+    if (await copyText(code)) {
+      setCopiedCode(code);
+      setTimeout(() => setCopiedCode(null), 2500);
+    }
   };
 
   // Questions go to the Summoners War coach; short names route to the player / monster pages
@@ -202,9 +205,11 @@ export default function DashboardView({ onNavigate }) {
   const guildBoard = rankings.board(selectedServer, guildKind);
   const topGuilds = guildBoard ? guildBoard.rows.slice(0, 5) : [];
 
+  const [uploadError, setUploadError] = useState('');
   const handleQuickUpload = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    setUploadError('');
     try {
       setUploadingProfile(true);
       const text = await file.text();
@@ -212,11 +217,15 @@ export default function DashboardView({ onNavigate }) {
       if (parsed.units && parsed.units.length > 0) {
         saveBox(parsed);
         setUserBox(parsed);
+      } else {
+        setUploadError('ไฟล์นี้ไม่มีข้อมูลมอนสเตอร์ — เลือกไฟล์ที่ export จาก SWEX (เมนู Profile)');
       }
     } catch (err) {
       console.error('Failed to parse uploaded SWEX file:', err);
+      setUploadError('อ่านไฟล์ SWEX ไม่สำเร็จ — ตรวจว่าเป็นไฟล์ JSON ที่ export จาก SWEX (เมนู Profile)');
     } finally {
       setUploadingProfile(false);
+      e.target.value = ''; // allow picking the same file again after fixing it
     }
   };
 
@@ -575,31 +584,40 @@ export default function DashboardView({ onNavigate }) {
               <div className="flex flex-wrap sm:flex-nowrap items-center gap-2.5 shrink-0">
                 <button
                   type="button"
-                  onClick={() => {
-                    exportProfileCard({
-                      wizard: {
-                        ...userBox.wizard,
-                        repMonster: userProfileStats.activeAvatar,
-                      },
-                      stats: {
-                        total6Star: userProfileStats.sixStarUnits,
-                        ld5Count: userProfileStats.pureLd5Count,
-                        avgEff: userProfileStats.avgRuneEff,
-                        quadSpdCount: userProfileStats.quadSpdCount,
-                        totalUnits: userProfileStats.totalUnits,
-                        nat5Count: userProfileStats.nat5Count,
-                        totalArtifacts: userProfileStats.totalArtifacts,
-                      },
-                      topLd5: userProfileStats.ld5List || [],
-                      heroes: [userProfileStats.activeAvatar, ...(userProfileStats.cardHeroes || [])].filter(Boolean),
-                      speedRuneSets: userProfileStats.speedRuneSets || [],
-                    });
+                  disabled={cardBusy}
+                  onClick={async () => {
+                    if (cardBusy) return;
+                    setCardBusy(true);
+                    try {
+                      await exportProfileCard({
+                        wizard: {
+                          ...userBox.wizard,
+                          repMonster: userProfileStats.activeAvatar,
+                        },
+                        stats: {
+                          total6Star: userProfileStats.sixStarUnits,
+                          ld5Count: userProfileStats.pureLd5Count,
+                          avgEff: userProfileStats.avgRuneEff,
+                          quadSpdCount: userProfileStats.quadSpdCount,
+                          totalUnits: userProfileStats.totalUnits,
+                          nat5Count: userProfileStats.nat5Count,
+                          totalArtifacts: userProfileStats.totalArtifacts,
+                        },
+                        topLd5: userProfileStats.ld5List || [],
+                        heroes: [userProfileStats.activeAvatar, ...(userProfileStats.cardHeroes || [])].filter(Boolean),
+                        speedRuneSets: userProfileStats.speedRuneSets || [],
+                      });
+                    } catch (err) {
+                      console.error('profile card export failed', err);
+                    } finally {
+                      setCardBusy(false);
+                    }
                   }}
-                  className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 hover:from-cyan-400 hover:via-blue-500 hover:to-indigo-500 text-white text-xs font-black shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all cursor-pointer"
+                  className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 hover:from-cyan-400 hover:via-blue-500 hover:to-indigo-500 text-white text-xs font-black shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-wait"
                   title="บันทึกรูป Passport Card เป็นไฟล์ PNG (มีหน้าต่างดูตัวอย่างก่อนดาวน์โหลด)"
                 >
-                  <Share2 className="w-4 h-4" />
-                  <span>บันทึกการ์ดโปรไฟล์ (PNG)</span>
+                  <Share2 className={cardBusy ? 'w-4 h-4 animate-pulse' : 'w-4 h-4'} />
+                  <span>{cardBusy ? 'กำลังสร้างการ์ด...' : 'บันทึกการ์ดโปรไฟล์ (PNG)'}</span>
                 </button>
 
                 <button
@@ -778,6 +796,11 @@ export default function DashboardView({ onNavigate }) {
                 />
               </label>
             </div>
+            {uploadError && (
+              <div role="alert" className="mt-2 text-xs text-rose-300 bg-rose-500/10 border border-rose-500/30 rounded-xl px-3 py-2">
+                {uploadError}
+              </div>
+            )}
           </div>
         ) : (
           /* Empty State: Prompt to connect profile in 1 click */
@@ -822,6 +845,11 @@ export default function DashboardView({ onNavigate }) {
                 />
               </label>
             </div>
+            {uploadError && (
+              <div role="alert" className="mt-2 text-xs text-rose-300 bg-rose-500/10 border border-rose-500/30 rounded-xl px-3 py-2">
+                {uploadError}
+              </div>
+            )}
           </div>
         )}
       </section>
@@ -920,7 +948,13 @@ export default function DashboardView({ onNavigate }) {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/[0.04]">
-                  {topRtaPlayers.map((player) => (
+                  {topRtaPlayers.length === 0
+                    ? Array.from({ length: 4 }, (_, i) => (
+                        <tr key={`skeleton-${i}`} className="animate-pulse" aria-hidden="true">
+                          <td className="py-3.5" colSpan={6}><div className="h-3 rounded bg-white/[0.06]" /></td>
+                        </tr>
+                      ))
+                    : topRtaPlayers.map((player) => (
                     <tr 
                       key={player.name}
                       onClick={() => onNavigate('player-tracker', { initialPlayer: player.name })}

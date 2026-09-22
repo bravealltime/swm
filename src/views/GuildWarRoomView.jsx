@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import {
   Shield, Swords, Clock, Users, Flame, RefreshCw, Plus, CheckCircle2,
   XCircle, AlertTriangle, MessageSquare, Copy, Check, Download, Upload,
@@ -256,8 +256,13 @@ export default function GuildWarRoomView({ onNavigate }) {
   };
 
   // Handle reporting Win or Loss for a defense slot
+  const lastReportRef = useRef(0);
   const reportBattleResult = (defId, isWin) => {
     if (!war) return;
+    // an accidental double-tap must not mark the defense twice or deduct 6 swords
+    const now = Date.now();
+    if (now - lastReportRef.current < 800) return;
+    lastReportRef.current = now;
     updateWar((prev) => {
       let targetMonsters = [];
       const updatedBases = prev.bases.map((base) => {
@@ -360,9 +365,9 @@ export default function GuildWarRoomView({ onNavigate }) {
                 {live.status === 'live' ? `AegisLink เชื่อมต่อแล้ว${live.lastEventAt ? ` • ${new Date(live.lastEventAt).toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}` : ''}` : live.status === 'connecting' ? 'กำลังหาปลั๊กอิน AegisLink…' : live.status === 'error' ? 'ไม่พบปลั๊กอิน AegisLink' : 'ยังไม่ได้เชื่อมต่อ SWEX'}
               </span>
               {live.status === 'off' || live.status === 'error' ? (
-                <button onClick={() => { if (live.status === 'error') aegisLive.stop(); aegisLive.start(); }} className="px-2.5 py-0.5 text-xs font-bold rounded-full bg-cyan-600 hover:bg-cyan-500 text-white cursor-pointer">เชื่อมต่อ SWEX</button>
+                <button onClick={() => { if (live.status === 'error') aegisLive.stop(); aegisLive.start(); }} className="px-3.5 py-2 text-xs font-bold rounded-full bg-cyan-600 hover:bg-cyan-500 text-white cursor-pointer">เชื่อมต่อ SWEX</button>
               ) : (
-                <button onClick={() => aegisLive.stop()} className="px-2.5 py-0.5 text-xs rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 cursor-pointer">ตัดการเชื่อมต่อ</button>
+                <button onClick={() => aegisLive.stop()} className="px-3.5 py-2 text-xs rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 cursor-pointer">ตัดการเชื่อมต่อ</button>
               )}
             </div>
             <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight flex items-center gap-3">
@@ -620,14 +625,14 @@ export default function GuildWarRoomView({ onNavigate }) {
                           <button
                             onClick={() => reportBattleResult(def.id, true)}
                             className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-emerald-600/80 hover:bg-emerald-600 text-white text-xs font-bold shadow-lg shadow-emerald-600/20 active:scale-95 transition-all"
-                            title="บันทึกผลว่าตีชนะ (-1 ดาบ)"
+                            title="บันทึกผลว่าตีชนะ (ใช้ 3 ดาบ ตามทีม 3 ตัว)"
                           >
                             <Check className="w-3.5 h-3.5" /> ชนะ
                           </button>
                           <button
                             onClick={() => reportBattleResult(def.id, false)}
                             className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-rose-600/80 hover:bg-rose-600 text-white text-xs font-bold shadow-lg shadow-rose-600/20 active:scale-95 transition-all"
-                            title="บันทึกผลว่าตีแพ้ (-1 ดาบ)"
+                            title="บันทึกผลว่าตีแพ้ (ใช้ 3 ดาบ ตามทีม 3 ตัว)"
                           >
                             <XCircle className="w-3.5 h-3.5" /> แพ้
                           </button>
@@ -764,7 +769,7 @@ export default function GuildWarRoomView({ onNavigate }) {
                                 }));
                               }}
                               className="px-2 py-1 rounded bg-white/5 hover:bg-white/10 text-slate-300 font-bold hover:text-white"
-                              title="หักดาบ -1 ดาบ (3 ตัว)"
+                              title="หักดาบ 3 ดาบ (ทีมละ 3 ตัว)"
                             >
                               -3 ดาบ
                             </button>
@@ -778,7 +783,7 @@ export default function GuildWarRoomView({ onNavigate }) {
                                 }));
                               }}
                               className="px-2 py-1 rounded bg-white/5 hover:bg-white/10 text-slate-300 font-bold hover:text-white"
-                              title="คืนดาบ +1 ดาบ"
+                              title="คืนดาบ 3 ดาบ"
                             >
                               +3
                             </button>

@@ -27,6 +27,7 @@ import { matchArenaTeams } from '../utils/arenaMatcher';
 import { findArenaCounters } from '../utils/arenaCounter';
 import { loadBox, loadDemoBox, boxUnits } from '../utils/swexImport';
 import { exportArenaTeamCard } from '../utils/cardExporter';
+import { copyText } from '../utils/clipboard';
 import { MONSTERS } from '../data/monsters';
 import { buildUrl } from '../router';
 
@@ -437,7 +438,7 @@ function EnemyPicker({ picks, onChange, onSearch, onClear, onReorder, presets })
                 <>
                   <button
                     onClick={(e) => handleClearSlot(slotIdx, e)}
-                    className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-rose-600 hover:bg-rose-500 text-white flex items-center justify-center text-xs font-bold shadow-md z-20 cursor-pointer"
+                    className="absolute -top-2.5 -right-2.5 w-8 h-8 rounded-full bg-rose-600 hover:bg-rose-500 text-white flex items-center justify-center text-xs font-bold shadow-md z-20 cursor-pointer"
                     title="เอาตัวนี้ออก"
                     aria-label={`เอา ${name} ออก`}
                   >
@@ -659,32 +660,42 @@ export default function ArenaMetaView({ onNavigate, subItem, ad }) {
     });
   }, [rawList, tierFilter, ldFilter, selectedArchetype, searchQuery]);
 
+  // Tab/counter URLs are pushed as history entries so mobile Back undoes the tab instead of
+  // leaving the site; on popstate App re-renders this view with fresh subItem/ad props.
+  const pushArenaUrl = (params) => {
+    try {
+      const url = buildUrl('arena', params);
+      if (url !== window.location.pathname + window.location.search) window.history.pushState(null, '', url);
+    } catch { /* not important */ }
+  };
+
+  // Keep the in-page state in sync with the URL after back/forward navigation
+  useEffect(() => {
+    setActiveTab(TABS.includes(subItem) ? subItem : ad ? 'counter' : 'ao');
+    setEnemyPicks(parseNames(ad));
+    setEnemyQuery(parseNames(ad));
+  }, [subItem, ad]);
+
   const switchTab = (tab) => {
     setActiveTab(tab);
     setSelectedArchetype('all');
-    try {
-      const p = { subItem: tab };
-      if (tab === 'counter' && enemyQuery.length) p.ad = enemyQuery.join(',');
-      window.history.replaceState(null, '', buildUrl('arena', p));
-    } catch { /* not important */ }
+    const p = { subItem: tab };
+    if (tab === 'counter' && enemyQuery.length) p.ad = enemyQuery.join(',');
+    pushArenaUrl(p);
   };
 
   const runCounterSearch = (explicit) => {
     const names = (Array.isArray(explicit) ? explicit : enemyPicks).slice(0, 4);
     setEnemyQuery(names);
     setShowAllCounters(false);
-    try {
-      window.history.replaceState(null, '', buildUrl('arena', { subItem: 'counter', ad: names.join(',') }));
-    } catch { /* not important */ }
+    pushArenaUrl({ subItem: 'counter', ad: names.join(',') });
   };
 
   const handleClearCounter = () => {
     setEnemyPicks([]);
     setEnemyQuery([]);
     setShowAllCounters(false);
-    try {
-      window.history.replaceState(null, '', buildUrl('arena', { subItem: 'counter' }));
-    } catch { /* not important */ }
+    pushArenaUrl({ subItem: 'counter' });
   };
 
   const handleReorder = (reordered) => {
@@ -693,15 +704,16 @@ export default function ArenaMetaView({ onNavigate, subItem, ad }) {
     }
   };
 
-  const copyCounterLink = () => {
+  const copyCounterLink = async () => {
     const url = `${window.location.origin}${buildUrl('arena', { subItem: 'counter', ad: enemyQuery.join(',') })}`;
-    navigator.clipboard.writeText(url);
-    setLinkCopied(true);
-    setTimeout(() => setLinkCopied(false), 2500);
+    if (await copyText(url)) {
+      setLinkCopied(true);
+      setTimeout(() => setLinkCopied(false), 2500);
+    }
   };
 
   // Copy team details
-  const handleCopyTeam = (team) => {
+  const handleCopyTeam = async (team) => {
     const swapText = Object.entries(team.swaps || {}).map(([slot, alts]) => `${slot} → ${alts.join(' / ')}`).join(', ');
     const text = [
       `⚔️ [SWM Arena] ${team.nameTh} (${team.name}) — Tier ${team.tier}`,
@@ -711,9 +723,10 @@ export default function ArenaMetaView({ onNavigate, subItem, ad }) {
       swapText ? `ตัวแทน: ${swapText}` : '',
       'สูตรคอมมูนิตี้ (ไม่มีสถิติวัดจริง) — swm-blue.vercel.app/arena',
     ].filter(Boolean).join('\n');
-    navigator.clipboard.writeText(text);
-    setCopiedTeamId(team.id);
-    setTimeout(() => setCopiedTeamId(null), 2500);
+    if (await copyText(text)) {
+      setCopiedTeamId(team.id);
+      setTimeout(() => setCopiedTeamId(null), 2500);
+    }
   };
 
   const handleCard = async (team) => {

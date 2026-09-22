@@ -81,7 +81,18 @@ export default function MyBoxView({ onNavigate, tab: initialTab, subItem }) {
     }
   };
 
-  const reset = () => { clearBox(); setBox(null); };
+  // two-step confirm: one accidental tap must not wipe the whole imported box
+  const [resetArmed, setResetArmed] = useState(false);
+  const reset = () => {
+    if (!resetArmed) {
+      setResetArmed(true);
+      setTimeout(() => setResetArmed(false), 4000);
+      return;
+    }
+    clearBox();
+    setBox(null);
+    setResetArmed(false);
+  };
 
   // --- auto-sync from the SWEX folder (Chromium desktop) ---------------------
   const [watch, setWatch] = useState({ status: supportsFolderWatch() ? 'idle' : 'unsupported', handle: null, lastCheck: null, newest: null });
@@ -187,8 +198,8 @@ export default function MyBoxView({ onNavigate, tab: initialTab, subItem }) {
                 <Download className="w-4 h-4" /> สำรองข้อมูล JSON
               </button>
               <ImportButton onFile={importFile} label="นำเข้าใหม่" icon={RefreshCw} subtle />
-              <button onClick={reset} className="px-3 py-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-300 text-xs font-bold flex items-center gap-1.5 cursor-pointer">
-                <Trash2 className="w-4 h-4" /> ลบข้อมูลออกจากเครื่อง
+              <button onClick={reset} className={`px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-all ${resetArmed ? 'bg-rose-500 hover:bg-rose-400 text-white border border-rose-400' : 'bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-300'}`}>
+                <Trash2 className="w-4 h-4" /> {resetArmed ? 'แน่ใจไหม? กดอีกครั้งเพื่อลบ' : 'ลบข้อมูลออกจากเครื่อง'}
               </button>
             </div>
           )}
@@ -245,13 +256,14 @@ export default function MyBoxView({ onNavigate, tab: initialTab, subItem }) {
       {liveAllowed && <LiveCard live={live} box={box} onStart={startLive} onStop={stopLive} onNavigate={onNavigate} />}
       {box && live.status === 'off' && <SyncCard watch={watch} box={box} onStart={startWatching} onGrant={grantAgain} onStop={stopWatching} />}
 
-      <div role="tablist" className="flex flex-wrap items-center gap-1.5 p-1.5 rounded-2xl bg-[#0a0f19]/80 border border-white/[0.08] shadow-lg sticky top-[68px] z-30 backdrop-blur-xl">
+      {/* one scrollable row instead of wrapping: on phones the wrapped rows stayed pinned under the navbar and ate a third of the screen */}
+      <div role="tablist" className="flex items-center gap-1.5 p-1.5 rounded-2xl bg-[#0a0f19]/80 border border-white/[0.08] shadow-lg sticky top-[68px] z-30 backdrop-blur-xl overflow-x-auto">
         {TABS.map((t) => {
           const Icon = t.icon;
           const active = tab === t.id;
           return (
-            <button key={t.id} role="tab" aria-selected={active} onClick={() => setTab(t.id)}
-              className={`px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all cursor-pointer ${active ? `${t.color} text-white shadow-lg` : 'text-slate-300 hover:text-white hover:bg-white/[0.04]'}`}>
+            <button key={t.id} role="tab" aria-selected={active} onClick={() => { setTab(t.id); window.scrollTo({ top: 0 }); }}
+              className={`px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all cursor-pointer shrink-0 whitespace-nowrap ${active ? `${t.color} text-white shadow-lg` : 'text-slate-300 hover:text-white hover:bg-white/[0.04]'}`}>
               <Icon className="w-4 h-4" /> {t.label}
             </button>
           );
@@ -1240,7 +1252,7 @@ function SpeedTuner({ box, onNavigate }) {
                       −{u.gap}{u.gap <= 3 ? ' เสี่ยงโดนแซง' : ''}
                     </span>
                   )}
-                  <button onClick={() => setTeam(team.filter((t) => t !== u.idx))} className="p-1 text-slate-500 hover:text-rose-300 cursor-pointer" aria-label="เอาออก"><X className="w-4 h-4" /></button>
+                  <button onClick={() => setTeam(team.filter((t) => t !== u.idx))} className="p-2.5 -mr-1.5 text-slate-500 hover:text-rose-300 cursor-pointer" aria-label="เอาออก"><X className="w-4 h-4" /></button>
                 </div>
               ))}
               <p className="text-[11px] text-slate-500 pt-1">ยังไม่รวมบัฟสปีดในสนามและ ATB boost — ใช้เครื่องคำนวณเต็มสำหรับกรณีตัวเปิดเกจ</p>

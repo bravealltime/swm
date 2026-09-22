@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { buildUrl } from '../router';
+import { copyText } from '../utils/clipboard';
 import {
   Search,
   Trophy,
@@ -162,11 +163,12 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
     }
   };
 
-  const copyShareLink = () => {
+  const copyShareLink = async () => {
     if (!activePlayer) return;
-    navigator.clipboard.writeText(window.location.origin + buildUrl('player-tracker', { initialPlayer: activePlayer.name }));
-    setCopiedLink(true);
-    setTimeout(() => setCopiedLink(false), 2000);
+    if (await copyText(window.location.origin + buildUrl('player-tracker', { initialPlayer: activePlayer.name }))) {
+      setCopiedLink(true);
+      setTimeout(() => setCopiedLink(false), 2000);
+    }
   };
 
   // Filtered recent matches

@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { BookOpen, Search, Swords, X, Filter, Info } from 'lucide-react';
 import MonsterAvatar from '../components/MonsterAvatar';
 import SkillTooltip from '../components/SkillTooltip';
@@ -121,15 +121,31 @@ export default function MonsterCatalogView({ initialSearch = '', initialMonster 
   const [selectedEffect, setSelectedEffect] = useState('all');
   const [selectedMonster, setSelectedMonster] = useState(initial);
   const [visibleCount, setVisibleCount] = useState(48);
+  const inspectorOpenRef = useRef(false);
 
   // While the inspector is open the address bar shows /monster/<slug> — the same URL the
-  // prerendered pages use — so it can be shared, bookmarked and indexed; closing it goes back to /catalog.
+  // prerendered pages use — so it can be shared, bookmarked and indexed. Opening pushes a
+  // history entry so the mobile Back button closes the overlay instead of leaving the site;
+  // switching straight to another monster replaces, and closing returns to /catalog.
   useEffect(() => {
     if (selectedMonster) {
       const url = `/monster/${monsterSlug(selectedMonster.name)}`;
-      if (window.location.pathname !== url) window.history.replaceState(null, '', url);
+      if (window.location.pathname !== url) {
+        if (inspectorOpenRef.current) window.history.replaceState(null, '', url);
+        else window.history.pushState(null, '', url);
+      }
+      inspectorOpenRef.current = true;
       document.title = monsterTitle(selectedMonster);
-    } else if (window.location.pathname.startsWith('/monster/')) {
+      document.body.style.overflow = 'hidden'; // no background scroll behind the overlay (iOS)
+      const onPop = () => setSelectedMonster(null);
+      window.addEventListener('popstate', onPop);
+      return () => {
+        window.removeEventListener('popstate', onPop);
+        document.body.style.overflow = '';
+      };
+    }
+    inspectorOpenRef.current = false;
+    if (window.location.pathname.startsWith('/monster/')) {
       window.history.replaceState(null, '', '/catalog');
       document.title = 'สารานุกรมมอนสเตอร์ | SWM';
     }
@@ -347,6 +363,23 @@ export default function MonsterCatalogView({ initialSearch = '', initialMonster 
           <MonsterCard key={monster.id} monster={monster} onSelect={setSelectedMonster} />
         ))}
       </div>
+
+      {/* Zero-result guidance instead of a blank page */}
+      {filteredMonsters.length === 0 && (
+        <div className="py-16 text-center space-y-3">
+          <div className="text-4xl">🔍</div>
+          <div className="text-sm font-bold text-white">ไม่พบมอนสเตอร์ที่ตรงกับเงื่อนไข</div>
+          <p className="text-xs text-slate-400">
+            ลองตรวจสอบการสะกดชื่อ หรือคลายตัวกรองธาตุ/ดาว/เอฟเฟกต์แล้วค้นใหม่อีกครั้ง
+          </p>
+          <button
+            onClick={() => { setSearchQuery(''); setSelectedElement('all'); setSelectedStars('all'); setSelectedEffect('all'); }}
+            className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold cursor-pointer"
+          >
+            ล้างการค้นหาและตัวกรองทั้งหมด
+          </button>
+        </div>
+      )}
 
       {/* Load More Button */}
       {visibleCount < filteredMonsters.length && (

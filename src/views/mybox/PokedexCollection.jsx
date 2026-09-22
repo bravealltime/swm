@@ -65,6 +65,7 @@ const TOP_LD5_HALL_OF_FAME = [
 export default function PokedexCollection({ box, onNavigate, onLoadDemo }) {
   const tierList = useLiveData('rta-tierlist', swrtTierList);
   const { season: RTA_SEASON, byId: RTA_BY_ID } = useMemo(() => indexTierList(tierList.data), [tierList.data]);
+  const [cardBusy, setCardBusy] = useState(false);
   const [eleFilter, setEleFilter] = useState('all');
   const [ownershipFilter, setOwnershipFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -380,12 +381,23 @@ export default function PokedexCollection({ box, onNavigate, onLoadDemo }) {
             <div className="flex flex-wrap items-center gap-2">
               {/* Export LD5 Showcase Card PNG */}
               <button
-                onClick={() => exportLdShowcaseCard({ wizardName: box?.wizard?.name || 'Summoner', ld5List: displayedLd5s })}
-                className="px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer border bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white shadow-lg shadow-purple-600/20"
+                onClick={async () => {
+                  if (cardBusy) return;
+                  setCardBusy(true);
+                  try {
+                    await exportLdShowcaseCard({ wizardName: box?.wizard?.name || 'Summoner', ld5List: displayedLd5s });
+                  } catch (err) {
+                    console.error('LD showcase card export failed', err);
+                  } finally {
+                    setCardBusy(false);
+                  }
+                }}
+                disabled={cardBusy}
+                className="px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer border bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white shadow-lg shadow-purple-600/20 disabled:opacity-50 disabled:cursor-wait"
                 title="บันทึกรูปการ์ดตู้สะสม LD 5★ เป็นไฟล์ PNG สำหรับแชร์โซเชียล"
               >
-                <Share2 className="w-3.5 h-3.5" />
-                <span>บันทึกรูปตู้สะสม LD (PNG)</span>
+                <Share2 className={cardBusy ? 'w-3.5 h-3.5 animate-pulse' : 'w-3.5 h-3.5'} />
+                <span>{cardBusy ? 'กำลังสร้างรูป...' : 'บันทึกรูปตู้สะสม LD (PNG)'}</span>
               </button>
 
               {/* Toggle to Hide Non-Summonable LDs */}
@@ -775,7 +787,8 @@ export default function PokedexCollection({ box, onNavigate, onLoadDemo }) {
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white cursor-pointer"
+                aria-label="ล้างคำค้นหา"
+                className="absolute right-0.5 top-1/2 -translate-y-1/2 p-2.5 text-slate-500 hover:text-white cursor-pointer"
               >
                 <X className="w-3.5 h-3.5" />
               </button>

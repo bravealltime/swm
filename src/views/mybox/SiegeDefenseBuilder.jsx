@@ -18,9 +18,18 @@ export default function SiegeDefenseBuilder({ box }) {
   const availableUnits = useMemo(() => {
     return units.filter((u) => {
       if (!searchTerm) return true;
-      return u.name.toLowerCase().includes(searchTerm.toLowerCase());
+      return (u.name || '').toLowerCase().includes(searchTerm.toLowerCase());
     });
   }, [units, searchTerm]);
+
+  // legacy boxes may miss baseSpd — never print "+NaN SPD"
+  const spdLine = (u) => {
+    const spd = Number.isFinite(u?.spd) ? u.spd : null;
+    const base = Number.isFinite(u?.baseSpd) ? u.baseSpd : null;
+    if (spd === null) return 'SPD: —';
+    if (base === null) return `SPD: ${spd}`;
+    return `SPD: ${spd} (${base}+${spd - base})`;
+  };
 
   // Turn Order calculation
   const turnOrder = useMemo(() => {
@@ -52,7 +61,7 @@ export default function SiegeDefenseBuilder({ box }) {
               <div className="space-y-2">
                 <MonsterAvatar name={slot1.name} size={64} className="rounded-2xl mx-auto shadow-lg" />
                 <div className="font-bold text-white text-sm">{slot1.name}</div>
-                <div className="text-xs font-mono text-cyan-300">SPD: {slot1.spd} ({slot1.baseSpd}+{slot1.spd - slot1.baseSpd})</div>
+                <div className="text-xs font-mono text-cyan-300">{spdLine(slot1)}</div>
                 <button
                   onClick={() => setSlot1(null)}
                   className="px-2.5 py-1 text-[11px] rounded bg-white/5 hover:bg-rose-500/20 text-rose-300"
@@ -74,7 +83,7 @@ export default function SiegeDefenseBuilder({ box }) {
               <div className="space-y-2">
                 <MonsterAvatar name={slot2.name} size={64} className="rounded-2xl mx-auto shadow-lg" />
                 <div className="font-bold text-white text-sm">{slot2.name}</div>
-                <div className="text-xs font-mono text-cyan-300">SPD: {slot2.spd} ({slot2.baseSpd}+{slot2.spd - slot2.baseSpd})</div>
+                <div className="text-xs font-mono text-cyan-300">{spdLine(slot2)}</div>
                 <button
                   onClick={() => setSlot2(null)}
                   className="px-2.5 py-1 text-[11px] rounded bg-white/5 hover:bg-rose-500/20 text-rose-300"
@@ -96,7 +105,7 @@ export default function SiegeDefenseBuilder({ box }) {
               <div className="space-y-2">
                 <MonsterAvatar name={slot3.name} size={64} className="rounded-2xl mx-auto shadow-lg" />
                 <div className="font-bold text-white text-sm">{slot3.name}</div>
-                <div className="text-xs font-mono text-cyan-300">SPD: {slot3.spd} ({slot3.baseSpd}+{slot3.spd - slot3.baseSpd})</div>
+                <div className="text-xs font-mono text-cyan-300">{spdLine(slot3)}</div>
                 <button
                   onClick={() => setSlot3(null)}
                   className="px-2.5 py-1 text-[11px] rounded bg-white/5 hover:bg-rose-500/20 text-rose-300"
@@ -175,7 +184,9 @@ export default function SiegeDefenseBuilder({ box }) {
                 >
                   <MonsterAvatar name={u.name} size={44} className="rounded-xl" />
                   <div className="text-[11px] font-bold text-white truncate max-w-full">{u.name}</div>
-                  <div className="text-[10px] font-mono text-cyan-300">+{u.spd - u.baseSpd} SPD</div>
+                  <div className="text-[10px] font-mono text-cyan-300">
+                    {Number.isFinite(u.spd) && Number.isFinite(u.baseSpd) ? `+${u.spd - u.baseSpd} SPD` : 'SPD —'}
+                  </div>
                 </button>
               );
             })}
