@@ -7,6 +7,9 @@ import * as aegisLive from '../services/aegisLive';
 import { evaluateRune } from '../utils/runeEvaluator';
 import { isAudioMuted, toggleAudioMute, playLegendAlertSound, playDropSound } from '../utils/soundEffects';
 import AccountSuiteHeader from '../components/AccountSuiteHeader';
+import RuneIcon from '../components/RuneIcon';
+import ArtifactIcon from '../components/ArtifactIcon';
+import { RUNE_SETS } from '../utils/swexImport';
 
 const DUNGEON_NAMES = {
   1001: 'Giants Keep (ยักษ์)',
@@ -310,14 +313,23 @@ export default function LiveFarmingMonitorView({ onNavigate }) {
                     </span>
                     <span className="font-mono text-slate-400">{run.clearTimeSec ? `${run.clearTimeSec}s` : '-'}</span>
                   </div>
-                  <div className="mt-3.5 flex items-center justify-between">
-                    <div>
-                      <div className="text-sm font-bold text-white">ผ่านรอบฟาร์มสำเร็จ {run.win ? '🏆 ชนะ' : '❌ แพ้'}</div>
-                      <div className="text-xs text-slate-400 mt-0.5">
-                        {run.artifact ? 'ได้รับอาร์ติแฟกต์' : 'ได้รับคัมภีร์/หินมานา/วัตถุดิบ'}
+                  <div className="mt-4 flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      {run.artifact ? (
+                        <ArtifactIcon artifact={run.artifact} size={54} />
+                      ) : (
+                        <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 font-black">
+                          💎
+                        </div>
+                      )}
+                      <div>
+                        <div className="text-sm font-bold text-white">ผ่านรอบฟาร์มสำเร็จ {run.win ? '🏆 ชนะ' : '❌ แพ้'}</div>
+                        <div className="text-xs text-slate-400 mt-0.5">
+                          {run.artifact ? 'ได้รับอาร์ติแฟกต์' : 'ได้รับคัมภีร์/หินมานา/วัตถุดิบ'}
+                        </div>
                       </div>
                     </div>
-                    <span className="px-2.5 py-1 rounded-xl text-xs font-bold bg-white/5 border border-white/10 text-slate-300">
+                    <span className="px-2.5 py-1 rounded-xl text-xs font-bold bg-white/5 border border-white/10 text-slate-300 shrink-0">
                       รอบปกติ
                     </span>
                   </div>
@@ -325,48 +337,77 @@ export default function LiveFarmingMonitorView({ onNavigate }) {
               );
             }
 
+            const runeSetId = Number(run.rune?.set_id) || (ev.setName ? Number(Object.keys(RUNE_SETS).find((k) => RUNE_SETS[k]?.toLowerCase() === ev.setName.toLowerCase())) : 1) || 1;
+            const runeObj = {
+              set: runeSetId,
+              slot: Number(ev.slot) || Number(run.rune?.slot_no) || 1,
+              q: Number(ev.originalQuality) || Number(run.rune?.extra) || 5,
+              stars: Number(ev.stars) || Number(run.rune?.class) || 6,
+              lvl: Number(ev.upgradeLevel) || Number(run.rune?.upgrade_curr) || 0,
+              ancient: Boolean(run.rune?.ancient),
+            };
+
             return (
               <div
                 key={`${run.at}-${idx}`}
-                className={`relative overflow-hidden rounded-3xl border p-5 transition-all ${
+                className={`relative overflow-hidden rounded-3xl border p-5 transition-all shadow-xl ${
                   ev.recommendation === 'KEEP_INSTANT'
-                    ? 'bg-gradient-to-b from-[#0a1813] to-[#080d14] border-emerald-500/40 shadow-lg shadow-emerald-500/5'
+                    ? 'bg-gradient-to-b from-[#0a1b14] via-[#081315] to-[#070b12] border-emerald-500/40 shadow-emerald-500/5'
                     : ev.recommendation === 'ROLL_TEST'
-                    ? 'bg-gradient-to-b from-[#0e1626] to-[#080d14] border-blue-500/40'
-                    : 'bg-gradient-to-b from-[#180a0a] to-[#080d14] border-rose-500/30'
+                    ? 'bg-gradient-to-b from-[#0d182b] via-[#09121f] to-[#070b12] border-blue-500/40 shadow-blue-500/5'
+                    : 'bg-gradient-to-b from-[#1c0c0c] via-[#140808] to-[#070b12] border-rose-500/30'
                 }`}
               >
                 {/* Header: Dungeon name + clear time */}
-                <div className="flex items-center justify-between text-xs pb-3 border-b border-white/[0.06]">
+                <div className="flex items-center justify-between text-xs pb-3 border-b border-white/[0.08]">
                   <span className="font-bold text-slate-300 flex items-center gap-1.5">
                     <span className="w-2 h-2 rounded-full bg-emerald-400" />
                     {getDungeonLabel(run.dungeonId, run.stageId)}
                   </span>
-                  <span className="font-mono text-slate-400">{run.clearTimeSec ? `${run.clearTimeSec}s` : '-'}</span>
+                  <span className="font-mono text-slate-400 font-semibold">{run.clearTimeSec ? `⏱️ ${run.clearTimeSec}s` : '-'}</span>
                 </div>
 
-                {/* Rune Info & Recommendation Badge */}
-                <div className="mt-3.5 flex items-start justify-between gap-3">
-                  <div>
-                    <div className="flex items-center gap-1.5">
-                      <span className="text-base font-black text-white">{ev.setNameTh}</span>
-                      <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-white/10 text-slate-300">
-                        สล็อต {ev.slot}
-                      </span>
+                {/* Hero Rune Presentation: Official In-Game Visual Rune Piece */}
+                <div className="mt-4 flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-3.5 min-w-0">
+                    {/* Visual In-Game Rune Icon */}
+                    <div className="relative shrink-0 hover:scale-105 transition-transform duration-200">
+                      <RuneIcon
+                        rune={runeObj}
+                        size={68}
+                        showLevel={false}
+                        className="shadow-2xl shadow-black/80 ring-2 ring-white/10"
+                      />
                     </div>
-                    <div className="text-xs text-slate-400 mt-0.5">
-                      {ev.stars}★ {ev.qualityName}
+
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className="text-base font-black text-white truncate">{ev.setNameTh}</span>
+                        <span className={`px-2 py-0.5 rounded-lg text-[10px] font-mono font-black shrink-0 ${
+                          ev.slot === 2 || ev.slot === 4 || ev.slot === 6
+                            ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
+                            : 'bg-white/10 text-slate-200 border border-white/10'
+                        }`}>
+                          ช่อง {ev.slot}
+                        </span>
+                      </div>
+                      <div className="text-xs text-slate-400 mt-1 flex items-center gap-1.5">
+                        <span className="text-amber-400 tracking-tighter text-[11px]">
+                          {'★'.repeat(Math.min(6, ev.stars || 6))}
+                        </span>
+                        <span className="font-medium">{ev.qualityName}</span>
+                      </div>
                     </div>
                   </div>
 
                   {/* Recommendation Badge */}
                   <span
-                    className={`px-3 py-1 rounded-xl text-xs font-black uppercase tracking-wider border shadow-sm ${
+                    className={`px-3 py-1.5 rounded-xl text-xs font-black uppercase tracking-wider border shadow-md shrink-0 text-center ${
                       ev.recommendation === 'KEEP_INSTANT'
-                        ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
+                        ? 'bg-emerald-500/25 text-emerald-300 border-emerald-500/50 shadow-emerald-500/20'
                         : ev.recommendation === 'ROLL_TEST'
-                        ? 'bg-blue-500/20 text-blue-300 border-blue-500/40'
-                        : 'bg-rose-500/20 text-rose-300 border-rose-500/40'
+                        ? 'bg-blue-500/25 text-blue-300 border-blue-500/50 shadow-blue-500/20'
+                        : 'bg-rose-500/25 text-rose-300 border-rose-500/50 shadow-rose-500/20'
                     }`}
                   >
                     {ev.recommendationTh}
@@ -374,7 +415,7 @@ export default function LiveFarmingMonitorView({ onNavigate }) {
                 </div>
 
                 {/* Main Stat & Potential SPD */}
-                <div className="mt-3 p-3 rounded-2xl bg-white/[0.03] border border-white/5 space-y-1.5">
+                <div className="mt-4 p-3 rounded-2xl bg-white/[0.03] border border-white/5 space-y-1.5">
                   <div className="flex items-center justify-between text-xs">
                     <span className="text-slate-400">ออปชั่นหลัก:</span>
                     <span className="font-bold text-white">{ev.mainStat.nameTh} +{ev.mainStat.value}</span>
@@ -389,7 +430,7 @@ export default function LiveFarmingMonitorView({ onNavigate }) {
 
                   <div className="flex items-center justify-between text-xs pt-1.5 border-t border-white/5">
                     <span className="text-slate-400">ลุ้นสปีดสูงสุด (Max SPD):</span>
-                    <span className={`font-mono font-black ${ev.maxPotentialSpd >= 20 ? 'text-amber-300' : 'text-slate-200'}`}>
+                    <span className={`font-mono font-black ${ev.maxPotentialSpd >= 20 ? 'text-amber-300 text-sm' : 'text-slate-200'}`}>
                       +{ev.maxPotentialSpd} SPD
                     </span>
                   </div>
@@ -401,23 +442,36 @@ export default function LiveFarmingMonitorView({ onNavigate }) {
                 </div>
 
                 {/* Substats */}
-                <div className="mt-3 space-y-1">
+                <div className="mt-3.5 space-y-1">
                   <div className="text-[11px] text-slate-400 font-medium">สเตตัสรอง (Substats):</div>
                   <div className="grid grid-cols-2 gap-1.5 text-xs">
-                    {ev.subs.map((s, sIdx) => (
-                      <div key={sIdx} className="px-2 py-1 rounded-lg bg-white/[0.02] border border-white/5 text-slate-300 flex justify-between">
-                        <span>{s.nameTh}:</span>
-                        <span className={`font-bold font-mono ${s.type === 8 ? 'text-amber-300' : 'text-white'}`}>
-                          +{s.value}
-                        </span>
-                      </div>
-                    ))}
+                    {ev.subs.map((s, sIdx) => {
+                      const isSpd = s.type === 8;
+                      return (
+                        <div
+                          key={sIdx}
+                          className={`px-2.5 py-1.5 rounded-xl border flex justify-between items-center ${
+                            isSpd
+                              ? 'bg-amber-500/10 border-amber-500/30 text-amber-300 shadow-sm shadow-amber-500/10'
+                              : 'bg-white/[0.02] border-white/5 text-slate-300'
+                          }`}
+                        >
+                          <span className="flex items-center gap-1 truncate">
+                            {isSpd && <span>⚡</span>}
+                            <span>{s.nameTh}:</span>
+                          </span>
+                          <span className={`font-bold font-mono ml-1 ${isSpd ? 'text-amber-300 font-black' : 'text-white'}`}>
+                            +{s.value}
+                          </span>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
 
                 {/* Reason Explanation */}
-                <div className="mt-3 pt-2.5 border-t border-white/[0.06] text-[11px] text-slate-300 flex items-start gap-1.5">
-                  <span className="shrink-0">💡</span>
+                <div className="mt-3.5 pt-2.5 border-t border-white/[0.06] text-[11px] text-slate-300 flex items-start gap-1.5">
+                  <span className="shrink-0 text-amber-400">💡</span>
                   <span className="leading-snug">{ev.reason}</span>
                 </div>
               </div>
