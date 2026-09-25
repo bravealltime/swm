@@ -138,6 +138,15 @@ tests/*.test.js      vitest (`npm test`) — parser SWEX, แพ็กเก็�
 - ทดสอบโดยไม่ต้องมีเกม: สคริปต์จำลองอยู่นอก repo (scratchpad `plugin_sim.cjs`) — แนวคิดคือ `require('plugins/aegislink/index.js')` แล้ว `init()` ด้วย proxy ปลอมที่ `emit('apiCommand', req, resp)`
 - **ยังไม่เคยเจอแพ็กเก็ตจริง**: รูปแบบ Siege/อันดับกิลด์แกะจากชื่อฟิลด์มาตรฐาน ถ้าผู้ใช้จริงเปิดหน้า Siege แล้วส่วนไหนว่าง ให้ดูชื่อคำสั่งจากคอนโซลหน้า /aegislink แล้วปรับ `siegeLive.js` / `guildRankings.js`
 
+### 7.1 โหมด sidecar (เครื่องจริงของเจ้าของเว็บ — ใช้งานจริงตั้งแต่ 2026-09-22)
+
+- **SWEX ของเครื่องนี้โหลดปลั๊กอินจาก `filesPath\plugins`** = `OneDrive\เดสก์ท็อป\GG\plugins\aegislink` (ไม่ใช่ Roaming/resources — ที่นั่นวางผิดมาตั้งแต่แรก) และ build นี้มี proxy/live service ในตัวที่ผูกครอบพอร์ตเดียวกับปลั๊กอินเสมอ (mirror `livePort` → `Proxy.port` ด้วย) เซิร์ฟเวอร์ในปลั๊กอินจึง bind ไม่ได้
+- **สถาปัตยกรรมปัจจุบัน**: เกม → SWEX proxy (`Port` ช่องแรกของ SWEX = **6566**, ของเกม — ห้ามเปลี่ยน) → ปลั๊กอินใน SWEX (แพตช์แล้ว: ปิด `startServer`, `broadcast()` ยิง `POST 127.0.0.1:7391/ingest`) → **`sidecar.js`** (node ล้วน bind `127.0.0.1:7391`, persist `sidecar-state.json`, เสิร์ฟ `/status /snapshot /guild /events` ให้เว็บ) → หน้า /aegislink ตั้ง "พอร์ตปลั๊กอิน" = **7391**
+- **auto-start**: `Startup\aegislink-sidecar.bat` (logon, หน้าต่าง minimized); ถ้าพอร์ตถูกใช้อยู่ sidecar จะ exit(1) เอง (ป้องกันซ้ำซ้อน) — รันมือ: `node sidecar.js`
+- **แก้ API/ตรรกะข้อมูลที่ `sidecar.js` เท่านั้น** (ตัวใน GG\plugins ปิดเซิร์ฟเวอร์ไว้แล้ว); ไฟล์ใน Roaming คือขยะ (มี .bak ไว้เทียบ) — ลบได้
+- ยืนยันแล้วว่าของจริงเข้า: PedictU 555 หน่วย, seq เดิน, `GetGuildInfo/GetGuildDataAll/GetGuildSiege*` ถูกจับ; ยังรอทดสอบผล battle Siege จริง (`battles > 0`)
+- ตรวจสถานะ: `curl http://127.0.0.1:7391/status` (`hasSnapshot:false` = รอล็อกอินเกม)
+
 ## 8. หลังบ้าน `/admin`
 
 - ผู้ดูแลในตัว: `pedictu@gmail.com` (hard-code ใน `api/_lib/admin.js` `OWNER_EMAILS`) + `ADMIN_EMAILS`

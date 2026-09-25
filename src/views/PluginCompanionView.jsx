@@ -209,6 +209,9 @@ export default function PluginCompanionView({ onNavigate }) {
                 <button onClick={() => { aegisLive.setPort(port); aegisLive.stop({ forget: false }); aegisLive.start(); }} className="px-3 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold flex items-center gap-1.5 cursor-pointer"><Radio className="w-3.5 h-3.5" /> เชื่อมต่อและจำไว้</button>
               ) : null}
             </div>
+            <p className="text-[11px] text-slate-500 leading-relaxed">
+              อย่าสับสนกับพอร์ตอื่น: ช่องนี้คือพอร์ต API ของปลั๊กอิน (<span className="font-mono text-slate-400">7391</span>) ส่วนช่อง <span className="font-mono text-slate-400">Port</span> ในหน้าต่าง SWEX เป็นพอร์ต proxy ของเกม (6566) — สองอันนี้แยกกัน ห้ามใช้เลขสลับกัน
+            </p>
             {probe && (
               <div className={`text-xs p-2.5 rounded-lg border flex items-start gap-2 ${probe.ok === true ? 'text-emerald-200 bg-emerald-500/10 border-emerald-500/30' : probe.ok === false ? 'text-rose-200 bg-rose-500/10 border-rose-500/30' : 'text-slate-300 bg-white/5 border-white/10'}`}>
                 {probe.ok === false ? <AlertCircle className="w-4 h-4 shrink-0" /> : <Check className="w-4 h-4 shrink-0" />} <span>{probe.text}</span>

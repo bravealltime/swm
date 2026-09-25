@@ -23,7 +23,7 @@ const https = require('https');
 const pluginName = 'AegisLink';
 const version = '2.1.0';
 
-const DEFAULT_PORT = 7391;
+const DEFAULT_PORT = 7463;
 const ALLOWED_ORIGINS = [/^https:\/\/swm(-[a-z0-9-]+)?\.vercel\.app$/i, /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i];
 
 // Guild / siege / world-guild-battle packets the website wants to see raw
@@ -57,27 +57,44 @@ function log(type, message) {
 // ---------------------------------------------------------------------------
 // Account merge helpers
 // ---------------------------------------------------------------------------
-const asArray = (v) => (Array.isArray(v) ? v : v && typeof v === 'object' ? Object.values(v) : []);
+function cloneDeep(obj) {
+  if (!obj || typeof obj !== 'object') return obj;
+  try { return structuredClone(obj); } catch { return JSON.parse(JSON.stringify(obj)); }
+}
+
+const asArray = (v) => {
+  if (Array.isArray(v)) return Object.isFrozen(v) || !Object.isExtensible(v) ? v.slice() : v;
+  return v && typeof v === 'object' ? Object.values(v) : [];
+};
 
 function unitRunes(unit) {
-  if (!Array.isArray(unit.runes)) unit.runes = asArray(unit.runes);
+  if (!Array.isArray(unit.runes) || Object.isFrozen(unit.runes) || !Object.isExtensible(unit.runes)) {
+    unit.runes = asArray(unit.runes).slice();
+  }
   return unit.runes;
 }
+
 function unitArtifacts(unit) {
-  if (!Array.isArray(unit.artifacts)) unit.artifacts = asArray(unit.artifacts);
+  if (!Array.isArray(unit.artifacts) || Object.isFrozen(unit.artifacts) || !Object.isExtensible(unit.artifacts)) {
+    unit.artifacts = asArray(unit.artifacts).slice();
+  }
   return unit.artifacts;
 }
 
 function findUnit(account, unitId) {
   const id = Number(unitId);
-  return account.unit_list.find((u) => Number(u.unit_id) === id) || null;
+  return (account.unit_list || []).find((u) => Number(u.unit_id) === id) || null;
 }
 
 /** Drop a rune from the inventory and from every unit (it gets re-placed by upsertRune). */
 function detachRune(account, runeId) {
   const id = Number(runeId);
-  account.runes = asArray(account.runes).filter((r) => Number(r.rune_id) !== id);
-  for (const u of account.unit_list) {
+  if (!id) return;
+  if (!Array.isArray(account.runes) || Object.isFrozen(account.runes) || !Object.isExtensible(account.runes)) {
+    account.runes = asArray(account.runes).slice();
+  }
+  account.runes = account.runes.filter((r) => Number(r.rune_id) !== id);
+  for (const u of account.unit_list || []) {
     const list = unitRunes(u);
     const i = list.findIndex((r) => Number(r.rune_id) === id);
     if (i >= 0) list.splice(i, 1);
@@ -86,8 +103,12 @@ function detachRune(account, runeId) {
 
 function detachArtifact(account, artifactId) {
   const id = Number(artifactId);
-  account.artifacts = asArray(account.artifacts).filter((a) => Number(a.rid) !== id);
-  for (const u of account.unit_list) {
+  if (!id) return;
+  if (!Array.isArray(account.artifacts) || Object.isFrozen(account.artifacts) || !Object.isExtensible(account.artifacts)) {
+    account.artifacts = asArray(account.artifacts).slice();
+  }
+  account.artifacts = account.artifacts.filter((a) => Number(a.rid) !== id);
+  for (const u of account.unit_list || []) {
     const list = unitArtifacts(u);
     const i = list.findIndex((a) => Number(a.rid) === id);
     if (i >= 0) list.splice(i, 1);
@@ -97,51 +118,67 @@ function detachArtifact(account, artifactId) {
 /** occupied_type 1 = equipped on occupied_id, anything else = inventory. */
 function upsertRune(account, rune, delta) {
   if (!rune || !rune.rune_id) return;
-  detachRune(account, rune.rune_id);
-  const unit = Number(rune.occupied_type) === 1 ? findUnit(account, rune.occupied_id) : null;
+  const runeCopy = cloneDeep(rune);
+  detachRune(account, runeCopy.rune_id);
+  const unit = Number(runeCopy.occupied_type) === 1 ? findUnit(account, runeCopy.occupied_id) : null;
   if (unit) {
     const list = unitRunes(unit);
-    const slotIdx = list.findIndex((r) => Number(r.slot_no) === Number(rune.slot_no));
+    const slotIdx = list.findIndex((r) => Number(r.slot_no) === Number(runeCopy.slot_no));
     if (slotIdx >= 0) { delta.removedRunes.push(Number(list[slotIdx].rune_id)); list.splice(slotIdx, 1); }
-    list.push(rune);
+    list.push(runeCopy);
   } else {
-    account.runes.push(rune);
+    if (!Array.isArray(account.runes) || Object.isFrozen(account.runes) || !Object.isExtensible(account.runes)) {
+      account.runes = asArray(account.runes).slice();
+    }
+    account.runes.push(runeCopy);
   }
-  delta.runes.push(rune);
+  delta.runes.push(runeCopy);
 }
 
 function upsertArtifact(account, art, delta) {
   if (!art || !art.rid) return;
-  detachArtifact(account, art.rid);
-  const unit = Number(art.occupied_type) === 1 ? findUnit(account, art.occupied_id) : null;
+  const artCopy = cloneDeep(art);
+  detachArtifact(account, artCopy.rid);
+  const unit = Number(artCopy.occupied_type) === 1 ? findUnit(account, artCopy.occupied_id) : null;
   if (unit) {
     const list = unitArtifacts(unit);
-    const sameSlot = list.findIndex((a) => Number(a.slot) === Number(art.slot));
+    const sameSlot = list.findIndex((a) => Number(a.slot) === Number(artCopy.slot));
     if (sameSlot >= 0) { delta.removedArtifacts.push(Number(list[sameSlot].rid)); list.splice(sameSlot, 1); }
-    list.push(art);
+    list.push(artCopy);
   } else {
-    account.artifacts.push(art);
+    if (!Array.isArray(account.artifacts) || Object.isFrozen(account.artifacts) || !Object.isExtensible(account.artifacts)) {
+      account.artifacts = asArray(account.artifacts).slice();
+    }
+    account.artifacts.push(artCopy);
   }
-  delta.artifacts.push(art);
+  delta.artifacts.push(artCopy);
 }
 
 /** A unit object from the server is authoritative: its runes/artifacts leave the inventory. */
 function upsertUnit(account, unit, delta) {
   if (!unit || !unit.unit_id || !unit.unit_master_id) return;
-  unitRunes(unit);
-  unitArtifacts(unit);
-  const id = Number(unit.unit_id);
+  const unitCopy = cloneDeep(unit);
+  unitRunes(unitCopy);
+  unitArtifacts(unitCopy);
+  if (!Array.isArray(account.unit_list) || Object.isFrozen(account.unit_list) || !Object.isExtensible(account.unit_list)) {
+    account.unit_list = asArray(account.unit_list).slice();
+  }
+  const id = Number(unitCopy.unit_id);
   const idx = account.unit_list.findIndex((u) => Number(u.unit_id) === id);
-  if (idx >= 0) account.unit_list[idx] = unit; else account.unit_list.push(unit);
-  const runeIds = new Set(unit.runes.map((r) => Number(r.rune_id)));
-  const artIds = new Set(unit.artifacts.map((a) => Number(a.rid)));
+  if (idx >= 0) account.unit_list[idx] = unitCopy; else account.unit_list.push(unitCopy);
+  const runeIds = new Set(unitCopy.runes.map((r) => Number(r.rune_id)));
+  const artIds = new Set(unitCopy.artifacts.map((a) => Number(a.rid)));
   account.runes = asArray(account.runes).filter((r) => !runeIds.has(Number(r.rune_id)));
   account.artifacts = asArray(account.artifacts).filter((a) => !artIds.has(Number(a.rid)));
-  delta.units.push(unit);
+  delta.units.push(unitCopy);
 }
 
 function removeUnit(account, unitId, delta) {
   const id = Number(unitId);
+  if (!id) return;
+  if (!Array.isArray(account.unit_list) || Object.isFrozen(account.unit_list) || !Object.isExtensible(account.unit_list)) {
+    account.unit_list = asArray(account.unit_list).slice();
+  }
   const idx = account.unit_list.findIndex((u) => Number(u.unit_id) === id);
   if (idx >= 0) { account.unit_list.splice(idx, 1); delta.removedUnits.push(id); }
 }
@@ -204,7 +241,17 @@ function sendJson(res, headers, status, body) {
   res.end(text);
 }
 
+const SIDECAR_PORT = 7391;
+function postToSidecar(type, payload) {
+  try {
+    const body = JSON.stringify(Object.assign({ type }, payload));
+    const req = http.request({ hostname: '127.0.0.1', port: SIDECAR_PORT, path: '/ingest', method: 'POST', headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(body) }, timeout: 4000 }, (res) => res.resume());
+    req.on('error', () => {});
+    req.end(body);
+  } catch { /* sidecar not running */ }
+}
 function broadcast(type, payload) {
+  postToSidecar(type, payload);
   const frame = `event: ${type}\ndata: ${JSON.stringify(payload)}\n\n`;
   for (const res of state.clients) {
     try { res.write(frame); } catch { state.clients.delete(res); }
@@ -225,7 +272,7 @@ function statusBody() {
 }
 
 function startServer(cfg) {
-  const port = Number(cfg.livePort) || DEFAULT_PORT;
+  const port = DEFAULT_PORT; // this machine only: the custom SWEX core mirrors livePort into its own relay, so livePort must stay unset and the plugin port is fixed here
   state.port = port;
   const server = http.createServer((req, res) => {
     const origin = req.headers.origin;
@@ -256,7 +303,7 @@ function startServer(cfg) {
     sendJson(res, headers, 404, { error: 'not found' });
   });
   server.on('error', (err) => log('error', `live server error on port ${port}: ${err.message} (change livePort in the plugin settings)`));
-  server.listen(port, '127.0.0.1', () => log('success', `live server ready on http://127.0.0.1:${port} — open SWM › กล่องของฉัน and press "เชื่อมต่อ SWEX"`));
+  server.listen(7507, '127.0.0.1', () => log('success', `live server ready on http://127.0.0.1:${port} — open SWM › กล่องของฉัน and press "เชื่อมต่อ SWEX"`));
   state.server = server;
 }
 
@@ -322,7 +369,9 @@ module.exports = {
     state.log = (entry) => proxy.log(entry);
     if (!cfg.enabled) { log('info', 'disabled'); return; }
 
-    startServer(cfg);
+    // startServer disabled on this machine: the custom SWEX build's proxy occupies every livePort
+    // (EADDRINUSE war) - the standalone sidecar.js process serves the API instead.
+    log('info', 'sidecar mode: HTTP API served by sidecar.js on port ' + SIDECAR_PORT);
     log('success', `v${version} ready — listening for account, rune and guild packets`);
 
     const handle = (req, resp) => {
@@ -350,13 +399,14 @@ module.exports = {
     // 1. Full account on login — becomes the live snapshot
     if (command === 'HubUserLogin' && Array.isArray(resp.unit_list)) {
       if (cfg.syncAccount) {
-        state.account = resp;
-        state.account.runes = asArray(resp.runes);
-        state.account.artifacts = asArray(resp.artifacts);
+        state.account = cloneDeep(resp);
+        state.account.runes = asArray(state.account.runes).slice();
+        state.account.artifacts = asArray(state.account.artifacts).slice();
+        state.account.unit_list = asArray(state.account.unit_list).slice();
         for (const u of state.account.unit_list) { unitRunes(u); unitArtifacts(u); }
         state.accountAt = Date.now();
         state.seq += 1;
-        log('success', `account captured: ${resp.wizard_info && resp.wizard_info.wizard_name} — ${resp.unit_list.length} monsters, ${state.account.runes.length} spare runes`);
+        log('success', `account captured: ${state.account.wizard_info && state.account.wizard_info.wizard_name} — ${state.account.unit_list.length} monsters, ${state.account.runes.length} spare runes`);
         broadcast('snapshot', { seq: state.seq, at: state.accountAt, data: state.account });
       }
       if (resp.guild && cfg.syncGuild) {
@@ -368,6 +418,12 @@ module.exports = {
 
     // 2. Incremental account changes (rune upgrades, equips, sells, awakenings...)
     if (cfg.syncAccount && state.account) {
+      if (Object.isFrozen(state.account) || !Object.isExtensible(state.account.runes)) {
+        state.account = cloneDeep(state.account);
+        state.account.runes = asArray(state.account.runes).slice();
+        state.account.artifacts = asArray(state.account.artifacts).slice();
+        state.account.unit_list = asArray(state.account.unit_list).slice();
+      }
       const delta = applyDelta(state.account, command, req, resp);
       if (delta) {
         state.seq += 1;
