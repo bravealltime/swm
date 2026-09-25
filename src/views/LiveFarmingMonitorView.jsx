@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import {
   Compass, Radio, Sparkles, Trophy, Volume2, VolumeX, CheckCircle2,
   XCircle, AlertTriangle, RefreshCw, Zap, Flame, Shield, ArrowUpRight,
-  Filter, Play, Clock, HelpCircle, Layers } from 'lucide-react';
+  Filter, Play, Clock, HelpCircle, Layers, Bot } from 'lucide-react';
 import * as aegisLive from '../services/aegisLive';
 import { evaluateRune } from '../utils/runeEvaluator';
 import { isAudioMuted, toggleAudioMute, playLegendAlertSound, playDropSound } from '../utils/soundEffects';
 import AccountSuiteHeader from '../components/AccountSuiteHeader';
 import RuneIcon from '../components/RuneIcon';
 import ArtifactIcon from '../components/ArtifactIcon';
+import AiRuneModal from '../components/AiRuneModal';
 import { RUNE_SETS } from '../utils/swexImport';
 
 const DUNGEON_NAMES = {
@@ -42,6 +43,9 @@ export default function LiveFarmingMonitorView({ onNavigate }) {
   const [runs, setRuns] = useState(() => aegisLive.getState().dungeons || []);
   const [filter, setFilter] = useState('all'); // 'all' | 'keep' | 'legend'
   const [muted, setMuted] = useState(() => isAudioMuted());
+  const [aiModalOpen, setAiModalOpen] = useState(false);
+  const [aiModalMode, setAiModalMode] = useState('rune'); // 'rune' | 'session'
+  const [selectedRuneRun, setSelectedRuneRun] = useState(null);
 
   useEffect(() => {
     // Auto-connect to local SWEX sidecar & log tailer
@@ -175,6 +179,19 @@ export default function LiveFarmingMonitorView({ onNavigate }) {
 
           {/* Quick Actions */}
           <div className="flex items-center gap-2.5 flex-wrap shrink-0">
+            <button
+              onClick={() => {
+                setAiModalMode('session');
+                setSelectedRuneRun(null);
+                setAiModalOpen(true);
+              }}
+              className="px-3.5 py-2.5 rounded-xl border border-cyan-500/40 bg-cyan-500/15 hover:bg-cyan-500/25 text-xs font-bold text-cyan-300 flex items-center gap-2 cursor-pointer transition-all shadow-md shadow-cyan-500/10 group"
+              title="ดูบทวิเคราะห์ภาพรวมการฟาร์มและคำแนะนำโค้ช AI"
+            >
+              <Bot className="w-4 h-4 text-cyan-400 group-hover:scale-110 transition-transform" />
+              <span>AI สรุปผลการฟาร์ม ({runs.length} รอบ)</span>
+            </button>
+
             <button
               onClick={handleMuteToggle}
               className="px-3.5 py-2.5 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-xs font-bold text-slate-300 flex items-center gap-2 cursor-pointer transition-all"
@@ -474,11 +491,35 @@ export default function LiveFarmingMonitorView({ onNavigate }) {
                   <span className="shrink-0 text-amber-400">💡</span>
                   <span className="leading-snug">{ev.reason}</span>
                 </div>
+
+                {/* AI Assistant Action Button */}
+                <div className="mt-3.5 pt-2.5 border-t border-white/[0.06]">
+                  <button
+                    onClick={() => {
+                      setSelectedRuneRun(run);
+                      setAiModalMode('rune');
+                      setAiModalOpen(true);
+                    }}
+                    className="w-full py-2 px-3 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 hover:border-cyan-500/50 text-cyan-300 text-xs font-bold flex items-center justify-center gap-1.5 transition cursor-pointer shadow-sm group"
+                  >
+                    <Bot className="w-4 h-4 text-cyan-400 group-hover:scale-110 transition-transform" />
+                    <span>ถาม AI วิเคราะห์รูนนี้ (ใครใส่ดี / ตีบวกยังไง)</span>
+                  </button>
+                </div>
               </div>
             );
           })}
         </div>
       )}
+
+      {/* 5. AI Rune & Session Coach Modal */}
+      <AiRuneModal
+        isOpen={aiModalOpen}
+        onClose={() => setAiModalOpen(false)}
+        mode={aiModalMode}
+        rune={selectedRuneRun}
+        runs={runs}
+      />
     </div>
   );
 }
