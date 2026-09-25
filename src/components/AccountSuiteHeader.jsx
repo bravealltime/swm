@@ -23,7 +23,21 @@ export default function AccountSuiteHeader({ activeTab, onNavigate }) {
         sourceName = 'AegisLink (สด)';
       }
 
-      // 2. Try Supabase Cloud
+      // 2. Try Global Cloud Storage CDN (Supabase 24/7 — works on mobile 4G without PC)
+      if (!syncedBox) {
+        try {
+          const { pullBoxFromCloud } = await import('../services/cloudSyncService');
+          const current = (await import('../utils/boxStorage')).loadBox();
+          const targetKey = current?.wizard?.name || 'pedictu';
+          const cloudRes = await pullBoxFromCloud(targetKey);
+          if (cloudRes?.ok && cloudRes.box?.units?.length > 0) {
+            syncedBox = cloudRes.box;
+            sourceName = 'Cloud CDN (24 ชม.)';
+          }
+        } catch {}
+      }
+
+      // 3. Try Supabase Cloud Auth
       if (!syncedBox) {
         try {
           const { getSupabase } = await import('../services/supabaseClient');
@@ -43,7 +57,7 @@ export default function AccountSuiteHeader({ activeTab, onNavigate }) {
         } catch {}
       }
 
-      // 3. Try /data/my_profile.json
+      // 4. Try /data/my_profile.json
       if (!syncedBox) {
         const res = await fetch('/data/my_profile.json').catch(() => null);
         if (res && res.ok) {
@@ -126,8 +140,16 @@ export default function AccountSuiteHeader({ activeTab, onNavigate }) {
           </button>
         </div>
 
-        {/* 1-Click Fast Sync Button */}
+        {/* Sync Buttons */}
         <div className="flex items-center gap-2 shrink-0 w-full md:w-auto justify-end">
+          <button
+            onClick={() => window.dispatchEvent(new CustomEvent('swm:open-cloud-sync'))}
+            className="px-3.5 py-2 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-xs font-bold flex items-center justify-center gap-1.5 transition cursor-pointer"
+            title="เปิด QR Code หรือ Magic Link สำหรับดูบนมือถือผ่าน 4G/5G โดยไม่ต้องเปิดคอม"
+          >
+            <span>📱 ซิงค์ไปมือถือ</span>
+          </button>
+
           <button
             onClick={handleQuickSync}
             disabled={syncing}

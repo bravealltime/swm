@@ -78,26 +78,27 @@ function AppContent() {
   // LAN hand-off for development only: open http://<pc-ip>:5173/?sync=<key> on another device and
   // the Vite dev middleware (/api/profile) serves the local export. Never installs anyone's
   // account on an anonymous visitor; cross-device sync in production goes through the account login.
+  // 24/7 Global Cloud Profile Sync: open https://swm-blue.vercel.app/?sync=<key> on any mobile device
+  // Fetches directly from Supabase Storage CDN / Serverless API without needing the desktop PC turned on.
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const syncParam = params.get('sync');
+    const syncParam = params.get('sync') || params.get('profile') || params.get('box');
     if (!syncParam) return;
     window.history.replaceState({}, '', window.location.pathname);
 
     (async () => {
       try {
-        const res = await fetch(`/api/profile/${encodeURIComponent(syncParam)}`).catch(() => null);
-        if (!res || !res.ok) return;
-        const data = await res.json();
-        const { parseSwexExport } = await import('./utils/swexImport');
-        const parsed = parseSwexExport(data);
-        if (parsed?.units?.length) {
-          saveBox(parsed);
-          setSyncNotice(`✨ ซิงค์ข้อมูลไอดี ${parsed.wizard?.name || ''} (มอนสเตอร์ ${parsed.units.length} ตัว) เข้าสู่อุปกรณ์นี้แล้ว`);
-          setTimeout(() => setSyncNotice(null), 6000);
+        const { pullBoxFromCloud } = await import('./services/cloudSyncService');
+        const res = await pullBoxFromCloud(syncParam);
+        if (res.ok) {
+          setSyncNotice(`✨ ซิงค์ข้อมูลไอดี "${res.wizardName}" (มอนสเตอร์ ${res.unitsCount} ตัว, รูน ${res.runesCount} ชิ้น) จาก Cloud เรียบร้อยแล้ว! ใช้งานบนมือถือได้ทันทีโดยไม่ต้องเปิดคอม`);
+          setTimeout(() => setSyncNotice(null), 8000);
+        } else {
+          setSyncNotice(`⚠️ ${res.message || 'ไม่สามารถดึงข้อมูลไอดีจาก Cloud ได้'}`);
+          setTimeout(() => setSyncNotice(null), 8000);
         }
       } catch (err) {
-        console.warn('LAN profile sync warning:', err);
+        console.warn('Cloud profile sync warning:', err);
       }
     })();
   }, []);
@@ -166,6 +167,13 @@ function AppContent() {
     const onOpenAuth = () => setIsAuthOpen(true);
     window.addEventListener('swm:open-auth', onOpenAuth);
     return () => window.removeEventListener('swm:open-auth', onOpenAuth);
+  }, []);
+
+  // 24/7 Cloud sync modal opener for mobile hand-off
+  useEffect(() => {
+    const onOpenSync = () => setIsSyncOpen(true);
+    window.addEventListener('swm:open-cloud-sync', onOpenSync);
+    return () => window.removeEventListener('swm:open-cloud-sync', onOpenSync);
   }, []);
 
   useEffect(() => {

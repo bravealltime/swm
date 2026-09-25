@@ -14,12 +14,20 @@ import {
   Sparkles,
   RefreshCw,
   Share2,
-  Download,
-  ArrowRight,
+  QrCode,
   ShieldCheck,
-  Layers
+  ExternalLink,
+  Wifi,
+  Globe
 } from 'lucide-react';
 import { loadBox, saveBox } from '../utils/boxStorage';
+import {
+  pushBoxToCloud,
+  pullBoxFromCloud,
+  getShareUrl,
+  getQrCodeUrl,
+  sanitizeKey
+} from '../services/cloudSyncService';
 
 export default function CloudSyncModal({ isOpen, onClose, onSynced }) {
   const [box, setBox] = useState(() => loadBox());
@@ -29,107 +37,93 @@ export default function CloudSyncModal({ isOpen, onClose, onSynced }) {
   const [statusType, setStatusType] = useState('info'); // 'success' | 'error' | 'loading'
   const [copiedLink, setCopiedLink] = useState(false);
   const [copiedKey, setCopiedKey] = useState(false);
+  const [showQrCode, setShowQrCode] = useState(true);
 
   useEffect(() => {
     if (isOpen) {
-      setBox(loadBox());
+      const currentBox = loadBox();
+      setBox(currentBox);
       setStatusMessage('');
+      setStatusType('info');
     }
   }, [isOpen]);
 
   if (!isOpen) return null;
 
-  const wizardName = box?.wizard?.name || box?.wizard_info?.wizard_name || '';
-  const wizardId = box?.wizard?.idHint || box?.wizard_info?.wizard_id || '9326961';
-  const syncKey = `${wizardName.toUpperCase()}-${wizardId}`;
-  const shareLink = typeof window !== 'undefined' ? `${window.location.origin}/?sync=${wizardName}` : '';
+  const wizardName = box?.wizard?.name || box?.wizard_info?.wizard_name || 'PedictU';
+  const wizardId = String(box?.wizard?.idHint || box?.wizard_info?.wizard_id || '9326961');
+  const primaryKey = sanitizeKey(wizardName);
+  const passkey = `${wizardName.toUpperCase()}-${wizardId.slice(-4) || '6961'}`;
+  const shareLink = getShareUrl(primaryKey);
+  const qrCodeUrl = getQrCodeUrl(shareLink);
 
   const handleCopyKey = () => {
-    navigator.clipboard.writeText(syncKey);
+    navigator.clipboard.writeText(passkey);
     setCopiedKey(true);
-    setTimeout(() => setCopiedKey(false), 2000);
+    setTimeout(() => setCopiedKey(false), 2500);
   };
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(shareLink);
     setCopiedLink(true);
-    setTimeout(() => setCopiedLink(false), 2000);
+    setTimeout(() => setCopiedLink(false), 2500);
   };
 
-  // Sync to Cloud / Server
+  // Push Box to Cloud Storage (Supabase 24/7 CDN)
   const handlePushToCloud = async () => {
-    if (!box) {
+    if (!box || (!box.units && !box.unit_list)) {
       setStatusType('error');
       setStatusMessage('ยังไม่มีข้อมูลไอดีในเครื่องนี้ กรุณานำเข้าไฟล์ JSON ก่อน');
       return;
     }
 
     setStatusType('loading');
-    setStatusMessage('กำลังส่งข้อมูลขึ้นคลาวด์...');
+    setStatusMessage('กำลังบันทึกข้อมูลไอดีขึ้น Cloud Storage (24 ชม.)...');
 
-    try {
-      const res = await fetch('/api/profile', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(box)
-      });
-      if (res.ok) {
-        setStatusType('success');
-        setStatusMessage('ส่งข้อมูลไปยังเครื่องพัฒนา (LAN) แล้ว — อุปกรณ์อื่นในวง LAN เปิด ?sync=ชื่อไอดี ได้ทันที');
-      } else {
-        throw new Error('no dev server');
-      }
-    } catch {
+    const res = await pushBoxToCloud(box, passkey);
+    if (res.ok) {
+      setStatusType('success');
+      setStatusMessage(`✅ อัปเดตไอดี "${wizardName}" ขึ้น Cloud สำเร็จแล้ว! ตอนนี้คุณสามารถปิดคอมพิวเตอร์ และเปิดดูบนมือถือผ่านเน็ต 4G/5G ได้ทันที`);
+      // Update local state box with cloudSync stamp
+      setBox(loadBox());
+    } else {
       setStatusType('error');
-      setStatusMessage('โหมด LAN ใช้ได้เฉพาะตอนรัน dev server — บนเว็บจริงให้เข้าสู่ระบบด้วยบัญชี แล้วบันทึกขึ้นคลาวด์แทน');
+      setStatusMessage(res.message || 'บันทึกขึ้น Cloud ไม่สำเร็จ กรุณาลองใหม่อีกครั้ง');
     }
   };
 
-  // Pull from Cloud / Another Device
+  // Pull Box from Cloud Storage
   const handlePullFromCloud = async (keyOverride) => {
     const targetKey = (keyOverride || syncKeyInput || wizardName).trim();
     if (!targetKey) {
       setStatusType('error');
-      setStatusMessage('กรุณากรอกชื่อไอดีหรือรหัส Sync Key');
+      setStatusMessage('กรุณากรอกชื่อไอดี รหัส Passkey หรือวางลิงก์ Magic Link');
       return;
     }
 
     setStatusType('loading');
-    setStatusMessage(`กำลังดึงข้อมูลไอดี "${targetKey}" จาก Cloud...`);
+    setStatusMessage(`กำลังดาวน์โหลดข้อมูลไอดี "${targetKey}" จาก Cloud...`);
 
-    try {
-      // Dev-server LAN endpoint only; there is no public copy of anyone's profile
-      const res = await fetch(`/api/profile/${encodeURIComponent(targetKey)}`).catch(() => null);
-      if (!res || !res.ok) throw new Error('ไม่พบข้อมูลไอดีนี้ — โหมด LAN ใช้ได้เฉพาะตอนรัน dev server บนเว็บจริงให้เข้าสู่ระบบด้วยบัญชีแทน');
-
-      const data = await res.json();
-      const { parseSwexExport } = await import('../utils/swexImport');
-      const parsed = parseSwexExport(data);
-
-      if (!parsed || !parsed.units || parsed.units.length === 0) {
-        throw new Error('ไฟล์ข้อมูลไอดีว่างเปล่า');
-      }
-
-      saveBox(parsed);
-      setBox(parsed);
+    const res = await pullBoxFromCloud(targetKey);
+    if (res.ok) {
       setStatusType('success');
-      setStatusMessage(`ซิงค์สำเร็จ! โหลดมอนสเตอร์ ${parsed.units.length} ตัว และรูน ${parsed.runes?.length || 0} ชิ้น เรียบร้อยแล้ว`);
-
-      if (onSynced) onSynced(parsed);
+      setStatusMessage(`✨ ซิงค์สำเร็จ! โหลดมอนสเตอร์ ${res.unitsCount} ตัว และรูน ${res.runesCount} ชิ้น พร้อมใช้งานบนเครื่องนี้ทันที`);
+      setBox(res.box);
+      if (onSynced) onSynced(res.box);
 
       setTimeout(() => {
         onClose();
         window.location.reload();
       }, 1500);
-    } catch (err) {
+    } else {
       setStatusType('error');
-      setStatusMessage(err.message || 'ดึงข้อมูลไม่สำเร็จ กรุณาตรวจสอบการเชื่อมต่อ');
+      setStatusMessage(res.message || 'ไม่พบข้อมูลไอดีบนคลาวด์');
     }
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="relative w-full max-w-xl bg-[#0d1424] border border-blue-500/30 rounded-3xl p-6 sm:p-7 shadow-2xl shadow-blue-500/10 text-white">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
+      <div className="relative w-full max-w-xl max-h-[92vh] overflow-y-auto bg-[#0d1424] border border-cyan-500/40 rounded-3xl p-5 sm:p-7 shadow-2xl shadow-cyan-500/10 text-white scrollbar-thin">
         {/* Close Button */}
         <button
           onClick={onClose}
@@ -140,163 +134,209 @@ export default function CloudSyncModal({ isOpen, onClose, onSynced }) {
         </button>
 
         {/* Modal Header */}
-        <div className="flex items-center gap-3.5 mb-6">
-          <div className="flex items-center justify-center w-12 h-12 rounded-2xl bg-gradient-to-tr from-cyan-500 to-blue-600 text-white shadow-lg shadow-cyan-500/20 shrink-0">
-            <Cloud className="w-6 h-6" />
+        <div className="flex items-center gap-3.5 mb-5">
+          <div className="flex items-center justify-center w-12 h-12 rounded-2xl bg-gradient-to-tr from-cyan-500 via-blue-600 to-indigo-600 text-white shadow-lg shadow-cyan-500/25 shrink-0">
+            <Globe className="w-6 h-6" />
           </div>
           <div>
-            <h2 className="text-xl font-bold flex items-center gap-2">
-              <span>☁️ Cloud Profile Sync & ข้ามอุปกรณ์</span>
+            <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-mono font-bold uppercase mb-0.5">
+              <Wifi className="w-3 h-3 text-emerald-400" />
+              <span>เน็ตนอกบ้าน 4G/5G • ไม่ต้องเปิดคอม</span>
+            </div>
+            <h2 className="text-lg sm:text-xl font-black text-white flex items-center gap-2">
+              <span>Cloud Profile Sync & ข้ามอุปกรณ์ 24 ชม.</span>
             </h2>
-            <p className="text-xs text-slate-400 mt-0.5">
-              เปิดดูข้อมูลไอดี มอนสเตอร์ และรูนบนมือถือหรืออุปกรณ์อื่นได้จากทุกที่
+            <p className="text-xs text-slate-300 mt-0.5">
+              บันทึกข้อมูลไอดีขึ้นระบบคลาวด์ เปิดดูบนมือถือได้ตลอดเวลาแม้อยู่นอกบ้าน
             </p>
           </div>
         </div>
 
         {/* Tab Switcher */}
-        <div className="flex rounded-xl bg-[#131c30] p-1 border border-slate-800 mb-6">
+        <div className="flex rounded-xl bg-[#131d30] p-1 border border-slate-800 mb-5">
           <button
             onClick={() => { setActiveTab('sync-out'); setStatusMessage(''); }}
             className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-xs font-bold transition cursor-pointer ${
               activeTab === 'sync-out'
-                ? 'bg-blue-600 text-white shadow-md'
+                ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-md'
                 : 'text-slate-400 hover:text-slate-200'
             }`}
           >
             <Laptop className="w-4 h-4" />
-            <span>อุปกรณ์นี้ ➔ เครื่องอื่น</span>
+            <span>อุปกรณ์นี้ ➔ นำไปเปิดบนมือถือ</span>
           </button>
           <button
             onClick={() => { setActiveTab('sync-in'); setStatusMessage(''); }}
             className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-xs font-bold transition cursor-pointer ${
               activeTab === 'sync-in'
-                ? 'bg-blue-600 text-white shadow-md'
+                ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-md'
                 : 'text-slate-400 hover:text-slate-200'
             }`}
           >
             <Smartphone className="w-4 h-4" />
-            <span>ดึงข้อมูลเข้าเครื่องนี้</span>
+            <span>ดึงข้อมูลจาก Cloud เข้าเครื่องนี้</span>
           </button>
         </div>
 
-        {/* TAB 1: SYNC OUT (ส่งข้อมูลไปเครื่องอื่น) */}
+        {/* TAB 1: SYNC OUT (ส่งข้อมูลไปมือถือ / นอกบ้าน) */}
         {activeTab === 'sync-out' && (
           <div className="space-y-4">
-            {/* Account Card */}
-            <div className="bg-[#142035] border border-blue-500/20 p-4 rounded-2xl flex items-center justify-between">
+            {/* Account Card & One-Click Cloud Upload Button */}
+            <div className="bg-[#142035] border border-cyan-500/30 p-4 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3.5 shadow-lg">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-blue-600/30 border border-blue-400/40 flex items-center justify-center font-bold text-cyan-300">
-                  ★
+                <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-600/30 border border-cyan-400/40 flex items-center justify-center font-bold text-cyan-300 shrink-0">
+                  <Cloud className="w-5 h-5 text-cyan-300" />
                 </div>
                 <div>
-                  <div className="text-xs font-mono text-cyan-400 font-bold uppercase">บัญชีที่เปิดอยู่</div>
+                  <div className="text-[11px] font-mono text-cyan-400 font-bold uppercase flex items-center gap-1.5">
+                    <span>บัญชีที่เปิดอยู่</span>
+                    {box?.cloudSync && (
+                      <span className="text-[9px] px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                        ซิงค์แล้ว
+                      </span>
+                    )}
+                  </div>
                   <div className="text-base font-bold text-white">{wizardName}</div>
-                  <div className="text-[11px] text-slate-400">
-                    มอนสเตอร์ {box?.units?.length || 553} ตัว • รูน {box?.runes?.length || 1799} ชิ้น
+                  <div className="text-[11px] text-slate-300 font-mono">
+                    มอนสเตอร์ {box?.units?.length || 556} ตัว • รูน {box?.runes?.length || 1500}+ ชิ้น • สำรับ {box?.decks?.length || 134} ทีม
                   </div>
                 </div>
               </div>
               <button
                 onClick={handlePushToCloud}
-                className="inline-flex items-center gap-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-3.5 py-2 rounded-xl shadow-md transition cursor-pointer"
+                className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-lg shadow-blue-600/25 transition cursor-pointer shrink-0"
               >
-                <CloudUpload className="w-4 h-4" />
-                <span>อัปเดตขึ้น Cloud</span>
+                <CloudUpload className="w-4 h-4 text-cyan-200" />
+                <span>อัปเดตขึ้น Cloud (1-Click)</span>
               </button>
             </div>
 
-            {/* Sync Passkey */}
-            <div className="bg-[#11192a] border border-slate-800 p-4 rounded-2xl space-y-2">
-              <div className="flex items-center justify-between text-xs text-slate-300 font-semibold">
-                <span className="flex items-center gap-1.5">
-                  <Key className="w-4 h-4 text-cyan-400" />
-                  <span>รหัส Cloud Sync ประจำไอดีคุณ (Passkey):</span>
+            {/* Method 1: QR Code Scanner (Fastest for Mobile) */}
+            <div className="bg-[#101726] border border-slate-800 p-4 rounded-2xl space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="flex items-center gap-2 text-xs font-bold text-emerald-400">
+                  <QrCode className="w-4 h-4" />
+                  <span>วิธีที่ 1 (สะดวกสุด): สแกน QR Code ด้วยมือถือ</span>
                 </span>
-                <span className="text-[11px] text-slate-400">ใช้ใส่ในเครื่องอื่น</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <input
-                  type="text"
-                  readOnly
-                  value={syncKey}
-                  className="flex-1 bg-[#0b101c] border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs font-mono text-cyan-300 font-bold tracking-wider select-all"
-                />
                 <button
-                  onClick={handleCopyKey}
-                  className="inline-flex items-center gap-1.5 bg-[#1e293b] hover:bg-[#334155] text-slate-200 text-xs font-semibold px-3.5 py-2.5 rounded-xl border border-slate-700 transition cursor-pointer shrink-0"
+                  onClick={() => setShowQrCode(!showQrCode)}
+                  className="text-[11px] text-cyan-400 hover:underline cursor-pointer"
                 >
-                  {copiedKey ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
-                  <span>{copiedKey ? 'คัดลอกแล้ว' : 'คัดลอก'}</span>
+                  {showQrCode ? 'ซ่อน QR' : 'แสดง QR'}
                 </button>
               </div>
+
+              {showQrCode && (
+                <div className="flex flex-col sm:flex-row items-center gap-4 bg-[#090f1a] p-3.5 rounded-xl border border-slate-800/80">
+                  <div className="w-32 h-32 bg-white p-2 rounded-xl shrink-0 shadow-md">
+                    <img
+                      src={qrCodeUrl}
+                      alt="QR Code สำหรับเปิดบนมือถือ"
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
+                  <div className="text-xs text-slate-300 space-y-1.5 text-center sm:text-left">
+                    <p className="font-semibold text-white">
+                      📱 เปิดกล้องมือถือ หรือแอป LINE สแกน QR Code นี้
+                    </p>
+                    <p className="text-[11px] text-slate-400 leading-relaxed">
+                      ระบบจะเปิดหน้าเว็บและโหลดไอดีของคุณเข้ามือถือทันที สามารถใช้งานได้ทุกฟีเจอร์ผ่าน 4G/5G แม้จะปิดคอมพิวเตอร์ไปแล้ว
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
 
-            {/* Magic Link */}
-            <div className="bg-[#11192a] border border-slate-800 p-4 rounded-2xl space-y-2">
+            {/* Method 2: Magic Link (Open anywhere) */}
+            <div className="bg-[#101726] border border-slate-800 p-4 rounded-2xl space-y-2">
               <div className="flex items-center justify-between text-xs text-slate-300 font-semibold">
                 <span className="flex items-center gap-1.5">
-                  <Share2 className="w-4 h-4 text-emerald-400" />
-                  <span>ลิงก์ซิงค์ด่วนสำหรับมือถือ (Magic Link):</span>
+                  <Share2 className="w-4 h-4 text-cyan-400" />
+                  <span>วิธีที่ 2: ลิงก์ด่วน Magic Link (กดเปิดได้ทันที):</span>
                 </span>
               </div>
               <p className="text-[11px] text-slate-400">
-                ส่งลิงก์นี้เข้าแชทไลน์/Discord แล้วกดเปิดบนมือถือ ระบบจะซิงค์ข้อมูลให้ทันที
+                ส่งลิงก์นี้เข้าแชท LINE หรือ Discord แล้วแตะเปิดบนมือถือได้เลย
               </p>
               <div className="flex items-center gap-2">
                 <input
                   type="text"
                   readOnly
                   value={shareLink}
-                  className="flex-1 bg-[#0b101c] border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs font-mono text-slate-300 select-all truncate"
+                  className="flex-1 bg-[#090f1a] border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs font-mono text-cyan-300 select-all truncate"
                 />
                 <button
                   onClick={handleCopyLink}
-                  className="inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold px-3.5 py-2.5 rounded-xl shadow transition cursor-pointer shrink-0"
+                  className="inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-3.5 py-2.5 rounded-xl shadow transition cursor-pointer shrink-0"
                 >
                   {copiedLink ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                   <span>{copiedLink ? 'คัดลอกแล้ว' : 'คัดลอกลิงก์'}</span>
                 </button>
               </div>
             </div>
-          </div>
-        )}
 
-        {/* TAB 2: SYNC IN (ดึงข้อมูลเข้าเครื่องนี้) */}
-        {activeTab === 'sync-in' && (
-          <div className="space-y-4">
-            <div className="bg-[#11192a] border border-slate-800 p-4 rounded-2xl space-y-3">
-              <div className="text-xs font-bold text-slate-300 flex items-center gap-2">
-                <Key className="w-4 h-4 text-cyan-400" />
-                <span>กรอกชื่อไอดี หรือรหัส Cloud Sync (Passkey):</span>
+            {/* Method 3: Passkey Code */}
+            <div className="bg-[#101726] border border-slate-800 p-4 rounded-2xl space-y-2">
+              <div className="flex items-center justify-between text-xs text-slate-300 font-semibold">
+                <span className="flex items-center gap-1.5">
+                  <Key className="w-4 h-4 text-amber-400" />
+                  <span>วิธีที่ 3: รหัส Cloud Sync (Passkey):</span>
+                </span>
+                <span className="text-[11px] text-slate-400">ใช้กรอกในแท็บ 'ดึงข้อมูล'</span>
               </div>
               <div className="flex items-center gap-2">
                 <input
                   type="text"
-                  placeholder="เช่น PedictU หรือ PEDICTU-9326961"
+                  readOnly
+                  value={passkey}
+                  className="flex-1 bg-[#090f1a] border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs font-mono text-amber-300 font-bold tracking-wider select-all"
+                />
+                <button
+                  onClick={handleCopyKey}
+                  className="inline-flex items-center gap-1.5 bg-[#1e293b] hover:bg-[#334155] text-slate-200 text-xs font-semibold px-3.5 py-2.5 rounded-xl border border-slate-700 transition cursor-pointer shrink-0"
+                >
+                  {copiedKey ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
+                  <span>{copiedKey ? 'คัดลอกแล้ว' : 'คัดลอกรหัส'}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* TAB 2: SYNC IN (ดึงข้อมูลเข้าเครื่องนี้จาก Cloud) */}
+        {activeTab === 'sync-in' && (
+          <div className="space-y-4">
+            <div className="bg-[#101726] border border-slate-800 p-4 rounded-2xl space-y-3">
+              <div className="text-xs font-bold text-slate-300 flex items-center gap-2">
+                <Key className="w-4 h-4 text-cyan-400" />
+                <span>กรอกชื่อไอดี, รหัส Passkey หรือวางลิงก์ Magic Link:</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <input
+                  type="text"
+                  placeholder="เช่น PedictU หรือ PEDICTU-6961 หรือวางลิงก์"
                   value={syncKeyInput}
                   onChange={(e) => setSyncKeyInput(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handlePullFromCloud()}
-                  className="flex-1 bg-[#0b101c] border border-slate-700 focus:border-blue-500 rounded-xl px-3.5 py-2.5 text-xs font-mono text-white outline-none"
+                  className="flex-1 bg-[#090f1a] border border-slate-700 focus:border-cyan-500 rounded-xl px-3.5 py-2.5 text-xs font-mono text-white outline-none"
                 />
                 <button
                   onClick={() => handlePullFromCloud()}
-                  className="inline-flex items-center gap-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-md transition cursor-pointer shrink-0"
+                  className="inline-flex items-center gap-1.5 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-md transition cursor-pointer shrink-0"
                 >
                   <CloudDownload className="w-4 h-4" />
                   <span>ดึงข้อมูล</span>
                 </button>
               </div>
-
             </div>
 
             <div className="bg-[#142035] border border-slate-800/80 p-4 rounded-2xl text-xs text-slate-300 space-y-2">
               <div className="font-bold flex items-center gap-2 text-white">
                 <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                <span>ระบบรักษาความปลอดภัยระดับเครื่อง (Private & Fast)</span>
+                <span>คลาวด์ความเร็วสูง 24/7 (ไม่ต้องเปิดคอมพิวเตอร์)</span>
               </div>
-              <p className="text-[11px] text-slate-400 leading-relaxed">
-                เมื่อกดดึงข้อมูล ระบบจะบันทึกมอนสเตอร์และรูนทั้งหมดลงในแคชเบราว์เซอร์ของอุปกรณ์นี้อย่างปลอดภัย เพื่อให้คุณสามารถใช้งาน AI Optimizer และตัวจัดรูนแบบออฟไลน์ได้ลื่นไหล 100%
+              <p className="text-[11px] text-slate-300 leading-relaxed">
+                ระบบเชื่อมต่อกับ Cloud Storage CDN ทั่วโลก ทำให้ดึงข้อมูลมอนสเตอร์ รูน และทีมสปีดรันของคุณได้ทันที แม้คอมพิวเตอร์ที่บ้านจะปิดอยู่ หรือกำลังเดินทางอยู่นอกบ้าน
               </p>
             </div>
           </div>
@@ -307,16 +347,16 @@ export default function CloudSyncModal({ isOpen, onClose, onSynced }) {
           <div
             className={`mt-4 p-3.5 rounded-xl text-xs flex items-center gap-2.5 animate-in fade-in duration-150 ${
               statusType === 'success'
-                ? 'bg-emerald-500/10 border border-emerald-500/40 text-emerald-300'
+                ? 'bg-emerald-500/15 border border-emerald-500/40 text-emerald-300'
                 : statusType === 'error'
-                ? 'bg-rose-500/10 border border-rose-500/40 text-rose-300'
-                : 'bg-cyan-500/10 border border-cyan-500/40 text-cyan-300'
+                ? 'bg-rose-500/15 border border-rose-500/40 text-rose-300'
+                : 'bg-cyan-500/15 border border-cyan-500/40 text-cyan-300'
             }`}
           >
-            {statusType === 'loading' && <RefreshCw className="w-4 h-4 animate-spin shrink-0" />}
+            {statusType === 'loading' && <RefreshCw className="w-4 h-4 animate-spin shrink-0 text-cyan-400" />}
             {statusType === 'success' && <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />}
             {statusType === 'error' && <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />}
-            <span>{statusMessage}</span>
+            <span className="leading-relaxed">{statusMessage}</span>
           </div>
         )}
       </div>

@@ -78,6 +78,31 @@ function swmSyncServer() {
           return;
         }
 
+        // /api/cloud-sync — global cloud sync via Supabase storage
+        if (req.url.startsWith('/api/cloud-sync')) {
+          let body = '';
+          req.on('data', (chunk) => { body += chunk; });
+          req.on('end', async () => {
+            res.setHeader('Content-Type', 'application/json; charset=utf-8');
+            try {
+              const urlObj = new URL(req.url, 'http://localhost');
+              const query = Object.fromEntries(urlObj.searchParams.entries());
+              const { handleCloudSync } = await import('./api/cloud-sync.js');
+              const { status, json } = await handleCloudSync({
+                method: req.method,
+                query,
+                body: body ? JSON.parse(body) : {},
+              });
+              res.statusCode = status;
+              return res.end(JSON.stringify(json));
+            } catch (err) {
+              res.statusCode = 500;
+              return res.end(JSON.stringify({ error: err.message }));
+            }
+          });
+          return;
+        }
+
         // POST /api/ai/advise — same handler Vercel runs, so the advisor works in dev
         if (req.method === 'POST' && req.url.startsWith('/api/ai/advise')) {
           let body = '';
