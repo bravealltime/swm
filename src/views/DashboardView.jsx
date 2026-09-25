@@ -22,6 +22,7 @@ import {
   Upload,
   Share2,
   Camera,
+  Radio,
 } from 'lucide-react';
 import MonsterAvatar from '../components/MonsterAvatar';
 import { PROMO_CODES } from '../data/promoCodes';
@@ -748,6 +749,24 @@ export default function DashboardView({ onNavigate }) {
               <div className="flex flex-wrap items-center gap-2">
                 <button
                   type="button"
+                  onClick={() => onNavigate('ai-account-audit')}
+                  className="px-3 py-1.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-amber-300 text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                  <span>🤖 AI ตรวจไอดี</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => onNavigate('live-farm-monitor')}
+                  className="px-3 py-1.5 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-300 text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
+                >
+                  <Radio className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>📡 จอฟาร์มสด</span>
+                </button>
+
+                <button
+                  type="button"
                   onClick={() => onNavigate('my-box', { tab: 'pokedex' })}
                   className="px-3 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/25 text-amber-300 text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5"
                 >
@@ -852,6 +871,91 @@ export default function DashboardView({ onNavigate }) {
             )}
           </div>
         )}
+      </section>
+
+      {/* 2.5 REAL-TIME & ACCOUNT SUITE COMMAND HUB */}
+      <section className="grid grid-cols-1 md:grid-cols-3 gap-4 animate-in fade-in duration-300">
+        {/* Card 1: AI Account Audit */}
+        <div
+          onClick={() => onNavigate('ai-account-audit')}
+          className="relative overflow-hidden rounded-2xl border border-amber-500/25 bg-gradient-to-br from-amber-950/30 via-[#14120f] to-[#0c0f18] p-5 shadow-xl hover:border-amber-500/50 hover:shadow-amber-500/10 transition-all cursor-pointer group"
+        >
+          <div className="absolute top-0 right-0 w-48 h-48 bg-amber-500/10 rounded-full blur-2xl pointer-events-none group-hover:bg-amber-500/15 transition-all" />
+          <div className="flex items-start justify-between gap-3 mb-3">
+            <div className="p-2.5 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-400">
+              <Sparkles className="w-5 h-5" />
+            </div>
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-amber-500/20 text-amber-300 border border-amber-500/30 uppercase tracking-wide">
+              G2-G3 Ready
+            </span>
+          </div>
+          <h3 className="text-base font-black text-white group-hover:text-amber-300 transition-colors flex items-center gap-1.5">
+            <span>🤖 AI วินิจฉัยสุขภาพไอดี</span>
+          </h3>
+          <p className="text-xs text-slate-400 mt-1.5 leading-relaxed">
+            วัดเกณฑ์สปีด Swift (+221 SPD), คุณภาพ Violent, เช็ค 30 ตัวเมต้าการ์เดียน และจัดลำดับการฟาร์มที่คุ้มค่าที่สุด
+          </p>
+          <div className="mt-4 pt-3 border-t border-white/[0.06] flex items-center justify-between text-xs font-bold text-amber-400">
+            <span>เปิดรายงานวิเคราะห์ไอดี</span>
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          </div>
+        </div>
+
+        {/* Card 2: Live Farming Monitor */}
+        <div
+          onClick={() => onNavigate('live-farm-monitor')}
+          className="relative overflow-hidden rounded-2xl border border-emerald-500/25 bg-gradient-to-br from-emerald-950/30 via-[#0c1616] to-[#080f14] p-5 shadow-xl hover:border-emerald-500/50 hover:shadow-emerald-500/10 transition-all cursor-pointer group"
+        >
+          <div className="absolute top-0 right-0 w-48 h-48 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none group-hover:bg-emerald-500/15 transition-all" />
+          <div className="flex items-start justify-between gap-3 mb-3">
+            <div className="p-2.5 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400">
+              <Radio className="w-5 h-5" />
+            </div>
+            <span className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 uppercase tracking-wide">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </span>
+              สดจากเกม (SWEX)
+            </span>
+          </div>
+          <h3 className="text-base font-black text-white group-hover:text-emerald-300 transition-colors flex items-center gap-1.5">
+            <span>📡 จอตรวจจับการฟาร์มสด</span>
+          </h3>
+          <p className="text-xs text-slate-400 mt-1.5 leading-relaxed">
+            จับผลดรอปรูนดันเจี้ยน Abyss วินาทีต่อวินาที คำนวณ Max Potential SPD (+30) พร้อม Keep/Sell Advisor ภาษาไทย
+          </p>
+          <div className="mt-4 pt-3 border-t border-white/[0.06] flex items-center justify-between text-xs font-bold text-emerald-400">
+            <span>เปิดหน้าจอฟาร์มสด</span>
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          </div>
+        </div>
+
+        {/* Card 3: My Box */}
+        <div
+          onClick={() => onNavigate('my-box')}
+          className="relative overflow-hidden rounded-2xl border border-cyan-500/25 bg-gradient-to-br from-cyan-950/30 via-[#0a1420] to-[#080d18] p-5 shadow-xl hover:border-cyan-500/50 hover:shadow-cyan-500/10 transition-all cursor-pointer group"
+        >
+          <div className="absolute top-0 right-0 w-48 h-48 bg-cyan-500/10 rounded-full blur-2xl pointer-events-none group-hover:bg-cyan-500/15 transition-all" />
+          <div className="flex items-start justify-between gap-3 mb-3">
+            <div className="p-2.5 rounded-xl bg-cyan-500/15 border border-cyan-500/30 text-cyan-400">
+              <Package className="w-5 h-5" />
+            </div>
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 uppercase tracking-wide">
+              1-Click Sync
+            </span>
+          </div>
+          <h3 className="text-base font-black text-white group-hover:text-cyan-300 transition-colors flex items-center gap-1.5">
+            <span>📦 กล่องมอนสเตอร์ & ตู้สะสม</span>
+          </h3>
+          <p className="text-xs text-slate-400 mt-1.5 leading-relaxed">
+            คลังมอนสเตอร์ {userProfileStats?.totalUnits || 556} ตัว, ตู้สะสม Nat 5/LD5, คลังรูน {userProfileStats?.totalRunes || 1815} ชิ้น และอาร์ติแฟกต์
+          </p>
+          <div className="mt-4 pt-3 border-t border-white/[0.06] flex items-center justify-between text-xs font-bold text-cyan-400">
+            <span>เข้าสู่กล่องมอนสเตอร์</span>
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          </div>
+        </div>
       </section>
 
       {/* 3. INSTANT PROMO CODES BANNER (1-Click Copy) */}

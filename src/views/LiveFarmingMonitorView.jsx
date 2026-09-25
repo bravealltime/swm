@@ -6,6 +6,7 @@ import {
 import * as aegisLive from '../services/aegisLive';
 import { evaluateRune } from '../utils/runeEvaluator';
 import { isAudioMuted, toggleAudioMute, playLegendAlertSound, playDropSound } from '../utils/soundEffects';
+import AccountSuiteHeader from '../components/AccountSuiteHeader';
 
 const DUNGEON_NAMES = {
   1001: 'Giants Keep (ยักษ์)',
@@ -93,6 +94,9 @@ export default function LiveFarmingMonitorView({ onNavigate }) {
 
   return (
     <div className="space-y-6 max-w-[1780px] 2xl:max-w-[1880px] mx-auto pb-16 animate-in fade-in duration-300">
+      {/* Unified Suite Switcher */}
+      <AccountSuiteHeader activeTab="live-farm-monitor" onNavigate={onNavigate} />
+
       {/* 1. Header Banner */}
       <div className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-r from-[#0d1f1c] via-[#09151c] to-[#070b12] p-6 sm:p-8 shadow-2xl">
         <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />

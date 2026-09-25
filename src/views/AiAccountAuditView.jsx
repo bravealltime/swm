@@ -9,6 +9,7 @@ import { loadBox, saveBox } from '../utils/boxStorage';
 import { auditAccount } from '../utils/accountAudit';
 import { loadDemoBox } from '../utils/swexImport';
 import * as aegisLive from '../services/aegisLive';
+import AccountSuiteHeader from '../components/AccountSuiteHeader';
 
 export default function AiAccountAuditView({ onNavigate, onOpenAuth }) {
   const [box, setBox] = useState(() => loadBox());
@@ -118,6 +119,7 @@ export default function AiAccountAuditView({ onNavigate, onOpenAuth }) {
   if (!box || !auditResult) {
     return (
       <div className="max-w-[1200px] mx-auto py-12 px-4 animate-in fade-in duration-300">
+        <AccountSuiteHeader activeTab="ai-account-audit" onNavigate={onNavigate} />
         <div className="rounded-3xl border border-white/[0.08] bg-gradient-to-b from-[#121c2c] to-[#0a101b] p-8 sm:p-12 text-center shadow-2xl">
           <div className="w-16 h-16 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center mx-auto mb-6">
             <HeartPulse className="w-8 h-8" />
@@ -169,6 +171,8 @@ export default function AiAccountAuditView({ onNavigate, onOpenAuth }) {
 
   return (
     <div className="space-y-6 max-w-[1780px] 2xl:max-w-[1880px] mx-auto pb-16 animate-in fade-in duration-300">
+      <AccountSuiteHeader activeTab="ai-account-audit" onNavigate={onNavigate} />
+
       {/* 1. Header Overview & Rank Badge */}
       <div className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-r from-[#121c2e] via-[#0d1624] to-[#080d16] p-6 sm:p-8 shadow-2xl">
         <div className="absolute top-0 right-0 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />

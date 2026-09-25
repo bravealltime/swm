@@ -57,6 +57,7 @@ export default function Sidebar({
   onClose
 }) {
   const [expandedCategories, setExpandedCategories] = useState({
+    'live-account-suite': true,
     'guild-siege': true,
     'rta-rankings': true,
     'tools-dungeons': true,

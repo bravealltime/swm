@@ -2,6 +2,17 @@
 // Counts are intentionally not hard-coded here — they drift from the data.
 export const NAVIGATION_CATEGORIES = [
   {
+    id: 'live-account-suite',
+    title: '⚡ ระบบสด & จัดการไอดี (Live SWEX Suite)',
+    items: [
+      { id: 'ai-account-audit', label: '🤖 AI วินิจฉัยสุขภาพไอดี (Health Check)', icon: 'Sparkles', badge: 'AI' },
+      { id: 'live-farm-monitor', label: '📡 ระบบตรวจจับฟาร์มสด (Live Monitor)', icon: 'Radio', badge: 'สด' },
+      { id: 'my-box', label: '📦 กล่องมอนสเตอร์ & ตู้สะสม (My Box)', icon: 'Layers', badge: 'หลัก' },
+      { id: 'ai-farm-optimizer', label: '⚔️ AI จัดทีม & รูน Abyss (Realtime)', icon: 'Zap', badge: 'AI' },
+      { id: 'aegislink', label: '🔌 AegisLink ปลั๊กอินส่งข้อมูลสด', icon: 'Cpu', badge: 'SWEX' },
+    ]
+  },
+  {
     id: 'guild-siege',
     title: 'กิลด์วอร์ & ศึกยึดเกาะ (Siege)',
     items: [
@@ -55,13 +66,9 @@ export const NAVIGATION_CATEGORIES = [
   },
   {
     id: 'community-account',
-    title: 'ชุมชน & เชื่อมต่อไอดี (SWEX)',
+    title: 'ชุมชน & ช่วยเหลือผู้เล่น',
     items: [
-      { id: 'my-box', label: 'กล่องมอนสเตอร์ & ตู้สะสม (SWEX)', icon: 'Layers', badge: 'ใหม่' },
-      { id: 'live-farm-monitor', label: '📡 ระบบตรวจจับฟาร์มสด (Live Monitor)', icon: 'Radio', badge: 'สด' },
-      { id: 'ai-account-audit', label: '🤖 AI วินิจฉัยสุขภาพไอดี (Health Check)', icon: 'Sparkles', badge: 'AI' },
       { id: 'guild-recruiting', label: 'ประกาศรับสมัครกิลด์', icon: 'UserPlus' },
-      { id: 'aegislink', label: 'AegisLink ปลั๊กอินส่งข้อมูลสด', icon: 'Cpu', badge: 'SWEX' },
       { id: 'faq-guides', label: 'คู่มือ & คำถามพบบ่อย (FAQ)', icon: 'HelpCircle' },
     ]
   }

@@ -21,6 +21,7 @@ import {
   Package,
   Cloud,
   User,
+  Radio,
 } from 'lucide-react';
 import SwmLogo from './SwmLogo';
 import { buildUrl } from '../router';
@@ -28,6 +29,7 @@ import { useAuth } from '../contexts/AuthContext';
 
 const NAV_ITEMS = [
   { id: 'dashboard', label: 'หน้าแรก', icon: Home },
+  { id: 'my-box', label: 'กล่องไอดี & ฟาร์มสด', icon: Sparkles, group: ['my-box', 'live-farm-monitor', 'ai-account-audit'], badge: 'ใหม่' },
   { id: '3mdc', label: '3MDC Siege', icon: Shield, group: ['3mdc', 'where2use', '3mdc-stats'] },
   { id: 'rta', label: 'RTA Analytics', icon: Trophy, group: ['rta', 'meta-dashboard', 'rta-synergies', 'guardian'] },
   { id: 'player-tracker', label: 'ค้นหาผู้เล่น', icon: Search },
@@ -35,9 +37,11 @@ const NAV_ITEMS = [
 ];
 
 const TOOL_ITEMS = [
+  { id: 'ai-account-audit', label: '🤖 AI วินิจฉัยสุขภาพไอดี (Health Check)', desc: 'ตรวจสปีด Swift/Violent & จัดอันดับ RTA', icon: Sparkles },
+  { id: 'live-farm-monitor', label: '📡 จอตรวจจับการฟาร์มสด (Live Monitor)', desc: 'เช็คดรอปรูน Abyss สด พร้อม Keep/Sell Advisor', icon: Radio },
+  { id: 'my-box', label: 'กล่องมอนสเตอร์ของฉัน (My Box)', desc: 'นำเข้า SWEX → ทีมที่สร้างได้', icon: Package },
   { id: 'guardian', label: 'อันดับ Guardian คนไทย & เมต้าจริง', desc: 'จากสถิติการแข่งขันระดับ Guardian จริง', icon: Trophy },
   { id: 'arena', label: 'ทีมบุก & ตั้งรับ Arena (AO/AD)', desc: 'สูตรบุกเร็ว 15 วิ & ถ่วงเวลา Rush Hour', icon: Swords },
-  { id: 'my-box', label: 'กล่องมอนสเตอร์ของฉัน', desc: 'นำเข้า SWEX → ทีมที่สร้างได้', icon: Package },
   { id: 'artifact', label: 'ดาเมจเสริมอาร์ติแฟกต์', desc: 'True Damage Optimizer', icon: Sparkles },
   { id: 'speed', label: 'จูนสปีดเทิร์น (Speed Tuner)', desc: 'Tick & Speed Tuning', icon: Gauge },
   { id: 'tier-list-maker', label: 'สร้าง Tier List RTA/Siege', desc: 'Drag & Drop Builder', icon: Award },
@@ -117,6 +121,11 @@ export default function Navbar({ currentView, onNavigate, onOpenSearch, onOpenMe
                 >
                   <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-blue-400' : 'text-slate-400'}`} />
                   <span className="hidden xl:inline">{item.label}</span>
+                  {item.badge && (
+                    <span className="hidden xl:inline-block px-1.5 py-0.2 rounded text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                      {item.badge}
+                    </span>
+                  )}
                 </a>
               );
             })}

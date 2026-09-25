@@ -4,7 +4,7 @@ import Sidebar from './components/Sidebar';
 import ErrorBoundary from './components/ErrorBoundary';
 import SwmLogo from './components/SwmLogo';
 import { AuthProvider } from './contexts/AuthContext';
-import { Home, Shield, Trophy, Search, Menu, Loader2, CheckCircle2 } from 'lucide-react';
+import { Home, Shield, Trophy, Search, Menu, Loader2, CheckCircle2, Sparkles } from 'lucide-react';
 import { buildUrl, parseLocation, normalizeView, titleFor, descriptionFor } from './router';
 import { saveBox } from './utils/boxStorage';
 
@@ -305,6 +305,10 @@ function AppContent() {
           <Home className="w-4 h-4" />
           <span>หน้าแรก</span>
         </button>
+        <button onClick={() => handleNavigate('my-box')} className={dockItem(['my-box', 'live-farm-monitor', 'ai-account-audit'].includes(currentView))} aria-current={['my-box', 'live-farm-monitor', 'ai-account-audit'].includes(currentView) ? 'page' : undefined}>
+          <Sparkles className="w-4 h-4" />
+          <span>ไอดี/ฟาร์ม</span>
+        </button>
         <button onClick={() => handleNavigate('3mdc')} className={dockItem(currentView === '3mdc')} aria-current={currentView === '3mdc' ? 'page' : undefined}>
           <Shield className="w-4 h-4" />
           <span>3MDC</span>
@@ -312,10 +316,6 @@ function AppContent() {
         <button onClick={() => handleNavigate('rta')} className={dockItem(RTA_VIEWS.includes(currentView))} aria-current={RTA_VIEWS.includes(currentView) ? 'page' : undefined}>
           <Trophy className="w-4 h-4" />
           <span>RTA</span>
-        </button>
-        <button onClick={() => setIsSearchOpen(true)} className={dockItem(false)}>
-          <Search className="w-4 h-4" />
-          <span>ค้นหา</span>
         </button>
         <button onClick={() => setMobileMenuOpen(true)} className={dockItem(false)} aria-haspopup="dialog">
           <Menu className="w-4 h-4" />

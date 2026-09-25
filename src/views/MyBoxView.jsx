@@ -23,6 +23,7 @@ import { computeUnitSkillStatus } from '../data/monsterSkills';
 
 import { monsterOf, monsterByName, monsterByImage, ELEMENT_FILTERS, ELEMENT_COLOR, ELEMENT_TH, card, agoLabel } from './mybox/shared';
 import RuneCard from './mybox/RuneCard';
+import AccountSuiteHeader from '../components/AccountSuiteHeader';
 
 // The heavy tabs load on demand so the box page itself stays small
 const PokedexCollection = lazy(() => import('./mybox/PokedexCollection'));
@@ -247,6 +248,9 @@ export default function MyBoxView({ onNavigate, tab: initialTab, subItem }) {
 
   return (
     <div className="space-y-6 max-w-[1780px] 2xl:max-w-[1880px] mx-auto pb-16 animate-in fade-in duration-300">
+      {/* Unified Suite Switcher */}
+      <AccountSuiteHeader activeTab="my-box" onNavigate={onNavigate} />
+
       <div className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-r from-[#0f2a1a] via-[#090e18] to-[#070b12] p-6 sm:p-8 shadow-2xl">
         <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
