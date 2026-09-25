@@ -13,6 +13,10 @@ const VIEW_ALIASES = {
   'deck-builder': 'siege-planner',
   'arena-defense': 'arena',
   'arena-offense': 'arena',
+  'live-farm': 'live-farm-monitor',
+  'farm-monitor': 'live-farm-monitor',
+  'account-audit': 'ai-account-audit',
+  audit: 'ai-account-audit',
 };
 
 export const VIEW_TITLES = {
@@ -47,6 +51,8 @@ export const VIEW_TITLES = {
   recruit: 'กิลด์รับสมัคร',
   aegislink: 'AegisLink',
   'my-box': 'กล่องมอนสเตอร์ของฉัน',
+  'live-farm-monitor': '📡 ระบบตรวจจับฟาร์มสด (Live Monitor)',
+  'ai-account-audit': '🤖 AI ตรวจสุขภาพไอดี (Account Audit)',
   admin: 'หลังบ้าน SWM',
   'ai-farm-optimizer': '🤖 AI จัดทีม & รูน Abyss (Realtime)',
   rta: 'วิเคราะห์ RTA',
@@ -167,6 +173,14 @@ export const VIEW_SEO = {
   'siege-planner': {
     title: 'จัด 10 ทีมบุก Siege (Deck Builder) จากมอนสเตอร์ในไอดี | SWM',
     description: 'วางแผน 10 ทีมบุกกิลด์วอร์ ป้องกันการใช้มอนสเตอร์ซ้ำ คำนวณความพร้อมของทีมและแชร์เดสก์กิลด์ได้ทันที',
+  },
+  'live-farm-monitor': {
+    title: 'ระบบตรวจจับการฟาร์มสด & วิเคราะห์รูนอัตโนมัติ (Live Farming Monitor) | SWM',
+    description: 'เชื่อมต่อ SWEX Real-time ตรวจจับผลดรอปรูนดันเจี้ยน Abyss วินาทีต่อวินาที คำนวณ Max Potential Efficiency / SPD พร้อมระบบ Keep or Sell Advisor',
+  },
+  'ai-account-audit': {
+    title: '🤖 AI วิเคราะห์ไอดี & ตรวจสุขภาพรูน (Account Audit & Health Check) | SWM',
+    description: 'ตรวจเช็คเกรดไอดี RTA Guardian, วัดเกณฑ์สปีด Swift (+220+), คุณภาพ Violent, เช็คตัวเมต้า 30 ตัว และจัดอันดับดันเจี้ยนที่ควรฟาร์ม',
   },
 };
 

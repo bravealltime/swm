@@ -16,6 +16,7 @@ import { supportsFolderWatch, loadDirHandle, clearDirHandle, pickSwexFolder, ens
 import { exportAllDataAsJSON } from '../services/storageService';
 import { loadPublicSettings } from '../services/adminClient';
 import * as aegisLive from '../services/aegisLive';
+import { playDropSound } from '../utils/soundEffects';
 import AccountRadarChart from '../components/AccountRadarChart';
 import { calculateAccountRadar } from '../utils/accountRadar';
 import { computeUnitSkillStatus } from '../data/monsterSkills';
@@ -78,6 +79,78 @@ export default function MyBoxView({ onNavigate, tab: initialTab, subItem }) {
     } catch (err) {
       setError(err.message || 'อ่านไฟล์ไม่สำเร็จ');
       return false;
+    }
+  };
+
+  const [syncing, setSyncing] = useState(false);
+  const [syncToast, setSyncToast] = useState(null);
+
+  const handleOneClickSync = async () => {
+    setSyncing(true);
+    setError('');
+    try {
+      let syncedBox = null;
+      let sourceName = '';
+
+      // 1. First try AegisLink Live Snapshot (local, fastest, most up to date)
+      const liveSnap = await aegisLive.fetchLiveSnapshot().catch(() => null);
+      if (liveSnap && liveSnap.success && liveSnap.box?.units?.length > 0) {
+        syncedBox = liveSnap.box;
+        sourceName = 'AegisLink (สด)';
+      }
+
+      // 2. If not live snap, try Supabase Cloud (if logged in)
+      if (!syncedBox) {
+        try {
+          const { getSupabase } = await import('../services/supabaseClient');
+          const supabase = await getSupabase();
+          const { data: { session } } = (await supabase?.auth.getSession()) || {};
+          if (session?.user) {
+            const { data } = await supabase.from('user_profiles').select('box_data').eq('id', session.user.id).single();
+            if (data?.box_data) {
+              let parsed = data.box_data;
+              if (parsed.unit_list && !Array.isArray(parsed.units)) parsed = parseSwexExport(parsed);
+              if (parsed?.units?.length > 0) {
+                syncedBox = parsed;
+                sourceName = 'Supabase Cloud';
+              }
+            }
+          }
+        } catch {}
+      }
+
+      // 3. Fallback to /data/my_profile.json
+      if (!syncedBox) {
+        const res = await fetch('/data/my_profile.json').catch(() => null);
+        if (res && res.ok) {
+          const json = await res.json();
+          let parsed = json;
+          if (parsed.unit_list && !Array.isArray(parsed.units)) parsed = parseSwexExport(parsed);
+          if (parsed?.units?.length > 0) {
+            syncedBox = parsed;
+            sourceName = 'โฟลเดอร์ GG (my_profile)';
+          }
+        }
+      }
+
+      if (syncedBox && syncedBox.units?.length > 0) {
+        syncedBox.source = { name: sourceName, modified: Date.now(), auto: true, live: true };
+        saveBox(syncedBox);
+        setBox(syncedBox);
+        setTab('overview');
+        playDropSound();
+        const msg = `✨ ซิงค์ไอดี ${syncedBox.wizard?.name || 'PedictU'} สำเร็จ (${syncedBox.units.length} มอนสเตอร์, ${syncedBox.runes?.length || 0} รูน) [${sourceName}]`;
+        setSyncToast({ text: msg, type: 'success' });
+        setTimeout(() => setSyncToast(null), 5000);
+      } else {
+        throw new Error('ไม่พบข้อมูลกล่องล่าสุด กรุณาเปิดเกมขณะรัน SWEX หรือนำเข้าไฟล์ JSON');
+      }
+    } catch (err) {
+      setError(err.message || 'ซิงค์ข้อมูลไม่สำเร็จ');
+      setSyncToast({ text: err.message, type: 'error' });
+      setTimeout(() => setSyncToast(null), 5000);
+    } finally {
+      setSyncing(false);
     }
   };
 
@@ -191,6 +264,15 @@ export default function MyBoxView({ onNavigate, tab: initialTab, subItem }) {
           {box && (
             <div className="flex items-center gap-2 shrink-0 flex-wrap">
               <button
+                onClick={handleOneClickSync}
+                disabled={syncing}
+                className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 text-xs font-black flex items-center gap-1.5 cursor-pointer shadow-lg shadow-emerald-500/20 transition-all disabled:opacity-50"
+                title="ซิงค์ดึงข้อมูลมอนสเตอร์และรูนล่าสุดจาก AegisLink / Supabase Cloud / โฟลเดอร์ GG ทันที"
+              >
+                <RefreshCw className={`w-4 h-4 text-slate-950 ${syncing ? 'animate-spin' : ''}`} />
+                <span>{syncing ? 'กำลังซิงค์...' : '🔄 ซิงค์ข้อมูลล่าสุด (1-Click)'}</span>
+              </button>
+              <button
                 onClick={() => exportAllDataAsJSON()}
                 className="px-3 py-2 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-sm transition-all"
                 title="สำรองข้อมูลทั้งหมด (มอนสเตอร์ + รูน + สงครามกิลด์) เป็นไฟล์ JSON"
@@ -205,6 +287,13 @@ export default function MyBoxView({ onNavigate, tab: initialTab, subItem }) {
           )}
         </div>
       </div>
+
+      {syncToast && (
+        <div role="status" className={`p-4 rounded-2xl border flex items-center gap-2 text-sm animate-in fade-in slide-in-from-top-2 duration-300 ${syncToast.type === 'success' ? 'bg-emerald-500/10 border-emerald-500/40 text-emerald-300' : 'bg-rose-500/10 border-rose-500/40 text-rose-300'}`}>
+          {syncToast.type === 'success' ? <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" /> : <XCircle className="w-5 h-5 text-rose-400 shrink-0" />}
+          <span>{syncToast.text}</span>
+        </div>
+      )}
 
       {error && (
         <div role="alert" className="p-4 rounded-2xl border border-rose-500/30 bg-rose-500/5 text-sm text-rose-200 flex items-center gap-2">
@@ -232,6 +321,15 @@ export default function MyBoxView({ onNavigate, tab: initialTab, subItem }) {
               </div>
             </div>
             <div className="flex flex-wrap items-center gap-2 shrink-0">
+              <button
+                onClick={handleOneClickSync}
+                disabled={syncing}
+                className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 text-xs font-black flex items-center gap-2 cursor-pointer shadow-lg shadow-emerald-500/25 transition-all disabled:opacity-50"
+                title="ซิงค์ดึงข้อมูลจริงล่าสุดของไอดีคุณทันที"
+              >
+                <RefreshCw className={`w-4 h-4 text-slate-950 ${syncing ? 'animate-spin' : ''}`} />
+                <span>{syncing ? 'กำลังซิงค์...' : '🔄 ซิงค์ข้อมูลไอดีจริง (1-Click)'}</span>
+              </button>
               <button
                 onClick={handleLoadDemo}
                 className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 text-xs font-black flex items-center gap-2 cursor-pointer shadow-lg shadow-amber-500/20"

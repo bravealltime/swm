@@ -4,6 +4,8 @@
 import { parseSwexExport } from '../utils/swexImport';
 import { saveBox } from '../utils/boxStorage';
 import { parseRankingPacket, kindFromCommand, serverFromCountry } from '../utils/guildRankings';
+import { evaluateRune } from '../utils/runeEvaluator';
+import { playLegendAlertSound, playDropSound } from '../utils/soundEffects';
 
 export const DEFAULT_PORT = 7391;
 const ENABLED_KEY = 'swm:aegis-live';
@@ -26,6 +28,9 @@ const state = {
   events: 0,
   guild: { packets: {}, battles: [] },
   rankings: {}, // kind -> { rows, at, server, shared, error } from in-game ranking screens
+  dungeons: [], // list of recent runs with evaluated runes
+  summons: [],  // list of recent summons
+  liveAlert: null, // latest high-priority alert (Nat 5 or 6★ Legend)
   port: DEFAULT_PORT,
   recent: [], // last events for the plugin page console: { at, kind, text }
 };
@@ -167,6 +172,25 @@ async function loadInitial() {
   }
 }
 
+export async function fetchLiveSnapshot() {
+  try {
+    const snap = await fetchJson('/snapshot');
+    if (snap?.data) {
+      raw = snap.data;
+      state.seq = snap.seq || 0;
+      publishBox('snapshot');
+      return { success: true, box: parseSwexExport(raw) };
+    }
+    return { success: false, error: 'ยังไม่มี snapshot ในปลั๊กอิน (ต้องเข้าเกมขณะเปิด SWEX)' };
+  } catch (err) {
+    return { success: false, error: err.message };
+  }
+}
+
+export function dismissLiveAlert() {
+  patch({ liveAlert: null });
+}
+
 export function start() {
   if (es) return;
   try { localStorage.setItem(ENABLED_KEY, '1'); } catch { /* ignore */ }
@@ -214,6 +238,80 @@ export function start() {
     patch({ lastEventAt: Date.now(), lastCommand: msg.command, events: state.events + 1 });
     emit('guild', state.guild);
     if (/Rank/i.test(msg.command)) handleRankingPacket(msg.command, msg.resp, msg.at);
+  });
+  source.addEventListener('dungeon', (ev) => {
+    if (es !== source) return;
+    try {
+      const msg = JSON.parse(ev.data);
+      const rune = msg.rune;
+      const evaluated = rune ? evaluateRune(rune) : null;
+      const run = {
+        at: msg.at || Date.now(),
+        dungeonId: msg.dungeonId,
+        stageId: msg.stageId,
+        win: msg.win,
+        clearTimeSec: msg.clearTimeSec,
+        rune,
+        evaluated,
+      };
+
+      state.dungeons = [run, ...state.dungeons].slice(0, 50);
+
+      if (evaluated) {
+        if (evaluated.isLegend6Star || evaluated.maxPotentialSpd >= 24) {
+          playLegendAlertSound();
+          patch({
+            liveAlert: {
+              type: 'legend_rune',
+              title: `✨ ดรอปรูนตำนาน 6★! [${evaluated.setName}]`,
+              desc: `สล็อต ${evaluated.slot} ${evaluated.mainStat.nameTh} (${evaluated.recommendationTh})`,
+              badge: evaluated.recommendationTh,
+              badgeColor: evaluated.badgeColor,
+              at: Date.now(),
+              rune: evaluated,
+            },
+          });
+        } else {
+          playDropSound();
+        }
+      }
+
+      note('dungeon', `ดันเจี้ยน: จบใน ${msg.clearTimeSec ? msg.clearTimeSec + 's' : '-'} ${evaluated ? `(ดรอป ${evaluated.setName} ${evaluated.slot}★ ${evaluated.recommendationTh})` : ''}`);
+      patch({ lastEventAt: Date.now(), lastCommand: 'dungeon', events: state.events + 1 });
+      emit('dungeon', run);
+    } catch (err) {
+      console.warn('Failed to parse dungeon event:', err);
+    }
+  });
+  source.addEventListener('summon', (ev) => {
+    if (es !== source) return;
+    try {
+      const msg = JSON.parse(ev.data);
+      const units = Array.isArray(msg.units) ? msg.units : [];
+      state.summons = [{ at: msg.at || Date.now(), units }, ...state.summons].slice(0, 50);
+
+      const nat5 = units.find((u) => Number(u.class) >= 5 || Number(u.unit_master_id) % 10 === 5);
+      if (nat5) {
+        playLegendAlertSound();
+        patch({
+          liveAlert: {
+            type: 'nat5_summon',
+            title: `🎉 ซัมมอนได้ 5★ แท้ระดับตำนาน!`,
+            desc: `ขอแสดงความยินดีด้วยครับ! ข้อมูลอัปเดตเข้ากล่องแล้ว`,
+            badge: '5★ NAT 5',
+            badgeColor: 'amber',
+            at: Date.now(),
+            unit: nat5,
+          },
+        });
+      }
+
+      note('summon', `ซัมมอน: ${units.length} มอนสเตอร์`);
+      patch({ lastEventAt: Date.now(), lastCommand: 'summon', events: state.events + 1 });
+      emit('summon', msg);
+    } catch (err) {
+      console.warn('Failed to parse summon event:', err);
+    }
   });
   source.onerror = () => {
     if (es !== source) return;

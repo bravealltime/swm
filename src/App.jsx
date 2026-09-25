@@ -8,6 +8,8 @@ import { Home, Shield, Trophy, Search, Menu, Loader2, CheckCircle2 } from 'lucid
 import { buildUrl, parseLocation, normalizeView, titleFor, descriptionFor } from './router';
 import { saveBox } from './utils/boxStorage';
 
+import LiveAlertBanner from './components/LiveAlertBanner';
+
 // Every view (and the JSON it imports) is its own chunk, so the first paint
 // only downloads the shell + the page that was actually requested.
 const VIEWS = {
@@ -38,6 +40,8 @@ const VIEWS = {
   recruit: lazy(() => import('./views/GuildRecruitView')),
   aegislink: lazy(() => import('./views/PluginCompanionView')),
   'my-box': lazy(() => import('./views/MyBoxView')),
+  'live-farm-monitor': lazy(() => import('./views/LiveFarmingMonitorView')),
+  'ai-account-audit': lazy(() => import('./views/AiAccountAuditView')),
   rta: lazy(() => import('./views/RtaAnalyticsView')),
   'summon-simulator': lazy(() => import('./views/SummonSimulatorView')),
   'siege-planner': lazy(() => import('./views/SiegePlannerView')),
@@ -233,6 +237,9 @@ function AppContent() {
           </button>
         </aside>
       )}
+
+      {/* Global Real-Time Alert Banner (Summon & Legend Rune Drops) */}
+      <LiveAlertBanner onNavigate={handleNavigate} />
 
       <Navbar
         currentView={currentView}

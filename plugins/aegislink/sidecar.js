@@ -22,6 +22,8 @@ const state = {
   seq: 0,
   guild: {},
   battles: [],
+  dungeons: [],
+  summons: [],
   clients: new Set(),
   startedAt: Date.now(),
 };
@@ -35,6 +37,8 @@ function loadState() {
     state.seq = raw.seq || 0;
     state.guild = raw.guild || {};
     state.battles = raw.battles || [];
+    state.dungeons = raw.dungeons || [];
+    state.summons = raw.summons || [];
     console.log(`[sidecar] restored state: seq ${state.seq}, units ${state.account ? state.account.unit_list.length : 0}`);
   } catch { /* first run */ }
 }
@@ -43,6 +47,7 @@ function saveState() {
     fs.mkdirSync(__dirname, { recursive: true });
     fs.writeFileSync(STATE_FILE, JSON.stringify({
       account: state.account, accountAt: state.accountAt, seq: state.seq, guild: state.guild, battles: state.battles,
+      dungeons: state.dungeons.slice(0, 50), summons: state.summons.slice(0, 50),
     }));
   } catch (err) { console.error('[sidecar] save failed:', err.message); }
 }
@@ -56,7 +61,9 @@ function statusBody() {
   return {
     plugin: 'AegisLink', version: '2.1.0+sidecar', seq: state.seq, hasSnapshot: !!state.account, accountAt: state.accountAt,
     wizard: wizardSummary(), units: state.account ? state.account.unit_list.length : 0,
-    guildCommands: Object.keys(state.guild), battles: state.battles.length, clients: state.clients.size, uptime: Date.now() - state.startedAt,
+    guildCommands: Object.keys(state.guild), battles: state.battles.length,
+    recentDungeons: state.dungeons.length, recentSummons: state.summons.length,
+    clients: state.clients.size, uptime: Date.now() - state.startedAt,
   };
 }
 function applyDelta(account, delta) {
@@ -117,6 +124,16 @@ function ingest(body) {
     }
     broadcast('guild', { seq: state.seq, command: body.command, at: body.at, req: body.req || {}, resp: body.resp });
     saveState();
+  } else if (body.type === 'dungeon') {
+    state.dungeons.unshift(body);
+    if (state.dungeons.length > 50) state.dungeons.pop();
+    broadcast('dungeon', body);
+    saveState();
+  } else if (body.type === 'summon') {
+    state.summons.unshift(body);
+    if (state.summons.length > 50) state.summons.pop();
+    broadcast('summon', body);
+    saveState();
   }
 }
 
@@ -170,6 +187,8 @@ const server = http.createServer((req, res) => {
     return sendJson(res, headers, 200, { seq: state.seq, at: state.accountAt, data: state.account });
   }
   if (url.pathname === '/guild') return sendJson(res, headers, 200, { seq: state.seq, packets: state.guild, battles: state.battles });
+  if (url.pathname === '/dungeons') return sendJson(res, headers, 200, { seq: state.seq, runs: state.dungeons });
+  if (url.pathname === '/summons') return sendJson(res, headers, 200, { seq: state.seq, summons: state.summons });
   if (url.pathname === '/events') {
     res.writeHead(200, { ...headers, 'Content-Type': 'text/event-stream; charset=utf-8', Connection: 'keep-alive', 'X-Accel-Buffering': 'no' });
     res.write('retry: 3000\n\n');

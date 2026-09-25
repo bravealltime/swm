@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { Search, X, Gift, Shield, Gauge, BookOpen, ArrowRight, Trophy, SearchX, User } from 'lucide-react';
+import { Search, X, Gift, Shield, Gauge, BookOpen, ArrowRight, Trophy, SearchX, User, Radio, Sparkles } from 'lucide-react';
 import { MONSTERS } from '../data/monsters';
 import { PROMO_CODES } from '../data/promoCodes';
 import playersIndex from '../data/swrtPlayersIndex.json';
@@ -13,6 +13,8 @@ const PLAYERS = [
 ];
 
 const QUICK_TOOLS = [
+  { id: 'live-farm', name: 'ระบบตรวจจับการฟาร์มสด (Live Farming Monitor)', desc: 'ตรวจจับผลดรอปรูนดันเจี้ยน Abyss วินาทีต่อวินาที พร้อม Keep/Sell Advisor', icon: Radio, view: 'live-farm-monitor' },
+  { id: 'account-audit', name: '🤖 AI วินิจฉัยสุขภาพไอดี (AI Account Audit)', desc: 'วัดเกณฑ์ Swift (+220+), Violent, เช็ค 30 เมต้า Guardian และแนะนำดันเจี้ยน', icon: Sparkles, view: 'ai-account-audit' },
   { id: 'where2use', name: 'ใช้มอนสเตอร์ตัวนี้ที่ไหนดี? (Where to Use)', desc: 'ตรวจสอบการใช้งานในทีมรับ, ทีมบุก, ดันเจี้ยน และ RTA', icon: Shield, view: 'where2use' },
   { id: '3mdc-stats', name: 'ศูนย์สถิติและรายงาน 3MDC (Statistics Hub)', desc: 'รวมรายงานเมต้า, สถิติวินเรท, และ Battle Log Performance', icon: Trophy, view: '3mdc-stats' },
   { id: 'game-guides', name: 'สารบัญคู่มือกลยุทธ์เกม (Game Guides)', desc: 'คู่มือดันเจี้ยน Abyss Hard และแผน Siege', icon: BookOpen, view: 'game-guides' },

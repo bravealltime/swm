@@ -36,6 +36,7 @@ import {
   Flame,
   Compass,
   Home,
+  Radio,
   X
 } from 'lucide-react';
 import { NAVIGATION_CATEGORIES } from '../data/navigation';
@@ -46,7 +47,7 @@ const ICON_MAP = {
   UserCheck, Award, Layers, BookOpen, History, ShieldAlert, Sparkles, TrendingUp,
   Cpu, Gem, Shield, Swords, Users, Search, Activity, UserPlus, FileText, Crosshair,
   Star, HelpCircle, BarChart3, Trophy, Map, Calendar, Globe, Gift, Book, Gauge,
-  Calculator, Sliders, Flame, Compass, Home
+  Calculator, Sliders, Flame, Compass, Home, Radio
 };
 
 export default function Sidebar({
@@ -92,6 +93,8 @@ export default function Sidebar({
     if (itemId === 'arena') return 'arena';
     if (itemId === 'guardian-ladder' || itemId === 'guardian-meta') return 'guardian';
     if (itemId === 'ai-farm-optimizer' || itemId.includes('ai-farm')) return 'ai-farm-optimizer';
+    if (itemId === 'live-farm-monitor') return 'live-farm-monitor';
+    if (itemId === 'ai-account-audit') return 'ai-account-audit';
     if (itemId === 'my-box') return 'my-box';
     if (itemId === 'summon-simulator') return 'summon-simulator';
     if (itemId === 'siege-planner') return 'siege-planner';
@@ -220,6 +223,8 @@ export default function Sidebar({
                         (item.id === 'game-guides' && currentView === 'game-guides') ||
                         ((item.id === 'guardian-ladder' || item.id === 'guardian-meta') && currentView === 'guardian') ||
                         (item.id === 'my-box' && currentView === 'my-box') ||
+                        (item.id === 'live-farm-monitor' && currentView === 'live-farm-monitor') ||
+                        (item.id === 'ai-account-audit' && currentView === 'ai-account-audit') ||
                         (item.id === 'siege-calculator' && currentView === 'siege-calculator') ||
                         ((item.id === 'defense-trending' || item.id === 'monster-defense-trending' || item.id === 'monster-offense-trending') && currentView === 'trending') ||
                         (item.id.includes('rta') && currentView === 'rta') ||

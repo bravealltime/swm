@@ -58,6 +58,8 @@ export const NAVIGATION_CATEGORIES = [
     title: 'ชุมชน & เชื่อมต่อไอดี (SWEX)',
     items: [
       { id: 'my-box', label: 'กล่องมอนสเตอร์ & ตู้สะสม (SWEX)', icon: 'Layers', badge: 'ใหม่' },
+      { id: 'live-farm-monitor', label: '📡 ระบบตรวจจับฟาร์มสด (Live Monitor)', icon: 'Radio', badge: 'สด' },
+      { id: 'ai-account-audit', label: '🤖 AI วินิจฉัยสุขภาพไอดี (Health Check)', icon: 'Sparkles', badge: 'AI' },
       { id: 'guild-recruiting', label: 'ประกาศรับสมัครกิลด์', icon: 'UserPlus' },
       { id: 'aegislink', label: 'AegisLink ปลั๊กอินส่งข้อมูลสด', icon: 'Cpu', badge: 'SWEX' },
       { id: 'faq-guides', label: 'คู่มือ & คำถามพบบ่อย (FAQ)', icon: 'HelpCircle' },

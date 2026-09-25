@@ -444,6 +444,31 @@ module.exports = {
       broadcast('guild', { seq: state.seq, command, at, req, resp });
     }
 
+    // 4. Live Dungeon runs & drops (Abyss / Cairos / Rift)
+    if (command === 'BattleDungeonResult_v2' || command === 'BattleRiftDungeonResult') {
+      const at = Date.now();
+      const payload = {
+        command,
+        at,
+        dungeonId: req.dungeon_id || (resp.dungeon_info && resp.dungeon_info.dungeon_id),
+        stageId: req.stage_id,
+        win: resp.win_lose === 1,
+        clearTimeSec: resp.clear_time ? resp.clear_time.current_time / 1000 : null,
+        reward: resp.reward || null,
+        rune: resp.reward?.crate?.rune || resp.rune || null,
+        artifacts: resp.reward?.crate?.artifacts || resp.artifacts || null,
+      };
+      broadcast('dungeon', payload);
+    }
+
+    // 5. Live Summoning
+    if (/SummonUnit/i.test(command)) {
+      const units = asArray(resp.unit_list).concat(asArray(resp.reward?.unit_list)).concat(resp.unit_info ? [resp.unit_info] : []);
+      if (units.length > 0) {
+        broadcast('summon', { command, at: Date.now(), units });
+      }
+    }
+
     // 4. Legacy relay of battle summaries
     if (command === 'BattleGuildSiegeStart_v2' && cfg.logSiege) {
       activeSessions.set(`${wizardId}_siege`, {
