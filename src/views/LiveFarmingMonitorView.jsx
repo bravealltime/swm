@@ -10,12 +10,29 @@ import AccountSuiteHeader from '../components/AccountSuiteHeader';
 
 const DUNGEON_NAMES = {
   1001: 'Giants Keep (ยักษ์)',
+  1011: 'Giants Keep Abyss (ยักษ์ Abyss)',
   2001: 'Dragons Lair (มังกร)',
+  2011: 'Dragons Lair Abyss (มังกร Abyss)',
   3001: 'Necropolis (เนโคร)',
+  3011: 'Necropolis Abyss (เนโคร Abyss)',
   4001: 'Spiritual Realm (สปิริตชวล)',
+  4011: 'Spiritual Realm Abyss (สปิริตชวล Abyss)',
   5001: 'Steel Fortress (โกเลมเหล็ก)',
+  5011: 'Steel Fortress Abyss (โกเลมเหล็ก Abyss)',
   6001: 'Punishers Crypt (สุสานพิพากษา)',
+  6011: 'Punishers Crypt Abyss (สุสานพิพากษา Abyss)',
 };
+
+function getDungeonLabel(id, stage) {
+  const numId = Number(id);
+  const stageStr = stage === 2 ? 'Hard' : stage === 1 ? 'Normal' : stage ? `B${stage}` : '';
+  if (DUNGEON_NAMES[numId]) {
+    return stageStr ? `${DUNGEON_NAMES[numId]} • ${stageStr}` : DUNGEON_NAMES[numId];
+  }
+  if (numId >= 8000 && numId < 9000) return 'Rift of Worlds (รอยแยกมิติ)';
+  if (numId >= 9000) return 'Dimension Hole (มิติลี้ลับ)';
+  return `ดันเจี้ยน #${id}${stageStr ? ' • ' + stageStr : ''}`;
+}
 
 export default function LiveFarmingMonitorView({ onNavigate }) {
   const [liveState, setLiveState] = useState(() => aegisLive.getState());
@@ -24,9 +41,20 @@ export default function LiveFarmingMonitorView({ onNavigate }) {
   const [muted, setMuted] = useState(() => isAudioMuted());
 
   useEffect(() => {
+    // Auto-connect to local SWEX sidecar & log tailer
+    if (aegisLive.getState().status !== 'live') {
+      aegisLive.start();
+    }
+    // Fetch recent live runs from sidecar immediately
+    aegisLive.fetchRecentDungeons().then((recent) => {
+      if (recent && recent.length > 0) {
+        setRuns([...recent]);
+      }
+    });
+
     return aegisLive.subscribe((type, payload, st) => {
       setLiveState({ ...st });
-      if (type === 'dungeon' || st.dungeons) {
+      if (type === 'dungeon' || type === 'dungeons' || st.dungeons) {
         setRuns([...(st.dungeons || [])]);
       }
     });
@@ -110,14 +138,28 @@ export default function LiveFarmingMonitorView({ onNavigate }) {
                 <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
                   Real-time Farming Assistant
                 </span>
-                <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold border flex items-center gap-1.5 ${
-                  liveState.status === 'live'
-                    ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40 animate-pulse'
-                    : 'bg-slate-500/20 text-slate-300 border-slate-500/30'
-                }`}>
-                  <span className={`w-2 h-2 rounded-full ${liveState.status === 'live' ? 'bg-emerald-400' : 'bg-slate-400'}`} />
-                  {liveState.status === 'live' ? 'SWEX สดเชื่อมต่อแล้ว' : 'รอเปิดเกม & SWEX'}
-                </span>
+                <button
+                  onClick={() => { if (liveState.status !== 'live') aegisLive.start(); }}
+                  className={`px-3 py-1 rounded-full text-[11px] font-bold border flex items-center gap-1.5 transition-all cursor-pointer ${
+                    liveState.status === 'live'
+                      ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40 shadow-sm shadow-emerald-500/20'
+                      : liveState.status === 'connecting'
+                      ? 'bg-amber-500/20 text-amber-300 border-amber-500/40 animate-pulse'
+                      : 'bg-slate-500/20 text-slate-300 border-slate-500/30 hover:bg-white/10'
+                  }`}
+                  title="คลิกเพื่อรีเฟรชการเชื่อมต่อ SWEX"
+                >
+                  <span className={`w-2 h-2 rounded-full ${
+                    liveState.status === 'live' ? 'bg-emerald-400' : liveState.status === 'connecting' ? 'bg-amber-400' : 'bg-slate-400'
+                  }`} />
+                  <span>
+                    {liveState.status === 'live'
+                      ? '🟢 SWEX สดเชื่อมต่อแล้ว (ตรวจจับเร็ว 200ms)'
+                      : liveState.status === 'connecting'
+                      ? '🟡 กำลังเชื่อมต่อ SWEX...'
+                      : '⚪ คลิกเชื่อมต่อ SWEX สด'}
+                  </span>
+                </button>
               </div>
               <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight mt-1.5">
                 จอตรวจจับการฟาร์มสด <span className="bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent">& ผู้ช่วยประเมินรูน</span>
@@ -255,7 +297,33 @@ export default function LiveFarmingMonitorView({ onNavigate }) {
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
           {filteredRuns.map((run, idx) => {
             const ev = run.evaluated;
-            if (!ev) return null;
+            if (!ev) {
+              return (
+                <div
+                  key={`${run.at}-${idx}`}
+                  className="relative overflow-hidden rounded-3xl border border-white/10 bg-[#0c121d] p-5 transition-all text-slate-300 shadow-sm"
+                >
+                  <div className="flex items-center justify-between text-xs pb-3 border-b border-white/[0.06]">
+                    <span className="font-bold text-slate-300 flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-cyan-400" />
+                      {getDungeonLabel(run.dungeonId, run.stageId)}
+                    </span>
+                    <span className="font-mono text-slate-400">{run.clearTimeSec ? `${run.clearTimeSec}s` : '-'}</span>
+                  </div>
+                  <div className="mt-3.5 flex items-center justify-between">
+                    <div>
+                      <div className="text-sm font-bold text-white">ผ่านรอบฟาร์มสำเร็จ {run.win ? '🏆 ชนะ' : '❌ แพ้'}</div>
+                      <div className="text-xs text-slate-400 mt-0.5">
+                        {run.artifact ? 'ได้รับอาร์ติแฟกต์' : 'ได้รับคัมภีร์/หินมานา/วัตถุดิบ'}
+                      </div>
+                    </div>
+                    <span className="px-2.5 py-1 rounded-xl text-xs font-bold bg-white/5 border border-white/10 text-slate-300">
+                      รอบปกติ
+                    </span>
+                  </div>
+                </div>
+              );
+            }
 
             return (
               <div
@@ -272,7 +340,7 @@ export default function LiveFarmingMonitorView({ onNavigate }) {
                 <div className="flex items-center justify-between text-xs pb-3 border-b border-white/[0.06]">
                   <span className="font-bold text-slate-300 flex items-center gap-1.5">
                     <span className="w-2 h-2 rounded-full bg-emerald-400" />
-                    {DUNGEON_NAMES[run.dungeonId] || 'Abyss Dungeon'}
+                    {getDungeonLabel(run.dungeonId, run.stageId)}
                   </span>
                   <span className="font-mono text-slate-400">{run.clearTimeSec ? `${run.clearTimeSec}s` : '-'}</span>
                 </div>

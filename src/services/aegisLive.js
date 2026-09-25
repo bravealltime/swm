@@ -159,9 +159,10 @@ async function fetchJson(path) {
 }
 
 async function loadInitial() {
-  const [snap, guild] = await Promise.all([
+  const [snap, guild, dungeons] = await Promise.all([
     fetchJson('/snapshot').catch(() => null), // 404 until the game has been logged in
     fetchJson('/guild').catch(() => null),
+    fetchJson('/dungeons').catch(() => null),
   ]);
   if (snap?.data) { raw = snap.data; state.seq = snap.seq || 0; publishBox('snapshot'); }
   else patch({ wizard: null, units: 0 });
@@ -170,6 +171,22 @@ async function loadInitial() {
     emit('guild', state.guild);
     for (const [command, p] of Object.entries(state.guild.packets)) if (/Rank/i.test(command)) handleRankingPacket(command, p.resp, p.at);
   }
+  if (dungeons?.runs && Array.isArray(dungeons.runs)) {
+    state.dungeons = dungeons.runs;
+    emit('dungeons', state.dungeons);
+  }
+}
+
+export async function fetchRecentDungeons() {
+  try {
+    const res = await fetchJson('/dungeons');
+    if (res?.runs && Array.isArray(res.runs)) {
+      state.dungeons = res.runs;
+      emit('dungeons', state.dungeons);
+      return res.runs;
+    }
+  } catch {}
+  return state.dungeons || [];
 }
 
 export async function fetchLiveSnapshot() {

@@ -444,19 +444,32 @@ module.exports = {
       broadcast('guild', { seq: state.seq, command, at, req, resp });
     }
 
-    // 4. Live Dungeon runs & drops (Abyss / Cairos / Rift)
-    if (command === 'BattleDungeonResult_v2' || command === 'BattleRiftDungeonResult') {
+    // 4. Live Dungeon runs & drops (Abyss / Cairos / Rift / Repeat Battle)
+    if (/BattleDungeonResult|BattleRepeatResult|BattleDimensionHoleDungeonResult|BattleRiftDungeonResult|BattleScenarioResult/i.test(command)) {
       const at = Date.now();
+      let rawRune = null;
+      const changedItems = asArray(resp.changed_item_list);
+      for (const item of changedItems) {
+        if (item.type === 8 || item.info?.rune_id) { rawRune = item.info; break; }
+      }
+      if (!rawRune) rawRune = resp.reward?.crate?.rune || resp.rune || null;
+
+      let rawArtifact = null;
+      for (const item of changedItems) {
+        if (item.type === 73 || item.info?.rid) { rawArtifact = item.info; break; }
+      }
+      if (!rawArtifact) rawArtifact = resp.reward?.crate?.artifacts || resp.artifacts || null;
+
       const payload = {
         command,
         at,
-        dungeonId: req.dungeon_id || (resp.dungeon_info && resp.dungeon_info.dungeon_id),
-        stageId: req.stage_id,
+        dungeonId: req.dungeon_id || (resp.dungeon_info && resp.dungeon_info.dungeon_id) || resp.dungeon_id,
+        stageId: req.stage_id || (resp.dungeon_info && resp.dungeon_info.stage_id) || resp.stage_id,
         win: resp.win_lose === 1,
-        clearTimeSec: resp.clear_time ? resp.clear_time.current_time / 1000 : null,
+        clearTimeSec: resp.clear_time ? (Number(resp.clear_time.current_time) / 1000).toFixed(1) : null,
         reward: resp.reward || null,
-        rune: resp.reward?.crate?.rune || resp.rune || null,
-        artifacts: resp.reward?.crate?.artifacts || resp.artifacts || null,
+        rune: rawRune,
+        artifacts: rawArtifact,
       };
       broadcast('dungeon', payload);
     }
