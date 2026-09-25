@@ -351,6 +351,7 @@ export function parseSwexExport(json) {
     units: list,
     runes,
     artifacts,
+    decks: Array.isArray(json.deck_list) ? json.deck_list : (Array.isArray(json.decks) ? json.decks : []),
     importedAt: new Date().toISOString(),
     version: BOX_VERSION,
   };

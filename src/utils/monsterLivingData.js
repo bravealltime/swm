@@ -204,23 +204,38 @@ export function getMonsterLivingData(monsterInput) {
   // 6. Dungeon Abyss Hard Presence (PVE)
   const dungeonStats = [];
   for (const d of dungeonStatsData) {
-    const member = (d.recommendedTeam || []).find((m) => {
-      const mn = (m.name || '').replace(/\s*\(.*?\)\s*/g, '').toLowerCase().trim();
-      return mn === monNameLower || (m.name || '').toLowerCase().includes(monNameLower);
-    });
-    if (member) {
+    const allPresets = [
+      { team: d.recommendedTeam || [], turnOrderTh: d.turnOrderTh, bossMechanicTh: d.bossMechanicTh, avgTime: d.avgTime, recordTime: d.recordTime, successRate: d.successRate },
+      ...(d.metaPresets || []).map((p) => ({ team: p.team || [], turnOrderTh: p.turnOrderTh, bossMechanicTh: p.bossMechanicTh, avgTime: p.avgTime, recordTime: p.recordTime, successRate: p.successRate }))
+    ];
+
+    let foundMember = null;
+    let foundCtx = null;
+    for (const ctx of allPresets) {
+      const m = ctx.team.find((x) => {
+        const mn = (x.name || '').replace(/\s*\(.*?\)\s*/g, '').toLowerCase().trim();
+        return mn === monNameLower || (x.name || '').toLowerCase().includes(monNameLower);
+      });
+      if (m) {
+        foundMember = m;
+        foundCtx = ctx;
+        break;
+      }
+    }
+
+    if (foundMember && foundCtx) {
       dungeonStats.push({
         dungeonId: d.id,
         dungeonName: d.nameTh,
         dungeonNameEn: d.nameEn,
-        avgTime: d.avgTime,
-        recordTime: d.recordTime,
-        successRate: d.successRate,
-        role: member.role || 'ตัวทำดาเมจ/ซัพพอร์ตหลัก',
-        recommendedRune: member.rune || 'Rage / Blade',
-        turnOrderTh: d.turnOrderTh,
-        bossMechanicTh: d.bossMechanicTh,
-        teammates: (d.recommendedTeam || []).map((x) => x.name),
+        avgTime: foundCtx.avgTime || d.avgTime,
+        recordTime: foundCtx.recordTime || d.recordTime,
+        successRate: foundCtx.successRate || d.successRate,
+        role: foundMember.role || 'ตัวทำดาเมจ/ซัพพอร์ตหลัก',
+        recommendedRune: foundMember.rune || 'Rage / Blade',
+        turnOrderTh: foundCtx.turnOrderTh || d.turnOrderTh,
+        bossMechanicTh: foundCtx.bossMechanicTh || d.bossMechanicTh,
+        teammates: foundCtx.team.map((x) => x.name),
       });
     }
   }

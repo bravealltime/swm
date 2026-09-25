@@ -8,49 +8,49 @@
     "elementTh": "ธาตุน้ำ",
     "dungeonId": "8011",
     "stageId": "2",
-    "recordTime": "00:24",
-    "avgTime": "00:32",
-    "successRate": "99.8%",
+    "recordTime": "00:13",
+    "avgTime": "00:16",
+    "successRate": "99.9%",
     "recommendedTeam": [
       {
-        "name": "Teshar (L)",
-        "role": "ดาเมจหลักกวาดม็อบ & ล้างเวฟ",
-        "rune": "Fatal / Blade",
-        "spd": "+42",
-        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0027_2_4.png"
-      },
-      {
-        "name": "Homunculus (Wind)",
-        "role": "ดาเมจเจาะเกราะตาม % เลือดบอส",
-        "rune": "Rage / Blade",
-        "spd": "+40",
-        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0047_2_0.png"
+        "name": "Julie (L)",
+        "role": "กวาดล้างม็อบเวฟ 1 และ 3 จบใน 1 เทิร์น (Thousand Shots 100% HP)",
+        "rune": "Fight x2 / Blade หรือ Rage",
+        "spd": "+60 ถึง +70",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0014_0_4.png"
       },
       {
         "name": "Prilea (Water Harpu 2A)",
-        "role": "เปิดเทิร์น ลดเกราะ Def Break 100%",
+        "role": "เปิดเทิร์น ลดเกราะ Def Break 100% ใส่บอสทันที",
         "rune": "Fight x3 / Will",
-        "spd": "+75",
-        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0009_0_1.png"
+        "spd": "+30 ถึง +40 (ให้ช้ากว่า Julie)",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0001_2_4.png"
+      },
+      {
+        "name": "Lucifer (Light Demon)",
+        "role": "พาสซีฟ Dark Light: เมื่อสร้างดาเมจ เร่งเกจทั้งทีม 100% ทันที!",
+        "rune": "Rage / Will หรือ Fight",
+        "spd": "+70 ถึง +80",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0052_3_4.png"
+      },
+      {
+        "name": "Luna (Dark Pierret)",
+        "role": "สกิล 3 Falling Blossom วันช็อตบอสตาม Max HP ในฮิตเดียว",
+        "rune": "Rage / Blade หรือ Fight/Intangible",
+        "spd": "+55 ถึง +65",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0014_4_4.png"
       },
       {
         "name": "Deborah (Dark Blacksmith)",
-        "role": "พาสซีฟเพิ่มดาเมจเจาะเกราะ +25%",
-        "rune": "Fight x3 / Will",
-        "spd": "+65",
-        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0055_4_0.png"
-      },
-      {
-        "name": "Lyn (Light Amazon)",
-        "role": "ปิดฉากบอสตาม Max HP ศัตรู",
-        "rune": "Rage / Blade",
-        "spd": "+35",
-        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0006_3_4.png"
+        "role": "พาสซีฟ Special Hammer: ขยายผลลดเกราะเจาะทะลวง +25% & เพิ่ม ATK",
+        "rune": "Fight x3 (Triple Fight)",
+        "spd": "+25 ถึง +35",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0081_1_5.png"
       }
     ],
-    "leaderSkill": "Teshar (เพิ่มอัตราคริติคอล CRIT Rate +33% ในดันเจี้ยน)",
-    "turnOrderTh": "1. Prilea (เปิดลดเกราะ Def Break) ➔ 2. Deborah (ซัพพอร์ตเจาะเกราะ) ➔ 3. Teshar (สกิล 3 Tempest กวาดล้างม็อบรีเซ็ตคูลดาวน์) ➔ 4. Wind Homunculus (ลดเลือดบอส) ➔ 5. Lyn (สกิล 3 ตีตาม % เลือดบอสปิดฉาก)",
-    "bossMechanicTh": "บอสยักษ์จะเคาน์เตอร์โจมตีสวนกลับอัตโนมัติทุกๆ 7 ครั้งที่โดนตี และมีหอคอยบัฟโจมตี + เจาะเกราะ จึงต้องใช้ทีมที่จบเวฟม็อบใน 1 เทิร์น และระเบิดดาเมจใส่บอสให้ตายก่อนโดนสวน",
+    "leaderSkill": "Julie (เพิ่มพลังโจมตี ATK +38% ในดันเจี้ยน)",
+    "turnOrderTh": "1. Julie (กวาดเวฟ 1 และ 3 ด้วยสกิล 3 Thousand Shots นัดเดียวจบ) ➔ 2. Prilea (เปิดลดเกราะ Def Break 100% ใส่บอส) ➔ 3. Lucifer (พาสซีฟ Dark Light เร่งเกจทั้งทีม 100% ทันทีเมื่อเกิดดาเมจ) ➔ 4. Deborah (พาสซีฟขยายผลลดเกราะเจาะทะลวง +25%) ➔ 5. Luna (สกิล 3 Falling Blossom ตีตาม Max HP บอส ปลิดชีพวันช็อตในฮิตเดียว ไม่โดนเคาน์เตอร์ 7 ครั้ง!)",
+    "bossMechanicTh": "บอสยักษ์จะเคาน์เตอร์สวนกลับเมื่อโดนโจมตีครบ 7 ครั้ง แต่ทีมนี้ปิดเกมใน 3 แอคชั่น (Julie ล้างม็อบ ➔ Prilea เจาะเกราะ ➔ Luna วันช็อต 300,000+ HP) บอสไม่มีโอกาสขยับหรือเคาน์เตอร์แม้แต่ครั้งเดียว!",
     "totalRuns": "30,670",
     "bossStats": {
       "bossName": "",
@@ -191,6 +191,155 @@
         "count": "4,898",
         "percent": "20.2%"
       }
+    ],
+    "metaPresets": [
+      {
+        "id": "lucifer-god",
+        "name": "⚡ สถิติโลก: เมต้าลูซิเฟอร์ (Lucifer God 13-16s)",
+        "badge": "World Record",
+        "source": "YouTube World Record / Top Tier Meta (SeanB, Obabo, SW Thailand)",
+        "recordTime": "00:13",
+        "avgTime": "00:16",
+        "successRate": "99.9%",
+        "leaderSkill": "Julie (เพิ่มพลังโจมตี ATK +38% ในดันเจี้ยน)",
+        "turnOrderTh": "1. Julie (กวาดเวฟ 1 และ 3 ด้วยสกิล 3 Thousand Shots นัดเดียวจบ) ➔ 2. Prilea (เปิดลดเกราะ Def Break 100% ใส่บอส) ➔ 3. Lucifer (พาสซีฟ Dark Light เร่งเกจทั้งทีม 100% ทันทีเมื่อเกิดดาเมจ) ➔ 4. Deborah (พาสซีฟขยายผลลดเกราะเจาะทะลวง +25%) ➔ 5. Luna (สกิล 3 Falling Blossom ตีตาม Max HP บอส ปลิดชีพวันช็อตในฮิตเดียว ไม่โดนเคาน์เตอร์ 7 ครั้ง!)",
+        "bossMechanicTh": "บอสยักษ์จะเคาน์เตอร์สวนกลับเมื่อโดนโจมตีครบ 7 ครั้ง แต่ทีมนี้ปิดเกมใน 3 แอคชั่น (Julie ล้างม็อบ ➔ Prilea เจาะเกราะ ➔ Luna วันช็อต 300,000+ HP) บอสไม่มีโอกาสขยับหรือเคาน์เตอร์แม้แต่ครั้งเดียว!",
+        "team": [
+          {
+            "name": "Julie (L)",
+            "role": "กวาดล้างม็อบเวฟ 1 และ 3 จบใน 1 เทิร์น (Thousand Shots 100% HP)",
+            "rune": "Fight x2 / Blade หรือ Rage",
+            "spd": "+60 ถึง +70",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0014_0_4.png"
+          },
+          {
+            "name": "Prilea (Water Harpu 2A)",
+            "role": "เปิดเทิร์น ลดเกราะ Def Break 100% ใส่บอสทันที",
+            "rune": "Fight x3 / Will",
+            "spd": "+30 ถึง +40 (ให้ช้ากว่า Julie)",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0001_2_4.png"
+          },
+          {
+            "name": "Lucifer (Light Demon)",
+            "role": "พาสซีฟ Dark Light: เมื่อสร้างดาเมจ เร่งเกจทั้งทีม 100% ทันที!",
+            "rune": "Rage / Will หรือ Fight",
+            "spd": "+70 ถึง +80",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0052_3_4.png"
+          },
+          {
+            "name": "Luna (Dark Pierret)",
+            "role": "สกิล 3 Falling Blossom วันช็อตบอสตาม Max HP ในฮิตเดียว",
+            "rune": "Rage / Blade หรือ Fight/Intangible",
+            "spd": "+55 ถึง +65",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0014_4_4.png"
+          },
+          {
+            "name": "Deborah (Dark Blacksmith)",
+            "role": "พาสซีฟ Special Hammer: ขยายผลลดเกราะเจาะทะลวง +25% & เพิ่ม ATK",
+            "rune": "Fight x3 (Triple Fight)",
+            "spd": "+25 ถึง +35",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0081_1_5.png"
+          }
+        ]
+      },
+      {
+        "id": "teshar-speed",
+        "name": "🔥 เมต้ายอดนิยม YouTube (Teshar + Kona/Teon 18-24s)",
+        "badge": "YouTube Popular",
+        "source": "YouTube Guide & Facebook SW Thailand (Seiishizo, Xkav, กลุ่มผู้เล่นไทย)",
+        "recordTime": "00:18",
+        "avgTime": "00:22",
+        "successRate": "99.8%",
+        "leaderSkill": "Teshar (เพิ่มอัตราคริติคอล CRIT Rate +33% ในดันเจี้ยน)",
+        "turnOrderTh": "1. Prilea (เปิด Def Break 100%) ➔ 2. Teshar (Tempest กวาดเวฟ 1) ➔ 3. Konamiya/Teon (Surge ดึงเทิร์น Teshar ทันที) ➔ 4. Teshar (Tempest ซ้ำรอบสองใส่บอส) ➔ 5. Wind Homunculus / Luna (ระเบิดดาเมจตาม % เลือดบอสปิดฉาก)",
+        "bossMechanicTh": "ใช้ประโยชน์จากการรีเซ็ตคูลดาวน์สกิล 3 ของ Teshar เมื่อสังหารศัตรู ทำให้สามารถกวาดล้างม็อบเวฟ 1 และ 3 ได้ในสกิลเดียว และมี Kona คอยดึงเทิร์นให้สแปมสกิลใส่บอสได้ทันที",
+        "team": [
+          {
+            "name": "Teshar (L)",
+            "role": "ดาเมจหลักกวาดม็อบ & ล้างเวฟรีเซ็ตคูลดาวน์",
+            "rune": "Fatal / Blade หรือ Rage",
+            "spd": "+42",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0017_2_3.png"
+          },
+          {
+            "name": "Prilea (Water Harpu 2A)",
+            "role": "เปิดเทิร์น ลดเกราะ Def Break 100%",
+            "rune": "Fight x3 / Will",
+            "spd": "+75",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0001_2_4.png"
+          },
+          {
+            "name": "Konamiya (Water Garuda)",
+            "role": "สกิล 2 Resurge ดึงเทิร์นให้ Teshar สแปม Tempest ซ้ำทันที",
+            "rune": "Fight x3",
+            "spd": "+68",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0003_0_2.png"
+          },
+          {
+            "name": "Homunculus (Wind)",
+            "role": "ดาเมจเจาะเกราะตาม % เลือดบอส",
+            "rune": "Rage / Blade",
+            "spd": "+40",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0042_2_2.png"
+          },
+          {
+            "name": "Lyn (Light Amazon)",
+            "role": "ปิดฉากบอสตาม Max HP ศัตรู",
+            "rune": "Rage / Blade",
+            "spd": "+35",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0018_3_0.png"
+          }
+        ]
+      },
+      {
+        "id": "f2p-speed",
+        "name": "🛡️ เมต้าสายฟรี F2P (Sigmarus Standard 28-35s)",
+        "badge": "F2P Friendly",
+        "source": "สูตรสายฟรีผู้เล่นทั่วไป ฟิวชั่นครบ 100% ไม่ต้องมีมอนแสงมืด 5 ดาว",
+        "recordTime": "00:26",
+        "avgTime": "00:32",
+        "successRate": "99.5%",
+        "leaderSkill": "Sigmarus (เพิ่มพลังชีวิต HP +44% ในดันเจี้ยน)",
+        "turnOrderTh": "1. Prilea (Def Break) ➔ 2. Veromos (ล้างดีบัฟ/สตั๊น) ➔ 3. Sigmarus (สกิล 3 แช่แข็งม็อบและตัด Max HP บอส) ➔ 4. Wind Homunculus (ลดเลือดบอส) ➔ 5. Lyn (ระเบิด Max HP ปิดเกม)",
+        "bossMechanicTh": "เน้นความเสถียร 100% มี Veromos คอยล้างดีบัฟเกราะแตกหากบอสได้เคาน์เตอร์ และใช้ Sigmarus + Lyn ทำดาเมจหลักแสนตาม Max HP",
+        "team": [
+          {
+            "name": "Sigmarus (L)",
+            "role": "แช่แข็งม็อบและตัด Max HP บอส 20%+",
+            "rune": "Rage / Blade",
+            "spd": "+30",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0017_0_3.png"
+          },
+          {
+            "name": "Prilea (Water Harpu 2A)",
+            "role": "เปิดเทิร์น ลดเกราะ Def Break 100%",
+            "rune": "Fight x2 / Swift",
+            "spd": "+70",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0001_2_4.png"
+          },
+          {
+            "name": "Homunculus (Wind)",
+            "role": "ดาเมจเจาะเกราะตาม % เลือดบอส",
+            "rune": "Rage / Blade",
+            "spd": "+35",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0042_2_2.png"
+          },
+          {
+            "name": "Lyn (Light Amazon)",
+            "role": "ปิดฉากบอสตาม Max HP ศัตรู",
+            "rune": "Rage / Blade",
+            "spd": "+30",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0018_3_0.png"
+          },
+          {
+            "name": "Veromos (Dark Ifrit)",
+            "role": "ล้างดีบัฟและสตั๊นม็อบ",
+            "rune": "Violent / Nemesis",
+            "spd": "+80",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0032_4_2.png"
+          }
+        ]
+      }
     ]
   },
   {
@@ -202,49 +351,49 @@
     "elementTh": "ธาตุไฟ",
     "dungeonId": "9011",
     "stageId": "2",
-    "recordTime": "00:28",
-    "avgTime": "00:38",
-    "successRate": "99.4%",
+    "recordTime": "00:19",
+    "avgTime": "00:23",
+    "successRate": "99.7%",
     "recommendedTeam": [
       {
-        "name": "Verdehile (L)",
-        "role": "เร่งเกจเทิร์นทั้งทีมเมื่อคริติคอล",
-        "rune": "Rage / Blade (Atk/CD/Atk)",
-        "spd": "+30",
-        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0016_1_2.png"
+        "name": "Shaina (L)",
+        "role": "ลีดเดอร์สปีด/ATK เจาะเกราะหมู่ และตัดเกจศัตรู",
+        "rune": "Fight x3",
+        "spd": "+60",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0045_1_1.png"
+      },
+      {
+        "name": "Julie",
+        "role": "กวาดล้างม็อบเวฟ 1 และ 3 จบใน 1 เทิร์น (Thousand Shots)",
+        "rune": "Rage / Blade",
+        "spd": "+75",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0014_0_4.png"
+      },
+      {
+        "name": "Luna",
+        "role": "สกิล 3 ตัดเลือดมังกรลงมาต่ำกว่าเงื่อนไข",
+        "rune": "Rage / Blade",
+        "spd": "+55",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0014_4_4.png"
+      },
+      {
+        "name": "Icaru (Water Inugami 2A)",
+        "role": "Team-up ดึงเพื่อนร่วมทีมรุมโจมตีและลดคูลดาวน์",
+        "rune": "Fight x3",
+        "spd": "+65",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0051_0_3.png"
       },
       {
         "name": "Liam (Water Weapon Master)",
-        "role": "ดาเมจเดี่ยวสุดแรงปาดมังกรทีเดียวตาย",
-        "rune": "Rage / Will",
-        "spd": "+38",
-        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0059_0_1.png"
-      },
-      {
-        "name": "Julie (Water Pierret)",
-        "role": "สกิลกวาด 6 นัดเคลียร์เวฟ 1 & 3",
-        "rune": "Fatal / Blade (100% HP)",
-        "spd": "+85",
-        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0018_0_1.png"
-      },
-      {
-        "name": "Shaina (Fire Boomerang)",
-        "role": "เจาะเกราะ Def Break มินิบอสและมังกร",
-        "rune": "Fight x2 / Will",
-        "spd": "+65",
-        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0049_1_0.png"
-      },
-      {
-        "name": "Sabrina (Water Chakram)",
-        "role": "จับคู่แท็กทีมเพิ่มดาเมจ Shaina",
-        "rune": "Fight x2 / Blade",
-        "spd": "+55",
-        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0049_0_0.png"
+        "role": "สกิล 3 Storm of Tempest ทะลวงบอสไม่สนเกราะ ดาเมจ 250,000+ วันช็อตมังกร!",
+        "rune": "Rage / Blade",
+        "spd": "+30",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0080_1_1.png"
       }
     ],
-    "leaderSkill": "Verdehile (เพิ่มความเร็วโจมตี Attack Speed +28% ในดันเจี้ยน)",
-    "turnOrderTh": "1. Julie (กวาดเวฟม็อบเลือดเต็ม 100%) ➔ 2. Shaina (เกราะแตก) ➔ 3. Sabrina (แท็กทีมลดเกจ) ➔ 4. Liam (สกิล 3 ปาดดาเมจหนัก) ➔ 5. Verdehile (เร่งเกจเทิร์นปิดเกม)",
-    "bossMechanicTh": "หอคอยขวาจะกางเกราะอมตะ (Immunity) ให้มังกร และมังกรจะโจมตีแรงขึ้นมหาศาลหากเลือดต่ำกว่า 30% กลยุทธ์ที่เร็วที่สุดคือใช้ Liam ยิงปิดฉากในเทิร์นแรกก่อนหอคอยขวาจะได้ขยับ",
+    "leaderSkill": "Shaina (เพิ่มความเร็วโจมตี SPD +24% หรือ ATK)",
+    "turnOrderTh": "1. Julie (สกิล 3 ล้างเวฟม็อบ 1 และ 3 นัดเดียวจบ) ➔ 2. Icaru (Team-up ดึงเพื่อนรุมเพื่อลดคูลดาวน์และทำดาเมจ) ➔ 3. Shaina (Def Break & ลดเกจศัตรู) ➔ 4. Luna (สกิล 3 ตัดเลือดมังกรลงมาต่ำกว่าเงื่อนไข) ➔ 5. Liam (สกิล 3 Storm of Tempest ทะลวงบอสไม่สนเกราะ ดาเมจ 250,000+ วันช็อตมังกรตายทันที!)",
+    "bossMechanicTh": "Liam มีสกิลพาสซีฟที่ยิ่งศัตรูไม่มีบัฟหรือเลือดต่ำ จะโจมตีแบบ Ignore DEF (ไม่สนเกราะ) ทำให้วันช็อตมังกร Abyss Hard ตายก่อนที่หอคอยจะทันกางโล่อมตะหรือบัฟป้องกัน!",
     "totalRuns": "30,455",
     "bossStats": {
       "bossName": "",
@@ -391,6 +540,155 @@
         "count": "3,103",
         "percent": "13.3%"
       }
+    ],
+    "metaPresets": [
+      {
+        "id": "liam-oneshot",
+        "name": "⚡ เมต้าวันช็อตสถิติโลก YouTube (Liam 1-Shot 19-24s)",
+        "badge": "World Record",
+        "source": "YouTube World Record & Guide (Seiishizo, Obabo, SW Community)",
+        "recordTime": "00:19",
+        "avgTime": "00:23",
+        "successRate": "99.7%",
+        "leaderSkill": "Shaina (เพิ่มความเร็วโจมตี SPD +24% หรือ ATK)",
+        "turnOrderTh": "1. Julie (สกิล 3 ล้างเวฟม็อบ 1 และ 3 นัดเดียวจบ) ➔ 2. Icaru (Team-up ดึงเพื่อนรุมเพื่อลดคูลดาวน์และทำดาเมจ) ➔ 3. Shaina (Def Break & ลดเกจศัตรู) ➔ 4. Luna (สกิล 3 ตัดเลือดมังกรลงมาต่ำกว่าเงื่อนไข) ➔ 5. Liam (สกิล 3 Storm of Tempest ทะลวงบอสไม่สนเกราะ ดาเมจ 250,000+ วันช็อตมังกรตายทันที!)",
+        "bossMechanicTh": "Liam มีสกิลพาสซีฟที่ยิ่งศัตรูไม่มีบัฟหรือเลือดต่ำ จะโจมตีแบบ Ignore DEF (ไม่สนเกราะ) ทำให้วันช็อตมังกร Abyss Hard ตายก่อนที่หอคอยจะทันกางโล่อมตะหรือบัฟป้องกัน!",
+        "team": [
+          {
+            "name": "Shaina (L)",
+            "role": "ลีดเดอร์สปีด/ATK เจาะเกราะหมู่ และตัดเกจศัตรู",
+            "rune": "Fight x3",
+            "spd": "+60",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0045_1_1.png"
+          },
+          {
+            "name": "Julie",
+            "role": "กวาดล้างม็อบเวฟ 1 และ 3 จบใน 1 เทิร์น (Thousand Shots)",
+            "rune": "Rage / Blade",
+            "spd": "+75",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0014_0_4.png"
+          },
+          {
+            "name": "Luna",
+            "role": "สกิล 3 ตัดเลือดมังกรลงมาต่ำกว่าเงื่อนไข",
+            "rune": "Rage / Blade",
+            "spd": "+55",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0014_4_4.png"
+          },
+          {
+            "name": "Icaru (Water Inugami 2A)",
+            "role": "Team-up ดึงเพื่อนร่วมทีมรุมโจมตีและลดคูลดาวน์",
+            "rune": "Fight x3",
+            "spd": "+65",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0051_0_3.png"
+          },
+          {
+            "name": "Liam (Water Weapon Master)",
+            "role": "สกิล 3 Storm of Tempest ทะลวงบอสไม่สนเกราะ ดาเมจ 250,000+ วันช็อตมังกร!",
+            "rune": "Rage / Blade",
+            "spd": "+30",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0080_1_1.png"
+          }
+        ]
+      },
+      {
+        "id": "lucifer-dragon",
+        "name": "👑 เมต้าลูซิเฟอร์มังกร (Lucifer Dragon Speed 18-22s)",
+        "badge": "Top Tier God Meta",
+        "source": "ทีมจริงยอดฮิตของผู้เล่นระดับสูงที่มี Lucifer + Deborah",
+        "recordTime": "00:18",
+        "avgTime": "00:21",
+        "successRate": "99.6%",
+        "leaderSkill": "Shaina (เพิ่มพลังโจมตี/สปีด)",
+        "turnOrderTh": "1. Shaina ➔ 2. Lucifer (เร่งเกจทั้งทีม 100% ทันที) ➔ 3. Raoq (Team-up ล้างคูลดาวน์) ➔ 4. Deborah (ขยายผลเกราะแตก +25%) ➔ 5. Astar (สแปมสกิล Silence ยิงมังกรขาดครึ่งหลอด)",
+        "bossMechanicTh": "Lucifer เร่งเกจให้ Raoq และ Astar ได้เทิร์นระเบิดดาเมจก่อนมังกรขยับ ผสาน Deborah ที่ทำให้เจาะเกราะทะลุ 95% บอสตายภายใน 1 เทิร์น",
+        "team": [
+          {
+            "name": "Shaina (L)",
+            "role": "ลีดเดอร์ เจาะเกราะ & ตัดเกจ",
+            "rune": "Fight x3 / Violent",
+            "spd": "+65",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0045_1_1.png"
+          },
+          {
+            "name": "Lucifer (Light Demon)",
+            "role": "พาสซีฟ Dark Light เร่งเกจ 100%",
+            "rune": "Rage / Will",
+            "spd": "+75",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0052_3_4.png"
+          },
+          {
+            "name": "Astar (Fire Magic Knight)",
+            "role": "พาสซีฟ Silence ยิงดาเมจมหาศาลทะลวงบอส",
+            "rune": "Vampire / Blade หรือ Rage",
+            "spd": "+50",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0036_1_4.png"
+          },
+          {
+            "name": "Raoq (Fire Inugami 2A)",
+            "role": "Team-up ดึงเพื่อนรุมฉีกเกราะ",
+            "rune": "Violent / Revenge",
+            "spd": "+65",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0051_1_3.png"
+          },
+          {
+            "name": "Deborah (Dark Blacksmith)",
+            "role": "พาสซีฟ Special Hammer ขยายผลลดเกราะ +25%",
+            "rune": "Fight x3",
+            "spd": "+30",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0081_1_5.png"
+          }
+        ]
+      },
+      {
+        "id": "verde-twins",
+        "name": "🛡️ เมต้าปลอดภัย Verdehile + Twins F2P (28-36s)",
+        "badge": "Standard Safe",
+        "source": "เมต้ามาตรฐานฝาแฝด ปลอดภัย 100% ฟาร์มข้ามคืนได้ไม่มีหลุด",
+        "recordTime": "00:28",
+        "avgTime": "00:36",
+        "successRate": "99.8%",
+        "leaderSkill": "Verdehile (เพิ่มความเร็วโจมตี SPD +28% ในดันเจี้ยน)",
+        "turnOrderTh": "1. Julie ➔ 2. Galleon (Time to Loot) ➔ 3. Sabrina ➔ 4. Talia ➔ 5. Verdehile (ปั่นเกจ 40%)",
+        "bossMechanicTh": "Verdehile คอยปั่นเกจ 40% ทุกรอบการคริติคอล ทำให้ฝาแฝด Talia + Sabrina วนรอบโจมตีมังกรอย่างต่อเนื่อง",
+        "team": [
+          {
+            "name": "Verdehile (L)",
+            "role": "ปั่นเกจโจมตี +40% ทุกรอบการคริติคอล",
+            "rune": "Triple Revenge หรือ Violent",
+            "spd": "+70",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0016_1_2.png"
+          },
+          {
+            "name": "Galleon",
+            "role": "Time to Loot บัฟ ATK + เจาะเกราะหมู่ 100%",
+            "rune": "Violent / Shield",
+            "spd": "+95",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0031_0_3.png"
+          },
+          {
+            "name": "Julie",
+            "role": "กวาดล้างม็อบเวฟ 1 และ 3",
+            "rune": "Rage / Blade",
+            "spd": "+80",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0014_0_4.png"
+          },
+          {
+            "name": "Sabrina",
+            "role": "ผสานพลัง Boomerang ลดเกราะ & เพิ่มดาเมจ",
+            "rune": "Violent / Blade",
+            "spd": "+60",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0045_0_3.png"
+          },
+          {
+            "name": "Talia",
+            "role": "ระเบิดเลือดบอสตาม HP ที่ลดลง",
+            "rune": "Rage / Blade",
+            "spd": "+45",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0045_0_1.png"
+          }
+        ]
+      }
     ]
   },
   {
@@ -402,49 +700,49 @@
     "elementTh": "ธาตุมืด",
     "dungeonId": "6011",
     "stageId": "2",
-    "recordTime": "00:31",
-    "avgTime": "00:44",
-    "successRate": "99.5%",
+    "recordTime": "00:27",
+    "avgTime": "00:32",
+    "successRate": "99.6%",
     "recommendedTeam": [
       {
-        "name": "Astar (Fire Magic Knight L)",
-        "role": "ตีหลายฮิตทำลายเกราะบาเรีย + กวาดเวฟ",
-        "rune": "Vampire / Revenge",
-        "spd": "+35",
-        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0029_1_2.png"
-      },
-      {
-        "name": "Shamann (Light Griffon 2A)",
-        "role": "ดาเมจ x2 ต่อมอนสเตอร์มืดตาม Max HP",
-        "rune": "Rage / Blade",
-        "spd": "+38",
-        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0010_3_4.png"
+        "name": "Abigail (L)",
+        "role": "มัลติฮิตทำลายชิลด์บอสเนโคร 5 ชั้น + บัฟ ATK",
+        "rune": "Fight x3 หรือ Violent",
+        "spd": "+65",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0049_0_4.png"
       },
       {
         "name": "Raoq (Fire Inugami 2A)",
-        "role": "รุมโจมตีลดคูลดาวน์เพื่อน & รีเทิร์น",
+        "role": "Team-up ดึงเพื่อนรุมฉีกเกราะและลูปเทิร์น",
         "rune": "Violent / Revenge",
-        "spd": "+48",
-        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0007_1_2.png"
+        "spd": "+60",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0051_1_3.png"
+      },
+      {
+        "name": "Seren (Dark Harpu 2A)",
+        "role": "มัลติฮิต เจาะเกราะ Def Break และบล็อกฮีลตัดการฟื้นเลือด",
+        "rune": "Fight x3 / Revenge",
+        "spd": "+55",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0160_3_5.png"
+      },
+      {
+        "name": "Astar (Fire Magic Knight)",
+        "role": "พาสซีฟ Silence ยิงดาเมจมหาศาลทะลวงบอสตอน HP บอสเต็ม",
+        "rune": "Vampire / Blade หรือ Rage",
+        "spd": "+40",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0036_1_4.png"
       },
       {
         "name": "Icaru (Water Inugami 2A)",
-        "role": "ดึงเพื่อนร่วมโจมตี 3 ตัวทำลายเกราะ",
-        "rune": "Guard x3 (DEF สูงสุด)",
-        "spd": "+45",
-        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0007_0_1.png"
-      },
-      {
-        "name": "Lucasha (Fire Harpu 2A)",
-        "role": "ดีบัฟเกราะแตกและห้ามฟื้นฟูเลือด",
-        "rune": "Fight x2 / Revenge",
-        "spd": "+55",
-        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0009_0_2.png"
+        "role": "Team-up ดึงเพื่อนร่วมทีมรุมโจมตีพร้อมกัน",
+        "rune": "Fight x3",
+        "spd": "+50",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0051_0_3.png"
       }
     ],
-    "leaderSkill": "Astar (เพิ่มพลังโจมตี ATK +33% ในดันเจี้ยน)",
-    "turnOrderTh": "1. Lucasha (เปิดเกราะแตก + ตีหลายฮิต) ➔ 2. Icaru (รุมตีปลดบาเรีย 7 ชั้น) ➔ 3. Raoq (รุมตีรอบสอง) ➔ 4. Shamann (ทุบมังกร/บอสธาตุมืด ดาเมจทะลุหลอด) ➔ 5. Astar (เคลียร์ซ้ำ)",
-    "bossMechanicTh": "บอสเนโครจะกางโล่บาเรีย 7 ฮิตที่ไม่คิดความเสียหาย และจำกัดสปีดโจมตี จึงต้องใช้มอนสเตอร์รุมตีหลายฮิต (Team Up) เพื่อทำลายเกราะก่อน แล้วให้ Shamann ปิดฉาก",
+    "leaderSkill": "Abigail (เพิ่มพลังโจมตี ATK +33% ธาตุน้ำ)",
+    "turnOrderTh": "1. Abigail (ยิงปืนหลายฮิตทำลายชิลด์บอส 5 ชั้น) ➔ 2. Seren 2A (เจาะเกราะ Def Break & บล็อกฮีล 100%) ➔ 3. Raoq 2A (Team-up รุมฉีกชิลด์และสแปมเกราะแตก) ➔ 4. Icaru 2A (Team-up เสริม) ➔ 5. Astar (สกิลพาสซีฟยิงดาเมจมหาศาลทะลวงบอส)",
+    "bossMechanicTh": "บอสเนโครมีบาเรียป้องกันดาเมจ ต้องใช้มอนสเตอร์มัลติฮิตอย่าง Abigail และ Seren ทำลายบาเรียให้หมดก่อน จากนั้น Raoq และ Astar จะเข้าไประเบิดดาเมจปลิดชีพ",
     "totalRuns": "10,184",
     "bossStats": {
       "bossName": "",
@@ -585,6 +883,106 @@
         "count": "1,686",
         "percent": "20.2%"
       }
+    ],
+    "metaPresets": [
+      {
+        "id": "abigail-speed",
+        "name": "🔥 เมต้ายอดนิยม Abyss: Abigail + Raoq + Seren 2A (28-34s)",
+        "badge": "YouTube Popular",
+        "source": "เมต้ายอดฮิตจาก YouTube และกลุ่มเฟสบุ๊คสำหรับดันเจี้ยน Necro Abyss Hard",
+        "recordTime": "00:27",
+        "avgTime": "00:32",
+        "successRate": "99.6%",
+        "leaderSkill": "Abigail (เพิ่มพลังโจมตี ATK +33% ธาตุน้ำ)",
+        "turnOrderTh": "1. Abigail (ยิงปืนหลายฮิตทำลายชิลด์บอส 5 ชั้น) ➔ 2. Seren 2A (เจาะเกราะ Def Break & บล็อกฮีล 100%) ➔ 3. Raoq 2A (Team-up รุมฉีกชิลด์และสแปมเกราะแตก) ➔ 4. Icaru 2A (Team-up เสริม) ➔ 5. Astar (สกิลพาสซีฟยิงดาเมจมหาศาลทะลวงบอส)",
+        "bossMechanicTh": "บอสเนโครมีบาเรียป้องกันดาเมจ ต้องใช้มอนสเตอร์มัลติฮิตอย่าง Abigail และ Seren ทำลายบาเรียให้หมดก่อน จากนั้น Raoq และ Astar จะเข้าไประเบิดดาเมจปลิดชีพ",
+        "team": [
+          {
+            "name": "Abigail (L)",
+            "role": "มัลติฮิตทำลายชิลด์บอสเนโคร 5 ชั้น + บัฟ ATK",
+            "rune": "Fight x3 หรือ Violent",
+            "spd": "+65",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0049_0_4.png"
+          },
+          {
+            "name": "Raoq (Fire Inugami 2A)",
+            "role": "Team-up ดึงเพื่อนรุมฉีกเกราะและลูปเทิร์น",
+            "rune": "Violent / Revenge",
+            "spd": "+60",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0051_1_3.png"
+          },
+          {
+            "name": "Seren (Dark Harpu 2A)",
+            "role": "มัลติฮิต เจาะเกราะ Def Break และบล็อกฮีลตัดการฟื้นเลือด",
+            "rune": "Fight x3 / Revenge",
+            "spd": "+55",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0160_3_5.png"
+          },
+          {
+            "name": "Astar (Fire Magic Knight)",
+            "role": "พาสซีฟ Silence ยิงดาเมจมหาศาลทะลวงบอสตอน HP บอสเต็ม",
+            "rune": "Vampire / Blade หรือ Rage",
+            "spd": "+40",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0036_1_4.png"
+          },
+          {
+            "name": "Icaru (Water Inugami 2A)",
+            "role": "Team-up ดึงเพื่อนร่วมทีมรุมโจมตีพร้อมกัน",
+            "rune": "Fight x3",
+            "spd": "+50",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0051_0_3.png"
+          }
+        ]
+      },
+      {
+        "id": "shamann-nuke",
+        "name": "⚡ เมต้า Shamann 2A วันช็อตเนโคร (26-32s)",
+        "badge": "High Damage",
+        "source": "ทีม Shamann 2A ปิดฉากด้วยดาเมจตาม Max HP บอสหลักแสน",
+        "recordTime": "00:25",
+        "avgTime": "00:30",
+        "successRate": "99.5%",
+        "leaderSkill": "Astar (เพิ่มพลังโจมตี ATK +33%)",
+        "turnOrderTh": "1. Abigail ➔ 2. Lucasha ➔ 3. Raoq ➔ 4. Astar ➔ 5. Shamann (สกิล 2 Special Assault ดาเมจ 180,000+)",
+        "bossMechanicTh": "Shamann 2A ได้รับการลดดาเมจจากการโจมตีของมอนสเตอร์ธาตุมืด และสกิล 2 สร้างความเสียหายมหาศาลตาม Max HP ของบอส",
+        "team": [
+          {
+            "name": "Astar (L)",
+            "role": "ลีดเดอร์ & ดาเมจทะลวงชิลด์",
+            "rune": "Rage / Blade",
+            "spd": "+40",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0036_1_4.png"
+          },
+          {
+            "name": "Shamann (Light Griffon 2A)",
+            "role": "สกิล 2 Special Assault วันช็อตเนโครตาม Max HP",
+            "rune": "Rage / Blade",
+            "spd": "+35",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0055_0_3.png"
+          },
+          {
+            "name": "Raoq (Fire Inugami 2A)",
+            "role": "Team-up รุมฉีกชิลด์",
+            "rune": "Violent / Revenge",
+            "spd": "+65",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0051_1_3.png"
+          },
+          {
+            "name": "Lucasha (Fire Harpu 2A)",
+            "role": "มัลติฮิต & เจาะเกราะ Def Break",
+            "rune": "Fight x3",
+            "spd": "+55",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0001_1_4.png"
+          },
+          {
+            "name": "Abigail (Water Cannon Girl)",
+            "role": "ทำลายชิลด์บอส 5 ชั้น + บัฟ ATK",
+            "rune": "Fight x3",
+            "spd": "+70",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0049_0_4.png"
+          }
+        ]
+      }
     ]
   },
   {
@@ -596,49 +994,49 @@
     "elementTh": "ธาตุลม",
     "dungeonId": "9513",
     "stageId": "2",
-    "recordTime": "00:42",
-    "avgTime": "00:54",
-    "successRate": "99.0%",
+    "recordTime": "00:19",
+    "avgTime": "00:24",
+    "successRate": "99.8%",
     "recommendedTeam": [
       {
-        "name": "Veromos (Dark Ifrit L)",
-        "role": "ล้างดีบัฟทั้งทีมทุกเทิร์น + สตั๊นเวฟ",
-        "rune": "Violent / Nemesis",
-        "spd": "+85",
-        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0028_0_5.png"
+        "name": "Talia (L)",
+        "role": "ดาเมจหลัก Chakram ระเบิดเลือดบอสตาม HP ที่ลดลง",
+        "rune": "Rage / Blade",
+        "spd": "+45",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0045_0_1.png"
       },
       {
-        "name": "Riley (Wind Totemist)",
-        "role": "บัฟดาบ บัฟภูมิคุ้มกัน และฟื้นฟูเลือด",
-        "rune": "Violent / Will",
+        "name": "Julie",
+        "role": "กวาดล้างม็อบเวฟ 1 และ 3 จบใน 1 เทิร์น (Thousand Shots)",
+        "rune": "Rage / Blade",
         "spd": "+75",
-        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0058_0_0.png"
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0014_0_4.png"
       },
       {
-        "name": "Nora (Fire Totemist)",
-        "role": "เผาเลือดด้วย DoT และปลดบัฟศัตรู",
-        "rune": "Despair / Will",
-        "spd": "+78",
-        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0058_0_2.png"
+        "name": "Prilea (Water Harpu 2A)",
+        "role": "เปิดเทิร์น ลดเกราะ Def Break 100%",
+        "rune": "Fight x3",
+        "spd": "+60",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0001_2_4.png"
       },
       {
-        "name": "Loren (Light Cow Girl)",
-        "role": "ลดเกจโจมตี + เจาะเกราะต่อเนื่อง",
-        "rune": "Swift / Focus",
-        "spd": "+95",
-        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0038_0_4.png"
+        "name": "Icaru (Water Inugami 2A)",
+        "role": "Team-up ดึงเพื่อนรุมโจมตี",
+        "rune": "Fight x3",
+        "spd": "+55",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0051_0_3.png"
       },
       {
-        "name": "Belial (Water Demon)",
-        "role": "ฟื้นคืนชีพไม่จำกัด + เจาะเกราะ 100%",
-        "rune": "Vampire / Nemesis",
-        "spd": "+30",
-        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0054_0_1.png"
+        "name": "Sabrina",
+        "role": "ผสานพลัง Boomerang ลดเกราะ & เพิ่มดาเมจ",
+        "rune": "Violent / Blade",
+        "spd": "+50",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0045_0_3.png"
       }
     ],
-    "leaderSkill": "Veromos (เพิ่มพลังชีวิต HP +33% แก่พรรคพวกทุกคน)",
-    "turnOrderTh": "1. Loren (เจาะเกราะ + ลดเกจ) ➔ 2. Riley (บัฟดาบ ATK + ภูมิคุ้มกัน) ➔ 3. Veromos (ล้างสถานะผิดปกติ) ➔ 4. Nora (ลงพิษต่อเนื่อง DoT) ➔ 5. Belial (ดาเมจเจาะเกราะสังหารบอส)",
-    "bossMechanicTh": "บอสจะขโมยบัฟของทีมเราไปเป็นของตัวเอง และแจกดีบัฟหนัก จึงต้องใช้ Veromos ล้างพิษตลอดเวลา และเน้นดาเมจที่เจาะเกราะทะลวงหลอด",
+    "leaderSkill": "Talia (เพิ่มพลังโจมตี ATK +24% ในดันเจี้ยน)",
+    "turnOrderTh": "1. Julie (กวาดล้างม็อบเวฟ 1 และ 3 ด้วย Thousand Shots) ➔ 2. Prilea (เปิด Def Break 100% ใส่บอส) ➔ 3. Icaru (Team-up ดึงเพื่อนรุมโจมตี) ➔ 4. Sabrina (Boomerang ลดเกราะ & เพิ่มดาเมจพันธมิตร) ➔ 5. Talia (Chakram ระเบิดดาเมจทะลวงหลอดเลือดบอสในพริบตา)",
+    "bossMechanicTh": "บอสและม็อบในมิติลี้ลับแพ้ทางดาเมจกายภาพเบิสต์เร็ว การใช้ Julie ล้างเวฟม็อบอย่างรวดเร็ว ผสานพลังคู่แฝดน้ำ Talia + Sabrina ที่โจมตีประสานกัน ทำดาเมจคูณสองในทุกเทิร์น จบเกมได้ทันทีก่อนบอสสะสมบัฟ",
     "totalRuns": "2,173",
     "bossStats": {
       "bossName": "",
@@ -785,6 +1183,106 @@
         "count": "284",
         "percent": "17.6%"
       }
+    ],
+    "metaPresets": [
+      {
+        "id": "talia-twins",
+        "name": "⚡ เมต้าคู่แฝด Talia + Sabrina + Julie + Prilea (19-24s)",
+        "badge": "World Record",
+        "source": "เมต้าสปีดรันคู่แฝดน้ำยอดนิยมจาก YouTube & Facebook SW Thailand",
+        "recordTime": "00:19",
+        "avgTime": "00:24",
+        "successRate": "99.8%",
+        "leaderSkill": "Talia (เพิ่มพลังโจมตี ATK +24% ในดันเจี้ยน)",
+        "turnOrderTh": "1. Julie (กวาดล้างม็อบเวฟ 1 และ 3 ด้วย Thousand Shots) ➔ 2. Prilea (เปิด Def Break 100% ใส่บอส) ➔ 3. Icaru (Team-up ดึงเพื่อนรุมโจมตี) ➔ 4. Sabrina (Boomerang ลดเกราะ & เพิ่มดาเมจพันธมิตร) ➔ 5. Talia (Chakram ระเบิดดาเมจทะลวงหลอดเลือดบอสในพริบตา)",
+        "bossMechanicTh": "บอสและม็อบในมิติลี้ลับแพ้ทางดาเมจกายภาพเบิสต์เร็ว การใช้ Julie ล้างเวฟม็อบอย่างรวดเร็ว ผสานพลังคู่แฝดน้ำ Talia + Sabrina ที่โจมตีประสานกัน ทำดาเมจคูณสองในทุกเทิร์น จบเกมได้ทันทีก่อนบอสสะสมบัฟ",
+        "team": [
+          {
+            "name": "Talia (L)",
+            "role": "ดาเมจหลัก Chakram ระเบิดเลือดบอสตาม HP ที่ลดลง",
+            "rune": "Rage / Blade",
+            "spd": "+45",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0045_0_1.png"
+          },
+          {
+            "name": "Julie",
+            "role": "กวาดล้างม็อบเวฟ 1 และ 3 จบใน 1 เทิร์น (Thousand Shots)",
+            "rune": "Rage / Blade",
+            "spd": "+75",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0014_0_4.png"
+          },
+          {
+            "name": "Prilea (Water Harpu 2A)",
+            "role": "เปิดเทิร์น ลดเกราะ Def Break 100%",
+            "rune": "Fight x3",
+            "spd": "+60",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0001_2_4.png"
+          },
+          {
+            "name": "Icaru (Water Inugami 2A)",
+            "role": "Team-up ดึงเพื่อนรุมโจมตี",
+            "rune": "Fight x3",
+            "spd": "+55",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0051_0_3.png"
+          },
+          {
+            "name": "Sabrina",
+            "role": "ผสานพลัง Boomerang ลดเกราะ & เพิ่มดาเมจ",
+            "rune": "Violent / Blade",
+            "spd": "+50",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0045_0_3.png"
+          }
+        ]
+      },
+      {
+        "id": "shaina-sieq",
+        "name": "🔥 เมต้าบัฟคริ Shaina + Sieq + Julie + Twins (18-22s)",
+        "badge": "High Crit Speed",
+        "source": "สูตรสปีดจัดเต็ม บัฟ ATK + คริติคอล 30% จาก Sieq",
+        "recordTime": "00:18",
+        "avgTime": "00:22",
+        "successRate": "99.7%",
+        "leaderSkill": "Shaina (เพิ่มพลังโจมตี/สปีด)",
+        "turnOrderTh": "1. Sieq (บัฟ ATK + คริ) ➔ 2. Julie (ล้างเวฟ) ➔ 3. Shaina (เจาะเกราะ) ➔ 4. Sabrina ➔ 5. Talia",
+        "bossMechanicTh": "Sieq ช่วยให้มอนสเตอร์ในทีมต้องการ CR เพียง 70% สามารถเน้น ATK และ Crit Damage ให้สูงสุดเพื่อวันช็อตบอส",
+        "team": [
+          {
+            "name": "Shaina (L)",
+            "role": "ลีดเดอร์ & เจาะเกราะ",
+            "rune": "Fight x3",
+            "spd": "+65",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0045_1_1.png"
+          },
+          {
+            "name": "Sieq (Fire Hellhound 2A)",
+            "role": "บัฟ ATK + คริติคอล 30% ให้ทั้งทีม",
+            "rune": "Fight x3",
+            "spd": "+80",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0211_3_2.png"
+          },
+          {
+            "name": "Julie",
+            "role": "กวาดล้างม็อบเวฟ 1 และ 3",
+            "rune": "Rage / Blade",
+            "spd": "+70",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0014_0_4.png"
+          },
+          {
+            "name": "Sabrina",
+            "role": "คู่แฝด Boomerang",
+            "rune": "Violent / Blade",
+            "spd": "+50",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0045_0_3.png"
+          },
+          {
+            "name": "Talia",
+            "role": "คู่แฝด Chakram ปิดฉาก",
+            "rune": "Rage / Blade",
+            "spd": "+45",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0045_0_1.png"
+          }
+        ]
+      }
     ]
   },
   {
@@ -796,49 +1294,49 @@
     "elementTh": "ธาตุลม",
     "dungeonId": "9511",
     "stageId": "2",
-    "recordTime": "00:29",
-    "avgTime": "00:39",
-    "successRate": "99.4%",
+    "recordTime": "00:18",
+    "avgTime": "00:22",
+    "successRate": "99.8%",
     "recommendedTeam": [
       {
-        "name": "Eirgar (Dark Vampire Lord L)",
-        "role": "บัฟ ATK บัฟดูดเลือด และนำทีมบุก",
-        "rune": "Fight x3",
-        "spd": "+65",
-        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0016_2_5.png"
-      },
-      {
-        "name": "Zinc (Dark Living Armor 2A)",
-        "role": "สกิลห้ามบอสรับบัฟ (Block Buff) 100%",
-        "rune": "Despair / Guard",
+        "name": "Verdehile (L)",
+        "role": "ลีดเดอร์สปีด & ปั่นเกจโจมตี +40%",
+        "rune": "Triple Revenge",
         "spd": "+70",
-        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0013_1_5.png"
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0016_1_2.png"
       },
       {
-        "name": "Loren (Light Cow Girl)",
-        "role": "เจาะเกราะ Def Break + ควบคุมเกจบอส",
-        "rune": "Swift / Focus",
-        "spd": "+98",
-        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0038_0_4.png"
+        "name": "Raoq (Fire Inugami 2A)",
+        "role": "Team-up ดึงเพื่อนรุมฉีกเกราะ",
+        "rune": "Violent / Revenge",
+        "spd": "+65",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0051_1_3.png"
       },
       {
-        "name": "Kro (Dark Inugami 2A)",
-        "role": "ดาเมจระเบิดตามจำนวนดีบัฟบนตัวบอส",
+        "name": "Lucifer (Light Demon)",
+        "role": "พาสซีฟ Dark Light เร่งเกจ 100%",
         "rune": "Rage / Blade",
-        "spd": "+42",
-        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0007_1_5.png"
+        "spd": "+75",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0052_3_4.png"
       },
       {
-        "name": "Pang (Light Rakshasa)",
-        "role": "ยืดระยะเวลาดีบัฟห้ามบัฟและเกราะแตก",
-        "rune": "Violent / Focus",
+        "name": "Astar (Fire Magic Knight)",
+        "role": "ระเบิดดาเมจทะลวงบอส",
+        "rune": "Vampire / Blade",
+        "spd": "+50",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0036_1_4.png"
+      },
+      {
+        "name": "Shaina (Fire Boomerang)",
+        "role": "เจาะเกราะหมู่ & ตัดเกจ",
+        "rune": "Fight x3",
         "spd": "+60",
-        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0015_0_4.png"
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0045_1_1.png"
       }
     ],
-    "leaderSkill": "Eirgar (เพิ่มพลังโจมตี ATK +38% ในดันเจี้ยน)",
-    "turnOrderTh": "1. Loren (เจาะเกราะ Def Break) ➔ 2. Zinc (ลงดีบัฟห้ามรับบัฟ Block Beneficial Effects) ➔ 3. Eirgar (แจกบัฟดาบ ATK) ➔ 4. Pang (ยืดระยะดีบัฟ) ➔ 5. Kro (สกิล 3 Scar ระเบิดบอสตายทันที)",
-    "bossMechanicTh": "บอสจะสะสมพลังเกราะและยิงสตั๊นทั้งทีมหากได้บัฟ กุญแจสำคัญคือห้ามให้บอสติดบัฟ (Block Buff) โดยเด็ดขาด จะทำให้บอสตัวเปล่าและโดน Kro ยิงดอกเดียวดับ",
+    "leaderSkill": "Verdehile (เพิ่มสปีด SPD +28% ในดันเจี้ยน)",
+    "turnOrderTh": "1. Verdehile ➔ 2. Raoq (Team-up ล้างคูลดาวน์) ➔ 3. Lucifer (เร่งเกจทั้งทีม 100% ทันที) ➔ 4. Astar (กวาดล้างเวฟและเจาะเลือดบอส) ➔ 5. Shaina (ลดเกจและเจาะเกราะหมู่)",
+    "bossMechanicTh": "บอสป้อมเหล็กมีสกิลกางโล่อมตะและเพิ่มพลังป้องกัน แต่การใช้ Lucifer เร่งเกจผสาน Verdehile ทำให้ทีมโจมตีก่อนบอสได้ขยับ บอสโดนดาเมจตายสนิทตั้งแต่ก่อนกางโล่!",
     "totalRuns": "22,083",
     "bossStats": {
       "bossName": "",
@@ -986,6 +1484,106 @@
         "count": "3,671",
         "percent": "19.6%"
       }
+    ],
+    "metaPresets": [
+      {
+        "id": "lucifer-steel",
+        "name": "👑 เมต้าลูซิเฟอร์ป้อมเหล็ก Verde + Lucifer + Astar (18-24s)",
+        "badge": "World Record",
+        "source": "เมต้าสปีดรันป้อมเหล็กเร็วสุดในเกมของผู้เล่นระดับท็อป",
+        "recordTime": "00:18",
+        "avgTime": "00:22",
+        "successRate": "99.8%",
+        "leaderSkill": "Verdehile (เพิ่มสปีด SPD +28% ในดันเจี้ยน)",
+        "turnOrderTh": "1. Verdehile ➔ 2. Raoq (Team-up ล้างคูลดาวน์) ➔ 3. Lucifer (เร่งเกจทั้งทีม 100% ทันที) ➔ 4. Astar (กวาดล้างเวฟและเจาะเลือดบอส) ➔ 5. Shaina (ลดเกจและเจาะเกราะหมู่)",
+        "bossMechanicTh": "บอสป้อมเหล็กมีสกิลกางโล่อมตะและเพิ่มพลังป้องกัน แต่การใช้ Lucifer เร่งเกจผสาน Verdehile ทำให้ทีมโจมตีก่อนบอสได้ขยับ บอสโดนดาเมจตายสนิทตั้งแต่ก่อนกางโล่!",
+        "team": [
+          {
+            "name": "Verdehile (L)",
+            "role": "ลีดเดอร์สปีด & ปั่นเกจโจมตี +40%",
+            "rune": "Triple Revenge",
+            "spd": "+70",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0016_1_2.png"
+          },
+          {
+            "name": "Raoq (Fire Inugami 2A)",
+            "role": "Team-up ดึงเพื่อนรุมฉีกเกราะ",
+            "rune": "Violent / Revenge",
+            "spd": "+65",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0051_1_3.png"
+          },
+          {
+            "name": "Lucifer (Light Demon)",
+            "role": "พาสซีฟ Dark Light เร่งเกจ 100%",
+            "rune": "Rage / Blade",
+            "spd": "+75",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0052_3_4.png"
+          },
+          {
+            "name": "Astar (Fire Magic Knight)",
+            "role": "ระเบิดดาเมจทะลวงบอส",
+            "rune": "Vampire / Blade",
+            "spd": "+50",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0036_1_4.png"
+          },
+          {
+            "name": "Shaina (Fire Boomerang)",
+            "role": "เจาะเกราะหมู่ & ตัดเกจ",
+            "rune": "Fight x3",
+            "spd": "+60",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0045_1_1.png"
+          }
+        ]
+      },
+      {
+        "id": "zinc-block",
+        "name": "⚡ เมต้าบล็อกบัฟ Eirgar + Zinc + Loren (22-28s)",
+        "badge": "YouTube Popular",
+        "source": "สูตรมาตรฐานบล็อกบัฟชัวร์ 100% บอสไม่มีทางกางโล่",
+        "recordTime": "00:22",
+        "avgTime": "00:28",
+        "successRate": "99.7%",
+        "leaderSkill": "Eirgar (เพิ่มพลังโจมตี ATK +33% ธาตุมืด)",
+        "turnOrderTh": "1. Loren (เจาะเกราะ) ➔ 2. Zinc (บล็อกบัฟ Block Buff) ➔ 3. Eirgar (บัฟ ATK + ดูดเลือด) ➔ 4. Raoq (Team-up) ➔ 5. Kro (สกิล 3 ดาเมจคูณตามดีบัฟ)",
+        "bossMechanicTh": "Zinc 2A มีสกิลบล็อกบัฟ 100% ทำให้บอสป้อมเหล็กไม่สามารถกางโล่อมตะหรือบัฟป้องกันได้เลยตลอดทั้งการต่อสู้",
+        "team": [
+          {
+            "name": "Eirgar (L)",
+            "role": "ลีดเดอร์ ATK +33% และบัฟดูดเลือด",
+            "rune": "Fight x3",
+            "spd": "+60",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0050_0_2.png"
+          },
+          {
+            "name": "Zinc (Dark Living Armor 2A)",
+            "role": "บล็อกบัฟ Block Buff 100% ป้องกันบอสกางโล่",
+            "rune": "Despair / Guard หรือ Fight",
+            "spd": "+65",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0125_3_5.png"
+          },
+          {
+            "name": "Loren (Light Cow Girl)",
+            "role": "เปิดเจาะเกราะ Def Break & ตัดเกจ",
+            "rune": "Swift / Focus",
+            "spd": "+90",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0032_3_4.png"
+          },
+          {
+            "name": "Raoq (Fire Inugami 2A)",
+            "role": "Team-up ดึงเพื่อนรุม",
+            "rune": "Violent / Revenge",
+            "spd": "+65",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0051_1_3.png"
+          },
+          {
+            "name": "Kro (Dark Inugami 2A)",
+            "role": "สกิล 3 Scar ดาเมจคูณตามจำนวนดีบัฟ",
+            "rune": "Rage / Blade",
+            "spd": "+40",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0051_4_3.png"
+          }
+        ]
+      }
     ]
   },
   {
@@ -997,49 +1595,49 @@
     "elementTh": "ธาตุแสง",
     "dungeonId": "9512",
     "stageId": "2",
-    "recordTime": "00:33",
-    "avgTime": "00:43",
-    "successRate": "99.3%",
+    "recordTime": "00:21",
+    "avgTime": "00:26",
+    "successRate": "99.8%",
     "recommendedTeam": [
       {
-        "name": "Verdehile (Fire Vampire L)",
-        "role": "เพิ่มความเร็วสปีดดันเจี้ยน + ลีดเดอร์",
-        "rune": "Rage / Blade",
-        "spd": "+35",
-        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0016_1_2.png"
+        "name": "Shaina (L)",
+        "role": "ลดเกจและเจาะเกราะหมู่",
+        "rune": "Violent / Blade",
+        "spd": "+70",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0045_1_1.png"
       },
       {
-        "name": "Loren (Light Cow Girl)",
-        "role": "ชะลอความเร็วบอส Slow + ลดเกจ",
-        "rune": "Swift / Focus",
-        "spd": "+92",
-        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0038_0_4.png"
+        "name": "Hwa (Fire Rakshasa)",
+        "role": "พาสซีฟตัดเกจบอส 25% ทุกฮิต ล็อคไม่ให้บอสขยับ",
+        "rune": "Swift / Blade",
+        "spd": "+140+",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0021_1_4.png"
+      },
+      {
+        "name": "Astar (Fire Magic Knight)",
+        "role": "ดาเมจระเบิดตอนเลือดบอสเต็ม",
+        "rune": "Vampire / Blade",
+        "spd": "+50",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0036_1_4.png"
       },
       {
         "name": "Raoq (Fire Inugami 2A)",
-        "role": "ดึงเพื่อนรุมตีลดคูลดาวน์",
-        "rune": "Violent / Blade",
-        "spd": "+48",
-        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0007_1_2.png"
+        "role": "Team-up ดึงเพื่อนรุมฉีกเกราะ",
+        "rune": "Violent / Revenge",
+        "spd": "+60",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0051_1_3.png"
       },
       {
-        "name": "Jultan (Dark Werewolf 2A)",
-        "role": "เกราะแตก 100% เมื่อคริติคอล + เลือดหนา",
-        "rune": "Energy x3 / Will",
-        "spd": "+55",
-        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0008_1_5.png"
-      },
-      {
-        "name": "Kro (Dark Inugami 2A)",
-        "role": "สไนเปอร์บอสด้วยดาเมจคูณดีบัฟ",
+        "name": "Cordelia / CHUN-LI",
+        "role": "เบิสต์ดาเมจมหาศาลตามสปีด ปิดฉากในพริบตา",
         "rune": "Rage / Blade",
-        "spd": "+40",
-        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters/unit_icon_0007_1_5.png"
+        "spd": "+90",
+        "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0065_1_3_swgtC2NC.png"
       }
     ],
-    "leaderSkill": "Verdehile (เพิ่มความเร็วโจมตี Attack Speed +28% ในดันเจี้ยน)",
-    "turnOrderTh": "1. Loren (ใส่ดีบัฟสโลว์ + เจาะเกราะ) ➔ 2. Jultan (เกราะแตกซ้ำ + บล็อกฮีล) ➔ 3. Raoq (รุมตีเร่งเทิร์น) ➔ 4. Kro (สกิล 3 ระเบิดดาเมจมหาศาล) ➔ 5. Verdehile (ดันเกจซ้ำ)",
-    "bossMechanicTh": "บอสจะได้รับความเร็วและเกจโจมตีเพิ่มขึ้นตามความเร็วของทีมเรา ห้ามใช้บัฟสปีด และควรใช้ Loren ลดเกจสโลว์บอสไว้ไม่ให้ขยับ",
+    "leaderSkill": "Shaina (เพิ่มพลังโจมตี ATK +24% หรือสปีด)",
+    "turnOrderTh": "1. Shaina (ลดเกจและเจาะเกราะหมู่) ➔ 2. Hwa (พาสซีฟตัดเกจบอสทุกฮิต ไม่ให้บอสขยับ) ➔ 3. Raoq 2A (Team-up ดึงเพื่อนรุมสับเกราะ) ➔ 4. Astar (ดาเมจระเบิดตอนบอสเลือดเต็ม) ➔ 5. Cordelia / Chun-Li (เบิสต์ดาเมจมหาศาลตามความเร็ว ปลิดชีพในพริบตา)",
+    "bossMechanicTh": "บอสสุสานผู้ลงทัณฑ์จะมีความเร็วสูงขึ้นตามลำดับการโจมตี แต่ Hwa มีพาสซีฟตัดเกจโจมตีศัตรู 25% ทุกครั้งที่โจมตี ทำให้บอสติดลูป 0% ATB ไม่ได้ออกท่าแม้แต่ครั้งเดียว!",
     "totalRuns": "14,556",
     "bossStats": {
       "bossName": "",
@@ -1180,6 +1778,106 @@
         "setTh": "อาร์ติแฟกต์สายสนับสนุน (Support Type)",
         "count": "2,950",
         "percent": "25.1%"
+      }
+    ],
+    "metaPresets": [
+      {
+        "id": "hwa-lock",
+        "name": "⚡ เมต้าล็อคเกจ Shaina + Hwa + Cordelia (21-26s)",
+        "badge": "World Record",
+        "source": "เมต้าสปีดรันยอดนิยมระดับสูงจาก YouTube & Facebook",
+        "recordTime": "00:21",
+        "avgTime": "00:26",
+        "successRate": "99.8%",
+        "leaderSkill": "Shaina (เพิ่มพลังโจมตี ATK +24% หรือสปีด)",
+        "turnOrderTh": "1. Shaina (ลดเกจและเจาะเกราะหมู่) ➔ 2. Hwa (พาสซีฟตัดเกจบอสทุกฮิต ไม่ให้บอสขยับ) ➔ 3. Raoq 2A (Team-up ดึงเพื่อนรุมสับเกราะ) ➔ 4. Astar (ดาเมจระเบิดตอนบอสเลือดเต็ม) ➔ 5. Cordelia / Chun-Li (เบิสต์ดาเมจมหาศาลตามความเร็ว ปลิดชีพในพริบตา)",
+        "bossMechanicTh": "บอสสุสานผู้ลงทัณฑ์จะมีความเร็วสูงขึ้นตามลำดับการโจมตี แต่ Hwa มีพาสซีฟตัดเกจโจมตีศัตรู 25% ทุกครั้งที่โจมตี ทำให้บอสติดลูป 0% ATB ไม่ได้ออกท่าแม้แต่ครั้งเดียว!",
+        "team": [
+          {
+            "name": "Shaina (L)",
+            "role": "ลดเกจและเจาะเกราะหมู่",
+            "rune": "Violent / Blade",
+            "spd": "+70",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0045_1_1.png"
+          },
+          {
+            "name": "Hwa (Fire Rakshasa)",
+            "role": "พาสซีฟตัดเกจบอส 25% ทุกฮิต ล็อคไม่ให้บอสขยับ",
+            "rune": "Swift / Blade",
+            "spd": "+140+",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0021_1_4.png"
+          },
+          {
+            "name": "Astar (Fire Magic Knight)",
+            "role": "ดาเมจระเบิดตอนเลือดบอสเต็ม",
+            "rune": "Vampire / Blade",
+            "spd": "+50",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0036_1_4.png"
+          },
+          {
+            "name": "Raoq (Fire Inugami 2A)",
+            "role": "Team-up ดึงเพื่อนรุมฉีกเกราะ",
+            "rune": "Violent / Revenge",
+            "spd": "+60",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0051_1_3.png"
+          },
+          {
+            "name": "Cordelia / CHUN-LI",
+            "role": "เบิสต์ดาเมจมหาศาลตามสปีด ปิดฉากในพริบตา",
+            "rune": "Rage / Blade",
+            "spd": "+90",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0065_1_3_swgtC2NC.png"
+          }
+        ]
+      },
+      {
+        "id": "verde-kro",
+        "name": "🛡️ เมต้าปลอดภัย Verdehile + Loren + Jultan + Kro (28-35s)",
+        "badge": "Standard Safe",
+        "source": "สูตรมาตรฐานปลอดภัยสำหรับผู้เล่นทั่วไป",
+        "recordTime": "00:28",
+        "avgTime": "00:35",
+        "successRate": "99.5%",
+        "leaderSkill": "Verdehile (เพิ่มสปีด SPD +28%)",
+        "turnOrderTh": "1. Loren ➔ 2. Raoq ➔ 3. Jultan ➔ 4. Kro ➔ 5. Verdehile",
+        "bossMechanicTh": "อาศัยดีบัฟหลากหลายชนิดเพื่อเร่งดาเมจสกิล 3 ของ Kro ให้ทำดาเมจทะลุ 100,000+",
+        "team": [
+          {
+            "name": "Verdehile (L)",
+            "role": "ปั่นเกจ 40%",
+            "rune": "Triple Revenge",
+            "spd": "+70",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0016_1_2.png"
+          },
+          {
+            "name": "Loren (Light Cow Girl)",
+            "role": "เจาะเกราะ & ตัดเกจ",
+            "rune": "Swift / Focus",
+            "spd": "+90",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0032_3_4.png"
+          },
+          {
+            "name": "Raoq (Fire Inugami 2A)",
+            "role": "Team-up",
+            "rune": "Violent / Revenge",
+            "spd": "+65",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0051_1_3.png"
+          },
+          {
+            "name": "Jultan (Dark Werewolf 2A)",
+            "role": "ดีบัฟเกราะแตกและชะงักศัตรู",
+            "rune": "Energy x3",
+            "spd": "+50",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0012_4_1.png"
+          },
+          {
+            "name": "Kro (Dark Inugami 2A)",
+            "role": "สกิล 3 ปิดฉากตามจำนวนดีบัฟ",
+            "rune": "Rage / Blade",
+            "spd": "+40",
+            "img": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0051_4_3.png"
+          }
+        ]
       }
     ]
   }

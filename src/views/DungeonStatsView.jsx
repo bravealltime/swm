@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import dungeonList from '../data/dungeonRealStats.json';
 import { 
   Zap, 
@@ -19,9 +19,18 @@ import {
   CheckCircle2,
   HelpCircle,
   TrendingUp,
-  Sliders
+  Sliders,
+  Tv,
+  Check,
+  UserCheck,
+  Play,
+  ArrowRight,
+  ExternalLink
 } from 'lucide-react';
 import AbyssCalculatorPanel from '../components/AbyssCalculatorPanel';
+import { loadBox, saveBox } from '../utils/boxStorage';
+import { findUserDungeonDecks } from '../utils/cairosDecks';
+import * as aegisLive from '../services/aegisLive';
 
 const ELEMENT_STYLES = {
   Water: { label: 'ธาตุน้ำ', color: '#38bdf8', bg: 'bg-sky-500/15 text-sky-400 border-sky-500/30', icon: Droplets },
@@ -33,11 +42,105 @@ const ELEMENT_STYLES = {
 
 export default function DungeonStatsView({ onNavigate }) {
   const [selectedDungeonId, setSelectedDungeonId] = useState(dungeonList[0].id);
-  const [activeSubTab, setActiveSubTab] = useState('team'); // 'team' | 'drops' | 'boss'
+  const [activeSubTab, setActiveSubTab] = useState('team'); // 'team' | 'drops' | 'boss' | 'calc'
+  const [box, setBox] = useState(() => loadBox());
+  const [selectedPresetId, setSelectedPresetId] = useState(null);
 
-  const currentDungeon = dungeonList.find(d => d.id === selectedDungeonId) || dungeonList[0];
+  // Sync with live AegisLink updates or pull live snapshot if decks missing
+  useEffect(() => {
+    const unsub = aegisLive.subscribe((type, data) => {
+      if (type === 'box' && data) {
+        setBox(data);
+      }
+    });
+
+    if (!box?.decks || box.decks.length === 0) {
+      fetch('http://127.0.0.1:7391/snapshot')
+        .then((r) => r.json())
+        .then((res) => {
+          if (res?.data?.deck_list && res.data.deck_list.length > 0) {
+            const current = loadBox() || {};
+            current.decks = res.data.deck_list;
+            saveBox(current);
+            setBox({ ...current });
+          }
+        })
+        .catch(() => {});
+    }
+
+    return unsub;
+  }, []);
+
+  const handleSelectDungeon = (id) => {
+    setSelectedDungeonId(id);
+    setSelectedPresetId(null);
+  };
+
+  const currentDungeon = dungeonList.find((d) => d.id === selectedDungeonId) || dungeonList[0];
   const elemMeta = ELEMENT_STYLES[currentDungeon.element] || ELEMENT_STYLES.Water;
   const ElemIcon = elemMeta.icon;
+
+  // Real in-game decks from the user's box for this dungeon
+  const userDecks = useMemo(() => {
+    return findUserDungeonDecks(box, currentDungeon.id);
+  }, [box, currentDungeon.id]);
+
+  // Combine user decks and curated community presets
+  const allPresets = useMemo(() => {
+    const list = [];
+
+    // Add user in-game decks first with top priority
+    if (userDecks.length > 0) {
+      userDecks.forEach((ud) => {
+        list.push({
+          id: `user-deck-${ud.seq}`,
+          isUserDeck: true,
+          name: userDecks.length === 1 
+            ? `👑 ทีมจริงของคุณ (${ud.team.map((m) => m.rawName.split(' ')[0]).join(' + ')})`
+            : `👑 ทีมจริงของคุณ (สำรับ #${ud.seq}: ${ud.team.map((m) => m.rawName.split(' ')[0]).join(' + ')})`,
+          badge: '👑 ในเกมของคุณ',
+          source: ud.source,
+          recordTime: ud.recordTime,
+          avgTime: ud.avgTime,
+          successRate: ud.successRate,
+          leaderSkill: ud.leaderSkill,
+          turnOrderTh: ud.specialDescription || currentDungeon.turnOrderTh,
+          bossMechanicTh: `${ud.specialDescription || 'ทีมจริงที่เซ็ตไว้ในเกมของคุณ'} — ดึงข้อมูลรูน สปีดจริง และสเตตัสสดจากไอดี ${box?.wizard?.name || 'PedictU'} ผ่าน SWEX/AegisLink`,
+          team: ud.team,
+        });
+      });
+    }
+
+    // Add curated community / YouTube / WR meta presets
+    const metaList = currentDungeon.metaPresets || [];
+    metaList.forEach((mp) => {
+      if (!list.some((x) => x.id === mp.id)) {
+        list.push({ ...mp, isUserDeck: false });
+      }
+    });
+
+    // Fallback if no presets defined
+    if (list.length === 0) {
+      list.push({
+        id: 'default-recommended',
+        isUserDeck: false,
+        name: 'สูตรทีมแนะนำมาตรฐาน',
+        badge: 'Standard',
+        source: 'ฐานข้อมูล SWM',
+        recordTime: currentDungeon.recordTime,
+        avgTime: currentDungeon.avgTime,
+        successRate: currentDungeon.successRate,
+        leaderSkill: currentDungeon.leaderSkill,
+        turnOrderTh: currentDungeon.turnOrderTh,
+        bossMechanicTh: currentDungeon.bossMechanicTh,
+        team: currentDungeon.recommendedTeam,
+      });
+    }
+
+    return list;
+  }, [userDecks, currentDungeon, box]);
+
+  const activePreset = allPresets.find((p) => p.id === selectedPresetId) || allPresets[0];
 
   return (
     <div className="space-y-6 max-w-[1780px] 2xl:max-w-[1880px] mx-auto pb-16 animate-in fade-in duration-300">
@@ -81,7 +184,7 @@ export default function DungeonStatsView({ onNavigate }) {
           return (
             <button
               key={d.id}
-              onClick={() => setSelectedDungeonId(d.id)}
+              onClick={() => handleSelectDungeon(d.id)}
               className={`p-3 rounded-xl border text-left transition-all duration-200 relative group flex flex-col justify-between ${
                 isSelected
                   ? 'bg-[#152336] border-cyan-500/80 shadow-lg shadow-cyan-500/10 ring-1 ring-cyan-500/30'
@@ -133,7 +236,7 @@ export default function DungeonStatsView({ onNavigate }) {
             <div className="text-xs text-slate-400 mt-1 flex flex-wrap items-center gap-2">
               <span>สกิลหัวหน้าทีม (Leader Skill):</span>
               <span className="text-amber-400 font-semibold bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
-                {currentDungeon.leaderSkill}
+                {activePreset.leaderSkill || currentDungeon.leaderSkill}
               </span>
             </div>
           </div>
@@ -142,15 +245,15 @@ export default function DungeonStatsView({ onNavigate }) {
           <div className="flex flex-wrap items-center gap-2.5">
             <div className="bg-[#0b1018] border border-[#1d2b3e] px-3.5 py-2 rounded-xl text-center min-w-[100px]">
               <div className="text-[11px] text-slate-400 font-mono">เวลาเฉลี่ย (Avg)</div>
-              <div className="text-base sm:text-lg font-mono font-bold text-emerald-400">{currentDungeon.avgTime} นาที</div>
+              <div className="text-base sm:text-lg font-mono font-bold text-emerald-400">{activePreset.avgTime || currentDungeon.avgTime} นาที</div>
             </div>
             <div className="bg-[#0b1018] border border-[#1d2b3e] px-3.5 py-2 rounded-xl text-center min-w-[100px]">
               <div className="text-[11px] text-slate-400 font-mono">เร็วสุด (Record)</div>
-              <div className="text-base sm:text-lg font-mono font-bold text-cyan-400">{currentDungeon.recordTime} นาที</div>
+              <div className="text-base sm:text-lg font-mono font-bold text-cyan-400">{activePreset.recordTime || currentDungeon.recordTime} นาที</div>
             </div>
             <div className="bg-[#0b1018] border border-[#1d2b3e] px-3.5 py-2 rounded-xl text-center min-w-[100px]">
               <div className="text-[11px] text-slate-400 font-mono">อัตราผ่าน (Win)</div>
-              <div className="text-base sm:text-lg font-mono font-bold text-amber-400">{currentDungeon.successRate}</div>
+              <div className="text-base sm:text-lg font-mono font-bold text-amber-400">{activePreset.successRate || currentDungeon.successRate}</div>
             </div>
             <div className="bg-[#0b1018] border border-[#1d2b3e] px-3.5 py-2 rounded-xl text-center min-w-[100px]">
               <div className="text-[11px] text-slate-400 font-mono">ฐานข้อมูล (Runs)</div>
@@ -215,27 +318,136 @@ export default function DungeonStatsView({ onNavigate }) {
         {/* TAB 1: Speed Team & Turn Order */}
         {activeSubTab === 'team' && (
           <div className="space-y-6">
+
+            {/* In-Game Active Deck Banner (if user has configured deck for this dungeon) */}
+            {userDecks.length > 0 && (
+              <div className="relative overflow-hidden rounded-2xl border border-emerald-500/40 bg-gradient-to-r from-emerald-950/40 via-[#0d1c29] to-[#0c1523] p-4 sm:p-5 shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div className="absolute top-0 right-0 w-60 h-60 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+                <div className="relative z-10 space-y-1.5">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[11px] font-mono font-bold flex items-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5 text-amber-300 animate-pulse" />
+                      <span>👑 ตรวจพบทีมจริงในไอดีของคุณ ({box?.wizard?.name || 'PedictU'})</span>
+                    </span>
+                    <span className="text-xs font-mono text-cyan-400 bg-cyan-950/50 px-2 py-0.5 rounded border border-cyan-800/40">
+                      สำรับที่ตั้งในเกม #{userDecks[0].seq}
+                    </span>
+                    <span className="text-xs font-mono text-amber-400 font-bold bg-amber-950/40 px-2 py-0.5 rounded border border-amber-800/40">
+                      สถิติประมาณ {userDecks[0].recordTime} - {userDecks[0].avgTime}
+                    </span>
+                  </div>
+                  <div className="text-sm sm:text-base font-bold text-white flex flex-wrap items-center gap-2">
+                    <span>{userDecks[0].team.map((m) => m.name).join(' • ')}</span>
+                  </div>
+                  <p className="text-xs text-slate-300 max-w-3xl leading-relaxed">
+                    {userDecks[0].specialDescription || 'ทีมที่ไอดีของคุณตั้งค่าไว้สำหรับลงดันเจี้ยนนี้ในเกม ดึงค่าสปีดและเซ็ตรูนจริงมาแสดงผลอัตโนมัติ'}
+                  </p>
+                </div>
+                <div className="relative z-10 flex items-center gap-2 shrink-0">
+                  <button
+                    onClick={() => setSelectedPresetId(`user-deck-${userDecks[0].seq}`)}
+                    className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-bold shadow-lg shadow-emerald-600/25 transition-all flex items-center gap-2 cursor-pointer"
+                  >
+                    <Zap className="w-4 h-4 text-amber-300" />
+                    <span>เลือกดูทีมจริงของคุณ</span>
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Presets Switcher Bar */}
+            <div className="bg-[#0b121e] border border-[#1c2a3f] rounded-2xl p-3.5 sm:p-4 space-y-3">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <Sliders className="w-4 h-4 text-cyan-400" />
+                  <span className="text-xs sm:text-sm font-bold text-white font-mono">
+                    สูตรทีมสปีดรัน & สถิติโลก (Speed Run Presets & In-Game Decks):
+                  </span>
+                </div>
+                <span className="text-[11px] text-slate-400 font-mono">
+                  รวม {allPresets.length} สูตรเมต้า (YouTube / Facebook / สถิติโลก)
+                </span>
+              </div>
+
+              {/* Preset Buttons */}
+              <div className="flex items-center gap-2 overflow-x-auto pb-1.5 scrollbar-thin">
+                {allPresets.map((preset) => {
+                  const isSelected = activePreset.id === preset.id;
+                  return (
+                    <button
+                      key={preset.id}
+                      onClick={() => setSelectedPresetId(preset.id)}
+                      className={`px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-2 cursor-pointer border shrink-0 ${
+                        isSelected
+                          ? 'bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-600 text-white border-cyan-400/80 shadow-lg shadow-cyan-600/30 ring-1 ring-cyan-400/60 font-bold'
+                          : preset.isUserDeck
+                            ? 'bg-emerald-950/40 text-emerald-300 border-emerald-500/40 hover:bg-emerald-900/50 hover:border-emerald-400'
+                            : 'bg-[#101724] text-slate-300 border-[#1d2a3c] hover:bg-[#152336] hover:text-white hover:border-slate-500'
+                      }`}
+                    >
+                      {preset.isUserDeck ? (
+                        <UserCheck className="w-3.5 h-3.5 text-emerald-400" />
+                      ) : (
+                        <Tv className="w-3.5 h-3.5 text-amber-400" />
+                      )}
+                      <span>{preset.name}</span>
+                      <span className="font-mono text-[11px] px-1.5 py-0.5 rounded bg-black/40 text-emerald-400 font-bold">
+                        ⏱ {preset.avgTime}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Source Reference & KPI Strip */}
+              <div className="flex flex-wrap items-center justify-between gap-2 pt-2.5 border-t border-[#182335] text-[11px]">
+                <div className="flex items-center gap-2">
+                  <span className="text-slate-400">แหล่งข้อมูล/อ้างอิง:</span>
+                  <span className="text-cyan-300 font-mono font-medium bg-cyan-950/40 px-2 py-0.5 rounded border border-cyan-500/20">
+                    {activePreset.source || 'คอมมูนิตี้ Summoners War'}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2 text-slate-400 font-mono">
+                  <span>สถิติที่บันทึก:</span>
+                  <span className="text-emerald-400 font-bold">เร็วสุด {activePreset.recordTime}</span>
+                  <span>•</span>
+                  <span className="text-slate-200">เฉลี่ย {activePreset.avgTime}</span>
+                  <span>•</span>
+                  <span className="text-amber-400 font-bold">ผ่าน {activePreset.successRate}</span>
+                </div>
+              </div>
+            </div>
+
             {/* Monster 5-Slot Card Grid */}
             <div>
               <div className="flex items-center justify-between mb-3">
                 <h3 className="text-xs sm:text-sm font-bold text-slate-200 uppercase tracking-wider font-mono flex items-center gap-2">
-                  <span>มอนสเตอร์ในทีมที่แนะนำ (Recommended 5-Monster Team)</span>
+                  <span>{activePreset.name} (5-Monster Setup)</span>
+                  {activePreset.isUserDeck && (
+                    <span className="text-[11px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                      ดึงสเตตัสและรูนจากไอดีของคุณจริง 100%
+                    </span>
+                  )}
                 </h3>
                 <span className="text-xs text-slate-400 font-mono">เรียงตามตำแหน่ง Pos #1 ถึง #5</span>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
-                {currentDungeon.recommendedTeam.map((m, idx) => (
+                {activePreset.team.map((m, idx) => (
                   <div
                     key={idx}
-                    className="bg-[#0e1624] border border-[#1e2d42] hover:border-cyan-500/50 rounded-xl p-3 flex flex-col justify-between transition-all group"
+                    className={`bg-[#0e1624] border rounded-xl p-3 flex flex-col justify-between transition-all group ${
+                      activePreset.isUserDeck
+                        ? 'border-emerald-500/30 hover:border-emerald-400 shadow-md shadow-emerald-500/5'
+                        : 'border-[#1e2d42] hover:border-cyan-500/50'
+                    }`}
                   >
                     <div>
                       {/* Portrait & Position Badge */}
                       <div className="flex items-center gap-3">
                         <div className="relative w-14 h-14 rounded-lg overflow-hidden border-2 border-[#25374e] group-hover:border-cyan-400 transition-colors shadow-md flex-shrink-0 bg-black">
                           <img
-                            src={m.img}
+                            src={m.img || m.avatarUrl}
                             alt={m.name}
                             className="w-full h-full object-cover"
                             onError={(e) => { e.target.src = 'https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0001_0_0.png'; }}
@@ -243,19 +455,33 @@ export default function DungeonStatsView({ onNavigate }) {
                           <span className="absolute bottom-0 right-0 bg-cyan-600 text-white text-[10px] font-mono font-bold px-1 rounded-tl">
                             #{idx + 1}
                           </span>
+                          {m.isLeader && (
+                            <span className="absolute top-0 left-0 bg-amber-500 text-slate-950 text-[9px] font-mono font-black px-1 rounded-br">
+                              L
+                            </span>
+                          )}
                         </div>
                         <div className="min-w-0">
                           <h4 className="text-white font-bold text-xs truncate group-hover:text-cyan-300 transition-colors">
                             {m.name}
                           </h4>
-                          <span className="text-[11px] text-amber-400 font-mono block mt-0.5">
+                          <span className="text-[11px] text-amber-400 font-mono block mt-0.5 font-bold">
                             SPD {m.spd}
                           </span>
-                          <span className="text-[11px] text-cyan-400/90 font-mono block">
+                          <span className="text-[11px] text-cyan-300 font-mono block truncate font-medium">
                             {m.rune}
                           </span>
                         </div>
                       </div>
+
+                      {/* Extra real stats if user deck */}
+                      {activePreset.isUserDeck && (m.atk > 0 || m.cr > 0 || m.cd > 0) && (
+                        <div className="mt-2 pt-1.5 border-t border-[#182333] flex items-center justify-between text-[10px] font-mono text-slate-400">
+                          <span>ATK <strong className="text-slate-200">{m.atk}</strong></span>
+                          <span>CR <strong className="text-slate-200">{m.cr}%</strong></span>
+                          <span>CD <strong className="text-slate-200">{m.cd}%</strong></span>
+                        </div>
+                      )}
 
                       {/* Role Explanation in Thai */}
                       <div className="mt-2.5 pt-2 border-t border-[#182333] text-xs text-slate-300 leading-tight">
@@ -266,8 +492,8 @@ export default function DungeonStatsView({ onNavigate }) {
                     {/* Quick Link to Catalog */}
                     {onNavigate && (
                       <button
-                        onClick={() => onNavigate('catalog', { search: m.name.replace(/\s*\(.*\)/, '') })}
-                        className="mt-3 text-[11px] text-blue-400 hover:text-blue-300 flex items-center justify-end gap-1 transition-colors"
+                        onClick={() => onNavigate('catalog', { search: m.name.replace(/\s*\(.*\)/, '').replace(/\s*\(L\)/, '') })}
+                        className="mt-3 text-[11px] text-blue-400 hover:text-blue-300 flex items-center justify-end gap-1 transition-colors cursor-pointer"
                       >
                         <span>ดูสเตตัสในสารานุกรม</span>
                         <span>→</span>
@@ -282,10 +508,10 @@ export default function DungeonStatsView({ onNavigate }) {
             <div className="bg-[#0b121c] border border-cyan-500/30 rounded-xl p-4 sm:p-5 space-y-2">
               <div className="flex items-center gap-2 text-xs font-bold text-cyan-300 uppercase tracking-wider font-mono">
                 <Zap className="w-4 h-4 text-cyan-400" />
-                <span>ลำดับการออกสกิลที่แม่นยำ (Optimal Turn Order & Tactics):</span>
+                <span>ลำดับการออกสกิลและแท็กติก (Turn Order & Skill Sequence):</span>
               </div>
               <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-sans font-medium">
-                {currentDungeon.turnOrderTh}
+                {activePreset.turnOrderTh}
               </p>
             </div>
 
@@ -293,10 +519,10 @@ export default function DungeonStatsView({ onNavigate }) {
             <div className="bg-[#121927] border border-amber-500/30 rounded-xl p-4 space-y-1.5">
               <div className="flex items-center gap-2 text-xs font-bold text-amber-300 font-mono">
                 <ShieldAlert className="w-4 h-4 text-amber-400" />
-                <span>จุดสำคัญที่ต้องระวังในการสปีดรัน (Boss Mechanic Strategy):</span>
+                <span>กลยุทธ์แก้ทางบอส & จุดสำคัญ (Boss Mechanic Strategy):</span>
               </div>
               <p className="text-xs text-slate-300 leading-relaxed">
-                {currentDungeon.bossMechanicTh}
+                {activePreset.bossMechanicTh}
               </p>
             </div>
           </div>
