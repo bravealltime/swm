@@ -37,6 +37,7 @@ import {
   Compass,
   Home,
   Radio,
+  Smartphone,
   X
 } from 'lucide-react';
 import { NAVIGATION_CATEGORIES } from '../data/navigation';
@@ -288,6 +289,26 @@ export default function Sidebar({
               <span>หลังบ้าน SWM (ผู้ดูแล)</span>
             </a>
           )}
+        </div>
+
+        {/* PWA App Install Action */}
+        <div className="p-3 border-t border-[#172233] bg-gradient-to-r from-blue-950/40 via-cyan-950/30 to-blue-950/40">
+          <button
+            type="button"
+            onClick={() => {
+              onClose?.();
+              window.dispatchEvent(new CustomEvent('swm:open-install'));
+            }}
+            className="w-full flex items-center justify-between gap-2.5 px-3 py-2 rounded-xl bg-gradient-to-r from-blue-600/30 to-cyan-600/30 hover:from-blue-600/40 hover:to-cyan-600/40 border border-blue-500/40 text-blue-200 hover:text-white text-xs font-bold transition-all shadow-md cursor-pointer group"
+          >
+            <div className="flex items-center gap-2">
+              <Smartphone className="w-4 h-4 text-cyan-400 group-hover:scale-110 transition-transform" />
+              <span>ติดตั้ง SWM เป็นแอปมือถือ</span>
+            </div>
+            <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-blue-500/30 text-cyan-300 border border-blue-400/30">
+              PWA
+            </span>
+          </button>
         </div>
 
         {/* Sidebar Footer */}

@@ -9,6 +9,7 @@ import { buildUrl, parseLocation, normalizeView, titleFor, descriptionFor } from
 import { saveBox } from './utils/boxStorage';
 
 import LiveAlertBanner from './components/LiveAlertBanner';
+import InstallAppBanner from './components/InstallAppBanner';
 
 // Every view (and the JSON it imports) is its own chunk, so the first paint
 // only downloads the shell + the page that was actually requested.
@@ -367,6 +368,8 @@ function AppContent() {
       <Suspense fallback={null}>
         <CardPreviewModal />
       </Suspense>
+
+      <InstallAppBanner />
     </div>
   );
 }

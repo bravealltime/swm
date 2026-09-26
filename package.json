@@ -16,6 +16,7 @@
     "players:quick": "node scripts/fetch_swrt_players.cjs --quick",
     "sync:data": "node scripts/sync_all_sw_data.mjs",
     "skills:shards": "node scripts/build_skill_shards.mjs --force",
+    "pwa:icons": "node scripts/generate_pwa_icons.cjs",
     "prerender": "node scripts/prerender_monsters.mjs"
   },
   "dependencies": {

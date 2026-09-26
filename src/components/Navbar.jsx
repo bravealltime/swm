@@ -22,6 +22,7 @@ import {
   Cloud,
   User,
   Radio,
+  Smartphone,
 } from 'lucide-react';
 import SwmLogo from './SwmLogo';
 import { buildUrl } from '../router';
@@ -229,6 +230,16 @@ export default function Navbar({ currentView, onNavigate, onOpenSearch, onOpenMe
                 <span className="hidden sm:inline lg:hidden 2xl:inline">เข้าสู่ระบบ</span>
               </button>
             )}
+
+            <button
+              onClick={() => window.dispatchEvent(new CustomEvent('swm:open-install'))}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-blue-600/15 hover:bg-blue-600/25 border border-blue-500/30 text-blue-300 hover:text-white text-xs font-bold transition-all duration-200 cursor-pointer shadow-lg shadow-blue-500/5 hover:scale-[1.02]"
+              title="ติดตั้ง SWM เป็นแอปมือถือ/Desktop (PWA)"
+              aria-label="ติดตั้งแอป SWM"
+            >
+              <Smartphone className="w-4 h-4 text-blue-400" />
+              <span className="hidden sm:inline lg:hidden 2xl:inline">ติดตั้งแอป</span>
+            </button>
 
             <button
               onClick={onOpenSync}

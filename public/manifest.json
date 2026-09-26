@@ -1,0 +1,77 @@
+{
+  "name": "SWM • Summoners War Master",
+  "short_name": "SWM",
+  "description": "ศูนย์รวมโค้ดแจกไอเทมล่าสุด สูตรตีบ้าน 3MDC สถิติ RTA สารานุกรมสกิลแปลไทย และ AI โค้ช",
+  "start_url": "/?pwa=1",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "orientation": "any",
+  "background_color": "#0b1017",
+  "theme_color": "#0b1017",
+  "lang": "th",
+  "dir": "ltr",
+  "categories": ["games", "utilities", "entertainment"],
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-192-maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "แจกโค้ดฟรีล่าสุด",
+      "short_name": "โค้ดฟรี",
+      "description": "ดูโค้ดแลกไอเทมล่าสุดที่ยังใช้งานได้",
+      "url": "/codes",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "สูตรแก้ทาง 3MDC Siege",
+      "short_name": "3MDC",
+      "description": "ค้นหาสูตรตีบ้านกิลด์วอร์และ Siege",
+      "url": "/3mdc",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "ทีมดันเจี้ยน Abyss",
+      "short_name": "ดันเจี้ยน",
+      "description": "ดูทีมฟาร์ม Abyss Hard และ R5 ยอดนิยม",
+      "url": "/dungeons",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "กล่องมอนสเตอร์ของฉัน",
+      "short_name": "กล่องของฉัน",
+      "description": "จัดการมอนสเตอร์และรูนในไอดี",
+      "url": "/my-box",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}
