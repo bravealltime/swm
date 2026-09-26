@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { X, Compass, Star, Gem, Sparkles, Info, Swords, Zap } from 'lucide-react';
+import { X, Compass, Star, Gem, Sparkles, Info, Swords, Zap, Share2 } from 'lucide-react';
 import MonsterAvatar from './MonsterAvatar';
 import RuneIcon from './RuneIcon';
 import ArtifactIcon from './ArtifactIcon';
@@ -9,6 +9,7 @@ import MonsterSkillsCard from './MonsterSkillsCard';
 import { useMonsterSkills } from '../hooks/useMonsterSkills';
 import { computeUnitSkillStatus } from '../data/monsterSkills';
 import { RUNE_SETS, STAT_NAMES, ARTIFACT_EFFECT_NAMES } from '../utils/swexImport';
+import { exportEsportsMonsterCard } from '../utils/cardExporter';
 
 // In-game rune screen: the golden hex plate (RuneBoard) plus a detail panel and the stat sheet.
 
@@ -184,6 +185,25 @@ export default function MonsterDetailModal({ unit, box, onClose, onNavigate }) {
             </div>
           </div>
           <div className="flex items-center gap-2 shrink-0">
+            <button
+              onClick={() => {
+                exportEsportsMonsterCard({
+                  unit,
+                  monster: info,
+                  runes,
+                  artifacts,
+                  stats,
+                  wizardName: box?.wizard?.name || 'Summoner',
+                  guildName: box?.wizard?.guild || '',
+                  preview: true,
+                });
+              }}
+              className="px-3 py-2 rounded-xl bg-gradient-to-r from-amber-500/20 via-orange-500/20 to-amber-500/20 hover:from-amber-500/30 hover:to-orange-500/30 border border-amber-500/40 text-amber-200 hover:text-white text-xs font-bold flex items-center gap-1.5 shadow-md transition-all cursor-pointer"
+              title="สร้างการ์ดสเตตัสมอนสเตอร์ E-Sports สำหรับแชร์ลงโซเชียล"
+            >
+              <Sparkles className="w-4 h-4 text-amber-400 animate-pulse" />
+              <span>การ์ด E-Sports Flex</span>
+            </button>
             {info && (
               <button onClick={() => onNavigate('where2use', { initialMonster: info.name })} className="hidden sm:flex px-3 py-2 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 text-slate-200 text-xs font-bold items-center gap-1.5 cursor-pointer">
                 <Compass className="w-4 h-4 text-emerald-400" /> ใช้ที่ไหนได้บ้าง

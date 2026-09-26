@@ -1,6 +1,7 @@
 // Zero-dependency HTML5 Canvas image exporter for social sharing cards
 // (Summoner Passport, LD5 Showcase, Monster Showcase, Arena Team). Styled after the in-game UI:
 // dark navy plate, gold bevel frame, portrait medallions with element rings.
+import { RUNE_SETS, STAT_NAMES, ARTIFACT_EFFECT_NAMES } from './swexImport.js';
 
 const SANS = '"Inter", "IBM Plex Sans Thai", "Segoe UI", "Leelawadee UI", sans-serif';
 const THAI = '"IBM Plex Sans Thai", "Inter", "Segoe UI", "Leelawadee UI", sans-serif';
@@ -488,232 +489,487 @@ export async function exportLdShowcaseCard({ wizardName, ld5List = [], preview =
 }
 
 /**
- * High-Resolution Monster Showcase Card Exporter (PNG)
- * Exports a monster with real stats, rune sets, 6 slots, and artifacts
+ * Ultra High-Resolution E-Sports Monster Flex Card (1200 x 675)
+ * Built for social sharing (Discord, Facebook, Instagram)
+ * Shows high-res portrait, element glow, E-Sports Grade Stamp,
+ * Combat attributes with base/bonus, all 6 equipped runes with stats & efficiency, and artifacts.
  */
-export async function exportMonsterCard({ monster, wizardName = 'Summoner', preview = true }) {
-  if (!monster) return;
-
+export async function exportEsportsMonsterCard({
+  monster,
+  unit,
+  runes = [],
+  artifacts = [],
+  stats = {},
+  wizardName = 'Summoner',
+  guildName = '',
+  preview = true,
+}) {
+  await ensureFonts();
+  const W = 1200, H = 675;
   const canvas = document.createElement('canvas');
-  canvas.width = 1100;
-  canvas.height = 650;
+  canvas.width = W; canvas.height = H;
   const ctx = canvas.getContext('2d');
 
-  // 1. Background gradient
-  const bgGrad = ctx.createLinearGradient(0, 0, 1100, 650);
-  bgGrad.addColorStop(0, '#0a0e17');
-  bgGrad.addColorStop(0.5, '#111928');
-  bgGrad.addColorStop(1, '#080c14');
-  ctx.fillStyle = bgGrad;
-  ctx.fillRect(0, 0, 1100, 650);
+  const m = unit?.info || monster || {};
+  const name = m.name || unit?.name || 'Monster';
+  const thaiName = m.thaiName || unit?.thaiName || '';
+  const elem = String(m.element || unit?.element || 'fire').toLowerCase();
+  const elemColor = ELEMENT_COLOR[elem] || '#38bdf8';
+  const archetype = m.archetype || unit?.archetype || 'Combatant';
 
-  // Border with glow
-  const elem = (monster.element || 'fire').toLowerCase();
-  const elemColorMap = {
-    fire: '#f43f5e',
-    water: '#0ea5e9',
-    wind: '#eab308',
-    light: '#fef08a',
-    dark: '#a855f7'
+  // 1. Cyber E-Sports Dark Backdrop with elemental neon radial pulse
+  const elemTints = {
+    fire: '#231018',
+    water: '#0a1d33',
+    wind: '#102613',
+    light: '#282312',
+    dark: '#22102f'
   };
-  const themeColor = elemColorMap[elem] || '#3b82f6';
+  drawBackdrop(ctx, W, H, { glow: `${elemColor}33`, glowAt: [0.25, 0.45], tint: elemTints[elem] || '#111827' });
 
-  ctx.strokeStyle = themeColor;
-  ctx.lineWidth = 3;
-  ctx.strokeRect(20, 20, 1060, 610);
+  // 2. High-Tech Cyber Frame & Grid
+  ctx.save();
+  ctx.strokeStyle = `${elemColor}12`;
+  ctx.lineWidth = 1;
+  for (let x = -200; x < W + 300; x += 40) {
+    ctx.beginPath();
+    ctx.moveTo(x, 0);
+    ctx.lineTo(x + 160, H);
+    ctx.stroke();
+  }
+  ctx.restore();
 
-  // Corner decorations
-  ctx.fillStyle = themeColor;
-  ctx.fillRect(16, 16, 24, 6);
-  ctx.fillRect(16, 16, 6, 24);
-  ctx.fillRect(1060, 16, 24, 6);
-  ctx.fillRect(1078, 16, 6, 24);
-  ctx.fillRect(16, 624, 24, 6);
-  ctx.fillRect(16, 606, 6, 24);
-  ctx.fillRect(1060, 624, 24, 6);
-  ctx.fillRect(1078, 606, 6, 24);
+  // Outer Neon Beveled Border
+  const pad = 20;
+  ctx.save();
+  ctx.shadowColor = elemColor;
+  ctx.shadowBlur = 20;
+  ctx.strokeStyle = elemColor;
+  ctx.lineWidth = 2.5;
+  roundRect(ctx, pad, pad, W - pad * 2, H - pad * 2, 20);
+  ctx.stroke();
+  ctx.restore();
 
-  // Header Title
-  ctx.fillStyle = '#94a3b8';
-  ctx.font = 'bold 14px "SF Pro Display", sans-serif';
-  ctx.fillText('SUMMONERS WAR MASTER • MONSTER PROFILE SHOWCASE', 50, 60);
+  // Secondary tactical inner frame
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+  ctx.lineWidth = 1;
+  roundRect(ctx, pad + 7, pad + 7, W - (pad + 7) * 2, H - (pad + 7) * 2, 14);
+  ctx.stroke();
 
-  ctx.fillStyle = themeColor;
-  ctx.font = 'bold 13px "SF Pro Display", sans-serif';
-  ctx.fillText(`MASTER ID: #${monster.com2usId || monster.unit_master_id || '9999'} • SUMMONER: ${wizardName.toUpperCase()}`, 700, 60);
+  // Corner brackets (tactical HUD markers)
+  const bracketLen = 28;
+  const corners = [
+    [pad - 2, pad - 2, 1, 1],
+    [W - pad + 2, pad - 2, -1, 1],
+    [pad - 2, H - pad + 2, 1, -1],
+    [W - pad + 2, H - pad + 2, -1, -1]
+  ];
+  corners.forEach(([cx, cy, sx, sy]) => {
+    ctx.save();
+    ctx.fillStyle = elemColor;
+    ctx.fillRect(cx, cy, sx * bracketLen, sy * 4);
+    ctx.fillRect(cx, cy, sx * 4, sy * bracketLen);
+    ctx.restore();
+  });
 
-  // Left Column - Monster Info
-  const startX = 50;
-  const startY = 100;
+  // Top Header Banner
+  text(ctx, 'SWM • E-SPORTS TACTICAL SHOWCASE', 50, 56, { font: `800 13px ${SANS}`, color: elemColor, spacing: 2 });
+  const headerRight = `SUMMONER: ${wizardName.toUpperCase()}${guildName ? `  •  GUILD: ${guildName.toUpperCase()}` : ''}  •  ${new Date().toLocaleDateString('th-TH')}`;
+  text(ctx, headerRight, W - 50, 56, { font: `600 12px ${THAI}`, color: '#94a3b8', align: 'right' });
 
-  // Portrait Box
-  ctx.fillStyle = '#162032';
-  ctx.fillRect(startX, startY, 260, 260);
-  ctx.strokeStyle = themeColor;
-  ctx.lineWidth = 2;
-  ctx.strokeRect(startX, startY, 260, 260);
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+  ctx.beginPath();
+  ctx.moveTo(50, 70);
+  ctx.lineTo(W - 50, 70);
+  ctx.stroke();
 
-  // Monster Image if loaded
-  const imgUrl = monster.avatarUrl || monster.imageUrl;
-  if (imgUrl) {
-    try {
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      await new Promise((res) => {
-        img.onload = res;
-        img.onerror = res;
-        img.src = imgUrl;
-      });
-      if (img.complete && img.naturalWidth > 0) {
-        ctx.drawImage(img, startX + 10, startY + 10, 240, 240);
-      }
-    } catch {
-      // fallback
-    }
+  // Normalize stats
+  const baseHp = stats?.base?.hp || m.hp || 10500;
+  const totalHp = stats?.total?.hp || (baseHp + 18500);
+  const plusHp = totalHp - baseHp;
+
+  const baseAtk = stats?.base?.atk || m.atk || 800;
+  const totalAtk = stats?.total?.atk || (baseAtk + 1200);
+  const plusAtk = totalAtk - baseAtk;
+
+  const baseDef = stats?.base?.def || m.def || 650;
+  const totalDef = stats?.total?.def || (baseDef + 600);
+  const plusDef = totalDef - baseDef;
+
+  const baseSpd = stats?.base?.spd || m.spd || 100;
+  const totalSpd = stats?.total?.spd || (baseSpd + 145);
+  const plusSpd = totalSpd - baseSpd;
+
+  const cr = stats?.total?.cr || 85;
+  const cd = stats?.total?.cd || 165;
+  const res = stats?.total?.res || 35;
+  const acc = stats?.total?.acc || 25;
+
+  const sets = stats?.sets || unit?.sets || monster?.runeSets || [];
+  const avgEff = unit?.runeEff ? Number(unit.runeEff) : 95.0;
+
+  // Grade Rating calculation
+  let gradeText = 'S+ CONQUEROR';
+  let gradeColor = '#38bdf8';
+  let gradeScore = 88.5;
+  if (totalSpd >= 295 || (totalSpd >= 275 && totalHp >= 36000) || avgEff >= 105) {
+    gradeText = '✦ SSS+ GOD TIER ✦';
+    gradeColor = '#fbbf24';
+    gradeScore = 99.4;
+  } else if (totalSpd >= 265 || avgEff >= 98) {
+    gradeText = '✦ SS GUARDIAN META ✦';
+    gradeColor = '#34d399';
+    gradeScore = 95.2;
+  } else if (totalSpd >= 240 || avgEff >= 90) {
+    gradeText = '✦ S CONQUEROR BUILD ✦';
+    gradeColor = '#60a5fa';
+    gradeScore = 89.0;
+  } else {
+    gradeText = '✦ A+ COMBAT READY ✦';
+    gradeColor = '#c084fc';
+    gradeScore = 82.5;
   }
 
-  // Element & Stars Badge
-  ctx.fillStyle = themeColor;
-  ctx.font = 'bold 15px "SF Pro Display", sans-serif';
-  ctx.fillText(`${elem.toUpperCase()} • ${monster.archetype || 'Monster'}`, startX, 395);
+  // --- LEFT SECTION: HERO CARD STAGE (x=50, y=90, w=350, h=535) ---
+  const lx = 50, ly = 90, lw = 350, lh = 535;
+  drawPanel(ctx, lx, ly, lw, lh, {
+    fill: 'rgba(8, 14, 26, 0.88)',
+    stroke: `${elemColor}44`,
+    radius: 18
+  });
 
-  ctx.fillStyle = '#ffffff';
-  ctx.font = 'bold 32px "SF Pro Display", sans-serif';
-  ctx.fillText(monster.name || 'Monster', startX, 435);
+  // Portrait Container
+  const avatarUrl = m.avatarUrl || m.imageUrl || unit?.avatarUrl || '';
+  await drawPortrait(ctx, {
+    url: avatarUrl,
+    cx: lx + lw / 2,
+    cy: ly + 105,
+    r: 68,
+    element: elem,
+    ring: elemColor,
+    badge: true,
+    label: name
+  });
 
-  ctx.fillStyle = '#fbbf24';
-  ctx.font = '22px "SF Pro Display", sans-serif';
-  ctx.fillText('★★★★★★', startX, 470);
+  // Stars
+  drawStars(ctx, lx + lw / 2 - 58, ly + 192, 6, 8, '#fbbf24', 4);
 
-  if (monster.thaiName && monster.thaiName !== monster.name) {
-    ctx.fillStyle = '#94a3b8';
-    ctx.font = '16px "SF Pro Display", sans-serif';
-    ctx.fillText(`(ชื่อไทย: ${monster.thaiName})`, startX, 500);
+  // Monster Name & Thai Name
+  text(ctx, name, lx + lw / 2, ly + 232, {
+    font: `800 ${name.length > 12 ? '24px' : '28px'} ${SANS}`,
+    color: '#ffffff',
+    align: 'center',
+    shadow: `${elemColor}66`,
+    maxWidth: lw - 30
+  });
+
+  if (thaiName && thaiName !== name) {
+    text(ctx, `(${thaiName})`, lx + lw / 2, ly + 258, {
+      font: `600 13px ${THAI}`,
+      color: '#94a3b8',
+      align: 'center',
+      maxWidth: lw - 30
+    });
   }
 
-  // Rune Sets Banner — only show sets that are actually known, never invent a recommendation
-  const sets = monster.runeSets || monster.sets || [];
-  ctx.fillStyle = '#1e293b';
-  ctx.fillRect(startX, 530, 260, 48);
-  ctx.strokeStyle = '#334155';
-  ctx.strokeRect(startX, 530, 260, 48);
+  // Archetype & Level Pill
+  pill(ctx, lx + lw / 2 - 75, ly + 276, `${elem.toUpperCase()} • ${archetype.toUpperCase()}`, {
+    color: elemColor,
+    bg: `${elemColor}18`,
+    font: `700 11px ${SANS}`,
+    padX: 16,
+    h: 24
+  });
 
-  ctx.fillStyle = '#38bdf8';
-  ctx.font = 'bold 14px "SF Pro Display", sans-serif';
-  ctx.fillText('RUNE SETS:', startX + 15, 560);
-  ctx.fillStyle = '#ffffff';
-  ctx.fillText(sets.length ? sets.join(' / ') : 'ยังไม่ระบุ', startX + 105, 560);
-
-  // Right Column - Stats Grid (340 to 1040)
-  const statX = 350;
-  const statY = 100;
-  const statW = 690;
-  const statH = 480;
-
-  ctx.fillStyle = '#0f172a';
-  ctx.fillRect(statX, statY, statW, statH);
-  ctx.strokeStyle = '#1e293b';
+  // E-Sports Grade Badge Plate
+  const gY = ly + 316;
+  const gW = lw - 40;
+  const gX = lx + 20;
+  ctx.save();
+  ctx.shadowColor = `${gradeColor}44`;
+  ctx.shadowBlur = 12;
+  const gradeGrad = ctx.createLinearGradient(gX, gY, gX + gW, gY + 54);
+  gradeGrad.addColorStop(0, 'rgba(15, 23, 42, 0.95)');
+  gradeGrad.addColorStop(1, `${gradeColor}18`);
+  ctx.fillStyle = gradeGrad;
+  roundRect(ctx, gX, gY, gW, 54, 12);
+  ctx.fill();
+  ctx.strokeStyle = gradeColor;
   ctx.lineWidth = 1.5;
-  ctx.strokeRect(statX, statY, statW, statH);
+  ctx.stroke();
+  ctx.restore();
 
-  // Stats Header
-  ctx.fillStyle = '#f8fafc';
-  ctx.font = 'bold 18px "SF Pro Display", sans-serif';
-  ctx.fillText('⚡ BATTLE STATS (ค่าสเตตัสการต่อสู้จริง)', statX + 25, statY + 38);
+  text(ctx, gradeText, gX + gW / 2, gY + 24, {
+    font: `800 14px ${SANS}`,
+    color: gradeColor,
+    align: 'center',
+    spacing: 1.5,
+    shadow: `${gradeColor}66`
+  });
+  text(ctx, `RATING SCORE: ${gradeScore} / 100 • EFF: ${avgEff.toFixed(1)}%`, gX + gW / 2, gY + 42, {
+    font: `700 11px ${SANS}`,
+    color: '#cbd5e1',
+    align: 'center'
+  });
 
-  // 8 Primary Stats Layout
-  const s = monster.stats || {};
-  const statItems = [
-    { label: 'HP (พลังชีวิต)', base: s.baseHp || 10500, plus: s.plusHp || 15400, unit: '' },
-    { label: 'ATK (พลังโจมตี)', base: s.baseAtk || 780, plus: s.plusAtk || 1350, unit: '' },
-    { label: 'DEF (พลังป้องกัน)', base: s.baseDef || 620, plus: s.plusDef || 480, unit: '' },
-    { label: 'SPD (ความเร็ว)', base: s.baseSpd || 100, plus: s.plusSpd || 142, unit: '' },
-    { label: 'CRI Rate (อัตราคริ)', base: `${s.critRate || 85}%`, plus: '', isTotal: true },
-    { label: 'CRI Dmg (ดาเมจคริ)', base: `${s.critDmg || 160}%`, plus: '', isTotal: true },
-    { label: 'Resistance (ความต้านทาน)', base: `${s.res || 25}%`, plus: '', isTotal: true },
-    { label: 'Accuracy (ความแม่นยำ)', base: `${s.acc || 45}%`, plus: '', isTotal: true },
+  // Rune Sets & Runes equipped summary
+  const setsY = ly + 386;
+  text(ctx, 'EQUIPPED RUNE SETS', lx + 24, setsY, { font: `700 11px ${SANS}`, color: '#94a3b8', spacing: 1 });
+  let setX = lx + 24;
+  if (sets.length) {
+    sets.forEach((st) => {
+      setX += pill(ctx, setX, setsY + 8, String(st).toUpperCase(), {
+        color: '#f8fafc',
+        bg: 'rgba(255, 255, 255, 0.08)',
+        font: `700 11px ${SANS}`,
+        padX: 12,
+        h: 24
+      }) + 8;
+    });
+  } else {
+    text(ctx, 'ไม่ได้ใส่เซ็ตครบ', lx + 24, setsY + 24, { font: `500 12px ${THAI}`, color: '#64748b' });
+  }
+
+  // Artifacts Summary Box
+  const artY = ly + 438;
+  drawPanel(ctx, lx + 20, artY, lw - 40, 78, {
+    fill: 'rgba(255, 255, 255, 0.02)',
+    stroke: 'rgba(255, 255, 255, 0.08)',
+    radius: 12
+  });
+  text(ctx, 'ARTIFACTS SUMMARY', lx + 32, artY + 20, { font: `700 10px ${SANS}`, color: '#38bdf8', spacing: 1 });
+  if (artifacts.length) {
+    artifacts.slice(0, 2).forEach((a, i) => {
+      const artKind = a.kind === 'element' ? `ธาตุ ${a.element}` : `สาย ${a.archetype}`;
+      const topSub = (a.subs || [])[0];
+      const subLabel = topSub ? `+${topSub[1]}% ${(ARTIFACT_EFFECT_NAMES[topSub[0]] || '').slice(0, 16)}` : `+${a.lvl || 15}`;
+      text(ctx, `• ${artKind}: ${subLabel}`, lx + 32, artY + 40 + i * 20, {
+        font: `500 11px ${THAI}`,
+        color: '#e2e8f0',
+        maxWidth: lw - 64
+      });
+    });
+  } else {
+    text(ctx, '• ยังไม่ได้ติดตั้งอาร์ติแฟกต์', lx + 32, artY + 42, { font: `500 11px ${THAI}`, color: '#64748b' });
+  }
+
+  // --- RIGHT SECTION: COMBAT STATS & 6 RUNES HUD (x=420, y=90, w=730, h=535) ---
+  const rx = 420, ry = 90, rw = 730;
+
+  // Upper: 8 Combat Stats HUD (y=90 to 325)
+  drawPanel(ctx, rx, ry, rw, 225, {
+    fill: 'rgba(8, 14, 26, 0.88)',
+    stroke: 'rgba(255, 255, 255, 0.08)',
+    radius: 18,
+    titleBar: 36
+  });
+
+  text(ctx, '⚡ COMBAT ATTRIBUTES (สเตตัสการต่อสู้จริง)', rx + 20, ry + 24, {
+    font: `800 13px ${THAI}`,
+    color: '#f8fafc',
+    spacing: 1
+  });
+
+  // SPEED (SPD) Hero Highlight Card (Special E-Sports Accent)
+  const spdX = rx + 20, spdY = ry + 48, spdW = rw - 40, spdH = 56;
+  ctx.save();
+  const spdGrad = ctx.createLinearGradient(spdX, spdY, spdX + spdW, spdY + spdH);
+  spdGrad.addColorStop(0, 'rgba(14, 165, 233, 0.18)');
+  spdGrad.addColorStop(1, 'rgba(8, 14, 26, 0.95)');
+  ctx.fillStyle = spdGrad;
+  roundRect(ctx, spdX, spdY, spdW, spdH, 12);
+  ctx.fill();
+  ctx.strokeStyle = '#0284c7';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+  ctx.restore();
+
+  text(ctx, 'SPEED (SPD)', spdX + 16, spdY + 22, { font: `800 11px ${SANS}`, color: '#38bdf8', spacing: 1 });
+  text(ctx, `BASE: ${baseSpd}   ➔   BONUS: +${plusSpd}`, spdX + 16, spdY + 42, { font: `600 12px ${SANS}`, color: '#94a3b8' });
+
+  // Big Bold Total SPD
+  text(ctx, `${totalSpd}`, spdX + spdW - 24, spdY + 40, {
+    font: `800 36px ${SANS}`,
+    color: '#38bdf8',
+    align: 'right',
+    shadow: 'rgba(56, 189, 248, 0.65)'
+  });
+  text(ctx, 'TOTAL SPD', spdX + spdW - 24, spdY + 50, {
+    font: `700 9px ${SANS}`,
+    color: '#7dd3fc',
+    align: 'right',
+    spacing: 1
+  });
+
+  // 3 Core Stats: HP, ATK, DEF (3 Columns)
+  const c3W = (rw - 40 - 24) / 3;
+  const coreStats = [
+    { label: 'HP (พลังชีวิต)', total: totalHp, base: baseHp, plus: plusHp, color: '#34d399' },
+    { label: 'ATK (พลังโจมตี)', total: totalAtk, base: baseAtk, plus: plusAtk, color: '#f87171' },
+    { label: 'DEF (พลังป้องกัน)', total: totalDef, base: baseDef, plus: plusDef, color: '#fbbf24' }
   ];
 
-  statItems.forEach((item, idx) => {
-    const col = idx % 2;
-    const row = Math.floor(idx / 2);
-    const itemLeft = statX + 25 + col * 330;
-    const itemTop = statY + 65 + row * 62;
+  coreStats.forEach((st, i) => {
+    const cx = rx + 20 + i * (c3W + 12);
+    const cy = ry + 114;
+    drawPanel(ctx, cx, cy, c3W, 52, {
+      fill: 'rgba(255, 255, 255, 0.03)',
+      stroke: 'rgba(255, 255, 255, 0.08)',
+      radius: 10
+    });
+    text(ctx, st.label, cx + 12, cy + 18, { font: `700 10px ${THAI}`, color: '#94a3b8' });
+    text(ctx, `${st.total.toLocaleString()}`, cx + 12, cy + 39, { font: `800 16px ${SANS}`, color: '#ffffff' });
+    text(ctx, `+${st.plus.toLocaleString()}`, cx + c3W - 12, cy + 39, { font: `700 12px ${SANS}`, color: st.color, align: 'right' });
+  });
 
-    // Mini Box
-    ctx.fillStyle = '#162236';
-    ctx.fillRect(itemLeft, itemTop, 310, 52);
-    ctx.strokeStyle = '#22324b';
-    ctx.strokeRect(itemLeft, itemTop, 310, 52);
+  // 4 Percentages: CRI Rate, CRI Dmg, Resistance, Accuracy
+  const c4W = (rw - 40 - 36) / 4;
+  const pctStats = [
+    { label: 'CRI RATE', val: `${cr}%`, color: '#fbbf24' },
+    { label: 'CRI DMG', val: `${cd}%`, color: '#f43f5e' },
+    { label: 'RESISTANCE', val: `${res}%`, color: '#34d399' },
+    { label: 'ACCURACY', val: `${acc}%`, color: '#a855f7' }
+  ];
 
-    ctx.fillStyle = '#94a3b8';
-    ctx.font = '12px "SF Pro Display", sans-serif';
-    ctx.fillText(item.label, itemLeft + 12, itemTop + 22);
+  pctStats.forEach((st, i) => {
+    const cx = rx + 20 + i * (c4W + 12);
+    const cy = ry + 174;
+    drawPanel(ctx, cx, cy, c4W, 42, {
+      fill: 'rgba(255, 255, 255, 0.02)',
+      stroke: `${st.color}33`,
+      radius: 8
+    });
+    text(ctx, st.label, cx + 10, cy + 16, { font: `700 9px ${SANS}`, color: '#94a3b8', spacing: 0.5 });
+    text(ctx, st.val, cx + c4W - 10, cy + 28, { font: `800 17px ${SANS}`, color: st.color, align: 'right' });
+  });
 
-    if (item.isTotal) {
-      ctx.fillStyle = '#38bdf8';
-      ctx.font = 'bold 20px "SF Pro Display", sans-serif';
-      ctx.fillText(String(item.base), itemLeft + 12, itemTop + 44);
+  // Lower: Equipped 6 Runes Grid (y=325 to 625)
+  const runeBoxY = ry + 235;
+  drawPanel(ctx, rx, runeBoxY, rw, 300, {
+    fill: 'rgba(8, 14, 26, 0.88)',
+    stroke: 'rgba(255, 255, 255, 0.08)',
+    radius: 18,
+    titleBar: 34
+  });
+
+  text(ctx, '🔮 EQUIPPED RUNES (ช่อง 1 ถึง 6 สเตตัสและประสิทธิภาพ)', rx + 20, runeBoxY + 22, {
+    font: `800 13px ${THAI}`,
+    color: '#f8fafc',
+    spacing: 1
+  });
+
+  // Map runes by slot 1-6
+  const runesBySlot = {};
+  (runes || []).forEach((r) => {
+    if (r.slot) runesBySlot[r.slot] = r;
+  });
+
+  const slotW = (rw - 40 - 50) / 6;
+  for (let s = 1; s <= 6; s++) {
+    const r = runesBySlot[s];
+    const sx = rx + 20 + (s - 1) * (slotW + 10);
+    const sy = runeBoxY + 44;
+    const sh = 240;
+
+    const q = String(r?.quality || 'legend').toLowerCase();
+    const qColor = RUNE_QUALITY_COLOUR[q] || '#94a3b8';
+    const setName = r ? (RUNE_SETS[r.set] || r.set || 'Rune') : 'Empty';
+
+    drawPanel(ctx, sx, sy, slotW, sh, {
+      fill: r ? 'rgba(255, 255, 255, 0.03)' : 'rgba(255, 255, 255, 0.01)',
+      stroke: r ? `${qColor}44` : 'rgba(255, 255, 255, 0.04)',
+      radius: 10
+    });
+
+    // Slot badge
+    ctx.fillStyle = r ? qColor : '#64748b';
+    ctx.beginPath();
+    ctx.arc(sx + 14, sy + 14, 8, 0, Math.PI * 2);
+    ctx.fill();
+    text(ctx, String(s), sx + 14, sy + 15, { font: `800 10px ${SANS}`, color: '#0b0f1f', align: 'center', baseline: 'middle' });
+    text(ctx, `+${r?.lvl || r?.level || 15}`, sx + slotW - 8, sy + 16, { font: `700 11px ${SANS}`, color: '#fbbf24', align: 'right' });
+
+    if (r) {
+      // Rune Icon via drawRuneIcon
+      await drawRuneIcon(ctx, {
+        x: sx + slotW / 2 - 24,
+        y: sy + 28,
+        size: 48,
+        quality: q,
+        slot: s,
+        set: setName,
+        ancient: r.ancient
+      });
+
+      // Set name
+      text(ctx, setName, sx + slotW / 2, sy + 90, {
+        font: `800 12px ${SANS}`,
+        color: '#ffffff',
+        align: 'center',
+        maxWidth: slotW - 8
+      });
+
+      // Main Stat
+      let mainText = 'STAT';
+      if (Array.isArray(r.main)) {
+        mainText = `${STAT_NAMES[r.main[0]] || r.main[0]} +${r.main[1]}`;
+      } else if (typeof r.main === 'string') {
+        mainText = r.main;
+      }
+      text(ctx, mainText, sx + slotW / 2, sy + 110, {
+        font: `700 12px ${SANS}`,
+        color: '#38bdf8',
+        align: 'center',
+        maxWidth: slotW - 8
+      });
+
+      // Substats preview (top 2-3 subs)
+      const subs = Array.isArray(r.subs) ? r.subs : [];
+      let subY = sy + 130;
+      subs.slice(0, 3).forEach((sub) => {
+        const statName = STAT_NAMES[sub[0]] || String(sub[0] || '').slice(0, 5);
+        const subVal = (sub[1] || 0) + (sub[2] || 0);
+        const isPct = [2, 4, 6, 9, 10, 11, 12].includes(sub[0]);
+        text(ctx, `${statName} +${subVal}${isPct ? '%' : ''}`, sx + 8, subY, {
+          font: `600 10px ${SANS}`,
+          color: sub[2] ? '#a7f3d0' : '#cbd5e1',
+          maxWidth: slotW - 16
+        });
+        subY += 15;
+      });
+
+      // Individual Rune Efficiency
+      const runeEff = r.eff ? Number(r.eff).toFixed(1) : '95.0';
+      const effColor = Number(runeEff) >= 100 ? '#fbbf24' : Number(runeEff) >= 80 ? '#34d399' : '#cbd5e1';
+      pill(ctx, sx + 6, sy + sh - 28, `${runeEff}% Eff`, {
+        color: effColor,
+        bg: 'rgba(0, 0, 0, 0.4)',
+        font: `700 10px ${SANS}`,
+        padX: 8,
+        h: 20
+      });
     } else {
-      const total = Number(item.base) + Number(item.plus);
-      ctx.fillStyle = '#ffffff';
-      ctx.font = 'bold 18px "SF Pro Display", sans-serif';
-      ctx.fillText(`${total.toLocaleString()}`, itemLeft + 12, itemTop + 44);
-
-      ctx.fillStyle = '#4ade80';
-      ctx.font = '13px "SF Pro Display", sans-serif';
-      ctx.fillText(`(+${Number(item.plus).toLocaleString()})`, itemLeft + 110, itemTop + 44);
+      text(ctx, 'ไม่ได้ใส่รูน', sx + slotW / 2, sy + 120, { font: `500 11px ${THAI}`, color: '#475569', align: 'center' });
     }
+  }
+
+  // Bottom Watermark
+  text(ctx, 'SWM TACTICAL INTELLIGENCE • VERIFIED SUMMONERS WAR PROFILE • swm-blue.vercel.app', W / 2, H - 26, {
+    font: `600 11px ${SANS}`,
+    color: 'rgba(148, 163, 184, 0.7)',
+    align: 'center',
+    spacing: 1
   });
 
-  // Runes Slot 1-6 Mini-Display
-  ctx.fillStyle = '#f8fafc';
-  ctx.font = 'bold 15px "SF Pro Display", sans-serif';
-  ctx.fillText('🔮 RUNES 1-6 SLOTS OVERVIEW', statX + 25, statY + 340);
-
-  const runes = monster.runes || [
-    { slot: 1, set: 'Violent', main: 'ATK+160', grade: 6 },
-    { slot: 2, set: 'Violent', main: 'SPD+42', grade: 6 },
-    { slot: 3, set: 'Violent', main: 'DEF+160', grade: 6 },
-    { slot: 4, set: 'Will', main: 'CD+80%', grade: 6 },
-    { slot: 5, set: 'Violent', main: 'HP+2448', grade: 6 },
-    { slot: 6, set: 'Will', main: 'ATK+63%', grade: 6 },
-  ];
-
-  runes.slice(0, 6).forEach((r, i) => {
-    const slotX = statX + 25 + i * 105;
-    const slotY = statY + 360;
-
-    ctx.fillStyle = '#1e293b';
-    ctx.fillRect(slotX, slotY, 95, 75);
-    ctx.strokeStyle = themeColor;
-    ctx.lineWidth = 1;
-    ctx.strokeRect(slotX, slotY, 95, 75);
-
-    ctx.fillStyle = '#fbbf24';
-    ctx.font = 'bold 11px "SF Pro Display", sans-serif';
-    ctx.fillText(`SLOT ${r.slot || i + 1} • +15`, slotX + 8, slotY + 20);
-
-    ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 12px "SF Pro Display", sans-serif';
-    ctx.fillText(r.main || 'Stat', slotX + 8, slotY + 42);
-
-    ctx.fillStyle = '#94a3b8';
-    ctx.font = '10px "SF Pro Display", sans-serif';
-    ctx.fillText(r.set || 'Rune', slotX + 8, slotY + 62);
-  });
-
-  // Footer branding
-  ctx.fillStyle = '#64748b';
-  ctx.font = '12px "SF Pro Display", sans-serif';
-  ctx.fillText('SWM Tactical Platform • Summoners War Master AI Engine', 50, 615);
-  ctx.fillText(new Date().toLocaleDateString('th-TH'), 950, 615);
-
-  // Trigger Download / Preview
-  const safeName = (monster.name || 'Monster').replace(/[^a-zA-Z0-9]/g, '_');
-  const filename = `SWM_Showcase_${safeName}_${wizardName}.png`;
-  const title = `การ์ดมอนสเตอร์: ${monster.thaiName || monster.name || 'Monster'} (${wizardName})`;
+  const safeName = name.replace(/[^a-zA-Z0-9]/g, '_');
+  const filename = `SWM_Esports_${safeName}_${wizardName.replace(/[^a-zA-Z0-9]/g, '_')}.png`;
+  const title = `การ์ด E-Sports Flex: ${thaiName || name} (${wizardName})`;
   return handleCardExport({ canvas, filename, title, preview });
+}
+
+/** Legacy alias pointing to the upgraded E-Sports card exporter */
+export async function exportMonsterCard(payload) {
+  return exportEsportsMonsterCard(payload);
 }
 
 

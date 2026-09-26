@@ -100,11 +100,11 @@ export default function MonsterLivingData({
             <button
               onClick={handleExportCard}
               disabled={isExporting}
-              className="px-3 py-1.5 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 text-white text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-all hover:scale-[1.02]"
-              title="สร้างรูปภาพการ์ดพลังมอนสเตอร์สำหรับแชร์ลงโซเชียล"
+              className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500/20 via-orange-500/20 to-amber-500/20 hover:from-amber-500/30 hover:to-orange-500/30 border border-amber-500/40 text-amber-200 hover:text-white text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-all shadow-md hover:scale-[1.02]"
+              title="สร้างการ์ดสเตตัสมอนสเตอร์ E-Sports สุดเท่สำหรับแชร์ลงโซเชียล"
             >
-              <Share2 className="w-3.5 h-3.5 text-cyan-400" />
-              <span>{isExporting ? 'กำลังสร้างรูป...' : 'แชร์การ์ด PNG'}</span>
+              <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
+              <span>{isExporting ? 'กำลังสร้างการ์ด...' : 'การ์ด E-Sports Flex'}</span>
             </button>
           </div>
         </div>
