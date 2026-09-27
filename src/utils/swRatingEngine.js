@@ -97,23 +97,50 @@ export function evaluateSwRating(box) {
 
   const getSetRunes = (setName) => runesBySet[setName] || [];
 
-  // Top 10 Average Efficiency for Swift, Violent, Despair
+  // Top 10 Average Efficiency for Swift, Violent, Despair, Will
   const calcTop10Avg = (setName) => {
     const list = getSetRunes(setName)
-      .map((r) => r.eff || 0)
-      .sort((a, b) => b - a)
+      .slice()
+      .sort((a, b) => (b.eff || 0) - (a.eff || 0))
       .slice(0, 10);
-    if (!list.length) return { avg: 90.0, rank: RANK_TIERS.C2 };
-    const avg = Number((list.reduce((acc, v) => acc + v, 0) / list.length).toFixed(1));
+    if (!list.length) {
+      return {
+        avg: 90.0,
+        rank: RANK_TIERS.C2,
+        runes: [],
+      };
+    }
+    const avg = Number((list.reduce((acc, v) => acc + (v.eff || 0), 0) / list.length).toFixed(1));
+    const runeProofs = list.map((r) => {
+      const u = units.find((unit) => unit.masterId === r.unit || unit.uid === r.uid);
+      return {
+        id: r.id,
+        slot: r.slot,
+        set: r.set,
+        stars: r.stars,
+        level: r.level,
+        eff: r.eff,
+        subSpd: r.subSpd || 0,
+        mainStat: r.mainStat || 'Unknown',
+        mainValue: r.mainValue || 0,
+        quality: r.quality || 'Legend',
+        unitName: u?.name || (r.unit ? 'Equipped' : 'ในคลัง (Storage)'),
+        unitThaiName: u?.thaiName || '',
+        unitAvatar: u?.avatarUrl || '',
+        unitElement: u?.element || '',
+      };
+    });
     return {
       avg,
       rank: getRankTierFromEfficiency(avg),
+      runes: runeProofs,
     };
   };
 
   const top10Swift = calcTop10Avg('Swift');
   const top10Violent = calcTop10Avg('Violent');
   const top10Despair = calcTop10Avg('Despair');
+  const top10Will = calcTop10Avg('Will');
 
   // General Rune Scores for Swift, Violent, Despair, Will, Revenge, Any
   const calcGeneralScore = (setName, isAny = false) => {
@@ -319,6 +346,7 @@ export function evaluateSwRating(box) {
         swift: top10Swift,
         violent: top10Violent,
         despair: top10Despair,
+        will: top10Will,
       },
       generalRuneScore: {
         swift: genSwift,
@@ -330,5 +358,39 @@ export function evaluateSwRating(box) {
       },
     },
     monsterSummary,
+    verification: {
+      totalRunes: runes.length,
+      sixStarRunes: runes.filter((r) => r.stars === 6).length,
+      legendRunes: runes.filter((r) => r.quality === 'Legend' || r.originalQuality === 5).length,
+      quadSpdRunes: runes.filter((r) => (r.subSpd || 0) >= 24).length,
+      highSpdRunes18: runes.filter((r) => (r.subSpd || 0) >= 18).length,
+      totalArtifacts: artifacts.length,
+      plus15Artifacts: artifacts.filter((a) => a.lvl === 15).length,
+      totalUnits: units.length,
+      sixStarUnits: sixStarUnits.length,
+      nat5Units: nat5Units.length,
+      pureLd5Units: pureLd5Units.length,
+      fastestMonster: units.slice().sort((a, b) => (b.spd || 0) - (a.spd || 0))[0] || null,
+      topRunesBySet: {
+        Swift: top10Swift.runes,
+        Violent: top10Violent.runes,
+        Despair: top10Despair.runes,
+        Will: top10Will.runes,
+      },
+      benchmarks: [
+        { tier: 'G3 (Guardian 3)', swiftAvg: '≥ 93.0%', vioAvg: '≥ 94.0%', runeScore: '≥ 2,800', artScore: '≥ 3,000', estPts: '≥ 1,900' },
+        { tier: 'G2 (Guardian 2)', swiftAvg: '≥ 90.0%', vioAvg: '≥ 91.0%', runeScore: '≥ 2,500', artScore: '≥ 2,500', estPts: '≥ 1,800' },
+        { tier: 'G1 (Guardian 1)', swiftAvg: '≥ 87.0%', vioAvg: '≥ 88.0%', runeScore: '≥ 2,200', artScore: '≥ 2,000', estPts: '≥ 1,700' },
+        { tier: 'C3 (Conqueror 3)', swiftAvg: '≥ 84.0%', vioAvg: '≥ 85.0%', runeScore: '≥ 1,900', artScore: '≥ 1,600', estPts: '≥ 1,600' },
+        { tier: 'C2 (Conqueror 2)', swiftAvg: '≥ 80.0%', vioAvg: '≥ 81.0%', runeScore: '≥ 1,600', artScore: '≥ 1,200', estPts: '≥ 1,500' },
+        { tier: 'C1 (Conqueror 1)', swiftAvg: '< 80.0%', vioAvg: '< 81.0%', runeScore: '< 1,600', artScore: '< 1,200', estPts: '1,400 - 1,499' },
+      ],
+      formulas: {
+        runeEfficiency: 'Barion Efficiency Formula = ((1 + Σ(substat_roll / max_possible_roll)) / 2.8) × 100%',
+        runeScore: 'Rune Score = Σ(Top 10 Sets Average Efficiency) + 6★ Legend Depth Bonus (Efficiency ≥ 70% + SPD Sub ≥ 18 bonus)',
+        artifactScore: 'Artifact Score = Element Score + Type Score (Weighted by combat-relevant rolls: Add Dmg by SPD/ATK/HP + CD scaling)',
+        expectedRank: 'Est. RTA Rank = Weighted combination (Rune Score 60% + Artifact Score 25% + Unit Roster 15%) mapped to live season MMR cuts',
+      },
+    },
   };
 }
