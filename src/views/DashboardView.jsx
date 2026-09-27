@@ -46,7 +46,7 @@ const isPureLd5 = (u) => {
   return isNat5 && isLd && !isNonSummonableLd5(u) && (!u.info || !isNonSummonableLd5(u.info));
 };
 import { loadUserBoxFromDB } from '../services/storageService';
-import { exportProfileCard } from '../utils/cardExporter';
+import { exportProfileCard, exportAccountMilestoneCard } from '../utils/cardExporter';
 import AiChatPanel from '../components/AiChatPanel';
 import { summarizeBoxForAi, keyMonstersForAi } from '../utils/boxSummary';
 
@@ -614,11 +614,49 @@ export default function DashboardView({ onNavigate }) {
                       setCardBusy(false);
                     }
                   }}
-                  className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 hover:from-cyan-400 hover:via-blue-500 hover:to-indigo-500 text-white text-xs font-black shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-wait"
+                  className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 hover:from-cyan-400 hover:via-blue-500 hover:to-indigo-500 text-white text-xs font-black shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-wait"
                   title="บันทึกรูป Passport Card เป็นไฟล์ PNG (มีหน้าต่างดูตัวอย่างก่อนดาวน์โหลด)"
                 >
                   <Share2 className={cardBusy ? 'w-4 h-4 animate-pulse' : 'w-4 h-4'} />
-                  <span>{cardBusy ? 'กำลังสร้างการ์ด...' : 'บันทึกการ์ดโปรไฟล์ (PNG)'}</span>
+                  <span>{cardBusy ? 'กำลังสร้างการ์ด...' : 'บันทึกการ์ดโปรไฟล์'}</span>
+                </button>
+
+                <button
+                  type="button"
+                  disabled={cardBusy}
+                  onClick={async () => {
+                    if (cardBusy) return;
+                    setCardBusy(true);
+                    try {
+                      await exportAccountMilestoneCard({
+                        wizard: {
+                          ...userBox.wizard,
+                          repMonster: userProfileStats.activeAvatar,
+                        },
+                        stats: {
+                          total6Star: userProfileStats.sixStarUnits,
+                          ld5Count: userProfileStats.pureLd5Count,
+                          avgEff: userProfileStats.avgRuneEff,
+                          quadSpdCount: userProfileStats.quadSpdCount,
+                          totalUnits: userProfileStats.totalUnits,
+                          nat5Count: userProfileStats.nat5Count,
+                          totalArtifacts: userProfileStats.totalArtifacts,
+                        },
+                        topLd5: userProfileStats.ld5List || [],
+                        heroes: [userProfileStats.activeAvatar, ...(userProfileStats.cardHeroes || [])].filter(Boolean),
+                        speedRuneSets: userProfileStats.speedRuneSets || [],
+                      });
+                    } catch (err) {
+                      console.error('milestone card export failed', err);
+                    } finally {
+                      setCardBusy(false);
+                    }
+                  }}
+                  className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 hover:from-amber-400 hover:to-yellow-400 text-slate-950 text-xs font-black shadow-lg shadow-amber-500/20 transition-all cursor-pointer disabled:opacity-50"
+                  title="สร้างการ์ด Infographic สรุปไอดีแผ่นเดียว (สปีดสูงสุด + เรคคอร์ดดันเจี้ยน + เกรดไอดี) สำหรับแชร์ลงกลุ่ม"
+                >
+                  <Trophy className="w-4 h-4 text-slate-950" />
+                  <span>การ์ดสรุปไอดี (Milestone)</span>
                 </button>
 
                 <button

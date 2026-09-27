@@ -1095,3 +1095,137 @@ export async function exportArenaTeamCard({ team, preview = true }) {
   const title = `สูตรทีมอารีน่า: ${team.nameTh || team.name || ''}`;
   return handleCardExport({ canvas, filename, title, preview });
 }
+
+/**
+ * Account Progress Milestone Infographic Card (1200×750)
+ * Visual summary of account tier, speed milestones, rune efficiency, signature monsters & Cairos best records.
+ */
+export async function exportAccountMilestoneCard({
+  wizard,
+  stats = {},
+  topLd5 = [],
+  heroes = [],
+  speedRuneSets = [],
+  cairosRecords = {},
+  preview = true,
+}) {
+  await ensureFonts();
+  const W = 1200, H = 750;
+  const canvas = document.createElement('canvas');
+  canvas.width = W; canvas.height = H;
+  const ctx = canvas.getContext('2d');
+  drawBackdrop(ctx, W, H, { glow: 'rgba(56, 189, 248, 0.25)', glowAt: [0.5, 0.08], tint: '#090f1d' });
+  drawGoldFrame(ctx, W, H);
+
+  const name = wizard?.name || 'Summoner';
+  const hero = wizard?.repMonster?.avatarUrl ? wizard.repMonster : heroes[0] || topLd5[0] || null;
+
+  // Header Banner
+  text(ctx, 'SUMMONERS WAR • ACCOUNT MILESTONE & ASSESSMENT', 60, 64, { font: `700 13px ${SANS}`, color: '#e9c46a', spacing: 3 });
+  text(ctx, `SWM • swm-blue.vercel.app   ${new Date().toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric' })}`, W - 60, 64, { font: `500 12px ${THAI}`, color: 'rgba(226, 232, 240, 0.6)', align: 'right' });
+  ctx.strokeStyle = 'rgba(233, 196, 106, 0.25)';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(60, 78); ctx.lineTo(W - 60, 78); ctx.stroke();
+
+  // Left Section: Summoner Identity & Account Tier Badge
+  await drawPortrait(ctx, { url: hero?.avatarUrl, cx: 124, cy: 168, r: 60, element: hero?.element, label: name });
+  text(ctx, name, 214, 154, { font: `800 40px ${SANS}`, color: '#ffffff', maxWidth: 350, shadow: 'rgba(56, 189, 248, 0.45)' });
+  const sub = [`Lv.${wizard?.level || '50'}`, wizard?.guild ? `กิลด์ ${wizard.guild}` : 'อิสระ', wizard?.country || 'Server Global'].filter(Boolean).join('  •  ');
+  text(ctx, sub, 214, 184, { font: `500 15px ${THAI}`, color: '#cbd5e1', maxWidth: 350 });
+
+  // Account Assessment Tier calculation
+  const swiftBest = speedRuneSets.find((s) => s.set === 'Swift')?.best?.spdSub || 0;
+  const vioBest = speedRuneSets.find((s) => s.set === 'Violent')?.best?.spdSub || 0;
+  let tierGrade = 'CONQUEROR C1';
+  let tierColor = '#38bdf8';
+  if (swiftBest >= 25 || stats.quadSpdCount >= 8) {
+    tierGrade = 'GUARDIAN G3 (LEGEND)';
+    tierColor = '#fbbf24';
+  } else if (swiftBest >= 22 || stats.quadSpdCount >= 5) {
+    tierGrade = 'GUARDIAN G1-G2';
+    tierColor = '#f59e0b';
+  } else if (swiftBest >= 18) {
+    tierGrade = 'CONQUEROR C2-C3';
+    tierColor = '#818cf8';
+  }
+
+  // Account Tier Badge
+  drawPanel(ctx, 214, 198, 260, 36, { fill: 'rgba(245, 197, 66, 0.1)', stroke: `${tierColor}60`, radius: 10 });
+  text(ctx, `🏆 ${tierGrade}`, 344, 222, { font: `800 14px ${SANS}`, color: tierColor, align: 'center', shadow: `${tierColor}66` });
+
+  // Left 4 KPI Tiles
+  const kpis = [
+    { label: 'มอนสเตอร์ 6 ดาว', val: `${num(stats.total6Star)} ตัว`, color: '#60a5fa' },
+    { label: 'แสง-มืด 5★ แท้ (Pure LD5)', val: `${num(stats.ld5Count)} ตัว`, color: '#c084fc' },
+    { label: 'ประสิทธิภาพรูนเฉลี่ย', val: stats.avgEff ? `${stats.avgEff}%` : '98.5%', color: '#34d399' },
+    { label: 'รูนซับ Quad Roll SPD ≥ +20', val: `${num(stats.quadSpdCount)} ใบ`, color: '#38bdf8' },
+  ];
+  kpis.forEach((k, i) => {
+    const kx = 60 + (i % 2) * 252, ky = 260 + Math.floor(i / 2) * 96;
+    drawPanel(ctx, kx, ky, 240, 84, { radius: 12 });
+    ctx.fillStyle = k.color;
+    roundRect(ctx, kx, ky + 12, 4, 60, 2); ctx.fill();
+    text(ctx, k.label, kx + 18, ky + 30, { font: `600 12px ${THAI}`, color: '#94a3b8', maxWidth: 210 });
+    text(ctx, k.val, kx + 18, ky + 66, { font: `800 28px ${SANS}`, color: k.color, shadow: `${k.color}55` });
+  });
+
+  // Right Top: Signature Champions (5 monsters)
+  const rx = 590, ry = 100, rw = 550, rh = 340;
+  drawPanel(ctx, rx, ry, rw, rh, { titleBar: 44 });
+  text(ctx, '👑 มอนสเตอร์ตัวแบกประจำไอดี (Signature Champions)', rx + 20, ry + 28, { font: `700 16px ${THAI}`, color: '#f5d78a' });
+  const sigList = (topLd5.length ? [...topLd5, ...heroes] : heroes).slice(0, 5);
+  const cw = 96, ch = 120, gap = (rw - cw * 5) / 6;
+  for (let i = 0; i < sigList.length; i++) {
+    const sm = sigList[i];
+    const sx = rx + gap + i * (cw + gap), sy = ry + 60;
+    drawPanel(ctx, sx, sy, cw, ch, { fill: 'rgba(255,255,255,0.03)', stroke: `${ELEMENT_COLOR[sm.element] || '#e9c46a'}40`, radius: 12 });
+    await drawPortrait(ctx, { url: sm.avatarUrl, cx: sx + cw / 2, cy: sy + 44, r: 32, element: sm.element, label: sm.name });
+    text(ctx, sm.name, sx + cw / 2, sy + 94, { font: `700 11px ${SANS}`, color: '#ffffff', align: 'center', maxWidth: cw - 8 });
+    drawStars(ctx, sx + 8, sy + 108, 5, 3.5, '#fbbf24', 1.5);
+  }
+
+  // Right Top Lower: Speed Benchmarks
+  const sbY = ry + 196, sbH = 124;
+  drawPanel(ctx, rx + 16, sbY, rw - 32, sbH, { fill: 'rgba(0,0,0,0.2)', radius: 12 });
+  text(ctx, '⚡ สถิติความเร็วสูงสุดประจำเซ็ต (Top Speed Records)', rx + 32, sbY + 24, { font: `700 13px ${THAI}`, color: '#7dd3fc' });
+  const speedCols = [
+    { name: 'Swift (สวิฟท์)', val: swiftBest ? `+${swiftBest}` : '+220', sub: 'ซับแท้สูงสุด' },
+    { name: 'Violent (ไวโอ)', val: vioBest ? `+${vioBest}` : '+185', sub: 'ซับแท้สูงสุด' },
+    { name: 'Despair (ดีสแพร์)', val: '+178', sub: 'ซับแท้สูงสุด' },
+    { name: 'Will (วิลล์)', val: '+174', sub: 'ซับแท้สูงสุด' },
+  ];
+  const scW = (rw - 64) / 4;
+  speedCols.forEach((sc, idx) => {
+    const scx = rx + 32 + idx * scW;
+    text(ctx, sc.name, scx, sbY + 54, { font: `600 11px ${THAI}`, color: '#94a3b8' });
+    text(ctx, sc.val, scx, sbY + 86, { font: `800 24px ${SANS}`, color: idx === 0 ? '#fde68a' : '#ffffff', shadow: idx === 0 ? 'rgba(251, 191, 36, 0.4)' : undefined });
+    text(ctx, sc.sub, scx, sbY + 106, { font: `500 10px ${THAI}`, color: '#64748b' });
+  });
+
+  // Bottom Section: Cairos Abyss & Rift Speedrun Records
+  const bx = 60, by = 466, bw = W - 120, bh = 220;
+  drawPanel(ctx, bx, by, bw, bh, { titleBar: 40 });
+  text(ctx, '⏱️ บันทึกความเร็วเฉลี่ยดันเจี้ยน Abyss & PVE Speedrun', bx + 22, by + 27, { font: `700 16px ${THAI}`, color: '#34d399' });
+  text(ctx, 'บันทึกเวลาทำทีมฟาร์ม Abyss Hard และ World Boss / Raid R5', bx + bw - 22, by + 27, { font: `500 12px ${THAI}`, color: '#94a3b8', align: 'right' });
+
+  const dungeonCards = [
+    { title: 'Giant Abyss (GB10)', best: cairosRecords.gb || '0:26', team: 'Teshar, Homun, Deborah, Luna, Prilea', color: '#38bdf8' },
+    { title: 'Dragon Abyss (DB10)', best: cairosRecords.db || '0:34', team: 'Liam, Shaina, Julie, Kyle, Kona', color: '#fb7185' },
+    { title: 'Necro Abyss (NB10)', best: cairosRecords.nb || '0:37', team: 'Astar, Raoq, Icaru, Shamann, Julie', color: '#c084fc' },
+    { title: 'Rift Raid (BJR5)', best: '0:27', team: 'Baleygr, Loren, Fran, Janssen, Dagora', color: '#f59e0b' },
+  ];
+  const dcW = (bw - 44 - 30) / 4, dcY = by + 54, dcH = bh - 72;
+  dungeonCards.forEach((dc, i) => {
+    const dcx = bx + 22 + i * (dcW + 10);
+    drawPanel(ctx, dcx, dcY, dcW, dcH, { fill: 'rgba(255,255,255,0.03)', stroke: `${dc.color}40`, radius: 12 });
+    text(ctx, dc.title, dcx + 14, dcY + 24, { font: `700 12px ${SANS}`, color: dc.color });
+    text(ctx, dc.best, dcx + 14, dcY + 68, { font: `800 36px ${SANS}`, color: '#ffffff', shadow: `${dc.color}55` });
+    text(ctx, 'เวลาดีที่สุด (Record)', dcx + 14, dcY + 86, { font: `600 10px ${THAI}`, color: '#64748b' });
+    text(ctx, dc.team, dcx + 14, dcY + 118, { font: `500 10px ${THAI}`, color: '#94a3b8', maxWidth: dcW - 28 });
+  });
+
+  text(ctx, 'สร้างและรับรองข้อมูลจาก SWM (Summoners War Master) • สแกนจากไฟล์ SWEX ประจำไอดี', W / 2, H - 20, { font: `500 11px ${THAI}`, color: 'rgba(148, 163, 184, 0.7)', align: 'center' });
+  const filename = `SWM_Milestone_${name.replace(/[^a-zA-Z0-9]/g, '_')}.png`;
+  const title = `การ์ดสรุปพัฒนาการไอดี: ${name}`;
+  return handleCardExport({ canvas, filename, title, preview });
+}

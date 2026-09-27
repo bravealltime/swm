@@ -26,6 +26,7 @@ import AiAdvisorPanel from '../components/AiAdvisorPanel';
 import AiChatPanel from '../components/AiChatPanel';
 import { MONSTERS } from '../data/monsters';
 import RTA_SYNERGIES from '../data/rtaSynergies.json';
+import { analyzeRtaDraft } from '../utils/draftAdvisorEngine';
 
 // Guardian Preset Drafts
 const PRESET_DRAFTS = [
@@ -167,91 +168,11 @@ export default function DraftExplorerView({ onNavigate }) {
     setActivePicker(null);
   };
 
-  // Draft Calculation Engine (Synergy, Winrate, Threats)
+  const [advisorTab, setAdvisorTab] = useState('counters'); // 'counters' | 'synergy' | 'replays'
+
+  // Dynamic Draft Calculation Engine using G3/Legend Metas & SWRT Replays
   const analysis = useMemo(() => {
-    const activeBlue = blueTeam.filter((m, i) => m && i !== redBan);
-    const activeRed = redTeam.filter((m, i) => m && i !== blueBan);
-
-    // Calculate archetype points
-    let blueSpd = 50, blueCc = 50, blueDmg = 50, blueTank = 50, blueUtil = 50;
-    let redSpd = 50, redCc = 50, redDmg = 50, redTank = 50, redUtil = 50;
-
-    activeBlue.forEach(m => {
-      const n = m.name.toLowerCase();
-      if (['oliver', 'vanessa', 'sonia', 'ethna', 'adriana', 'moore', 'miles', 'sekhmet'].includes(n)) blueSpd += 12;
-      if (['cheongpung', 'oliver', 'robo', 'sagar', 'moore', 'tian lang', 'cp'].includes(n)) blueCc += 14;
-      if (['sonia', 'lushen', 'kaki', 'perna', 'miles', 'lucifer', 'masha'].includes(n)) blueDmg += 14;
-      if (['camilla', 'chandra', 'velajuel', 'byungchul', 'haeyang', 'riley'].includes(n)) blueTank += 15;
-      if (['shizuka', 'adriana', 'woosa', 'tomoe', 'anavel', 'bastet'].includes(n)) blueUtil += 12;
-    });
-
-    activeRed.forEach(m => {
-      const n = m.name.toLowerCase();
-      if (['oliver', 'vanessa', 'sonia', 'ethna', 'adriana', 'moore', 'miles', 'sekhmet'].includes(n)) redSpd += 12;
-      if (['cheongpung', 'oliver', 'robo', 'sagar', 'moore', 'tian lang', 'cp'].includes(n)) redCc += 14;
-      if (['sonia', 'lushen', 'kaki', 'perna', 'miles', 'lucifer', 'masha'].includes(n)) redDmg += 14;
-      if (['camilla', 'chandra', 'velajuel', 'byungchul', 'haeyang', 'riley'].includes(n)) redTank += 15;
-      if (['shizuka', 'adriana', 'woosa', 'tomoe', 'anavel', 'bastet'].includes(n)) redUtil += 12;
-    });
-
-    // Check synergies in blue team
-    let blueSynergyBonus = 0;
-    const blueNames = activeBlue.map(m => m.name.toLowerCase());
-    RTA_SYNERGIES.duos.forEach(d => {
-      if (blueNames.includes(d.monsters[0].toLowerCase()) && blueNames.includes(d.monsters[1].toLowerCase())) {
-        blueSynergyBonus += 2.5;
-      }
-    });
-
-    // Check synergies in red team
-    let redSynergyBonus = 0;
-    const redNames = activeRed.map(m => m.name.toLowerCase());
-    RTA_SYNERGIES.duos.forEach(d => {
-      if (redNames.includes(d.monsters[0].toLowerCase()) && redNames.includes(d.monsters[1].toLowerCase())) {
-        redSynergyBonus += 2.5;
-      }
-    });
-
-    // Leo special rule
-    if (blueNames.includes('leo') && blueNames.includes('lucifer')) blueSynergyBonus += 8;
-    if (redNames.includes('leo') && redNames.includes('lucifer')) redSynergyBonus += 8;
-
-    // Total score calculation
-    const blueTotal = blueSpd + blueCc + blueDmg + blueTank + blueUtil + blueSynergyBonus;
-    const redTotal = redSpd + redCc + redDmg + redTank + redUtil + redSynergyBonus;
-    const sum = blueTotal + redTotal;
-
-    const blueWinProb = Math.min(82, Math.max(18, Math.round((blueTotal / Math.max(1, sum)) * 100)));
-    const redWinProb = 100 - blueWinProb;
-
-    // Determine ban recommendation for blue (which red monster to ban)
-    let recommendedBan = redTeam[0]?.name || 'มอนสเตอร์สปีดลีด';
-    let banReason = 'ตัวเปิดเกมที่อันตรายที่สุด';
-    if (redNames.includes('oliver')) { recommendedBan = 'Oliver'; banReason = 'ตัวลดเกจและรีเซ็ตคูลดาวน์เบอร์ 1'; }
-    else if (redNames.includes('leo')) { recommendedBan = 'Leo'; banReason = 'ล็อคสปีดทำลายระบบทีมของคุณ'; }
-    else if (redNames.includes('sonia')) { recommendedBan = 'Sonia'; banReason = 'สไนป์ดาเมจเดี่ยวทะลุเกราะแรงมาก'; }
-    else if (redNames.includes('chandra')) { recommendedBan = 'Chandra'; banReason = 'กอดปกป้องตัวแบกทำให้เจาะไม่เข้า'; }
-    else if (redNames.includes('sagar')) { recommendedBan = 'Sagar'; banReason = 'ยั่วยวนและรีเซ็ตเทิร์นกวนไฟต์'; }
-
-    // Counter pick suggestions for blue
-    const suggestions = [
-      { name: 'Miles', role: 'Speed Bruiser', reason: 'วิ่งสะสมสปีดเจาะเกราะเคาน์เตอร์ตัวแทงก์' },
-      { name: 'Juno', role: 'Passive Cleanser', reason: 'ล้างดีบัฟหมู่และฮีลทีมเมื่อเจอทีม CC' },
-      { name: 'Haeyang', role: 'Anti-Crit Shield', reason: 'ลดความเสียหายคริติคอลจากสไนเปอร์' },
-      { name: 'Ethna', role: 'Turn 1 Stun', reason: 'สปีดเบสสูง ฉีกเกราะและสตันตัวเปิดคู่แข่ง' },
-    ];
-
-    return {
-      blueWinProb,
-      redWinProb,
-      stats: {
-        blue: { spd: blueSpd, cc: blueCc, dmg: blueDmg, tank: blueTank, util: blueUtil },
-        red: { spd: redSpd, cc: redCc, dmg: redDmg, tank: redTank, util: redUtil }
-      },
-      recommendedBan,
-      banReason,
-      suggestions
-    };
+    return analyzeRtaDraft(blueTeam, redTeam, blueBan, redBan);
   }, [blueTeam, redTeam, blueBan, redBan]);
 
   return (
@@ -682,76 +603,199 @@ export default function DraftExplorerView({ onNavigate }) {
           </div>
         </div>
 
-        {/* Column 2: AI Draft Ban Advisor */}
+        {/* Column 2: AI Draft Ban Advisor & Replay Insights */}
         <div className="bg-[#0c1320] border border-[#1b2b42] rounded-2xl p-5 space-y-4 shadow-lg">
-          <div className="flex items-center gap-2 pb-2 border-b border-[#182638]">
-            <Ban className="w-4 h-4 text-rose-400" />
-            <h3 className="text-sm font-bold text-white uppercase tracking-wider">
-              แนะนำตัวที่ควรแบนที่สุด (High Threat Ban)
-            </h3>
+          <div className="flex items-center justify-between pb-2 border-b border-[#182638]">
+            <div className="flex items-center gap-2">
+              <Ban className="w-4 h-4 text-rose-400" />
+              <h3 className="text-sm font-bold text-white uppercase tracking-wider">
+                แนะนำเป้าหมายแบน (Threat Ban Advisor)
+              </h3>
+            </div>
+            {analysis.topBanTarget && (
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40 font-bold">
+                Threat Score: {analysis.topBanTarget.score}/100
+              </span>
+            )}
           </div>
 
-          <div className="p-4 rounded-xl bg-rose-950/20 border border-rose-500/30 space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-rose-400 uppercase tracking-wide">
-                เป้าหมายแบนอันดับ #1
-              </span>
-              <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40">
-                CRITICAL THREAT
-              </span>
+          {analysis.topBanTarget ? (
+            <div className="p-4 rounded-xl bg-gradient-to-br from-rose-950/30 to-[#0e1726] border border-rose-500/30 space-y-3">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-xl overflow-hidden border border-rose-500/40 shrink-0 bg-slate-950">
+                  <img
+                    src={analysis.topBanTarget.avatarUrl || 'https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0001_0_0.png'}
+                    alt={analysis.topBanTarget.name}
+                    className="w-full h-full object-cover"
+                    onError={(e) => { e.target.src = 'https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0001_0_0.png'; }}
+                  />
+                </div>
+                <div>
+                  <div className="text-xs text-rose-400 font-bold uppercase tracking-wider">เป้าหมายแบนอันดับ #1</div>
+                  <div className="text-base font-black text-white flex items-center gap-1.5">
+                    <span>{analysis.topBanTarget.name}</span>
+                    <span className="text-xs text-slate-400 font-normal">({analysis.topBanTarget.thaiName})</span>
+                  </div>
+                </div>
+              </div>
+              <p className="text-xs text-slate-300 leading-relaxed bg-black/20 p-2.5 rounded-lg border border-white/[0.04]">
+                ⚠️ <strong>ทำไมต้องแบน:</strong> {analysis.topBanTarget.reason}
+              </p>
             </div>
-            <div className="text-lg font-black text-white">
-              {analysis.recommendedBan}
+          ) : (
+            <div className="p-4 rounded-xl bg-[#080d16] border border-white/[0.06] text-center text-xs text-slate-400">
+              เลือกมอนสเตอร์ฝั่งสีแดง เพื่อให้ระบบวิเคราะห์ตัวที่ควรแบน
             </div>
-            <p className="text-xs text-slate-300 leading-relaxed">
-              เหตุผล: {analysis.banReason}
-            </p>
-          </div>
+          )}
 
-          <div className="pt-2 text-xs text-slate-400 leading-relaxed">
-            💡 <strong>คำแนะนำจากระบบ AI Draft Analyzer:</strong> การแบนตัวที่ขัดขวางคอมโบหลักของคุณ จะช่วยเพิ่ม Win Rate ให้กับทีมได้ถึง +8.5%
-          </div>
+          {/* Replay Turning Point Insights */}
+          {analysis.replayInsights && analysis.replayInsights.length > 0 && (
+            <div className="pt-2 border-t border-[#182638] space-y-2">
+              <div className="text-[11px] font-bold text-amber-300 flex items-center gap-1.5">
+                <Trophy className="w-3.5 h-3.5 text-amber-400" />
+                <span>รีเพลย์ G3/Legend ที่เคยชนะทรงนี้:</span>
+              </div>
+              <div className="space-y-1.5">
+                {analysis.replayInsights.map((rep, idx) => (
+                  <div key={idx} className="p-2 rounded-lg bg-[#080d16] border border-white/[0.04] text-[11px] text-slate-300">
+                    <span className="text-rose-400 font-bold">{rep.winnerPlayer}</span> ({rep.rank}): {rep.winCondition}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* Column 3: Recommended Counter Picks */}
-        <div className="bg-[#0c1320] border border-[#1b2b42] rounded-2xl p-5 space-y-4 shadow-lg">
-          <div className="flex items-center gap-2 pb-2 border-b border-[#182638]">
-            <Sparkles className="w-4 h-4 text-amber-400" />
-            <h3 className="text-sm font-bold text-white uppercase tracking-wider">
-              แนะนำมอนสเตอร์พิกแก้ทาง (Next Picks)
-            </h3>
+        {/* Column 3: Realtime Next Picks & Synergies */}
+        <div className="bg-[#0c1320] border border-[#1b2b42] rounded-2xl p-5 space-y-4 shadow-lg flex flex-col">
+          <div className="flex items-center justify-between pb-2 border-b border-[#182638] gap-2 flex-wrap">
+            <div className="flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-amber-400" />
+              <h3 className="text-sm font-bold text-white uppercase tracking-wider">
+                ผู้ช่วยเลือกพิก (Draft Assistant)
+              </h3>
+            </div>
+
+            <div className="flex items-center gap-1 bg-[#080d16] p-0.5 rounded-lg border border-white/[0.06]">
+              <button
+                onClick={() => setAdvisorTab('counters')}
+                className={`px-2 py-1 rounded text-[11px] font-bold transition-all cursor-pointer ${
+                  advisorTab === 'counters'
+                    ? 'bg-amber-500 text-slate-950 shadow-sm'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                🔥 แก้ทาง ({analysis.counterRecommendations?.length || 0})
+              </button>
+              <button
+                onClick={() => setAdvisorTab('synergy')}
+                className={`px-2 py-1 rounded text-[11px] font-bold transition-all cursor-pointer ${
+                  advisorTab === 'synergy'
+                    ? 'bg-cyan-500 text-slate-950 shadow-sm'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                ⚡ คอมโบ ({analysis.synergyRecommendations?.length || 0})
+              </button>
+            </div>
           </div>
 
-          <div className="space-y-2">
-            {analysis.suggestions.map((sug, idx) => (
-              <div 
-                key={idx}
-                className="p-2.5 rounded-xl bg-[#080d16] border border-[#1b283d] flex items-center justify-between hover:border-amber-400/50 transition-colors"
-              >
-                <div>
-                  <div className="text-xs font-bold text-white flex items-center gap-1.5">
-                    <span>{sug.name}</span>
-                    <span className="text-[11px] text-amber-400 font-mono">({sug.role})</span>
+          <div className="space-y-2.5 flex-1 overflow-y-auto max-h-[320px] pr-1">
+            {advisorTab === 'counters' && (
+              <>
+                {analysis.counterRecommendations && analysis.counterRecommendations.length > 0 ? (
+                  analysis.counterRecommendations.map((c, idx) => (
+                    <div
+                      key={idx}
+                      className="p-3 rounded-xl bg-[#080d16] border border-[#1b283d] hover:border-amber-400/50 transition-all flex items-center justify-between gap-3 group"
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <img
+                          src={c.monster.avatarUrl || 'https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0001_0_0.png'}
+                          alt={c.monster.name}
+                          className="w-10 h-10 rounded-lg object-cover border border-white/10 shrink-0"
+                          onError={(e) => { e.target.src = 'https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0001_0_0.png'; }}
+                        />
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            <span className="text-xs font-bold text-white group-hover:text-amber-300 transition-colors">{c.monster.name}</span>
+                            <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-amber-500/10 text-amber-300 border border-amber-500/20">
+                              {c.badge}
+                            </span>
+                          </div>
+                          <div className="text-[11px] text-slate-400 truncate mt-0.5">{c.reason}</div>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => {
+                          const emptyIdx = blueTeam.findIndex((m) => !m);
+                          const target = emptyIdx !== -1 ? emptyIdx : 4;
+                          const next = [...blueTeam];
+                          next[target] = c.monster;
+                          setBlueTeam(next);
+                        }}
+                        className="px-2.5 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500 text-amber-300 hover:text-slate-950 text-xs font-bold border border-amber-500/30 transition-all cursor-pointer shrink-0"
+                        title="คลิกเพื่อเลือกมอนสเตอร์นี้เข้าทีม Blue ทันที"
+                      >
+                        + ใส่ทีม
+                      </button>
+                    </div>
+                  ))
+                ) : (
+                  <div className="py-8 text-center text-xs text-slate-400">
+                    เลือกมอนสเตอร์ฝั่งสีแดง เพื่อให้ระบบดึงตัวเคาน์เตอร์ที่เหมาะสม
                   </div>
-                  <div className="text-xs text-slate-400">{sug.reason}</div>
-                </div>
-                <button
-                  onClick={() => {
-                    const emptyIdx = blueTeam.findIndex(m => !m);
-                    const target = emptyIdx !== -1 ? emptyIdx : 4;
-                    const mObj = MONSTERS.find(m => m.name.toLowerCase() === sug.name.toLowerCase());
-                    if (mObj) {
-                      const next = [...blueTeam];
-                      next[target] = mObj;
-                      setBlueTeam(next);
-                    }
-                  }}
-                  className="px-2 py-1 rounded bg-blue-600/20 hover:bg-blue-600 text-blue-300 hover:text-white text-[11px] font-bold border border-blue-500/30 transition-all cursor-pointer shrink-0"
-                >
-                  + ใส่ทีม
-                </button>
-              </div>
-            ))}
+                )}
+              </>
+            )}
+
+            {advisorTab === 'synergy' && (
+              <>
+                {analysis.synergyRecommendations && analysis.synergyRecommendations.length > 0 ? (
+                  analysis.synergyRecommendations.map((syn, idx) => (
+                    <div
+                      key={idx}
+                      className="p-3 rounded-xl bg-[#080d16] border border-[#1b283d] hover:border-cyan-400/50 transition-all flex items-center justify-between gap-3 group"
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <img
+                          src={syn.monster.avatarUrl || 'https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0001_0_0.png'}
+                          alt={syn.monster.name}
+                          className="w-10 h-10 rounded-lg object-cover border border-white/10 shrink-0"
+                          onError={(e) => { e.target.src = 'https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0001_0_0.png'; }}
+                        />
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            <span className="text-xs font-bold text-white group-hover:text-cyan-300 transition-colors">{syn.monster.name}</span>
+                            <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-cyan-500/10 text-cyan-300 border border-cyan-500/20">
+                              {syn.badge}
+                            </span>
+                          </div>
+                          <div className="text-[11px] text-slate-400 truncate mt-0.5">{syn.thaiDesc}</div>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => {
+                          const emptyIdx = blueTeam.findIndex((m) => !m);
+                          const target = emptyIdx !== -1 ? emptyIdx : 4;
+                          const next = [...blueTeam];
+                          next[target] = syn.monster;
+                          setBlueTeam(next);
+                        }}
+                        className="px-2.5 py-1.5 rounded-lg bg-cyan-500/20 hover:bg-cyan-500 text-cyan-300 hover:text-slate-950 text-xs font-bold border border-cyan-500/30 transition-all cursor-pointer shrink-0"
+                        title="คลิกเพื่อเลือกมอนสเตอร์นี้เข้าทีม Blue ทันที"
+                      >
+                        + ใส่ทีม
+                      </button>
+                    </div>
+                  ))
+                ) : (
+                  <div className="py-8 text-center text-xs text-slate-400">
+                    เลือกมอนสเตอร์ฝั่งสีน้ำเงิน เพื่อให้ระบบจับคู่คอมโบเมต้า RTA
+                  </div>
+                )}
+              </>
+            )}
           </div>
         </div>
 

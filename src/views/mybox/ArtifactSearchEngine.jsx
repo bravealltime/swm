@@ -3,6 +3,7 @@ import { Search, Zap, Sparkles } from 'lucide-react';
 import MonsterAvatar from '../../components/MonsterAvatar';
 import ArtifactIcon from '../../components/ArtifactIcon';
 import { ARTIFACT_EFFECT_NAMES } from '../../utils/swexImport';
+import { evaluateArtifactRolls } from '../../utils/artifactEvaluator';
 import { monsterOf, ELEMENT_TH, card } from './shared';
 
 // ---------------------------------------------------------------------------
@@ -17,6 +18,7 @@ export default function ArtifactSearchEngine({ box }) {
   const [selectedArchetype, setSelectedArchetype] = useState('all');
   const [whereFilter, setWhereFilter] = useState('all'); // 'all', 'equipped', 'inventory'
   const [minVal, setMinVal] = useState(0);
+  const [godRollOnly, setGodRollOnly] = useState(false);
 
   // Only a box that actually carries artifacts (real import or the labeled demo) may show this tab —
   // getArtifactsFromBox() fabricates placeholder items when the list is empty and those must never
@@ -40,9 +42,15 @@ export default function ArtifactSearchEngine({ box }) {
 
   const activePreset = PRESETS.find((p) => p.id === selectedSubstatPreset);
 
+  const evaluatedArtifacts = useMemo(() => {
+    return artifacts.map((art) => evaluateArtifactRolls(art, box?.units || []));
+  }, [artifacts, box?.units]);
+
   // Filter artifacts
   const filteredArtifacts = useMemo(() => {
-    return artifacts.filter((art) => {
+    const list = evaluatedArtifacts.filter((art) => {
+      if (godRollOnly && art.rollTier !== 'GOD' && art.rollTier !== 'LEGEND') return false;
+
       // Slot filter
       if (selectedSlot === '1' && art.slot !== 1) return false;
       if (selectedSlot === '2' && art.slot !== 2) return false;
@@ -76,7 +84,12 @@ export default function ArtifactSearchEngine({ box }) {
 
       return true;
     });
-  }, [artifacts, selectedSlot, selectedElement, selectedArchetype, whereFilter, activePreset, minVal, searchKeyword]);
+
+    if (godRollOnly) {
+      list.sort((a, b) => b.score - a.score);
+    }
+    return list;
+  }, [evaluatedArtifacts, godRollOnly, selectedSlot, selectedElement, selectedArchetype, whereFilter, activePreset, minVal, searchKeyword]);
 
   if (!hasArtifacts) {
     return (
@@ -130,7 +143,19 @@ export default function ArtifactSearchEngine({ box }) {
           <Zap className="w-4 h-4 text-yellow-400" />
           เลือกออปชั่นเด็ดที่ต้องการค้นหา (Substat Presets):
         </div>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            onClick={() => setGodRollOnly(!godRollOnly)}
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer flex items-center gap-1.5 ${
+              godRollOnly
+                ? 'bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 shadow-lg shadow-amber-500/25 border border-amber-300'
+                : 'bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30'
+            }`}
+          >
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>🌟 กรองเฉพาะของเทพ (God / Legend Rolls)</span>
+          </button>
+
           {PRESETS.map((p) => {
             const isSelected = selectedSubstatPreset === p.id;
             return (
@@ -246,11 +271,18 @@ export default function ArtifactSearchEngine({ box }) {
                 <div className="flex items-center gap-3">
                   <ArtifactIcon artifact={art} size={52} />
                   <div className="min-w-0 flex-1">
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between gap-1 flex-wrap">
                       <span className="text-xs font-bold text-white truncate">{label}</span>
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30">
-                        +{art.lvl ?? 0} {art.rank ? '★'.repeat(art.rank) : ''}
-                      </span>
+                      <div className="flex items-center gap-1 shrink-0">
+                        {art.rollTier && art.rollTier !== 'STANDARD' && (
+                          <span className={`text-[9px] font-black px-1.5 py-0.2 rounded border ${art.tierColor}`}>
+                            {art.tierLabel}
+                          </span>
+                        )}
+                        <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30">
+                          +{art.lvl ?? 0} {art.rank ? '★'.repeat(art.rank) : ''}
+                        </span>
+                      </div>
                     </div>
                     <div className="text-xs font-mono text-cyan-300 font-bold mt-1 bg-white/[0.02] px-2 py-0.5 rounded border border-white/5 inline-block">
                       Main: {mainStatLabel}
@@ -265,6 +297,7 @@ export default function ArtifactSearchEngine({ box }) {
                     const val = s[1];
                     const isHighlighted = activePreset?.statIds?.includes(statId);
                     const effectName = ARTIFACT_EFFECT_NAMES[statId] || `Stat #${statId}`;
+                    const isGodRoll = val >= 16;
 
                     return (
                       <div
@@ -272,15 +305,34 @@ export default function ArtifactSearchEngine({ box }) {
                         className={`text-xs p-1.5 rounded-lg flex items-center justify-between transition-colors ${
                           isHighlighted
                             ? 'bg-teal-500/20 border border-teal-500/40 text-teal-200 font-bold'
+                            : isGodRoll
+                            ? 'bg-amber-500/10 border border-amber-500/30 text-amber-200 font-bold'
                             : 'bg-white/[0.02] text-slate-300'
                         }`}
                       >
-                        <span className="truncate pr-2">{effectName}</span>
+                        <span className="truncate pr-2 flex items-center gap-1">
+                          {isGodRoll && <span className="text-[10px] text-amber-400">🌟</span>}
+                          <span>{effectName}</span>
+                        </span>
                         <span className="font-mono font-bold text-right shrink-0">+{val}%</span>
                       </div>
                     );
                   })}
                 </div>
+
+                {/* Matched Box Monsters */}
+                {art.matchedOwnedWearers && art.matchedOwnedWearers.length > 0 && (
+                  <div className="pt-2 border-t border-white/[0.06] flex items-center justify-between gap-1 text-[11px]">
+                    <span className="text-slate-400 shrink-0">🎯 เหมาะกับในไอดี:</span>
+                    <div className="flex items-center gap-1 overflow-x-auto no-scrollbar">
+                      {art.matchedOwnedWearers.map((m) => (
+                        <span key={m.id} className="text-[10px] font-bold text-amber-300 bg-amber-500/10 px-1.5 py-0.5 rounded border border-amber-500/20 shrink-0">
+                          {m.name}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Footer: Where Equipped */}
