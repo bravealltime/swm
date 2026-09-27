@@ -10,9 +10,12 @@ import { auditAccount } from '../utils/accountAudit';
 import { loadDemoBox } from '../utils/swexImport';
 import * as aegisLive from '../services/aegisLive';
 import AccountSuiteHeader from '../components/AccountSuiteHeader';
+import SwRatingDashboard from '../components/SwRatingDashboard';
 
-export default function AiAccountAuditView({ onNavigate, onOpenAuth }) {
+export default function AiAccountAuditView({ onNavigate, onOpenAuth, subItem, viewParams = {} }) {
   const [box, setBox] = useState(() => loadBox());
+  const activeSub = subItem || viewParams?.subItem;
+  const [viewMode, setViewMode] = useState(activeSub === 'diagnosis' ? 'diagnosis' : 'sw-rating');
   const [isAuditing, setIsAuditing] = useState(false);
   const [metaFilter, setMetaFilter] = useState('all'); // 'all' | 'owned' | 'missing'
   const [checkedActions, setCheckedActions] = useState({});
@@ -173,8 +176,59 @@ export default function AiAccountAuditView({ onNavigate, onOpenAuth }) {
     <div className="space-y-6 max-w-[1780px] 2xl:max-w-[1880px] mx-auto pb-16 animate-in fade-in duration-300">
       <AccountSuiteHeader activeTab="ai-account-audit" onNavigate={onNavigate} />
 
-      {/* 1. Header Overview & Rank Badge */}
-      <div className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-r from-[#121c2e] via-[#0d1624] to-[#080d16] p-6 sm:p-8 shadow-2xl">
+      {/* Mode Switcher: SW-Rating vs Deep Diagnosis */}
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.08] pb-3">
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setViewMode('sw-rating')}
+            className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all cursor-pointer ${
+              viewMode === 'sw-rating'
+                ? 'bg-gradient-to-r from-orange-500 to-amber-600 text-white shadow-lg shadow-orange-500/25 ring-1 ring-orange-400/50'
+                : 'bg-white/[0.04] hover:bg-white/[0.08] text-slate-400 hover:text-white border border-white/5'
+            }`}
+          >
+            <Trophy className="w-4 h-4 text-amber-300" />
+            <span>📊 คะแนนไอดี SW-Rating (ภาพรวมไอดี & รูน)</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setViewMode('diagnosis')}
+            className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all cursor-pointer ${
+              viewMode === 'diagnosis'
+                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/25 ring-1 ring-blue-400/50'
+                : 'bg-white/[0.04] hover:bg-white/[0.08] text-slate-400 hover:text-white border border-white/5'
+            }`}
+          >
+            <Bot className="w-4 h-4 text-cyan-300" />
+            <span>🤖 AI วินิจฉัย & จุดอ่อนไอดี (Detailed Audit)</span>
+          </button>
+        </div>
+
+        <button
+          type="button"
+          onClick={handleAegisSync}
+          className="px-3 py-1.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-xs font-semibold text-slate-300 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+        >
+          <RefreshCw className="w-3.5 h-3.5 text-cyan-400" />
+          <span>ซิงค์สด AegisLink</span>
+        </button>
+      </div>
+
+      {viewMode === 'sw-rating' ? (
+        <SwRatingDashboard
+          box={box}
+          onOpenAiCoach={() => {
+            setViewMode('diagnosis');
+            handleAskAiCoach();
+          }}
+          onNavigate={onNavigate}
+        />
+      ) : (
+        <>
+          {/* 1. Header Overview & Rank Badge */}
+          <div className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-r from-[#121c2e] via-[#0d1624] to-[#080d16] p-6 sm:p-8 shadow-2xl">
         <div className="absolute top-0 right-0 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div className="flex items-start gap-4">
@@ -679,6 +733,8 @@ export default function AiAccountAuditView({ onNavigate, onOpenAuth }) {
           })}
         </div>
       </div>
+        </>
+      )}
     </div>
   );
 }

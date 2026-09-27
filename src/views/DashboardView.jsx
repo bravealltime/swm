@@ -661,6 +661,16 @@ export default function DashboardView({ onNavigate }) {
 
                 <button
                   type="button"
+                  onClick={() => onNavigate('ai-account-audit', { subItem: 'sw-rating' })}
+                  className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-400 hover:to-amber-500 text-white text-xs font-black shadow-lg shadow-orange-500/25 transition-all cursor-pointer"
+                  title="ดูคะแนนไอดีสไตล์ SW-Rating (Unit Score, Rune Score, Artifact Score, Expected Rank)"
+                >
+                  <Sparkles className="w-4 h-4 text-white" />
+                  <span>คะแนน SW-Rating</span>
+                </button>
+
+                <button
+                  type="button"
                   onClick={() => onNavigate('my-box')}
                   className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 text-white text-xs font-bold transition-all cursor-pointer"
                 >
