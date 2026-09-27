@@ -70,7 +70,7 @@ export default function InstallAppBanner() {
     <>
       {/* Floating Bottom Install Banner */}
       {!isDismissed && (
-        <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-6 md:w-[420px] z-50 animate-in fade-in slide-in-from-bottom-5 duration-300">
+        <div className="fixed bottom-16 sm:bottom-4 left-3 right-3 sm:left-auto sm:right-6 sm:w-[420px] z-40 animate-in fade-in slide-in-from-bottom-5 duration-300">
           <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-slate-900/95 via-blue-950/90 to-slate-900/95 border border-blue-500/40 shadow-[0_10px_35px_rgba(0,0,0,0.8),0_0_20px_rgba(59,130,246,0.3)] backdrop-blur-xl p-4 text-white">
             {/* Background Glow */}
             <div className="absolute -top-12 -right-12 w-32 h-32 bg-blue-500/20 rounded-full blur-2xl pointer-events-none" />

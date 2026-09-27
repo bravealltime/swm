@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 
 export default function SwmLogo({ size = 'md', showText = true, className = '' }) {
   const sizeMap = {
@@ -62,7 +62,7 @@ export default function SwmLogo({ size = 'md', showText = true, className = '' }
               MASTER
             </span>
           </div>
-          <span className={`${sizeMap.sub} text-slate-400 font-medium tracking-tight mt-1 leading-none`}>
+          <span className={`${sizeMap.sub} text-slate-400 font-medium tracking-tight mt-1 leading-none hidden sm:inline`}>
             Summoners War Tactical Intelligence
           </span>
         </div>

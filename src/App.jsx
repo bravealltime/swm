@@ -211,7 +211,7 @@ function AppContent() {
     }`;
 
   return (
-    <div className="min-h-screen bg-[#0a0f18] text-slate-100 flex flex-col antialiased selection:bg-blue-600 selection:text-white">
+    <div className="min-h-screen bg-[#0a0f18] text-slate-100 flex flex-col antialiased selection:bg-blue-600 selection:text-white w-full max-w-[100vw] overflow-x-hidden">
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[60] focus:px-4 focus:py-2 focus:rounded-lg focus:bg-blue-600 focus:text-white"
@@ -284,10 +284,10 @@ function AppContent() {
 
       <footer className="w-full border-t border-[#1e293b] bg-[#0c121c] py-8 text-xs text-slate-400">
         <div className="max-w-[1720px] 2xl:max-w-[1850px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-3 text-center sm:text-left">
             <SwmLogo size="sm" />
-            <span className="text-slate-400">|</span>
-            <span className="text-slate-400">Summoners War Master • ศูนย์รวมยุทธวิธีกิลด์วอร์ & คลังวิเคราะห์เกมฉบับภาษาไทย</span>
+            <span className="hidden sm:inline text-slate-400">|</span>
+            <span className="text-slate-400 text-[11px] sm:text-xs">Summoners War Master • ศูนย์รวมยุทธวิธีกิลด์วอร์ & คลังวิเคราะห์เกมฉบับภาษาไทย</span>
           </div>
 
           <nav aria-label="ลิงก์ท้ายหน้า" className="flex flex-wrap items-center justify-center gap-4 text-xs font-semibold text-slate-300">
@@ -309,7 +309,7 @@ function AppContent() {
       </footer>
 
       {/* Mobile Bottom Navigation Dock */}
-      <nav aria-label="เมนูหลัก (มือถือ)" className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#090d16]/95 backdrop-blur-xl border-t border-white/10 px-1 py-1 grid grid-cols-5 items-stretch justify-items-stretch shadow-[0_-8px_20px_rgba(0,0,0,0.7)] select-none pb-[max(0.25rem,env(safe-area-inset-bottom))]">
+      <nav aria-label="เมนูหลัก (มือถือ)" className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#090d16]/95 backdrop-blur-xl border-t border-white/10 px-1 py-1 grid grid-cols-5 items-stretch justify-items-stretch shadow-[0_-8px_20px_rgba(0,0,0,0.7)] select-none pb-[max(0.25rem,env(safe-area-inset-bottom))]">
         <button onClick={() => handleNavigate('dashboard')} className={dockItem(currentView === 'dashboard')} aria-current={currentView === 'dashboard' ? 'page' : undefined}>
           <Home className="w-4 h-4 shrink-0" />
           <span className="truncate w-full text-center">หน้าแรก</span>

@@ -582,7 +582,7 @@ export default function DashboardView({ onNavigate }) {
               </div>
 
               {/* Right: Primary Hero Actions */}
-              <div className="flex flex-wrap sm:flex-nowrap items-center gap-2.5 shrink-0">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
                 <button
                   type="button"
                   disabled={cardBusy}
