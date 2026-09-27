@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { X, Download, Copy, Check, Sparkles, Image as ImageIcon } from 'lucide-react';
+import { X, Download, Copy, Check, Sparkles, Image as ImageIcon, ZoomIn, ZoomOut } from 'lucide-react';
 
 export default function CardPreviewModal({ isOpen: propIsOpen, onClose: propOnClose, cardData: propCardData }) {
   const [internalOpen, setInternalOpen] = useState(false);
   const [internalData, setInternalData] = useState(null);
   const [copied, setCopied] = useState(false);
+  const [isZoomed, setIsZoomed] = useState(false);
 
   // Allow either controlled props or window event trigger
   const isOpen = propIsOpen !== undefined ? propIsOpen : internalOpen;
@@ -95,32 +96,54 @@ export default function CardPreviewModal({ isOpen: propIsOpen, onClose: propOnCl
               <Sparkles className="w-4 h-4" />
             </div>
             <div className="min-w-0">
-              <h3 id="card-preview-title" className="text-sm sm:text-base font-bold text-white truncate">
-                {cardData.title || 'ตัวอย่างรูปการ์ด (Card Preview)'}
-              </h3>
+              <div className="flex items-center gap-2">
+                <h3 id="card-preview-title" className="text-sm sm:text-base font-bold text-white truncate">
+                  {cardData.title || 'ตัวอย่างรูปการ์ด (Card Preview)'}
+                </h3>
+                <span className="hidden sm:inline-block px-2 py-0.5 rounded-full text-[10px] font-bold bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">
+                  Ultra HD
+                </span>
+              </div>
               <p className="text-[11px] text-slate-400 truncate font-mono">
                 {cardData.filename || 'SWM_Card.png'}
               </p>
             </div>
           </div>
 
-          <button
-            type="button"
-            onClick={handleClose}
-            className="p-1.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.1] text-slate-400 hover:text-white transition-colors cursor-pointer"
-            aria-label="ปิดหน้าต่าง"
-          >
-            <X className="w-5 h-5" />
-          </button>
+          <div className="flex items-center gap-1.5 shrink-0">
+            <button
+              type="button"
+              onClick={() => setIsZoomed(!isZoomed)}
+              className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.1] text-slate-300 hover:text-white transition-colors cursor-pointer flex items-center gap-1 text-xs"
+              title={isZoomed ? 'ย่อให้พอดีหน้าจอ' : 'ซูมดูขนาดจริง 100%'}
+            >
+              {isZoomed ? <ZoomOut className="w-4 h-4 text-cyan-400" /> : <ZoomIn className="w-4 h-4" />}
+              <span className="hidden sm:inline">{isZoomed ? 'พอดีจอ' : 'ขนาดจริง'}</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={handleClose}
+              className="p-1.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.1] text-slate-400 hover:text-white transition-colors cursor-pointer"
+              aria-label="ปิดหน้าต่าง"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
         </div>
 
         {/* Image Preview Area */}
-        <div className="flex-1 overflow-auto p-4 sm:p-6 flex items-center justify-center bg-[#070b14] relative min-h-[220px]">
-          <div className="relative group max-w-full flex items-center justify-center">
+        <div className="flex-1 overflow-auto p-3 sm:p-6 flex items-center justify-center bg-[#070b14] relative min-h-[260px]">
+          <div className={`relative group flex items-center justify-center ${isZoomed ? 'w-auto' : 'max-w-full'}`}>
             <img
               src={cardData.dataUrl}
               alt={cardData.title || 'Card Preview'}
-              className="max-h-[66vh] w-auto max-w-full object-contain rounded-xl shadow-2xl border border-amber-500/20 ring-1 ring-white/10 transition-transform duration-200"
+              onClick={() => setIsZoomed(!isZoomed)}
+              className={`${
+                isZoomed
+                  ? 'max-h-none w-auto max-w-none cursor-zoom-out'
+                  : 'max-h-[66vh] w-auto max-w-full object-contain cursor-zoom-in'
+              } rounded-xl shadow-2xl border border-amber-500/20 ring-1 ring-white/10 transition-all duration-200`}
             />
           </div>
         </div>
@@ -129,7 +152,7 @@ export default function CardPreviewModal({ isOpen: propIsOpen, onClose: propOnCl
         <div className="px-5 py-3.5 bg-slate-900/95 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 shrink-0">
           <div className="text-[11px] sm:text-xs text-slate-400 flex items-center gap-1.5">
             <ImageIcon className="w-3.5 h-3.5 text-slate-500 shrink-0" />
-            <span>คลิกขวาที่รูปเพื่อบันทึกหรือคัดลอกรูปภาพได้โดยตรง</span>
+            <span>คลิกที่รูปเพื่อซูมขนาดจริง หรือคลิกขวาที่รูปเพื่อบันทึกหรือคัดลอกรูปภาพได้โดยตรง</span>
           </div>
 
           <div className="flex items-center gap-2 w-full sm:w-auto justify-end">

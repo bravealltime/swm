@@ -320,118 +320,239 @@ async function drawRuneIcon(ctx, { x, y, size, quality, slot, set, ancient }) {
 }
 
 /**
- * Summoner passport (1200×675): identity + four stat tiles on the left, the LD5 hall on the right,
- * and along the bottom the fastest rune of each set by its own SPD substat — the number as it rolled,
- * with grinds shown separately and never summed into it (and no wearer: the card is about the runes).
+ * Summoner passport (1200×720):
+ * - Modern E-Sports aesthetic with cosmic glow, gold framing and luminous badges
+ * - Top Left: Summoner identity, level, guild, server, and Account Tier Assessment badge
+ * - Middle Left: 4 KPI stat tiles with modern glassmorphism and left accent bars
+ * - Top Right: LD5 Hall of Fame with collectible cards, clean name formatting (no collab truncation), and speed indicators
+ * - Bottom: Fastest Rune Showcase by set with prominent rolled SPD, grinded totals, slot/grade info, and runners-up
+ * - Footer: Perfectly spaced watermark with zero frame collision
  */
 export async function exportProfileCard({ wizard, stats = {}, topLd5 = [], heroes = [], speedRuneSets = [], preview = true }) {
   await ensureFonts();
-  const W = 1200, H = 675;
+  const W = 1200, H = 720;
   const canvas = document.createElement('canvas');
   canvas.width = W; canvas.height = H;
   const ctx = canvas.getContext('2d');
-  drawBackdrop(ctx, W, H);
-  drawGoldFrame(ctx, W, H);
+
+  // 1. Celestial Backdrop & Gold Beveled Frame
+  drawBackdrop(ctx, W, H, { glow: 'rgba(245, 197, 66, 0.18)', glowAt: [0.35, 0.15], tint: '#0d1527' });
+  drawGoldFrame(ctx, W, H, 16);
 
   const name = wizard?.name || 'Summoner';
   const ld = topLd5.slice(0, 8);
-  // The portrait is the summoner's chosen representative, then the fastest hero, then an LD5
   const hero = wizard?.repMonster?.avatarUrl ? wizard.repMonster : heroes[0] || ld[0] || null;
 
-  // header
-  text(ctx, 'SUMMONERS WAR • SUMMONER PASSPORT', 60, 66, { font: `700 13px ${SANS}`, color: '#e9c46a', spacing: 3 });
-  text(ctx, `SWM • swm-blue.vercel.app   ${new Date().toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric' })}`, W - 60, 66, { font: `500 12px ${THAI}`, color: 'rgba(226, 232, 240, 0.6)', align: 'right' });
+  // 2. Top Header Bar
+  const dateStr = new Date().toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric' });
+  text(ctx, 'SUMMONERS WAR • OFFICIAL SUMMONER PASSPORT', 48, 54, { font: `700 13px ${SANS}`, color: '#e9c46a', spacing: 2 });
+  text(ctx, `SWM • swm-blue.vercel.app   ${dateStr}`, W - 48, 54, { font: `500 12px ${THAI}`, color: 'rgba(226, 232, 240, 0.65)', align: 'right' });
   ctx.strokeStyle = 'rgba(233, 196, 106, 0.25)';
   ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.moveTo(60, 80); ctx.lineTo(W - 60, 80); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(48, 68); ctx.lineTo(W - 48, 68); ctx.stroke();
 
-  // identity
-  await drawPortrait(ctx, { url: hero?.avatarUrl, cx: 128, cy: 172, r: 62, element: hero?.element, label: name });
-  text(ctx, name, 218, 160, { font: `800 44px ${SANS}`, color: '#ffffff', maxWidth: 340, shadow: 'rgba(245, 197, 66, 0.45)' });
-  const sub = [`Lv.${wizard?.level || '-'}`, wizard?.guild ? `กิลด์ ${wizard.guild}` : 'ไม่มีกิลด์', wizard?.country ? wizard.country : ''].filter(Boolean).join('  •  ');
-  text(ctx, sub, 218, 190, { font: `500 16px ${THAI}`, color: '#cbd5e1', maxWidth: 340 });
-  let px = 218;
-  for (const [label, colour] of [[`มอนสเตอร์ ${num(stats.totalUnits)}`, '#93c5fd'], [`nat5 ${num(stats.nat5Count)}`, '#fbbf24'], [`อาร์ติแฟกต์ ${num(stats.totalArtifacts)}`, '#5eead4']]) {
-    if (!/\s0$/.test(label)) px += pill(ctx, px, 206, label, { color: colour, bg: 'rgba(255,255,255,0.05)' }) + 8;
+  // 3. Top Left: Summoner Identity Card
+  const px = 46, py = 82, pw = 490, ph = 138;
+  drawPanel(ctx, px, py, pw, ph, { fill: 'rgba(12, 18, 34, 0.75)', stroke: 'rgba(233, 196, 106, 0.32)', radius: 16 });
+
+  // Representative Monster Portrait
+  await drawPortrait(ctx, { url: hero?.avatarUrl, cx: px + 64, cy: py + 69, r: 50, element: hero?.element, label: name });
+
+  // Summoner Name
+  text(ctx, name, px + 130, py + 38, { font: `800 32px ${SANS}`, color: '#ffffff', maxWidth: 340, shadow: 'rgba(245, 197, 66, 0.45)' });
+
+  // Subtitle: Guild & Server
+  const sub = [
+    wizard?.level ? `Lv.${wizard.level}` : 'Lv.100',
+    wizard?.guild ? `กิลด์ ${wizard.guild}` : 'อิสระ',
+    wizard?.country === 'TH' ? 'Asia Server (TH)' : (wizard?.country || 'Global Server')
+  ].filter(Boolean).join('  •  ');
+  text(ctx, sub, px + 130, py + 66, { font: `600 13px ${THAI}`, color: '#cbd5e1', maxWidth: 340 });
+
+  // Account Assessment Tier Calculation
+  const bestSpd = Math.max(...speedRuneSets.map((s) => s.best?.spdSub || 0), 0);
+  const swiftBest = speedRuneSets.find((s) => s.set === 'Swift')?.best?.spdSub || 0;
+  const quadCount = stats.quadSpdCount || 0;
+  let tierGrade = 'CONQUEROR C1';
+  let tierColor = '#38bdf8';
+  if (bestSpd >= 27 || swiftBest >= 25 || quadCount >= 8) {
+    tierGrade = 'GUARDIAN G3 (LEGEND)';
+    tierColor = '#fbbf24';
+  } else if (bestSpd >= 24 || swiftBest >= 22 || quadCount >= 5) {
+    tierGrade = 'GUARDIAN G1-G2';
+    tierColor = '#f59e0b';
+  } else if (bestSpd >= 20 || swiftBest >= 19 || quadCount >= 2) {
+    tierGrade = 'CONQUEROR C2-C3';
+    tierColor = '#a78bfa';
   }
 
-  // stat tiles
+  // Tier Badge & Account Counter Pills
+  let pillX = px + 130;
+  pillX += pill(ctx, pillX, py + 86, `🏆 ${tierGrade}`, { color: tierColor, bg: `${tierColor}18`, font: `800 11px ${SANS}`, padX: 10, h: 26 }) + 8;
+  if (stats.totalUnits) {
+    pillX += pill(ctx, pillX, py + 86, `มอน ${num(stats.totalUnits)}`, { color: '#93c5fd', bg: 'rgba(255,255,255,0.05)', font: `700 11px ${THAI}`, padX: 8, h: 26 }) + 6;
+  }
+  if (stats.nat5Count && pillX < px + pw - 70) {
+    pill(ctx, pillX, py + 86, `nat5 ${num(stats.nat5Count)}`, { color: '#fbbf24', bg: 'rgba(255,255,255,0.05)', font: `700 11px ${THAI}`, padX: 8, h: 26 });
+  }
+
+  // 4. Middle Left: 4 Modern Glassmorphic KPI Tiles
   const tiles = [
-    { label: 'มอนสเตอร์ 6 ดาว', val: `${num(stats.total6Star)} ตัว`, color: '#60a5fa' },
-    { label: 'แสง-มืด 5★ แท้', val: `${num(stats.ld5Count)} ตัว`, color: '#c084fc' },
-    { label: 'ประสิทธิภาพรูนเฉลี่ย', val: stats.avgEff ? `${stats.avgEff}%` : '-', color: '#34d399' },
-    { label: 'รูนซับ SPD ≥ +20 (ไม่รวมขัด)', val: `${num(stats.quadSpdCount)} ใบ`, color: '#38bdf8' },
+    { label: '⭐ มอนสเตอร์ 6 ดาว', val: `${num(stats.total6Star)}`, unit: 'ตัว', color: '#60a5fa', sub: 'พร้อมรบเต็มพิกัด' },
+    { label: '✦ แสง-มืด 5★ แท้', val: `${num(stats.ld5Count)}`, unit: 'ตัว', color: '#c084fc', sub: 'มอนสเตอร์ระดับตำนาน' },
+    { label: '⚡ ประสิทธิภาพรูนเฉลี่ย', val: stats.avgEff ? `${stats.avgEff}%` : '-', unit: '', color: '#34d399', sub: 'คุณภาพรูนทั้งไอดี' },
+    { label: '🚀 รูน Quad SPD (≥+20)', val: `${num(stats.quadSpdCount)}`, unit: 'ใบ', color: '#38bdf8', sub: 'สปีดแท้ไม่รวมขัด' },
   ];
+  const kw = 237, kh = 86, kGapX = 16, kGapY = 12;
   tiles.forEach((t, i) => {
-    const x = 60 + (i % 2) * 252, y = 252 + Math.floor(i / 2) * 92;
-    drawPanel(ctx, x, y, 240, 82, { radius: 12 });
+    const kx = px + (i % 2) * (kw + kGapX);
+    const ky = 230 + Math.floor(i / 2) * (kh + kGapY);
+    drawPanel(ctx, kx, ky, kw, kh, { fill: 'rgba(12, 18, 34, 0.75)', stroke: `${t.color}35`, radius: 14 });
     ctx.fillStyle = t.color;
-    roundRect(ctx, x, y + 12, 4, 58, 2); ctx.fill();
-    text(ctx, t.label, x + 20, y + 30, { font: `600 12px ${THAI}`, color: '#94a3b8', maxWidth: 210 });
-    text(ctx, t.val, x + 20, y + 64, { font: `800 28px ${SANS}`, color: t.color, shadow: `${t.color}55` });
+    roundRect(ctx, kx + 1, ky + 12, 4, kh - 24, 2); ctx.fill();
+
+    text(ctx, t.label, kx + 16, ky + 25, { font: `700 12px ${THAI}`, color: '#94a3b8', maxWidth: kw - 24 });
+    text(ctx, t.val, kx + 16, ky + 58, { font: `800 28px ${SANS}`, color: t.color, shadow: `${t.color}55` });
+    if (t.unit) {
+      const valW = ctx.measureText(t.val).width;
+      text(ctx, t.unit, kx + 16 + valW + 6, ky + 58, { font: `600 13px ${THAI}`, color: '#cbd5e1' });
+    }
+    text(ctx, t.sub, kx + 16, ky + 74, { font: `500 10px ${THAI}`, color: '#64748b', maxWidth: kw - 24 });
   });
 
-  // LD5 hall
-  const hx = 600, hy = 100, hw = 540, hh = 340;
-  drawPanel(ctx, hx, hy, hw, hh, { titleBar: 48 });
+  // 5. Top Right: LD5 Hall of Fame
+  const hx = 552, hy = 82, hw = W - 46 - 552, hh = 332;
+  drawPanel(ctx, hx, hy, hw, hh, { fill: 'rgba(12, 18, 34, 0.75)', stroke: 'rgba(233, 196, 106, 0.32)', radius: 16, titleBar: 46 });
   const hallTitle = ld.length ? 'ทำเนียบมอนสเตอร์แสง-มืด 5★' : 'มอนสเตอร์เด่นในกล่อง';
-  text(ctx, `✦ ${hallTitle}`, hx + 22, hy + 31, { font: `700 18px ${THAI}`, color: '#f5d78a' });
+  text(ctx, `✦ ${hallTitle}`, hx + 20, hy + 29, { font: `700 17px ${THAI}`, color: '#f5d78a' });
   const hallCount = ld.length ? topLd5.length : heroes.length;
-  pill(ctx, hx + hw - 22 - 84, hy + 12, `${hallCount} ตัว`, { color: '#f5d78a', padX: 14 });
+  pill(ctx, hx + hw - 20 - 92, hy + 10, `สะสม ${hallCount} ตัว`, { color: '#f5d78a', bg: 'rgba(245, 197, 66, 0.12)', font: `700 12px ${THAI}`, padX: 12, h: 26 });
+
   const cells = ld.length ? ld : heroes.slice(0, 8);
-  const cw = 122, ch = 134, gx = (hw - cw * 4) / 5;
+  const cw = 132, ch = 126, gx = (hw - 32 - cw * 4) / 3;
   for (let i = 0; i < Math.min(cells.length, 8); i++) {
     const m = cells[i];
-    const cx = hx + gx + (i % 4) * (cw + gx), cy = hy + 60 + Math.floor(i / 4) * (ch + 8);
-    drawPanel(ctx, cx, cy, cw, ch, { fill: 'rgba(255,255,255,0.03)', stroke: `${ELEMENT_COLOR[m.element] || '#e9c46a'}40`, radius: 12 });
-    await drawPortrait(ctx, { url: m.avatarUrl, cx: cx + cw / 2, cy: cy + 46, r: 34, element: m.element, label: m.name });
-    text(ctx, m.name, cx + cw / 2, cy + 100, { font: `700 12px ${SANS}`, color: '#ffffff', align: 'center', maxWidth: cw - 12 });
-    drawStars(ctx, cx + 10, cy + 118, 5, 4, '#fbbf24', 2);
-    if (m.spd) text(ctx, `SPD ${m.spd}`, cx + cw - 9, cy + 122, { font: `700 10px ${SANS}`, color: '#7dd3fc', align: 'right' });
-  }
-  if (topLd5.length > 8) text(ctx, `+ อีก ${topLd5.length - 8} ตัว`, hx + hw - 22, hy + hh - 12, { font: `600 12px ${THAI}`, color: '#94a3b8', align: 'right' });
-  if (!cells.length) text(ctx, 'ยังไม่มีมอนสเตอร์แสง-มืด 5 ดาวแท้ในไอดีนี้ — สู้ต่อไป!', hx + hw / 2, hy + hh / 2 + 10, { font: `500 16px ${THAI}`, color: '#94a3b8', align: 'center' });
+    const col = i % 4, row = Math.floor(i / 4);
+    const cx = hx + 16 + col * (cw + gx);
+    const cy = hy + 56 + row * (ch + 10);
+    const isLight = m.element === 'light';
+    const isDark = m.element === 'dark';
+    const cardFill = isLight ? 'rgba(253, 230, 138, 0.08)' : isDark ? 'rgba(192, 132, 252, 0.09)' : 'rgba(255,255,255,0.035)';
+    const cardStroke = isLight ? 'rgba(253, 230, 138, 0.45)' : isDark ? 'rgba(192, 132, 252, 0.45)' : `${ELEMENT_COLOR[m.element] || '#e9c46a'}45`;
 
-  // fastest rune of each set: the SPD substat as rolled, grind shown separately, the set's runners-up under it
-  const sx = 60, sy = 446, sw = W - 120, sh = 200;
-  drawPanel(ctx, sx, sy, sw, sh, { titleBar: 40 });
-  text(ctx, '⚡ รูนสปีดสูงสุดของแต่ละเซ็ต', sx + 22, sy + 27, { font: `700 16px ${THAI}`, color: '#7dd3fc' });
-  text(ctx, 'ค่าซับ SPD ตามที่ออก · ขัดแสดงแยก ไม่บวกรวม · ไม่รวมสปีดตัวมอน', sx + sw - 22, sy + 27, { font: `500 12px ${THAI}`, color: '#94a3b8', align: 'right' });
+    drawPanel(ctx, cx, cy, cw, ch, { fill: cardFill, stroke: cardStroke, radius: 12 });
+    await drawPortrait(ctx, { url: m.avatarUrl, cx: cx + cw / 2, cy: cy + 42, r: 30, element: m.element, label: m.name });
+
+    // Clean collab monster name (e.g. "Ariana / Pure Vanilla Cookie" -> "Ariana") to prevent truncation
+    const rawName = m.name || 'Monster';
+    const displayName = rawName.includes(' / ') ? rawName.split(' / ')[0].trim() : rawName;
+    text(ctx, displayName, cx + cw / 2, cy + 90, { font: `700 12px ${SANS}`, color: '#ffffff', align: 'center', maxWidth: cw - 12 });
+
+    drawStars(ctx, cx + 8, cy + 108, 5, 3.2, '#fbbf24', 1.5);
+    if (m.spd) {
+      text(ctx, `⚡${m.spd}`, cx + cw - 8, cy + 112, { font: `700 11px ${SANS}`, color: '#7dd3fc', align: 'right' });
+    }
+  }
+
+  if (topLd5.length > 8) {
+    text(ctx, `+ อีก ${topLd5.length - 8} ตัวในคลัง`, hx + hw - 20, hy + hh - 10, { font: `600 12px ${THAI}`, color: '#94a3b8', align: 'right' });
+  }
+  if (!cells.length) {
+    text(ctx, 'ยังไม่มีมอนสเตอร์แสง-มืด 5 ดาวแท้ในไอดีนี้ — สู้ต่อไป!', hx + hw / 2, hy + hh / 2 + 10, { font: `500 15px ${THAI}`, color: '#94a3b8', align: 'center' });
+  }
+
+  // 6. Bottom Section: Fastest Speed Runes Showcase
+  const sx = 46, sy = 428, sw = W - 92, sh = 244;
+  drawPanel(ctx, sx, sy, sw, sh, { fill: 'rgba(12, 18, 34, 0.75)', stroke: 'rgba(233, 196, 106, 0.32)', radius: 16, titleBar: 42 });
+  text(ctx, '⚡ รูนสปีดสูงสุดของแต่ละเซ็ต (Fastest Rune by Set)', sx + 20, sy + 27, { font: `700 16px ${THAI}`, color: '#7dd3fc' });
+  text(ctx, 'ค่าซับ SPD แท้ตามที่สุ่มได้ (ไม่รวมขัด)  •  ขัดแสดงแยก  •  ไม่รวมสปีดตัวมอน', sx + sw - 20, sy + 27, { font: `500 12px ${THAI}`, color: '#94a3b8', align: 'right' });
+
   const sets = speedRuneSets.slice(0, 6);
   if (!sets.length) {
-    text(ctx, 'ยังไม่มีข้อมูลรูน — นำเข้าไฟล์ SWEX ใหม่เพื่อให้การ์ดแสดงรูนสปีด', sx + sw / 2, sy + 112, { font: `500 14px ${THAI}`, color: '#64748b', align: 'center' });
+    text(ctx, 'ยังไม่มีข้อมูลรูน — นำเข้าไฟล์ SWEX ใหม่เพื่อให้การ์ดแสดงรูนสปีด', sx + sw / 2, sy + 130, { font: `500 14px ${THAI}`, color: '#64748b', align: 'center' });
   }
-  const rcGap = 10, rcW = (sw - 44 - rcGap * 5) / 6, rcY = sy + 48, rcH = sh - 60;
-  const rankColour = ['#fbbf24', '#e2e8f0', '#d97706'];
+
+  const rcGap = 12;
+  const rcW = (sw - 36 - rcGap * 5) / 6;
+  const rcY = sy + 50, rcH = sh - 60;
+  const rankColours = ['#fbbf24', '#e2e8f0', '#d97706'];
+
   for (let i = 0; i < sets.length; i++) {
     const g = sets[i];
     const r = g.best;
-    const x = sx + 22 + i * (rcW + rcGap);
+    const x = sx + 18 + i * (rcW + rcGap);
+    const isTop1 = i === 0;
     const qColour = RUNE_QUALITY_COLOUR[String(r.quality || '').toLowerCase()] || '#94a3b8';
-    drawPanel(ctx, x, rcY, rcW, rcH, { fill: i === 0 ? 'rgba(251, 191, 36, 0.06)' : 'rgba(255,255,255,0.03)', stroke: i === 0 ? 'rgba(251, 191, 36, 0.45)' : `${qColour}40`, radius: 12 });
-    // rank + set name across the top
-    ctx.fillStyle = rankColour[i] || 'rgba(148, 163, 184, 0.5)';
-    ctx.beginPath(); ctx.arc(x + 14, rcY + 14, 9, 0, Math.PI * 2); ctx.fill();
-    text(ctx, String(i + 1), x + 14, rcY + 15, { font: `800 10px ${SANS}`, color: '#0b0f1f', align: 'center', baseline: 'middle' });
-    text(ctx, g.set, x + 30, rcY + 18, { font: `800 13px ${SANS}`, color: i === 0 ? '#fde68a' : '#ffffff', maxWidth: rcW - 76 });
-    text(ctx, `${g.count} ใบ`, x + rcW - 12, rcY + 18, { font: `600 10px ${THAI}`, color: '#94a3b8', align: 'right' });
-    // icon on the left, the rolled SPD sub big on the right
-    await drawRuneIcon(ctx, { x: x + 12, y: rcY + 30, size: 46, quality: r.quality, slot: r.slot, set: r.set, ancient: r.ancient });
-    text(ctx, `+${r.spdSub}`, x + rcW - 12, rcY + 64, { font: `800 32px ${SANS}`, color: i === 0 ? '#fde68a' : '#ffffff', align: 'right', shadow: i === 0 ? 'rgba(251, 191, 36, 0.5)' : undefined });
-    text(ctx, 'SPD ซับ', x + rcW - 12, rcY + 79, { font: `600 9px ${THAI}`, color: '#7dd3fc', align: 'right', spacing: 0.5 });
-    // rune identity, then grind / main SPD kept apart from the rolled value
-    text(ctx, `ช่อง ${r.slot} · ${r.stars}★ +${r.level}${r.ancient ? ' · Ancient' : ''}`, x + 12, rcY + 99, { font: `600 11px ${THAI}`, color: '#e2e8f0', maxWidth: rcW - 24 });
-    const extras = [];
-    if (r.spdGrind > 0) extras.push(`ขัด +${r.spdGrind}`);
-    if (r.mainSpd > 0) extras.push(`เมน SPD ${r.mainSpd}`);
-    if (r.innateSpd > 0) extras.push(`ติดตัว +${r.innateSpd}`);
-    text(ctx, extras.length ? extras.join(' · ') : 'ยังไม่ขัด', x + 12, rcY + 114, { font: `500 10px ${THAI}`, color: extras.length ? '#a7f3d0' : '#64748b', maxWidth: rcW - 24 });
-    // the set's next-best rolls, so one lucky rune does not stand for the whole set
-    const next = g.runnersUp.length ? `รองลงมา ${g.runnersUp.map((v) => `+${v}`).join(', ')}` : 'มีใบเดียวที่ติดซับ SPD';
-    text(ctx, next, x + 12, rcY + rcH - 9, { font: `500 10px ${THAI}`, color: '#94a3b8', maxWidth: rcW - 24 });
+
+    // Card background
+    drawPanel(ctx, x, rcY, rcW, rcH, {
+      fill: isTop1 ? 'rgba(251, 191, 36, 0.08)' : 'rgba(255, 255, 255, 0.035)',
+      stroke: isTop1 ? 'rgba(251, 191, 36, 0.55)' : `${qColour}45`,
+      radius: 12
+    });
+
+    // 1. Top row: Rank medal + Set Name + Count
+    const medalColour = rankColours[i] || '#64748b';
+    ctx.fillStyle = medalColour;
+    ctx.beginPath(); ctx.arc(x + 16, rcY + 18, 9, 0, Math.PI * 2); ctx.fill();
+    text(ctx, String(i + 1), x + 16, rcY + 19, { font: `800 10px ${SANS}`, color: '#0b0f1f', align: 'center', baseline: 'middle' });
+    text(ctx, g.set, x + 32, rcY + 22, { font: `800 13px ${SANS}`, color: isTop1 ? '#fde68a' : '#ffffff', maxWidth: rcW - 74 });
+    text(ctx, `${g.count} ใบ`, x + rcW - 12, rcY + 22, { font: `600 10px ${THAI}`, color: '#94a3b8', align: 'right' });
+
+    // Separator line
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
+    ctx.beginPath(); ctx.moveTo(x + 10, rcY + 34); ctx.lineTo(x + rcW - 10, rcY + 34); ctx.stroke();
+
+    // 2. Middle Row: Rune Icon on left, Big Rolled SPD on right
+    await drawRuneIcon(ctx, { x: x + 10, y: rcY + 44, size: 50, quality: r.quality, slot: r.slot, set: r.set, ancient: r.ancient });
+
+    text(ctx, `+${r.spdSub}`, x + rcW - 12, rcY + 76, {
+      font: `800 32px ${SANS}`,
+      color: isTop1 ? '#fde68a' : '#ffffff',
+      align: 'right',
+      shadow: isTop1 ? 'rgba(251, 191, 36, 0.6)' : 'rgba(56, 189, 248, 0.35)'
+    });
+    text(ctx, 'SPD ซับแท้', x + rcW - 12, rcY + 92, {
+      font: `600 10px ${THAI}`,
+      color: '#7dd3fc',
+      align: 'right'
+    });
+
+    // 3. Slot & Grade info
+    const slotText = `ช่อง ${r.slot} • ${r.stars}★ +${r.level}${r.ancient ? ' • Anc' : ''}`;
+    text(ctx, slotText, x + 12, rcY + 118, { font: `600 11px ${THAI}`, color: '#e2e8f0', maxWidth: rcW - 24 });
+
+    // 4. Grind Status
+    if (r.spdGrind > 0) {
+      const totalSpd = r.spdSub + r.spdGrind;
+      text(ctx, `ขัด +${r.spdGrind} (รวม +${totalSpd})`, x + 12, rcY + 136, {
+        font: `700 11px ${THAI}`,
+        color: '#34d399',
+        maxWidth: rcW - 24
+      });
+    } else {
+      text(ctx, 'ยังไม่ขัดหินสปีด', x + 12, rcY + 136, {
+        font: `500 11px ${THAI}`,
+        color: '#64748b',
+        maxWidth: rcW - 24
+      });
+    }
+
+    // 5. Runners-up at bottom
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+    ctx.beginPath(); ctx.moveTo(x + 10, rcY + 150); ctx.lineTo(x + rcW - 10, rcY + 150); ctx.stroke();
+
+    const next = g.runnersUp.length ? `รอง: ${g.runnersUp.map((v) => `+${v}`).join(', ')}` : 'มีใบเดียวที่ติดซับ SPD';
+    text(ctx, next, x + 12, rcY + 168, {
+      font: `500 10px ${THAI}`,
+      color: '#94a3b8',
+      maxWidth: rcW - 24
+    });
   }
 
-  text(ctx, 'สร้างจากกล่องจริงของผู้เล่นด้วย SWM (Summoners War Master)', W / 2, H - 22, { font: `500 11px ${THAI}`, color: 'rgba(148, 163, 184, 0.7)', align: 'center' });
+  // 7. Footer Watermark (Properly spaced above frame border with zero collision)
+  text(ctx, 'สร้างจากกล่องจริงของผู้เล่นด้วย SWM (Summoners War Master) • สแกนและวิเคราะห์จากไฟล์ SWEX ประจำไอดี', W / 2, 690, { font: `500 11px ${THAI}`, color: 'rgba(148, 163, 184, 0.75)', align: 'center' });
+
   const filename = `SWM_Passport_${name.replace(/[^a-zA-Z0-9]/g, '_')}.png`;
   const title = `พาสปอร์ตผู้เรียกอสูร: ${wizard?.name || 'Summoner'}`;
   return handleCardExport({ canvas, filename, title, preview });
