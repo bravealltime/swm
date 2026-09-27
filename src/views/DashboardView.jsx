@@ -767,20 +767,47 @@ export default function DashboardView({ onNavigate }) {
 
                 <button
                   type="button"
+                  onClick={() => onNavigate('my-box', { tab: 'grind-tracker' })}
+                  className="px-3 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/25 text-amber-300 text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                  <span>✨ สแกนหินขัด/แปลง</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => onNavigate('my-box', { tab: 'fusion-devilmon' })}
+                  className="px-3 py-1.5 rounded-xl bg-teal-500/10 hover:bg-teal-500/20 border border-teal-500/25 text-teal-300 text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5"
+                >
+                  <Zap className="w-3.5 h-3.5 text-teal-400" />
+                  <span>🧬 ผสมมอน & เดวิลม่อน</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => onNavigate('rta-replays')}
+                  className="px-3 py-1.5 rounded-xl bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/25 text-purple-300 text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5"
+                >
+                  <Trophy className="w-3.5 h-3.5 text-purple-400" />
+                  <span>🎬 รีเพลย์ RTA G3</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => onNavigate('siege-battles')}
+                  className="px-3 py-1.5 rounded-xl bg-sky-500/10 hover:bg-sky-500/20 border border-sky-500/25 text-sky-300 text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5"
+                >
+                  <Shield className="w-3.5 h-3.5 text-sky-400" />
+                  <span>🏰 เมต้า Siege สด</span>
+                </button>
+
+                <button
+                  type="button"
                   onClick={() => onNavigate('my-box', { tab: 'pokedex' })}
                   className="px-3 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/25 text-amber-300 text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5"
                 >
                   <Trophy className="w-3.5 h-3.5 text-amber-400" />
                   <span>ตู้สะสม Nat 5 & LD5</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => onNavigate('my-box', { subItem: 'artifacts' })}
-                  className="px-3 py-1.5 rounded-xl bg-teal-500/10 hover:bg-teal-500/20 border border-teal-500/25 text-teal-300 text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5"
-                >
-                  <Layers className="w-3.5 h-3.5 text-teal-400" />
-                  <span>ค้นหาอาร์ติแฟกต์</span>
                 </button>
 
                 <button

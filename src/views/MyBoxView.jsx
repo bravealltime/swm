@@ -29,6 +29,8 @@ import AccountSuiteHeader from '../components/AccountSuiteHeader';
 const PokedexCollection = lazy(() => import('./mybox/PokedexCollection'));
 const ArtifactSearchEngine = lazy(() => import('./mybox/ArtifactSearchEngine'));
 const RuneEfficiencyAndQuads = lazy(() => import('./mybox/RuneEfficiencyAndQuads'));
+const RuneGrindTracker = lazy(() => import('../components/RuneGrindTracker'));
+const FusionDevilmonPlanner = lazy(() => import('../components/FusionDevilmonPlanner'));
 const SiegeDefenseBuilder = lazy(() => import('./mybox/SiegeDefenseBuilder'));
 const TabLoading = () => <div className="py-16 text-center text-xs text-slate-500">กำลังโหลด…</div>;
 
@@ -39,7 +41,9 @@ const TABS = [
   { id: 'box', label: 'มอนสเตอร์', icon: Package, color: 'bg-cyan-600 shadow-cyan-600/25' },
   { id: 'pokedex', label: 'ตู้สะสม Nat 5 & ทำเนียบ LD5', icon: Trophy, color: 'bg-amber-600 shadow-amber-600/25' },
   { id: 'artifacts', label: 'ค้นหาอาร์ติแฟกต์', icon: Layers, color: 'bg-teal-600 shadow-teal-600/25' },
-  { id: 'efficiency', label: 'สแกนหินขัด & หินแปลง (Grind/Gem)', icon: Sparkles, color: 'bg-violet-600 shadow-violet-600/25' },
+  { id: 'grind-tracker', label: 'สแกนหิน Grind/Gem', icon: Gem, color: 'bg-amber-600 shadow-amber-600/25' },
+  { id: 'fusion-devilmon', label: 'ผสมมอน & เดวิลม่อน', icon: Zap, color: 'bg-teal-600 shadow-teal-600/25' },
+  { id: 'efficiency', label: 'ประสิทธิภาพรูน & Quads', icon: Sparkles, color: 'bg-violet-600 shadow-violet-600/25' },
   { id: 'defense', label: 'สร้างทีมรับ Siege', icon: Castle, color: 'bg-indigo-600 shadow-indigo-600/25' },
   { id: 'teams', label: 'ทีมที่สร้างได้', icon: Shield, color: 'bg-blue-600 shadow-blue-600/25' },
   { id: 'meta', label: 'เมต้า Guardian', icon: Flame, color: 'bg-rose-600 shadow-rose-600/25' },
@@ -378,6 +382,8 @@ export default function MyBoxView({ onNavigate, tab: initialTab, subItem }) {
       {tab === 'box' && (box ? <BoxGrid box={box} onNavigate={onNavigate} onOpenUnit={setOpenUnit} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} onLive={liveAllowed ? startLive : null} />)}
       {tab === 'pokedex' && <Suspense fallback={<TabLoading />}><PokedexCollection box={box} onNavigate={onNavigate} onLoadDemo={handleLoadDemo} /></Suspense>}
       {tab === 'artifacts' && <Suspense fallback={<TabLoading />}><ArtifactSearchEngine box={box} onNavigate={onNavigate} /></Suspense>}
+      {tab === 'grind-tracker' && (box ? <Suspense fallback={<TabLoading />}><RuneGrindTracker box={box} /></Suspense> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} onLive={liveAllowed ? startLive : null} />)}
+      {tab === 'fusion-devilmon' && <Suspense fallback={<TabLoading />}><FusionDevilmonPlanner box={box} onNavigate={onNavigate} /></Suspense>}
       {tab === 'efficiency' && (box ? <Suspense fallback={<TabLoading />}><RuneEfficiencyAndQuads box={box} /></Suspense> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} onLive={liveAllowed ? startLive : null} />)}
       {tab === 'defense' && (box ? <Suspense fallback={<TabLoading />}><SiegeDefenseBuilder box={box} onNavigate={onNavigate} /></Suspense> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} onLive={liveAllowed ? startLive : null} />)}
       {tab === 'teams' && <Teams owned={owned} mdc={mdc} onNavigate={onNavigate} />}

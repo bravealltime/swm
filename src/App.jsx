@@ -44,6 +44,8 @@ const VIEWS = {
   'live-farm-monitor': lazy(() => import('./views/LiveFarmingMonitorView')),
   'ai-account-audit': lazy(() => import('./views/AiAccountAuditView')),
   rta: lazy(() => import('./views/RtaAnalyticsView')),
+  'rta-replays': lazy(() => import('./views/RtaReplayTheaterView')),
+  'siege-battles': lazy(() => import('./views/SiegeBattlesView')),
   'summon-simulator': lazy(() => import('./views/SummonSimulatorView')),
   'siege-planner': lazy(() => import('./views/SiegePlannerView')),
   'guild-war-room': lazy(() => import('./views/GuildWarRoomView')),
@@ -66,7 +68,7 @@ function ViewLoading() {
   );
 }
 
-const RTA_VIEWS = ['rta', 'player-tracker', 'draft-explorer', 'rta-synergies', 'meta-dashboard', 'guardian'];
+const RTA_VIEWS = ['rta', 'player-tracker', 'draft-explorer', 'rta-synergies', 'meta-dashboard', 'guardian', 'rta-replays'];
 
 function AppContent() {
   const [route, setRoute] = useState(() => parseLocation());

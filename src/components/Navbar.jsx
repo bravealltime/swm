@@ -31,8 +31,8 @@ import { useAuth } from '../contexts/AuthContext';
 const NAV_ITEMS = [
   { id: 'dashboard', label: 'หน้าแรก', icon: Home },
   { id: 'my-box', label: 'กล่องไอดี & ฟาร์มสด', icon: Sparkles, group: ['my-box', 'live-farm-monitor', 'ai-account-audit'], badge: 'ใหม่' },
-  { id: '3mdc', label: '3MDC Siege', icon: Shield, group: ['3mdc', 'where2use', '3mdc-stats'] },
-  { id: 'rta', label: 'RTA Analytics', icon: Trophy, group: ['rta', 'meta-dashboard', 'rta-synergies', 'guardian'] },
+  { id: '3mdc', label: '3MDC Siege', icon: Shield, group: ['3mdc', 'where2use', '3mdc-stats', 'siege-battles'] },
+  { id: 'rta', label: 'RTA Analytics', icon: Trophy, group: ['rta', 'meta-dashboard', 'rta-synergies', 'guardian', 'rta-replays'] },
   { id: 'player-tracker', label: 'ค้นหาผู้เล่น', icon: Search },
   { id: 'draft-explorer', label: 'จำลองดราฟต์ 5v5', icon: Swords },
 ];
@@ -41,6 +41,8 @@ const TOOL_ITEMS = [
   { id: 'ai-account-audit', label: '🤖 AI วินิจฉัยสุขภาพไอดี (Health Check)', desc: 'ตรวจสปีด Swift/Violent & จัดอันดับ RTA', icon: Sparkles },
   { id: 'live-farm-monitor', label: '📡 จอตรวจจับการฟาร์มสด (Live Monitor)', desc: 'เช็คดรอปรูน Abyss สด พร้อม Keep/Sell Advisor', icon: Radio },
   { id: 'my-box', label: 'กล่องมอนสเตอร์ของฉัน (My Box)', desc: 'นำเข้า SWEX → ทีมที่สร้างได้', icon: Package },
+  { id: 'rta-replays', label: '🎬 โรงหนังรีเพลย์ RTA (SWRT Replays)', desc: 'ดราฟต์ 60 แมตช์ G3/Legend & วิเคราะห์ชนะ', icon: Trophy },
+  { id: 'siege-battles', label: '🏰 ศูนย์กลางสงคราม Siege (Global Hub)', desc: 'แมตช์สด 4 เซิร์ฟเวอร์ & สถิติชนะ 90%+', icon: Shield },
   { id: 'guardian', label: 'อันดับ Guardian คนไทย & เมต้าจริง', desc: 'จากสถิติการแข่งขันระดับ Guardian จริง', icon: Trophy },
   { id: 'arena', label: 'ทีมบุก & ตั้งรับ Arena (AO/AD)', desc: 'สูตรบุกเร็ว 15 วิ & ถ่วงเวลา Rush Hour', icon: Swords },
   { id: 'artifact', label: 'ดาเมจเสริมอาร์ติแฟกต์', desc: 'True Damage Optimizer', icon: Sparkles },

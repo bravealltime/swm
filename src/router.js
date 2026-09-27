@@ -17,6 +17,12 @@ const VIEW_ALIASES = {
   'farm-monitor': 'live-farm-monitor',
   'account-audit': 'ai-account-audit',
   audit: 'ai-account-audit',
+  replays: 'rta-replays',
+  'swrt-replays': 'rta-replays',
+  'replay-theater': 'rta-replays',
+  'siege-hub': 'siege-battles',
+  'siege-meta': 'siege-battles',
+  'siege-matchups': 'siege-battles',
 };
 
 export const VIEW_TITLES = {
@@ -30,9 +36,11 @@ export const VIEW_TITLES = {
   'siege-calculator': 'คำนวณคะแนน Siege',
   'siege-tournament': 'ทัวร์นาเมนต์ Siege',
   'siege-planner': 'จัด 10 ทีมบุก Siege (Deck Builder)',
+  'siege-battles': '🏰 ศูนย์กลางสงคราม Siege (Global Siege Hub)',
   'player-tracker': 'ค้นหาสถิติผู้เล่น',
   'draft-explorer': 'จำลองดราฟต์ 5v5',
   'rta-synergies': 'คอมโบ RTA',
+  'rta-replays': '🎬 โรงหนังรีเพลย์ RTA (SWRT Pro Theater)',
   'meta-dashboard': 'เมต้าแดชบอร์ด',
   guardian: 'อันดับ Guardian & เมต้าจากรีเพลย์จริง',
   'tier-list-maker': 'สร้าง Tier List',
