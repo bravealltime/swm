@@ -183,53 +183,53 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
       </div>
 
       {/* Main Tabs Navigation */}
-      <div role="tablist" className="flex flex-wrap items-center gap-1.5 p-1.5 rounded-2xl bg-[#0a0f19]/80 border border-white/[0.08] backdrop-blur-xl shadow-lg">
+      <div role="tablist" className="flex items-center gap-1 sm:gap-1.5 p-1 sm:p-1.5 rounded-2xl bg-[#0a0f19]/80 border border-white/[0.08] backdrop-blur-xl shadow-lg overflow-x-auto no-scrollbar scroll-smooth">
         <button
           onClick={() => setActiveTab('tierlist')}
-          className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap ${
+          className={`px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-1.5 sm:gap-2 transition-all cursor-pointer whitespace-nowrap shrink-0 ${
             activeTab === 'tierlist'
               ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/25'
               : 'text-slate-300 hover:text-white hover:bg-white/[0.04]'
           }`}
         >
-          <Trophy className="w-4 h-4 text-amber-400" />
-          <span>🏆 Tier List มอนสเตอร์ RTA (Season 38)</span>
+          <Trophy className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400 shrink-0" />
+          <span><span className="hidden sm:inline">🏆 Tier List มอนสเตอร์ RTA (Season 38)</span><span className="sm:hidden">🏆 Tier List RTA</span></span>
         </button>
 
         <button
           onClick={() => setActiveTab('stats')}
-          className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap ${
+          className={`px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-1.5 sm:gap-2 transition-all cursor-pointer whitespace-nowrap shrink-0 ${
             activeTab === 'stats'
               ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/25'
               : 'text-slate-300 hover:text-white hover:bg-white/[0.04]'
           }`}
         >
-          <BarChart3 className="w-4 h-4 text-purple-400" />
-          <span>📊 สถิติเมต้า (Pick / Win / Ban Rate)</span>
+          <BarChart3 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-purple-400 shrink-0" />
+          <span><span className="hidden sm:inline">📊 สถิติเมต้า (Pick / Win / Ban Rate)</span><span className="sm:hidden">📊 สถิติเมต้า</span></span>
         </button>
 
         <button
           onClick={() => setActiveTab('replays')}
-          className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap ${
+          className={`px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-1.5 sm:gap-2 transition-all cursor-pointer whitespace-nowrap shrink-0 ${
             activeTab === 'replays'
               ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/25'
               : 'text-slate-300 hover:text-white hover:bg-white/[0.04]'
           }`}
         >
-          <Swords className="w-4 h-4 text-emerald-400" />
-          <span>⚔️ รีเพลย์การต่อสู้สดระดับ Guardian ({replaysData.length})</span>
+          <Swords className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400 shrink-0" />
+          <span><span className="hidden sm:inline">⚔️ รีเพลย์การต่อสู้สดระดับ Guardian ({replaysData.length})</span><span className="sm:hidden">⚔️ รีเพลย์สด ({replaysData.length})</span></span>
         </button>
 
         <button
           onClick={() => setActiveTab('cutoffs')}
-          className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap ${
+          className={`px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-1.5 sm:gap-2 transition-all cursor-pointer whitespace-nowrap shrink-0 ${
             activeTab === 'cutoffs'
               ? 'bg-amber-600 text-white shadow-lg shadow-amber-600/25'
               : 'text-slate-300 hover:text-white hover:bg-white/[0.04]'
           }`}
         >
-          <Target className="w-4 h-4 text-amber-400" />
-          <span>🎯 คะแนนตัดแรงค์ RTA (Rank Cutoffs)</span>
+          <Target className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400 shrink-0" />
+          <span><span className="hidden sm:inline">🎯 คะแนนตัดแรงค์ RTA (Rank Cutoffs)</span><span className="sm:hidden">🎯 คะแนนตัดแรงค์</span></span>
         </button>
       </div>
 

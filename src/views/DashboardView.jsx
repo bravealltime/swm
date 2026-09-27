@@ -391,20 +391,20 @@ export default function DashboardView({ onNavigate }) {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="พิมพ์ชื่อผู้เล่น / มอนสเตอร์ หรือถามโค้ช AI เช่น Seara แก้ยังไง..."
-                className="w-full bg-[#0d1422]/90 border border-white/15 focus:border-cyan-400 hover:border-white/25 rounded-2xl pl-12 pr-[11.5rem] sm:pr-[13rem] py-3.5 sm:py-4 text-sm sm:text-base text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-400/20 transition-all shadow-2xl backdrop-blur-xl"
+                className="w-full bg-[#0d1422]/90 border border-white/15 focus:border-cyan-400 hover:border-white/25 rounded-xl sm:rounded-2xl pl-9 sm:pl-12 pr-28 sm:pr-[13rem] py-2.5 sm:py-4 text-xs sm:text-base text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-400/20 transition-all shadow-2xl backdrop-blur-xl"
               />
-              <div className="absolute right-2 flex items-center gap-1.5">
+              <div className="absolute right-1.5 sm:right-2 flex items-center gap-1 sm:gap-1.5">
                 <button
                   type="button"
                   onClick={(e) => handleSearchSubmit(e, true)}
                   title="ถามโค้ช AI (เฉพาะเรื่อง Summoners War)"
-                  className="px-3 py-2 sm:py-2.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 text-amber-200 text-xs sm:text-sm font-bold flex items-center gap-1.5 transition-all cursor-pointer"
+                  className="px-2 py-1.5 sm:px-3 sm:py-2.5 rounded-lg sm:rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 text-amber-200 text-[11px] sm:text-sm font-bold flex items-center gap-1 transition-all cursor-pointer"
                 >
                   <Sparkles className="w-3.5 h-3.5" /> ถาม AI
                 </button>
                 <button
                   type="submit"
-                  className="px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white text-xs sm:text-sm font-bold shadow-lg shadow-blue-500/25 transition-all cursor-pointer"
+                  className="px-2.5 py-1.5 sm:px-4 sm:py-2.5 rounded-lg sm:rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white text-[11px] sm:text-sm font-bold shadow-lg shadow-blue-500/25 transition-all cursor-pointer"
                 >
                   ค้นหา
                 </button>

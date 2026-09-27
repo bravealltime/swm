@@ -206,8 +206,8 @@ function AppContent() {
   const viewKey = `${currentView}:${JSON.stringify(viewParams)}`;
 
   const dockItem = (active) =>
-    `flex flex-col items-center gap-0.5 py-1 px-2.5 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
-      active ? 'text-blue-400' : 'text-slate-400 hover:text-slate-200'
+    `flex flex-col items-center justify-center gap-0.5 py-1 px-0.5 rounded-lg text-[10px] font-semibold transition-all cursor-pointer min-w-0 w-full select-none ${
+      active ? 'text-blue-400 bg-blue-500/10' : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.03]'
     }`;
 
   return (
@@ -309,26 +309,26 @@ function AppContent() {
       </footer>
 
       {/* Mobile Bottom Navigation Dock */}
-      <nav aria-label="เมนูหลัก (มือถือ)" className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#090d16]/95 backdrop-blur-lg border-t border-[#1e293b] px-3 py-1.5 flex items-center justify-around shadow-[0_-8px_20px_rgba(0,0,0,0.6)]">
+      <nav aria-label="เมนูหลัก (มือถือ)" className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#090d16]/95 backdrop-blur-xl border-t border-white/10 px-1 py-1 grid grid-cols-5 items-stretch justify-items-stretch shadow-[0_-8px_20px_rgba(0,0,0,0.7)] select-none pb-[max(0.25rem,env(safe-area-inset-bottom))]">
         <button onClick={() => handleNavigate('dashboard')} className={dockItem(currentView === 'dashboard')} aria-current={currentView === 'dashboard' ? 'page' : undefined}>
-          <Home className="w-4 h-4" />
-          <span>หน้าแรก</span>
+          <Home className="w-4 h-4 shrink-0" />
+          <span className="truncate w-full text-center">หน้าแรก</span>
         </button>
         <button onClick={() => handleNavigate('my-box')} className={dockItem(['my-box', 'live-farm-monitor', 'ai-account-audit'].includes(currentView))} aria-current={['my-box', 'live-farm-monitor', 'ai-account-audit'].includes(currentView) ? 'page' : undefined}>
-          <Sparkles className="w-4 h-4" />
-          <span>ไอดี/ฟาร์ม</span>
+          <Sparkles className="w-4 h-4 shrink-0" />
+          <span className="truncate w-full text-center">ไอดี/ฟาร์ม</span>
         </button>
         <button onClick={() => handleNavigate('3mdc')} className={dockItem(currentView === '3mdc')} aria-current={currentView === '3mdc' ? 'page' : undefined}>
-          <Shield className="w-4 h-4" />
-          <span>3MDC</span>
+          <Shield className="w-4 h-4 shrink-0" />
+          <span className="truncate w-full text-center">3MDC</span>
         </button>
         <button onClick={() => handleNavigate('rta')} className={dockItem(RTA_VIEWS.includes(currentView))} aria-current={RTA_VIEWS.includes(currentView) ? 'page' : undefined}>
-          <Trophy className="w-4 h-4" />
-          <span>RTA</span>
+          <Trophy className="w-4 h-4 shrink-0" />
+          <span className="truncate w-full text-center">RTA</span>
         </button>
         <button onClick={() => setMobileMenuOpen(true)} className={dockItem(false)} aria-haspopup="dialog">
-          <Menu className="w-4 h-4" />
-          <span>เมนู</span>
+          <Menu className="w-4 h-4 shrink-0" />
+          <span className="truncate w-full text-center">เมนู</span>
         </button>
       </nav>
 

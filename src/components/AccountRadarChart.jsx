@@ -45,44 +45,44 @@ export default function AccountRadarChart({ radarData, onExportCard, isExporting
   const theme = gradeColors[overallGrade] || gradeColors.A;
 
   return (
-    <div className="rounded-3xl border border-white/10 bg-[#0a0f19] p-5 sm:p-7 shadow-2xl space-y-5">
+    <div className="rounded-2xl sm:rounded-3xl border border-white/10 bg-[#0a0f19] p-3.5 sm:p-7 shadow-2xl space-y-4 sm:space-y-5">
       {/* Header */}
-      <div className="flex items-center justify-between flex-wrap gap-3 pb-4 border-b border-white/[0.06]">
+      <div className="flex items-center justify-between flex-wrap gap-2.5 sm:gap-3 pb-3 sm:pb-4 border-b border-white/[0.06]">
         <div>
           <div className="flex items-center gap-2 text-amber-400 text-xs font-mono font-bold uppercase tracking-wider">
             <Trophy className="w-4 h-4" />
             <span>Summoner Power Radar • วิเคราะห์ไอดี 6 มิติ</span>
           </div>
-          <h2 className="text-xl sm:text-2xl font-black text-white mt-1">
+          <h2 className="text-lg sm:text-2xl font-black text-white mt-1">
             เรดาร์ขุมกำลังของไอดี (Account Assessment)
           </h2>
         </div>
 
-        <div className="flex items-center gap-3">
-          <div className={`px-3.5 py-1.5 rounded-2xl border flex items-center gap-2 font-mono font-bold text-sm ${theme.bg}`}>
-            <span className="text-xs text-slate-400">เกรดรวม</span>
-            <span className={`text-xl font-black ${theme.text}`}>{overallGrade}</span>
-            <span className="text-xs font-normal text-slate-300">({overallScore}/100)</span>
+        <div className="flex items-center gap-2 sm:gap-3">
+          <div className={`px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-xl sm:rounded-2xl border flex items-center gap-1.5 sm:gap-2 font-mono font-bold text-xs sm:text-sm ${theme.bg}`}>
+            <span className="text-[11px] sm:text-xs text-slate-400">เกรดรวม</span>
+            <span className={`text-base sm:text-xl font-black ${theme.text}`}>{overallGrade}</span>
+            <span className="text-[11px] sm:text-xs font-normal text-slate-300">({overallScore}/100)</span>
           </div>
 
           {onExportCard && (
             <button
               onClick={onExportCard}
               disabled={isExporting}
-              className="px-3.5 py-2 rounded-xl text-xs font-bold bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 text-slate-200 flex items-center gap-1.5 transition cursor-pointer"
+              className="px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs font-bold bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 text-slate-200 flex items-center gap-1.5 transition cursor-pointer"
             >
               <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-              <span>{isExporting ? 'กำลังบันทึก...' : 'แชร์การ์ดเรดาร์'}</span>
+              <span>{isExporting ? 'กำลังบันทึก...' : 'แชร์การ์ด'}</span>
             </button>
           )}
         </div>
       </div>
 
       {/* Chart and Stats Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 items-center">
         {/* SVG Radar Chart */}
-        <div className="lg:col-span-6 flex justify-center py-2 relative">
-          <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="overflow-visible">
+        <div className="lg:col-span-6 flex justify-center py-2 relative overflow-hidden sm:overflow-visible">
+          <svg viewBox={`0 0 ${size} ${size}`} className="w-full max-w-[270px] sm:max-w-[320px] aspect-square overflow-visible">
             {/* Concentric grid rings */}
             {rings.map((scale, idx) => (
               <polygon

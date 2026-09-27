@@ -90,33 +90,33 @@ export default function AccountSuiteHeader({ activeTab, onNavigate }) {
   };
 
   return (
-    <div className="w-full mb-6 space-y-3">
-      <div className="bg-[#0b121e]/90 backdrop-blur-xl border border-white/[0.08] p-1.5 sm:p-2 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-3 shadow-xl">
+    <div className="w-full mb-3 sm:mb-6 space-y-2 sm:space-y-3">
+      <div className="bg-[#0b121e]/90 backdrop-blur-xl border border-white/[0.08] p-1.5 sm:p-2 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-2 sm:gap-3 shadow-xl">
         {/* Navigation Tabs Switcher */}
-        <div className="flex items-center gap-1.5 w-full md:w-auto overflow-x-auto no-scrollbar py-0.5">
+        <div className="flex items-center gap-1 sm:gap-1.5 w-full md:w-auto overflow-x-auto no-scrollbar py-0.5">
           <button
             onClick={() => onNavigate('my-box')}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer shrink-0 ${
+            className={`flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-[11px] sm:text-xs font-bold transition-all cursor-pointer shrink-0 ${
               activeTab === 'my-box'
                 ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/25 border border-blue-400/40'
                 : 'text-slate-300 hover:text-white hover:bg-white/[0.05]'
             }`}
           >
-            <Layers className="w-4 h-4 text-blue-300" />
-            <span>📦 กล่องของฉัน (My Box)</span>
+            <Layers className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-300 shrink-0" />
+            <span><span className="hidden sm:inline">📦 กล่องของฉัน (My Box)</span><span className="sm:hidden">📦 กล่องของฉัน</span></span>
           </button>
 
           <button
             onClick={() => onNavigate('ai-account-audit')}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer shrink-0 ${
+            className={`flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-[11px] sm:text-xs font-bold transition-all cursor-pointer shrink-0 ${
               activeTab === 'ai-account-audit'
                 ? 'bg-amber-500 text-slate-950 shadow-lg shadow-amber-500/25 font-black border border-amber-300/40'
                 : 'text-slate-300 hover:text-white hover:bg-white/[0.05]'
             }`}
           >
-            <Sparkles className={`w-4 h-4 ${activeTab === 'ai-account-audit' ? 'text-slate-950' : 'text-amber-400'}`} />
-            <span>🤖 AI ตรวจสุขภาพไอดี (Health Check)</span>
-            <span className={`px-1.5 py-0.2 rounded text-[10px] font-black ${
+            <Sparkles className={`w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 ${activeTab === 'ai-account-audit' ? 'text-slate-950' : 'text-amber-400'}`} />
+            <span><span className="hidden sm:inline">🤖 AI ตรวจสุขภาพไอดี (Health Check)</span><span className="sm:hidden">🤖 AI ตรวจไอดี</span></span>
+            <span className={`px-1.5 py-0.2 rounded text-[9px] sm:text-[10px] font-black ${
               activeTab === 'ai-account-audit' ? 'bg-black/20 text-slate-950' : 'bg-amber-400/15 text-amber-300 border border-amber-400/30'
             }`}>
               G2-G3
@@ -125,14 +125,14 @@ export default function AccountSuiteHeader({ activeTab, onNavigate }) {
 
           <button
             onClick={() => onNavigate('live-farm-monitor')}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer shrink-0 ${
+            className={`flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-[11px] sm:text-xs font-bold transition-all cursor-pointer shrink-0 ${
               activeTab === 'live-farm-monitor'
                 ? 'bg-emerald-500 text-slate-950 shadow-lg shadow-emerald-500/25 font-black border border-emerald-300/40'
                 : 'text-slate-300 hover:text-white hover:bg-white/[0.05]'
             }`}
           >
-            <Radio className={`w-4 h-4 ${activeTab === 'live-farm-monitor' ? 'text-slate-950' : 'text-emerald-400'}`} />
-            <span>📡 จอตรวจจับฟาร์มสด (Live Monitor)</span>
+            <Radio className={`w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 ${activeTab === 'live-farm-monitor' ? 'text-slate-950' : 'text-emerald-400'}`} />
+            <span><span className="hidden sm:inline">📡 จอตรวจจับฟาร์มสด (Live Monitor)</span><span className="sm:hidden">📡 ฟาร์มสด</span></span>
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
@@ -141,23 +141,23 @@ export default function AccountSuiteHeader({ activeTab, onNavigate }) {
         </div>
 
         {/* Sync Buttons */}
-        <div className="flex items-center gap-2 shrink-0 w-full md:w-auto justify-end">
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 w-full md:w-auto justify-end">
           <button
             onClick={() => window.dispatchEvent(new CustomEvent('swm:open-cloud-sync'))}
-            className="px-3.5 py-2 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-xs font-bold flex items-center justify-center gap-1.5 transition cursor-pointer"
+            className="flex-1 md:flex-initial px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-[11px] sm:text-xs font-bold flex items-center justify-center gap-1 transition cursor-pointer"
             title="เปิด QR Code หรือ Magic Link สำหรับดูบนมือถือผ่าน 4G/5G โดยไม่ต้องเปิดคอม"
           >
-            <span>📱 ซิงค์ไปมือถือ</span>
+            <span>📱 <span className="hidden sm:inline">ซิงค์ไป</span>มือถือ</span>
           </button>
 
           <button
             onClick={handleQuickSync}
             disabled={syncing}
-            className="w-full md:w-auto px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-black text-xs flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 transition-all cursor-pointer disabled:opacity-50"
+            className="flex-1 md:flex-initial px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-black text-[11px] sm:text-xs flex items-center justify-center gap-1.5 shadow-lg shadow-emerald-500/20 transition-all cursor-pointer disabled:opacity-50"
             title="ดึงข้อมูลล่าสุดจากเกมทันทีโดยไม่ต้องเลือกไฟล์"
           >
-            <RefreshCw className={`w-3.5 h-3.5 text-slate-950 ${syncing ? 'animate-spin' : ''}`} />
-            <span>{syncing ? 'กำลังซิงค์...' : '🔄 ซิงค์ข้อมูลสด (1-Click)'}</span>
+            <RefreshCw className={`w-3 h-3 sm:w-3.5 sm:h-3.5 text-slate-950 ${syncing ? 'animate-spin' : ''}`} />
+            <span>{syncing ? 'กำลังซิงค์...' : '🔄 ซิงค์สด 1-Click'}</span>
           </button>
         </div>
       </div>

@@ -251,41 +251,43 @@ export default function MyBoxView({ onNavigate, tab: initialTab, subItem }) {
       {/* Unified Suite Switcher */}
       <AccountSuiteHeader activeTab="my-box" onNavigate={onNavigate} />
 
-      <div className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-r from-[#0f2a1a] via-[#090e18] to-[#070b12] p-6 sm:p-8 shadow-2xl">
+      <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl border border-white/[0.08] bg-gradient-to-r from-[#0f2a1a] via-[#090e18] to-[#070b12] p-3.5 sm:p-6 lg:p-8 shadow-2xl">
         <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-          <div className="flex items-start gap-3">
-            <div className="p-2.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400"><Package className="w-6 h-6" /></div>
+        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4">
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            <div className="p-2 sm:p-2.5 rounded-xl sm:rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 shrink-0">
+              <Package className="w-5 h-5 sm:w-6 sm:h-6" />
+            </div>
             <div>
-              <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
+              <h1 className="text-lg sm:text-2xl lg:text-4xl font-black text-white tracking-tight">
                 กล่องมอนสเตอร์ <span className="bg-gradient-to-r from-emerald-400 to-cyan-300 bg-clip-text text-transparent">ของฉัน</span>
               </h1>
-              <p className="text-xs sm:text-sm text-slate-400 mt-1 max-w-3xl">
+              <p className="hidden sm:block text-xs sm:text-sm text-slate-400 mt-1 max-w-3xl">
                 นำเข้าไฟล์ JSON จาก SWEX แล้วดูทีมที่สร้างได้ จูนสปีดด้วยค่าจริง และวิเคราะห์รูนทั้งกล่อง — ประมวลผลในเบราว์เซอร์ทั้งหมด ไม่ส่งไฟล์ขึ้นเซิร์ฟเวอร์
               </p>
             </div>
           </div>
           {box && (
-            <div className="flex items-center gap-2 shrink-0 flex-wrap">
+            <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 flex-wrap">
               <button
                 onClick={handleOneClickSync}
                 disabled={syncing}
-                className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 text-xs font-black flex items-center gap-1.5 cursor-pointer shadow-lg shadow-emerald-500/20 transition-all disabled:opacity-50"
+                className="px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 text-[11px] sm:text-xs font-black flex items-center gap-1 cursor-pointer shadow-lg shadow-emerald-500/20 transition-all disabled:opacity-50"
                 title="ซิงค์ดึงข้อมูลมอนสเตอร์และรูนล่าสุดจาก AegisLink / Supabase Cloud / โฟลเดอร์ GG ทันที"
               >
-                <RefreshCw className={`w-4 h-4 text-slate-950 ${syncing ? 'animate-spin' : ''}`} />
-                <span>{syncing ? 'กำลังซิงค์...' : '🔄 ซิงค์ข้อมูลล่าสุด (1-Click)'}</span>
+                <RefreshCw className={`w-3.5 h-3.5 text-slate-950 ${syncing ? 'animate-spin' : ''}`} />
+                <span>{syncing ? 'กำลังซิงค์...' : '🔄 ซิงค์สด (1-Click)'}</span>
               </button>
               <button
                 onClick={() => exportAllDataAsJSON()}
-                className="px-3 py-2 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-sm transition-all"
+                className="px-2.5 py-1.5 sm:px-3 py-2 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 text-[11px] sm:text-xs font-bold flex items-center gap-1 cursor-pointer shadow-sm transition-all"
                 title="สำรองข้อมูลทั้งหมด (มอนสเตอร์ + รูน + สงครามกิลด์) เป็นไฟล์ JSON"
               >
-                <Download className="w-4 h-4" /> สำรองข้อมูล JSON
+                <Download className="w-3.5 h-3.5" /> สำรอง JSON
               </button>
               <ImportButton onFile={importFile} label="นำเข้าใหม่" icon={RefreshCw} subtle />
-              <button onClick={reset} className={`px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-all ${resetArmed ? 'bg-rose-500 hover:bg-rose-400 text-white border border-rose-400' : 'bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-300'}`}>
-                <Trash2 className="w-4 h-4" /> {resetArmed ? 'แน่ใจไหม? กดอีกครั้งเพื่อลบ' : 'ลบข้อมูลออกจากเครื่อง'}
+              <button onClick={reset} className={`px-2.5 py-1.5 sm:px-3 py-2 rounded-xl text-[11px] sm:text-xs font-bold flex items-center gap-1 cursor-pointer transition-all ${resetArmed ? 'bg-rose-500 hover:bg-rose-400 text-white border border-rose-400' : 'bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-300'}`}>
+                <Trash2 className="w-3.5 h-3.5" /> {resetArmed ? 'กดอีกครั้งเพื่อลบ' : 'ลบข้อมูล'}
               </button>
             </div>
           )}
@@ -359,14 +361,14 @@ export default function MyBoxView({ onNavigate, tab: initialTab, subItem }) {
       {box && live.status === 'off' && <SyncCard watch={watch} box={box} onStart={startWatching} onGrant={grantAgain} onStop={stopWatching} />}
 
       {/* one scrollable row instead of wrapping: on phones the wrapped rows stayed pinned under the navbar and ate a third of the screen */}
-      <div role="tablist" className="flex items-center gap-1.5 p-1.5 rounded-2xl bg-[#0a0f19]/80 border border-white/[0.08] shadow-lg sticky top-[68px] z-30 backdrop-blur-xl overflow-x-auto">
+      <div role="tablist" className="flex items-center gap-1 sm:gap-1.5 p-1 sm:p-1.5 rounded-2xl bg-[#0a0f19]/90 border border-white/[0.08] shadow-lg sticky top-[58px] sm:top-[68px] z-30 backdrop-blur-xl overflow-x-auto no-scrollbar scroll-smooth">
         {TABS.map((t) => {
           const Icon = t.icon;
           const active = tab === t.id;
           return (
             <button key={t.id} role="tab" aria-selected={active} onClick={() => { setTab(t.id); window.scrollTo({ top: 0 }); }}
-              className={`px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition-all cursor-pointer shrink-0 whitespace-nowrap ${active ? `${t.color} text-white shadow-lg` : 'text-slate-300 hover:text-white hover:bg-white/[0.04]'}`}>
-              <Icon className="w-4 h-4" /> {t.label}
+              className={`px-2.5 py-1.5 sm:px-3.5 sm:py-2.5 rounded-xl text-[11px] sm:text-sm font-bold flex items-center gap-1.5 sm:gap-2 transition-all cursor-pointer shrink-0 whitespace-nowrap ${active ? `${t.color} text-white shadow-lg` : 'text-slate-300 hover:text-white hover:bg-white/[0.04]'}`}>
+              <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> {t.label}
             </button>
           );
         })}
@@ -609,44 +611,44 @@ function BoxHeader({ box, onNavigate }) {
   const six = units.filter((u) => u.stars === 6).length;
   const runes = box?.runes?.length || 0;
   return (
-    <div className={`${card} p-5 sm:p-6 flex flex-col lg:flex-row lg:items-center justify-between gap-4`}>
-      <div className="flex items-center gap-4">
-        <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-2xl">{flagFromCountry(wizard.country)}</div>
-        <div>
-          <div className="text-xl sm:text-2xl font-black text-white flex items-center gap-2 flex-wrap">
-            {wizard.name || 'ผู้เล่นของฉัน'}
-            <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-white/[0.05] border border-white/10 text-slate-300">Lv.{wizard.level ?? '—'}</span>
-            {wizard.guild && <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-300">{wizard.guild}</span>}
+    <div className={`${card} p-3.5 sm:p-6 flex flex-col lg:flex-row lg:items-center justify-between gap-3 sm:gap-4`}>
+      <div className="flex items-center gap-3 sm:gap-4">
+        <div className="w-11 h-11 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-xl sm:text-2xl shrink-0">{flagFromCountry(wizard.country)}</div>
+        <div className="min-w-0 flex-1">
+          <div className="text-base sm:text-2xl font-black text-white flex items-center gap-1.5 sm:gap-2 flex-wrap">
+            <span className="truncate">{wizard.name || 'ผู้เล่นของฉัน'}</span>
+            <span className="text-[11px] sm:text-xs font-semibold px-2 py-0.5 rounded-full bg-white/[0.05] border border-white/10 text-slate-300">Lv.{wizard.level ?? '—'}</span>
+            {wizard.guild && <span className="text-[11px] sm:text-xs font-semibold px-2 py-0.5 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-300 truncate max-w-[120px]">{wizard.guild}</span>}
             {box?.isDemo && (
-              <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 flex items-center gap-1">
-                <Sparkles className="w-3.5 h-3.5" /> บัญชีตัวอย่าง Guardian G3 (Demo)
+              <span className="text-[10px] sm:text-xs font-bold px-2 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 flex items-center gap-1">
+                <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5" /> Demo G3
               </span>
             )}
           </div>
-          <div className="text-xs text-slate-400 mt-1">
+          <div className="text-[11px] sm:text-xs text-slate-400 mt-0.5 truncate">
             {box?.isDemo
-              ? 'ข้อมูลจำลองเพื่อการทดสอบทุกฟังก์ชัน • สามารถกด "นำเข้าใหม่" ด้านบนเพื่อใส่ไฟล์จริงของคุณ'
-              : `นำเข้าเมื่อ ${box?.importedAt?.slice(0, 16).replace('T', ' ') || '-'} • เก็บในเครื่องนี้เท่านั้น`}
+              ? 'บัญชีตัวอย่าง Guardian G3'
+              : `นำเข้า ${box?.importedAt?.slice(0, 16).replace('T', ' ') || '-'}`}
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-4 gap-2 sm:gap-3 text-center">
+      <div className="grid grid-cols-4 gap-1.5 sm:gap-3 text-center">
         {[
           ['มอนสเตอร์', units.length, 'text-white'],
           ['เนเชอรัล 5★', nat5, 'text-amber-300'],
           ['ระดับ 6★', six, 'text-emerald-300'],
           ['รูน', runes, 'text-purple-300'],
         ].map(([label, value, color]) => (
-          <div key={label} className="px-3 sm:px-4 py-2.5 rounded-xl bg-[#0a0f19] border border-white/[0.08]">
-            <div className="text-[11px] text-slate-400">{label}</div>
-            <div className={`text-lg sm:text-xl font-black font-mono ${color}`}>{value.toLocaleString()}</div>
+          <div key={label} className="px-1.5 py-1.5 sm:px-4 sm:py-2.5 rounded-lg sm:rounded-xl bg-[#0a0f19] border border-white/[0.08]">
+            <div className="text-[10px] sm:text-[11px] text-slate-400 truncate">{label}</div>
+            <div className={`text-sm sm:text-xl font-black font-mono ${color}`}>{value.toLocaleString()}</div>
           </div>
         ))}
       </div>
       <button onClick={() => wizard.name && onNavigate('player-tracker', { initialPlayer: wizard.name })}
         disabled={!wizard.name}
-        className="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:opacity-40 disabled:hover:bg-amber-500 text-slate-950 text-xs font-bold flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed shrink-0">
-        <Search className="w-4 h-4" /> ดูสถิติ RTA ของฉัน <ChevronRight className="w-4 h-4" />
+        className="w-full lg:w-auto px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:opacity-40 disabled:hover:bg-amber-500 text-slate-950 text-xs font-bold flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer disabled:cursor-not-allowed shrink-0">
+        <Search className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> ดูสถิติ RTA ของฉัน <ChevronRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
       </button>
     </div>
   );
@@ -1030,7 +1032,7 @@ function BoxGrid({ box, onOpenUnit }) {
         {rows.map((u, i) => (
           <button key={`${u.uid || u.masterId}-${i}`} onClick={() => onOpenUnit(u)}
             title={u.info ? `ดูรูน อาร์ติแฟกต์ และสเตตัสของ ${u.info.name}` : `ไม่พบ #${u.masterId} ในสารานุกรม`}
-            className={`${card} p-3 hover:border-emerald-500/40 flex items-center gap-3 text-left cursor-pointer`}>
+            className={`${card} p-2 sm:p-3 hover:border-emerald-500/40 flex items-center gap-2 sm:gap-3 text-left cursor-pointer`}>
             {u.info ? <MonsterAvatar monster={u.info} size="sm" showStars={false} /> : <div className="w-11 h-11 rounded-xl bg-slate-800 shrink-0" />}
             <div className="min-w-0 flex-1">
               <div className="text-xs font-bold text-white truncate">{u.info?.name || `#${u.masterId}`}</div>

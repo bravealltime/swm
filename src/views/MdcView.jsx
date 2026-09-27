@@ -301,26 +301,27 @@ export default function MdcView({ search = '' }) {
       </div>
 
       {/* 2. Visual 3-Slot Interactive Defense Picker */}
-      <div className="rounded-3xl border border-white/[0.08] bg-[#0a0f19]/80 backdrop-blur-xl p-6 shadow-xl space-y-5">
+      <div className="rounded-2xl sm:rounded-3xl border border-white/[0.08] bg-[#0a0f19]/80 backdrop-blur-xl p-3.5 sm:p-6 shadow-xl space-y-4 sm:space-y-5">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-xs font-bold text-slate-300 uppercase tracking-wider">
             <span className="w-2.5 h-2.5 rounded-full bg-blue-400 animate-pulse" />
-            <span>คลิกช่องเพื่อเลือก 3 มอนสเตอร์ทีมป้องกัน (Tap to Pick Monsters):</span>
+            <span className="hidden sm:inline">คลิกช่องเพื่อเลือก 3 มอนสเตอร์ทีมป้องกัน (Tap to Pick Monsters):</span>
+            <span className="sm:hidden">เลือก 3 มอนสเตอร์ทีมป้องกัน:</span>
           </div>
 
           {(selectedSlots.some(Boolean) || searchQuery) && (
             <button
               onClick={handleResetAll}
-              className="px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500 text-rose-300 hover:text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border border-rose-500/20 cursor-pointer"
+              className="px-2.5 py-1 sm:px-3 sm:py-1.5 bg-rose-500/10 hover:bg-rose-500 text-rose-300 hover:text-white rounded-xl text-[11px] sm:text-xs font-bold transition-all flex items-center gap-1.5 border border-rose-500/20 cursor-pointer"
             >
               <RotateCcw className="w-3.5 h-3.5" />
-              <span>ล้างตัวเลือกทั้งหมด (Reset)</span>
+              <span>ล้างตัวเลือก</span>
             </button>
           )}
         </div>
 
         {/* 3 Interactive Slots */}
-        <div className="grid grid-cols-3 gap-3 sm:gap-5 max-w-2xl mx-auto">
+        <div className="grid grid-cols-3 gap-2 sm:gap-5 max-w-2xl mx-auto">
           {[0, 1, 2].map((slotIdx) => {
             const monster = selectedSlots[slotIdx];
             const isActive = activeSlotIdx === slotIdx;
@@ -329,7 +330,7 @@ export default function MdcView({ search = '' }) {
               <div
                 key={slotIdx}
                 onClick={() => handleSlotClick(slotIdx)}
-                className={`relative rounded-2xl border transition-all p-4 text-center cursor-pointer flex flex-col items-center justify-center min-h-[145px] shadow-lg select-none ${
+                className={`relative rounded-xl sm:rounded-2xl border transition-all p-2 sm:p-4 text-center cursor-pointer flex flex-col items-center justify-center min-h-[110px] sm:min-h-[145px] shadow-lg select-none ${
                   isActive
                     ? 'border-blue-400 bg-blue-600/20 shadow-blue-500/25 ring-2 ring-blue-400 scale-[1.02]'
                     : monster
