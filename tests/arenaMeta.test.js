@@ -310,5 +310,24 @@ describe('arenaPrompt (AI Grounded Advisor)', () => {
     expect(profileWater.chips.some((c) => c.key === 'atkLead')).toBe(false);
     expect(profileWater.chips.some((c) => c.key === 'hpLead')).toBe(true);
   });
+
+  it('correctly ranks counters for Maximilian, Amduat, Triton, Fire Kai / Jin Kazama', () => {
+    const res = findArenaCounters(['Maximilian', 'Amduat', 'Triton', 'Fire Kai / Jin Kazama']);
+    expect(res.enemy.leader).toBe('Maximilian');
+    expect(res.enemy.flags.speedLead).toBe(true);
+    expect(res.enemy.groups.atb.length).toBeGreaterThan(0);
+    expect(res.results.length).toBeGreaterThanOrEqual(10);
+    // Leo / Galleon / Lushens should score high against speed lead
+    const top = res.results[0];
+    expect(top.score).toBeGreaterThan(0);
+  });
+
+  it('handles object-based slot items from matchArenaTeams without error', () => {
+    const { offense, defense } = matchArenaTeams(null);
+    const presetSlots = defense[0].slots; // array of objects { name, thaiName, ... }
+    const res = findArenaCounters(presetSlots, { offense, defense });
+    expect(res.enemy.leader).toBe(presetSlots[0].name);
+    expect(res.results.length).toBeGreaterThanOrEqual(10);
+  });
 });
 

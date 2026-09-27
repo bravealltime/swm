@@ -44,6 +44,7 @@ const extractElement = (str) => {
 };
 
 const norm = (s) => String(s || '').replace(/\s*\(.*?\)\s*/g, '').toLowerCase().trim();
+export const slotName = (s) => (typeof s === 'string' ? s : s?.name || '');
 const traitIndex = new Map();
 
 for (const [name, t] of Object.entries(traitsMap)) {
@@ -83,14 +84,15 @@ for (const [name, t] of Object.entries(traitsMap)) {
 }
 
 export const traitsOfName = (name) => {
-  if (!name) return [];
-  const lower = String(name).toLowerCase().trim();
+  const raw = slotName(name);
+  if (!raw) return [];
+  const lower = String(raw).toLowerCase().trim();
 
   // 1. Direct match on lower string (e.g. 'water old wood / gandalf', 'gandalf (water)')
   if (traitIndex.has(lower)) return traitIndex.get(lower);
 
   // 2. Collab element alias resolution (e.g. 'Gandalf (น้ำ)' or 'Gandalf water')
-  const el = extractElement(name);
+  const el = extractElement(raw);
   if (el) {
     const bare = lower
       .replace(/\s*\(.*?\)\s*/g, ' ')
@@ -105,12 +107,12 @@ export const traitsOfName = (name) => {
   }
 
   // 3. Fallback to norm (stripping parentheses if generic)
-  const n = norm(name);
+  const n = norm(raw);
   if (traitIndex.has(n)) return traitIndex.get(n);
 
   // 4. Slash split fallback
-  if (name.includes('/')) {
-    for (const part of name.split('/')) {
+  if (raw.includes('/')) {
+    for (const part of raw.split('/')) {
       const hit = traitsOfName(part.trim());
       if (hit.length) return hit;
     }
@@ -120,11 +122,12 @@ export const traitsOfName = (name) => {
 };
 
 export const hasSkill = (name) => {
-  if (!name) return false;
-  const lower = String(name).toLowerCase().trim();
+  const raw = slotName(name);
+  if (!raw) return false;
+  const lower = String(raw).toLowerCase().trim();
   if (traitIndex.has(lower)) return true;
-  if (traitIndex.has(norm(name))) return true;
-  const el = extractElement(name);
+  if (traitIndex.has(norm(raw))) return true;
+  const el = extractElement(raw);
   if (el) {
     const bare = lower
       .replace(/\s*\(.*?\)\s*/g, ' ')
@@ -134,15 +137,13 @@ export const hasSkill = (name) => {
       .trim();
     if (bare && (traitIndex.has(`${el} ${bare}`) || traitIndex.has(`${bare} (${el})`))) return true;
   }
-  if (name.includes('/')) {
-    return name.split('/').some((part) => hasSkill(part.trim()));
+  if (raw.includes('/')) {
+    return raw.split('/').some((part) => hasSkill(part.trim()));
   }
   return false;
 };
 
 const has = (list, tr) => list.includes(tr);
-// Team slots are plain names in the catalogue but { name, … } objects once matchArenaTeams() has run
-const slotName = (s) => (typeof s === 'string' ? s : s?.name || '');
 const names = (list) => list.join(', ');
 
 /**
@@ -150,7 +151,7 @@ const names = (list) => list.join(', ');
  * @param {string[]} enemyNames 1–4 monster names
  */
 export function profileEnemy(enemyNames) {
-  const members = enemyNames.filter(Boolean).slice(0, 4).map((name) => ({ name, traits: traitsOfName(name) }));
+  const members = (enemyNames || []).map(slotName).filter(Boolean).slice(0, 4).map((name) => ({ name, traits: traitsOfName(name) }));
   const withTrait = (tr, exceptLeaderOnly = false) => members.filter((m, i) => m.traits.includes(tr) && (!exceptLeaderOnly || i === 0)).map((m) => m.name);
   const leaderTraits = members[0]?.traits || [];
   const lead = (tr) => leaderTraits.includes(tr);
@@ -216,7 +217,7 @@ export function matchDefenses(enemyNames, defense = arenaData.defense) {
     return [n];
   };
 
-  const enemyKeys = new Set(enemyNames.flatMap(normKeys));
+  const enemyKeys = new Set((enemyNames || []).map(slotName).flatMap(normKeys));
 
   return defense
     .map((team) => {

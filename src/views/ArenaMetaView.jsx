@@ -19,6 +19,8 @@ import {
   Loader2,
   Flame,
   RotateCcw,
+  ChevronDown,
+  ArrowUp,
 } from 'lucide-react';
 import MonsterAvatar from '../components/MonsterAvatar';
 import ArenaRushHourHub from '../components/ArenaRushHourHub';
@@ -128,29 +130,35 @@ function TeamCard({ team, summary, copied, busy, onCopy, onCard, extra, compact 
 
         {/* 4 Monster Slots */}
         <div className="grid grid-cols-4 gap-2.5 p-3 rounded-2xl bg-[#070b14] border border-white/[0.06]">
-          {team.slots.map((mon, sIdx) => (
-            <div key={sIdx} className="flex flex-col items-center text-center group/m relative">
-              <div className="relative">
-                <MonsterAvatar monster={mon} size="md" showStars={false} />
-                {sIdx === 0 && (
-                  <div className="absolute -top-2 -left-1 bg-amber-500 text-slate-950 p-1 rounded-full shadow-md" title="สกิลหัวหน้าทีม (Leader)">
-                    <Crown className="w-3 h-3 font-black" />
-                  </div>
-                )}
-                {mon.isRealOwned && (
-                  <div className="absolute -bottom-1 -right-1 bg-emerald-500 text-white rounded-full p-0.5" title="มีในไอดีแล้ว">
-                    <CheckCircle2 className="w-3.5 h-3.5" />
-                  </div>
-                )}
+          {team.slots.map((slotItem, sIdx) => {
+            const monObj = typeof slotItem === 'string' ? { name: slotItem, thaiName: slotItem } : slotItem || {};
+            const monName = monObj.name || '';
+            const monThai = monObj.thaiName || monName;
+            const isRealOwned = Boolean(monObj.isRealOwned);
+            return (
+              <div key={sIdx} className="flex flex-col items-center text-center group/m relative">
+                <div className="relative">
+                  <MonsterAvatar monster={slotItem} size="md" showStars={false} />
+                  {sIdx === 0 && (
+                    <div className="absolute -top-2 -left-1 bg-amber-500 text-slate-950 p-1 rounded-full shadow-md" title="สกิลหัวหน้าทีม (Leader)">
+                      <Crown className="w-3 h-3 font-black" />
+                    </div>
+                  )}
+                  {isRealOwned && (
+                    <div className="absolute -bottom-1 -right-1 bg-emerald-500 text-white rounded-full p-0.5" title="มีในไอดีแล้ว">
+                      <CheckCircle2 className="w-3.5 h-3.5" />
+                    </div>
+                  )}
+                </div>
+                <span className="text-xs font-bold text-white truncate max-w-[85px] mt-1.5">
+                  {monName}
+                </span>
+                <span className="text-[10px] text-slate-400 truncate max-w-[85px]">
+                  {monThai !== monName ? monThai : `ช่องที่ ${sIdx + 1}`}
+                </span>
               </div>
-              <span className="text-xs font-bold text-white truncate max-w-[85px] mt-1.5">
-                {mon.name}
-              </span>
-              <span className="text-[10px] text-slate-400 truncate max-w-[85px]">
-                {mon.thaiName !== mon.name ? mon.thaiName : `ช่องที่ ${sIdx + 1}`}
-              </span>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Leader Skill */}
@@ -248,7 +256,17 @@ function TeamCard({ team, summary, copied, busy, onCopy, onCard, extra, compact 
 }
 
 /** Four interactive slots + visual monster selector drawer (Guild War / 3MDC style). */
-function EnemyPicker({ picks, onChange, onSearch, onClear, onReorder, presets }) {
+function EnemyPicker({
+  picks,
+  onChange,
+  onSearch,
+  onClear,
+  onReorder,
+  presets,
+  isSearching = false,
+  counterCount = 0,
+  onScrollToResults,
+}) {
   const [activeSlotIdx, setActiveSlotIdx] = useState(null);
   const [pickerElement, setPickerElement] = useState('all');
   const [pickerSearch, setPickerSearch] = useState('');
@@ -265,8 +283,8 @@ function EnemyPicker({ picks, onChange, onSearch, onClear, onReorder, presets })
     return () => document.removeEventListener('mousedown', onPointerDown);
   }, [activeSlotIdx]);
 
-  // Slots array: always length 4
-  const slots = useMemo(() => [0, 1, 2, 3].map((i) => picks[i] || null), [picks]);
+  // Slots array: always length 4, safe strings
+  const slots = useMemo(() => [0, 1, 2, 3].map((i) => (typeof picks[i] === 'string' ? picks[i] : picks[i]?.name || null)), [picks]);
 
   // 1-click presets: the highest-tier catalogue defenses, one per archetype so the row stays varied
   const topPresets = useMemo(() => {
@@ -303,7 +321,15 @@ function EnemyPicker({ picks, onChange, onSearch, onClear, onReorder, presets })
   }, [pickerElement, pickerSearch]);
 
   const handleSlotClick = (idx) => {
-    setActiveSlotIdx((curr) => (curr === idx ? null : idx));
+    setActiveSlotIdx((curr) => {
+      const nextIdx = curr === idx ? null : idx;
+      if (nextIdx !== null) {
+        setTimeout(() => {
+          drawerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 50);
+      }
+      return nextIdx;
+    });
     setPickerSearch('');
   };
 
@@ -356,7 +382,8 @@ function EnemyPicker({ picks, onChange, onSearch, onClear, onReorder, presets })
   };
 
   const handleSelectPreset = (p) => {
-    const next = [...p.slots];
+    if (!p?.slots) return;
+    const next = p.slots.map((s) => (typeof s === 'string' ? s : s?.name || '')).filter(Boolean);
     onChange(next);
     setActiveSlotIdx(null);
     if (onSearch) onSearch(next);
@@ -594,14 +621,38 @@ function EnemyPicker({ picks, onChange, onSearch, onClear, onReorder, presets })
           </div>
         </div>
 
-        <button
-          onClick={() => onSearch()}
-          disabled={!hasPicks}
-          className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-orange-600 hover:from-rose-500 hover:to-orange-500 text-white font-bold text-sm flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-rose-500/20 disabled:opacity-40 disabled:cursor-not-allowed shrink-0"
-        >
-          <Crosshair className="w-4 h-4" />
-          <span>ค้นหาทีมแก้ทาง {hasPicks ? `(${picks.filter(Boolean).length}/4)` : ''}</span>
-        </button>
+        <div className="flex items-center gap-2 flex-wrap justify-end">
+          {counterCount > 0 && onScrollToResults && (
+            <button
+              type="button"
+              onClick={onScrollToResults}
+              className="px-3.5 py-2.5 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/30 text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer shadow-lg shadow-emerald-950/40 shrink-0"
+              title="เลื่อนหน้าจอลงไปดูสูตรทีมบุกที่วิเคราะห์แล้ว"
+            >
+              <ChevronDown className="w-4 h-4 animate-bounce" />
+              <span>ดูผลลัพธ์ ({counterCount} ทีม)</span>
+            </button>
+          )}
+
+          <button
+            type="button"
+            onClick={() => onSearch(picks)}
+            disabled={!hasPicks || isSearching}
+            className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-orange-600 hover:from-rose-500 hover:to-orange-500 text-white font-bold text-sm flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-rose-500/20 disabled:opacity-40 disabled:cursor-not-allowed shrink-0 transition-all active:scale-95"
+          >
+            {isSearching ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin text-white" />
+                <span>กำลังวิเคราะห์...</span>
+              </>
+            ) : (
+              <>
+                <Crosshair className="w-4 h-4" />
+                <span>ค้นหาทีมแก้ทาง {hasPicks ? `(${picks.filter(Boolean).length}/4)` : ''}</span>
+              </>
+            )}
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -622,6 +673,17 @@ export default function ArenaMetaView({ onNavigate, subItem, ad }) {
   const [showAllCounters, setShowAllCounters] = useState(false);
   const [onlyMine, setOnlyMine] = useState(false);
   const [linkCopied, setLinkCopied] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
+  const resultsRef = useRef(null);
+
+  const scrollToResults = () => {
+    setTimeout(() => {
+      const el = document.getElementById('counter-results') || resultsRef.current;
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 100);
+  };
 
   const arenaData = useMemo(() => matchArenaTeams(userBox), [userBox]);
 
@@ -685,10 +747,19 @@ export default function ArenaMetaView({ onNavigate, subItem, ad }) {
   };
 
   const runCounterSearch = (explicit) => {
-    const names = (Array.isArray(explicit) ? explicit : enemyPicks).slice(0, 4);
+    const raw = Array.isArray(explicit) ? explicit : enemyPicks;
+    const names = (raw || []).map((s) => (typeof s === 'string' ? s : s?.name || '')).filter(Boolean).slice(0, 4);
+    if (!names.length) return;
+
+    setIsSearching(true);
     setEnemyQuery(names);
     setShowAllCounters(false);
     pushArenaUrl({ subItem: 'counter', ad: names.join(',') });
+
+    setTimeout(() => {
+      setIsSearching(false);
+      scrollToResults();
+    }, 200);
   };
 
   const handleClearCounter = () => {
@@ -717,7 +788,7 @@ export default function ArenaMetaView({ onNavigate, subItem, ad }) {
     const swapText = Object.entries(team.swaps || {}).map(([slot, alts]) => `${slot} → ${alts.join(' / ')}`).join(', ');
     const text = [
       `⚔️ [SWM Arena] ${team.nameTh} (${team.name}) — Tier ${team.tier}`,
-      `สมาชิก: ${team.slots.map(s => s.name).join(' + ')}`,
+      `สมาชิก: ${(team.slots || []).map((s) => (typeof s === 'string' ? s : s?.name || '')).join(' + ')}`,
       `ลีดเดอร์: ${team.leader}`,
       `รูน: ${team.runeGuidance || team.runeBuilds}`,
       swapText ? `ตัวแทน: ${swapText}` : '',
@@ -872,21 +943,52 @@ export default function ArenaMetaView({ onNavigate, subItem, ad }) {
             onClear={handleClearCounter}
             onReorder={handleReorder}
             presets={defense}
+            isSearching={isSearching}
+            counterCount={counter?.results?.length || 0}
+            onScrollToResults={scrollToResults}
           />
 
           {counter && (
-            <>
+            <div id="counter-results" ref={resultsRef} className="space-y-5 scroll-mt-24 animate-in fade-in duration-300">
               {/* Enemy profile */}
-              <div className="rounded-3xl border border-orange-500/20 bg-gradient-to-r from-[#1a1010] via-[#120d14] to-[#070b14] p-5 space-y-3">
+              <div className="rounded-3xl border border-orange-500/30 bg-gradient-to-r from-[#1a1010] via-[#120d14] to-[#070b14] p-5 sm:p-6 space-y-3 shadow-2xl">
                 <div className="flex items-center justify-between gap-3 flex-wrap">
-                  <div className="text-sm font-black text-white">
-                    ทีมรับ: <span className="text-orange-300">{counter.enemy.members.map((m) => m.name).join(' · ')}</span>
-                    <span className="text-[11px] text-slate-500 font-normal ml-2">(ลีด: {counter.enemy.leader})</span>
+                  <div className="flex items-center gap-2.5">
+                    <span className="p-2 rounded-xl bg-orange-500/20 text-orange-400 border border-orange-500/30 shrink-0">
+                      <Crosshair className="w-5 h-5" />
+                    </span>
+                    <div>
+                      <div className="text-sm sm:text-base font-black text-white flex items-center gap-2 flex-wrap">
+                        <span>ทีมรับเป้าหมาย:</span>
+                        <span className="text-orange-300 font-bold">
+                          {counter.enemy.members.map((m) => m.name).join(' · ')}
+                        </span>
+                      </div>
+                      <div className="text-xs text-slate-400 font-mono mt-0.5">
+                        👑 ลีดเดอร์: <span className="text-amber-300 font-bold">{counter.enemy.leader || 'ไม่มีลีด'}</span>
+                        {counter.enemy.otherLeads.length > 0 && (
+                          <span className="text-slate-500 ml-2">
+                            (ตัวอื่นที่มีลีด: {counter.enemy.otherLeads.join(', ')})
+                          </span>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                  <button onClick={copyCounterLink} className="px-3 py-1.5 rounded-xl text-xs font-bold bg-white/[0.04] hover:bg-white/[0.08] text-slate-200 border border-white/10 flex items-center gap-1.5 cursor-pointer">
-                    {linkCopied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <LinkIcon className="w-3.5 h-3.5 text-slate-400" />}
-                    <span>{linkCopied ? 'คัดลอกลิงก์แล้ว' : 'คัดลอกลิงก์ผลนี้'}</span>
-                  </button>
+
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                      className="px-3 py-1.5 rounded-xl text-xs font-bold bg-white/[0.04] hover:bg-white/[0.08] text-slate-300 border border-white/10 flex items-center gap-1.5 cursor-pointer"
+                      title="กลับขึ้นไปแก้ไขตัวมอนสเตอร์ทีมรับ"
+                    >
+                      <ArrowUp className="w-3.5 h-3.5 text-orange-400" />
+                      <span>แก้ไขมอนสเตอร์</span>
+                    </button>
+                    <button onClick={copyCounterLink} className="px-3 py-1.5 rounded-xl text-xs font-bold bg-white/[0.04] hover:bg-white/[0.08] text-slate-200 border border-white/10 flex items-center gap-1.5 cursor-pointer">
+                      {linkCopied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <LinkIcon className="w-3.5 h-3.5 text-slate-400" />}
+                      <span>{linkCopied ? 'คัดลอกแล้ว' : 'คัดลอกลิงก์ผลนี้'}</span>
+                    </button>
+                  </div>
                 </div>
                 {counter.enemy.chips.length > 0 ? (
                   <div className="flex flex-wrap gap-1.5">
@@ -927,13 +1029,13 @@ export default function ArenaMetaView({ onNavigate, subItem, ad }) {
                   kind: 'arena',
                   defense: {
                     leader: counter.enemy.leader,
-                    monsters: counter.enemy.members.map((m) => m.name),
+                    monsters: (counter.enemy.members || []).map((m) => (typeof m === 'string' ? m : m?.name || '')),
                   },
                   counters: counter.results.slice(0, 5).map((c) => ({
                     name: c.name,
                     nameTh: c.nameTh,
                     archetype: c.archetype,
-                    slots: c.slots.map((s) => s.name),
+                    slots: (c.slots || []).map((s) => (typeof s === 'string' ? s : s?.name || '')),
                     leader: c.leader,
                     turnOrder: c.turnOrder,
                     runeGuidance: c.runeGuidance || c.runeBuilds,
@@ -996,7 +1098,7 @@ export default function ArenaMetaView({ onNavigate, subItem, ad }) {
                   </button>
                 </div>
               )}
-            </>
+            </div>
           )}
         </div>
       )}
