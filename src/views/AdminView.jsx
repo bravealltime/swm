@@ -283,11 +283,32 @@ function QuotaPanel() {
     finally { setBusy(''); }
   };
   const limit = q?.limit ?? 3;
-  const Row = ({ id, label, sub, count, resetAt }) => (
+  const Row = ({ id, label, sub, count, totalToday, resetAt }) => (
     <tr className="border-t border-white/[0.05]">
-      <td className="px-3 py-2 font-mono text-slate-200">{label}{sub && <div className="text-[10px] text-slate-500">{sub}</div>}</td>
-      <td className="px-3 py-2 tabular-nums"><span className={count >= limit && limit > 0 ? 'text-rose-300 font-bold' : 'text-slate-200'}>{count}</span><span className="text-slate-500"> / {limit || '∞'}</span>{resetAt && <div className="text-[10px] text-emerald-300">รีเซ็ตแล้ว {fmtTime(resetAt)}</div>}</td>
-      <td className="px-3 py-2 text-right"><button onClick={() => reset(id, label)} disabled={busy === id} className="px-2.5 py-1 rounded-lg bg-white/[0.05] hover:bg-emerald-500/20 text-slate-300 hover:text-emerald-200 text-xs font-bold cursor-pointer disabled:opacity-50">รีเซ็ต</button></td>
+      <td className="px-3 py-2 text-slate-200">
+        <div className="font-semibold text-white truncate max-w-[200px]" title={label}>{label}</div>
+        {sub && <div className="text-[10px] text-slate-400 truncate max-w-[200px]">{sub}</div>}
+      </td>
+      <td className="px-3 py-2 tabular-nums">
+        <span className={count >= limit && limit > 0 ? 'text-rose-300 font-bold' : 'text-slate-200'}>
+          {count}
+        </span>
+        <span className="text-slate-500"> / {limit || '∞'}</span>
+        {resetAt && (
+          <div className="text-[10px] text-emerald-300">
+            รีเซ็ตแล้ว {fmtTime(resetAt)}{totalToday !== undefined && totalToday > count ? ` (เดิม ${totalToday})` : ''}
+          </div>
+        )}
+      </td>
+      <td className="px-3 py-2 text-right">
+        <button
+          onClick={() => reset(id, label)}
+          disabled={busy === id}
+          className="px-2.5 py-1 rounded-lg bg-white/[0.05] hover:bg-emerald-500/20 text-slate-300 hover:text-emerald-200 text-xs font-bold cursor-pointer disabled:opacity-50"
+        >
+          รีเซ็ต
+        </button>
+      </td>
     </tr>
   );
   return (
@@ -309,9 +330,39 @@ function QuotaPanel() {
         : (
           <div className="grid lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-white/[0.06]">
             <table className="w-full text-xs"><thead className="bg-white/[0.03] text-slate-400"><tr><th className="text-left px-3 py-2">บัญชี</th><th className="text-left px-3 py-2">ใช้ไป</th><th className="px-3 py-2"></th></tr></thead>
-              <tbody>{q.users.map((u) => <Row key={u.userId} id={`u:${u.userId}`} label={u.userId.slice(0, 8)} sub={`ล่าสุด ${fmtTime(u.last)}`} count={u.count} resetAt={u.resetAt} />)}</tbody></table>
+              <tbody>
+                {q.users.map((u) => {
+                  const userLabel = u.displayName || u.email?.split('@')[0] || u.userId.slice(0, 8);
+                  const subText = [u.email && u.email !== userLabel ? u.email : null, `ล่าสุด ${fmtTime(u.last)}`].filter(Boolean).join(' · ');
+                  return (
+                    <Row
+                      key={u.userId}
+                      id={`u:${u.userId}`}
+                      label={userLabel}
+                      sub={subText}
+                      count={u.count}
+                      totalToday={u.totalToday}
+                      resetAt={u.resetAt}
+                    />
+                  );
+                })}
+              </tbody>
+            </table>
             <table className="w-full text-xs"><thead className="bg-white/[0.03] text-slate-400"><tr><th className="text-left px-3 py-2">IP</th><th className="text-left px-3 py-2">ใช้ไป</th><th className="px-3 py-2"></th></tr></thead>
-              <tbody>{q.ips.map((i) => <Row key={i.ipHash} id={`ip:${i.ipHash}`} label={i.ip || `#${i.ipHash.slice(0, 8)}`} sub={[i.country, `ล่าสุด ${fmtTime(i.last)}`].filter(Boolean).join(' · ')} count={i.count} resetAt={i.resetAt} />)}</tbody></table>
+              <tbody>
+                {q.ips.map((i) => (
+                  <Row
+                    key={i.ipHash}
+                    id={`ip:${i.ipHash}`}
+                    label={i.ip || `#${i.ipHash.slice(0, 8)}`}
+                    sub={[i.country, `ล่าสุด ${fmtTime(i.last)}`].filter(Boolean).join(' · ')}
+                    count={i.count}
+                    totalToday={i.totalToday}
+                    resetAt={i.resetAt}
+                  />
+                ))}
+              </tbody>
+            </table>
           </div>
         )}
     </div>

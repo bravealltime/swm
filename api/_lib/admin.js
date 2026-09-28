@@ -44,6 +44,33 @@ export async function requireAdmin(token) {
 }
 
 // --- Supabase REST (service role bypasses RLS) ----------------------------------------------
+let userDirCache = { at: 0, map: new Map() };
+export async function getUserDirectory() {
+  if (Date.now() - userDirCache.at < 60_000 && userDirCache.map.size > 0) {
+    return userDirCache.map;
+  }
+  const url = supabaseUrl();
+  const key = serviceKey();
+  if (!url || !key) return userDirCache.map;
+  try {
+    const res = await fetch(`${url}/auth/v1/admin/users?per_page=1000`, {
+      headers: { apikey: key, Authorization: `Bearer ${key}` },
+    });
+    if (!res.ok) return userDirCache.map;
+    const data = await res.json();
+    const map = new Map();
+    for (const u of data.users || []) {
+      const email = u.email || '';
+      const name = u.user_metadata?.display_name || u.user_metadata?.username || u.user_metadata?.name || '';
+      map.set(u.id, { id: u.id, email, name });
+    }
+    userDirCache = { at: Date.now(), map };
+    return map;
+  } catch {
+    return userDirCache.map;
+  }
+}
+
 export function supabaseInfo() {
   const url = supabaseUrl();
   return { configured: Boolean(url && anonKey()), host: url ? new URL(url).host : '', serviceRole: Boolean(serviceKey()) };
@@ -212,8 +239,19 @@ export async function aiUsageGroups({ since }) {
   } else if (!r.ok) return { ok: false, error: r.error, users: [], ips: [] };
   const users = new Map(), ips = new Map();
   for (const row of rows) {
-    if (row.user_id) { const u = users.get(row.user_id) || { userId: row.user_id, count: 0, last: row.created_at }; u.count += 1; users.set(row.user_id, u); }
-    if (row.ip_hash) { const i = ips.get(row.ip_hash) || { ipHash: row.ip_hash, ip: row.ip || null, country: row.country || null, count: 0, last: row.created_at }; i.count += 1; if (!i.ip && row.ip) i.ip = row.ip; ips.set(row.ip_hash, i); }
+    if (row.user_id) {
+      const u = users.get(row.user_id) || { userId: row.user_id, count: 0, timestamps: [], last: row.created_at };
+      u.count += 1;
+      u.timestamps.push(row.created_at);
+      users.set(row.user_id, u);
+    }
+    if (row.ip_hash) {
+      const i = ips.get(row.ip_hash) || { ipHash: row.ip_hash, ip: row.ip || null, country: row.country || null, count: 0, timestamps: [], last: row.created_at };
+      i.count += 1;
+      i.timestamps.push(row.created_at);
+      if (!i.ip && row.ip) i.ip = row.ip;
+      ips.set(row.ip_hash, i);
+    }
   }
   const desc = (a, b) => b.count - a.count;
   return { ok: true, users: [...users.values()].sort(desc), ips: [...ips.values()].sort(desc) };

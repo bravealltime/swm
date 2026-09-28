@@ -1,7 +1,7 @@
 // /api/admin/<action> — back-office API. Every action except `settings` (public GET) requires an
 // admin (Supabase login + ADMIN_EMAILS). Vercel routes here via the [action] file name; the Vite dev
 // middleware calls handleAdmin() directly with the same arguments.
-import { requireAdmin, userFromToken, supabaseInfo, tableStatus, getSettings, saveSettings, aiLogs, aiStats, aiUsageGroups, datasetReport, deployInfo, githubInfo, workflowRuns, dispatchWorkflow } from '../_lib/admin.js';
+import { requireAdmin, userFromToken, getUserDirectory, supabaseInfo, tableStatus, getSettings, saveSettings, aiLogs, aiStats, aiUsageGroups, datasetReport, deployInfo, githubInfo, workflowRuns, dispatchWorkflow } from '../_lib/admin.js';
 import { bangkokDay } from '../_lib/aiQuota.js';
 import { aiConfig, chat } from '../_lib/ai.js';
 import { adminSnapshots, setContributorFlag, deleteSnapshot } from '../_lib/guildRankings.js';
@@ -61,8 +61,45 @@ export async function handleAdmin({ action, method, body, token, query = {} }) {
     const resets = settings.ai?.resets || {};
     const since = [day.start, resets.all].filter(Boolean).sort().pop();
     const usage = await aiUsageGroups({ since });
+    const userDir = await getUserDirectory();
     const after = (k) => (resets[k] && resets[k] > since ? resets[k] : null);
-    return { status: 200, json: { ...usage, day, limit: settings.ai?.dailyLimit ?? 3, resets, users: usage.users.map((u) => ({ ...u, resetAt: after(`u:${u.userId}`) })), ips: usage.ips.map((i) => ({ ...i, resetAt: after(`ip:${i.ipHash}`) })) } };
+
+    const users = usage.users.map((u) => {
+      const resetTime = after(`u:${u.userId}`);
+      const activeCount = resetTime && Array.isArray(u.timestamps) ? u.timestamps.filter((ts) => ts > resetTime).length : u.count;
+      const profile = userDir.get(u.userId);
+      return {
+        ...u,
+        count: activeCount,
+        totalToday: u.count,
+        resetAt: resetTime,
+        email: profile?.email || null,
+        displayName: profile?.name || null,
+      };
+    });
+
+    const ips = usage.ips.map((i) => {
+      const resetTime = after(`ip:${i.ipHash}`);
+      const activeCount = resetTime && Array.isArray(i.timestamps) ? i.timestamps.filter((ts) => ts > resetTime).length : i.count;
+      return {
+        ...i,
+        count: activeCount,
+        totalToday: i.count,
+        resetAt: resetTime,
+      };
+    });
+
+    return {
+      status: 200,
+      json: {
+        ...usage,
+        day,
+        limit: settings.ai?.dailyLimit ?? 3,
+        resets,
+        users,
+        ips,
+      },
+    };
   }
   if (action === 'ai-quota' && method === 'POST') {
     const target = String(body?.target || '');
