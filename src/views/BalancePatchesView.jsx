@@ -612,7 +612,7 @@ export default function BalancePatchesView({ onNavigate }) {
                           <div className="text-[11px] text-slate-400 uppercase tracking-wider mb-1 font-bold">
                             COM2US OFFICIAL TEXT:
                           </div>
-                          {card.preview || card.officialText}
+                          {card.officialText || card.preview}
                         </div>
                       )}
                       {patchAi.patches?.[selectedPatchId]?.perMonster?.[card.monsterName] && (

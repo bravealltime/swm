@@ -3917,8 +3917,8 @@
       "skillBadge": "Passive",
       "skillImg": "",
       "changeType": "Value changed",
-      "changeTypeTh": "ปรับเปลี่ยนค่าสถานะ / เพิ่มเอฟเฟกต์",
-      "preview": "[Value changed]\r\nDamage dealt increased from 40% ➔ 50%.\r\n[Effect added]\r\nRemoves 1 harmful effect granted on yourself when you gain a turn.",
+      "changeTypeTh": "📊 ปรับสัดส่วน / เพิ่มเอฟเฟกต์",
+      "preview": "สร้างความเสียหายเพิ่มขึ้นจาก 40% ➔ 50% และ [เพิ่มเอฟเฟกต์] ลบล้าง 1 ดีบัฟที่ติดอยู่กับตัวเองทันทีเมื่อได้รับเทิร์น",
       "officialText": "[Value changed]\r\nDamage dealt increased from 40% ➔ 50%.\r\n[Effect added]\r\nRemoves 1 harmful effect granted on yourself when you gain a turn.",
       "valueChanges": [
         {
@@ -3938,8 +3938,8 @@
       "skillBadge": "Passive",
       "skillImg": "",
       "changeType": "Percentage changed",
-      "changeTypeTh": "ปรับเปอร์เซ็นต์โอกาสติด",
-      "preview": "[Percentage changed]\r\nResets the enemy from removing harmful effects for 1 turn with an 80% ➔ 100% chance when you attack an enemy granted with a harmful effect.",
+      "changeTypeTh": "🎯 ปรับเปอร์เซ็นต์โอกาสติด",
+      "preview": "เมื่อโจมตีศัตรูที่มีดีบัฟ โอกาสรีเซ็ตไม่ให้ศัตรูลบล้างดีบัฟได้ 1 เทิร์น เพิ่มจาก 80% ➔ 100% (ติดชัวร์)",
       "officialText": "[Percentage changed]\r\nResets the enemy from removing harmful effects for 1 turn with an 80% ➔ 100% chance when you attack an enemy granted with a harmful effect.",
       "valueChanges": [
         {
@@ -3959,8 +3959,8 @@
       "skillBadge": "Passive",
       "skillImg": "",
       "changeType": "Value changed",
-      "changeTypeTh": "ปรับตัวเลขความแรง/สัดส่วน",
-      "preview": "[Value changed]\r\nIncreases Attack Bar by 10% ➔ 15% when an ally is attacked.\r\nDecreases the damage ally receives by 20% ➔ 30%.",
+      "changeTypeTh": "📊 ปรับตัวเลขความแรง/สัดส่วน",
+      "preview": "เมื่อเพื่อนร่วมทีมถูกโจมตี เพิ่มเกจตัวเอง 10% ➔ 15% และลดความเสียหายที่เพื่อนร่วมทีมได้รับลงจาก 20% ➔ 30%",
       "officialText": "[Value changed]\r\nIncreases Attack Bar by 10% ➔ 15% when an ally is attacked.\r\nDecreases the damage ally receives by 20% ➔ 30%.",
       "valueChanges": [
         {
@@ -3984,8 +3984,8 @@
       "skillBadge": "S2",
       "skillImg": "",
       "changeType": "Percentage changed",
-      "changeTypeTh": "ปรับเปอร์เซ็นต์/ตัวคูณ",
-      "preview": "[Percentage changed]\r\nIncreases the Attack Bar of the ally target by 10% ➔ 15%.",
+      "changeTypeTh": "🎯 ปรับเปอร์เซ็นต์/ตัวคูณ",
+      "preview": "เพิ่มเกจโจมตี (Attack Bar) ให้กับเพื่อนร่วมทีมเป้าหมายจาก 10% ➔ 15%",
       "officialText": "[Percentage changed]\r\nIncreases the Attack Bar of the ally target by 10% ➔ 15%.",
       "valueChanges": [
         {
@@ -4005,8 +4005,8 @@
       "skillBadge": "S2",
       "skillImg": "",
       "changeType": "Damage Increased",
-      "changeTypeTh": "บัฟเพิ่มความแรงดาเมจ",
-      "preview": "[Damage increased]\r\nDeals damage in proportion to Attack Power ➔ Deals damage that increases according to the lost HP.",
+      "changeTypeTh": "🗡️ บัฟเพิ่มความแรงดาเมจ",
+      "preview": "ความเสียหายคิดตามพลังโจมตี (ATK) ➔ เปลี่ยนเป็นสร้างความเสียหายเพิ่มขึ้นตามสัดส่วน HP ที่สูญเสียไป (ยิ่งเลือดน้อยยิ่งตีแรง)",
       "officialText": "[Damage increased]\r\nDeals damage in proportion to Attack Power ➔ Deals damage that increases according to the lost HP.",
       "valueChanges": [],
       "impact": "buff"
@@ -4021,8 +4021,8 @@
       "skillBadge": "S1",
       "skillImg": "",
       "changeType": "Percentage changed",
-      "changeTypeTh": "ปรับเปอร์เซ็นต์โอกาสติด",
-      "preview": "[Percentage increased]\r\nDecreases the Attack Bar 1 turn with a 50% ➔ 60% chance.",
+      "changeTypeTh": "🎯 ปรับเปอร์เซ็นต์โอกาสติด",
+      "preview": "โอกาสลดเกจโจมตีศัตรู 1 เทิร์น ปรับเพิ่มจาก 50% ➔ 60%",
       "officialText": "[Percentage increased]\r\nDecreases the Attack Bar 1 turn with a 50% ➔ 60% chance.",
       "valueChanges": [
         {
@@ -4042,8 +4042,8 @@
       "skillBadge": "S3",
       "skillImg": "",
       "changeType": "Value changed",
-      "changeTypeTh": "ปรับตัวเลขความแรง/สัดส่วน",
-      "preview": "[Value changed]\r\nRecovers the HP of all allies by 30% ➔ 35%.",
+      "changeTypeTh": "📊 ปรับตัวเลขความแรง/สัดส่วน",
+      "preview": "ฟื้นฟู HP เพื่อนร่วมทีมทั้งหมดจาก 30% ➔ 35%",
       "officialText": "[Value changed]\r\nRecovers the HP of all allies by 30% ➔ 35%.",
       "valueChanges": [
         {
@@ -4063,8 +4063,8 @@
       "skillBadge": "S2",
       "skillImg": "",
       "changeType": "Value changed",
-      "changeTypeTh": "ปรับตัวเลขความแรง/สัดส่วน",
-      "preview": "[Value changed]\r\nThe attack will ignore the enemy's Defense by 20% ➔ 25% for each beneficial effect the enemy has.",
+      "changeTypeTh": "📊 ปรับตัวเลขความแรง/สัดส่วน",
+      "preview": "การโจมตีจะเจาะเกราะป้องกันศัตรูเพิ่มขึ้นจาก 20% ➔ 25% ต่อจำนวนบัฟ 1 อย่างที่ศัตรูมี",
       "officialText": "[Value changed]\r\nThe attack will ignore the enemy's Defense by 20% ➔ 25% for each beneficial effect the enemy has.",
       "valueChanges": [
         {
@@ -4084,8 +4084,8 @@
       "skillBadge": "S1",
       "skillImg": "",
       "changeType": "Effect added",
-      "changeTypeTh": "เพิ่มเอฟเฟกต์ใหม่",
-      "preview": "[Effect added]\r\nAttacks the enemy, then removing harmful effects for 1 turn if the enemy is already asleep.",
+      "changeTypeTh": "✨ เพิ่มเอฟเฟกต์ใหม่",
+      "preview": "[เพิ่มเอฟเฟกต์] โจมตีศัตรู และหากศัตรูติดสถานะหลับอยู่แล้ว จะทำการลบล้างบัฟของศัตรูออกเป็นเวลา 1 เทิร์น",
       "officialText": "[Effect added]\r\nAttacks the enemy, then removing harmful effects for 1 turn if the enemy is already asleep.",
       "valueChanges": [],
       "impact": "buff"
@@ -4100,8 +4100,8 @@
       "skillBadge": "S2",
       "skillImg": "",
       "changeType": "Effect changed",
-      "changeTypeTh": "เปลี่ยนเอฟเฟกต์สกิล",
-      "preview": "[Effect modified]\r\nAttacks all enemies to put them to sleep for 1 ➔ 2 turns.",
+      "changeTypeTh": "🔄 เปลี่ยนเอฟเฟกต์สกิล",
+      "preview": "โจมตีศัตรูทั้งหมดและทำให้ติดสถานะหลับจาก 1 เทิร์น ➔ 2 เทิร์น (หลับยาว)",
       "officialText": "[Effect modified]\r\nAttacks all enemies to put them to sleep for 1 ➔ 2 turns.",
       "valueChanges": [
         {
@@ -4121,8 +4121,8 @@
       "skillBadge": "S2",
       "skillImg": "",
       "changeType": "Cooldown Changed",
-      "changeTypeTh": "ปรับคูลดาวน์สกิล",
-      "preview": "[Cooltime decreased]\r\nMAX cooltime: [3 turns ➔ 2 turns]. สามารถใช้สกิลเจาะเกราะได้เทิร์นเว้นเทิร์น!",
+      "changeTypeTh": "⏳ ปรับคูลดาวน์สกิล",
+      "preview": "คูลดาวน์สกิล 2 Triple Crush: ลดจาก 3 เทิร์น ➔ เหลือ 2 เทิร์น (สามารถออกสกิลเจาะเกราะได้เทิร์นเว้นเทิร์น!)",
       "officialText": "[Cooltime decreased]\r\nMAX cooltime: [3 turns ➔ 2 turns]",
       "valueChanges": [
         {
@@ -4142,8 +4142,8 @@
       "skillBadge": "S2",
       "skillImg": "",
       "changeType": "Cooldown Changed",
-      "changeTypeTh": "ปรับคูลดาวน์สกิล",
-      "preview": "[Cooltime decreased]\r\nMAX cooltime: [3 turns ➔ 2 turns]",
+      "changeTypeTh": "⏳ ปรับคูลดาวน์สกิล",
+      "preview": "คูลดาวน์สกิล 2 Triple Crush: ลดจาก 3 เทิร์น ➔ เหลือ 2 เทิร์น (ออกเจาะเกราะได้บ่อยขึ้น)",
       "officialText": "[Cooltime decreased]\r\nMAX cooltime: [3 turns ➔ 2 turns]",
       "valueChanges": [
         {
@@ -4163,8 +4163,8 @@
       "skillBadge": "S2",
       "skillImg": "",
       "changeType": "Cooldown Changed",
-      "changeTypeTh": "ปรับคูลดาวน์สกิล",
-      "preview": "[Cooltime decreased]\r\nMAX cooltime: [3 turns ➔ 2 turns]",
+      "changeTypeTh": "⏳ ปรับคูลดาวน์สกิล",
+      "preview": "คูลดาวน์สกิล 2 Triple Crush: ลดจาก 3 เทิร์น ➔ เหลือ 2 เทิร์น (วนเจาะเกราะและขโมยบัฟได้ถี่ขึ้น)",
       "officialText": "[Cooltime decreased]\r\nMAX cooltime: [3 turns ➔ 2 turns]",
       "valueChanges": [
         {
@@ -4184,8 +4184,8 @@
       "skillBadge": "S2",
       "skillImg": "",
       "changeType": "Value changed",
-      "changeTypeTh": "ปรับเปลี่ยนค่าสถานะ",
-      "preview": "[Value changed]\r\nDecreases the Attack Bar of targets that are not stunned by 20% ➔ 30%.",
+      "changeTypeTh": "📊 ปรับเปลี่ยนค่าสถานะ",
+      "preview": "เป้าหมายที่ไม่ติดสถานะสตัน จะถูกลดเกจโจมตีเพิ่มขึ้นจาก 20% ➔ 30%",
       "officialText": "[Value changed]\r\nDecreases the Attack Bar of targets that are not stunned by 20% ➔ 30%.",
       "valueChanges": [
         {
@@ -4205,8 +4205,8 @@
       "skillBadge": "S2",
       "skillImg": "",
       "changeType": "Damage Increased",
-      "changeTypeTh": "บัฟเพิ่มความแรงดาเมจ",
-      "preview": "[Damage increased]\r\nDeals damage equal to 15% ➔ 20% of your MAX HP.",
+      "changeTypeTh": "🗡️ บัฟเพิ่มความแรงดาเมจ",
+      "preview": "สร้างความเสียหายตามสัดส่วน MAX HP เพิ่มขึ้นจาก 15% ➔ 20%",
       "officialText": "[Damage increased]\r\nDeals damage equal to 15% ➔ 20% of your MAX HP.",
       "valueChanges": [
         {
@@ -4226,8 +4226,8 @@
       "skillBadge": "S2",
       "skillImg": "",
       "changeType": "Effect changed",
-      "changeTypeTh": "เปลี่ยนเอฟเฟกต์สกิล",
-      "preview": "[Effect changed]\r\n(Human Form) Recovers the HP of allies with fewer HP in proportion to MAX HP by 15%.",
+      "changeTypeTh": "🔄 เปลี่ยนเอฟเฟกต์สกิล",
+      "preview": "(ร่างมนุษย์) ฟื้นฟู HP ให้กับเพื่อนร่วมทีมที่มีเปอร์เซ็นต์เลือดน้อยที่สุด เพิ่มเติมอีก 15%",
       "officialText": "[Effect changed]\r\nRecovers the HP of allies with fewer HP in proportion to HP by 15%.",
       "valueChanges": [],
       "impact": "buff"
@@ -4242,8 +4242,8 @@
       "skillBadge": "S2",
       "skillImg": "",
       "changeType": "Effect changed",
-      "changeTypeTh": "เปลี่ยนเอฟเฟกต์สกิล",
-      "preview": "[Effect changed]\r\nDecreases the Attack Bar by 50% if your MAX HP is higher than the target's ➔ Decreases the Attack Bar by 60% without conditions.",
+      "changeTypeTh": "🔄 เปลี่ยนเอฟเฟกต์สกิล",
+      "preview": "ลดเกจ 50% เฉพาะเมื่อ MAX HP มากกว่าศัตรู ➔ ลดเกจศัตรู 60% โดยไม่มีเงื่อนไขใดๆ ทันที!",
       "officialText": "[Effect changed]\r\nDecreases the Attack Bar by 50% if your MAX HP is higher than the target's ➔ Decreases the Attack Bar by 60% without conditions.",
       "valueChanges": [
         {
@@ -4263,8 +4263,8 @@
       "skillBadge": "Passive",
       "skillImg": "",
       "changeType": "Value changed",
-      "changeTypeTh": "ปรับตัวเลขความแรง/สัดส่วน",
-      "preview": "[Value changed]\r\nCreates a Shield equivalent to 10% ➔ 15% of your MAX HP for 1 turn at the start of your turn.",
+      "changeTypeTh": "📊 ปรับตัวเลขความแรง/สัดส่วน",
+      "preview": "สร้างโล่ป้องกันให้กับตัวเองเพิ่มขึ้นจาก 10% ➔ 15% ของ MAX HP เป็นเวลา 1 เทิร์นในทุกต้นเทิร์น",
       "officialText": "[Value changed]\r\nCreates a Shield equivalent to 10% ➔ 15% of your MAX HP for 1 turn at the start of your turn.",
       "valueChanges": [
         {
@@ -4284,8 +4284,8 @@
       "skillBadge": "S2",
       "skillImg": "",
       "changeType": "Damage Increased",
-      "changeTypeTh": "บัฟเพิ่มความแรงดาเมจ",
-      "preview": "[Damage increased]\r\nIncreases your Attack Bar by 20% ➔ 25% for each beneficial effect removed.",
+      "changeTypeTh": "🗡️ บัฟเพิ่มความแรงดาเมจ",
+      "preview": "เพิ่มความเสียหายดาเมจ และเพิ่มเกจโจมตีตัวเองจาก 20% ➔ 25% ต่อบัฟศัตรูที่ลบล้างได้",
       "officialText": "[Damage increased]\r\nIncreases your Attack Bar by 20% ➔ 25% for each beneficial effect removed.",
       "valueChanges": [
         {
@@ -4305,8 +4305,8 @@
       "skillBadge": "Passive",
       "skillImg": "",
       "changeType": "Effect and value changed",
-      "changeTypeTh": "ปรับกลไกและตัวเลขสกิล",
-      "preview": "[Effect and value changed]\r\nRecovers 5% of HP and by 20% when you gain a turn under an inability effect ➔ Recovers the HP of all allies by 15% when you gain a turn under an inability effect.",
+      "changeTypeTh": "⚙️ ปรับกลไกและตัวเลขสกิล",
+      "preview": "ฟื้นฟูเลือดตัวเองเมื่อติด CC ➔ เปลี่ยนเป็นฟื้นฟู HP เพื่อนร่วมทีมทั้งหมด 15% เมื่อตัวเองได้รับเทิร์นขณะติดสถานะผิดปกติ",
       "officialText": "[Effect and value changed]\r\nRecovers 5% of HP and by 20% when you gain a turn under an inability effect ➔ Recovers the HP of all allies by 15% when you gain a turn under an inability effect.",
       "valueChanges": [],
       "impact": "buff"
@@ -4321,8 +4321,8 @@
       "skillBadge": "S3",
       "skillImg": "",
       "changeType": "Effect changed",
-      "changeTypeTh": "เปลี่ยนเอฟเฟกต์สกิล",
-      "preview": "[Effect changed]\r\nAttacks all enemies to remove 1 beneficial effect and block them from receiving beneficial effects for 2 turns. Provides a shield to allies with no beneficial effects for 1 turn.",
+      "changeTypeTh": "🔄 เปลี่ยนเอฟเฟกต์สกิล",
+      "preview": "โจมตีลดความเร็วศัตรู ➔ โจมตีศัตรูทั้งหมดเพื่อลบล้าง 1 บัฟ + ห้ามรับบัฟ 2 เทิร์น และมอบโล่ป้องกันให้เพื่อนที่ไม่มีบัฟ 1 เทิร์น",
       "officialText": "[Effect changed]\r\nAttacks all enemies to remove 1 beneficial effect and block them from receiving beneficial effects for 2 turns. Provides a shield to allies with no beneficial effects for 1 turn.",
       "valueChanges": [],
       "impact": "adjustment"
@@ -4337,8 +4337,8 @@
       "skillBadge": "S2",
       "skillImg": "",
       "changeType": "Effect added",
-      "changeTypeTh": "เพิ่มเอฟเฟกต์ใหม่",
-      "preview": "[Effect added]\r\nRecovers the HP of all allies by 20%.",
+      "changeTypeTh": "✨ เพิ่มเอฟเฟกต์ใหม่",
+      "preview": "[เพิ่มเอฟเฟกต์] ฟื้นฟู HP ให้เพื่อนร่วมทีมทั้งหมด 20% ทันที",
       "officialText": "[Effect added]\r\nRecovers the HP of all allies by 20%.",
       "valueChanges": [],
       "impact": "buff"
@@ -4353,8 +4353,8 @@
       "skillBadge": "Passive",
       "skillImg": "",
       "changeType": "Value changed",
-      "changeTypeTh": "ปรับตัวเลขความแรง/สัดส่วน",
-      "preview": "[Value changed]\r\nWhile in the judgement of flame state, deals 50% ➔ 70% increased damage.",
+      "changeTypeTh": "📊 ปรับตัวเลขความแรง/สัดส่วน",
+      "preview": "ขณะอยู่ในสถานะ Judgement of Flame สร้างความเสียหายเพิ่มขึ้นจาก 50% ➔ 70%",
       "officialText": "[Value changed]\r\nWhile in the judgement of flame state, deals 50% ➔ 70% increased damage.",
       "valueChanges": [
         {
@@ -4374,8 +4374,8 @@
       "skillBadge": "S2",
       "skillImg": "",
       "changeType": "Effect changed",
-      "changeTypeTh": "เปลี่ยนเอฟเฟกต์สกิล",
-      "preview": "[Effect changed]\r\nRecovers your HP and that of the ally with the worst HP condition by 20% ➔ Recovers the HP of all allies by 15%.",
+      "changeTypeTh": "🔄 เปลี่ยนเอฟเฟกต์สกิล",
+      "preview": "ฟื้นฟู HP ตัวเองและเพื่อนเลือดน้อย 20% ➔ ปรับเป็นฟื้นฟู HP เพื่อนร่วมทีมทั้งหมด 15%",
       "officialText": "[Effect changed]\r\nRecovers your HP and that of the ally with the worst HP condition by 20% ➔ Recovers the HP of all allies by 15%.",
       "valueChanges": [],
       "impact": "adjustment"
@@ -4390,8 +4390,8 @@
       "skillBadge": "Passive",
       "skillImg": "",
       "changeType": "Effect changed",
-      "changeTypeTh": "เปลี่ยนเอฟเฟกต์สกิล",
-      "preview": "[Effect changed]\r\nActivates when an ally receives fatal damage from an attack that ignores Defense ➔ Activates when an ally receives fatal damage from an attack that ignores Defense or if HP falls to 10% or below.",
+      "changeTypeTh": "🔄 เปลี่ยนเอฟเฟกต์สกิล",
+      "preview": "ทำงานเมื่อเพื่อนโดนดาเมจทะลุเกราะตาย ➔ ทำงานเมื่อเพื่อนโดนดาเมจทะลุเกราะตาย หรือเมื่อ HP ลดลงเหลือ 10% หรือต่ำกว่า",
       "officialText": "[Effect changed]\r\nActivates when an ally receives fatal damage from an attack that ignores Defense ➔ Activates when an ally receives fatal damage from an attack that ignores Defense or if HP falls to 10% or below.",
       "valueChanges": [],
       "impact": "buff"
@@ -4406,8 +4406,8 @@
       "skillBadge": "Passive",
       "skillImg": "",
       "changeType": "Value changed",
-      "changeTypeTh": "ปรับตัวเลขความแรง/สัดส่วน",
-      "preview": "[Value changed]\r\nIncreases your Attack Bar by 10% ➔ 25% whenever an enemy granted with a harmful effect gains a turn.",
+      "changeTypeTh": "📊 ปรับตัวเลขความแรง/สัดส่วน",
+      "preview": "เพิ่มเกจโจมตีตัวเองจาก 10% ➔ 25% เมื่อใดก็ตามที่ศัตรูที่มีดีบัฟได้รับเทิร์น",
       "officialText": "[Value changed]\r\nIncreases your Attack Bar by 10% ➔ 25% whenever an enemy granted with a harmful effect gains a turn.",
       "valueChanges": [
         {
@@ -4427,8 +4427,8 @@
       "skillBadge": "Passive",
       "skillImg": "",
       "changeType": "Value changed",
-      "changeTypeTh": "ปรับตัวเลขความแรง/สัดส่วน",
-      "preview": "When attacked, offsets the damage and decreases the enemy's Attack Bar with a 25% ➔ 40% chance.",
+      "changeTypeTh": "📊 ปรับตัวเลขความแรง/สัดส่วน",
+      "preview": "เมื่อถูกโจมตี โอกาสบล็อกความเสียหายและลดเกจโจมตีศัตรูปรับเพิ่มจาก 25% ➔ 40%",
       "officialText": "When attacked, offsets the damage and decreases the enemy's Attack Bar with a 25% ➔ 40% chance.",
       "valueChanges": [
         {
@@ -4448,8 +4448,8 @@
       "skillBadge": "Passive",
       "skillImg": "",
       "changeType": "Value changed",
-      "changeTypeTh": "ปรับตัวเลขความแรง/สัดส่วน",
-      "preview": "[Value changed]\r\nWhen you take fatal damage from the enemy, offsets the damage and reflects 50% ➔ 80% of the damage back to the attacker.",
+      "changeTypeTh": "📊 ปรับตัวเลขความแรง/สัดส่วน",
+      "preview": "เมื่อได้รับความเสียหายถึงตาย ป้องกันดาเมจและสะท้อนความเสียหายกลับคืนสู่ผู้โจมตีเพิ่มจาก 50% ➔ 80%",
       "officialText": "[Value changed]\r\nWhen you take fatal damage from the enemy, offsets the damage and reflects 50% ➔ 80% of the damage back to the attacker.",
       "valueChanges": [
         {
@@ -4469,8 +4469,8 @@
       "skillBadge": "Passive",
       "skillImg": "",
       "changeType": "Effect added",
-      "changeTypeTh": "เพิ่มเอฟเฟกต์ใหม่",
-      "preview": "[Effect added]\r\nWhenever you attack an enemy, grants one of the following beneficial effects you do not have on yourself for 2 turns: Shield, Counterattack, or Immunity.",
+      "changeTypeTh": "✨ เพิ่มเอฟเฟกต์ใหม่",
+      "preview": "[เพิ่มเอฟเฟกต์] เมื่อโจมตีศัตรู สุ่มรับบัฟที่ตัวเองยังไม่มี 1 อย่างเป็นเวลา 2 เทิร์น: โล่ป้องกัน (Shield), สวนกลับ (Counter), หรือ ภูมิคุ้มกัน (Immunity)",
       "officialText": "[Effect added]\r\nWhenever you attack an enemy, grants one of the following beneficial effects you do not have on yourself for 2 turns: Shield, Counterattack, or Immunity.",
       "valueChanges": [],
       "impact": "buff"
@@ -4485,8 +4485,8 @@
       "skillBadge": "S1",
       "skillImg": "",
       "changeType": "Damage Increased",
-      "changeTypeTh": "บัฟเพิ่มความแรงดาเมจ",
-      "preview": "[Damage increased]\r\nDamage increased by 10% on Skill 1 and 15% on follow-up strikes.",
+      "changeTypeTh": "🗡️ บัฟเพิ่มความแรงดาเมจ",
+      "preview": "เพิ่มความแรงดาเมจสกิล 1 ขึ้น 10% และเพิ่มความแรงของการโจมตีต่อเนื่องขึ้น 15%",
       "officialText": "[Damage increased]\r\nDamage increased by 10% on Skill 1 and 15% on follow-up strikes.",
       "valueChanges": [],
       "impact": "buff"
@@ -4501,8 +4501,8 @@
       "skillBadge": "Passive",
       "skillImg": "",
       "changeType": "Effect changed",
-      "changeTypeTh": "เปลี่ยนเอฟเฟกต์สกิล",
-      "preview": "[Effect changed]\r\nFor each harmful effect granted on yourself ➔ for each harmful effect granted on all allies, increases damage dealt by 20%, and decreases damage taken by 10% (Up to 200% DMG / 50% RED).",
+      "changeTypeTh": "🔄 เปลี่ยนเอฟเฟกต์สกิล",
+      "preview": "คิดโบนัสจากดีบัฟบนตัวเอง ➔ คิดจากจำนวนดีบัฟทั้งหมดบนเพื่อนร่วมทีมทุกคน เพิ่มดาเมจ 20% และลดดาเมจรับ 10% ต่อ 1 ดีบัฟ (สูงสุด ดาเมจ +200% / ลดดาเมจรับ 50%)",
       "officialText": "[Effect changed]\r\nFor each harmful effect granted on yourself ➔ for each harmful effect granted on all allies, increases damage dealt by 20%, and decreases damage taken by 10% (Up to 200% DMG / 50% RED).",
       "valueChanges": [],
       "impact": "buff"
@@ -4517,8 +4517,8 @@
       "skillBadge": "S1",
       "skillImg": "",
       "changeType": "Effect added",
-      "changeTypeTh": "เพิ่มเอฟเฟกต์ใหม่",
-      "preview": "[Effect added]\r\nAttacks sleeping enemies without waking them up.",
+      "changeTypeTh": "✨ เพิ่มเอฟเฟกต์ใหม่",
+      "preview": "[เพิ่มเอฟเฟกต์] สามารถโจมตีศัตรูที่กำลังติดสถานะหลับได้ โดยไม่ทำให้ศัตรูตื่นขึ้น!",
       "officialText": "[Effect added]\r\nAttacks sleeping enemies without waking them up.",
       "valueChanges": [],
       "impact": "buff"
@@ -4533,8 +4533,8 @@
       "skillBadge": "Passive",
       "skillImg": "",
       "changeType": "Effect added",
-      "changeTypeTh": "เพิ่มเอฟเฟกต์ใหม่",
-      "preview": "[Effect added]\r\nIf you defeat a sleeping enemy on your turn, the target cannot be revived during battle.",
+      "changeTypeTh": "✨ เพิ่มเอฟเฟกต์ใหม่",
+      "preview": "[เพิ่มเอฟเฟกต์] หากสังหารศัตรูที่กำลังหลับอยู่ได้ในเทิร์นของตัวเอง ศัตรูตัวนั้นจะไม่สามารถชุบชีวิตได้ตลอดการต่อสู้!",
       "officialText": "[Effect added]\r\nIf you defeat a sleeping enemy on your turn, the target cannot be revived during battle.",
       "valueChanges": [],
       "impact": "buff"
@@ -4549,8 +4549,8 @@
       "skillBadge": "Passive",
       "skillImg": "",
       "changeType": "Effect changed",
-      "changeTypeTh": "เปลี่ยนเอฟเฟกต์สกิล",
-      "preview": "[Effect changed]\r\nDecreases the Attack Bar by 15% when attacking a frozen enemy ➔ Decreases the Attack Bar by 10% without conditions.",
+      "changeTypeTh": "🔄 เปลี่ยนเอฟเฟกต์สกิล",
+      "preview": "ลดเกจ 15% เมื่อตีศัตรูที่แช่แข็ง ➔ ลดเกจโจมตีศัตรู 10% ในทุกการโจมตีโดยไม่มีเงื่อนไขใดๆ",
       "officialText": "[Effect changed]\r\nDecreases the Attack Bar by 15% when attacking a frozen enemy ➔ Decreases the Attack Bar by 10% without conditions.",
       "valueChanges": [],
       "impact": "buff"
@@ -4565,8 +4565,8 @@
       "skillBadge": "S2",
       "skillImg": "",
       "changeType": "Percentage changed",
-      "changeTypeTh": "ปรับเปอร์เซ็นต์โอกาสติด",
-      "preview": "[Percentage changed]\r\nBeneficial effect block for 1 turn with a 50% ➔ 70% chance.",
+      "changeTypeTh": "🎯 ปรับเปอร์เซ็นต์โอกาสติด",
+      "preview": "โอกาสมอบสถานะห้ามรับบัฟ (Block Beneficial Effects) 1 เทิร์น ปรับเพิ่มจาก 50% ➔ 70%",
       "officialText": "[Percentage changed]\r\nBeneficial effect block for 1 turn with a 50% ➔ 70% chance.",
       "valueChanges": [
         {
@@ -4586,8 +4586,8 @@
       "skillBadge": "Passive",
       "skillImg": "",
       "changeType": "Effect changed",
-      "changeTypeTh": "เปลี่ยนเอฟเฟกต์สกิล",
-      "preview": "[Effect changed]\r\nWhenever you gain a turn, grants a random ATK, DEF, or SPD increase for 1 ➔ 2 turns.",
+      "changeTypeTh": "🔄 เปลี่ยนเอฟเฟกต์สกิล",
+      "preview": "เมื่อได้รับเทิร์น สุ่มบัฟเพิ่ม ATK, DEF หรือ SPD ให้กับตัวเอง ปรับระยะเวลาจาก 1 เทิร์น ➔ 2 เทิร์น",
       "officialText": "[Effect changed]\r\nWhenever you gain a turn, grants a random ATK, DEF, or SPD increase for 1 ➔ 2 turns.",
       "valueChanges": [
         {
@@ -4607,8 +4607,8 @@
       "skillBadge": "Passive",
       "skillImg": "",
       "changeType": "Effect changed",
-      "changeTypeTh": "เปลี่ยนเอฟเฟกต์สกิล",
-      "preview": "[Effect changed]\r\nRemoves 1 harmful effect from yourself and the ally with highest Attack Bar ➔ Removes 1 harmful effect from the 3 allies with highest Attack Bar and increases their Attack Bar by 20%.",
+      "changeTypeTh": "🔄 เปลี่ยนเอฟเฟกต์สกิล",
+      "preview": "ล้างดีบัฟให้ตัวเองและเพื่อนเกจสูงสุด 1 ตัว ➔ ลบล้าง 1 ดีบัฟให้กับเพื่อนร่วมทีม 3 ตัวที่มีเกจโจมตีสูงสุด พร้อมเพิ่มเกจโจมตีให้ 20% ทันที",
       "officialText": "[Effect changed]\r\nRemoves 1 harmful effect from yourself and the ally with highest Attack Bar ➔ Removes 1 harmful effect from the 3 allies with highest Attack Bar and increases their Attack Bar by 20%.",
       "valueChanges": [],
       "impact": "buff"
@@ -4623,8 +4623,8 @@
       "skillBadge": "Leader",
       "skillImg": "",
       "changeType": "Leader Skill Changed",
-      "changeTypeTh": "ปรับสกิลลีดเดอร์",
-      "preview": "Increases the Defense of ally monsters in Guild Content by 28% ➔ Increases the Attack Speed of ally Monsters in Guild Content by 24%.",
+      "changeTypeTh": "👑 ปรับสกิลลีดเดอร์",
+      "preview": "ลีดเดอร์สกิล: เพิ่มพลังป้องกัน (DEF) มอนสเตอร์ในกิลด์ 28% ➔ เพิ่มความเร็วโจมตี (SPD Lead) ใน Guild Content 24%",
       "officialText": "Increases the Defense of ally monsters in Guild Content by 28% ➔ Increases the Attack Speed of ally Monsters in Guild Content by 24%.",
       "valueChanges": [],
       "impact": "buff"
@@ -4639,8 +4639,8 @@
       "skillBadge": "Leader",
       "skillImg": "",
       "changeType": "Leader Skill Changed",
-      "changeTypeTh": "ปรับสกิลลีดเดอร์",
-      "preview": "Increases the Resistance of ally Monsters in Dungeons by 33% ➔ Increases the Resistance of ally Monsters in Guild Content by 33%.",
+      "changeTypeTh": "👑 ปรับสกิลลีดเดอร์",
+      "preview": "ลีดเดอร์สกิล: เพิ่มค่าต้านทาน (RES) ในดันเจี้ยน 33% ➔ เพิ่มค่าต้านทาน (RES) ใน Guild Content 33%",
       "officialText": "Increases the Resistance of ally Monsters in Dungeons by 33% ➔ Increases the Resistance of ally Monsters in Guild Content by 33%.",
       "valueChanges": [],
       "impact": "adjustment"
@@ -4655,8 +4655,8 @@
       "skillBadge": "Awakening",
       "skillImg": "",
       "changeType": "Awakening Effect Changed",
-      "changeTypeTh": "ปรับเอฟเฟกต์ปลุกพลัง",
-      "preview": "Increases Critical Rate by 15% ➔ Increases Critical Damage by 25%.",
+      "changeTypeTh": "🌟 ปรับเอฟเฟกต์ปลุกพลัง",
+      "preview": "เอฟเฟกต์ปลุกพลัง (Awakening): เพิ่มอัตราคริติคอล 15% ➔ เปลี่ยนเป็นเพิ่มความเสียหายคริติคอล (CRIT DMG) 25%",
       "officialText": "Increases Critical Rate by 15% ➔ Increases Critical Damage by 25%.",
       "valueChanges": [],
       "impact": "buff"
@@ -4671,8 +4671,8 @@
       "skillBadge": "Stat Changed",
       "skillImg": "",
       "changeType": "Stat Changed",
-      "changeTypeTh": "ปรับสเตตัสพื้นฐาน",
-      "preview": "(Unawakened) Attack Speed 102 ➔ 104\r\n(Awakened) Attack Speed 103 ➔ 105",
+      "changeTypeTh": "⚡ ปรับสเตตัสพื้นฐาน",
+      "preview": "ความเร็วโจมตีพื้นฐาน (Base SPD) ก่อนตื่น 102 ➔ 104 / หลังตื่น 103 ➔ 105 (+2 SPD)",
       "officialText": "(Unawakened) Attack Speed 102 ➔ 104\r\n(Awakened) Attack Speed 103 ➔ 105",
       "valueChanges": [
         {
@@ -4692,8 +4692,8 @@
       "skillBadge": "Stat Changed",
       "skillImg": "",
       "changeType": "Stat Changed",
-      "changeTypeTh": "ปรับสเตตัสพื้นฐาน",
-      "preview": "(Unawakened) Attack Speed 102 ➔ 104\r\n(Awakened) Attack Speed 103 ➔ 105",
+      "changeTypeTh": "⚡ ปรับสเตตัสพื้นฐาน",
+      "preview": "ความเร็วโจมตีพื้นฐาน (Base SPD) ก่อนตื่น 102 ➔ 104 / หลังตื่น 103 ➔ 105 (+2 SPD)",
       "officialText": "(Unawakened) Attack Speed 102 ➔ 104\r\n(Awakened) Attack Speed 103 ➔ 105",
       "valueChanges": [
         {
@@ -4713,8 +4713,8 @@
       "skillBadge": "Stat Changed",
       "skillImg": "",
       "changeType": "Stat Changed",
-      "changeTypeTh": "ปรับสเตตัสพื้นฐาน",
-      "preview": "(Unawakened) Attack Speed 102 ➔ 104\r\n(Awakened) Attack Speed 103 ➔ 105",
+      "changeTypeTh": "⚡ ปรับสเตตัสพื้นฐาน",
+      "preview": "ความเร็วโจมตีพื้นฐาน (Base SPD) ก่อนตื่น 102 ➔ 104 / หลังตื่น 103 ➔ 105 (+2 SPD)",
       "officialText": "(Unawakened) Attack Speed 102 ➔ 104\r\n(Awakened) Attack Speed 103 ➔ 105",
       "valueChanges": [
         {
@@ -4734,8 +4734,8 @@
       "skillBadge": "Stat Changed",
       "skillImg": "",
       "changeType": "Stat Changed",
-      "changeTypeTh": "ปรับสเตตัสพื้นฐาน",
-      "preview": "(Awakened) Attack Speed 95 ➔ 96",
+      "changeTypeTh": "⚡ ปรับสเตตัสพื้นฐาน",
+      "preview": "ความเร็วโจมตีพื้นฐาน (Base SPD) หลังตื่น ปรับเพิ่มจาก 95 ➔ 96 (+1 SPD)",
       "officialText": "(Awakened) Attack Speed 95 ➔ 96",
       "valueChanges": [
         {
@@ -4755,8 +4755,8 @@
       "skillBadge": "Stat Changed",
       "skillImg": "",
       "changeType": "Stat Changed",
-      "changeTypeTh": "ปรับสเตตัสพื้นฐาน",
-      "preview": "HP, Attack Power, and Defense base stats adjusted at 6★ Lv.40",
+      "changeTypeTh": "⚡ ปรับสเตตัสพื้นฐาน",
+      "preview": "ปรับปรุงสเตตัสพื้นฐาน HP, ATK, DEF ในระดับ 6 ดาว เลเวล 40 ให้มีความสมดุลและทรงพลังยิ่งขึ้น",
       "officialText": "HP, Attack Power, and Defense base stats adjusted at 6★ Lv.40",
       "valueChanges": [],
       "impact": "adjustment"
@@ -4771,8 +4771,8 @@
       "skillBadge": "Stat Changed",
       "skillImg": "",
       "changeType": "Stat Changed",
-      "changeTypeTh": "ปรับสเตตัสพื้นฐาน",
-      "preview": "HP, Attack Power, and Defense base stats adjusted at 6★ Lv.40",
+      "changeTypeTh": "⚡ ปรับสเตตัสพื้นฐาน",
+      "preview": "ปรับปรุงสเตตัสพื้นฐาน HP, ATK, DEF ในระดับ 6 ดาว เลเวล 40 ให้ถึกทนยิ่งขึ้น",
       "officialText": "HP, Attack Power, and Defense base stats adjusted at 6★ Lv.40",
       "valueChanges": [],
       "impact": "adjustment"
@@ -4787,8 +4787,8 @@
       "skillBadge": "S3",
       "skillImg": "",
       "changeType": "Skill Description Changed",
-      "changeTypeTh": "ปรับคำอธิบายสกิลให้ชัดเจน",
-      "preview": "Adjusted skill description wording for clarity regarding targeting mechanics.",
+      "changeTypeTh": "📝 ปรับคำอธิบายสกิลให้ชัดเจน",
+      "preview": "ปรับปรุงคำอธิบายสกิล Exorcism Resonance ให้มีความชัดเจน ถูกต้องตามกลไกการเล็งเป้าหมายจริง",
       "officialText": "Adjusted skill description wording for clarity regarding targeting mechanics.",
       "valueChanges": [],
       "impact": "adjustment"
