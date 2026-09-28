@@ -1445,3 +1445,216 @@ export async function exportAccountMilestoneCard({
   const title = `การ์ดสรุปพัฒนาการไอดี: ${name}`;
   return handleCardExport({ canvas, filename, title, preview });
 }
+
+/**
+ * Balance Patch Infographic (1200×820):
+ * - Designed for Social Sharing (Facebook groups, LINE, Discord)
+ * - Cyber Dark Navy plate with gold bevel frame and cosmic ambient glow
+ * - Header: SWM Logo, "SUMMONERS WAR MASTER • BALANCE PATCH INFOGRAPHIC",
+ *   "สรุปอัปเดตบาลานซ์แพตช์ครั้งใหญ่ #{patchId}", วันที่ประกาศ, มอนสเตอร์ที่ปรับปรุง
+ * - Meta Overview: AI Meta Summary box with clean Thai text wrapping
+ * - 6 Top Highlight Monster Cards (Grid 2x3):
+ *   - Element portrait medallion with element glow
+ *   - Monster name (Thai/EN) + element badge + role tag
+ *   - Key buff badge (e.g. "Triple Crush CD-1", "SPD Lead 24%", "Daydream ฮีล 35%")
+ *   - Clear explanation of the rebalance
+ *   - Meta impact tag
+ * - Footer: SWM verification, official notice reference
+ */
+export async function exportBalancePatchInfographic({
+  patchId = '93',
+  date = '28 กันยายน 2026',
+  overview = '',
+  highlights = [],
+  totalAdjustments = 47,
+  buffCount = 41,
+  nerfCount = 0,
+  preview = true,
+}) {
+  await ensureFonts();
+  const W = 1200, H = 820;
+  const canvas = document.createElement('canvas');
+  canvas.width = W;
+  canvas.height = H;
+  const ctx = canvas.getContext('2d');
+
+  // 1. Background & Gold Bevel Frame
+  drawBackdrop(ctx, W, H, { glow: 'rgba(234, 179, 8, 0.18)', glowAt: [0.85, 0.15], tint: '#0d1326' });
+  drawGoldFrame(ctx, W, H, 20);
+
+  // 2. Header
+  text(ctx, 'SUMMONERS WAR MASTER  •  OFFICIAL BALANCE INFOGRAPHIC', 42, 54, {
+    font: `800 12px ${SANS}`,
+    color: '#fbbf24',
+    spacing: 1.5,
+  });
+
+  text(ctx, `🔥 สรุปบาลานซ์แพตช์ครั้งใหญ่ #${patchId}`, 42, 84, {
+    font: `800 24px ${THAI}`,
+    color: '#ffffff',
+    shadow: 'rgba(0,0,0,0.6)',
+  });
+
+  // Header Right Badges
+  const datePillText = `📅 ${date}`;
+  const statPillText = `⚔️ ${totalAdjustments} รายการ (${buffCount} บัฟ)`;
+  pill(ctx, W - 42 - 180, 56, statPillText, {
+    color: '#34d399',
+    bg: 'rgba(52, 211, 153, 0.12)',
+    font: `700 12px ${THAI}`,
+    h: 28,
+    padX: 12,
+  });
+  pill(ctx, W - 42 - 180 - 150, 56, datePillText, {
+    color: '#94a3b8',
+    bg: 'rgba(255, 255, 255, 0.05)',
+    font: `600 12px ${THAI}`,
+    h: 28,
+    padX: 12,
+  });
+
+  // 3. AI Meta Overview Panel
+  const ovX = 40, ovY = 104, ovW = W - 80, ovH = 92;
+  drawPanel(ctx, ovX, ovY, ovW, ovH, {
+    fill: 'rgba(245, 158, 11, 0.05)',
+    stroke: 'rgba(245, 158, 11, 0.28)',
+    radius: 12,
+    titleBar: 26,
+  });
+  text(ctx, '⚡ บทสรุปภาพรวมเมต้า & การปรับตัว (AI Meta Breakdown)', ovX + 16, ovY + 18, {
+    font: `700 12px ${THAI}`,
+    color: '#fde68a',
+  });
+
+  const overviewLines = wrapLines(ctx, overview || 'สรุปการปรับสมดุลมอนสเตอร์อย่างเป็นทางการ', ovW - 32, 3);
+  overviewLines.forEach((line, idx) => {
+    text(ctx, line, ovX + 16, ovY + 46 + idx * 20, {
+      font: `500 12.5px ${THAI}`,
+      color: '#e2e8f0',
+      maxWidth: ovW - 32,
+    });
+  });
+
+  // 4. Highlight Section Title
+  const secY = 218;
+  text(ctx, '👑 6 มอนสเตอร์ไฮไลท์ประจำแพตช์ที่น่าจับตามองที่สุด (Top Meta Picks)', 42, secY, {
+    font: `800 16px ${THAI}`,
+    color: '#fde68a',
+  });
+  text(ctx, '*คัดเลือกจากผลกระทบต่อ RTA / Guild Siege / Arena', W - 42, secY, {
+    font: `500 12px ${THAI}`,
+    color: '#94a3b8',
+    align: 'right',
+  });
+
+  // 5. 6 Monster Highlight Cards Grid (2 rows x 3 columns)
+  const gridX = 40;
+  const gridW = W - 80; // 1120
+  const cardGap = 16;
+  const cardW = (gridW - cardGap * 2) / 3; // (1120 - 32) / 3 = 362.66 -> 362
+  const cardH = 238;
+  const row1Y = 234;
+  const row2Y = row1Y + cardH + 16; // 488
+
+  for (let i = 0; i < Math.min(6, highlights.length); i++) {
+    const h = highlights[i];
+    const col = i % 3;
+    const row = Math.floor(i / 3);
+    const cx = gridX + col * (cardW + cardGap);
+    const cy = row === 0 ? row1Y : row2Y;
+
+    const elem = (h.element || 'water').toLowerCase();
+    const elemCol = ELEMENT_COLOR[elem] || '#38bdf8';
+
+    // Panel card
+    drawPanel(ctx, cx, cy, cardW, cardH, {
+      fill: 'rgba(12, 17, 34, 0.88)',
+      stroke: `${elemCol}40`,
+      radius: 14,
+      titleBar: 46,
+    });
+
+    // Portrait
+    await drawPortrait(ctx, {
+      url: h.avatarUrl,
+      cx: cx + 30,
+      cy: cy + 23,
+      r: 18,
+      element: elem,
+      badge: false,
+      label: h.name,
+    });
+
+    // Monster Name
+    text(ctx, h.name, cx + 56, cy + 27, {
+      font: `800 15px ${SANS}`,
+      color: '#ffffff',
+      maxWidth: cardW - 140,
+    });
+
+    // Tag badge at top-right
+    const tagLabel = h.tag || 'BUFF 🔥';
+    const tagColor = h.tagColor || elemCol;
+    pill(ctx, cx + cardW - 110, cy + 11, tagLabel, {
+      color: tagColor,
+      bg: `${tagColor}18`,
+      font: `700 10.5px ${THAI}`,
+      padX: 8,
+      h: 24,
+    });
+
+    // Key Buff Banner
+    drawPanel(ctx, cx + 12, cy + 54, cardW - 24, 34, {
+      fill: 'rgba(255, 255, 255, 0.04)',
+      stroke: `${elemCol}30`,
+      radius: 8,
+    });
+    text(ctx, h.keyBuff || 'ปรับปรุงประสิทธิภาพสกิล', cx + 22, cy + 75, {
+      font: `700 12px ${THAI}`,
+      color: elemCol,
+      maxWidth: cardW - 44,
+    });
+
+    // Description text
+    const descLines = wrapLines(ctx, h.desc || h.note || '', cardW - 28, 4);
+    descLines.forEach((dLine, dIdx) => {
+      text(ctx, dLine, cx + 14, cy + 106 + dIdx * 20, {
+        font: `500 12px ${THAI}`,
+        color: '#cbd5e1',
+        maxWidth: cardW - 28,
+      });
+    });
+
+    // Bottom impact pill
+    const impactText = h.impactText || '⚡ บัฟเมต้า RTA & Siege';
+    pill(ctx, cx + 12, cy + cardH - 34, impactText, {
+      color: '#34d399',
+      bg: 'rgba(52, 211, 153, 0.12)',
+      font: `700 10.5px ${THAI}`,
+      padX: 8,
+      h: 22,
+    });
+  }
+
+  // 6. Footer
+  const ftX = 40, ftY = 744, ftW = W - 80, ftH = 46;
+  drawPanel(ctx, ftX, ftY, ftW, ftH, {
+    fill: 'rgba(10, 14, 28, 0.88)',
+    stroke: 'rgba(233, 196, 106, 0.22)',
+    radius: 10,
+  });
+  text(ctx, '📌 สรุปข้อมูลการปรับสมดุลมอนสเตอร์อย่างเป็นทางการ • อ้างอิงประกาศ Com2uS • ใช้งานได้จริงบน SWM', ftX + 16, ftY + 28, {
+    font: `500 12px ${THAI}`,
+    color: '#94a3b8',
+  });
+  text(ctx, '🛡️ SWM (Summoners War Master) • คอมมูนิตี้ผู้เล่นไทย', ftX + ftW - 16, ftY + 28, {
+    font: `700 12px ${THAI}`,
+    color: '#fbbf24',
+    align: 'right',
+  });
+
+  const filename = `SWM_BalancePatch_${patchId}_Infographic.png`;
+  const title = `ภาพสรุปอัปเดตบาลานซ์แพตช์ #${patchId}`;
+  return handleCardExport({ canvas, filename, title, preview });
+}
+

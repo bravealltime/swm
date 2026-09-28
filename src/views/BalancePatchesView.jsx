@@ -1,10 +1,11 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import patchesArchive from '../data/balancePatches.json';
 import patchDetailsData from '../data/balancePatchDetails.json';
 import patchAi from '../data/balancePatchAi.json';
 import { MONSTERS } from '../data/monsters';
 import { parsePatchCard, getChangeTypeThai } from '../utils/patchTranslator';
-import { Sparkles, Globe, Languages } from 'lucide-react';
+import { exportBalancePatchInfographic } from '../utils/cardExporter';
+import { Sparkles, Globe, Languages, Camera, Share2, Check, ArrowRight, TrendingUp, TrendingDown, ExternalLink } from 'lucide-react';
 
 // Element metadata
 const ELEMENT_CONFIG = {
@@ -34,6 +35,7 @@ export default function BalancePatchesView({ onNavigate }) {
   const [selectedElement, setSelectedElement] = useState('all');
   const [selectedSlot, setSelectedSlot] = useState('all');
   const [langMode, setLangMode] = useState('thai'); // 'thai' | 'en'
+  const [isExporting, setIsExporting] = useState(false);
 
   // Archive search
   const [archiveSearch, setArchiveSearch] = useState('');
@@ -106,6 +108,173 @@ export default function BalancePatchesView({ onNavigate }) {
     );
   }, [archiveSearch]);
 
+  // Resolve monster avatar, element, and metadata for winner/loser cards
+  const resolveMonsterCardData = useCallback((rawName, adjustments = [], aiData = {}) => {
+    const cleanName = rawName.replace(/\s*\([^)]*\)/, '').trim();
+    const parenElem = (rawName.match(/\(([^)]+)\)/) || [])[1]?.trim().toLowerCase();
+
+    // Match in patch adjustments
+    const patchItem = adjustments.find(a => 
+      a.monsterName.toLowerCase() === cleanName.toLowerCase() ||
+      a.monsterName.toLowerCase().includes(cleanName.toLowerCase()) ||
+      cleanName.toLowerCase().includes(a.monsterName.toLowerCase())
+    );
+
+    // Match in MONSTERS catalog
+    const catalogItem = MONSTERS.find(m => {
+      const mn = m.name.toLowerCase();
+      const cn = cleanName.toLowerCase();
+      const match = mn === cn || mn.includes(cn) || cn.includes(mn);
+      if (!match) return false;
+      if (parenElem) return m.element.toLowerCase() === parenElem;
+      return true;
+    }) || MONSTERS.find(m => m.name.toLowerCase() === cleanName.toLowerCase());
+
+    const element = (parenElem || catalogItem?.element || patchItem?.element || 'water').toLowerCase();
+    const avatarUrl = catalogItem?.avatarUrl || patchItem?.monsterImg || '';
+    const thaiName = catalogItem?.thaiName || cleanName;
+    const note = aiData.perMonster?.[cleanName] || patchItem?.preview || '';
+
+    return {
+      rawName,
+      cleanName,
+      thaiName,
+      element,
+      avatarUrl,
+      note,
+      hasMonster: Boolean(catalogItem || patchItem?.monsterImg),
+      skillName: patchItem?.skillName || '',
+      changeTypeTh: patchItem?.changeTypeTh || patchItem?.changeType || '',
+    };
+  }, []);
+
+  // Generate 6 highlight cards for infographic export
+  const getPatchHighlights = useCallback((patchId, aiData, adjustments) => {
+    if (patchId === '93') {
+      return [
+        {
+          name: 'Theomars (Water)',
+          element: 'water',
+          avatarUrl: 'https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0032_0_2.png',
+          tag: '🔥 BUFF ใหญ่แห่งปี',
+          tagColor: '#38bdf8',
+          keyBuff: 'Triple Crush คูลดาวน์ -1 เทิร์น (เหลือ 2 เทิร์น)',
+          desc: 'บัฟใหญ่ที่สุดในรอบหลายปี! Theo วนเจาะเกราะได้เทิร์นเว้นเทิร์น และเบิร์สดาเมจต่อเนื่องใน Siege และ Guild War น่ากลัวยิ่งขึ้น',
+          impactText: '⚡ S-Tier • บัฟตัวเมต้าคลาสสิก',
+        },
+        {
+          name: 'Daphnis (Fire)',
+          element: 'fire',
+          avatarUrl: 'https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0040_1_3.png',
+          tag: '⚡ SPEED LEAD 24%',
+          tagColor: '#fb7185',
+          keyBuff: 'ลีดเดอร์สกิล: ความเร็ว (SPD) ในกิลด์ 24%',
+          desc: 'กลายเป็นตัวสปีดลีด 24% สำหรับ Siege และ Guild War ทันที มีทั้งดาเมจ สตริป และสปีดลีดครบเครื่องในตัวเดียว',
+          impactText: '⚡ S-Tier • ตัวเปิดไฟต์ยอดนิยม',
+        },
+        {
+          name: 'Praha (Water)',
+          element: 'water',
+          avatarUrl: 'https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0022_0_1.png',
+          tag: '💚 ฮีลแรงขึ้น 35%',
+          tagColor: '#34d399',
+          keyBuff: 'Daydream ฮีลเพิ่มเป็น 35% ของ MAX HP',
+          desc: 'สกิล 3 Daydream ฮีลแรงขึ้นเป็น 35% เพิ่มความถึกทนให้ทีมรับและทีม Bruiser ใน RTA/Siege ยืนชนไฟต์ยาวสบาย',
+          impactText: '⚡ S-Tier • เสริมแกร่งทีมรับ',
+        },
+        {
+          name: 'Barbara (Water)',
+          element: 'water',
+          avatarUrl: 'https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0054_0_0.png',
+          tag: '🛡️ เจาะเกราะ +25%',
+          tagColor: '#38bdf8',
+          keyBuff: 'เจาะเกราะแรงขึ้น 25% ต่อบัฟศัตรู',
+          desc: 'เจาะเกราะแรงขึ้นมากต่อบัฟของศัตรู สามารถเบิร์สละลายทีมที่กางบัฟหนาได้เร็วและเด็ดขาดยิ่งขึ้นใน RTA',
+          impactText: '⚡ S-Tier • ตัวสวนเมต้าบัฟ',
+        },
+        {
+          name: 'Harmonia (Fire)',
+          element: 'fire',
+          avatarUrl: 'https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0043_1_2.png',
+          tag: '💤 หลับหมู่ 2 เทิร์น',
+          tagColor: '#c084fc',
+          keyBuff: 'สกิล 2 หลับหมู่ยาวนาน 2 เทิร์นเต็ม',
+          desc: 'สกิล 2 ทำให้หลับหมู่ 2 เทิร์นเต็ม หากศัตรูไม่มี Will หรือตัวปลดดีบัฟ จะเสียจังหวะอย่างรุนแรง พลิกเกมรับได้ทันที',
+          impactText: '⚡ S-Tier • ควบคุมจังหวะไฟต์',
+        },
+        {
+          name: 'Amelia (Water)',
+          element: 'water',
+          avatarUrl: 'https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0043_0_4.png',
+          tag: '✨ ฮีลฉุกเฉิน +15%',
+          tagColor: '#38bdf8',
+          keyBuff: 'ร่างมนุษย์ฮีล 15% ให้ตัวที่เลือดน้อย',
+          desc: 'ร่างมนุษย์ช่วยเซฟเพื่อนเลือดน้อยได้ดีขึ้น เพิ่มการฮีล 15% ให้ตัวที่เสี่ยงตาย ยืนชนทีมคอนโทรลได้เหนียวแน่น',
+          impactText: '⚡ A+ Tier • ซัพพอร์ตยอดเยี่ยม',
+        },
+      ];
+    }
+
+    const list = [];
+    const winners = aiData?.winners || [];
+    for (const w of winners) {
+      const card = resolveMonsterCardData(w, adjustments, aiData);
+      list.push({
+        name: card.cleanName,
+        element: card.element,
+        avatarUrl: card.avatarUrl,
+        tag: 'BUFF 🔥',
+        keyBuff: card.skillName ? `${card.skillName}: ${card.changeTypeTh}` : 'ปรับปรุงสมดุล',
+        desc: card.note || 'ได้รับการปรับปรุงสมดุลและทักษะ',
+        impactText: '⚡ ได้รับผลประโยชน์ในแพตช์นี้',
+      });
+      if (list.length >= 6) break;
+    }
+
+    if (list.length < 6) {
+      for (const a of adjustments) {
+        if (list.some(x => x.name.toLowerCase() === a.monsterName.toLowerCase())) continue;
+        const cat = MONSTERS.find(m => m.name.toLowerCase() === a.monsterName.toLowerCase());
+        list.push({
+          name: a.monsterName,
+          element: (a.element || 'water').toLowerCase(),
+          avatarUrl: cat?.avatarUrl || a.monsterImg || '',
+          tag: a.impact === 'buff' ? 'BUFF 🔥' : 'REBALANCE ⚡',
+          keyBuff: `${a.skillName}: ${a.changeTypeTh || a.changeType}`,
+          desc: a.preview || a.officialText,
+          impactText: a.impact === 'buff' ? '🟢 บัฟเสริมความสามารถ' : '🔄 ปรับเปลี่ยนกลไก',
+        });
+        if (list.length >= 6) break;
+      }
+    }
+
+    return list;
+  }, [resolveMonsterCardData]);
+
+  // Handle Infographic export
+  const handleExportInfographic = async () => {
+    try {
+      setIsExporting(true);
+      const aiData = patchAi.patches?.[selectedPatchId] || {};
+      const highlights = getPatchHighlights(selectedPatchId, aiData, currentPatchAdjustments);
+
+      await exportBalancePatchInfographic({
+        patchId: selectedPatchId,
+        date: currentPatchMeta.date || '28 กันยายน 2026',
+        overview: aiData.overview || '',
+        highlights,
+        totalAdjustments: patchStats.total || currentPatchAdjustments.length,
+        buffCount: patchStats.buffs || 0,
+        nerfCount: patchStats.nerfs || 0,
+        preview: true,
+      });
+    } catch (err) {
+      console.error('Failed to export balance patch infographic:', err);
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
   return (
     <div className="space-y-6 animate-fadeIn pb-16">
       {/* Top Header */}
@@ -158,22 +327,225 @@ export default function BalancePatchesView({ onNavigate }) {
           {patchAi.patches?.[selectedPatchId]?.overview && (() => {
             const ai = patchAi.patches[selectedPatchId];
             return (
-              <div className="rounded-2xl border border-amber-500/25 bg-gradient-to-br from-amber-500/[0.06] to-transparent p-4 sm:p-5 space-y-3">
-                <div className="flex items-center gap-2 text-sm font-bold text-white">
-                  <Sparkles className="w-4 h-4 text-amber-300" /> สรุปแพตช์ #{selectedPatchId} ภาษาไทย (AI อ่านจากข้อความทางการ)
-                </div>
-                <p className="text-sm text-slate-200 leading-relaxed">{ai.overview}</p>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-                  <div className="p-3 rounded-xl bg-emerald-500/[0.06] border border-emerald-500/25">
-                    <div className="font-bold text-emerald-300 mb-1">ได้ประโยชน์</div>
-                    <div className="flex flex-wrap gap-1.5">{(ai.winners || []).map((n) => <span key={n} className="px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-200">{n}</span>)}</div>
+              <div className="rounded-2xl border border-amber-500/25 bg-gradient-to-br from-amber-500/[0.07] via-[#10192a]/95 to-[#0b101d] p-4 sm:p-5 space-y-4 shadow-xl shadow-black/40">
+                {/* Header with Title and Export Button */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-amber-500/20 pb-3">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-lg bg-amber-500/15 border border-amber-500/30 flex items-center justify-center">
+                      <Sparkles className="w-4 h-4 text-amber-300 animate-pulse" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <h3 className="text-sm sm:text-base font-bold text-white">
+                          สรุปบทวิเคราะห์แพตช์ #{selectedPatchId} ภาษาไทย
+                        </h3>
+                        <span className="hidden sm:inline-block px-2 py-0.5 rounded text-[10px] font-semibold bg-amber-500/15 text-amber-300 border border-amber-500/30">
+                          AI วิเคราะห์จากประกาศ Com2uS
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-slate-400">
+                        ไฮไลท์มอนสเตอร์ที่ได้เปรียบ-เสียเปรียบ พร้อมการปรับตัวในเมต้าปัจจุบัน
+                      </p>
+                    </div>
                   </div>
-                  <div className="p-3 rounded-xl bg-rose-500/[0.06] border border-rose-500/25">
-                    <div className="font-bold text-rose-300 mb-1">ถูกเนิร์ฟ</div>
-                    <div className="flex flex-wrap gap-1.5">{(ai.losers || []).map((n) => <span key={n} className="px-2 py-0.5 rounded-full bg-rose-500/15 text-rose-200">{n}</span>)}</div>
-                  </div>
+
+                  {/* Export Infographic Button */}
+                  <button
+                    onClick={handleExportInfographic}
+                    disabled={isExporting}
+                    className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-bold text-xs sm:text-sm shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40 transition-all active:scale-95 disabled:opacity-50 shrink-0 cursor-pointer"
+                    title="สร้างรูปภาพ Infographic สรุปแพตช์ขนาด 1200x820 สำหรับแชร์ลงกลุ่ม Facebook หรือ LINE"
+                  >
+                    {isExporting ? (
+                      <>
+                        <span className="w-3.5 h-3.5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin"></span>
+                        <span>กำลังเรนเดอร์รูปภาพ...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Camera className="w-4 h-4 text-slate-950" />
+                        <span>📸 ทำสรุปเป็นรูปเข้าใจง่าย (Infographic)</span>
+                      </>
+                    )}
+                  </button>
                 </div>
-                <p className="text-[11px] text-slate-500">สร้างโดย AI เมื่อ {ai.at?.slice(0, 10)} • ตรวจกับข้อความทางการด้านล่างก่อนตัดสินใจ</p>
+
+                {/* AI Meta Overview Text */}
+                <div className="p-3.5 rounded-xl bg-amber-500/[0.04] border border-amber-500/15">
+                  <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-sans">
+                    {ai.overview}
+                  </p>
+                </div>
+
+                {/* Winners & Losers Section */}
+                <div className="space-y-4">
+                  {/* Winners (ได้ประโยชน์) */}
+                  {ai.winners && ai.winners.length > 0 && (
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-400">
+                          <TrendingUp className="w-4 h-4" />
+                          <span>มอนสเตอร์ที่ได้ประโยชน์ / บัฟสำคัญ ({ai.winners.length} ตัว)</span>
+                        </div>
+                        <span className="text-[11px] text-slate-400">
+                          (คลิกที่การ์ดมอนสเตอร์เพื่อเจาะลึกสกิลด้านล่าง)
+                        </span>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+                        {ai.winners.map((n) => {
+                          const m = resolveMonsterCardData(n, currentPatchAdjustments, ai);
+                          const elemCfg = ELEMENT_CONFIG[m.element.charAt(0).toUpperCase() + m.element.slice(1)] || ELEMENT_CONFIG.Water;
+                          return (
+                            <div
+                              key={n}
+                              onClick={() => {
+                                setSearchTerm(m.cleanName);
+                                const tableEl = document.getElementById('patch-adjustments-section');
+                                if (tableEl) tableEl.scrollIntoView({ behavior: 'smooth' });
+                              }}
+                              className="group relative flex items-center gap-3 p-2.5 rounded-xl bg-[#0f172a]/90 border border-emerald-500/25 hover:border-emerald-400/70 hover:bg-[#142038] transition-all cursor-pointer shadow-sm hover:shadow-md hover:shadow-emerald-500/10"
+                              title={`คลิกเพื่อดูรายละเอียดการปรับปรุงของ ${m.cleanName}\n${m.note || m.rawName}`}
+                            >
+                              {/* Avatar with element ring */}
+                              <div className="relative shrink-0">
+                                <div
+                                  className="w-11 h-11 rounded-full overflow-hidden border-2 bg-slate-900 shadow-inner"
+                                  style={{ borderColor: elemCfg.color }}
+                                >
+                                  {m.avatarUrl ? (
+                                    <img
+                                      src={m.avatarUrl}
+                                      alt={m.cleanName}
+                                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                                      loading="lazy"
+                                      onError={(e) => { e.target.style.display = 'none'; }}
+                                    />
+                                  ) : (
+                                    <div className="w-full h-full flex items-center justify-center font-bold text-xs" style={{ color: elemCfg.color }}>
+                                      {m.cleanName.slice(0, 2)}
+                                    </div>
+                                  )}
+                                </div>
+                                <span
+                                  className="absolute -bottom-1 -right-1 text-[10px] px-1 py-0.2 rounded-full font-bold shadow leading-none"
+                                  style={{ backgroundColor: elemCfg.border, color: '#fff' }}
+                                >
+                                  {elemCfg.icon}
+                                </span>
+                              </div>
+
+                              {/* Info */}
+                              <div className="min-w-0 flex-1">
+                                <div className="flex items-center justify-between gap-1">
+                                  <span className="font-bold text-white text-xs truncate group-hover:text-emerald-300 transition-colors">
+                                    {m.cleanName}
+                                  </span>
+                                  <span
+                                    className="text-[10px] font-mono px-1.5 py-0.5 rounded uppercase font-semibold"
+                                    style={{ color: elemCfg.color, backgroundColor: elemCfg.bg }}
+                                  >
+                                    {elemCfg.label}
+                                  </span>
+                                </div>
+                                <p className="text-[11px] text-slate-300 line-clamp-1 mt-0.5" title={m.note || m.rawName}>
+                                  {m.note || (m.skillName ? `${m.skillName}: ${m.changeTypeTh}` : 'ได้รับการบัฟความสามารถ')}
+                                </p>
+                              </div>
+
+                              <ArrowRight className="w-3.5 h-3.5 text-slate-500 group-hover:text-emerald-400 group-hover:translate-x-0.5 transition-all shrink-0" />
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Losers (ถูกเนิร์ฟ / ปัจจัยที่ต้องระวัง) */}
+                  {ai.losers && ai.losers.length > 0 && (
+                    <div className="space-y-2 pt-1 border-t border-slate-800/80">
+                      <div className="flex items-center gap-1.5 text-xs font-bold text-rose-400">
+                        <TrendingDown className="w-4 h-4" />
+                        <span>ถูกเนิร์ฟ / ปัจจัยเมต้าที่ต้องระวัง ({ai.losers.length} รายการ)</span>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+                        {ai.losers.map((n) => {
+                          const m = resolveMonsterCardData(n, currentPatchAdjustments, ai);
+                          const isMonster = m.hasMonster;
+                          const elemCfg = ELEMENT_CONFIG[m.element.charAt(0).toUpperCase() + m.element.slice(1)] || ELEMENT_CONFIG.Dark;
+
+                          if (isMonster) {
+                            return (
+                              <div
+                                key={n}
+                                onClick={() => {
+                                  setSearchTerm(m.cleanName);
+                                  const tableEl = document.getElementById('patch-adjustments-section');
+                                  if (tableEl) tableEl.scrollIntoView({ behavior: 'smooth' });
+                                }}
+                                className="group relative flex items-center gap-3 p-2.5 rounded-xl bg-[#0f172a]/90 border border-rose-500/25 hover:border-rose-400/70 hover:bg-[#201524] transition-all cursor-pointer shadow-sm"
+                                title={`คลิกเพื่อดูรายละเอียดการเนิร์ฟของ ${m.cleanName}\n${m.note || m.rawName}`}
+                              >
+                                <div className="relative shrink-0">
+                                  <div
+                                    className="w-11 h-11 rounded-full overflow-hidden border-2 bg-slate-900"
+                                    style={{ borderColor: '#f43f5e' }}
+                                  >
+                                    {m.avatarUrl ? (
+                                      <img
+                                        src={m.avatarUrl}
+                                        alt={m.cleanName}
+                                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                                        loading="lazy"
+                                        onError={(e) => { e.target.style.display = 'none'; }}
+                                      />
+                                    ) : (
+                                      <div className="w-full h-full flex items-center justify-center font-bold text-xs text-rose-400">
+                                        {m.cleanName.slice(0, 2)}
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+
+                                <div className="min-w-0 flex-1">
+                                  <div className="flex items-center justify-between gap-1">
+                                    <span className="font-bold text-white text-xs truncate group-hover:text-rose-300 transition-colors">
+                                      {m.cleanName}
+                                    </span>
+                                    <span className="text-[10px] font-mono px-1.5 py-0.5 rounded uppercase font-semibold bg-rose-500/15 text-rose-400">
+                                      NERF
+                                    </span>
+                                  </div>
+                                  <p className="text-[11px] text-slate-300 line-clamp-1 mt-0.5" title={m.note || m.rawName}>
+                                    {m.note || m.rawName}
+                                  </p>
+                                </div>
+                                <ArrowRight className="w-3.5 h-3.5 text-slate-500 group-hover:text-rose-400 group-hover:translate-x-0.5 transition-all shrink-0" />
+                              </div>
+                            );
+                          }
+
+                          // Meta Note Warning Pill
+                          return (
+                            <div
+                              key={n}
+                              className="flex items-start gap-2.5 p-2.5 rounded-xl bg-rose-500/[0.06] border border-rose-500/25 text-xs text-rose-200"
+                            >
+                              <span className="text-sm shrink-0">⚠️</span>
+                              <span className="line-clamp-2 leading-relaxed text-[11px] sm:text-xs">{n}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-amber-500/15 text-[11px] text-slate-500">
+                  <span>สร้างโดย AI เมื่อ {ai.at?.slice(0, 10)} • อ้างอิงจากประกาศทางการ Com2uS</span>
+                  <span className="text-amber-400/80">กด 'ทำสรุปเป็นรูป' ด้านบนเพื่อบันทึกการ์ด Infographic สำหรับแชร์</span>
+                </div>
               </div>
             );
           })()}
@@ -272,7 +644,7 @@ export default function BalancePatchesView({ onNavigate }) {
           </div>
 
           {/* Filter & Search Bar */}
-          <div className="bg-[#111927] border border-[#1e2a3c] p-4 rounded-xl space-y-3">
+          <div id="patch-adjustments-section" className="bg-[#111927] border border-[#1e2a3c] p-4 rounded-xl space-y-3">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
               {/* Search input */}
               <div className="relative flex-1">

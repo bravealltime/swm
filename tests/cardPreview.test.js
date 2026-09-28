@@ -9,6 +9,7 @@ import {
   exportLdShowcaseCard,
   exportMonsterCard,
   exportArenaTeamCard,
+  exportBalancePatchInfographic,
 } from '../src/utils/cardExporter.js';
 
 describe('Card Preview System & Exporters', () => {
@@ -19,6 +20,7 @@ describe('Card Preview System & Exporters', () => {
     expect(typeof exportLdShowcaseCard).toBe('function');
     expect(typeof exportMonsterCard).toBe('function');
     expect(typeof exportArenaTeamCard).toBe('function');
+    expect(typeof exportBalancePatchInfographic).toBe('function');
   });
 
   it('dispatches swm:card-preview event with correct payload when showCardPreview is called', () => {
