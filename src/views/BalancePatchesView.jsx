@@ -23,7 +23,12 @@ const IMPACT_CONFIG = {
 
 export default function BalancePatchesView({ onNavigate }) {
   const [activeTab, setActiveTab] = useState('inspector'); // 'inspector' | 'archive'
-  const [selectedPatchId, setSelectedPatchId] = useState('92');
+  // Available detailed patches
+  const availablePatchIds = useMemo(() => Object.keys(patchDetailsData).sort((a, b) => Number(b) - Number(a)), []);
+  const [selectedPatchId, setSelectedPatchId] = useState(() => {
+    const sorted = Object.keys(patchDetailsData).sort((a, b) => Number(b) - Number(a));
+    return sorted[0] || '93';
+  });
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedImpact, setSelectedImpact] = useState('all'); // 'all' | 'buff' | 'nerf' | 'adjustment'
   const [selectedElement, setSelectedElement] = useState('all');
@@ -32,9 +37,6 @@ export default function BalancePatchesView({ onNavigate }) {
 
   // Archive search
   const [archiveSearch, setArchiveSearch] = useState('');
-
-  // Available detailed patches
-  const availablePatchIds = Object.keys(patchDetailsData).sort((a, b) => Number(b) - Number(a));
 
   // Current patch adjustments
   const currentPatchAdjustments = useMemo(() => {

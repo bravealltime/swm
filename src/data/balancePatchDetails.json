@@ -3905,5 +3905,893 @@
       ],
       "impact": "buff"
     }
+  ],
+  "93": [
+    {
+      "id": "93-1",
+      "patchId": 93,
+      "monsterName": "Wind Aya / Nobara Kugisaki",
+      "element": "Wind",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0164_1_3_swgtC2NC.png",
+      "skillName": "Strong Willpower (Passive)",
+      "skillBadge": "Passive",
+      "skillImg": "",
+      "changeType": "Value changed",
+      "changeTypeTh": "ปรับเปลี่ยนค่าสถานะ / เพิ่มเอฟเฟกต์",
+      "preview": "[Value changed]\r\nDamage dealt increased from 40% ➔ 50%.\r\n[Effect added]\r\nRemoves 1 harmful effect granted on yourself when you gain a turn.",
+      "officialText": "[Value changed]\r\nDamage dealt increased from 40% ➔ 50%.\r\n[Effect added]\r\nRemoves 1 harmful effect granted on yourself when you gain a turn.",
+      "valueChanges": [
+        {
+          "oldValue": "40%",
+          "newValue": "50%"
+        }
+      ],
+      "impact": "buff"
+    },
+    {
+      "id": "93-2",
+      "patchId": 93,
+      "monsterName": "Devil Maiden",
+      "element": "Wind",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0127_1_3.png",
+      "skillName": "Mischievous Curse (Passive)",
+      "skillBadge": "Passive",
+      "skillImg": "",
+      "changeType": "Percentage changed",
+      "changeTypeTh": "ปรับเปอร์เซ็นต์โอกาสติด",
+      "preview": "[Percentage changed]\r\nResets the enemy from removing harmful effects for 1 turn with an 80% ➔ 100% chance when you attack an enemy granted with a harmful effect.",
+      "officialText": "[Percentage changed]\r\nResets the enemy from removing harmful effects for 1 turn with an 80% ➔ 100% chance when you attack an enemy granted with a harmful effect.",
+      "valueChanges": [
+        {
+          "oldValue": "80%",
+          "newValue": "100%"
+        }
+      ],
+      "impact": "buff"
+    },
+    {
+      "id": "93-3",
+      "patchId": 93,
+      "monsterName": "Fami",
+      "element": "Light",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0023_4_4.png",
+      "skillName": "Nyan Cheers (Passive)",
+      "skillBadge": "Passive",
+      "skillImg": "",
+      "changeType": "Value changed",
+      "changeTypeTh": "ปรับตัวเลขความแรง/สัดส่วน",
+      "preview": "[Value changed]\r\nIncreases Attack Bar by 10% ➔ 15% when an ally is attacked.\r\nDecreases the damage ally receives by 20% ➔ 30%.",
+      "officialText": "[Value changed]\r\nIncreases Attack Bar by 10% ➔ 15% when an ally is attacked.\r\nDecreases the damage ally receives by 20% ➔ 30%.",
+      "valueChanges": [
+        {
+          "oldValue": "10%",
+          "newValue": "15%"
+        },
+        {
+          "oldValue": "20%",
+          "newValue": "30%"
+        }
+      ],
+      "impact": "buff"
+    },
+    {
+      "id": "93-4",
+      "patchId": 93,
+      "monsterName": "Twin Angels",
+      "element": "All",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0136_1_5.png",
+      "skillName": "Horn of Change",
+      "skillBadge": "S2",
+      "skillImg": "",
+      "changeType": "Percentage changed",
+      "changeTypeTh": "ปรับเปอร์เซ็นต์/ตัวคูณ",
+      "preview": "[Percentage changed]\r\nIncreases the Attack Bar of the ally target by 10% ➔ 15%.",
+      "officialText": "[Percentage changed]\r\nIncreases the Attack Bar of the ally target by 10% ➔ 15%.",
+      "valueChanges": [
+        {
+          "oldValue": "10%",
+          "newValue": "15%"
+        }
+      ],
+      "impact": "buff"
+    },
+    {
+      "id": "93-5",
+      "patchId": 93,
+      "monsterName": "Paul Phoenix",
+      "element": "All",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0199_1_2_swgtC2NC.png",
+      "skillName": "Mountain Buster",
+      "skillBadge": "S2",
+      "skillImg": "",
+      "changeType": "Damage Increased",
+      "changeTypeTh": "บัฟเพิ่มความแรงดาเมจ",
+      "preview": "[Damage increased]\r\nDeals damage in proportion to Attack Power ➔ Deals damage that increases according to the lost HP.",
+      "officialText": "[Damage increased]\r\nDeals damage in proportion to Attack Power ➔ Deals damage that increases according to the lost HP.",
+      "valueChanges": [],
+      "impact": "buff"
+    },
+    {
+      "id": "93-6",
+      "patchId": 93,
+      "monsterName": "Paul Phoenix / Bone Crusher",
+      "element": "Fire",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0186_1_2.png",
+      "skillName": "Phoenix Smasher / Bone Crusher",
+      "skillBadge": "S1",
+      "skillImg": "",
+      "changeType": "Percentage changed",
+      "changeTypeTh": "ปรับเปอร์เซ็นต์โอกาสติด",
+      "preview": "[Percentage increased]\r\nDecreases the Attack Bar 1 turn with a 50% ➔ 60% chance.",
+      "officialText": "[Percentage increased]\r\nDecreases the Attack Bar 1 turn with a 50% ➔ 60% chance.",
+      "valueChanges": [
+        {
+          "oldValue": "50%",
+          "newValue": "60%"
+        }
+      ],
+      "impact": "buff"
+    },
+    {
+      "id": "93-7",
+      "patchId": 93,
+      "monsterName": "Praha",
+      "element": "Water",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0022_0_1.png",
+      "skillName": "Daydream",
+      "skillBadge": "S3",
+      "skillImg": "",
+      "changeType": "Value changed",
+      "changeTypeTh": "ปรับตัวเลขความแรง/สัดส่วน",
+      "preview": "[Value changed]\r\nRecovers the HP of all allies by 30% ➔ 35%.",
+      "officialText": "[Value changed]\r\nRecovers the HP of all allies by 30% ➔ 35%.",
+      "valueChanges": [
+        {
+          "oldValue": "30%",
+          "newValue": "35%"
+        }
+      ],
+      "impact": "buff"
+    },
+    {
+      "id": "93-8",
+      "patchId": 93,
+      "monsterName": "Barbara",
+      "element": "Water",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0054_0_0.png",
+      "skillName": "Spear of Riding",
+      "skillBadge": "S2",
+      "skillImg": "",
+      "changeType": "Value changed",
+      "changeTypeTh": "ปรับตัวเลขความแรง/สัดส่วน",
+      "preview": "[Value changed]\r\nThe attack will ignore the enemy's Defense by 20% ➔ 25% for each beneficial effect the enemy has.",
+      "officialText": "[Value changed]\r\nThe attack will ignore the enemy's Defense by 20% ➔ 25% for each beneficial effect the enemy has.",
+      "valueChanges": [
+        {
+          "oldValue": "20%",
+          "newValue": "25%"
+        }
+      ],
+      "impact": "buff"
+    },
+    {
+      "id": "93-9",
+      "patchId": 93,
+      "monsterName": "Harp Magician",
+      "element": "Water",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0043_0_2.png",
+      "skillName": "Nightmare Melody",
+      "skillBadge": "S1",
+      "skillImg": "",
+      "changeType": "Effect added",
+      "changeTypeTh": "เพิ่มเอฟเฟกต์ใหม่",
+      "preview": "[Effect added]\r\nAttacks the enemy, then removing harmful effects for 1 turn if the enemy is already asleep.",
+      "officialText": "[Effect added]\r\nAttacks the enemy, then removing harmful effects for 1 turn if the enemy is already asleep.",
+      "valueChanges": [],
+      "impact": "buff"
+    },
+    {
+      "id": "93-10",
+      "patchId": 93,
+      "monsterName": "Harmonia",
+      "element": "Fire",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0043_1_2.png",
+      "skillName": "Distorted Healing Music",
+      "skillBadge": "S2",
+      "skillImg": "",
+      "changeType": "Effect changed",
+      "changeTypeTh": "เปลี่ยนเอฟเฟกต์สกิล",
+      "preview": "[Effect modified]\r\nAttacks all enemies to put them to sleep for 1 ➔ 2 turns.",
+      "officialText": "[Effect modified]\r\nAttacks all enemies to put them to sleep for 1 ➔ 2 turns.",
+      "valueChanges": [
+        {
+          "oldValue": "1 turn",
+          "newValue": "2 turns"
+        }
+      ],
+      "impact": "buff"
+    },
+    {
+      "id": "93-11",
+      "patchId": 93,
+      "monsterName": "Theomars",
+      "element": "Water",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0032_0_2.png",
+      "skillName": "Triple Crush",
+      "skillBadge": "S2",
+      "skillImg": "",
+      "changeType": "Cooldown Changed",
+      "changeTypeTh": "ปรับคูลดาวน์สกิล",
+      "preview": "[Cooltime decreased]\r\nMAX cooltime: [3 turns ➔ 2 turns]. สามารถใช้สกิลเจาะเกราะได้เทิร์นเว้นเทิร์น!",
+      "officialText": "[Cooltime decreased]\r\nMAX cooltime: [3 turns ➔ 2 turns]",
+      "valueChanges": [
+        {
+          "oldValue": "3 turns",
+          "newValue": "2 turns"
+        }
+      ],
+      "impact": "buff"
+    },
+    {
+      "id": "93-12",
+      "patchId": 93,
+      "monsterName": "Akhamamir",
+      "element": "Wind",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0032_2_2.png",
+      "skillName": "Triple Crush",
+      "skillBadge": "S2",
+      "skillImg": "",
+      "changeType": "Cooldown Changed",
+      "changeTypeTh": "ปรับคูลดาวน์สกิล",
+      "preview": "[Cooltime decreased]\r\nMAX cooltime: [3 turns ➔ 2 turns]",
+      "officialText": "[Cooltime decreased]\r\nMAX cooltime: [3 turns ➔ 2 turns]",
+      "valueChanges": [
+        {
+          "oldValue": "3 turns",
+          "newValue": "2 turns"
+        }
+      ],
+      "impact": "buff"
+    },
+    {
+      "id": "93-13",
+      "patchId": 93,
+      "monsterName": "Elsharion",
+      "element": "Light",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0032_3_2.png",
+      "skillName": "Triple Crush",
+      "skillBadge": "S2",
+      "skillImg": "",
+      "changeType": "Cooldown Changed",
+      "changeTypeTh": "ปรับคูลดาวน์สกิล",
+      "preview": "[Cooltime decreased]\r\nMAX cooltime: [3 turns ➔ 2 turns]",
+      "officialText": "[Cooltime decreased]\r\nMAX cooltime: [3 turns ➔ 2 turns]",
+      "valueChanges": [
+        {
+          "oldValue": "3 turns",
+          "newValue": "2 turns"
+        }
+      ],
+      "impact": "buff"
+    },
+    {
+      "id": "93-14",
+      "patchId": 93,
+      "monsterName": "Veromos",
+      "element": "Dark",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0032_4_2.png",
+      "skillName": "Super Crush",
+      "skillBadge": "S2",
+      "skillImg": "",
+      "changeType": "Value changed",
+      "changeTypeTh": "ปรับเปลี่ยนค่าสถานะ",
+      "preview": "[Value changed]\r\nDecreases the Attack Bar of targets that are not stunned by 20% ➔ 30%.",
+      "officialText": "[Value changed]\r\nDecreases the Attack Bar of targets that are not stunned by 20% ➔ 30%.",
+      "valueChanges": [
+        {
+          "oldValue": "20%",
+          "newValue": "30%"
+        }
+      ],
+      "impact": "buff"
+    },
+    {
+      "id": "93-15",
+      "patchId": 93,
+      "monsterName": "Gargoyle",
+      "element": "Wind",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0052_2_2.png",
+      "skillName": "Mountain's Roar",
+      "skillBadge": "S2",
+      "skillImg": "",
+      "changeType": "Damage Increased",
+      "changeTypeTh": "บัฟเพิ่มความแรงดาเมจ",
+      "preview": "[Damage increased]\r\nDeals damage equal to 15% ➔ 20% of your MAX HP.",
+      "officialText": "[Damage increased]\r\nDeals damage equal to 15% ➔ 20% of your MAX HP.",
+      "valueChanges": [
+        {
+          "oldValue": "15%",
+          "newValue": "20%"
+        }
+      ],
+      "impact": "buff"
+    },
+    {
+      "id": "93-16",
+      "patchId": 93,
+      "monsterName": "Amelia",
+      "element": "Water",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0043_0_4.png",
+      "skillName": "Purifying Wave",
+      "skillBadge": "S2",
+      "skillImg": "",
+      "changeType": "Effect changed",
+      "changeTypeTh": "เปลี่ยนเอฟเฟกต์สกิล",
+      "preview": "[Effect changed]\r\n(Human Form) Recovers the HP of allies with fewer HP in proportion to MAX HP by 15%.",
+      "officialText": "[Effect changed]\r\nRecovers the HP of allies with fewer HP in proportion to HP by 15%.",
+      "valueChanges": [],
+      "impact": "buff"
+    },
+    {
+      "id": "93-17",
+      "patchId": 93,
+      "monsterName": "Byungchul",
+      "element": "Wind",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0133_1_3.png",
+      "skillName": "Club to Fall",
+      "skillBadge": "S2",
+      "skillImg": "",
+      "changeType": "Effect changed",
+      "changeTypeTh": "เปลี่ยนเอฟเฟกต์สกิล",
+      "preview": "[Effect changed]\r\nDecreases the Attack Bar by 50% if your MAX HP is higher than the target's ➔ Decreases the Attack Bar by 60% without conditions.",
+      "officialText": "[Effect changed]\r\nDecreases the Attack Bar by 50% if your MAX HP is higher than the target's ➔ Decreases the Attack Bar by 60% without conditions.",
+      "valueChanges": [
+        {
+          "oldValue": "50%",
+          "newValue": "60%"
+        }
+      ],
+      "impact": "buff"
+    },
+    {
+      "id": "93-18",
+      "patchId": 93,
+      "monsterName": "Water Aya / Nobara Kugisaki",
+      "element": "Water",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0164_1_1_swgtC2NC.png",
+      "skillName": "Unique Strike (Passive)",
+      "skillBadge": "Passive",
+      "skillImg": "",
+      "changeType": "Value changed",
+      "changeTypeTh": "ปรับตัวเลขความแรง/สัดส่วน",
+      "preview": "[Value changed]\r\nCreates a Shield equivalent to 10% ➔ 15% of your MAX HP for 1 turn at the start of your turn.",
+      "officialText": "[Value changed]\r\nCreates a Shield equivalent to 10% ➔ 15% of your MAX HP for 1 turn at the start of your turn.",
+      "valueChanges": [
+        {
+          "oldValue": "10%",
+          "newValue": "15%"
+        }
+      ],
+      "impact": "buff"
+    },
+    {
+      "id": "93-19",
+      "patchId": 93,
+      "monsterName": "Dr. Persona",
+      "element": "Water",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0214_1_1.png",
+      "skillName": "Super Solenoid",
+      "skillBadge": "S2",
+      "skillImg": "",
+      "changeType": "Damage Increased",
+      "changeTypeTh": "บัฟเพิ่มความแรงดาเมจ",
+      "preview": "[Damage increased]\r\nIncreases your Attack Bar by 20% ➔ 25% for each beneficial effect removed.",
+      "officialText": "[Damage increased]\r\nIncreases your Attack Bar by 20% ➔ 25% for each beneficial effect removed.",
+      "valueChanges": [
+        {
+          "oldValue": "20%",
+          "newValue": "25%"
+        }
+      ],
+      "impact": "buff"
+    },
+    {
+      "id": "93-20",
+      "patchId": 93,
+      "monsterName": "Dr. Persona",
+      "element": "Dark",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0214_1_5.png",
+      "skillName": "Embarrassment of Riches (Passive)",
+      "skillBadge": "Passive",
+      "skillImg": "",
+      "changeType": "Effect and value changed",
+      "changeTypeTh": "ปรับกลไกและตัวเลขสกิล",
+      "preview": "[Effect and value changed]\r\nRecovers 5% of HP and by 20% when you gain a turn under an inability effect ➔ Recovers the HP of all allies by 15% when you gain a turn under an inability effect.",
+      "officialText": "[Effect and value changed]\r\nRecovers 5% of HP and by 20% when you gain a turn under an inability effect ➔ Recovers the HP of all allies by 15% when you gain a turn under an inability effect.",
+      "valueChanges": [],
+      "impact": "buff"
+    },
+    {
+      "id": "93-21",
+      "patchId": 93,
+      "monsterName": "Dr. Persona",
+      "element": "Wind",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0214_1_3.png",
+      "skillName": "Heavyweight Strike",
+      "skillBadge": "S3",
+      "skillImg": "",
+      "changeType": "Effect changed",
+      "changeTypeTh": "เปลี่ยนเอฟเฟกต์สกิล",
+      "preview": "[Effect changed]\r\nAttacks all enemies to remove 1 beneficial effect and block them from receiving beneficial effects for 2 turns. Provides a shield to allies with no beneficial effects for 1 turn.",
+      "officialText": "[Effect changed]\r\nAttacks all enemies to remove 1 beneficial effect and block them from receiving beneficial effects for 2 turns. Provides a shield to allies with no beneficial effects for 1 turn.",
+      "valueChanges": [],
+      "impact": "adjustment"
+    },
+    {
+      "id": "93-22",
+      "patchId": 93,
+      "monsterName": "Zandot",
+      "element": "Water",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0001_0_0.png",
+      "skillName": "World Tree Fragment",
+      "skillBadge": "S2",
+      "skillImg": "",
+      "changeType": "Effect added",
+      "changeTypeTh": "เพิ่มเอฟเฟกต์ใหม่",
+      "preview": "[Effect added]\r\nRecovers the HP of all allies by 20%.",
+      "officialText": "[Effect added]\r\nRecovers the HP of all allies by 20%.",
+      "valueChanges": [],
+      "impact": "buff"
+    },
+    {
+      "id": "93-23",
+      "patchId": 93,
+      "monsterName": "Arcane Weapon",
+      "element": "Fire",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0192_1_2.png",
+      "skillName": "Overcharge Drive (Passive)",
+      "skillBadge": "Passive",
+      "skillImg": "",
+      "changeType": "Value changed",
+      "changeTypeTh": "ปรับตัวเลขความแรง/สัดส่วน",
+      "preview": "[Value changed]\r\nWhile in the judgement of flame state, deals 50% ➔ 70% increased damage.",
+      "officialText": "[Value changed]\r\nWhile in the judgement of flame state, deals 50% ➔ 70% increased damage.",
+      "valueChanges": [
+        {
+          "oldValue": "50%",
+          "newValue": "70%"
+        }
+      ],
+      "impact": "buff"
+    },
+    {
+      "id": "93-24",
+      "patchId": 93,
+      "monsterName": "Kassandra",
+      "element": "Fire",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0116_1_2_swgtC2NC.png",
+      "skillName": "Cavalry's Drive",
+      "skillBadge": "S2",
+      "skillImg": "",
+      "changeType": "Effect changed",
+      "changeTypeTh": "เปลี่ยนเอฟเฟกต์สกิล",
+      "preview": "[Effect changed]\r\nRecovers your HP and that of the ally with the worst HP condition by 20% ➔ Recovers the HP of all allies by 15%.",
+      "officialText": "[Effect changed]\r\nRecovers your HP and that of the ally with the worst HP condition by 20% ➔ Recovers the HP of all allies by 15%.",
+      "valueChanges": [],
+      "impact": "adjustment"
+    },
+    {
+      "id": "93-25",
+      "patchId": 93,
+      "monsterName": "Beetle Guardian",
+      "element": "Fire",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0177_1_2.png",
+      "skillName": "Last Guard (Passive)",
+      "skillBadge": "Passive",
+      "skillImg": "",
+      "changeType": "Effect changed",
+      "changeTypeTh": "เปลี่ยนเอฟเฟกต์สกิล",
+      "preview": "[Effect changed]\r\nActivates when an ally receives fatal damage from an attack that ignores Defense ➔ Activates when an ally receives fatal damage from an attack that ignores Defense or if HP falls to 10% or below.",
+      "officialText": "[Effect changed]\r\nActivates when an ally receives fatal damage from an attack that ignores Defense ➔ Activates when an ally receives fatal damage from an attack that ignores Defense or if HP falls to 10% or below.",
+      "valueChanges": [],
+      "impact": "buff"
+    },
+    {
+      "id": "93-26",
+      "patchId": 93,
+      "monsterName": "Hanna",
+      "element": "Fire",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0001_0_0.png",
+      "skillName": "Magic Interpolation (Passive)",
+      "skillBadge": "Passive",
+      "skillImg": "",
+      "changeType": "Value changed",
+      "changeTypeTh": "ปรับตัวเลขความแรง/สัดส่วน",
+      "preview": "[Value changed]\r\nIncreases your Attack Bar by 10% ➔ 25% whenever an enemy granted with a harmful effect gains a turn.",
+      "officialText": "[Value changed]\r\nIncreases your Attack Bar by 10% ➔ 25% whenever an enemy granted with a harmful effect gains a turn.",
+      "valueChanges": [
+        {
+          "oldValue": "10%",
+          "newValue": "25%"
+        }
+      ],
+      "impact": "buff"
+    },
+    {
+      "id": "93-27",
+      "patchId": 93,
+      "monsterName": "Hanna",
+      "element": "Light",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0001_0_0.png",
+      "skillName": "The Weight of Magic (Passive)",
+      "skillBadge": "Passive",
+      "skillImg": "",
+      "changeType": "Value changed",
+      "changeTypeTh": "ปรับตัวเลขความแรง/สัดส่วน",
+      "preview": "When attacked, offsets the damage and decreases the enemy's Attack Bar with a 25% ➔ 40% chance.",
+      "officialText": "When attacked, offsets the damage and decreases the enemy's Attack Bar with a 25% ➔ 40% chance.",
+      "valueChanges": [
+        {
+          "oldValue": "25%",
+          "newValue": "40%"
+        }
+      ],
+      "impact": "buff"
+    },
+    {
+      "id": "93-28",
+      "patchId": 93,
+      "monsterName": "Harkor",
+      "element": "Wind",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0001_0_0.png",
+      "skillName": "Spikes Core (Passive)",
+      "skillBadge": "Passive",
+      "skillImg": "",
+      "changeType": "Value changed",
+      "changeTypeTh": "ปรับตัวเลขความแรง/สัดส่วน",
+      "preview": "[Value changed]\r\nWhen you take fatal damage from the enemy, offsets the damage and reflects 50% ➔ 80% of the damage back to the attacker.",
+      "officialText": "[Value changed]\r\nWhen you take fatal damage from the enemy, offsets the damage and reflects 50% ➔ 80% of the damage back to the attacker.",
+      "valueChanges": [
+        {
+          "oldValue": "50%",
+          "newValue": "80%"
+        }
+      ],
+      "impact": "buff"
+    },
+    {
+      "id": "93-29",
+      "patchId": 93,
+      "monsterName": "Magic Order Guardian",
+      "element": "Fire",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0153_1_2_swgtC2NC.png",
+      "skillName": "Reaction (Passive)",
+      "skillBadge": "Passive",
+      "skillImg": "",
+      "changeType": "Effect added",
+      "changeTypeTh": "เพิ่มเอฟเฟกต์ใหม่",
+      "preview": "[Effect added]\r\nWhenever you attack an enemy, grants one of the following beneficial effects you do not have on yourself for 2 turns: Shield, Counterattack, or Immunity.",
+      "officialText": "[Effect added]\r\nWhenever you attack an enemy, grants one of the following beneficial effects you do not have on yourself for 2 turns: Shield, Counterattack, or Immunity.",
+      "valueChanges": [],
+      "impact": "buff"
+    },
+    {
+      "id": "93-30",
+      "patchId": 93,
+      "monsterName": "Jin Kazama",
+      "element": "All",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0200_1_5_swgtC2NC.png",
+      "skillName": "Hellfire Tremors Stance",
+      "skillBadge": "S1",
+      "skillImg": "",
+      "changeType": "Damage Increased",
+      "changeTypeTh": "บัฟเพิ่มความแรงดาเมจ",
+      "preview": "[Damage increased]\r\nDamage increased by 10% on Skill 1 and 15% on follow-up strikes.",
+      "officialText": "[Damage increased]\r\nDamage increased by 10% on Skill 1 and 15% on follow-up strikes.",
+      "valueChanges": [],
+      "impact": "buff"
+    },
+    {
+      "id": "93-31",
+      "patchId": 93,
+      "monsterName": "Devil Maiden",
+      "element": "Light",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0127_1_4.png",
+      "skillName": "Messenger of Doom (Passive)",
+      "skillBadge": "Passive",
+      "skillImg": "",
+      "changeType": "Effect changed",
+      "changeTypeTh": "เปลี่ยนเอฟเฟกต์สกิล",
+      "preview": "[Effect changed]\r\nFor each harmful effect granted on yourself ➔ for each harmful effect granted on all allies, increases damage dealt by 20%, and decreases damage taken by 10% (Up to 200% DMG / 50% RED).",
+      "officialText": "[Effect changed]\r\nFor each harmful effect granted on yourself ➔ for each harmful effect granted on all allies, increases damage dealt by 20%, and decreases damage taken by 10% (Up to 200% DMG / 50% RED).",
+      "valueChanges": [],
+      "impact": "buff"
+    },
+    {
+      "id": "93-32",
+      "patchId": 93,
+      "monsterName": "Hypnomeow",
+      "element": "All",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0085_1_1.png",
+      "skillName": "Bubble Bubble",
+      "skillBadge": "S1",
+      "skillImg": "",
+      "changeType": "Effect added",
+      "changeTypeTh": "เพิ่มเอฟเฟกต์ใหม่",
+      "preview": "[Effect added]\r\nAttacks sleeping enemies without waking them up.",
+      "officialText": "[Effect added]\r\nAttacks sleeping enemies without waking them up.",
+      "valueChanges": [],
+      "impact": "buff"
+    },
+    {
+      "id": "93-33",
+      "patchId": 93,
+      "monsterName": "Hypnomeow",
+      "element": "Dark",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0085_1_5.png",
+      "skillName": "Ground Reader (Passive)",
+      "skillBadge": "Passive",
+      "skillImg": "",
+      "changeType": "Effect added",
+      "changeTypeTh": "เพิ่มเอฟเฟกต์ใหม่",
+      "preview": "[Effect added]\r\nIf you defeat a sleeping enemy on your turn, the target cannot be revived during battle.",
+      "officialText": "[Effect added]\r\nIf you defeat a sleeping enemy on your turn, the target cannot be revived during battle.",
+      "valueChanges": [],
+      "impact": "buff"
+    },
+    {
+      "id": "93-34",
+      "patchId": 93,
+      "monsterName": "Espresso Cookie / Black Tea Bunny",
+      "element": "Water",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0090_1_1.png",
+      "skillName": "Cold Brew / Iced Tea (Passive)",
+      "skillBadge": "Passive",
+      "skillImg": "",
+      "changeType": "Effect changed",
+      "changeTypeTh": "เปลี่ยนเอฟเฟกต์สกิล",
+      "preview": "[Effect changed]\r\nDecreases the Attack Bar by 15% when attacking a frozen enemy ➔ Decreases the Attack Bar by 10% without conditions.",
+      "officialText": "[Effect changed]\r\nDecreases the Attack Bar by 15% when attacking a frozen enemy ➔ Decreases the Attack Bar by 10% without conditions.",
+      "valueChanges": [],
+      "impact": "buff"
+    },
+    {
+      "id": "93-35",
+      "patchId": 93,
+      "monsterName": "Espresso Cookie / Black Tea Bunny",
+      "element": "Wind",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0090_1_3.png",
+      "skillName": "Spinning Tea Spoon",
+      "skillBadge": "S2",
+      "skillImg": "",
+      "changeType": "Percentage changed",
+      "changeTypeTh": "ปรับเปอร์เซ็นต์โอกาสติด",
+      "preview": "[Percentage changed]\r\nBeneficial effect block for 1 turn with a 50% ➔ 70% chance.",
+      "officialText": "[Percentage changed]\r\nBeneficial effect block for 1 turn with a 50% ➔ 70% chance.",
+      "valueChanges": [
+        {
+          "oldValue": "50%",
+          "newValue": "70%"
+        }
+      ],
+      "impact": "buff"
+    },
+    {
+      "id": "93-36",
+      "patchId": 93,
+      "monsterName": "Espresso Cookie / Black Tea Bunny",
+      "element": "Fire",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0090_1_2.png",
+      "skillName": "Caffeine (Passive)",
+      "skillBadge": "Passive",
+      "skillImg": "",
+      "changeType": "Effect changed",
+      "changeTypeTh": "เปลี่ยนเอฟเฟกต์สกิล",
+      "preview": "[Effect changed]\r\nWhenever you gain a turn, grants a random ATK, DEF, or SPD increase for 1 ➔ 2 turns.",
+      "officialText": "[Effect changed]\r\nWhenever you gain a turn, grants a random ATK, DEF, or SPD increase for 1 ➔ 2 turns.",
+      "valueChanges": [
+        {
+          "oldValue": "1 turn",
+          "newValue": "2 turns"
+        }
+      ],
+      "impact": "buff"
+    },
+    {
+      "id": "93-37",
+      "patchId": 93,
+      "monsterName": "Tarosho",
+      "element": "Wind",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0001_0_0.png",
+      "skillName": "Magic Ministry (Passive)",
+      "skillBadge": "Passive",
+      "skillImg": "",
+      "changeType": "Effect changed",
+      "changeTypeTh": "เปลี่ยนเอฟเฟกต์สกิล",
+      "preview": "[Effect changed]\r\nRemoves 1 harmful effect from yourself and the ally with highest Attack Bar ➔ Removes 1 harmful effect from the 3 allies with highest Attack Bar and increases their Attack Bar by 20%.",
+      "officialText": "[Effect changed]\r\nRemoves 1 harmful effect from yourself and the ally with highest Attack Bar ➔ Removes 1 harmful effect from the 3 allies with highest Attack Bar and increases their Attack Bar by 20%.",
+      "valueChanges": [],
+      "impact": "buff"
+    },
+    {
+      "id": "93-38",
+      "patchId": 93,
+      "monsterName": "Daphnis",
+      "element": "Water",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0001_0_0.png",
+      "skillName": "Leader Skill",
+      "skillBadge": "Leader",
+      "skillImg": "",
+      "changeType": "Leader Skill Changed",
+      "changeTypeTh": "ปรับสกิลลีดเดอร์",
+      "preview": "Increases the Defense of ally monsters in Guild Content by 28% ➔ Increases the Attack Speed of ally Monsters in Guild Content by 24%.",
+      "officialText": "Increases the Defense of ally monsters in Guild Content by 28% ➔ Increases the Attack Speed of ally Monsters in Guild Content by 24%.",
+      "valueChanges": [],
+      "impact": "buff"
+    },
+    {
+      "id": "93-39",
+      "patchId": 93,
+      "monsterName": "Iona",
+      "element": "Light",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0020_3_1.png",
+      "skillName": "Leader Skill",
+      "skillBadge": "Leader",
+      "skillImg": "",
+      "changeType": "Leader Skill Changed",
+      "changeTypeTh": "ปรับสกิลลีดเดอร์",
+      "preview": "Increases the Resistance of ally Monsters in Dungeons by 33% ➔ Increases the Resistance of ally Monsters in Guild Content by 33%.",
+      "officialText": "Increases the Resistance of ally Monsters in Dungeons by 33% ➔ Increases the Resistance of ally Monsters in Guild Content by 33%.",
+      "valueChanges": [],
+      "impact": "adjustment"
+    },
+    {
+      "id": "93-40",
+      "patchId": 93,
+      "monsterName": "Devil Maiden",
+      "element": "Dark",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0127_1_5.png",
+      "skillName": "Awakening Effect",
+      "skillBadge": "Awakening",
+      "skillImg": "",
+      "changeType": "Awakening Effect Changed",
+      "changeTypeTh": "ปรับเอฟเฟกต์ปลุกพลัง",
+      "preview": "Increases Critical Rate by 15% ➔ Increases Critical Damage by 25%.",
+      "officialText": "Increases Critical Rate by 15% ➔ Increases Critical Damage by 25%.",
+      "valueChanges": [],
+      "impact": "buff"
+    },
+    {
+      "id": "93-41",
+      "patchId": 93,
+      "monsterName": "Ryu",
+      "element": "All",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0066_1_2_swgtC2NC.png",
+      "skillName": "Stat Changed",
+      "skillBadge": "Stat Changed",
+      "skillImg": "",
+      "changeType": "Stat Changed",
+      "changeTypeTh": "ปรับสเตตัสพื้นฐาน",
+      "preview": "(Unawakened) Attack Speed 102 ➔ 104\r\n(Awakened) Attack Speed 103 ➔ 105",
+      "officialText": "(Unawakened) Attack Speed 102 ➔ 104\r\n(Awakened) Attack Speed 103 ➔ 105",
+      "valueChanges": [
+        {
+          "oldValue": "103",
+          "newValue": "105"
+        }
+      ],
+      "impact": "buff"
+    },
+    {
+      "id": "93-42",
+      "patchId": 93,
+      "monsterName": "Paul Phoenix",
+      "element": "All",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0199_1_2_swgtC2NC.png",
+      "skillName": "Stat Changed",
+      "skillBadge": "Stat Changed",
+      "skillImg": "",
+      "changeType": "Stat Changed",
+      "changeTypeTh": "ปรับสเตตัสพื้นฐาน",
+      "preview": "(Unawakened) Attack Speed 102 ➔ 104\r\n(Awakened) Attack Speed 103 ➔ 105",
+      "officialText": "(Unawakened) Attack Speed 102 ➔ 104\r\n(Awakened) Attack Speed 103 ➔ 105",
+      "valueChanges": [
+        {
+          "oldValue": "103",
+          "newValue": "105"
+        }
+      ],
+      "impact": "buff"
+    },
+    {
+      "id": "93-43",
+      "patchId": 93,
+      "monsterName": "Slayer",
+      "element": "All",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0068_1_1_swgtC2NC.png",
+      "skillName": "Stat Changed",
+      "skillBadge": "Stat Changed",
+      "skillImg": "",
+      "changeType": "Stat Changed",
+      "changeTypeTh": "ปรับสเตตัสพื้นฐาน",
+      "preview": "(Unawakened) Attack Speed 102 ➔ 104\r\n(Awakened) Attack Speed 103 ➔ 105",
+      "officialText": "(Unawakened) Attack Speed 102 ➔ 104\r\n(Awakened) Attack Speed 103 ➔ 105",
+      "valueChanges": [
+        {
+          "oldValue": "103",
+          "newValue": "105"
+        }
+      ],
+      "impact": "buff"
+    },
+    {
+      "id": "93-44",
+      "patchId": 93,
+      "monsterName": "Epikion Priest",
+      "element": "Water",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0020_0_1.png",
+      "skillName": "Stat Changed",
+      "skillBadge": "Stat Changed",
+      "skillImg": "",
+      "changeType": "Stat Changed",
+      "changeTypeTh": "ปรับสเตตัสพื้นฐาน",
+      "preview": "(Awakened) Attack Speed 95 ➔ 96",
+      "officialText": "(Awakened) Attack Speed 95 ➔ 96",
+      "valueChanges": [
+        {
+          "oldValue": "95",
+          "newValue": "96"
+        }
+      ],
+      "impact": "buff"
+    },
+    {
+      "id": "93-45",
+      "patchId": 93,
+      "monsterName": "Zeratu",
+      "element": "Dark",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0017_4_2.png",
+      "skillName": "Stat Changed",
+      "skillBadge": "Stat Changed",
+      "skillImg": "",
+      "changeType": "Stat Changed",
+      "changeTypeTh": "ปรับสเตตัสพื้นฐาน",
+      "preview": "HP, Attack Power, and Defense base stats adjusted at 6★ Lv.40",
+      "officialText": "HP, Attack Power, and Defense base stats adjusted at 6★ Lv.40",
+      "valueChanges": [],
+      "impact": "adjustment"
+    },
+    {
+      "id": "93-46",
+      "patchId": 93,
+      "monsterName": "Dias",
+      "element": "Dark",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0024_4_3.png",
+      "skillName": "Stat Changed",
+      "skillBadge": "Stat Changed",
+      "skillImg": "",
+      "changeType": "Stat Changed",
+      "changeTypeTh": "ปรับสเตตัสพื้นฐาน",
+      "preview": "HP, Attack Power, and Defense base stats adjusted at 6★ Lv.40",
+      "officialText": "HP, Attack Power, and Defense base stats adjusted at 6★ Lv.40",
+      "valueChanges": [],
+      "impact": "adjustment"
+    },
+    {
+      "id": "93-47",
+      "patchId": 93,
+      "monsterName": "Light Aya / Nobara Kugisaki",
+      "element": "Light",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0164_1_4_swgtC2NC.png",
+      "skillName": "Exorcism Resonance",
+      "skillBadge": "S3",
+      "skillImg": "",
+      "changeType": "Skill Description Changed",
+      "changeTypeTh": "ปรับคำอธิบายสกิลให้ชัดเจน",
+      "preview": "Adjusted skill description wording for clarity regarding targeting mechanics.",
+      "officialText": "Adjusted skill description wording for clarity regarding targeting mechanics.",
+      "valueChanges": [],
+      "impact": "adjustment"
+    }
   ]
 }
