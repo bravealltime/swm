@@ -12,7 +12,8 @@ import {
   ArrowRight,
   ExternalLink,
   Flame,
-  Award
+  Award,
+  QrCode,
 } from 'lucide-react';
 import { VIP_PLANS } from '../utils/memberPolicy';
 import { useAuth } from '../contexts/AuthContext';
@@ -184,15 +185,16 @@ export default function MemberPaywallModal({ isOpen, onClose }) {
         {/* Action & Subscription Options */}
         <div className="p-4 sm:p-5 rounded-2xl bg-slate-900/80 border border-slate-800 flex flex-col gap-4">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
-            <div className="text-center sm:text-left space-y-0.5">
+            <div className="text-center sm:text-left space-y-1">
               <div className="text-sm font-bold text-white flex items-center justify-center sm:justify-start gap-1.5">
-                <span>💳 ชำระเงินผ่านระบบ Stripe</span>
+                <QrCode className="w-4 h-4 text-emerald-400" />
+                <span>สแกน QR พร้อมเพย์ / บัตร ผ่าน Stripe Gateway</span>
                 <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                  ปลอดภัย 100%
+                  สแกนจ่ายได้ทุกแอปธนาคาร
                 </span>
               </div>
-              <p className="text-xs text-slate-400">
-                รองรับบัตรเครดิต/เดบิต, Apple Pay, Google Pay, และใบเสร็จรับเงิน/ใบกำกับภาษีอัตโนมัติ
+              <p className="text-xs text-slate-400 leading-relaxed">
+                Stripe จะสร้าง <strong>Dynamic QR Code</strong> ประจำบิลนี้ สแกนจ่ายผ่าน K PLUS, SCB, KTB, BBL หรือแอปใดก็ได้ ระบบจะตรวจจับและปลดล็อก VIP อัตโนมัติทันที
               </p>
             </div>
 
@@ -200,10 +202,10 @@ export default function MemberPaywallModal({ isOpen, onClose }) {
               type="button"
               onClick={handleStripeCheckout}
               disabled={checkoutLoading}
-              className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 hover:from-amber-400 hover:to-yellow-400 text-slate-950 text-xs sm:text-sm font-black shadow-lg shadow-amber-500/25 transition-all cursor-pointer disabled:opacity-60"
+              className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 hover:from-amber-400 hover:to-yellow-400 text-slate-950 text-xs sm:text-sm font-black shadow-lg shadow-amber-500/25 transition-all cursor-pointer disabled:opacity-60 shrink-0"
             >
-              <Crown className="w-4 h-4 fill-slate-950" />
-              <span>{checkoutLoading ? 'กำลังเปิดหน้าชำระเงิน...' : `ชำระเงิน ${selectedPlan === 'guild' ? '฿249' : '฿99'} / เดือน ผ่าน Stripe`}</span>
+              <QrCode className="w-4 h-4 fill-slate-950" />
+              <span>{checkoutLoading ? 'กำลังเปิดหน้า QR Code...' : `เปิด QR พร้อมเพย์ ${selectedPlan === 'guild' ? '฿249' : '฿99'}`}</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
