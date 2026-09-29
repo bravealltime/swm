@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import {
   X,
   Zap,
@@ -28,7 +28,18 @@ export default function TacticalBattlePlanModal({
   defense,
   userUnitsMap
 }) {
-  if (!isOpen || !counter) return null;
+  // Close modal on Escape key press
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [isOpen, onClose]);
 
   // Resolve user's actual units for the counter
   const matchedUnits = useMemo(() => {
@@ -67,6 +78,8 @@ export default function TacticalBattlePlanModal({
   }, [counter, matchedUnits, userUnitsMap]);
 
   const canBuildFully = matchedUnits.every(Boolean);
+
+  if (!isOpen || !counter) return null;
 
   return (
     <div
