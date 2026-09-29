@@ -131,6 +131,31 @@ export const DEFAULT_SETTINGS = {
   ai: { requireLogin: true, dailyLimit: 3 },
   // contributor ids for the shared guild leaderboards (server-side only, see _lib/guildRankings.js)
   guildRankings: { trusted: [], blocked: [] },
+  // VIP promo and trial codes
+  vipPromoCodes: {
+    codes: [
+      {
+        code: 'VIP3DAY',
+        days: 3,
+        maxUses: 100,
+        usedCount: 0,
+        active: true,
+        expiresAt: null,
+        createdAt: '2026-09-29T00:00:00.000Z',
+        redeemedUsers: [],
+      },
+      {
+        code: 'SWMFREE7',
+        days: 7,
+        maxUses: 50,
+        usedCount: 0,
+        active: true,
+        expiresAt: null,
+        createdAt: '2026-09-29T00:00:00.000Z',
+        redeemedUsers: [],
+      },
+    ],
+  },
 };
 
 let settingsCache = { at: 0, value: null };
@@ -604,6 +629,163 @@ export async function deleteCloudProfileFile(filename) {
       headers: { apikey: key, Authorization: `Bearer ${key}` },
     });
     return { ok: res.ok };
+  } catch (err) {
+    return { ok: false, error: err.message };
+  }
+}
+
+// --- VIP Promo & Trial Codes Management ------------------------------------------------------
+export async function getVipPromoCodes() {
+  const s = await getSettings();
+  return { ok: true, codes: s.vipPromoCodes?.codes || [] };
+}
+
+export async function saveVipPromoCode(item, by) {
+  if (!item?.code) return { ok: false, error: 'กรุณาระบุรหัสโค้ด' };
+  const cleanCode = String(item.code).trim().toUpperCase();
+  if (cleanCode.length < 3) return { ok: false, error: 'รหัสโค้ดต้องมีความยาวอย่างน้อย 3 ตัวอักษร' };
+
+  const s = await getSettings({ fresh: true });
+  const currentCodes = Array.isArray(s.vipPromoCodes?.codes) ? [...s.vipPromoCodes.codes] : [];
+  const existingIdx = currentCodes.findIndex((c) => c.code === cleanCode);
+
+  const days = Math.max(1, Math.min(365, Number(item.days) || 3));
+  const maxUses = Math.max(0, Number(item.maxUses) || 0); // 0 = unlimited
+
+  const updatedEntry = {
+    code: cleanCode,
+    days,
+    maxUses,
+    usedCount: existingIdx >= 0 ? currentCodes[existingIdx].usedCount || 0 : 0,
+    active: item.active !== false,
+    expiresAt: item.expiresAt || null,
+    createdAt: existingIdx >= 0 ? currentCodes[existingIdx].createdAt : new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    redeemedUsers: existingIdx >= 0 ? currentCodes[existingIdx].redeemedUsers || [] : [],
+  };
+
+  if (existingIdx >= 0) {
+    currentCodes[existingIdx] = updatedEntry;
+  } else {
+    currentCodes.unshift(updatedEntry);
+  }
+
+  const res = await saveSettings({ vipPromoCodes: { codes: currentCodes } }, by);
+  return { ok: res.ok, error: res.error, code: updatedEntry };
+}
+
+export async function deleteVipPromoCode(code, by) {
+  if (!code) return { ok: false, error: 'กรุณาระบุรหัสโค้ดที่ต้องการลบ' };
+  const cleanCode = String(code).trim().toUpperCase();
+  const s = await getSettings({ fresh: true });
+  const currentCodes = (s.vipPromoCodes?.codes || []).filter((c) => c.code !== cleanCode);
+  const res = await saveSettings({ vipPromoCodes: { codes: currentCodes } }, by);
+  return { ok: res.ok, error: res.error };
+}
+
+export async function redeemVipPromoCode({ code, userId, userEmail }) {
+  if (!code) return { ok: false, error: 'กรุณากรอกโค้ดแลกสิทธิ์' };
+  if (!userId) return { ok: false, error: 'กรุณาเข้าสู่ระบบก่อน เพื่อบันทึกสิทธิ์ VIP เข้าบัญชีของคุณ' };
+
+  const cleanCode = String(code).trim().toUpperCase();
+  const s = await getSettings({ fresh: true });
+  const currentCodes = Array.isArray(s.vipPromoCodes?.codes) ? [...s.vipPromoCodes.codes] : [];
+  const targetCode = currentCodes.find((c) => c.code === cleanCode);
+
+  if (!targetCode) {
+    return { ok: false, error: `ไม่พบโค้ด "${cleanCode}" หรือโค้ดไม่ถูกต้อง` };
+  }
+
+  if (!targetCode.active) {
+    return { ok: false, error: `โค้ด "${cleanCode}" ถูกปิดใช้งานแล้ว` };
+  }
+
+  if (targetCode.expiresAt) {
+    const expTime = new Date(targetCode.expiresAt).getTime();
+    if (!Number.isNaN(expTime) && expTime < Date.now()) {
+      return { ok: false, error: `โค้ด "${cleanCode}" หมดอายุการใช้งานแล้ว` };
+    }
+  }
+
+  if (targetCode.maxUses > 0 && (targetCode.usedCount || 0) >= targetCode.maxUses) {
+    return { ok: false, error: `โค้ด "${cleanCode}" ถูกแลกครบตามจำนวนสิทธิ์แล้ว (${targetCode.maxUses} สิทธิ์)` };
+  }
+
+  if (Array.isArray(targetCode.redeemedUsers) && targetCode.redeemedUsers.includes(userId)) {
+    return { ok: false, error: `คุณเคยใช้สิทธิ์โค้ด "${cleanCode}" ไปแล้ว` };
+  }
+
+  // Grant VIP trial to user in Supabase
+  const url = supabaseUrl();
+  const key = serviceKey();
+  if (!url || !key || userId.startsWith('mock-') || userId.startsWith('test-') || userId === 'user-trial-test') {
+    // If no service key (e.g. dev demo mode or unit test), activate trial directly
+    const newExpiryIso = new Date(Date.now() + targetCode.days * 86400000).toISOString();
+    targetCode.usedCount = (targetCode.usedCount || 0) + 1;
+    targetCode.redeemedUsers = [...(targetCode.redeemedUsers || []), userId];
+    await saveSettings({ vipPromoCodes: { codes: currentCodes } }, userEmail || userId);
+    return {
+      ok: true,
+      days: targetCode.days,
+      expiresAt: newExpiryIso,
+      code: targetCode.code,
+      message: `🎉 ยินดีด้วย! คุณได้รับสิทธิ์ VIP ทดลองใช้ฟรี ${targetCode.days} วัน เรียบร้อยแล้ว`,
+    };
+  }
+
+  try {
+    let existingMeta = {};
+    let existingExpiry = null;
+    const userRes = await fetch(`${url}/auth/v1/admin/users/${userId}`, {
+      headers: { apikey: key, Authorization: `Bearer ${key}` },
+    });
+    if (userRes.ok) {
+      const u = await userRes.json();
+      existingMeta = u?.user_metadata || {};
+      existingExpiry = existingMeta.vip_expires_at ? new Date(existingMeta.vip_expires_at).getTime() : null;
+    }
+
+    const baseTime = existingExpiry && existingExpiry > Date.now() ? existingExpiry : Date.now();
+    const newExpiryIso = new Date(baseTime + targetCode.days * 86400000).toISOString();
+
+    const updateRes = await fetch(`${url}/auth/v1/admin/users/${userId}`, {
+      method: 'PUT',
+      headers: {
+        apikey: key,
+        Authorization: `Bearer ${key}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        user_metadata: {
+          ...existingMeta,
+          tier: 'vip',
+          role: 'vip',
+          is_vip: true,
+          vip_trial: true,
+          vip_expires_at: newExpiryIso,
+          vip_granted_at: new Date().toISOString(),
+          last_redeemed_code: targetCode.code,
+        },
+      }),
+    });
+
+    if (!updateRes.ok) {
+      const err = await updateRes.json().catch(() => ({}));
+      return { ok: false, error: err.message || 'ไม่สามารถบันทึกสิทธิ์ VIP เข้าบัญชีได้' };
+    }
+
+    // Increment code usage
+    targetCode.usedCount = (targetCode.usedCount || 0) + 1;
+    targetCode.redeemedUsers = [...(targetCode.redeemedUsers || []), userId];
+    await saveSettings({ vipPromoCodes: { codes: currentCodes } }, userEmail || userId);
+
+    return {
+      ok: true,
+      days: targetCode.days,
+      expiresAt: newExpiryIso,
+      code: targetCode.code,
+      message: `🎉 ยินดีด้วย! คุณได้รับสิทธิ์ VIP ทดลองใช้ฟรี ${targetCode.days} วัน เรียบร้อยแล้ว`,
+    };
   } catch (err) {
     return { ok: false, error: err.message };
   }

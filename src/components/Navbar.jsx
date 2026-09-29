@@ -67,7 +67,7 @@ const PVP_IDS = new Set(PVP_NAV_ITEMS.map((i) => i.id));
 const TOOL_IDS = new Set(TOOL_NAV_ITEMS.map((i) => i.id));
 
 export default function Navbar({ currentView, onNavigate, onOpenSearch, onOpenMenu, onOpenSync, onOpenAuth }) {
-  const { user, isAdmin, isMember, openPaywall, adminMode, setAdminMode } = useAuth();
+  const { user, isAdmin, isMember, vipInfo, openPaywall, adminMode, setAdminMode } = useAuth();
   const [activeDropdown, setActiveDropdown] = useState(null); // 'pvp' | 'tools' | null
   const navRef = useRef(null);
 
@@ -308,15 +308,19 @@ export default function Navbar({ currentView, onNavigate, onOpenSearch, onOpenMe
               onClick={openPaywall}
               className={`flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs font-black transition-all cursor-pointer shadow-md hover:scale-[1.03] ${
                 isMember
-                  ? 'bg-gradient-to-r from-amber-500/20 via-yellow-500/25 to-amber-500/20 border border-amber-400/50 text-amber-300 hover:border-amber-300 shadow-amber-500/10'
-                  : 'bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 hover:from-amber-400 hover:to-yellow-400 text-slate-950 shadow-amber-500/25'
+                  ? vipInfo?.isExpiringSoon
+                    ? 'bg-gradient-to-r from-amber-600/30 via-orange-600/30 to-amber-600/30 border border-amber-400 text-amber-300 animate-pulse shadow-amber-500/20'
+                    : 'bg-gradient-to-r from-amber-500/20 via-yellow-500/25 to-amber-500/20 border border-amber-400/50 text-amber-300 hover:border-amber-300 shadow-amber-500/10'
+                  : vipInfo?.isExpired
+                    ? 'bg-rose-500/20 border border-rose-500/40 text-rose-300 hover:bg-rose-500/30'
+                    : 'bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 hover:from-amber-400 hover:to-yellow-400 text-slate-950 shadow-amber-500/25'
               }`}
-              title={isMember ? 'บัญชี VIP Member (คลิกเพื่อดูสิทธิ์ / จัดการแพ็กเกจ)' : 'อัปเกรดเป็นสมาชิก VIP ปลดล็อกทุกระบบ'}
+              title={isMember ? `${vipInfo?.label || 'VIP Member'} (คลิกเพื่อดูสิทธิ์)` : vipInfo?.isExpired ? 'สิทธิ์ VIP หมดอายุแล้ว (คลิกเพื่อต่ออายุ)' : 'อัปเกรดเป็นสมาชิก VIP ปลดล็อกทุกระบบ'}
               aria-label="จัดการสิทธิ์ VIP"
             >
               <Crown className={`w-3.5 h-3.5 ${isMember ? 'text-amber-400 fill-amber-400' : 'fill-slate-950'}`} />
-              <span>VIP</span>
-              {isMember && <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />}
+              <span>{isMember ? (vipInfo?.badgeText ? `VIP (${vipInfo.badgeText})` : 'VIP') : vipInfo?.isExpired ? 'ต่ออายุ VIP' : 'VIP'}</span>
+              {isMember && <span className={`w-1.5 h-1.5 rounded-full ${vipInfo?.isExpiringSoon ? 'bg-amber-400' : 'bg-emerald-400'} animate-pulse`} />}
             </button>
 
             {/* User Profile / Auth */}

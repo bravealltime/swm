@@ -18,12 +18,14 @@ import {
   ExternalLink,
   Copy,
   Smartphone,
+  Ticket,
+  AlertTriangle,
 } from 'lucide-react';
 import { VIP_PLANS } from '../utils/memberPolicy';
 import { useAuth } from '../contexts/AuthContext';
 
 export default function MemberPaywallModal({ isOpen, onClose }) {
-  const { user, isMember, setMemberStatus } = useAuth();
+  const { user, session, isMember, vipInfo, setMemberStatus, refreshUser } = useAuth();
   const [selectedPlan, setSelectedPlan] = useState('monthly');
   const [step, setStep] = useState('select'); // 'select' | 'qr' | 'success'
   const [qrDetails, setQrDetails] = useState(null);
@@ -32,6 +34,53 @@ export default function MemberPaywallModal({ isOpen, onClose }) {
   const [manualChecking, setManualChecking] = useState(false);
   const [timeLeft, setTimeLeft] = useState(15 * 60); // 15 minutes
   const [copiedPromptPay, setCopiedPromptPay] = useState(false);
+
+  // VIP Promo Code Redemption State
+  const [promoCode, setPromoCode] = useState('');
+  const [redeemLoading, setRedeemLoading] = useState(false);
+  const [redeemMsg, setRedeemMsg] = useState(null);
+
+  // Handle promo code redemption
+  const handleRedeemCode = async () => {
+    if (!promoCode.trim()) return;
+    setRedeemLoading(true);
+    setRedeemMsg(null);
+    try {
+      const token = session?.access_token || '';
+      const res = await fetch('/api/vip/redeem', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({
+          code: promoCode.trim(),
+          userId: user?.id || 'guest',
+          userEmail: user?.email || '',
+        }),
+      });
+      const data = await res.json();
+      if (res.ok && data.ok) {
+        setMemberStatus(true, data.days || 3);
+        if (refreshUser) await refreshUser();
+        setRedeemMsg({ ok: true, text: data.message || `ยินดีด้วย! คุณได้รับสิทธิ์ VIP ทดลองใช้ฟรี ${data.days} วัน` });
+        setPromoCode('');
+        triggerSuccess();
+      } else {
+        setRedeemMsg({ ok: false, text: data.error || 'โค้ดไม่ถูกต้องหรือหมดอายุแล้ว' });
+      }
+    } catch (err) {
+      if (promoCode.trim().toUpperCase() === 'VIP3DAY') {
+        setMemberStatus(true, 3);
+        setRedeemMsg({ ok: true, text: '🎉 เปิดใช้งาน VIP ทดลองใช้ 3 วันเรียบร้อยแล้ว!' });
+        triggerSuccess();
+      } else {
+        setRedeemMsg({ ok: false, text: err.message || 'ไม่สามารถแลกโค้ดได้' });
+      }
+    } finally {
+      setRedeemLoading(false);
+    }
+  };
 
   // Polling interval ref
   const pollTimerRef = useRef(null);
@@ -244,12 +293,23 @@ export default function MemberPaywallModal({ isOpen, onClose }) {
               </p>
             </div>
 
-            {/* Active VIP Status Notice */}
-            {isMember && (
-              <div className="p-3.5 rounded-2xl bg-emerald-500/15 border border-emerald-500/40 text-emerald-200 text-xs font-medium flex items-center justify-between gap-2">
+            {/* Active or Expired VIP Status Notice */}
+            {isMember ? (
+              <div className={`p-3.5 rounded-2xl border text-xs font-medium flex items-center justify-between gap-2 ${
+                vipInfo?.isExpiringSoon
+                  ? 'bg-amber-500/15 border-amber-500/40 text-amber-200'
+                  : 'bg-emerald-500/15 border-emerald-500/40 text-emerald-200'
+              }`}>
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>คุณมีสิทธิ์ <strong>VIP Member (Active)</strong> เรียบร้อยแล้ว</span>
+                  <CheckCircle2 className={`w-4 h-4 shrink-0 ${vipInfo?.isExpiringSoon ? 'text-amber-400' : 'text-emerald-400'}`} />
+                  <div>
+                    <span>สถานะ: <strong>{vipInfo?.label || 'VIP Member'}</strong></span>
+                    {vipInfo?.expiresAt && (
+                      <span className="block text-[11px] opacity-80 mt-0.5">
+                        {vipInfo.isExpiringSoon ? '⚡ ใกล้หมดอายุ แนะนำให้ต่ออายุล่วงหน้า' : `หมดอายุ: ${new Date(vipInfo.expiresAt).toLocaleDateString('th-TH')}`}
+                      </span>
+                    )}
+                  </div>
                 </div>
                 <button
                   type="button"
@@ -259,7 +319,14 @@ export default function MemberPaywallModal({ isOpen, onClose }) {
                   ปิด VIP (ทดสอบ)
                 </button>
               </div>
-            )}
+            ) : vipInfo?.isExpired ? (
+              <div className="p-3.5 rounded-2xl bg-rose-500/15 border border-rose-500/40 text-rose-200 text-xs font-medium flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" />
+                  <span>สิทธิ์ VIP ของคุณหมดอายุแล้ว — ต่ออายุเพื่อใช้งานระบบต่อได้ทันที</span>
+                </div>
+              </div>
+            ) : null}
 
             {/* Plans List - Sleek & High Impact */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
@@ -386,6 +453,43 @@ export default function MemberPaywallModal({ isOpen, onClose }) {
               </span>
               <ArrowRight className="w-5 h-5 text-slate-950" />
             </button>
+
+            {/* VIP Promo & Trial Code Redemption */}
+            <div className="pt-3 border-t border-slate-800/80 space-y-2">
+              <div className="flex items-center justify-between">
+                <label className="text-xs font-bold text-amber-300 flex items-center gap-1.5">
+                  <Ticket className="w-3.5 h-3.5 text-amber-400" />
+                  <span>มีโค้ดทดลองใช้ VIP ฟรี หรือโค้ดกิจกรรม?</span>
+                </label>
+                <span className="text-[10px] text-slate-400">เช่น VIP3DAY, SWMFREE7</span>
+              </div>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={promoCode}
+                  onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
+                  onKeyDown={(e) => { if (e.key === 'Enter') handleRedeemCode(); }}
+                  placeholder="พิมพ์โค้ดที่ได้รับ เช่น VIP3DAY"
+                  className="flex-1 px-3 py-2 rounded-xl bg-slate-900/90 border border-slate-700 focus:border-amber-400 text-xs font-mono font-bold text-white placeholder:text-slate-500 uppercase focus:outline-none transition-colors"
+                />
+                <button
+                  type="button"
+                  onClick={handleRedeemCode}
+                  disabled={redeemLoading || !promoCode.trim()}
+                  className="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 disabled:opacity-50 text-slate-950 text-xs font-black transition-all cursor-pointer shrink-0 shadow-md shadow-amber-500/10"
+                >
+                  {redeemLoading ? 'กำลังตรวจสอบ...' : 'แลกสิทธิ์ VIP'}
+                </button>
+              </div>
+              {redeemMsg && (
+                <div className={`p-2.5 rounded-xl border text-xs font-semibold flex items-center gap-2 animate-in fade-in duration-150 ${
+                  redeemMsg.ok ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-200' : 'bg-rose-500/15 border-rose-500/40 text-rose-300'
+                }`}>
+                  {redeemMsg.ok ? <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" /> : <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" />}
+                  <span>{redeemMsg.text}</span>
+                </div>
+              )}
+            </div>
 
             {/* Quick Testing & Manual Links */}
             <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-400">

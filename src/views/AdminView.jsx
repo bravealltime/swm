@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import {
   ShieldCheck, RefreshCw, Activity, Database, Settings, Bot, PlayCircle, AlertTriangle, CheckCircle2, XCircle,
   Server, Cloud, GitBranch, Megaphone, Wrench, Radio, Lock, ExternalLink, Save, Loader2, Clock, Users, Zap, Trophy, ShieldOff, Trash2,
-  Crown, CreditCard, UserCheck, Search,
+  Crown, CreditCard, UserCheck, Search, Ticket, Download, Copy, Plus,
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { adminFetch } from '../services/adminClient';
@@ -862,6 +862,7 @@ function JobsPanel({ status }) {
 function VipPanel() {
   const [payments, setPayments] = useState(null);
   const [vipUsers, setVipUsers] = useState([]);
+  const [vipCodes, setVipCodes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [manualEmail, setManualEmail] = useState('');
   const [manualTier, setManualTier] = useState('vip');
@@ -871,15 +872,23 @@ function VipPanel() {
   const [searchUser, setSearchUser] = useState('');
   const [txFilter, setTxFilter] = useState('all');
 
+  // VIP Promo Code Form State
+  const [newCodeName, setNewCodeName] = useState('');
+  const [newCodeDays, setNewCodeDays] = useState(3);
+  const [newCodeMaxUses, setNewCodeMaxUses] = useState(50);
+  const [copiedCode, setCopiedCode] = useState(null);
+
   const loadData = useCallback(async () => {
     setLoading(true);
     try {
-      const [payRes, usersRes] = await Promise.all([
+      const [payRes, usersRes, codesRes] = await Promise.all([
         adminFetch('payments').catch(() => ({ ok: false, transactions: [] })),
         adminFetch('vip-users').catch(() => ({ ok: false, users: [] })),
+        adminFetch('vip-codes').catch(() => ({ ok: false, codes: [] })),
       ]);
       setPayments(payRes);
       setVipUsers(usersRes.users || []);
+      setVipCodes(codesRes.codes || []);
     } finally {
       setLoading(false);
     }
@@ -940,6 +949,122 @@ function VipPanel() {
     } finally {
       setBusyAction(false);
     }
+  };
+
+  const handleSaveCode = async (e) => {
+    e?.preventDefault();
+    if (!newCodeName.trim()) {
+      setMsg({ ok: false, text: 'กรุณากรอกรหัสโค้ด เช่น VIP3DAY' });
+      return;
+    }
+    setBusyAction(true);
+    setMsg(null);
+    try {
+      const res = await adminFetch('save-vip-code', {
+        method: 'POST',
+        body: {
+          code: newCodeName.trim(),
+          days: Number(newCodeDays) || 3,
+          maxUses: Number(newCodeMaxUses) || 0,
+          active: true,
+        },
+      });
+      if (res.ok) {
+        setMsg({ ok: true, text: `✨ สร้างโค้ด "${newCodeName.toUpperCase()}" (${newCodeDays} วัน) เรียบร้อยแล้ว!` });
+        setNewCodeName('');
+        loadData();
+      } else {
+        setMsg({ ok: false, text: res.error || 'สร้างโค้ดไม่สำเร็จ' });
+      }
+    } catch (err) {
+      setMsg({ ok: false, text: err.message });
+    } finally {
+      setBusyAction(false);
+    }
+  };
+
+  const handleToggleCode = async (codeItem) => {
+    setBusyAction(true);
+    try {
+      await adminFetch('save-vip-code', {
+        method: 'POST',
+        body: {
+          ...codeItem,
+          active: !codeItem.active,
+        },
+      });
+      loadData();
+    } catch (err) {
+      setMsg({ ok: false, text: err.message });
+    } finally {
+      setBusyAction(false);
+    }
+  };
+
+  const handleDeleteCode = async (codeStr) => {
+    if (!window.confirm(`ต้องการลบโค้ด "${codeStr}" ใช่หรือไม่?`)) return;
+    setBusyAction(true);
+    try {
+      await adminFetch('delete-vip-code', {
+        method: 'POST',
+        body: { code: codeStr },
+      });
+      setMsg({ ok: true, text: `ลบโค้ด "${codeStr}" เรียบร้อยแล้ว` });
+      loadData();
+    } catch (err) {
+      setMsg({ ok: false, text: err.message });
+    } finally {
+      setBusyAction(false);
+    }
+  };
+
+  const handleCopyCode = (codeStr) => {
+    navigator.clipboard?.writeText(codeStr);
+    setCopiedCode(codeStr);
+    setTimeout(() => setCopiedCode(null), 2500);
+  };
+
+  const exportTransactionsCsv = () => {
+    if (!transactions.length) return;
+    const headers = ['ID', 'Date', 'Method', 'Customer', 'Tier', 'Amount_THB', 'Status'];
+    const rows = transactions.map((t) => [
+      t.id,
+      t.createdAt ? new Date(t.createdAt).toISOString() : '',
+      t.method,
+      t.customerEmail,
+      t.tier,
+      t.amount,
+      t.status,
+    ]);
+    const csvContent = [headers.join(','), ...rows.map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(','))].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `swm-transactions-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const exportVipUsersCsv = () => {
+    if (!vipUsers.length) return;
+    const headers = ['User_ID', 'Email', 'Name', 'Tier', 'Is_VIP', 'Expires_At'];
+    const rows = vipUsers.map((u) => [
+      u.id,
+      u.email,
+      u.name,
+      u.tier,
+      u.isVip ? 'YES' : 'NO',
+      u.vipExpiresAt ? new Date(u.vipExpiresAt).toISOString() : (u.isVip ? 'LIFETIME' : ''),
+    ]);
+    const csvContent = [headers.join(','), ...rows.map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(','))].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `swm-vip-users-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   const filteredUsers = vipUsers.filter((u) => {
@@ -1067,6 +1192,143 @@ function VipPanel() {
         </form>
       </div>
 
+      {/* VIP Trial Codes Management */}
+      <div className={`${card} p-5 space-y-4`}>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <h3 className="text-sm font-bold text-white flex items-center gap-2">
+              <Ticket className="w-4 h-4 text-amber-400" />
+              <span>โค้ดแลกสิทธิ์ VIP ทดลองใช้ฟรี (VIP Trial Codes)</span>
+            </h3>
+            <p className="text-xs text-slate-400 mt-0.5">
+              สร้างโค้ดสำหรับแจกในกลุ่ม Facebook / Discord ให้ผู้เล่นทดลองใช้ฟังก์ชัน VIP
+            </p>
+          </div>
+          <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">
+            {vipCodes.length} โค้ดในระบบ
+          </span>
+        </div>
+
+        {/* Create Code Form */}
+        <form onSubmit={handleSaveCode} className="grid grid-cols-1 sm:grid-cols-4 gap-3 p-3.5 rounded-xl bg-white/[0.02] border border-white/[0.06]">
+          <div>
+            <label className="text-[11px] text-slate-400 block mb-1">รหัสโค้ด (Code):</label>
+            <input
+              type="text"
+              value={newCodeName}
+              onChange={(e) => setNewCodeName(e.target.value.toUpperCase())}
+              placeholder="เช่น VIP3DAY, TRIAL7"
+              className="w-full px-3 py-1.5 rounded-xl bg-slate-900 border border-white/10 text-white text-xs font-mono font-bold uppercase placeholder:text-slate-500 focus:outline-none focus:border-amber-400"
+            />
+          </div>
+
+          <div>
+            <label className="text-[11px] text-slate-400 block mb-1">ระยะเวลา (วัน):</label>
+            <input
+              type="number"
+              min={1}
+              max={365}
+              value={newCodeDays}
+              onChange={(e) => setNewCodeDays(Number(e.target.value) || 1)}
+              className="w-full px-3 py-1.5 rounded-xl bg-slate-900 border border-white/10 text-white text-xs focus:outline-none focus:border-amber-400"
+            />
+          </div>
+
+          <div>
+            <label className="text-[11px] text-slate-400 block mb-1">จำกัดสิทธิ์ (0 = ไม่จำกัด):</label>
+            <input
+              type="number"
+              min={0}
+              max={10000}
+              value={newCodeMaxUses}
+              onChange={(e) => setNewCodeMaxUses(Number(e.target.value) || 0)}
+              className="w-full px-3 py-1.5 rounded-xl bg-slate-900 border border-white/10 text-white text-xs focus:outline-none focus:border-amber-400"
+            />
+          </div>
+
+          <div className="flex items-end">
+            <button
+              type="submit"
+              disabled={busyAction || !newCodeName.trim()}
+              className="w-full py-2 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-black text-xs cursor-pointer disabled:opacity-50 flex items-center justify-center gap-1.5 shadow-md shadow-amber-500/10"
+            >
+              <Plus className="w-3.5 h-3.5" />
+              <span>สร้างโค้ดใหม่</span>
+            </button>
+          </div>
+        </form>
+
+        {/* Existing Codes Table */}
+        {vipCodes.length === 0 ? (
+          <div className="py-4 text-center text-xs text-slate-500">ยังไม่มีโค้ดทดลองใช้ในระบบ</div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-xs">
+              <thead className="bg-white/[0.02] text-slate-400 border-b border-white/[0.06]">
+                <tr>
+                  <th className="text-left px-3 py-2">รหัสโค้ด</th>
+                  <th className="text-center px-3 py-2">ระยะเวลา</th>
+                  <th className="text-center px-3 py-2">ใช้ไปแล้ว / สิทธิ์ทั้งหมด</th>
+                  <th className="text-center px-3 py-2">สถานะ</th>
+                  <th className="text-right px-3 py-2">จัดการ</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-white/[0.04]">
+                {vipCodes.map((c) => (
+                  <tr key={c.code} className="hover:bg-white/[0.02]">
+                    <td className="px-3 py-2 font-mono font-bold text-amber-300">
+                      <div className="flex items-center gap-1.5">
+                        <span>{c.code}</span>
+                        <button
+                          type="button"
+                          onClick={() => handleCopyCode(c.code)}
+                          title="คัดลอกโค้ด"
+                          className="p-1 rounded text-slate-400 hover:text-white cursor-pointer"
+                        >
+                          <Copy className="w-3 h-3" />
+                        </button>
+                        {copiedCode === c.code && (
+                          <span className="text-[10px] text-emerald-400">คัดลอกแล้ว!</span>
+                        )}
+                      </div>
+                    </td>
+                    <td className="px-3 py-2 text-center text-white">{c.days} วัน</td>
+                    <td className="px-3 py-2 text-center text-slate-300">
+                      {c.usedCount || 0} / {c.maxUses > 0 ? `${c.maxUses} คน` : 'ไม่จำกัด'}
+                    </td>
+                    <td className="px-3 py-2 text-center">
+                      <button
+                        type="button"
+                        onClick={() => handleToggleCode(c)}
+                        disabled={busyAction}
+                        className={`px-2 py-0.5 rounded-full text-[10px] font-bold cursor-pointer ${
+                          c.active
+                            ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                            : 'bg-slate-700 text-slate-400'
+                        }`}
+                      >
+                        {c.active ? 'เปิดใช้งาน ✓' : 'ปิดใช้งาน ✕'}
+                      </button>
+                    </td>
+                    <td className="px-3 py-2 text-right">
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteCode(c.code)}
+                        disabled={busyAction}
+                        className="p-1 rounded-lg text-rose-400 hover:bg-rose-500/20 cursor-pointer"
+                        title="ลบโค้ด"
+                      >
+                        <Trash2 className="w-3.5 h-3.5 inline" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+
       {/* Transactions Feed */}
       <div className={`${card} p-5 space-y-3`}>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
@@ -1081,6 +1343,15 @@ function VipPanel() {
           </div>
 
           <div className="flex items-center gap-2">
+            <button
+              onClick={exportTransactionsCsv}
+              disabled={transactions.length === 0}
+              className="px-2.5 py-1 rounded-lg bg-white/[0.06] hover:bg-white/[0.1] border border-white/10 text-white text-xs font-semibold flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+              title="ส่งออกประวัติรายการชำระเงินเป็นไฟล์ CSV"
+            >
+              <Download className="w-3 h-3 text-cyan-400" />
+              <span>Export CSV</span>
+            </button>
             <button
               onClick={() => setTxFilter('all')}
               className={`px-2.5 py-1 rounded-lg text-xs font-semibold cursor-pointer ${
@@ -1178,15 +1449,26 @@ function VipPanel() {
             </p>
           </div>
 
-          <div className="relative w-full sm:w-64">
-            <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-2.5" />
-            <input
-              type="text"
-              value={searchUser}
-              onChange={(e) => setSearchUser(e.target.value)}
-              placeholder="ค้นหาอีเมล หรือชื่อ..."
-              className="w-full pl-8 pr-3 py-1.5 rounded-xl bg-white/[0.04] border border-white/10 text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-cyan-400"
-            />
+          <div className="flex items-center gap-2 w-full sm:w-auto">
+            <button
+              onClick={exportVipUsersCsv}
+              disabled={vipUsers.length === 0}
+              className="px-2.5 py-1.5 rounded-xl bg-white/[0.06] hover:bg-white/[0.1] border border-white/10 text-white text-xs font-semibold flex items-center gap-1.5 cursor-pointer disabled:opacity-50 shrink-0"
+              title="ส่งออกรายชื่อสมาชิก VIP ทั้งหมดเป็นไฟล์ CSV"
+            >
+              <Download className="w-3 h-3 text-emerald-400" />
+              <span className="hidden sm:inline">Export CSV</span>
+            </button>
+            <div className="relative w-full sm:w-64">
+              <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-2.5" />
+              <input
+                type="text"
+                value={searchUser}
+                onChange={(e) => setSearchUser(e.target.value)}
+                placeholder="ค้นหาอีเมล หรือชื่อ..."
+                className="w-full pl-8 pr-3 py-1.5 rounded-xl bg-white/[0.04] border border-white/10 text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-cyan-400"
+              />
+            </div>
           </div>
         </div>
 

@@ -5,6 +5,7 @@ import {
   requireAdmin, userFromToken, getUserDirectory, supabaseInfo, tableStatus, getSettings, saveSettings,
   aiLogs, aiStats, aiUsageGroups, datasetReport, deployInfo, githubInfo, workflowRuns, dispatchWorkflow,
   getStripePaymentsSummary, getVipUsersList, grantUserVip, revokeUserVip, getCloudProfilesList, deleteCloudProfileFile,
+  getVipPromoCodes, saveVipPromoCode, deleteVipPromoCode,
 } from '../_lib/admin.js';
 import { bangkokDay } from '../_lib/aiQuota.js';
 import { aiConfig, chat } from '../_lib/ai.js';
@@ -72,6 +73,22 @@ export async function handleAdmin({ action, method, body, token, query = {} }) {
 
   if (action === 'revoke-vip' && (method === 'POST' || method === 'DELETE')) {
     const res = await revokeUserVip(body || {});
+    return { status: res.ok ? 200 : 400, json: res };
+  }
+
+  // --- VIP Promo / Trial Codes ---
+  if (action === 'vip-codes') {
+    return { status: 200, json: await getVipPromoCodes() };
+  }
+
+  if (action === 'save-vip-code' && (method === 'POST' || method === 'PUT')) {
+    const res = await saveVipPromoCode(body || {}, auth.user.email);
+    return { status: res.ok ? 200 : 400, json: res };
+  }
+
+  if (action === 'delete-vip-code' && (method === 'POST' || method === 'DELETE')) {
+    const code = body?.code || query?.code || '';
+    const res = await deleteVipPromoCode(code, auth.user.email);
     return { status: res.ok ? 200 : 400, json: res };
   }
 

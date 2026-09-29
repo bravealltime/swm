@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { getSupabase, isSupabaseConfigured, saveSupabaseConfig, clearSupabaseConfig } from '../services/supabaseClient';
 import { saveBox, saveBoxAsync, loadBox, loadBoxAsync } from '../utils/boxStorage';
-import { isUserMember } from '../utils/memberPolicy';
+import { isUserMember, getVipStatusInfo } from '../utils/memberPolicy';
 const parseSwexExport = async (raw) => (await import('../utils/swexImport')).parseSwexExport(raw);
 
 const AuthContext = createContext(null);
@@ -19,12 +19,21 @@ export function AuthProvider({ children }) {
   });
   const [paywallOpen, setPaywallOpen] = useState(false);
 
-  const setMemberStatus = useCallback((on) => {
+  const setMemberStatus = useCallback((on, durationDays = null) => {
     setMemberOverride(Boolean(on));
-    try { localStorage.setItem('swm:vip-member', on ? '1' : '0'); } catch { /* ignore */ }
+    try {
+      localStorage.setItem('swm:vip-member', on ? '1' : '0');
+      if (on && durationDays) {
+        const expIso = new Date(Date.now() + durationDays * 86400000).toISOString();
+        localStorage.setItem('swm:vip-expires', expIso);
+      } else if (!on) {
+        localStorage.removeItem('swm:vip-expires');
+      }
+    } catch { /* ignore */ }
   }, []);
 
   const isMember = Boolean(isAdmin || memberOverride || isUserMember(user, isAdmin));
+  const vipInfo = getVipStatusInfo(user, isAdmin);
 
   // Admins can browse as a normal user; admin mode shows the back-office entry points
   const [adminMode, setAdminModeState] = useState(() => { try { return localStorage.getItem('swm:admin-mode') === '1'; } catch { return false; } });
@@ -243,6 +252,15 @@ export function AuthProvider({ children }) {
     }
   }, [user, fetchProfileFromCloud, syncProfileToCloud]);
 
+  const refreshUser = useCallback(async () => {
+    const supabase = await getSupabase();
+    if (!supabase) return null;
+    const { data: { session: currentSession } } = await supabase.auth.getSession();
+    setSession(currentSession);
+    setUser(currentSession?.user ?? null);
+    return currentSession?.user ?? null;
+  }, []);
+
   const updateConfig = (url, anonKey) => {
     saveSupabaseConfig(url, anonKey);
     setConfigured(isSupabaseConfigured());
@@ -264,7 +282,9 @@ export function AuthProvider({ children }) {
         isAdmin,
         isMember,
         memberTier: isMember ? 'vip' : 'free',
+        vipInfo,
         setMemberStatus,
+        refreshUser,
         isPaywallOpen: paywallOpen,
         openPaywall: () => setPaywallOpen(true),
         closePaywall: () => setPaywallOpen(false),

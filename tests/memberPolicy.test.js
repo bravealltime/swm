@@ -4,6 +4,7 @@ import {
   isUserMember,
   isViewLocked,
   filterNavigationCategories,
+  getVipStatusInfo,
   FREE_VIEW_IDS,
 } from '../src/utils/memberPolicy';
 
@@ -42,13 +43,34 @@ describe('SWM Membership Policy', () => {
     expect(isUserMember(null, true)).toBe(true);
     expect(isUserMember({ email: 'admin@swm.com' }, true)).toBe(true);
 
-    // User with VIP metadata
+    // User with VIP metadata (active / no expiry)
     expect(isUserMember({ user_metadata: { tier: 'vip' } }, false)).toBe(true);
     expect(isUserMember({ user_metadata: { is_vip: true } }, false)).toBe(true);
     expect(isUserMember({ user_metadata: { role: 'pro' } }, false)).toBe(true);
 
     // Free registered user without VIP metadata
     expect(isUserMember({ user_metadata: { tier: 'free' } }, false)).toBe(false);
+  });
+
+  it('correctly respects vip_expires_at expiration date', () => {
+    // Unexpired VIP (+7 days in future)
+    const futureDate = new Date(Date.now() + 7 * 86400000).toISOString();
+    expect(isUserMember({ user_metadata: { tier: 'vip', is_vip: true, vip_expires_at: futureDate } }, false)).toBe(true);
+
+    // Expired VIP (-2 days in past)
+    const pastDate = new Date(Date.now() - 2 * 86400000).toISOString();
+    expect(isUserMember({ user_metadata: { tier: 'vip', is_vip: true, vip_expires_at: pastDate } }, false)).toBe(false);
+
+    // getVipStatusInfo calculates remaining days and expired state accurately
+    const activeInfo = getVipStatusInfo({ user_metadata: { tier: 'vip', is_vip: true, vip_expires_at: futureDate } }, false);
+    expect(activeInfo.isVip).toBe(true);
+    expect(activeInfo.isExpired).toBe(false);
+    expect(activeInfo.daysLeft).toBe(7);
+
+    const expiredInfo = getVipStatusInfo({ user_metadata: { tier: 'vip', is_vip: true, vip_expires_at: pastDate } }, false);
+    expect(expiredInfo.isVip).toBe(false);
+    expect(expiredInfo.isExpired).toBe(true);
+    expect(expiredInfo.badgeText).toBe('VIP หมดอายุ');
   });
 
   it('checks isViewLocked correctly', () => {

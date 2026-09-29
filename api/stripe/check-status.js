@@ -3,6 +3,7 @@
 
 import { getStripe } from '../_lib/stripe.js';
 import { loadEnv } from '../_lib/ai.js';
+import { updateUserTier } from './webhook.js';
 
 export default async function handler(req, res) {
   const { paymentIntentId } = req.query;
@@ -17,15 +18,27 @@ export default async function handler(req, res) {
     const pi = await stripe.paymentIntents.retrieve(paymentIntentId);
 
     const isPaid = pi.status === 'succeeded';
+    const userId = pi.metadata?.userId || '';
+    const tier = pi.metadata?.tier || 'vip';
+    const durationDays = Number(pi.metadata?.durationDays) || 30;
+
+    if (isPaid && userId) {
+      try {
+        await updateUserTier(userId, tier, pi.customer, null, durationDays);
+      } catch (e) {
+        console.warn('Auto tier sync in check-status failed:', e.message);
+      }
+    }
 
     return res.status(200).json({
       ok: true,
       paymentIntentId: pi.id,
       status: pi.status,
       isPaid,
-      tier: pi.metadata?.tier || 'vip',
+      tier,
       planId: pi.metadata?.planId || 'monthly',
-      userId: pi.metadata?.userId || '',
+      userId,
+      durationDays,
       amountReceived: (pi.amount_received || 0) / 100,
     });
   } catch (err) {

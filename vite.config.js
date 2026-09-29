@@ -166,6 +166,38 @@ function swmSyncServer() {
           return;
         }
 
+        // /api/vip/redeem — VIP code redemption
+        if (req.url.startsWith('/api/vip/redeem')) {
+          let body = '';
+          req.on('data', (chunk) => { body += chunk; });
+          req.on('end', async () => {
+            res.setHeader('Content-Type', 'application/json; charset=utf-8');
+            try {
+              const handler = (await import('./api/vip/redeem.js')).default;
+              const fakeReq = {
+                method: req.method,
+                headers: req.headers,
+                body: body ? JSON.parse(body) : {},
+              };
+              const fakeRes = {
+                setHeader: (k, v) => res.setHeader(k, v),
+                status: (code) => {
+                  res.statusCode = code;
+                  return {
+                    json: (obj) => res.end(JSON.stringify(obj)),
+                    send: (text) => res.end(text),
+                  };
+                },
+              };
+              return handler(fakeReq, fakeRes);
+            } catch (err) {
+              res.statusCode = 500;
+              return res.end(JSON.stringify({ ok: false, error: err.message }));
+            }
+          });
+          return;
+        }
+
         // /api/admin/<action> — back-office API, same handler Vercel runs
         if (req.url.startsWith('/api/admin/')) {
           const url = new URL(req.url, 'http://localhost');
