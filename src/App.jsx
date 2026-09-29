@@ -3,10 +3,11 @@ import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
 import ErrorBoundary from './components/ErrorBoundary';
 import SwmLogo from './components/SwmLogo';
-import { AuthProvider } from './contexts/AuthContext';
-import { Home, Shield, Trophy, Search, Menu, Loader2, CheckCircle2, Sparkles } from 'lucide-react';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { Home, Shield, Trophy, Search, Menu, Loader2, CheckCircle2, Sparkles, BookOpen } from 'lucide-react';
 import { buildUrl, parseLocation, normalizeView, titleFor, descriptionFor } from './router';
 import { saveBox } from './utils/boxStorage';
+import { isViewLocked } from './utils/memberPolicy';
 
 import LiveAlertBanner from './components/LiveAlertBanner';
 import InstallAppBanner from './components/InstallAppBanner';
@@ -58,6 +59,8 @@ const CommandPalette = lazy(() => import('./components/CommandPalette'));
 const CloudSyncModal = lazy(() => import('./components/CloudSyncModal'));
 const AuthModal = lazy(() => import('./components/AuthModal'));
 const CardPreviewModal = lazy(() => import('./components/CardPreviewModal'));
+const MemberPaywallModal = lazy(() => import('./components/MemberPaywallModal'));
+const MemberGate = lazy(() => import('./components/MemberGate'));
 
 function ViewLoading() {
   return (
@@ -71,6 +74,7 @@ function ViewLoading() {
 const RTA_VIEWS = ['rta', 'player-tracker', 'draft-explorer', 'rta-synergies', 'meta-dashboard', 'guardian', 'rta-replays'];
 
 function AppContent() {
+  const { isMember, isAdmin, isPaywallOpen, openPaywall, closePaywall } = useAuth();
   const [route, setRoute] = useState(() => parseLocation());
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -272,13 +276,21 @@ function AppContent() {
         <main id="main-content" className="flex-1 w-full min-w-0 px-3 sm:px-6 lg:px-8 py-6 pb-24 md:pb-8">
           <ErrorBoundary key={viewKey}>
             <Suspense fallback={<ViewLoading />}>
-              <View
-                key={viewKey}
-                onNavigate={handleNavigate}
-                onOpenAuth={() => setIsAuthOpen(true)}
-                {...viewParams}
-                initialSearch={viewParams.search || ''}
-              />
+              {isViewLocked(currentView, isMember || isAdmin) ? (
+                <MemberGate
+                  viewTitle={titleFor(currentView) || 'ฟีเจอร์ระดับแข่งขัน'}
+                  onNavigate={handleNavigate}
+                  onOpenPaywall={openPaywall}
+                />
+              ) : (
+                <View
+                  key={viewKey}
+                  onNavigate={handleNavigate}
+                  onOpenAuth={() => setIsAuthOpen(true)}
+                  {...viewParams}
+                  initialSearch={viewParams.search || ''}
+                />
+              )}
             </Suspense>
           </ErrorBoundary>
         </main>
@@ -295,13 +307,10 @@ function AppContent() {
           <nav aria-label="ลิงก์ท้ายหน้า" className="flex flex-wrap items-center justify-center gap-4 text-xs font-semibold text-slate-300">
             <a href={buildUrl('dashboard')} onClick={(e) => { e.preventDefault(); handleNavigate('dashboard'); }} className="hover:text-blue-400 transition-colors">หน้าแรก</a>
             <a href={buildUrl('3mdc')} onClick={(e) => { e.preventDefault(); handleNavigate('3mdc'); }} className="hover:text-blue-400 transition-colors">ทีมแก้ทาง 3MDC</a>
-            <a href={buildUrl('rta')} onClick={(e) => { e.preventDefault(); handleNavigate('rta'); }} className="hover:text-amber-400 transition-colors">วิเคราะห์ RTA World Arena</a>
-            <a href={buildUrl('trending')} onClick={(e) => { e.preventDefault(); handleNavigate('trending'); }} className="hover:text-blue-400 transition-colors">สถิติทั่วโลก (Trending)</a>
-            <a href={buildUrl('dungeons')} onClick={(e) => { e.preventDefault(); handleNavigate('dungeons'); }} className="hover:text-blue-400 transition-colors">ทีมฟาร์มดันเจี้ยน</a>
             <a href={buildUrl('catalog')} onClick={(e) => { e.preventDefault(); handleNavigate('catalog'); }} className="hover:text-blue-400 transition-colors">สารานุกรมสกิลมอนสเตอร์</a>
-            <a href={buildUrl('artifact')} onClick={(e) => { e.preventDefault(); handleNavigate('artifact'); }} className="hover:text-blue-400 transition-colors">อาร์ติแฟกต์ดาเมจเสริม</a>
             <a href={buildUrl('codes')} onClick={(e) => { e.preventDefault(); handleNavigate('codes'); }} className="hover:text-blue-400 transition-colors">โค้ดแจกไอเทม</a>
-            <a href={buildUrl('recruit')} onClick={(e) => { e.preventDefault(); handleNavigate('recruit'); }} className="hover:text-blue-400 transition-colors">กิลด์รับสมัคร</a>
+            <a href={buildUrl('balance')} onClick={(e) => { e.preventDefault(); handleNavigate('balance'); }} className="hover:text-blue-400 transition-colors">ประวัติแพตช์</a>
+            <a href={buildUrl('faq')} onClick={(e) => { e.preventDefault(); handleNavigate('faq'); }} className="hover:text-blue-400 transition-colors">คำถามพบบ่อย (FAQ)</a>
           </nav>
 
           <div className="text-slate-400 text-xs text-center md:text-right font-mono">
@@ -318,15 +327,19 @@ function AppContent() {
         </button>
         <button onClick={() => handleNavigate('my-box')} className={dockItem(['my-box', 'live-farm-monitor', 'ai-account-audit'].includes(currentView))} aria-current={['my-box', 'live-farm-monitor', 'ai-account-audit'].includes(currentView) ? 'page' : undefined}>
           <Sparkles className="w-4 h-4 shrink-0" />
-          <span className="truncate w-full text-center">ไอดี/ฟาร์ม</span>
+          <span className="truncate w-full text-center">กล่องไอดี</span>
         </button>
         <button onClick={() => handleNavigate('3mdc')} className={dockItem(currentView === '3mdc')} aria-current={currentView === '3mdc' ? 'page' : undefined}>
           <Shield className="w-4 h-4 shrink-0" />
           <span className="truncate w-full text-center">3MDC</span>
         </button>
-        <button onClick={() => handleNavigate('rta')} className={dockItem(RTA_VIEWS.includes(currentView))} aria-current={RTA_VIEWS.includes(currentView) ? 'page' : undefined}>
-          <Trophy className="w-4 h-4 shrink-0" />
-          <span className="truncate w-full text-center">RTA</span>
+        <button
+          onClick={() => handleNavigate(isMember ? 'rta' : 'catalog')}
+          className={dockItem(isMember ? RTA_VIEWS.includes(currentView) : currentView === 'catalog')}
+          aria-current={(isMember ? RTA_VIEWS.includes(currentView) : currentView === 'catalog') ? 'page' : undefined}
+        >
+          {isMember ? <Trophy className="w-4 h-4 shrink-0" /> : <BookOpen className="w-4 h-4 shrink-0" />}
+          <span className="truncate w-full text-center">{isMember ? 'RTA' : 'มอนสเตอร์'}</span>
         </button>
         <button onClick={() => setMobileMenuOpen(true)} className={dockItem(false)} aria-haspopup="dialog">
           <Menu className="w-4 h-4 shrink-0" />
@@ -347,13 +360,13 @@ function AppContent() {
       {isSyncOpen && (
         <Suspense fallback={null}>
           <CloudSyncModal
-        isOpen={isSyncOpen}
-        onClose={() => setIsSyncOpen(false)}
-        onSynced={(box) => {
-          const name = box?.wizard?.name || '';
-          setSyncNotice(`✨ ซิงค์ข้อมูลไอดี ${name} เรียบร้อยแล้ว!`);
-          setTimeout(() => setSyncNotice(null), 5000);
-        }}
+            isOpen={isSyncOpen}
+            onClose={() => setIsSyncOpen(false)}
+            onSynced={(box) => {
+              const name = box?.wizard?.name || '';
+              setSyncNotice(`✨ ซิงค์ข้อมูลไอดี ${name} เรียบร้อยแล้ว!`);
+              setTimeout(() => setSyncNotice(null), 5000);
+            }}
           />
         </Suspense>
       )}
@@ -370,6 +383,15 @@ function AppContent() {
       <Suspense fallback={null}>
         <CardPreviewModal />
       </Suspense>
+
+      {isPaywallOpen && (
+        <Suspense fallback={null}>
+          <MemberPaywallModal
+            isOpen={isPaywallOpen}
+            onClose={closePaywall}
+          />
+        </Suspense>
+      )}
 
       <InstallAppBanner />
     </div>

@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { getSupabase, isSupabaseConfigured, saveSupabaseConfig, clearSupabaseConfig } from '../services/supabaseClient';
 import { saveBox, loadBox } from '../utils/boxStorage';
+import { isUserMember } from '../utils/memberPolicy';
 const parseSwexExport = async (raw) => (await import('../utils/swexImport')).parseSwexExport(raw);
 
 const AuthContext = createContext(null);
@@ -13,6 +14,18 @@ export function AuthProvider({ children }) {
   const [syncError, setSyncError] = useState(null);
   const [configured, setConfigured] = useState(() => isSupabaseConfigured());
   const [isAdmin, setIsAdmin] = useState(false);
+  const [memberOverride, setMemberOverride] = useState(() => {
+    try { return localStorage.getItem('swm:vip-member') === '1'; } catch { return false; }
+  });
+  const [paywallOpen, setPaywallOpen] = useState(false);
+
+  const setMemberStatus = useCallback((on) => {
+    setMemberOverride(Boolean(on));
+    try { localStorage.setItem('swm:vip-member', on ? '1' : '0'); } catch { /* ignore */ }
+  }, []);
+
+  const isMember = Boolean(isAdmin || memberOverride || isUserMember(user, isAdmin));
+
   // Admins can browse as a normal user; admin mode shows the back-office entry points
   const [adminMode, setAdminModeState] = useState(() => { try { return localStorage.getItem('swm:admin-mode') === '1'; } catch { return false; } });
   const setAdminMode = useCallback((on) => {
@@ -236,6 +249,12 @@ export function AuthProvider({ children }) {
         session,
         loading,
         isAdmin,
+        isMember,
+        memberTier: isMember ? 'vip' : 'free',
+        setMemberStatus,
+        isPaywallOpen: paywallOpen,
+        openPaywall: () => setPaywallOpen(true),
+        closePaywall: () => setPaywallOpen(false),
         adminMode: isAdmin && adminMode,
         setAdminMode,
         syncStatus,
@@ -266,5 +285,5 @@ export function useAuth() {
 
 /** For widgets that may render outside the provider (unit tests, embeds): anonymous instead of throwing. */
 export function useOptionalAuth() {
-  return useContext(AuthContext) || { user: null, session: null, isAdmin: false, adminMode: false };
+  return useContext(AuthContext) || { user: null, session: null, isAdmin: false, adminMode: false, isMember: false, memberTier: 'free' };
 }

@@ -5,6 +5,8 @@ import { PROMO_CODES } from '../data/promoCodes';
 import playersIndex from '../data/swrtPlayersIndex.json';
 import curatedProfiles from '../data/playerProfiles.json';
 import { tierFromLevel, flagFromCountry } from '../data/swrtPlayerAdapter';
+import { useAuth } from '../contexts/AuthContext';
+import { isFreeView } from '../utils/memberPolicy';
 
 // One flat, pre-lowercased list so each keystroke is a cheap scan
 const PLAYERS = [
@@ -27,6 +29,7 @@ const QUICK_TOOLS = [
 ];
 
 export default function CommandPalette({ onClose, onNavigate }) {
+  const { isMember } = useAuth();
   const [query, setQuery] = useState('');
   const [activeIndex, setActiveIndex] = useState(0);
   const listRef = useRef(null);
@@ -35,7 +38,8 @@ export default function CommandPalette({ onClose, onNavigate }) {
 
   // One flat, ordered list of results so arrow keys can walk across sections
   const results = useMemo(() => {
-    const tools = QUICK_TOOLS
+    const availableTools = QUICK_TOOLS.filter((t) => isMember || isFreeView(t.view));
+    const tools = availableTools
       .filter((t) => !q || t.name.toLowerCase().includes(q) || t.desc.toLowerCase().includes(q))
       .map((t) => ({ kind: 'tool', key: `tool-${t.id}`, data: t, run: () => onNavigate(t.view) }));
 

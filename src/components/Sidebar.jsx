@@ -38,9 +38,11 @@ import {
   Home,
   Radio,
   Smartphone,
+  Crown,
   X
 } from 'lucide-react';
 import { NAVIGATION_CATEGORIES } from '../data/navigation';
+import { filterNavigationCategories } from '../utils/memberPolicy';
 import { buildUrl } from '../router';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -48,7 +50,7 @@ const ICON_MAP = {
   UserCheck, Award, Layers, BookOpen, History, ShieldAlert, Sparkles, TrendingUp,
   Cpu, Gem, Shield, Swords, Users, Search, Activity, UserPlus, FileText, Crosshair,
   Star, HelpCircle, BarChart3, Trophy, Map, Calendar, Globe, Gift, Book, Gauge,
-  Calculator, Sliders, Flame, Compass, Home, Radio
+  Calculator, Sliders, Flame, Compass, Home, Radio, Crown
 };
 
 export default function Sidebar({
@@ -73,7 +75,8 @@ export default function Sidebar({
   };
 
   const closeBtnRef = useRef(null);
-  const { adminMode } = useAuth();
+  const { adminMode, isMember, openPaywall } = useAuth();
+  const visibleCategories = filterNavigationCategories(NAVIGATION_CATEGORIES, isMember);
 
   // Escape closes, background stops scrolling, focus lands on the close button
   useEffect(() => {
@@ -189,8 +192,8 @@ export default function Sidebar({
             <span className="text-sm">หน้าแรก (Dashboard)</span>
           </a>
 
-          {/* 4 Clean Pillars */}
-          {NAVIGATION_CATEGORIES.map((cat) => {
+          {/* Navigation Categories */}
+          {visibleCategories.map((cat) => {
             const isExpanded = expandedCategories[cat.id];
 
             return (
@@ -276,6 +279,37 @@ export default function Sidebar({
               </div>
             );
           })}
+
+          {/* SWM VIP Member Banner / Status */}
+          {!isMember ? (
+            <div className="mt-4 p-3.5 rounded-2xl bg-gradient-to-b from-amber-500/15 via-slate-900 to-slate-950 border border-amber-500/35 text-center shadow-lg shadow-amber-500/10">
+              <div className="flex items-center justify-center gap-1.5 text-xs font-black text-amber-300">
+                <Crown className="w-4 h-4 text-amber-400 fill-amber-400" />
+                <span>SWM VIP Member</span>
+              </div>
+              <p className="text-[11px] text-slate-300 mt-1 leading-snug">
+                ปลดล็อกระบบยุทธวิธี Siege, RTA และฟาร์มสด Realtime
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  if (onClose) onClose();
+                  openPaywall();
+                }}
+                className="mt-2.5 w-full py-2 px-3 rounded-xl bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-black text-xs shadow-md shadow-amber-500/20 cursor-pointer flex items-center justify-center gap-1.5 transition-all"
+              >
+                <Crown className="w-3.5 h-3.5 fill-slate-950" />
+                <span>อัปเกรด VIP (99.-/ด.)</span>
+              </button>
+            </div>
+          ) : (
+            <div className="mt-4 p-3 rounded-xl bg-gradient-to-r from-amber-500/15 to-yellow-500/10 border border-amber-500/30 flex items-center justify-between text-amber-300 text-xs font-bold">
+              <div className="flex items-center gap-2">
+                <Crown className="w-4 h-4 fill-amber-400 shrink-0" />
+                <span>SWM VIP Member (Active)</span>
+              </div>
+            </div>
+          )}
 
           {adminMode && (
             <a

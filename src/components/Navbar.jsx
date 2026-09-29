@@ -23,10 +23,12 @@ import {
   User,
   Radio,
   Smartphone,
+  Crown,
 } from 'lucide-react';
 import SwmLogo from './SwmLogo';
 import { buildUrl } from '../router';
 import { useAuth } from '../contexts/AuthContext';
+import { isFreeView } from '../utils/memberPolicy';
 
 const NAV_ITEMS = [
   { id: 'dashboard', label: 'หน้าแรก', icon: Home },
@@ -60,9 +62,12 @@ const TOOL_ITEMS = [
 const PRIMARY_IDS = new Set(NAV_ITEMS.flatMap((i) => i.group || [i.id]));
 
 export default function Navbar({ currentView, onNavigate, onOpenSearch, onOpenMenu, onOpenSync, onOpenAuth }) {
-  const { user, isAdmin, adminMode, setAdminMode } = useAuth();
+  const { user, isAdmin, isMember, openPaywall, adminMode, setAdminMode } = useAuth();
   const [toolsOpen, setToolsOpen] = useState(false);
   const dropdownRef = useRef(null);
+
+  const visibleNavItems = NAV_ITEMS.filter((i) => isMember || isFreeView(i.id));
+  const visibleToolItems = TOOL_ITEMS.filter((i) => isMember || isFreeView(i.id));
 
   // Close the tools dropdown on outside click or Escape
   useEffect(() => {
@@ -106,7 +111,7 @@ export default function Navbar({ currentView, onNavigate, onOpenSearch, onOpenMe
 
           {/* Primary navigation (desktop) */}
           <nav aria-label="เมนูหลัก" className="hidden lg:flex items-center gap-1">
-            {NAV_ITEMS.map((item) => {
+            {visibleNavItems.map((item) => {
               const Icon = item.icon;
               const isActive = (item.group || [item.id]).includes(currentView);
               return (
@@ -159,7 +164,7 @@ export default function Navbar({ currentView, onNavigate, onOpenSearch, onOpenMe
                   <div className="px-3 py-1.5 text-xs font-bold text-slate-400 uppercase tracking-wider">
                     เครื่องมือ & ฐานข้อมูล PVE/PVP
                   </div>
-                  {TOOL_ITEMS.map((tool) => {
+                  {visibleToolItems.map((tool) => {
                     const ToolIcon = tool.icon;
                     const isActive = currentView === tool.id;
                     return (
@@ -231,6 +236,24 @@ export default function Navbar({ currentView, onNavigate, onOpenSearch, onOpenMe
                 <User className="w-4 h-4 text-cyan-400" />
                 <span className="hidden sm:inline lg:hidden 2xl:inline">เข้าสู่ระบบ</span>
               </button>
+            )}
+
+            {!isMember ? (
+              <button
+                type="button"
+                onClick={openPaywall}
+                className="flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 hover:from-amber-400 hover:to-yellow-400 text-slate-950 text-xs font-black shadow-lg shadow-amber-500/25 transition-all duration-200 cursor-pointer hover:scale-[1.03]"
+                title="อัปเกรดเป็นสมาชิก VIP ปลดล็อก 25+ ฟีเจอร์ขั้นสูง"
+                aria-label="อัปเกรด VIP"
+              >
+                <Crown className="w-3.5 h-3.5 fill-slate-950" />
+                <span className="inline">VIP</span>
+              </button>
+            ) : (
+              <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-amber-500/15 border border-amber-400/40 text-amber-300 font-extrabold text-xs">
+                <Crown className="w-3.5 h-3.5 fill-amber-400" />
+                <span>VIP</span>
+              </span>
             )}
 
             <button
