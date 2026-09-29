@@ -48,6 +48,16 @@ export default async function handler(req, res) {
   // Handle specific Stripe events
   try {
     switch (event.type) {
+      case 'payment_intent.succeeded': {
+        const paymentIntent = event.data.object;
+        const userId = paymentIntent.metadata?.userId;
+        const tier = paymentIntent.metadata?.tier || 'vip';
+        const customerId = paymentIntent.customer;
+        console.log(`[Stripe] PromptPay PaymentIntent succeeded for user: ${userId}, Tier: ${tier}`);
+        await updateUserTier(userId, tier, customerId, null);
+        break;
+      }
+
       case 'checkout.session.completed': {
         const session = event.data.object;
         const userId = session.client_reference_id || session.metadata?.userId;
