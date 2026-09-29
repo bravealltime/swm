@@ -8,7 +8,8 @@ import {
   Radio,
   Swords,
   Layers,
-  ChevronLeft
+  ChevronLeft,
+  Home
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -69,25 +70,52 @@ export default function MemberGate({ viewTitle = 'ฟีเจอร์ระด
         </div>
 
         {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
-          <button
-            type="button"
-            onClick={onOpenPaywall}
-            className="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 hover:from-amber-400 hover:to-yellow-400 text-slate-950 text-sm font-black shadow-lg shadow-amber-500/25 transition-all cursor-pointer"
-          >
-            <Crown className="w-4 h-4 fill-slate-950" />
-            <span>อัปเกรดเป็นสมาชิก VIP ทันที</span>
-            <ArrowRight className="w-4 h-4" />
-          </button>
+        <div className="flex flex-col items-center justify-center gap-3">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 w-full sm:w-auto">
+            <button
+              type="button"
+              onClick={onOpenPaywall}
+              className="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 hover:from-amber-400 hover:to-yellow-400 text-slate-950 text-sm font-black shadow-lg shadow-amber-500/25 transition-all cursor-pointer hover:scale-[1.02] active:scale-95"
+            >
+              <Crown className="w-4 h-4 fill-slate-950" />
+              <span>อัปเกรดเป็นสมาชิก VIP ทันที</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
 
-          <button
-            type="button"
-            onClick={() => onNavigate?.('monster-catalog')}
-            className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-200 text-sm font-semibold border border-slate-700 transition-all cursor-pointer"
-          >
-            <ChevronLeft className="w-4 h-4" />
-            <span>ดูสารานุกรมมอนสเตอร์ & โค้ดฟรี</span>
-          </button>
+            <button
+              type="button"
+              onClick={() => onNavigate?.('dashboard')}
+              className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-cyan-600/20 hover:bg-cyan-600/30 text-cyan-300 text-sm font-bold border border-cyan-500/40 transition-all cursor-pointer shadow-md hover:scale-[1.02] active:scale-95"
+            >
+              <Home className="w-4 h-4" />
+              <span>🏠 กลับหน้าหลัก (Dashboard)</span>
+            </button>
+          </div>
+
+          <div className="flex flex-wrap items-center justify-center gap-2 text-xs text-slate-400 pt-1">
+            <button
+              type="button"
+              onClick={() => {
+                if (window.history && window.history.length > 1) {
+                  window.history.back();
+                } else {
+                  onNavigate?.('dashboard');
+                }
+              }}
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-300 border border-slate-700 transition cursor-pointer"
+            >
+              <ChevronLeft className="w-3.5 h-3.5" />
+              <span>ย้อนกลับหน้าที่แล้ว</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => onNavigate?.('monster-catalog')}
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-300 border border-slate-700 transition cursor-pointer"
+            >
+              <span>ดูสารานุกรมมอนสเตอร์ & โค้ดฟรี</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>

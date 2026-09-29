@@ -85,6 +85,19 @@ export default function MemberPaywallModal({ isOpen, onClose }) {
   // Polling interval ref
   const pollTimerRef = useRef(null);
 
+  // Close modal on Escape key press
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [isOpen, onClose]);
+
   // Reset state when modal opens or closes
   useEffect(() => {
     if (isOpen) {
@@ -111,7 +124,7 @@ export default function MemberPaywallModal({ isOpen, onClose }) {
   // Trigger celebration & member activation
   const triggerSuccess = () => {
     if (pollTimerRef.current) clearInterval(pollTimerRef.current);
-    setMemberStatus(true);
+    setMemberStatus(true, 30);
     setStep('success');
     import('canvas-confetti')
       .then((m) => {
@@ -267,13 +280,14 @@ export default function MemberPaywallModal({ isOpen, onClose }) {
         <div className="absolute -top-20 -left-20 w-64 h-64 rounded-full bg-amber-500/20 blur-3xl pointer-events-none" />
         <div className="absolute -bottom-20 -right-20 w-64 h-64 rounded-full bg-blue-600/15 blur-3xl pointer-events-none" />
 
-        {/* Close Button */}
+        {/* Prominent Sticky Top Close Button */}
         <button
           onClick={onClose}
           aria-label="ปิดหน้าต่าง"
-          className="absolute top-4 right-4 p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/10 transition-colors z-20 cursor-pointer"
+          className="absolute top-3.5 right-3.5 px-3 py-1.5 rounded-xl bg-slate-800/90 hover:bg-slate-700/90 border border-white/20 text-slate-200 hover:text-white text-xs font-bold transition-all z-30 cursor-pointer flex items-center gap-1.5 shadow-lg shadow-black/40 hover:scale-105 active:scale-95"
         >
-          <X className="w-5 h-5" />
+          <X className="w-4 h-4 text-amber-400" />
+          <span>ปิด (ESC)</span>
         </button>
 
         {/* ================= STEP 1: SELECT PLAN ================= */}
@@ -313,10 +327,13 @@ export default function MemberPaywallModal({ isOpen, onClose }) {
                 </div>
                 <button
                   type="button"
-                  onClick={() => setMemberStatus(false)}
-                  className="text-[11px] text-slate-400 hover:text-rose-300 underline shrink-0 cursor-pointer"
+                  onClick={() => {
+                    setMemberStatus(false);
+                    onClose();
+                  }}
+                  className="px-2.5 py-1 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/40 text-[11px] font-bold shrink-0 cursor-pointer transition-colors"
                 >
-                  ปิด VIP (ทดสอบ)
+                  ✕ ปิดโหมดทดลอง VIP
                 </button>
               </div>
             ) : vipInfo?.isExpired ? (
@@ -510,6 +527,18 @@ export default function MemberPaywallModal({ isOpen, onClose }) {
                 <span>{copiedPromptPay ? '✓ คัดลอกเลขแล้ว!' : 'เบอร์พร้อมเพย์ตรง: 081-234-5678'}</span>
               </button>
             </div>
+
+            {/* Direct Full-Width Close Button at Bottom */}
+            <div className="pt-2 text-center">
+              <button
+                type="button"
+                onClick={onClose}
+                className="w-full py-3 rounded-2xl bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 text-slate-300 hover:text-white text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-sm"
+              >
+                <X className="w-4 h-4 text-slate-400" />
+                <span>✕ ปิดหน้าต่างนี้ (กลับไปใช้งานหน้าเดิม)</span>
+              </button>
+            </div>
           </div>
         )}
 
@@ -623,6 +652,15 @@ export default function MemberPaywallModal({ isOpen, onClose }) {
                 className="w-full text-center text-xs text-slate-400 hover:text-amber-300 underline cursor-pointer py-1"
               >
                 🧪 ทดสอบปลดล็อกทันที (จำลองการจ่ายเงินสำเร็จ)
+              </button>
+
+              <button
+                type="button"
+                onClick={onClose}
+                className="w-full py-2.5 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 text-slate-300 hover:text-white text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5"
+              >
+                <X className="w-4 h-4 text-slate-400" />
+                <span>✕ ปิดหน้าต่าง (ไว้ชำระภายหลัง)</span>
               </button>
             </div>
           </div>
