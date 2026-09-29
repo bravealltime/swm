@@ -9,6 +9,7 @@ import {
   exportLdShowcaseCard,
   exportMonsterCard,
   exportArenaTeamCard,
+  exportAccountMilestoneCard,
   exportBalancePatchInfographic,
 } from '../src/utils/cardExporter.js';
 
@@ -20,6 +21,7 @@ describe('Card Preview System & Exporters', () => {
     expect(typeof exportLdShowcaseCard).toBe('function');
     expect(typeof exportMonsterCard).toBe('function');
     expect(typeof exportArenaTeamCard).toBe('function');
+    expect(typeof exportAccountMilestoneCard).toBe('function');
     expect(typeof exportBalancePatchInfographic).toBe('function');
   });
 

@@ -646,6 +646,7 @@ export default function DashboardView({ onNavigate }) {
                         topLd5: userProfileStats.ld5List || [],
                         heroes: [userProfileStats.activeAvatar, ...(userProfileStats.cardHeroes || [])].filter(Boolean),
                         speedRuneSets: userProfileStats.speedRuneSets || [],
+                        box: userBox,
                       });
                     } catch (err) {
                       console.error('milestone card export failed', err);

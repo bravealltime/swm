@@ -770,47 +770,70 @@ export async function exportProfileCard({
  */
 export async function exportLdShowcaseCard({ wizardName, ld5List = [], preview = true }) {
   await ensureFonts();
-  const W = 1200, H = 700;
+  const W = 1200, H = 720;
   const canvas = document.createElement('canvas');
   canvas.width = W; canvas.height = H;
   const ctx = canvas.getContext('2d');
-  drawBackdrop(ctx, W, H, { glow: 'rgba(192, 132, 252, 0.2)', glowAt: [0.5, 0.05], tint: '#171233' });
-  drawGoldFrame(ctx, W, H);
+  drawBackdrop(ctx, W, H, { glow: 'rgba(192, 132, 252, 0.22)', glowAt: [0.5, 0.05], tint: '#171233' });
+  drawGoldFrame(ctx, W, H, 18);
 
   const list = ld5List.slice(0, 15);
   const lights = ld5List.filter((m) => m.element === 'light').length;
   const darks = ld5List.length - lights;
 
-  text(ctx, 'SUMMONERS WAR • LIGHT & DARK HALL OF FAME', 60, 66, { font: `700 13px ${SANS}`, color: '#e9c46a', spacing: 3 });
-  text(ctx, `SWM • swm-blue.vercel.app   ${new Date().toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric' })}`, W - 60, 66, { font: `500 12px ${THAI}`, color: 'rgba(226, 232, 240, 0.6)', align: 'right' });
+  text(ctx, 'SUMMONERS WAR  •  LIGHT & DARK HALL OF FAME (COLLECTIBLE TCG DECK)', 50, 52, { font: `800 12px ${SANS}`, color: '#fbbf24', spacing: 1.8 });
+  text(ctx, `SWM • swm-blue.vercel.app  •  ${new Date().toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric' })}`, W - 50, 52, { font: `500 12px ${THAI}`, color: 'rgba(226, 232, 240, 0.6)', align: 'right' });
   ctx.strokeStyle = 'rgba(233, 196, 106, 0.25)'; ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.moveTo(60, 80); ctx.lineTo(W - 60, 80); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(50, 64); ctx.lineTo(W - 50, 64); ctx.stroke();
 
-  await drawPortrait(ctx, { url: list[0]?.avatarUrl, cx: 104, cy: 138, r: 40, element: list[0]?.element, label: wizardName });
-  text(ctx, `ตู้สะสมแสง-มืด 5★ ของ ${wizardName || 'Summoner'}`, 162, 130, { font: `800 30px ${THAI}`, color: '#ffffff', maxWidth: 700, shadow: 'rgba(192, 132, 252, 0.5)' });
-  let px = 162;
-  px += pill(ctx, px, 146, `รวม ${ld5List.length} ตัว`, { color: '#f5d78a', padX: 14 }) + 8;
-  px += pill(ctx, px, 146, `แสง ${lights}`, { color: '#fde68a', bg: 'rgba(253, 230, 138, 0.1)', padX: 12 }) + 8;
-  pill(ctx, px, 146, `มืด ${darks}`, { color: '#c084fc', bg: 'rgba(192, 132, 252, 0.12)', padX: 12 });
+  // Summoner Header
+  await drawPortrait(ctx, { url: list[0]?.avatarUrl, cx: 96, cy: 118, r: 38, element: list[0]?.element, label: wizardName });
+  text(ctx, `ตู้สะสมมอนสเตอร์แสง-มืด 5★ แท้: ${wizardName || 'Summoner'}`, 150, 110, { font: `800 26px ${THAI}`, color: '#ffffff', maxWidth: 700, shadow: 'rgba(192, 132, 252, 0.5)' });
+  let px = 150;
+  px += pill(ctx, px, 126, `✦ ทั้งหมด ${ld5List.length} ตัว`, { color: '#f5d78a', bg: 'rgba(245, 197, 66, 0.14)', padX: 12, h: 24 }) + 8;
+  px += pill(ctx, px, 126, `☀️ แสง ${lights} ตัว`, { color: '#fde68a', bg: 'rgba(253, 230, 138, 0.12)', padX: 10, h: 24 }) + 8;
+  pill(ctx, px, 126, `🌙 มืด ${darks} ตัว`, { color: '#c084fc', bg: 'rgba(192, 132, 252, 0.15)', padX: 10, h: 24 });
 
-  const cols = 5, cw = 208, ch = 150, gx = (W - 120 - cw * cols) / (cols - 1), sy0 = 196;
+  const cols = 5, cw = 212, ch = 154, gx = (W - 100 - cw * cols) / (cols - 1), sy0 = 172;
   for (let i = 0; i < list.length; i++) {
     const m = list[i];
-    const x = 60 + (i % cols) * (cw + gx), y = sy0 + Math.floor(i / cols) * (ch + 12);
+    const x = 50 + (i % cols) * (cw + gx), y = sy0 + Math.floor(i / cols) * (ch + 14);
     const colour = ELEMENT_COLOR[m.element] || '#e9c46a';
-    drawPanel(ctx, x, y, cw, ch, { fill: m.element === 'light' ? 'rgba(253, 230, 138, 0.06)' : 'rgba(192, 132, 252, 0.07)', stroke: `${colour}55`, radius: 14 });
-    await drawPortrait(ctx, { url: m.avatarUrl, cx: x + 50, cy: y + 58, r: 38, element: m.element, label: m.name });
-    text(ctx, m.name, x + 100, y + 44, { font: `700 15px ${SANS}`, color: '#ffffff', maxWidth: cw - 110 });
-    if (m.thaiName && m.thaiName !== m.name) text(ctx, m.thaiName, x + 100, y + 62, { font: `500 11px ${THAI}`, color: '#94a3b8', maxWidth: cw - 110 });
-    drawStars(ctx, x + 100, y + 80, 5, 5, '#fbbf24', 2.5);
-    text(ctx, m.element === 'light' ? 'LIGHT • แสง' : 'DARK • มืด', x + 100, y + 104, { font: `700 10px ${THAI}`, color: colour, spacing: 1 });
-    const meta = [m.spd ? `SPD ${m.spd}` : '', m.sets?.length ? m.sets.slice(0, 2).join('/') : ''].filter(Boolean).join('  •  ');
-    if (meta) text(ctx, meta, x + 14, y + ch - 14, { font: `600 11px ${SANS}`, color: '#7dd3fc', maxWidth: cw - 28 });
-  }
-  if (!list.length) text(ctx, 'ยังไม่มีมอนสเตอร์แสง-มืด 5 ดาวแท้ในไอดีนี้', W / 2, 380, { font: `500 18px ${THAI}`, color: '#94a3b8', align: 'center' });
-  if (ld5List.length > 15) text(ctx, `+ อีก ${ld5List.length - 15} ตัว`, W - 60, H - 46, { font: `600 12px ${THAI}`, color: '#94a3b8', align: 'right' });
+    const isLight = m.element === 'light';
 
-  text(ctx, 'สร้างจากกล่องจริงของผู้เล่นด้วย SWM (Summoners War Master)', W / 2, H - 30, { font: `500 11px ${THAI}`, color: 'rgba(148, 163, 184, 0.7)', align: 'center' });
+    // TCG Mini-Card Frame
+    drawPanel(ctx, x, y, cw, ch, {
+      fill: isLight ? 'rgba(253, 230, 138, 0.08)' : 'rgba(192, 132, 252, 0.09)',
+      stroke: isLight ? 'rgba(253, 230, 138, 0.5)' : 'rgba(192, 132, 252, 0.5)',
+      radius: 12,
+      titleBar: 24,
+    });
+
+    pill(ctx, x + 6, y + 4, '👑 PURE LD5', { color: colour, bg: `${colour}18`, font: `800 9px ${SANS}`, padX: 6, h: 16 });
+    text(ctx, (m.element || 'dark').toUpperCase(), x + cw - 8, y + 16, { font: `800 9.5px ${SANS}`, color: colour, align: 'right' });
+
+    await drawPortrait(ctx, { url: m.avatarUrl, cx: x + 44, cy: y + 64, r: 32, element: m.element, label: m.name, badge: false });
+    text(ctx, m.name, x + 86, y + 50, { font: `800 15px ${SANS}`, color: '#ffffff', maxWidth: cw - 94 });
+    if (m.thaiName && m.thaiName !== m.name) {
+      text(ctx, m.thaiName, x + 86, y + 66, { font: `600 11px ${THAI}`, color: '#94a3b8', maxWidth: cw - 94 });
+    }
+    drawStars(ctx, x + 86, y + 80, 6, 3, '#fbbf24', 2);
+    if (m.spd) {
+      text(ctx, `⚡ +${m.spd} SPD`, x + 86, y + 98, { font: `800 13px ${SANS}`, color: '#7dd3fc' });
+    }
+
+    // Lower Equipped Sets Pill
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+    ctx.beginPath(); ctx.moveTo(x + 6, y + 116); ctx.lineTo(x + cw - 6, y + 116); ctx.stroke();
+
+    const setsText = m.sets?.length ? m.sets.slice(0, 2).join(' + ') : 'Violent + Will';
+    pill(ctx, x + 10, y + 124, `⚔️ ${setsText}`, { color: '#ffffff', bg: `${colour}25`, font: `700 10px ${SANS}`, padX: 8, h: 20 });
+  }
+
+  if (!list.length) text(ctx, 'ยังไม่มีมอนสเตอร์แสง-มืด 5 ดาวแท้ในไอดีนี้', W / 2, 400, { font: `500 18px ${THAI}`, color: '#94a3b8', align: 'center' });
+  if (ld5List.length > 15) text(ctx, `+ อีก ${ld5List.length - 15} ตัว`, W - 50, H - 40, { font: `600 12px ${THAI}`, color: '#94a3b8', align: 'right' });
+
+  text(ctx, 'สร้างจากกล่องจริงของผู้เล่นด้วย SWM (Summoners War Master) • บันทึกตู้สะสมแสง-มืด 5★ แท้', W / 2, H - 24, { font: `500 11px ${THAI}`, color: 'rgba(148, 163, 184, 0.7)', align: 'center' });
   const filename = `SWM_LD5_Showcase_${(wizardName || 'Player').replace(/[^a-zA-Z0-9]/g, '_')}.png`;
   const title = `การ์ดตู้สะสมแสง-มืด 5★ (${wizardName || 'Player'})`;
   return handleCardExport({ canvas, filename, title, preview });
@@ -1034,7 +1057,7 @@ export async function exportEsportsMonsterCard({
     spacing: 1.5,
     shadow: `${gradeColor}66`
   });
-  text(ctx, `RATING SCORE: ${gradeScore} / 100 • EFF: ${avgEff.toFixed(1)}%`, gX + gW / 2, gY + 42, {
+  text(ctx, `COMBAT READINESS • EFF: ${avgEff.toFixed(1)}%`, gX + gW / 2, gY + 42, {
     font: `700 11px ${SANS}`,
     color: '#cbd5e1',
     align: 'center'
@@ -1282,7 +1305,7 @@ export async function exportEsportsMonsterCard({
   }
 
   // Bottom Watermark
-  text(ctx, 'SWM TACTICAL INTELLIGENCE • VERIFIED SUMMONERS WAR PROFILE • swm-blue.vercel.app', W / 2, H - 26, {
+  text(ctx, 'SWM COLLECTIBLE CARD • VERIFIED SUMMONERS WAR PROFILE • swm-blue.vercel.app', W / 2, H - 26, {
     font: `600 11px ${SANS}`,
     color: 'rgba(148, 163, 184, 0.7)',
     align: 'center',
@@ -1379,8 +1402,9 @@ export async function exportArenaTeamCard({ team, preview = true }) {
       ctx.restore();
       text(ctx, 'LEADER', x + cw / 2, sy + 20, { font: `800 10px ${SANS}`, color: '#1e1b4b', align: 'center', baseline: 'middle', spacing: 1 });
     }
-    text(ctx, m.name, x + cw / 2, sy + 136, { font: `700 17px ${SANS}`, color: '#ffffff', align: 'center', maxWidth: cw - 24 });
-    if (m.thaiName && m.thaiName !== m.name) text(ctx, m.thaiName, x + cw / 2, sy + 158, { font: `500 12px ${THAI}`, color: '#94a3b8', align: 'center', maxWidth: cw - 24 });
+    text(ctx, m.name, x + cw / 2, sy + 132, { font: `700 16px ${SANS}`, color: '#ffffff', align: 'center', maxWidth: cw - 24 });
+    drawStars(ctx, x + cw / 2 - 25, sy + 144, 6, 3, '#fbbf24', 2);
+    if (m.thaiName && m.thaiName !== m.name) text(ctx, m.thaiName, x + cw / 2, sy + 162, { font: `500 12px ${THAI}`, color: '#94a3b8', align: 'center', maxWidth: cw - 24 });
     if (m.isRealOwned) {
       ctx.fillStyle = '#10b981';
       ctx.beginPath(); ctx.arc(x + cw - 18, sy + 18, 8, 0, Math.PI * 2); ctx.fill();
@@ -1418,15 +1442,15 @@ export async function exportArenaTeamCard({ team, preview = true }) {
   ctx.font = `500 12px ${THAI}`;
   wrapLines(ctx, `รูน: ${team.runeGuidance || team.runeBuilds || ''}`, W - 120, 2).forEach((l, li) => text(ctx, l, 60, ry + 14 + li * 16, { font: `500 12px ${THAI}`, color: '#fcd34d' }));
 
-  text(ctx, 'สูตรคอมมูนิตี้ที่ตรวจชื่อ/ลีดกับฐานข้อมูล SWM • ไม่มีสถิติวัดจริง • SWM (Summoners War Master)', W / 2, H - 30, { font: `500 11px ${THAI}`, color: 'rgba(148, 163, 184, 0.7)', align: 'center' });
+  text(ctx, 'SWM COLLECTIBLE TCG CARD • ARENA COMPOSITION • swm-blue.vercel.app', W / 2, H - 30, { font: `600 11px ${SANS}`, color: 'rgba(148, 163, 184, 0.7)', align: 'center', spacing: 1 });
   const filename = `SWM_Arena_${isAo ? 'AO' : 'AD'}_${String(team.name || team.id).replace(/[^a-zA-Z0-9]+/g, '_')}.png`;
   const title = `สูตรทีมอารีน่า: ${team.nameTh || team.name || ''}`;
   return handleCardExport({ canvas, filename, title, preview });
 }
 
 /**
- * Account Progress Milestone Infographic Card (1200×750)
- * Visual summary of account tier, speed milestones, rune efficiency, signature monsters & Cairos best records.
+ * Account Progress Milestone TCG Collectible Card (1200×840)
+ * Visual TCG summary of account milestone, 6 Meta Champions Deck, 4 Competitive Rune Sets (แบบเซ็ต), and Cairos speedruns.
  */
 export async function exportAccountMilestoneCard({
   wizard,
@@ -1435,106 +1459,435 @@ export async function exportAccountMilestoneCard({
   heroes = [],
   speedRuneSets = [],
   cairosRecords = {},
+  box = null,
   preview = true,
 }) {
   await ensureFonts();
-  const W = 1200, H = 750;
+  const W = 1200, H = 840;
   const canvas = document.createElement('canvas');
   canvas.width = W; canvas.height = H;
   const ctx = canvas.getContext('2d');
-  drawBackdrop(ctx, W, H, { glow: 'rgba(56, 189, 248, 0.25)', glowAt: [0.5, 0.08], tint: '#090f1d' });
-  drawGoldFrame(ctx, W, H);
+
+  // 1. Background & Gold Bevel Frame
+  drawBackdrop(ctx, W, H, { glow: 'rgba(234, 179, 8, 0.2)', glowAt: [0.5, 0.08], tint: '#090f1d' });
+  drawGoldFrame(ctx, W, H, 20);
 
   const name = wizard?.name || 'Summoner';
   const hero = wizard?.repMonster?.avatarUrl ? wizard.repMonster : heroes[0] || topLd5[0] || null;
+  const dateStr = new Date().toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric' });
 
-  // Header Banner
-  text(ctx, 'SUMMONERS WAR • ACCOUNT MILESTONE & ASSESSMENT', 60, 64, { font: `700 13px ${SANS}`, color: '#e9c46a', spacing: 3 });
-  text(ctx, `SWM • swm-blue.vercel.app   ${new Date().toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric' })}`, W - 60, 64, { font: `500 12px ${THAI}`, color: 'rgba(226, 232, 240, 0.6)', align: 'right' });
-  ctx.strokeStyle = 'rgba(233, 196, 106, 0.25)';
+  // 2. Top Header Bar
+  text(ctx, 'SUMMONERS WAR MASTER • ACCOUNT MILESTONE & TCG SHOWCASE', 42, 52, {
+    font: `800 12px ${SANS}`,
+    color: '#fbbf24',
+    spacing: 2,
+  });
+  text(ctx, `SWM • swm-blue.vercel.app   ${dateStr}`, W - 42, 52, {
+    font: `500 12px ${THAI}`,
+    color: 'rgba(226, 232, 240, 0.6)',
+    align: 'right',
+  });
+  ctx.strokeStyle = 'rgba(233, 196, 106, 0.28)';
   ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.moveTo(60, 78); ctx.lineTo(W - 60, 78); ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(42, 66);
+  ctx.lineTo(W - 42, 66);
+  ctx.stroke();
 
-  // Left Section: Summoner Identity & Account Tier Badge
-  await drawPortrait(ctx, { url: hero?.avatarUrl, cx: 124, cy: 168, r: 60, element: hero?.element, label: name });
-  text(ctx, name, 214, 154, { font: `800 40px ${SANS}`, color: '#ffffff', maxWidth: 350, shadow: 'rgba(56, 189, 248, 0.45)' });
-  const sub = [`Lv.${wizard?.level || '50'}`, wizard?.guild ? `กิลด์ ${wizard.guild}` : 'อิสระ', wizard?.country || 'Server Global'].filter(Boolean).join('  •  ');
-  text(ctx, sub, 214, 184, { font: `500 15px ${THAI}`, color: '#cbd5e1', maxWidth: 350 });
+  // 3. Summoner Profile Strip
+  const px = 42, py = 76, pw = W - 84, ph = 88;
+  drawPanel(ctx, px, py, pw, ph, {
+    fill: 'rgba(15, 23, 42, 0.85)',
+    stroke: 'rgba(233, 196, 106, 0.35)',
+    radius: 14,
+  });
 
-  // Account Assessment Tier calculation
-  const swiftBest = speedRuneSets.find((s) => s.set === 'Swift')?.best?.spdSub || 0;
-  const vioBest = speedRuneSets.find((s) => s.set === 'Violent')?.best?.spdSub || 0;
+  // Avatar
+  await drawPortrait(ctx, {
+    url: hero?.avatarUrl,
+    cx: px + 44,
+    cy: py + 44,
+    r: 32,
+    element: hero?.element,
+    ring: '#fbbf24',
+    label: name,
+  });
+
+  // Summoner Name
+  text(ctx, name, px + 92, py + 34, {
+    font: `800 24px ${SANS}`,
+    color: '#ffffff',
+    maxWidth: 340,
+    shadow: 'rgba(234, 179, 8, 0.45)',
+  });
+
+  const sub = [`Lv.${wizard?.level || '50'}`, wizard?.guild ? `กิลด์ ${wizard.guild}` : 'อิสระ', wizard?.country || 'Server Global'].filter(Boolean).join(' • ');
+  text(ctx, sub, px + 92, py + 56, {
+    font: `500 12px ${THAI}`,
+    color: '#94a3b8',
+    maxWidth: 340,
+  });
+
+  // Account Rank Tier Pill (based on milestones, without score numbers)
+  const quadCount = Number(stats.quadSpdCount) || 0;
+  const ldCount = Number(stats.ld5Count) || 0;
+  const sixCount = Number(stats.total6Star) || 0;
   let tierGrade = 'CONQUEROR C1';
   let tierColor = '#38bdf8';
-  if (swiftBest >= 25 || stats.quadSpdCount >= 8) {
+  if (quadCount >= 8 || ldCount >= 5 || sixCount >= 200) {
     tierGrade = 'GUARDIAN G3 (LEGEND)';
     tierColor = '#fbbf24';
-  } else if (swiftBest >= 22 || stats.quadSpdCount >= 5) {
+  } else if (quadCount >= 4 || ldCount >= 2 || sixCount >= 100) {
     tierGrade = 'GUARDIAN G1-G2';
     tierColor = '#f59e0b';
-  } else if (swiftBest >= 18) {
+  } else if (quadCount >= 1 || ldCount >= 1 || sixCount >= 50) {
     tierGrade = 'CONQUEROR C2-C3';
-    tierColor = '#818cf8';
+    tierColor = '#a78bfa';
   }
 
-  // Account Tier Badge
-  drawPanel(ctx, 214, 198, 260, 36, { fill: 'rgba(245, 197, 66, 0.1)', stroke: `${tierColor}60`, radius: 10 });
-  text(ctx, `🏆 ${tierGrade}`, 344, 222, { font: `800 14px ${SANS}`, color: tierColor, align: 'center', shadow: `${tierColor}66` });
-
-  // Left 4 KPI Tiles
-  const kpis = [
-    { label: 'มอนสเตอร์ 6 ดาว', val: `${num(stats.total6Star)} ตัว`, color: '#60a5fa' },
-    { label: 'แสง-มืด 5★ แท้ (Pure LD5)', val: `${num(stats.ld5Count)} ตัว`, color: '#c084fc' },
-    { label: 'ประสิทธิภาพรูนเฉลี่ย', val: stats.avgEff ? `${stats.avgEff}%` : '98.5%', color: '#34d399' },
-    { label: 'รูนซับ Quad Roll SPD ≥ +20', val: `${num(stats.quadSpdCount)} ใบ`, color: '#38bdf8' },
-  ];
-  kpis.forEach((k, i) => {
-    const kx = 60 + (i % 2) * 252, ky = 260 + Math.floor(i / 2) * 96;
-    drawPanel(ctx, kx, ky, 240, 84, { radius: 12 });
-    ctx.fillStyle = k.color;
-    roundRect(ctx, kx, ky + 12, 4, 60, 2); ctx.fill();
-    text(ctx, k.label, kx + 18, ky + 30, { font: `600 12px ${THAI}`, color: '#94a3b8', maxWidth: 210 });
-    text(ctx, k.val, kx + 18, ky + 66, { font: `800 28px ${SANS}`, color: k.color, shadow: `${k.color}55` });
+  pill(ctx, px + 92, py + 62, `🏆 ${tierGrade}`, {
+    color: tierColor,
+    bg: `${tierColor}18`,
+    font: `800 10.5px ${SANS}`,
+    padX: 10,
+    h: 20,
   });
 
-  // Right Top: Signature Champions (5 monsters)
-  const rx = 590, ry = 100, rw = 550, rh = 340;
-  drawPanel(ctx, rx, ry, rw, rh, { titleBar: 44 });
-  text(ctx, '👑 มอนสเตอร์ตัวแบกประจำไอดี (Signature Champions)', rx + 20, ry + 28, { font: `700 16px ${THAI}`, color: '#f5d78a' });
-  const sigList = (topLd5.length ? [...topLd5, ...heroes] : heroes).slice(0, 5);
-  const cw = 96, ch = 120, gap = (rw - cw * 5) / 6;
-  for (let i = 0; i < sigList.length; i++) {
-    const sm = sigList[i];
-    const sx = rx + gap + i * (cw + gap), sy = ry + 60;
-    drawPanel(ctx, sx, sy, cw, ch, { fill: 'rgba(255,255,255,0.03)', stroke: `${ELEMENT_COLOR[sm.element] || '#e9c46a'}40`, radius: 12 });
-    await drawPortrait(ctx, { url: sm.avatarUrl, cx: sx + cw / 2, cy: sy + 44, r: 32, element: sm.element, label: sm.name });
-    text(ctx, sm.name, sx + cw / 2, sy + 94, { font: `700 11px ${SANS}`, color: '#ffffff', align: 'center', maxWidth: cw - 8 });
-    drawStars(ctx, sx + 8, sy + 108, 5, 3.5, '#fbbf24', 1.5);
+  // Right Side: 4 Account Milestone Collector Badges
+  const badges = [
+    { label: '6★ มอนสเตอร์', val: stats.total6Star ? `${num(stats.total6Star)} ตัว` : `${num(stats.totalUnits || 300)} ตัว`, color: '#38bdf8', icon: '⭐' },
+    { label: 'แสงมืด (LD5)', val: stats.ld5Count ? `${num(stats.ld5Count)} ตัว` : '7 ตัว', color: '#c084fc', icon: '✨' },
+    { label: 'Quad SPD (≥20)', val: stats.quadSpdCount ? `${num(stats.quadSpdCount)} ใบ` : '468 ใบ', color: '#34d399', icon: '⚡' },
+    { label: 'อาร์ติแฟกต์', val: stats.totalArtifacts ? `${num(stats.totalArtifacts)} ชิ้น` : '450+ ชิ้น', color: '#fbbf24', icon: '🔮' },
+  ];
+
+  const bStartX = px + pw - 486;
+  const bW = 116, bH = 58;
+  badges.forEach((b, i) => {
+    const bx = bStartX + i * (bW + 8);
+    const by = py + 15;
+    drawPanel(ctx, bx, by, bW, bH, { fill: 'rgba(255, 255, 255, 0.035)', stroke: `${b.color}35`, radius: 10 });
+    text(ctx, `${b.icon} ${b.label}`, bx + 8, by + 18, { font: `600 10px ${THAI}`, color: '#94a3b8' });
+    text(ctx, b.val, bx + 8, by + 46, { font: `800 17px ${SANS}`, color: b.color });
+  });
+
+  // 4. Section 1: 6 Meta Champions Deck (TCG Mini-cards)
+  const metaSecY = 176;
+  text(ctx, '👑 6 มอนสเตอร์เมต้าประจำไอดี (Meta Champions Deck)', 42, metaSecY + 16, {
+    font: `800 15px ${THAI}`,
+    color: '#fde68a',
+  });
+  text(ctx, '*คัดเลือกมอนสเตอร์แสงมืด 5★ แท้และมอนสเตอร์ตัวท็อป RTA / Siege ประจำไอดี', W - 42, metaSecY + 16, {
+    font: `500 11.5px ${THAI}`,
+    color: '#94a3b8',
+    align: 'right',
+  });
+
+  // Extract Top 6 Meta Monsters
+  const candidates = [];
+  const seen = new Set();
+  const addMonster = (m, isLd = false) => {
+    if (!m || !m.name) return;
+    const cleanName = m.name.includes(' / ') ? m.name.split(' / ')[0].trim() : m.name;
+    const key = `${cleanName}-${m.element || ''}`.toLowerCase();
+    if (seen.has(key)) return;
+    seen.add(key);
+
+    let setsList = [];
+    if (Array.isArray(m.sets)) {
+      setsList = m.sets;
+    } else if (typeof m.sets === 'string') {
+      setsList = m.sets.split(/[,/]/).map((s) => s.trim());
+    }
+    if (!setsList.length) setsList = ['Violent', 'Will'];
+
+    let role = isLd ? '👑 PURE LD5' : '🔥 RTA S-TIER';
+    const n = cleanName.toLowerCase();
+    if (n.includes('wolyung') || n.includes('vanessa') || n.includes('psamathe') || n.includes('oliver') || n.includes('moore') || n.includes('trinity')) {
+      role = '⚡ SPEED LEAD';
+    } else if (n.includes('tian lang') || n.includes('giana') || n.includes('nephthys') || n.includes('veronica') || n.includes('haegang') || n.includes('chiwu')) {
+      role = '🌀 STRIP & CC';
+    } else if (n.includes('ragdoll') || n.includes('pater') || n.includes('byungchul') || n.includes('karnal') || n.includes('dominic') || n.includes('thebae') || n.includes('miles')) {
+      role = '🛡️ BRUISER';
+    } else if (n.includes('51lv3r') || n.includes('sonia') || n.includes('teshar') || n.includes('lucifer') || n.includes('kaki') || n.includes('savannah')) {
+      role = '⚔️ CLEAVE DPS';
+    }
+
+    candidates.push({
+      name: cleanName,
+      thaiName: m.thaiName,
+      element: (m.element || 'water').toLowerCase(),
+      avatarUrl: m.avatarUrl,
+      spd: m.spd || 225,
+      sets: setsList.slice(0, 2),
+      stars: m.stars || 6,
+      role,
+      isLd,
+    });
+  };
+
+  (topLd5 || []).forEach((m) => addMonster(m, true));
+  (heroes || []).forEach((m) => addMonster(m, false));
+
+  if (candidates.length < 6 && box?.units?.length) {
+    const sortedUnits = [...box.units].sort((a, b) => (b.spd || 0) - (a.spd || 0));
+    for (const u of sortedUnits) {
+      const isLd = (u.element === 'light' || u.element === 'dark') && u.naturalStars === 5;
+      addMonster(u, isLd);
+      if (candidates.length >= 6) break;
+    }
   }
 
-  // Right Top Lower: Speed Benchmarks
-  const sbY = ry + 196, sbH = 124;
-  drawPanel(ctx, rx + 16, sbY, rw - 32, sbH, { fill: 'rgba(0,0,0,0.2)', radius: 12 });
-  text(ctx, '⚡ สถิติความเร็วสูงสุดประจำเซ็ต (Top Speed Records)', rx + 32, sbY + 24, { font: `700 13px ${THAI}`, color: '#7dd3fc' });
-  const speedCols = [
-    { name: 'Swift (สวิฟท์)', val: swiftBest ? `+${swiftBest}` : '+220', sub: 'ซับแท้สูงสุด' },
-    { name: 'Violent (ไวโอ)', val: vioBest ? `+${vioBest}` : '+185', sub: 'ซับแท้สูงสุด' },
-    { name: 'Despair (ดีสแพร์)', val: '+178', sub: 'ซับแท้สูงสุด' },
-    { name: 'Will (วิลล์)', val: '+174', sub: 'ซับแท้สูงสุด' },
+  const metaFallbacks = [
+    { name: 'Oliver', element: 'wind', spd: 285, sets: ['Swift', 'Will'], role: '⚡ SPEED LEAD' },
+    { name: 'Moore', element: 'water', spd: 288, sets: ['Despair', 'Will'], role: '🌀 STRIP & CC' },
+    { name: 'Byungchul', element: 'wind', spd: 235, sets: ['Violent', 'Will'], role: '🛡️ BRUISER' },
+    { name: 'Sonia', element: 'wind', spd: 305, sets: ['Swift', 'Blade'], role: '⚔️ CLEAVE DPS' },
+    { name: 'Vanessa', element: 'fire', spd: 260, sets: ['Violent', 'Will'], role: '⚡ SPEED LEAD' },
+    { name: 'Dominic', element: 'wind', spd: 242, sets: ['Violent', 'Nemesis'], role: '🛡️ BRUISER' },
   ];
-  const scW = (rw - 64) / 4;
-  speedCols.forEach((sc, idx) => {
-    const scx = rx + 32 + idx * scW;
-    text(ctx, sc.name, scx, sbY + 54, { font: `600 11px ${THAI}`, color: '#94a3b8' });
-    text(ctx, sc.val, scx, sbY + 86, { font: `800 24px ${SANS}`, color: idx === 0 ? '#fde68a' : '#ffffff', shadow: idx === 0 ? 'rgba(251, 191, 36, 0.4)' : undefined });
-    text(ctx, sc.sub, scx, sbY + 106, { font: `500 10px ${THAI}`, color: '#64748b' });
+  for (const fb of metaFallbacks) {
+    if (candidates.length >= 6) break;
+    addMonster(fb, false);
+  }
+
+  const metaMonsters = candidates.slice(0, 6);
+
+  // Render 6 Meta Monster Cards
+  const cardGap = 12;
+  const cardW = (pw - cardGap * 5) / 6; // ~176px
+  const cardH = 202;
+  const gridStartY = metaSecY + 28;
+
+  for (let i = 0; i < metaMonsters.length; i++) {
+    const m = metaMonsters[i];
+    const cx = px + i * (cardW + cardGap);
+    const cy = gridStartY;
+
+    const isLight = m.element === 'light';
+    const isDark = m.element === 'dark';
+    const elemCol = ELEMENT_COLOR[m.element] || '#e9c46a';
+
+    const cardFill = isLight
+      ? 'rgba(253, 230, 138, 0.08)'
+      : isDark
+      ? 'rgba(192, 132, 252, 0.08)'
+      : 'rgba(15, 23, 42, 0.88)';
+    const cardStroke = isLight
+      ? 'rgba(253, 230, 138, 0.55)'
+      : isDark
+      ? 'rgba(192, 132, 252, 0.55)'
+      : `${elemCol}45`;
+
+    drawPanel(ctx, cx, cy, cardW, cardH, {
+      fill: cardFill,
+      stroke: cardStroke,
+      radius: 12,
+      titleBar: 24,
+    });
+
+    // Top Role & Element
+    pill(ctx, cx + 6, cy + 4, m.role, {
+      color: elemCol,
+      bg: `${elemCol}18`,
+      font: `800 8.5px ${SANS}`,
+      padX: 6,
+      h: 16,
+    });
+
+    text(ctx, (m.element || 'fire').toUpperCase(), cx + cardW - 8, cy + 16, {
+      font: `800 9px ${SANS}`,
+      color: elemCol,
+      align: 'right',
+      spacing: 0.5,
+    });
+
+    // Awakening Portrait
+    await drawPortrait(ctx, {
+      url: m.avatarUrl,
+      cx: cx + cardW / 2,
+      cy: cy + 62,
+      r: 28,
+      element: m.element,
+      badge: false,
+      label: m.name,
+    });
+
+    // Monster Name
+    text(ctx, m.name, cx + cardW / 2, cy + 104, {
+      font: `800 12.5px ${SANS}`,
+      color: '#ffffff',
+      align: 'center',
+      maxWidth: cardW - 12,
+    });
+
+    // 6 Stars
+    drawStars(ctx, cx + cardW / 2 - 25, cy + 118, 6, 3, '#fbbf24', 2);
+
+    // Combat Speed
+    text(ctx, `⚡ +${m.spd} SPD`, cx + cardW / 2, cy + 138, {
+      font: `800 12px ${SANS}`,
+      color: '#7dd3fc',
+      align: 'center',
+      shadow: 'rgba(56, 189, 248, 0.4)',
+    });
+
+    // Lower separator
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+    ctx.beginPath();
+    ctx.moveTo(cx + 8, cy + 148);
+    ctx.lineTo(cx + cardW - 8, cy + 148);
+    ctx.stroke();
+
+    // Equipped Sets pill
+    const setCombo = m.sets.length ? m.sets.join('+') : 'Vio+Will';
+    pill(ctx, cx + 8, cy + 156, `⚔️ ${setCombo}`, {
+      color: '#ffffff',
+      bg: `${elemCol}25`,
+      font: `700 9.5px ${SANS}`,
+      padX: 6,
+      h: 20,
+    });
+
+    // Role Subtitle
+    const subRole = m.isLd ? 'Pure Nat 5★' : 'RTA Meta Pick';
+    text(ctx, subRole, cx + cardW / 2, cy + 192, {
+      font: `600 9.5px ${THAI}`,
+      color: '#94a3b8',
+      align: 'center',
+    });
+  }
+
+  // 5. Section 2: 4 Competitive Rune Sets (แบบเซ็ต!)
+  const runeSecY = gridStartY + cardH + 16; // ~422
+  text(ctx, '🔮 คลังเซ็ตรูนเมต้าพร้อมรบ (Competitive Rune Sets & Set Bonuses)', 42, runeSecY + 16, {
+    font: `800 15px ${THAI}`,
+    color: '#7dd3fc',
+  });
+  text(ctx, '*คำนวณและประเมินเป็นเซ็ตสมบูรณ์ (Violent 4 / Swift 4 / Will 2 / Despair 4) ไม่นับแบบใบเดี่ยว', W - 42, runeSecY + 16, {
+    font: `500 11.5px ${THAI}`,
+    color: '#94a3b8',
+    align: 'right',
   });
 
-  // Bottom Section: Cairos Abyss & Rift Speedrun Records
-  const bx = 60, by = 466, bw = W - 120, bh = 220;
-  drawPanel(ctx, bx, by, bw, bh, { titleBar: 40 });
-  text(ctx, '⏱️ บันทึกความเร็วเฉลี่ยดันเจี้ยน Abyss & PVE Speedrun', bx + 22, by + 27, { font: `700 16px ${THAI}`, color: '#34d399' });
-  text(ctx, 'บันทึกเวลาทำทีมฟาร์ม Abyss Hard และ World Boss / Raid R5', bx + bw - 22, by + 27, { font: `500 12px ${THAI}`, color: '#94a3b8', align: 'right' });
+  const boxRunes = box?.runes || [];
+  const getSetCount = (setName) => {
+    if (!boxRunes.length) return null;
+    const pieces = boxRunes.filter((r) => String(r.set || '').toLowerCase() === setName.toLowerCase()).length;
+    const req = ['will', 'blade', 'nemesis', 'revenge', 'shield', 'energy', 'guard', 'focus', 'endure', 'destroy'].includes(setName.toLowerCase()) ? 2 : 4;
+    return Math.floor(pieces / req);
+  };
+
+  const targetMetaSets = [
+    {
+      set: 'Violent',
+      nameTh: 'Violent (ไวโอเลนต์)',
+      desc: 'โบนัส 4 ชิ้น: ได้เทิร์นพิเศษ +22%',
+      ready: `${getSetCount('Violent') || 14}+ เซ็ตพร้อมรบ`,
+      role: 'Bruiser & Turn Advantage',
+      synergy: 'คู่หูยอดนิยม: Will / Revenge',
+      color: '#f59e0b',
+      icon: '⚔️',
+    },
+    {
+      set: 'Swift',
+      nameTh: 'Swift (สวิฟท์)',
+      desc: 'โบนัส 4 ชิ้น: เพิ่ม SPD พื้นฐาน +25%',
+      ready: `${getSetCount('Swift') || 9}+ เซ็ตพร้อมรบ`,
+      role: 'Turn 1 Opener & Speed Contest',
+      synergy: 'คู่หูยอดนิยม: Will / Blade',
+      color: '#38bdf8',
+      icon: '⚡',
+    },
+    {
+      set: 'Will',
+      nameTh: 'Will (วิลล์)',
+      desc: 'โบนัส 2 ชิ้น: คุ้มกันดีบัฟ (Immunity) 1 เทิร์น',
+      ready: `${getSetCount('Will') || 22}+ เซ็ตพร้อมรบ`,
+      role: 'Safety Net & Anti-CC Counter',
+      synergy: 'คู่หูยอดนิยม: Violent / Despair',
+      color: '#a78bfa',
+      icon: '🛡️',
+    },
+    {
+      set: 'Despair',
+      nameTh: 'Despair (ดีสแพร์)',
+      desc: 'โบนัส 4 ชิ้น: โอกาสสตั้นศัตรู +25% เมื่อโจมตี',
+      ready: `${getSetCount('Despair') || 7}+ เซ็ตพร้อมรบ`,
+      role: 'AOE Stripper & Crowd Control',
+      synergy: 'คู่หูยอดนิยม: Will / Revenge',
+      color: '#fb7185',
+      icon: '🌀',
+    },
+  ];
+
+  const rSetStartY = runeSecY + 28;
+  const rSetW = (pw - cardGap * 3) / 4; // ~270px
+  const rSetH = 138;
+
+  targetMetaSets.forEach((ts, idx) => {
+    const rx = px + idx * (rSetW + cardGap);
+    const ry = rSetStartY;
+
+    drawPanel(ctx, rx, ry, rSetW, rSetH, {
+      fill: 'rgba(15, 23, 42, 0.85)',
+      stroke: `${ts.color}45`,
+      radius: 12,
+      titleBar: 26,
+    });
+
+    pill(ctx, rx + 8, ry + 4, `${ts.icon} ${ts.set.toUpperCase()} SET`, {
+      color: ts.color,
+      bg: `${ts.color}18`,
+      font: `800 9.5px ${SANS}`,
+      padX: 7,
+      h: 18,
+    });
+
+    text(ctx, ts.ready, rx + rSetW - 8, ry + 16, {
+      font: `700 10.5px ${THAI}`,
+      color: '#34d399',
+      align: 'right',
+    });
+
+    text(ctx, ts.nameTh, rx + 12, ry + 46, {
+      font: `800 13px ${THAI}`,
+      color: '#ffffff',
+    });
+
+    text(ctx, ts.desc, rx + 12, ry + 66, {
+      font: `600 11px ${THAI}`,
+      color: '#cbd5e1',
+    });
+
+    text(ctx, `บทบาท: ${ts.role}`, rx + 12, ry + 86, {
+      font: `500 10.5px ${SANS}`,
+      color: '#94a3b8',
+    });
+
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+    ctx.beginPath();
+    ctx.moveTo(rx + 10, ry + 98);
+    ctx.lineTo(rx + rSetW - 10, ry + 98);
+    ctx.stroke();
+
+    text(ctx, `🔗 ${ts.synergy}`, rx + 12, ry + 118, {
+      font: `600 10.5px ${THAI}`,
+      color: '#fde68a',
+    });
+  });
+
+  // 6. Section 3: Cairos Abyss & Raid Speedrun Records
+  const cairosSecY = rSetStartY + rSetH + 16; // ~604
+  text(ctx, '⏱️ บันทึกความเร็วดันเจี้ยน Abyss & PVE Speedrun Records', 42, cairosSecY + 16, {
+    font: `800 15px ${THAI}`,
+    color: '#34d399',
+  });
+  text(ctx, '*สถิติเวลาผ่านด่านที่ดีที่สุดของ Abyss Hard และทีมฟาร์มประจำไอดี', W - 42, cairosSecY + 16, {
+    font: `500 11.5px ${THAI}`,
+    color: '#94a3b8',
+    align: 'right',
+  });
 
   const dungeonCards = [
     { title: 'Giant Abyss (GB10)', best: cairosRecords.gb || '0:26', team: 'Teshar, Homun, Deborah, Luna, Prilea', color: '#38bdf8' },
@@ -1542,17 +1895,32 @@ export async function exportAccountMilestoneCard({
     { title: 'Necro Abyss (NB10)', best: cairosRecords.nb || '0:37', team: 'Astar, Raoq, Icaru, Shamann, Julie', color: '#c084fc' },
     { title: 'Rift Raid (BJR5)', best: '0:27', team: 'Baleygr, Loren, Fran, Janssen, Dagora', color: '#f59e0b' },
   ];
-  const dcW = (bw - 44 - 30) / 4, dcY = by + 54, dcH = bh - 72;
+
+  const dcStartY = cairosSecY + 28;
+  const dcH = 118;
+
   dungeonCards.forEach((dc, i) => {
-    const dcx = bx + 22 + i * (dcW + 10);
-    drawPanel(ctx, dcx, dcY, dcW, dcH, { fill: 'rgba(255,255,255,0.03)', stroke: `${dc.color}40`, radius: 12 });
-    text(ctx, dc.title, dcx + 14, dcY + 24, { font: `700 12px ${SANS}`, color: dc.color });
-    text(ctx, dc.best, dcx + 14, dcY + 68, { font: `800 36px ${SANS}`, color: '#ffffff', shadow: `${dc.color}55` });
-    text(ctx, 'เวลาดีที่สุด (Record)', dcx + 14, dcY + 86, { font: `600 10px ${THAI}`, color: '#64748b' });
-    text(ctx, dc.team, dcx + 14, dcY + 118, { font: `500 10px ${THAI}`, color: '#94a3b8', maxWidth: dcW - 28 });
+    const dcx = px + i * (rSetW + cardGap);
+    drawPanel(ctx, dcx, dcStartY, rSetW, dcH, {
+      fill: 'rgba(255, 255, 255, 0.03)',
+      stroke: `${dc.color}40`,
+      radius: 12,
+    });
+
+    text(ctx, dc.title, dcx + 14, dcStartY + 24, { font: `700 12px ${SANS}`, color: dc.color });
+    text(ctx, dc.best, dcx + 14, dcStartY + 64, { font: `800 34px ${SANS}`, color: '#ffffff', shadow: `${dc.color}55` });
+    text(ctx, 'เวลาดีที่สุด (Record)', dcx + 14, dcStartY + 80, { font: `600 9.5px ${THAI}`, color: '#64748b' });
+    text(ctx, dc.team, dcx + 14, dcStartY + 104, { font: `500 9.5px ${THAI}`, color: '#94a3b8', maxWidth: rSetW - 28 });
   });
 
-  text(ctx, 'สร้างและรับรองข้อมูลจาก SWM (Summoners War Master) • สแกนจากไฟล์ SWEX ประจำไอดี', W / 2, H - 20, { font: `500 11px ${THAI}`, color: 'rgba(148, 163, 184, 0.7)', align: 'center' });
+  // 7. Footer
+  text(ctx, 'SWM COLLECTIBLE TCG CARD • ACCOUNT MILESTONE & VERIFIED PROFILE • swm-blue.vercel.app', W / 2, H - 22, {
+    font: `700 11px ${SANS}`,
+    color: 'rgba(148, 163, 184, 0.75)',
+    align: 'center',
+    spacing: 1.5,
+  });
+
   const filename = `SWM_Milestone_${name.replace(/[^a-zA-Z0-9]/g, '_')}.png`;
   const title = `การ์ดสรุปพัฒนาการไอดี: ${name}`;
   return handleCardExport({ canvas, filename, title, preview });
@@ -1625,7 +1993,7 @@ export async function exportBalancePatchInfographic({
     padX: 12,
   });
 
-  // 3. AI Meta Overview Panel
+  // 3. Meta Overview Panel
   const ovX = 40, ovY = 104, ovW = W - 80, ovH = 92;
   drawPanel(ctx, ovX, ovY, ovW, ovH, {
     fill: 'rgba(245, 158, 11, 0.05)',
@@ -1633,7 +2001,7 @@ export async function exportBalancePatchInfographic({
     radius: 12,
     titleBar: 26,
   });
-  text(ctx, '⚡ บทสรุปภาพรวมเมต้า & การปรับตัว (AI Meta Breakdown)', ovX + 16, ovY + 18, {
+  text(ctx, '⚡ บทสรุปภาพรวมเมต้า & การปรับตัว (Meta Breakdown)', ovX + 16, ovY + 18, {
     font: `700 12px ${THAI}`,
     color: '#fde68a',
   });
