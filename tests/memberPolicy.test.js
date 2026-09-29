@@ -5,7 +5,6 @@ import {
   isViewLocked,
   filterNavigationCategories,
   getVipStatusInfo,
-  FREE_VIEW_IDS,
 } from '../src/utils/memberPolicy';
 
 describe('SWM Membership Policy', () => {

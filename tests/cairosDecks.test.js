@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { findUserDungeonDecks, resolveUserDeck, CAIROS_DUNGEON_SEQ_MAP } from '../src/utils/cairosDecks';
+import { findUserDungeonDecks, CAIROS_DUNGEON_SEQ_MAP } from '../src/utils/cairosDecks';
 
 describe('cairosDecks utility', () => {
   it('maps all 6 Cairos Abyss Hard dungeons to their SWEX sequence IDs', () => {

@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { STRIPE_PRICES } from '../api/_lib/stripe.js';
 
 describe('Stripe Configuration & Products', () => {
