@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import {
   ShieldCheck, RefreshCw, Activity, Database, Settings, Bot, PlayCircle, AlertTriangle, CheckCircle2, XCircle,
   Server, Cloud, GitBranch, Megaphone, Wrench, Radio, Lock, ExternalLink, Save, Loader2, Clock, Users, Zap, Trophy, ShieldOff, Trash2,
+  Crown, CreditCard, UserCheck, Search,
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { adminFetch } from '../services/adminClient';
@@ -22,6 +23,8 @@ const kb = (b) => (b ? `${(b / 1024).toFixed(0)} KB` : '-');
 
 const TABS = [
   { id: 'overview', label: 'ภาพรวม', icon: Activity },
+  { id: 'vip', label: 'สมาชิก VIP & การเงิน', icon: Crown },
+  { id: 'cloud', label: 'คลาวด์ไอดีผู้เล่น', icon: Cloud },
   { id: 'ai', label: 'โค้ช AI', icon: Bot },
   { id: 'data', label: 'ข้อมูล', icon: Database },
   { id: 'settings', label: 'ตั้งค่าเว็บ', icon: Settings },
@@ -145,6 +148,8 @@ export default function AdminView({ onNavigate, onOpenAuth }) {
       ) : (
         <>
           {tab === 'overview' && <Overview status={status} onTab={setTab} />}
+          {tab === 'vip' && <VipPanel />}
+          {tab === 'cloud' && <CloudPanel />}
           {tab === 'ai' && <AiPanel status={status} />}
           {tab === 'data' && <DataPanel status={status} onNavigate={onNavigate} />}
           {tab === 'settings' && <SettingsPanel status={status} onSaved={load} />}
@@ -172,6 +177,9 @@ function Overview({ status, onTab }) {
       </div>
 
       <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-3">
+        <Health icon={CreditCard} title="Stripe & PromptPay Gateway" ok={true}
+          lines={['ระบบรับชำระเงินออนไลน์ PromptPay Dynamic QR & บัตรเครดิต', 'ตรวจจับยอดและปลดล็อก VIP อัตโนมัติ 24 ชม.', 'VIP Member ฿99 / Guild Master ฿249']}
+          action={<button onClick={() => onTab('vip')} className="mt-2 text-[11px] text-amber-300 hover:text-white cursor-pointer">จัดการสมาชิก VIP & การเงิน →</button>} />
         <Health icon={Bot} title="โค้ช AI" ok={ai.configured && settings.features?.ai !== false} warn={ai.configured && settings.features?.ai === false}
           lines={[ai.configured ? `โมเดล ${ai.model} @ ${ai.baseHost}` : 'ยังไม่ได้ตั้งค่า AI_BASE_URL / AI_MODEL / AI_API_KEY', settings.features?.ai === false ? 'ปิดใช้งานโดยผู้ดูแล' : 'เปิดใช้งาน', s ? `24 ชม.: ${s.calls} ครั้ง, ผิดพลาด ${s.errors}` : '']}
           action={<button onClick={() => onTab('ai')} className="mt-2 text-[11px] text-amber-300 hover:text-white cursor-pointer">ดูรายละเอียด →</button>} />
@@ -849,3 +857,573 @@ function JobsPanel({ status }) {
     </div>
   );
 }
+
+// ================= VIP & PAYMENTS PANEL =================
+function VipPanel() {
+  const [payments, setPayments] = useState(null);
+  const [vipUsers, setVipUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [manualEmail, setManualEmail] = useState('');
+  const [manualTier, setManualTier] = useState('vip');
+  const [manualDuration, setManualDuration] = useState(30);
+  const [busyAction, setBusyAction] = useState(false);
+  const [msg, setMsg] = useState(null);
+  const [searchUser, setSearchUser] = useState('');
+  const [txFilter, setTxFilter] = useState('all');
+
+  const loadData = useCallback(async () => {
+    setLoading(true);
+    try {
+      const [payRes, usersRes] = await Promise.all([
+        adminFetch('payments').catch(() => ({ ok: false, transactions: [] })),
+        adminFetch('vip-users').catch(() => ({ ok: false, users: [] })),
+      ]);
+      setPayments(payRes);
+      setVipUsers(usersRes.users || []);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
+
+  const handleGrant = async (e) => {
+    e?.preventDefault();
+    if (!manualEmail.trim()) {
+      setMsg({ ok: false, text: 'กรุณากรอกอีเมลหรือ User ID ของลูกค้า' });
+      return;
+    }
+    setBusyAction(true);
+    setMsg(null);
+    try {
+      const res = await adminFetch('grant-vip', {
+        method: 'POST',
+        body: {
+          email: manualEmail.trim(),
+          tier: manualTier,
+          durationDays: Number(manualDuration),
+        },
+      });
+      if (res.ok) {
+        setMsg({ ok: true, text: `✨ มอบสิทธิ์ ${manualTier.toUpperCase()} ให้กับ "${manualEmail}" เรียบร้อยแล้ว!` });
+        setManualEmail('');
+        loadData();
+      } else {
+        setMsg({ ok: false, text: res.error || 'มอบสิทธิ์ไม่สำเร็จ' });
+      }
+    } catch (err) {
+      setMsg({ ok: false, text: err.message });
+    } finally {
+      setBusyAction(false);
+    }
+  };
+
+  const handleRevoke = async (userId, email) => {
+    if (!window.confirm(`ต้องการระงับสิทธิ์ VIP ของ "${email || userId}" ใช่หรือไม่?`)) return;
+    setBusyAction(true);
+    setMsg(null);
+    try {
+      const res = await adminFetch('revoke-vip', {
+        method: 'POST',
+        body: { userId, email },
+      });
+      if (res.ok) {
+        setMsg({ ok: true, text: `ระงับสิทธิ์ของ ${email || userId} เรียบร้อยแล้ว` });
+        loadData();
+      } else {
+        setMsg({ ok: false, text: res.error || 'ระงับสิทธิ์ไม่สำเร็จ' });
+      }
+    } catch (err) {
+      setMsg({ ok: false, text: err.message });
+    } finally {
+      setBusyAction(false);
+    }
+  };
+
+  const filteredUsers = vipUsers.filter((u) => {
+    const q = searchUser.trim().toLowerCase();
+    if (!q) return true;
+    return (
+      u.email?.toLowerCase().includes(q) ||
+      u.name?.toLowerCase().includes(q) ||
+      u.id?.toLowerCase().includes(q)
+    );
+  });
+
+  const transactions = (payments?.transactions || []).filter((tx) => {
+    if (txFilter === 'succeeded') return tx.status === 'succeeded';
+    if (txFilter === 'pending') return tx.status !== 'succeeded';
+    return true;
+  });
+
+  const totalRev = payments?.totalRevenueThb || 0;
+  const activeVipCount = vipUsers.filter((u) => u.isVip).length;
+
+  return (
+    <div className="space-y-5 animate-in fade-in duration-200">
+      {/* Top Stats */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <Stat
+          label="ยอดรายได้รวม (Stripe)"
+          value={`฿${totalRev.toLocaleString()}`}
+          sub="PromptPay & บัตรเครดิต"
+          tone="text-amber-300"
+        />
+        <Stat
+          label="สมาชิก VIP ทั้งหมด"
+          value={`${activeVipCount} คน`}
+          sub="สิทธิ์ Active ในระบบ"
+          tone="text-emerald-300"
+        />
+        <Stat
+          label="รายการชำระสำเร็จ"
+          value={`${payments?.successfulCount || 0} / ${payments?.totalCount || 0}`}
+          sub="รายการที่ลูกค้าสแกน/จ่ายแล้ว"
+          tone="text-cyan-300"
+        />
+        <Stat
+          label="สถานะ Gateway"
+          value="PromptPay พร้อม"
+          sub="ตรวจจับยอดอัตโนมัติ 24 ชม."
+          tone="text-fuchsia-300"
+        />
+      </div>
+
+      {msg && (
+        <div
+          className={`p-3 rounded-xl border flex items-center justify-between text-xs ${
+            msg.ok
+              ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-200'
+              : 'border-rose-500/40 bg-rose-500/10 text-rose-200'
+          }`}
+        >
+          <span>{msg.text}</span>
+          <button onClick={() => setMsg(null)} className="text-slate-400 hover:text-white cursor-pointer">✕</button>
+        </div>
+      )}
+
+      {/* Manual Grant Section */}
+      <div className={`${card} p-5 space-y-4`}>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <Crown className="w-5 h-5 text-amber-400" />
+            <h3 className="text-base font-bold text-white">มอบสิทธิ์สมาชิก VIP ด้วยตนเอง (Manual Grant)</h3>
+          </div>
+          <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">
+            สำหรับลูกค้าโอนตรง / แจ้งสลิป / แจกรางวัล
+          </span>
+        </div>
+
+        <form onSubmit={handleGrant} className="grid grid-cols-1 sm:grid-cols-4 gap-3">
+          <div className="sm:col-span-2">
+            <label className="text-[11px] text-slate-400 block mb-1">อีเมลผู้ใช้ หรือ User ID:</label>
+            <input
+              type="text"
+              value={manualEmail}
+              onChange={(e) => setManualEmail(e.target.value)}
+              placeholder="เช่น user@gmail.com หรือ uuid"
+              className="w-full px-3.5 py-2 rounded-xl bg-white/[0.04] border border-white/10 text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-amber-400"
+            />
+          </div>
+
+          <div>
+            <label className="text-[11px] text-slate-400 block mb-1">ระดับสิทธิ์ (Tier):</label>
+            <select
+              value={manualTier}
+              onChange={(e) => setManualTier(e.target.value)}
+              className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-white/10 text-white text-xs focus:outline-none focus:border-amber-400"
+            >
+              <option value="vip">👑 SWM VIP Member (฿99)</option>
+              <option value="guild">🏰 Guild Master & Pro (฿249)</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="text-[11px] text-slate-400 block mb-1">ระยะเวลาสิทธิ์:</label>
+            <div className="flex items-center gap-2">
+              <select
+                value={manualDuration}
+                onChange={(e) => setManualDuration(Number(e.target.value))}
+                className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-white/10 text-white text-xs focus:outline-none focus:border-amber-400"
+              >
+                <option value={30}>30 วัน (1 เดือน)</option>
+                <option value={90}>90 วัน (3 เดือน)</option>
+                <option value={365}>365 วัน (1 ปี)</option>
+                <option value={-1}>ตลอดชีพ (Lifetime)</option>
+              </select>
+
+              <button
+                type="submit"
+                disabled={busyAction}
+                className="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-black text-xs shrink-0 cursor-pointer disabled:opacity-50 flex items-center gap-1.5 shadow-md shadow-amber-500/20"
+              >
+                {busyAction ? <Loader2 className="w-4 h-4 animate-spin" /> : <UserCheck className="w-4 h-4" />}
+                <span>มอบสิทธิ์</span>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      {/* Transactions Feed */}
+      <div className={`${card} p-5 space-y-3`}>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <h3 className="text-sm font-bold text-white flex items-center gap-2">
+              <CreditCard className="w-4 h-4 text-cyan-400" />
+              <span>รายการชำระเงินล่าสุด (Stripe & PromptPay)</span>
+            </h3>
+            <p className="text-xs text-slate-400 mt-0.5">
+              ตรวจจับการสแกน QR พร้อมเพย์ และบัตรเครดิตแบบเรียลไทม์
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setTxFilter('all')}
+              className={`px-2.5 py-1 rounded-lg text-xs font-semibold cursor-pointer ${
+                txFilter === 'all' ? 'bg-white/10 text-white' : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              ทั้งหมด
+            </button>
+            <button
+              onClick={() => setTxFilter('succeeded')}
+              className={`px-2.5 py-1 rounded-lg text-xs font-semibold cursor-pointer ${
+                txFilter === 'succeeded' ? 'bg-emerald-500/20 text-emerald-300' : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              สำเร็จ
+            </button>
+            <button
+              onClick={() => setTxFilter('pending')}
+              className={`px-2.5 py-1 rounded-lg text-xs font-semibold cursor-pointer ${
+                txFilter === 'pending' ? 'bg-amber-500/20 text-amber-300' : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              รอดำเนินการ
+            </button>
+            <button
+              onClick={loadData}
+              disabled={loading}
+              className="p-1.5 rounded-lg bg-white/[0.05] text-slate-300 hover:text-white cursor-pointer"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
+            </button>
+          </div>
+        </div>
+
+        {transactions.length === 0 ? (
+          <div className="py-8 text-center text-xs text-slate-500">ยังไม่มีรายการชำระเงิน</div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-xs">
+              <thead className="bg-white/[0.02] text-slate-400 border-b border-white/[0.06]">
+                <tr>
+                  <th className="text-left px-3 py-2.5">วันเวลา</th>
+                  <th className="text-left px-3 py-2.5">ช่องทาง</th>
+                  <th className="text-left px-3 py-2.5">ลูกค้า</th>
+                  <th className="text-left px-3 py-2.5">แพ็กเกจ</th>
+                  <th className="text-right px-3 py-2.5">ยอดเงิน</th>
+                  <th className="text-center px-3 py-2.5">สถานะ</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-white/[0.04]">
+                {transactions.map((tx) => (
+                  <tr key={tx.id} className="hover:bg-white/[0.02]">
+                    <td className="px-3 py-2.5 text-slate-300 whitespace-nowrap">{fmtTime(tx.createdAt)}</td>
+                    <td className="px-3 py-2.5">
+                      <span className="inline-flex items-center gap-1 font-mono text-[11px] px-2 py-0.5 rounded bg-blue-500/10 text-blue-300 border border-blue-500/20">
+                        {tx.method === 'promptpay' ? '📱 พร้อมเพย์' : '💳 บัตรเครดิต'}
+                      </span>
+                    </td>
+                    <td className="px-3 py-2.5 text-slate-300 font-mono">{tx.customerEmail}</td>
+                    <td className="px-3 py-2.5">
+                      <span className="font-semibold text-white">
+                        {tx.tier === 'guild' ? 'Guild Master (฿249)' : 'VIP Member (฿99)'}
+                      </span>
+                    </td>
+                    <td className="px-3 py-2.5 text-right font-black text-amber-400">฿{tx.amount.toFixed(2)}</td>
+                    <td className="px-3 py-2.5 text-center">
+                      {tx.status === 'succeeded' ? (
+                        <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/30">
+                          <CheckCircle2 className="w-3 h-3" /> ชำระสำเร็จ
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1 text-[11px] font-bold text-amber-300 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/30">
+                          <Clock className="w-3 h-3" /> รอลูกค้าสแกน
+                        </span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+
+      {/* User Directory & VIP Status */}
+      <div className={`${card} p-5 space-y-3`}>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <h3 className="text-sm font-bold text-white flex items-center gap-2">
+              <Users className="w-4 h-4 text-emerald-400" />
+              <span>รายชื่อบัญชีผู้ใช้ & สิทธิ์ VIP ({vipUsers.length} บัญชี)</span>
+            </h3>
+            <p className="text-xs text-slate-400 mt-0.5">
+              ตรวจเช็กสิทธิ์ VIP และจัดการมอบ/ยกเลิกสิทธิ์รายบุคคล
+            </p>
+          </div>
+
+          <div className="relative w-full sm:w-64">
+            <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-2.5" />
+            <input
+              type="text"
+              value={searchUser}
+              onChange={(e) => setSearchUser(e.target.value)}
+              placeholder="ค้นหาอีเมล หรือชื่อ..."
+              className="w-full pl-8 pr-3 py-1.5 rounded-xl bg-white/[0.04] border border-white/10 text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-cyan-400"
+            />
+          </div>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="w-full text-xs">
+            <thead className="bg-white/[0.02] text-slate-400 border-b border-white/[0.06]">
+              <tr>
+                <th className="text-left px-3 py-2.5">อีเมล / บัญชี</th>
+                <th className="text-left px-3 py-2.5">ชื่อแสดง</th>
+                <th className="text-center px-3 py-2.5">สถานะสมาชิก</th>
+                <th className="text-left px-3 py-2.5">วันหมดอายุ</th>
+                <th className="text-right px-3 py-2.5">จัดการสิทธิ์</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-white/[0.04]">
+              {filteredUsers.map((u) => (
+                <tr key={u.id} className="hover:bg-white/[0.02]">
+                  <td className="px-3 py-2.5 text-white font-mono">{u.email || u.id}</td>
+                  <td className="px-3 py-2.5 text-slate-300">{u.name || '-'}</td>
+                  <td className="px-3 py-2.5 text-center">
+                    {u.tier === 'guild' ? (
+                      <span className="inline-flex items-center gap-1 text-[11px] font-bold text-blue-300 bg-blue-500/10 px-2 py-0.5 rounded-full border border-blue-500/30">
+                        🏰 Guild Pro
+                      </span>
+                    ) : u.isVip ? (
+                      <span className="inline-flex items-center gap-1 text-[11px] font-bold text-amber-300 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/30">
+                        👑 VIP Member
+                      </span>
+                    ) : (
+                      <span className="text-[11px] text-slate-500">บุคคลทั่วไป</span>
+                    )}
+                  </td>
+                  <td className="px-3 py-2.5 text-slate-400">
+                    {u.vipExpiresAt ? fmtTime(u.vipExpiresAt) : u.isVip ? 'ตลอดชีพ / Auto-renew' : '-'}
+                  </td>
+                  <td className="px-3 py-2.5 text-right space-x-1.5">
+                    {u.isVip ? (
+                      <button
+                        onClick={() => handleRevoke(u.id, u.email)}
+                        disabled={busyAction}
+                        className="px-2.5 py-1 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[11px] font-semibold cursor-pointer"
+                      >
+                        ยกเลิกสิทธิ์
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => {
+                          setManualEmail(u.email || u.id);
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }}
+                        className="px-2.5 py-1 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[11px] font-semibold cursor-pointer"
+                      >
+                        + ให้สิทธิ์ VIP
+                      </button>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ================= CLOUD SYNC PROFILES PANEL =================
+function CloudPanel() {
+  const [profiles, setProfiles] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState('');
+  const [deletingFile, setDeletingFile] = useState(null);
+  const [msg, setMsg] = useState(null);
+
+  const loadProfiles = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await adminFetch('cloud-profiles');
+      setProfiles(res.profiles || []);
+    } catch (err) {
+      setMsg({ ok: false, text: err.message });
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadProfiles();
+  }, [loadProfiles]);
+
+  const handleDelete = async (filename) => {
+    if (!window.confirm(`ต้องการลบไฟล์ "${filename}" บน Cloud Storage ใช่หรือไม่?`)) return;
+    setDeletingFile(filename);
+    try {
+      const res = await adminFetch('delete-cloud-profile', {
+        method: 'POST',
+        body: { filename },
+      });
+      if (res.ok) {
+        setMsg({ ok: true, text: `ลบไฟล์ "${filename}" เรียบร้อยแล้ว` });
+        loadProfiles();
+      } else {
+        setMsg({ ok: false, text: res.error || 'ลบไฟล์ไม่สำเร็จ' });
+      }
+    } catch (err) {
+      setMsg({ ok: false, text: err.message });
+    } finally {
+      setDeletingFile(null);
+    }
+  };
+
+  const filtered = profiles.filter((p) => {
+    const q = search.trim().toLowerCase();
+    if (!q) return true;
+    return p.name?.toLowerCase().includes(q) || p.filename?.toLowerCase().includes(q);
+  });
+
+  const totalBytes = profiles.reduce((acc, p) => acc + (p.sizeBytes || 0), 0);
+
+  return (
+    <div className="space-y-5 animate-in fade-in duration-200">
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
+        <Stat
+          label="ไอดีบน Cloud ทั้งหมด"
+          value={`${profiles.length} ไอดี`}
+          sub="อัปโหลดผ่าน Cloud Profile Sync"
+          tone="text-cyan-300"
+        />
+        <Stat
+          label="ขนาดพื้นที่ที่ใช้"
+          value={kb(totalBytes)}
+          sub="Supabase Storage Bucket: swm-cloud"
+          tone="text-emerald-300"
+        />
+        <Stat
+          label="ระบบ CDN ทั่วโลก"
+          value="ออนไลน์ 24/7"
+          sub="เปิดบนมือถือได้โดยไม่ต้องเปิดคอม"
+          tone="text-fuchsia-300"
+        />
+      </div>
+
+      {msg && (
+        <div
+          className={`p-3 rounded-xl border flex items-center justify-between text-xs ${
+            msg.ok
+              ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-200'
+              : 'border-rose-500/40 bg-rose-500/10 text-rose-200'
+          }`}
+        >
+          <span>{msg.text}</span>
+          <button onClick={() => setMsg(null)} className="text-slate-400 hover:text-white cursor-pointer">✕</button>
+        </div>
+      )}
+
+      <div className={`${card} p-5 space-y-3`}>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <h3 className="text-sm font-bold text-white flex items-center gap-2">
+              <Cloud className="w-4 h-4 text-cyan-400" />
+              <span>รายการไฟล์โปรไฟล์ SWEX บนคลาวด์ ({filtered.length} รายการ)</span>
+            </h3>
+            <p className="text-xs text-slate-400 mt-0.5">
+              ไฟล์ที่ผู้เล่นซิงค์ไว้เพื่อเปิดดูผ่านมือถือหรือเน็ตนอกบ้าน
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <div className="relative w-full sm:w-56">
+              <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-2.5" />
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="ค้นหาชื่อไอดี..."
+                className="w-full pl-8 pr-3 py-1.5 rounded-xl bg-white/[0.04] border border-white/10 text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-cyan-400"
+              />
+            </div>
+            <button
+              onClick={loadProfiles}
+              disabled={loading}
+              className="p-2 rounded-xl bg-white/[0.05] text-slate-300 hover:text-white cursor-pointer"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
+            </button>
+          </div>
+        </div>
+
+        {filtered.length === 0 ? (
+          <div className="py-8 text-center text-xs text-slate-500">ไม่พบข้อมูลไฟล์โปรไฟล์</div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-xs">
+              <thead className="bg-white/[0.02] text-slate-400 border-b border-white/[0.06]">
+                <tr>
+                  <th className="text-left px-3 py-2.5">ชื่อไอดี / Passkey</th>
+                  <th className="text-left px-3 py-2.5">ชื่อไฟล์</th>
+                  <th className="text-right px-3 py-2.5">ขนาดไฟล์</th>
+                  <th className="text-left px-3 py-2.5">อัปเดตล่าสุด</th>
+                  <th className="text-right px-3 py-2.5">เครื่องมือ</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-white/[0.04]">
+                {filtered.map((p) => {
+                  const publicUrl = `https://cpcuyhfjnbpjvfdedspa.supabase.co/storage/v1/object/public/swm-cloud/profiles/${p.filename}`;
+                  return (
+                    <tr key={p.filename} className="hover:bg-white/[0.02]">
+                      <td className="px-3 py-2.5 font-bold text-cyan-300 font-mono">{p.name}</td>
+                      <td className="px-3 py-2.5 text-slate-400 font-mono text-[11px]">{p.filename}</td>
+                      <td className="px-3 py-2.5 text-right font-mono text-slate-300">{kb(p.sizeBytes)}</td>
+                      <td className="px-3 py-2.5 text-slate-400">{ago(p.updatedAt)}</td>
+                      <td className="px-3 py-2.5 text-right space-x-2">
+                        <a
+                          href={publicUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center gap-1 text-[11px] font-semibold text-cyan-300 hover:underline"
+                        >
+                          <ExternalLink className="w-3 h-3" /> ดู JSON
+                        </a>
+                        <button
+                          onClick={() => handleDelete(p.filename)}
+                          disabled={deletingFile === p.filename}
+                          className="px-2 py-1 rounded bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 text-[11px] font-semibold cursor-pointer"
+                        >
+                          {deletingFile === p.filename ? 'กำลังลบ...' : 'ลบ'}
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+

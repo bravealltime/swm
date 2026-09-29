@@ -1,7 +1,11 @@
 // /api/admin/<action> — back-office API. Every action except `settings` (public GET) requires an
 // admin (Supabase login + ADMIN_EMAILS). Vercel routes here via the [action] file name; the Vite dev
 // middleware calls handleAdmin() directly with the same arguments.
-import { requireAdmin, userFromToken, getUserDirectory, supabaseInfo, tableStatus, getSettings, saveSettings, aiLogs, aiStats, aiUsageGroups, datasetReport, deployInfo, githubInfo, workflowRuns, dispatchWorkflow } from '../_lib/admin.js';
+import {
+  requireAdmin, userFromToken, getUserDirectory, supabaseInfo, tableStatus, getSettings, saveSettings,
+  aiLogs, aiStats, aiUsageGroups, datasetReport, deployInfo, githubInfo, workflowRuns, dispatchWorkflow,
+  getStripePaymentsSummary, getVipUsersList, grantUserVip, revokeUserVip, getCloudProfilesList, deleteCloudProfileFile,
+} from '../_lib/admin.js';
 import { bangkokDay } from '../_lib/aiQuota.js';
 import { aiConfig, chat } from '../_lib/ai.js';
 import { adminSnapshots, setContributorFlag, deleteSnapshot } from '../_lib/guildRankings.js';
@@ -50,6 +54,36 @@ export async function handleAdmin({ action, method, body, token, query = {} }) {
   if (action === 'settings' && (method === 'PUT' || method === 'POST')) {
     const r = await saveSettings(body, auth.user.email);
     return r.ok ? { status: 200, json: { ok: true, settings: await getSettings({ fresh: true }) } } : { status: 400, json: { error: r.error } };
+  }
+
+  // --- Stripe & VIP Payments Management ---
+  if (action === 'payments') {
+    return { status: 200, json: await getStripePaymentsSummary() };
+  }
+
+  if (action === 'vip-users') {
+    return { status: 200, json: await getVipUsersList() };
+  }
+
+  if (action === 'grant-vip' && (method === 'POST' || method === 'PUT')) {
+    const res = await grantUserVip(body || {});
+    return { status: res.ok ? 200 : 400, json: res };
+  }
+
+  if (action === 'revoke-vip' && (method === 'POST' || method === 'DELETE')) {
+    const res = await revokeUserVip(body || {});
+    return { status: res.ok ? 200 : 400, json: res };
+  }
+
+  // --- Cloud Profile Sync Inspector ---
+  if (action === 'cloud-profiles') {
+    return { status: 200, json: await getCloudProfilesList() };
+  }
+
+  if (action === 'delete-cloud-profile' && (method === 'POST' || method === 'DELETE')) {
+    const filename = body?.filename || query?.filename || '';
+    const res = await deleteCloudProfileFile(filename);
+    return { status: res.ok ? 200 : 400, json: res };
   }
 
   if (action === 'logs') return { status: 200, json: await aiLogs({ limit: Number(query.limit) || 100 }) };

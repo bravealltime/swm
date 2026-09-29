@@ -384,3 +384,227 @@ export async function dispatchWorkflow(inputs = {}, workflowFile) {
 
 /** The hourly job that refreshes live_data without a commit (see .github/workflows/update-live-data.yml). */
 export const LIVE_WORKFLOW = 'update-live-data.yml';
+
+// --- Stripe & VIP Payments Management --------------------------------------------------------
+export async function getStripePaymentsSummary() {
+  try {
+    const { getStripe } = await import('./stripe.js');
+    const stripe = getStripe();
+    const pis = await stripe.paymentIntents.list({ limit: 40 });
+
+    let totalRevenueThb = 0;
+    let successfulCount = 0;
+
+    const transactions = (pis?.data || []).map((pi) => {
+      const amountThb = (pi.amount || 0) / 100;
+      if (pi.status === 'succeeded') {
+        totalRevenueThb += amountThb;
+        successfulCount++;
+      }
+      return {
+        id: pi.id,
+        type: 'payment_intent',
+        amount: amountThb,
+        currency: (pi.currency || 'thb').toUpperCase(),
+        status: pi.status,
+        method: pi.payment_method_types?.[0] || 'promptpay',
+        customerEmail: pi.receipt_email || pi.metadata?.userEmail || 'ลูกค้าพร้อมเพย์',
+        tier: pi.metadata?.tier || (amountThb >= 240 ? 'guild' : 'vip'),
+        planId: pi.metadata?.planId || 'monthly',
+        userId: pi.metadata?.userId || '',
+        createdAt: new Date(pi.created * 1000).toISOString(),
+      };
+    });
+
+    return {
+      ok: true,
+      configured: true,
+      totalRevenueThb,
+      successfulCount,
+      totalCount: transactions.length,
+      transactions,
+    };
+  } catch (err) {
+    return { ok: false, configured: false, error: err.message, transactions: [] };
+  }
+}
+
+export async function getVipUsersList() {
+  const url = supabaseUrl();
+  const key = serviceKey();
+  if (!url || !key) return { ok: false, users: [] };
+  try {
+    const res = await fetch(`${url}/auth/v1/admin/users?per_page=500`, {
+      headers: { apikey: key, Authorization: `Bearer ${key}` },
+    });
+    if (!res.ok) return { ok: false, users: [] };
+    const data = await res.json();
+    const users = (data.users || []).map((u) => {
+      const meta = u.user_metadata || {};
+      const isVip = Boolean(meta.is_vip || meta.tier === 'vip' || meta.tier === 'guild');
+      return {
+        id: u.id,
+        email: u.email || '',
+        name: meta.display_name || meta.name || '',
+        isVip,
+        tier: meta.tier || (isVip ? 'vip' : 'free'),
+        vipGrantedAt: meta.vip_granted_at || null,
+        vipExpiresAt: meta.vip_expires_at || null,
+        createdAt: u.created_at,
+        lastSignIn: u.last_sign_in_at,
+      };
+    });
+    return { ok: true, users };
+  } catch (err) {
+    return { ok: false, error: err.message, users: [] };
+  }
+}
+
+export async function grantUserVip({ userId, email, tier = 'vip', durationDays = 30 }) {
+  const url = supabaseUrl();
+  const key = serviceKey();
+  if (!url || !key) return { ok: false, error: 'ไม่มี SUPABASE_SERVICE_ROLE_KEY บนเซิร์ฟเวอร์' };
+
+  let targetId = userId;
+  if (!targetId && email) {
+    const usersRes = await fetch(`${url}/auth/v1/admin/users?per_page=500`, {
+      headers: { apikey: key, Authorization: `Bearer ${key}` },
+    });
+    const usersData = await usersRes.json();
+    const found = (usersData.users || []).find((u) => u.email?.toLowerCase() === email.toLowerCase());
+    if (found) targetId = found.id;
+  }
+
+  if (!targetId) {
+    return { ok: false, error: 'ไม่พบผู้ใช้จากอีเมลหรือ ID ที่ระบุ' };
+  }
+
+  try {
+    const now = new Date();
+    const expiresAt = durationDays === -1
+      ? null
+      : new Date(now.getTime() + durationDays * 24 * 60 * 60 * 1000).toISOString();
+
+    const updateRes = await fetch(`${url}/auth/v1/admin/users/${targetId}`, {
+      method: 'PUT',
+      headers: {
+        apikey: key,
+        Authorization: `Bearer ${key}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        user_metadata: {
+          tier,
+          role: tier,
+          is_vip: true,
+          vip_granted_at: now.toISOString(),
+          vip_expires_at: expiresAt,
+          vip_granted_by: 'admin_manual',
+        },
+      }),
+    });
+
+    if (!updateRes.ok) {
+      const err = await updateRes.json().catch(() => ({}));
+      return { ok: false, error: err.message || `HTTP ${updateRes.status}` };
+    }
+
+    return { ok: true, userId: targetId, tier, expiresAt };
+  } catch (err) {
+    return { ok: false, error: err.message };
+  }
+}
+
+export async function revokeUserVip({ userId, email }) {
+  const url = supabaseUrl();
+  const key = serviceKey();
+  if (!url || !key) return { ok: false, error: 'ไม่มี SUPABASE_SERVICE_ROLE_KEY บนเซิร์ฟเวอร์' };
+
+  let targetId = userId;
+  if (!targetId && email) {
+    const usersRes = await fetch(`${url}/auth/v1/admin/users?per_page=500`, {
+      headers: { apikey: key, Authorization: `Bearer ${key}` },
+    });
+    const usersData = await usersRes.json();
+    const found = (usersData.users || []).find((u) => u.email?.toLowerCase() === email.toLowerCase());
+    if (found) targetId = found.id;
+  }
+
+  if (!targetId) return { ok: false, error: 'ไม่พบผู้ใช้ที่ต้องการระงับสิทธิ์' };
+
+  try {
+    const updateRes = await fetch(`${url}/auth/v1/admin/users/${targetId}`, {
+      method: 'PUT',
+      headers: {
+        apikey: key,
+        Authorization: `Bearer ${key}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        user_metadata: {
+          tier: 'free',
+          role: 'user',
+          is_vip: false,
+          vip_revoked_at: new Date().toISOString(),
+        },
+      }),
+    });
+
+    if (!updateRes.ok) {
+      const err = await updateRes.json().catch(() => ({}));
+      return { ok: false, error: err.message || `HTTP ${updateRes.status}` };
+    }
+
+    return { ok: true, userId: targetId };
+  } catch (err) {
+    return { ok: false, error: err.message };
+  }
+}
+
+// --- Cloud Sync Profiles Inspector -----------------------------------------------------------
+export async function getCloudProfilesList() {
+  const url = supabaseUrl();
+  const key = serviceKey();
+  if (!url || !key) return { ok: false, profiles: [] };
+  try {
+    const res = await fetch(`${url}/storage/v1/object/list/swm-cloud`, {
+      method: 'POST',
+      headers: {
+        apikey: key,
+        Authorization: `Bearer ${key}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ prefix: 'profiles/', limit: 100 }),
+    });
+
+    if (!res.ok) return { ok: false, profiles: [] };
+    const files = await res.json();
+    const profiles = (Array.isArray(files) ? files : []).map((f) => ({
+      name: f.name.replace(/\.json$/i, ''),
+      filename: f.name,
+      sizeBytes: f.metadata?.size || 0,
+      updatedAt: f.updated_at || f.created_at,
+      mimetype: f.metadata?.mimetype || 'application/json',
+    }));
+
+    return { ok: true, count: profiles.length, profiles };
+  } catch (err) {
+    return { ok: false, error: err.message, profiles: [] };
+  }
+}
+
+export async function deleteCloudProfileFile(filename) {
+  const url = supabaseUrl();
+  const key = serviceKey();
+  if (!url || !key) return { ok: false, error: 'No Supabase credentials' };
+  try {
+    const cleanFile = filename.endsWith('.json') ? filename : `${filename}.json`;
+    const res = await fetch(`${url}/storage/v1/object/swm-cloud/profiles/${cleanFile}`, {
+      method: 'DELETE',
+      headers: { apikey: key, Authorization: `Bearer ${key}` },
+    });
+    return { ok: res.ok };
+  } catch (err) {
+    return { ok: false, error: err.message };
+  }
+}
