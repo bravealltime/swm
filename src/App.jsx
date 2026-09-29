@@ -74,7 +74,7 @@ function ViewLoading() {
 const RTA_VIEWS = ['rta', 'player-tracker', 'draft-explorer', 'rta-synergies', 'meta-dashboard', 'guardian', 'rta-replays'];
 
 function AppContent() {
-  const { isMember, isAdmin, isPaywallOpen, openPaywall, closePaywall } = useAuth();
+  const { isMember, isAdmin, isPaywallOpen, openPaywall, closePaywall, setMemberStatus } = useAuth();
   const [route, setRoute] = useState(() => parseLocation());
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -90,6 +90,17 @@ function AppContent() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const syncParam = params.get('sync') || params.get('profile') || params.get('box');
+    const paymentSuccess = params.get('payment_success');
+
+    if (paymentSuccess) {
+      setMemberStatus(true);
+      setSyncNotice('🎉 ยินดีด้วย! การชำระเงินผ่าน Stripe สำเร็จแล้ว สิทธิ์ VIP Member ถูกเปิดใช้งานทันที ขอบคุณที่ร่วมสนับสนุน SWM');
+      setTimeout(() => setSyncNotice(null), 10000);
+      try {
+        import('canvas-confetti').then((m) => m.default({ particleCount: 120, spread: 80, origin: { y: 0.6 } }));
+      } catch {}
+    }
+
     if (!syncParam) return;
     window.history.replaceState({}, '', window.location.pathname);
 

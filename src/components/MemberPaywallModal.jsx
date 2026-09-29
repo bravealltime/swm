@@ -18,10 +18,12 @@ import { VIP_PLANS } from '../utils/memberPolicy';
 import { useAuth } from '../contexts/AuthContext';
 
 export default function MemberPaywallModal({ isOpen, onClose }) {
-  const { isMember, setMemberStatus } = useAuth();
+  const { user, isMember, setMemberStatus } = useAuth();
   const [selectedPlan, setSelectedPlan] = useState('monthly');
   const [copied, setCopied] = useState(false);
   const [activatedSuccess, setActivatedSuccess] = useState(false);
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [checkoutError, setCheckoutError] = useState('');
 
   if (!isOpen) return null;
 
@@ -38,6 +40,33 @@ export default function MemberPaywallModal({ isOpen, onClose }) {
       setActivatedSuccess(false);
       onClose();
     }, 1200);
+  };
+
+  const handleStripeCheckout = async () => {
+    setCheckoutLoading(true);
+    setCheckoutError('');
+    try {
+      const res = await fetch('/api/stripe/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          planId: selectedPlan,
+          userId: user?.id || '',
+          userEmail: user?.email || '',
+          returnUrl: window.location.href,
+        }),
+      });
+      const data = await res.json();
+      if (data.ok && data.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error(data.message || 'ไม่สามารถเริ่มการชำระเงินผ่าน Stripe ได้');
+      }
+    } catch (err) {
+      console.error('Stripe checkout error:', err);
+      setCheckoutError(err.message || 'เกิดข้อผิดพลาดในการเชื่อมต่อ Stripe');
+      setCheckoutLoading(false);
+    }
   };
 
   return (
@@ -145,33 +174,59 @@ export default function MemberPaywallModal({ isOpen, onClose }) {
           })}
         </div>
 
+        {/* Error Alert if Stripe checkout fails */}
+        {checkoutError && (
+          <div className="mb-4 p-3 rounded-xl bg-rose-500/15 border border-rose-500/40 text-rose-300 text-xs">
+            ⚠️ {checkoutError}
+          </div>
+        )}
+
         {/* Action & Subscription Options */}
-        <div className="p-4 sm:p-5 rounded-2xl bg-slate-900/80 border border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="text-center sm:text-left space-y-0.5">
-            <div className="text-xs font-bold text-slate-200 flex items-center justify-center sm:justify-start gap-1.5">
-              <span>💳 สมัครสมาชิกผ่าน QR พร้อมเพย์ หรือ โอนเงิน</span>
+        <div className="p-4 sm:p-5 rounded-2xl bg-slate-900/80 border border-slate-800 flex flex-col gap-4">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div className="text-center sm:text-left space-y-0.5">
+              <div className="text-sm font-bold text-white flex items-center justify-center sm:justify-start gap-1.5">
+                <span>💳 ชำระเงินผ่านระบบ Stripe</span>
+                <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                  ปลอดภัย 100%
+                </span>
+              </div>
+              <p className="text-xs text-slate-400">
+                รองรับบัตรเครดิต/เดบิต, Apple Pay, Google Pay, และใบเสร็จรับเงิน/ใบกำกับภาษีอัตโนมัติ
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleStripeCheckout}
+              disabled={checkoutLoading}
+              className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 hover:from-amber-400 hover:to-yellow-400 text-slate-950 text-xs sm:text-sm font-black shadow-lg shadow-amber-500/25 transition-all cursor-pointer disabled:opacity-60"
+            >
+              <Crown className="w-4 h-4 fill-slate-950" />
+              <span>{checkoutLoading ? 'กำลังเปิดหน้าชำระเงิน...' : `ชำระเงิน ${selectedPlan === 'guild' ? '฿249' : '฿99'} / เดือน ผ่าน Stripe`}</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+
+          <div className="border-t border-slate-800/80 pt-3 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-slate-400">
+            <div className="flex items-center gap-2">
+              <span>หรือโอนตรงผ่านพร้อมเพย์:</span>
               <button
                 type="button"
                 onClick={handleCopyPromptPay}
-                className="text-[11px] text-amber-400 hover:text-amber-300 underline font-mono"
+                className="text-amber-400 hover:text-amber-300 underline font-mono cursor-pointer"
               >
-                {copied ? '✓ คัดลอกเลขแล้ว!' : 'คัดลอกเบอร์พร้อมเพย์'}
+                {copied ? '✓ คัดลอกเลขแล้ว!' : 'คัดลอกเบอร์พร้อมเพย์ (081-234-5678)'}
               </button>
             </div>
-            <p className="text-[11px] text-slate-400">
-              แจ้งสลิปเพื่อเปิดสิทธิ์ผ่านแชท หรือกดปุ่มเปิดทดลองใช้งานทันทีด้านล่าง
-            </p>
-          </div>
 
-          <div className="flex items-center gap-2 w-full sm:w-auto">
             <button
               type="button"
               onClick={handleQuickActivate}
               disabled={activatedSuccess}
-              className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 hover:from-amber-400 hover:to-yellow-400 text-slate-950 text-xs font-black shadow-lg shadow-amber-500/25 transition-all cursor-pointer disabled:opacity-60"
+              className="text-slate-400 hover:text-amber-300 underline cursor-pointer"
             >
-              <Crown className="w-4 h-4 text-slate-950 fill-slate-950" />
-              <span>{activatedSuccess ? '✓ ปลดล็อก VIP สำเร็จ!' : isMember ? 'ต่ออายุสมาชิก' : 'เปิดใช้งานสิทธิ์ VIP ทันที'}</span>
+              {activatedSuccess ? '✓ ปลดล็อก VIP สำเร็จ!' : isMember ? 'สลับปิด VIP (ทดสอบ)' : '🧪 ทดลองเปิดสิทธิ์ VIP ทันที (โหมดทดสอบ)'}
             </button>
           </div>
         </div>
