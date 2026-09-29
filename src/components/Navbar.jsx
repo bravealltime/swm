@@ -32,7 +32,10 @@ import { isFreeView } from '../utils/memberPolicy';
 
 const NAV_ITEMS = [
   { id: 'dashboard', label: 'หน้าแรก', icon: Home },
-  { id: 'my-box', label: 'กล่องไอดี & ฟาร์มสด', icon: Sparkles, group: ['my-box', 'live-farm-monitor', 'ai-account-audit'], badge: 'ใหม่' },
+  { id: 'catalog', label: 'มอนสเตอร์ 940 ตัว', icon: BookOpen },
+  { id: 'codes', label: 'โค้ดแจกไอเทม', icon: Gift, badge: 'ฟรี' },
+  { id: 'balance', label: 'Balance Patch', icon: History },
+  { id: 'my-box', label: 'กล่องไอดี', icon: Package },
   { id: '3mdc', label: '3MDC Siege', icon: Shield, group: ['3mdc', 'where2use', '3mdc-stats', 'siege-battles'] },
   { id: 'rta', label: 'RTA Analytics', icon: Trophy, group: ['rta', 'meta-dashboard', 'rta-synergies', 'guardian', 'rta-replays'] },
   { id: 'player-tracker', label: 'ค้นหาผู้เล่น', icon: Search },
