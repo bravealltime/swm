@@ -19,22 +19,7 @@ export default function SwRatingDashboard({ box, onOpenAiCoach, onNavigate }) {
     return evaluateSwRating(box);
   }, [box]);
 
-  if (!ratingData) return null;
-
-  const {
-    summaryDate,
-    jsonImportDate,
-    wizard,
-    expectedRank,
-    nowRank,
-    nowPoints,
-    estPoints,
-    scores,
-    artifactRating,
-    runeRating,
-    monsterSummary,
-    verification,
-  } = ratingData;
+  const monsterSummary = ratingData?.monsterSummary || [];
 
   const filteredMonsters = useMemo(() => {
     let list = [...monsterSummary];
@@ -53,6 +38,22 @@ export default function SwRatingDashboard({ box, onOpenAiCoach, onNavigate }) {
     });
     return list;
   }, [monsterSummary, monsterSearch, sortBy, sortAsc]);
+
+  if (!ratingData) return null;
+
+  const {
+    summaryDate,
+    jsonImportDate,
+    wizard,
+    expectedRank,
+    nowRank,
+    nowPoints,
+    estPoints,
+    scores,
+    artifactRating,
+    runeRating,
+    verification,
+  } = ratingData;
 
   // Star Icon Helper
   const renderStars = (tier, countOverride) => {
