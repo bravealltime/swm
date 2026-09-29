@@ -261,8 +261,8 @@ export default function Navbar({ currentView, onNavigate, onOpenSearch, onOpenMe
             </div>
           </nav>
 
-          {/* Right Actions: Compact & Balanced */}
-          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+          {/* Right Actions: Clean, Minimal & Never Cluttered */}
+          <div className="flex items-center gap-2 shrink-0">
             {/* Quick Search */}
             <button
               type="button"
@@ -278,31 +278,7 @@ export default function Navbar({ currentView, onNavigate, onOpenSearch, onOpenMe
               </kbd>
             </button>
 
-            {/* Cloud Sync (Compact Icon) */}
-            <button
-              type="button"
-              onClick={onOpenSync}
-              className="p-2 sm:px-2.5 sm:py-2 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 hover:text-white text-xs font-bold transition-all cursor-pointer shadow-sm shadow-cyan-500/5 hover:scale-[1.03]"
-              title="ซิงค์ข้อมูลไอดีข้ามอุปกรณ์ (Cloud Sync)"
-              aria-label="ซิงค์ข้อมูลไอดีข้ามอุปกรณ์"
-            >
-              <Cloud className="w-4 h-4 text-cyan-400 animate-pulse" />
-              <span className="hidden 2xl:inline ml-1 text-xs">ซิงค์</span>
-            </button>
-
-            {/* Install PWA (Compact Icon) */}
-            <button
-              type="button"
-              onClick={() => window.dispatchEvent(new CustomEvent('swm:open-install'))}
-              className="hidden sm:flex items-center p-2 sm:px-2.5 sm:py-2 rounded-xl bg-blue-600/15 hover:bg-blue-600/25 border border-blue-500/30 text-blue-300 hover:text-white text-xs font-bold transition-all cursor-pointer shadow-sm shadow-blue-500/5 hover:scale-[1.03]"
-              title="ติดตั้ง SWM เป็นแอปมือถือ/Desktop (PWA)"
-              aria-label="ติดตั้งแอป SWM"
-            >
-              <Smartphone className="w-4 h-4 text-blue-400" />
-              <span className="hidden 2xl:inline ml-1 text-xs">แอป</span>
-            </button>
-
-            {/* Admin Switch (Compact) */}
+            {/* Admin Switch (Minimal icon-only, only visible if Admin) */}
             {isAdmin && (
               <button
                 type="button"
@@ -314,50 +290,48 @@ export default function Navbar({ currentView, onNavigate, onOpenSearch, onOpenMe
                 }}
                 role="switch"
                 aria-checked={adminMode}
-                className={`flex items-center gap-1.5 p-2 sm:px-2.5 sm:py-1.5 rounded-xl border text-xs font-bold transition-all cursor-pointer ${
+                className={`p-2 rounded-xl border text-xs font-bold transition-all cursor-pointer ${
                   adminMode
-                    ? 'bg-fuchsia-600/25 border-fuchsia-400/60 text-fuchsia-100 shadow-md shadow-fuchsia-500/20'
-                    : 'bg-white/[0.04] border-white/10 text-slate-300 hover:text-white'
+                    ? 'bg-fuchsia-600/25 border-fuchsia-400/60 text-fuchsia-300 shadow-md shadow-fuchsia-500/20'
+                    : 'bg-white/[0.04] border-white/10 text-slate-400 hover:text-white'
                 }`}
-                title={adminMode ? 'กำลังอยู่ในโหมดแอดมิน — คลิกเพื่อกลับหน้าปกติ' : 'สลับไปโหมดแอดมิน (หลังบ้าน)'}
+                title={adminMode ? 'โหมดแอดมิน (คลิกเพื่อกลับหน้าปกติ)' : 'สลับไปโหมดแอดมิน (หลังบ้าน)'}
+                aria-label="สลับโหมดแอดมิน"
               >
-                <Shield className={`w-3.5 h-3.5 ${adminMode ? 'text-fuchsia-300 animate-pulse' : 'text-slate-400'}`} />
-                <span className="hidden 2xl:inline text-xs">{adminMode ? 'แอดมิน' : 'โหมดปกติ'}</span>
+                <Shield className={`w-4 h-4 ${adminMode ? 'text-fuchsia-300 animate-pulse' : 'text-slate-400'}`} />
               </button>
             )}
 
-            {/* VIP Status / Upgrade Button */}
-            {!isMember ? (
-              <button
-                type="button"
-                onClick={openPaywall}
-                className="flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 hover:from-amber-400 hover:to-yellow-400 text-slate-950 text-xs font-black shadow-lg shadow-amber-500/25 transition-all cursor-pointer hover:scale-[1.03]"
-                title="อัปเกรดเป็นสมาชิก VIP ปลดล็อกทุกระบบ"
-                aria-label="อัปเกรด VIP"
-              >
-                <Crown className="w-3.5 h-3.5 fill-slate-950" />
-                <span>VIP</span>
-              </button>
-            ) : (
-              <span className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-amber-500/15 border border-amber-400/40 text-amber-300 font-extrabold text-xs">
-                <Crown className="w-3.5 h-3.5 fill-amber-400" />
-                <span className="hidden sm:inline">VIP</span>
-              </span>
-            )}
+            {/* VIP Status / Upgrade Button — ALWAYS CLICKABLE */}
+            <button
+              type="button"
+              onClick={openPaywall}
+              className={`flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs font-black transition-all cursor-pointer shadow-md hover:scale-[1.03] ${
+                isMember
+                  ? 'bg-gradient-to-r from-amber-500/20 via-yellow-500/25 to-amber-500/20 border border-amber-400/50 text-amber-300 hover:border-amber-300 shadow-amber-500/10'
+                  : 'bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 hover:from-amber-400 hover:to-yellow-400 text-slate-950 shadow-amber-500/25'
+              }`}
+              title={isMember ? 'บัญชี VIP Member (คลิกเพื่อดูสิทธิ์ / จัดการแพ็กเกจ)' : 'อัปเกรดเป็นสมาชิก VIP ปลดล็อกทุกระบบ'}
+              aria-label="จัดการสิทธิ์ VIP"
+            >
+              <Crown className={`w-3.5 h-3.5 ${isMember ? 'text-amber-400 fill-amber-400' : 'fill-slate-950'}`} />
+              <span>VIP</span>
+              {isMember && <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />}
+            </button>
 
             {/* User Profile / Auth */}
             {user ? (
               <button
                 type="button"
                 onClick={onOpenAuth}
-                className="flex items-center gap-1.5 sm:gap-2 px-2 py-1.5 sm:px-2.5 rounded-xl bg-cyan-950/70 hover:bg-cyan-900/70 border border-cyan-400/50 text-white text-xs font-bold transition-all shadow-md cursor-pointer hover:scale-[1.02]"
+                className="flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl bg-cyan-950/70 hover:bg-cyan-900/70 border border-cyan-400/50 text-white text-xs font-bold transition-all shadow-md cursor-pointer hover:scale-[1.02]"
                 title={`เข้าสู่ระบบด้วย ${user.email} (คลิกเพื่อดูโปรไฟล์หรือออกจากระบบ)`}
                 aria-label="โปรไฟล์ผู้ใช้"
               >
                 <div className="w-5 h-5 rounded-full bg-gradient-to-tr from-cyan-400 to-blue-500 flex items-center justify-center text-[10px] font-bold text-white uppercase shadow-sm">
                   {user.email ? user.email.slice(0, 1) : 'U'}
                 </div>
-                <span className="max-w-[75px] sm:max-w-[95px] truncate text-cyan-200 text-xs">
+                <span className="max-w-[75px] sm:max-w-[100px] truncate text-cyan-200 text-xs">
                   {user.user_metadata?.display_name || user.email?.split('@')[0]}
                 </span>
                 <span className="relative flex h-2 w-2 shrink-0">
@@ -369,7 +343,7 @@ export default function Navbar({ currentView, onNavigate, onOpenSearch, onOpenMe
               <button
                 type="button"
                 onClick={onOpenAuth}
-                className="flex items-center gap-1.5 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl bg-gradient-to-r from-blue-600/30 to-cyan-600/30 hover:from-blue-600/40 hover:to-cyan-600/40 border border-cyan-500/40 text-cyan-200 hover:text-white text-xs font-bold transition-all cursor-pointer shadow-lg shadow-cyan-500/10 hover:scale-[1.02]"
+                className="flex items-center gap-1.5 px-3 py-1.5 sm:px-3 sm:py-2 rounded-xl bg-gradient-to-r from-blue-600/30 to-cyan-600/30 hover:from-blue-600/40 hover:to-cyan-600/40 border border-cyan-500/40 text-cyan-200 hover:text-white text-xs font-bold transition-all cursor-pointer shadow-lg shadow-cyan-500/10 hover:scale-[1.02]"
                 title="เข้าสู่ระบบคลาวด์เพื่อซิงค์ข้อมูลทั่วโลก"
                 aria-label="เข้าสู่ระบบ"
               >
@@ -383,12 +357,11 @@ export default function Navbar({ currentView, onNavigate, onOpenSearch, onOpenMe
               type="button"
               onClick={onOpenMenu}
               aria-haspopup="dialog"
-              className="flex items-center gap-1.5 p-2 sm:px-2.5 sm:py-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-white/20 text-slate-300 hover:text-white text-xs font-bold transition-colors cursor-pointer"
+              className="p-2 sm:px-2.5 sm:py-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-white/20 text-slate-300 hover:text-white text-xs font-bold transition-colors cursor-pointer"
               title="เปิดสารบัญระบบทั้งหมด"
               aria-label="เปิดสารบัญระบบทั้งหมด"
             >
               <Menu className="w-4 h-4" />
-              <span className="hidden 2xl:inline text-xs">สารบัญ</span>
             </button>
           </div>
 

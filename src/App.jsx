@@ -119,7 +119,7 @@ function AppContent() {
         console.warn('Cloud profile sync warning:', err);
       }
     })();
-  }, []);
+  }, [setMemberStatus]);
 
   // Announcement / maintenance banner set from the back-office
   const [site, setSite] = useState(null);
