@@ -30,56 +30,62 @@ import { buildUrl } from '../router';
 import { useAuth } from '../contexts/AuthContext';
 import { isFreeView } from '../utils/memberPolicy';
 
-const NAV_ITEMS = [
+// 4 Core primary tabs always visible directly in the top bar
+const CORE_NAV_ITEMS = [
   { id: 'dashboard', label: 'หน้าแรก', icon: Home },
-  { id: 'catalog', label: 'มอนสเตอร์ 940 ตัว', icon: BookOpen },
-  { id: 'codes', label: 'โค้ดแจกไอเทม', icon: Gift, badge: 'ฟรี' },
-  { id: 'balance', label: 'Balance Patch', icon: History },
+  { id: 'catalog', label: 'มอนสเตอร์', icon: BookOpen, badge: '940' },
   { id: 'my-box', label: 'กล่องไอดี', icon: Package },
-  { id: '3mdc', label: '3MDC Siege', icon: Shield, group: ['3mdc', 'where2use', '3mdc-stats', 'siege-battles'] },
-  { id: 'rta', label: 'RTA Analytics', icon: Trophy, group: ['rta', 'meta-dashboard', 'rta-synergies', 'guardian', 'rta-replays'] },
-  { id: 'player-tracker', label: 'ค้นหาผู้เล่น', icon: Search },
-  { id: 'draft-explorer', label: 'จำลองดราฟต์ 5v5', icon: Swords },
+  { id: 'codes', label: 'โค้ดแจก', icon: Gift, badge: 'ฟรี' },
 ];
 
-const TOOL_ITEMS = [
-  { id: 'ai-account-audit', label: '🤖 AI วินิจฉัยสุขภาพไอดี (Health Check)', desc: 'ตรวจสปีด Swift/Violent & จัดอันดับ RTA', icon: Sparkles },
-  { id: 'live-farm-monitor', label: '📡 จอตรวจจับการฟาร์มสด (Live Monitor)', desc: 'เช็คดรอปรูน Abyss สด พร้อม Keep/Sell Advisor', icon: Radio },
-  { id: 'my-box', label: 'กล่องมอนสเตอร์ของฉัน (My Box)', desc: 'นำเข้า SWEX → ทีมที่สร้างได้', icon: Package },
-  { id: 'rta-replays', label: '🎬 โรงหนังรีเพลย์ RTA (SWRT Replays)', desc: 'ดราฟต์ 60 แมตช์ G3/Legend & วิเคราะห์ชนะ', icon: Trophy },
-  { id: 'siege-battles', label: '🏰 ศูนย์กลางสงคราม Siege (Global Hub)', desc: 'แมตช์สด 4 เซิร์ฟเวอร์ & สถิติชนะ 90%+', icon: Shield },
-  { id: 'guardian', label: 'อันดับ Guardian คนไทย & เมต้าจริง', desc: 'จากสถิติการแข่งขันระดับ Guardian จริง', icon: Trophy },
+// PVP & Guild Siege grouped dropdown
+const PVP_NAV_ITEMS = [
+  { id: '3mdc', label: '3MDC Siege (ทีมแก้ทาง)', desc: 'สูตรทีมแก้ทางยึดเกาะ 1,500+ สูตร', icon: Shield, free: true },
+  { id: 'rta', label: 'RTA Analytics & สถิติสด', desc: 'Pick / Win / Ban ซีซั่น 38 ระดับโลก', icon: Trophy },
+  { id: 'draft-explorer', label: 'จำลองดราฟต์ 5v5', desc: 'ฝึกซ้อม Pick & Counter Draft', icon: Swords },
+  { id: 'player-tracker', label: 'ค้นหาสถิติผู้เล่น (Tracker)', desc: 'สถิติ RTA สด & มอนสเตอร์หลัก', icon: Search },
+  { id: 'balance', label: 'Balance Patch ภาษาไทย', desc: 'สรุปปรับสมดุลมอนสเตอร์ล่าสุด', icon: History, free: true },
   { id: 'arena', label: 'ทีมบุก & ตั้งรับ Arena (AO/AD)', desc: 'สูตรบุกเร็ว 15 วิ & ถ่วงเวลา Rush Hour', icon: Swords },
+  { id: 'guardian', label: 'อันดับ Guardian คนไทย & เมต้าจริง', desc: 'จากสถิติการแข่งขัน Guardian จริง', icon: Award },
+];
+
+// Tools grouped dropdown
+const TOOL_NAV_ITEMS = [
+  { id: 'speed', label: 'จูนสปีดเทิร์น (Speed Tuner)', desc: 'Tick & Speed Tuning ป้องกันแซง', icon: Gauge },
   { id: 'artifact', label: 'ดาเมจเสริมอาร์ติแฟกต์', desc: 'True Damage Optimizer', icon: Sparkles },
-  { id: 'speed', label: 'จูนสปีดเทิร์น (Speed Tuner)', desc: 'Tick & Speed Tuning', icon: Gauge },
-  { id: 'tier-list-maker', label: 'สร้าง Tier List RTA/Siege', desc: 'Drag & Drop Builder', icon: Award },
+  { id: 'live-farm-monitor', label: '📡 จอตรวจจับการฟาร์มสด', desc: 'เช็คดรอปรูน Abyss สด พร้อม Keep/Sell', icon: Radio },
+  { id: 'ai-account-audit', label: '🤖 AI วินิจฉัยสุขภาพไอดี', desc: 'ตรวจสปีด Swift/Violent & จัดเกรด', icon: Sparkles },
   { id: 'dungeons', label: 'ทีมฟาร์มดันเจี้ยน Abyss', desc: 'Golem, Dragon, Necro Hard', icon: Cpu },
-  { id: 'catalog', label: 'สารานุกรมมอนสเตอร์', desc: 'Skill Multipliers & Details', icon: BookOpen },
-  { id: 'trending', label: 'สถิติเทรนด์ทั่วโลก', desc: 'Meta Trends & Defense Stats', icon: TrendingUp },
+  { id: 'tier-list-maker', label: 'สร้าง Tier List RTA/Siege', desc: 'Drag & Drop Builder', icon: Award },
+  { id: 'quiz', label: 'ทายมอนจากสกิล (เกมรายวัน)', desc: 'มินิเกมทายมอนสเตอร์สะสมแต้ม', icon: Sparkles, free: true },
   { id: 'siege-calculator', label: 'คำนวณแต้มกิลด์วอร์ Siege', desc: 'Base Points & Score Calculator', icon: Calculator },
-  { id: 'codes', label: 'โค้ดแจกไอเทมประจำเดือน', desc: 'Active Redeem Codes', icon: Gift },
-  { id: 'balance', label: 'สรุป Balance Patch ภาษาไทย', desc: 'Patch Notes Breakdown', icon: History },
+  { id: 'trending', label: 'สถิติเทรนด์ทั่วโลก', desc: 'Meta Trends & Defense Stats', icon: TrendingUp },
   { id: 'recruit', label: 'กระดานกิลด์รับสมัคร', desc: 'Guild Recruitment Board', icon: UserPlus },
 ];
 
-const PRIMARY_IDS = new Set(NAV_ITEMS.flatMap((i) => i.group || [i.id]));
+const PVP_IDS = new Set(PVP_NAV_ITEMS.map((i) => i.id));
+const TOOL_IDS = new Set(TOOL_NAV_ITEMS.map((i) => i.id));
 
 export default function Navbar({ currentView, onNavigate, onOpenSearch, onOpenMenu, onOpenSync, onOpenAuth }) {
   const { user, isAdmin, isMember, openPaywall, adminMode, setAdminMode } = useAuth();
-  const [toolsOpen, setToolsOpen] = useState(false);
-  const dropdownRef = useRef(null);
+  const [activeDropdown, setActiveDropdown] = useState(null); // 'pvp' | 'tools' | null
+  const navRef = useRef(null);
 
-  const visibleNavItems = NAV_ITEMS.filter((i) => isMember || isFreeView(i.id));
-  const visibleToolItems = TOOL_ITEMS.filter((i) => isMember || isFreeView(i.id));
+  const visibleCoreItems = CORE_NAV_ITEMS.filter((i) => isMember || isFreeView(i.id));
+  const visiblePvpItems = PVP_NAV_ITEMS.filter((i) => isMember || isFreeView(i.id));
+  const visibleToolItems = TOOL_NAV_ITEMS.filter((i) => isMember || isFreeView(i.id));
 
-  // Close the tools dropdown on outside click or Escape
+  const isPvpActive = PVP_IDS.has(currentView) || ['rta-synergies', 'meta-dashboard', 'rta-replays', 'where2use', '3mdc-stats', 'siege-battles'].includes(currentView);
+  const isToolActive = TOOL_IDS.has(currentView);
+
+  // Close dropdown on outside click or Escape
   useEffect(() => {
-    if (!toolsOpen) return;
+    if (!activeDropdown) return;
     const onPointerDown = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) setToolsOpen(false);
+      if (navRef.current && !navRef.current.contains(e.target)) setActiveDropdown(null);
     };
     const onKeyDown = (e) => {
-      if (e.key === 'Escape') setToolsOpen(false);
+      if (e.key === 'Escape') setActiveDropdown(null);
     };
     document.addEventListener('mousedown', onPointerDown);
     document.addEventListener('keydown', onKeyDown);
@@ -87,36 +93,35 @@ export default function Navbar({ currentView, onNavigate, onOpenSearch, onOpenMe
       document.removeEventListener('mousedown', onPointerDown);
       document.removeEventListener('keydown', onKeyDown);
     };
-  }, [toolsOpen]);
+  }, [activeDropdown]);
 
   const go = (e, view) => {
     e.preventDefault();
     onNavigate(view);
-    setToolsOpen(false);
+    setActiveDropdown(null);
   };
 
-  const isToolActive = !PRIMARY_IDS.has(currentView);
-
   return (
-    <header className="sticky top-0 z-40 w-full bg-[#080c14]/90 backdrop-blur-2xl border-b border-white/[0.08] shadow-2xl">
-      <div className="max-w-[1780px] 2xl:max-w-[1880px] mx-auto px-3 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 gap-3">
+    <header className="sticky top-0 z-40 w-full bg-[#080c14]/92 backdrop-blur-2xl border-b border-white/[0.08] shadow-2xl">
+      <div className="max-w-[1780px] 2xl:max-w-[1880px] mx-auto px-3 sm:px-5 lg:px-6">
+        <div className="flex items-center justify-between h-16 gap-2 sm:gap-4">
 
-          {/* Brand */}
+          {/* Left: Brand */}
           <a
             href="/"
             onClick={(e) => go(e, 'dashboard')}
-            className="flex items-center shrink-0 rounded-lg"
+            className="flex items-center shrink-0 rounded-lg hover:opacity-90 transition-opacity"
             aria-label="SWM หน้าแรก"
           >
             <SwmLogo size="sm" />
           </a>
 
-          {/* Primary navigation (desktop) */}
-          <nav aria-label="เมนูหลัก" className="hidden lg:flex items-center gap-1">
-            {visibleNavItems.map((item) => {
+          {/* Center: Clean Pro Navigation (4 Core Hubs + 2 Smart Dropdowns) */}
+          <nav aria-label="เมนูหลัก" ref={navRef} className="hidden lg:flex items-center gap-1 xl:gap-1.5">
+            {/* 4 Core Tabs */}
+            {visibleCoreItems.map((item) => {
               const Icon = item.icon;
-              const isActive = (item.group || [item.id]).includes(currentView);
+              const isActive = currentView === item.id;
               return (
                 <a
                   key={item.id}
@@ -124,16 +129,16 @@ export default function Navbar({ currentView, onNavigate, onOpenSearch, onOpenMe
                   onClick={(e) => go(e, item.id)}
                   aria-current={isActive ? 'page' : undefined}
                   title={item.label}
-                  className={`relative flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-colors ${
+                  className={`relative flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-colors ${
                     isActive
-                      ? 'bg-blue-600/20 text-white border border-blue-500/40'
-                      : 'text-slate-300 hover:text-white hover:bg-white/[0.05] border border-transparent'
+                      ? 'bg-blue-600/20 text-white border border-blue-500/40 shadow-sm shadow-blue-500/10'
+                      : 'text-slate-300 hover:text-white hover:bg-white/[0.06] border border-transparent'
                   }`}
                 >
                   <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-blue-400' : 'text-slate-400'}`} />
-                  <span className="hidden xl:inline">{item.label}</span>
+                  <span>{item.label}</span>
                   {item.badge && (
-                    <span className="hidden xl:inline-block px-1.5 py-0.2 rounded text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                    <span className="px-1.5 py-0.2 rounded text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
                       {item.badge}
                     </span>
                   )}
@@ -141,31 +146,88 @@ export default function Navbar({ currentView, onNavigate, onOpenSearch, onOpenMe
               );
             })}
 
-            {/* Tools dropdown */}
-            <div className="relative" ref={dropdownRef}>
+            {/* PVP & Guild Dropdown */}
+            <div className="relative">
               <button
-                onClick={() => setToolsOpen((o) => !o)}
+                type="button"
+                onClick={() => setActiveDropdown(activeDropdown === 'pvp' ? null : 'pvp')}
                 aria-haspopup="menu"
-                aria-expanded={toolsOpen}
-                title="เครื่องมือ"
+                aria-expanded={activeDropdown === 'pvp'}
                 className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-colors cursor-pointer ${
-                  isToolActive || toolsOpen
-                    ? 'bg-white/10 text-white border border-white/20'
-                    : 'text-slate-300 hover:text-white hover:bg-white/[0.05] border border-transparent'
+                  isPvpActive || activeDropdown === 'pvp'
+                    ? 'bg-blue-600/20 text-white border border-blue-500/40'
+                    : 'text-slate-300 hover:text-white hover:bg-white/[0.06] border border-transparent'
                 }`}
               >
-                <Wrench className="w-4 h-4 text-slate-400" />
-                <span className="hidden xl:inline">เครื่องมือ</span>
-                <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform ${toolsOpen ? 'rotate-180' : ''}`} />
+                <Swords className={`w-4 h-4 shrink-0 ${isPvpActive ? 'text-blue-400' : 'text-slate-400'}`} />
+                <span>กิลด์ & RTA</span>
+                <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-150 ${activeDropdown === 'pvp' ? 'rotate-180' : ''}`} />
               </button>
 
-              {toolsOpen && (
+              {activeDropdown === 'pvp' && (
                 <div
                   role="menu"
-                  className="absolute top-full left-0 mt-2 w-80 bg-[#0a0f19]/95 backdrop-blur-2xl border border-white/10 rounded-2xl p-2.5 shadow-2xl z-50 animate-in fade-in slide-in-from-top-2 duration-150 grid gap-1"
+                  className="absolute top-full left-0 mt-2 w-72 bg-[#090e18]/95 backdrop-blur-2xl border border-white/10 rounded-2xl p-2 shadow-2xl z-50 animate-in fade-in slide-in-from-top-2 duration-150 grid gap-1"
                 >
-                  <div className="px-3 py-1.5 text-xs font-bold text-slate-400 uppercase tracking-wider">
-                    เครื่องมือ & ฐานข้อมูล PVE/PVP
+                  <div className="px-3 py-1.5 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                    ศึกยึดเกาะ & เวิลด์อารีน่า
+                  </div>
+                  {visiblePvpItems.map((item) => {
+                    const ItemIcon = item.icon;
+                    const isActive = currentView === item.id;
+                    return (
+                      <a
+                        key={item.id}
+                        role="menuitem"
+                        href={buildUrl(item.id)}
+                        onClick={(e) => go(e, item.id)}
+                        className={`flex items-start gap-2.5 px-3 py-2 rounded-xl text-left transition-colors group ${
+                          isActive ? 'bg-blue-600/20 border border-blue-500/30' : 'hover:bg-white/[0.06]'
+                        }`}
+                      >
+                        <div className="p-1.5 rounded-lg bg-white/[0.04] border border-white/[0.06] text-slate-400 group-hover:text-blue-400 group-hover:border-blue-500/30 transition-colors shrink-0 mt-0.5">
+                          <ItemIcon className="w-3.5 h-3.5" />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="text-xs font-bold text-slate-200 group-hover:text-white truncate">
+                            {item.label}
+                          </div>
+                          <div className="text-[11px] text-slate-400 truncate">
+                            {item.desc}
+                          </div>
+                        </div>
+                      </a>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            {/* Tools Dropdown */}
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setActiveDropdown(activeDropdown === 'tools' ? null : 'tools')}
+                aria-haspopup="menu"
+                aria-expanded={activeDropdown === 'tools'}
+                className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-colors cursor-pointer ${
+                  isToolActive || activeDropdown === 'tools'
+                    ? 'bg-blue-600/20 text-white border border-blue-500/40'
+                    : 'text-slate-300 hover:text-white hover:bg-white/[0.06] border border-transparent'
+                }`}
+              >
+                <Wrench className={`w-4 h-4 shrink-0 ${isToolActive ? 'text-blue-400' : 'text-slate-400'}`} />
+                <span>เครื่องมือ</span>
+                <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-150 ${activeDropdown === 'tools' ? 'rotate-180' : ''}`} />
+              </button>
+
+              {activeDropdown === 'tools' && (
+                <div
+                  role="menu"
+                  className="absolute top-full left-0 mt-2 w-72 bg-[#090e18]/95 backdrop-blur-2xl border border-white/10 rounded-2xl p-2 shadow-2xl z-50 animate-in fade-in slide-in-from-top-2 duration-150 grid gap-1 max-h-[75vh] overflow-y-auto"
+                >
+                  <div className="px-3 py-1.5 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                    เครื่องมือช่วยเล่น & วิเคราะห์
                   </div>
                   {visibleToolItems.map((tool) => {
                     const ToolIcon = tool.icon;
@@ -176,17 +238,20 @@ export default function Navbar({ currentView, onNavigate, onOpenSearch, onOpenMe
                         role="menuitem"
                         href={buildUrl(tool.id)}
                         onClick={(e) => go(e, tool.id)}
-                        aria-current={isActive ? 'page' : undefined}
-                        className={`flex items-center gap-3 px-3 py-2 rounded-xl text-left transition-colors group ${
-                          isActive ? 'bg-blue-600/15' : 'hover:bg-white/[0.06]'
+                        className={`flex items-start gap-2.5 px-3 py-2 rounded-xl text-left transition-colors group ${
+                          isActive ? 'bg-blue-600/20 border border-blue-500/30' : 'hover:bg-white/[0.06]'
                         }`}
                       >
-                        <div className="p-1.5 rounded-lg bg-white/[0.04] border border-white/[0.06] text-slate-400 group-hover:text-blue-400 group-hover:border-blue-500/30 transition-colors">
-                          <ToolIcon className="w-4 h-4" />
+                        <div className="p-1.5 rounded-lg bg-white/[0.04] border border-white/[0.06] text-slate-400 group-hover:text-blue-400 group-hover:border-blue-500/30 transition-colors shrink-0 mt-0.5">
+                          <ToolIcon className="w-3.5 h-3.5" />
                         </div>
-                        <div>
-                          <div className="text-xs font-bold text-slate-200 group-hover:text-white transition-colors">{tool.label}</div>
-                          <div className="text-xs text-slate-400">{tool.desc}</div>
+                        <div className="min-w-0">
+                          <div className="text-xs font-bold text-slate-200 group-hover:text-white truncate">
+                            {tool.label}
+                          </div>
+                          <div className="text-[11px] text-slate-400 truncate">
+                            {tool.desc}
+                          </div>
                         </div>
                       </a>
                     );
@@ -196,109 +261,134 @@ export default function Navbar({ currentView, onNavigate, onOpenSearch, onOpenMe
             </div>
           </nav>
 
-          {/* Right actions */}
-          <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+          {/* Right Actions: Compact & Balanced */}
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+            {/* Quick Search */}
+            <button
+              type="button"
+              onClick={onOpenSearch}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-white/20 text-slate-300 hover:text-white text-xs font-medium transition-colors cursor-pointer"
+              title="ค้นหาด่วน (Ctrl+K)"
+              aria-label="ค้นหาด่วน"
+            >
+              <Search className="w-4 h-4 text-slate-400" />
+              <span className="hidden xl:inline text-slate-400 text-xs">ค้นหา...</span>
+              <kbd className="hidden 2xl:inline-block px-1.5 py-0.2 text-[10px] font-mono font-bold bg-[#070b12] text-slate-400 border border-white/10 rounded">
+                Ctrl K
+              </kbd>
+            </button>
+
+            {/* Cloud Sync (Compact Icon) */}
+            <button
+              type="button"
+              onClick={onOpenSync}
+              className="p-2 sm:px-2.5 sm:py-2 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 hover:text-white text-xs font-bold transition-all cursor-pointer shadow-sm shadow-cyan-500/5 hover:scale-[1.03]"
+              title="ซิงค์ข้อมูลไอดีข้ามอุปกรณ์ (Cloud Sync)"
+              aria-label="ซิงค์ข้อมูลไอดีข้ามอุปกรณ์"
+            >
+              <Cloud className="w-4 h-4 text-cyan-400 animate-pulse" />
+              <span className="hidden 2xl:inline ml-1 text-xs">ซิงค์</span>
+            </button>
+
+            {/* Install PWA (Compact Icon) */}
+            <button
+              type="button"
+              onClick={() => window.dispatchEvent(new CustomEvent('swm:open-install'))}
+              className="hidden sm:flex items-center p-2 sm:px-2.5 sm:py-2 rounded-xl bg-blue-600/15 hover:bg-blue-600/25 border border-blue-500/30 text-blue-300 hover:text-white text-xs font-bold transition-all cursor-pointer shadow-sm shadow-blue-500/5 hover:scale-[1.03]"
+              title="ติดตั้ง SWM เป็นแอปมือถือ/Desktop (PWA)"
+              aria-label="ติดตั้งแอป SWM"
+            >
+              <Smartphone className="w-4 h-4 text-blue-400" />
+              <span className="hidden 2xl:inline ml-1 text-xs">แอป</span>
+            </button>
+
+            {/* Admin Switch (Compact) */}
             {isAdmin && (
               <button
-                onClick={() => { const next = !adminMode; setAdminMode(next); if (next) onNavigate('admin'); else if (currentView === 'admin') onNavigate('dashboard'); }}
+                type="button"
+                onClick={() => {
+                  const next = !adminMode;
+                  setAdminMode(next);
+                  if (next) onNavigate('admin');
+                  else if (currentView === 'admin') onNavigate('dashboard');
+                }}
                 role="switch"
                 aria-checked={adminMode}
-                className={`flex items-center gap-1.5 px-2 py-1.5 sm:px-2.5 rounded-xl border text-xs font-bold transition-all cursor-pointer ${adminMode ? 'bg-fuchsia-600/25 border-fuchsia-400/60 text-fuchsia-100 shadow-lg shadow-fuchsia-500/20' : 'bg-white/[0.04] border-white/10 text-slate-300 hover:text-white'}`}
+                className={`flex items-center gap-1.5 p-2 sm:px-2.5 sm:py-1.5 rounded-xl border text-xs font-bold transition-all cursor-pointer ${
+                  adminMode
+                    ? 'bg-fuchsia-600/25 border-fuchsia-400/60 text-fuchsia-100 shadow-md shadow-fuchsia-500/20'
+                    : 'bg-white/[0.04] border-white/10 text-slate-300 hover:text-white'
+                }`}
                 title={adminMode ? 'กำลังอยู่ในโหมดแอดมิน — คลิกเพื่อกลับหน้าปกติ' : 'สลับไปโหมดแอดมิน (หลังบ้าน)'}
               >
-                <span className={`w-2 h-2 rounded-full ${adminMode ? 'bg-fuchsia-300 animate-pulse' : 'bg-slate-500'}`} />
-                <span className="hidden sm:inline lg:hidden 2xl:inline">{adminMode ? 'โหมดแอดมิน' : 'ผู้ใช้ปกติ'}</span>
+                <Shield className={`w-3.5 h-3.5 ${adminMode ? 'text-fuchsia-300 animate-pulse' : 'text-slate-400'}`} />
+                <span className="hidden 2xl:inline text-xs">{adminMode ? 'แอดมิน' : 'โหมดปกติ'}</span>
               </button>
             )}
-            {/* User Auth Button */}
+
+            {/* VIP Status / Upgrade Button */}
+            {!isMember ? (
+              <button
+                type="button"
+                onClick={openPaywall}
+                className="flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 hover:from-amber-400 hover:to-yellow-400 text-slate-950 text-xs font-black shadow-lg shadow-amber-500/25 transition-all cursor-pointer hover:scale-[1.03]"
+                title="อัปเกรดเป็นสมาชิก VIP ปลดล็อกทุกระบบ"
+                aria-label="อัปเกรด VIP"
+              >
+                <Crown className="w-3.5 h-3.5 fill-slate-950" />
+                <span>VIP</span>
+              </button>
+            ) : (
+              <span className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-amber-500/15 border border-amber-400/40 text-amber-300 font-extrabold text-xs">
+                <Crown className="w-3.5 h-3.5 fill-amber-400" />
+                <span className="hidden sm:inline">VIP</span>
+              </span>
+            )}
+
+            {/* User Profile / Auth */}
             {user ? (
               <button
+                type="button"
                 onClick={onOpenAuth}
                 className="flex items-center gap-1.5 sm:gap-2 px-2 py-1.5 sm:px-2.5 rounded-xl bg-cyan-950/70 hover:bg-cyan-900/70 border border-cyan-400/50 text-white text-xs font-bold transition-all shadow-md cursor-pointer hover:scale-[1.02]"
-                title={`เข้าสู่ระบบด้วย ${user.email} (คลิกเพื่อดูรายละเอียดหรือออกจากระบบ)`}
+                title={`เข้าสู่ระบบด้วย ${user.email} (คลิกเพื่อดูโปรไฟล์หรือออกจากระบบ)`}
                 aria-label="โปรไฟล์ผู้ใช้"
               >
                 <div className="w-5 h-5 rounded-full bg-gradient-to-tr from-cyan-400 to-blue-500 flex items-center justify-center text-[10px] font-bold text-white uppercase shadow-sm">
                   {user.email ? user.email.slice(0, 1) : 'U'}
                 </div>
-                <span className="hidden md:inline lg:hidden 2xl:inline max-w-[90px] truncate text-cyan-200">
+                <span className="max-w-[75px] sm:max-w-[95px] truncate text-cyan-200 text-xs">
                   {user.user_metadata?.display_name || user.email?.split('@')[0]}
                 </span>
-                <span className="relative flex h-2 w-2">
+                <span className="relative flex h-2 w-2 shrink-0">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                 </span>
               </button>
             ) : (
               <button
+                type="button"
                 onClick={onOpenAuth}
-                className="flex items-center gap-1.5 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl bg-gradient-to-r from-blue-600/30 to-cyan-600/30 hover:from-blue-600/40 hover:to-cyan-600/40 border border-cyan-500/40 text-cyan-200 hover:text-white text-xs font-bold transition-all duration-200 cursor-pointer shadow-lg shadow-cyan-500/10 hover:scale-[1.02]"
+                className="flex items-center gap-1.5 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl bg-gradient-to-r from-blue-600/30 to-cyan-600/30 hover:from-blue-600/40 hover:to-cyan-600/40 border border-cyan-500/40 text-cyan-200 hover:text-white text-xs font-bold transition-all cursor-pointer shadow-lg shadow-cyan-500/10 hover:scale-[1.02]"
                 title="เข้าสู่ระบบคลาวด์เพื่อซิงค์ข้อมูลทั่วโลก"
                 aria-label="เข้าสู่ระบบ"
               >
                 <User className="w-4 h-4 text-cyan-400" />
-                <span className="hidden sm:inline lg:hidden 2xl:inline">เข้าสู่ระบบ</span>
+                <span className="hidden sm:inline text-xs">เข้าสู่ระบบ</span>
               </button>
             )}
 
-            {!isMember ? (
-              <button
-                type="button"
-                onClick={openPaywall}
-                className="flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 hover:from-amber-400 hover:to-yellow-400 text-slate-950 text-xs font-black shadow-lg shadow-amber-500/25 transition-all duration-200 cursor-pointer hover:scale-[1.03]"
-                title="อัปเกรดเป็นสมาชิก VIP ปลดล็อก 25+ ฟีเจอร์ขั้นสูง"
-                aria-label="อัปเกรด VIP"
-              >
-                <Crown className="w-3.5 h-3.5 fill-slate-950" />
-                <span className="inline">VIP</span>
-              </button>
-            ) : (
-              <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-amber-500/15 border border-amber-400/40 text-amber-300 font-extrabold text-xs">
-                <Crown className="w-3.5 h-3.5 fill-amber-400" />
-                <span>VIP</span>
-              </span>
-            )}
-
+            {/* Drawer Sidebar Menu Toggle */}
             <button
-              onClick={() => window.dispatchEvent(new CustomEvent('swm:open-install'))}
-              className="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl bg-blue-600/15 hover:bg-blue-600/25 border border-blue-500/30 text-blue-300 hover:text-white text-xs font-bold transition-all duration-200 cursor-pointer shadow-lg shadow-blue-500/5 hover:scale-[1.02]"
-              title="ติดตั้ง SWM เป็นแอปมือถือ/Desktop (PWA)"
-              aria-label="ติดตั้งแอป SWM"
-            >
-              <Smartphone className="w-4 h-4 text-blue-400" />
-              <span className="hidden lg:hidden 2xl:inline">ติดตั้งแอป</span>
-            </button>
-
-            <button
-              onClick={onOpenSync}
-              className="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 hover:text-white text-xs font-bold transition-all duration-200 cursor-pointer shadow-lg shadow-cyan-500/5 hover:scale-[1.02]"
-              title="ซิงค์ข้อมูลไอดีข้ามอุปกรณ์ (มือถือ/แท็บเล็ต/PC)"
-              aria-label="ซิงค์ข้อมูลไอดีข้ามอุปกรณ์"
-            >
-              <Cloud className="w-4 h-4 text-cyan-400 animate-pulse" />
-              <span className="hidden lg:hidden 2xl:inline">ซิงค์ข้ามเครื่อง</span>
-            </button>
-
-            <button
-              onClick={onOpenSearch}
-              className="flex items-center gap-2 p-2 sm:px-3 sm:py-2 rounded-xl bg-white/[0.05] hover:bg-white/[0.09] border border-white/10 hover:border-white/20 text-slate-300 hover:text-white text-xs font-medium transition-colors cursor-pointer"
-              aria-label="ค้นหาด่วน (Ctrl+K)"
-            >
-              <Search className="w-4 h-4 text-slate-400" />
-              <span className="hidden sm:inline lg:hidden 2xl:inline text-slate-400">ค้นหาด่วน...</span>
-              <kbd className="hidden 2xl:inline-block px-1.5 py-0.5 text-xs font-mono font-bold bg-[#070b12] text-slate-400 border border-white/10 rounded">
-                Ctrl K
-              </kbd>
-            </button>
-
-            <button
+              type="button"
               onClick={onOpenMenu}
               aria-haspopup="dialog"
-              className="hidden md:flex items-center gap-1.5 p-2 sm:px-3 sm:py-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-white/20 text-slate-300 hover:text-white text-xs font-bold transition-colors cursor-pointer"
+              className="flex items-center gap-1.5 p-2 sm:px-2.5 sm:py-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-white/20 text-slate-300 hover:text-white text-xs font-bold transition-colors cursor-pointer"
+              title="เปิดสารบัญระบบทั้งหมด"
               aria-label="เปิดสารบัญระบบทั้งหมด"
             >
               <Menu className="w-4 h-4" />
-              <span className="hidden sm:inline lg:hidden 2xl:inline">สารบัญ</span>
+              <span className="hidden 2xl:inline text-xs">สารบัญ</span>
             </button>
           </div>
 
