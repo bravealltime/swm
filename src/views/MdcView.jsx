@@ -29,11 +29,13 @@ import ALL_MDC_DATA from '../data/allMdcData.json';
 import { MONSTERS } from '../data/monsters';
 import { loadBox, baseAwakenedId } from '../utils/swexImport';
 import { loadUserBoxFromDB } from '../services/storageService';
+import TacticalBattlePlanModal from '../components/TacticalBattlePlanModal';
 
 export default function MdcView({ search = '' }) {
   const [towerFilter, setTowerFilter] = useState('all'); // 'all', 'nat4', 'nat5'
   const [searchQuery, setSearchQuery] = useState(search);
   const detailRef = useRef(null);
+  const [activeBattlePlanCounter, setActiveBattlePlanCounter] = useState(null);
 
   const [selectedSlots, setSelectedSlots] = useState([null, null, null]);
   const [activeSlotIdx, setActiveSlotIdx] = useState(null);
@@ -621,6 +623,38 @@ export default function MdcView({ search = '' }) {
                 })}
               />
 
+              {/* AI Tactical Counter Scanner Banner */}
+              <div className="rounded-2xl border border-cyan-500/40 bg-gradient-to-r from-cyan-950/40 via-blue-950/30 to-indigo-950/40 p-4 sm:p-5 shadow-xl relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/10 rounded-full blur-2xl pointer-events-none" />
+                <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div>
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-cyan-500/20 border border-cyan-500/40 text-cyan-300 text-[11px] font-bold uppercase tracking-wider mb-1.5">
+                      <Zap className="w-3.5 h-3.5 text-cyan-400" />
+                      <span>AI Tactical Counter Scanner • สแกนเจาะบ้านรับจากไอดี</span>
+                    </div>
+                    <h3 className="text-base sm:text-lg font-black text-white">
+                      {totalCanBuildCount > 0 
+                        ? `พบคู่หู 3 ตัวในไอดีคุณพร้อมรบ ${totalCanBuildCount} ทีมสำหรับเจาะบ้านนี้!` 
+                        : 'สแกนคลังไอดี: มีสูตรแนะนำพร้อมระบบค้นหาตัวแทนที่คุณมีในไอดี'}
+                    </h3>
+                    <p className="text-xs text-slate-300 mt-0.5">
+                      คำนวณ Turn Order ลำดับออกสกิล, ช่องว่าง Speed Gap, รูน Will ป้องกันเทิร์นแรก และ Kill Priority
+                    </p>
+                  </div>
+
+                  {displayedCounters.length > 0 && (
+                    <button
+                      type="button"
+                      onClick={() => setActiveBattlePlanCounter(displayedCounters[0])}
+                      className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 hover:from-cyan-400 hover:to-blue-500 text-white text-xs font-bold shadow-lg shadow-cyan-500/20 transition-all cursor-pointer flex items-center justify-center gap-2 shrink-0 hover:scale-[1.02] active:scale-95"
+                    >
+                      <Zap className="w-4 h-4 text-amber-300" />
+                      <span>เปิดแผนรบทีมแนะนำ #{1}</span>
+                    </button>
+                  )}
+                </div>
+              </div>
+
               {/* Counter Teams List */}
               <div className="space-y-3">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs font-bold text-slate-400 uppercase tracking-wider px-1">
@@ -742,6 +776,19 @@ export default function MdcView({ search = '' }) {
                           💡 {counter.notes}
                         </div>
                       </div>
+
+                      {/* Tactical Battle Plan Action */}
+                      <button
+                        type="button"
+                        onClick={() => setActiveBattlePlanCounter(counter)}
+                        className="w-full py-2.5 px-3 rounded-xl bg-cyan-600/10 hover:bg-cyan-600/20 border border-cyan-500/30 hover:border-cyan-400/50 text-cyan-300 hover:text-white text-xs font-bold transition-all cursor-pointer flex items-center justify-between shadow-sm group"
+                      >
+                        <span className="flex items-center gap-2">
+                          <Zap className="w-3.5 h-3.5 text-cyan-400 group-hover:scale-110 transition-transform" />
+                          <span>แผนรบ & สปีดจริง (AI Tactical Battle Plan)</span>
+                        </span>
+                        <ChevronRight className="w-3.5 h-3.5 text-cyan-400 group-hover:translate-x-0.5 transition-transform" />
+                      </button>
                     </div>
                   ))}
                 </div>
@@ -766,6 +813,15 @@ export default function MdcView({ search = '' }) {
         </div>
 
       </div>
+
+      {/* Tactical Battle Plan Modal */}
+      <TacticalBattlePlanModal
+        isOpen={Boolean(activeBattlePlanCounter)}
+        onClose={() => setActiveBattlePlanCounter(null)}
+        counter={activeBattlePlanCounter}
+        defense={currentDefense}
+        userUnitsMap={ownedUnitsMap}
+      />
     </div>
   );
 }

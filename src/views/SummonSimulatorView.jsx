@@ -16,6 +16,7 @@ import {
 import MonsterAvatar from '../components/MonsterAvatar';
 import allMonstersData from '../data/allMonsters.json';
 import { isNonSummonableLd5 } from '../utils/swexImport';
+import GachaLuckPredictor from '../components/GachaLuckPredictor';
 
 // Approximate in-game shop value per scroll
 const SCROLL_TYPES = [
@@ -74,6 +75,7 @@ const SCROLL_TYPES = [
 ];
 
 export default function SummonSimulatorView({ onNavigate }) {
+  const [activeTab, setActiveTab] = useState('simulator'); // 'simulator' | 'predictor'
   const [selectedScrollId, setSelectedScrollId] = useState('ld');
   const [isSummoning, setIsSummoning] = useState(false);
   const [latestPull, setLatestPull] = useState(null);
@@ -239,8 +241,41 @@ export default function SummonSimulatorView({ onNavigate }) {
         </div>
       </div>
 
-      {/* 2. Scroll Type Selector */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+      {/* Mode Switcher Tabs */}
+      <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-white/[0.04] border border-white/10 backdrop-blur-xl w-full sm:w-auto self-start">
+        <button
+          type="button"
+          onClick={() => setActiveTab('simulator')}
+          className={`flex-1 sm:flex-initial flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+            activeTab === 'simulator'
+              ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/30'
+              : 'text-slate-400 hover:text-white'
+          }`}
+        >
+          <Sparkles className="w-4 h-4 text-amber-300" />
+          <span>🎰 ตู้จำลองเปิดกาชา (Portal Simulator)</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab('predictor')}
+          className={`flex-1 sm:flex-initial flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+            activeTab === 'predictor'
+              ? 'bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-950 font-black shadow-lg shadow-amber-500/25'
+              : 'text-slate-400 hover:text-white'
+          }`}
+        >
+          <Crown className="w-4 h-4 text-amber-400 fill-amber-400" />
+          <span>🔮 ทำนายดวง & คำนวณวันได้ LD5 (Luck Predictor & Wishlist)</span>
+        </button>
+      </div>
+
+      {activeTab === 'predictor' ? (
+        <GachaLuckPredictor onNavigate={onNavigate} />
+      ) : (
+        <>
+          {/* 2. Scroll Type Selector */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
         {SCROLL_TYPES.map((s) => {
           const isSelected = selectedScrollId === s.id;
           return (
@@ -469,6 +504,8 @@ export default function SummonSimulatorView({ onNavigate }) {
           </div>
         )}
       </div>
+        </>
+      )}
     </div>
   );
 }
