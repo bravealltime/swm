@@ -11,7 +11,7 @@ import { teamsFromBox } from '../utils/metaTeams';
 import { summarizeBoxForAi, keyMonstersForAi } from '../utils/boxSummary';
 import guardianMeta from '../data/swrtGuardianMeta.json';
 import { flagFromCountry } from '../data/swrtPlayerAdapter';
-import { parseSwexExport, ownedIdSet, loadBox, saveBox, clearBox, baseAwakenedId, BOX_VERSION, RUNE_SETS, loadDemoBox, isNonSummonableLd5 } from '../utils/swexImport';
+import { parseSwexExport, ownedIdSet, loadBox, loadBoxAsync, saveBox, saveBoxAsync, clearBox, baseAwakenedId, BOX_VERSION, RUNE_SETS, loadDemoBox, isNonSummonableLd5 } from '../utils/swexImport';
 import { supportsFolderWatch, loadDirHandle, clearDirHandle, pickSwexFolder, ensurePermission, findNewestExport } from '../utils/swexWatcher';
 import { exportAllDataAsJSON } from '../services/storageService';
 import { loadPublicSettings } from '../services/adminClient';
@@ -60,6 +60,33 @@ export default function MyBoxView({ onNavigate, tab: initialTab, subItem }) {
     if (initialTab || subItem) setTab(initialTab || subItem);
   }, [initialTab, subItem]);
 
+  // Load full box from IndexedDB on boot (prevents stale localStorage / quota issues)
+  useEffect(() => {
+    let alive = true;
+    loadBoxAsync().then((dbBox) => {
+      if (alive && dbBox && dbBox.units?.length > 0) {
+        setBox(dbBox);
+      }
+    }).catch(() => {});
+
+    const handleBoxUpdate = (e) => {
+      if (!alive) return;
+      if (e.detail) {
+        setBox(e.detail);
+      } else {
+        loadBoxAsync().then((dbBox) => {
+          if (alive && dbBox && dbBox.units?.length > 0) setBox(dbBox);
+        }).catch(() => {});
+      }
+    };
+    window.addEventListener('swm:box-updated', handleBoxUpdate);
+
+    return () => {
+      alive = false;
+      window.removeEventListener('swm:box-updated', handleBoxUpdate);
+    };
+  }, []);
+
   const owned = useMemo(() => ownedIdSet(box), [box]);
   const [openUnit, setOpenUnit] = useState(null); // unit (with .info) shown in the rune/artifact page
   const mdc = useMdcAnalysis(owned, !!box);
@@ -76,8 +103,9 @@ export default function MyBoxView({ onNavigate, tab: initialTab, subItem }) {
       const text = await file.text();
       const parsed = parseSwexExport(JSON.parse(text));
       if (!parsed.units.length) throw new Error('ไฟล์นี้ไม่มีมอนสเตอร์เลย');
-      parsed.source = { name: file.name, modified: file.lastModified || 0, auto };
-      if (!saveBox(parsed)) setError('บันทึกลงเครื่องไม่สำเร็จ (พื้นที่ไม่พอ) — ยังดูได้จนกว่าจะปิดแท็บ');
+      parsed.source = { name: file.name, modified: file.lastModified || Date.now(), auto };
+      parsed.updatedAt = Date.now();
+      await saveBoxAsync(parsed);
       setBox(parsed);
       if (!auto) setTab('overview');
       return true;
@@ -140,7 +168,8 @@ export default function MyBoxView({ onNavigate, tab: initialTab, subItem }) {
 
       if (syncedBox && syncedBox.units?.length > 0) {
         syncedBox.source = { name: sourceName, modified: Date.now(), auto: true, live: true };
-        saveBox(syncedBox);
+        syncedBox.updatedAt = Date.now();
+        await saveBoxAsync(syncedBox);
         setBox(syncedBox);
         setTab('overview');
         playDropSound();

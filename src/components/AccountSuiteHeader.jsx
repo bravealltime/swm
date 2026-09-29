@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Layers, Sparkles, Radio, RefreshCw, CheckCircle2, XCircle } from 'lucide-react';
 import * as aegisLive from '../services/aegisLive';
-import { saveBox } from '../utils/boxStorage';
+import { saveBox, saveBoxAsync } from '../utils/boxStorage';
 import { parseSwexExport } from '../utils/swexImport';
 import { playDropSound } from '../utils/soundEffects';
 
@@ -73,8 +73,9 @@ export default function AccountSuiteHeader({ activeTab, onNavigate }) {
 
       if (syncedBox && syncedBox.units?.length > 0) {
         syncedBox.source = { name: sourceName, modified: Date.now(), auto: true, live: true };
-        saveBox(syncedBox);
-        window.dispatchEvent(new CustomEvent('swm:box-updated'));
+        syncedBox.updatedAt = Date.now();
+        await saveBoxAsync(syncedBox);
+        window.dispatchEvent(new CustomEvent('swm:box-updated', { detail: syncedBox }));
         playDropSound();
         setSyncNotice({ text: `✨ ซิงค์ไอดี ${syncedBox.wizard?.name || ''} สำเร็จ (${syncedBox.units.length} มอนสเตอร์) [${sourceName}]`, success: true });
         setTimeout(() => setSyncNotice(null), 4000);

@@ -20,7 +20,8 @@ import {
   Wifi,
   Globe
 } from 'lucide-react';
-import { loadBox, saveBox } from '../utils/boxStorage';
+import { loadBox, loadBoxAsync, saveBox, saveBoxAsync } from '../utils/boxStorage';
+import { useAuth } from '../contexts/AuthContext';
 import {
   pushBoxToCloud,
   pullBoxFromCloud,
@@ -30,6 +31,7 @@ import {
 } from '../services/cloudSyncService';
 
 export default function CloudSyncModal({ isOpen, onClose, onSynced }) {
+  const { user, syncProfileToCloud } = useAuth() || {};
   const [box, setBox] = useState(() => loadBox());
   const [activeTab, setActiveTab] = useState('sync-out');
   const [syncKeyInput, setSyncKeyInput] = useState('');
@@ -41,8 +43,9 @@ export default function CloudSyncModal({ isOpen, onClose, onSynced }) {
 
   useEffect(() => {
     if (isOpen) {
-      const currentBox = loadBox();
-      setBox(currentBox);
+      loadBoxAsync().then((currentBox) => {
+        if (currentBox) setBox(currentBox);
+      }).catch(() => setBox(loadBox()));
       setStatusMessage('');
       setStatusType('info');
     }
@@ -109,12 +112,25 @@ export default function CloudSyncModal({ isOpen, onClose, onSynced }) {
       setStatusType('success');
       setStatusMessage(`✨ ซิงค์สำเร็จ! โหลดมอนสเตอร์ ${res.unitsCount} ตัว และรูน ${res.runesCount} ชิ้น พร้อมใช้งานบนเครื่องนี้ทันที`);
       setBox(res.box);
+
+      // 1. Commit to IndexedDB + localStorage synchronously & asynchronously
+      await saveBoxAsync(res.box);
+
+      // 2. If user is logged in to Supabase, update user_profiles so refresh NEVER reverts to old data!
+      if (user && syncProfileToCloud) {
+        try {
+          await syncProfileToCloud(res.box);
+        } catch (e) {
+          console.warn('Sync profile to Supabase on pull warning:', e);
+        }
+      }
+
       if (onSynced) onSynced(res.box);
+      window.dispatchEvent(new CustomEvent('swm:box-updated', { detail: res.box }));
 
       setTimeout(() => {
         onClose();
-        window.location.reload();
-      }, 1500);
+      }, 1200);
     } else {
       setStatusType('error');
       setStatusMessage(res.message || 'ไม่พบข้อมูลไอดีบนคลาวด์');

@@ -27,7 +27,7 @@ import ArenaRushHourHub from '../components/ArenaRushHourHub';
 import AiAdvisorPanel from '../components/AiAdvisorPanel';
 import { matchArenaTeams } from '../utils/arenaMatcher';
 import { findArenaCounters } from '../utils/arenaCounter';
-import { loadBox, loadDemoBox, boxUnits } from '../utils/swexImport';
+import { loadBox, loadBoxAsync, loadDemoBox, boxUnits } from '../utils/swexImport';
 import { exportArenaTeamCard } from '../utils/cardExporter';
 import { copyText } from '../utils/clipboard';
 import { MONSTERS } from '../data/monsters';
@@ -667,6 +667,24 @@ export default function ArenaMetaView({ onNavigate, subItem, ad }) {
   const [cardBusyId, setCardBusyId] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [userBox, setUserBox] = useState(() => loadBox());
+
+  useEffect(() => {
+    let alive = true;
+    loadBoxAsync().then((dbBox) => {
+      if (alive && dbBox && dbBox.units?.length > 0) setUserBox(dbBox);
+    }).catch(() => {});
+
+    const handleBoxUpdate = (e) => {
+      if (!alive) return;
+      if (e.detail) setUserBox(e.detail);
+      else loadBoxAsync().then((dbBox) => { if (alive && dbBox && dbBox.units?.length > 0) setUserBox(dbBox); });
+    };
+    window.addEventListener('swm:box-updated', handleBoxUpdate);
+    return () => {
+      alive = false;
+      window.removeEventListener('swm:box-updated', handleBoxUpdate);
+    };
+  }, []);
   // Counter search: what is being picked, and the last line-up actually searched
   const [enemyPicks, setEnemyPicks] = useState(() => parseNames(ad));
   const [enemyQuery, setEnemyQuery] = useState(() => parseNames(ad));

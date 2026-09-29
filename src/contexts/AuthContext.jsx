@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { getSupabase, isSupabaseConfigured, saveSupabaseConfig, clearSupabaseConfig } from '../services/supabaseClient';
-import { saveBox, loadBox } from '../utils/boxStorage';
+import { saveBox, saveBoxAsync, loadBox, loadBoxAsync } from '../utils/boxStorage';
 import { isUserMember } from '../utils/memberPolicy';
 const parseSwexExport = async (raw) => (await import('../utils/swexImport')).parseSwexExport(raw);
 
@@ -192,17 +192,30 @@ export function AuthProvider({ children }) {
       }
 
       if (data && data.box_data) {
-        let box = data.box_data;
-        if (box.unit_list && !Array.isArray(box.units)) {
+        let cloudBox = data.box_data;
+        if (cloudBox.unit_list && !Array.isArray(cloudBox.units)) {
           try {
-            box = await parseSwexExport(box);
+            cloudBox = await parseSwexExport(cloudBox);
           } catch (err) {
             console.warn('Failed to parse cloud box:', err);
           }
         }
-        saveBox(box);
+
+        // Compare timestamps: Never downgrade a newer local profile to an older cloud profile on refresh!
+        const localBox = await loadBoxAsync();
+        const localTime = new Date(localBox?.updatedAt || localBox?.importedAt || 0).getTime();
+        const cloudTime = new Date(data.updated_at || cloudBox?.updatedAt || cloudBox?.importedAt || 0).getTime();
+
+        if (localBox && Array.isArray(localBox.units) && localBox.units.length > 0 && localTime > cloudTime) {
+          console.log('[AuthContext] Local profile is newer than cloud. Uploading local to cloud...');
+          await syncProfileToCloud(localBox);
+          setSyncStatus('synced');
+          return localBox;
+        }
+
+        await saveBoxAsync(cloudBox);
         setSyncStatus('synced');
-        return box;
+        return cloudBox;
       }
 
       setSyncStatus('idle');
@@ -213,7 +226,7 @@ export function AuthProvider({ children }) {
       setSyncError(err.message);
       return null;
     }
-  }, [user]);
+  }, [user, syncProfileToCloud]);
 
   // Auto-sync profile on login if user has a cloud profile or local box
   useEffect(() => {

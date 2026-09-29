@@ -2,7 +2,7 @@
 // Uses Supabase Storage (public CDN) + Vercel Serverless API (/api/cloud-sync)
 // Allows accessing user's box, runes, and teams on mobile devices anywhere via 4G/5G.
 
-import { saveBox, loadBox } from '../utils/boxStorage.js';
+import { saveBox, saveBoxAsync, loadBox } from '../utils/boxStorage.js';
 import { parseSwexExport } from '../utils/swexImport.js';
 
 export const SUPABASE_STORAGE_CDN = 'https://cpcuyhfjnbpjvfdedspa.supabase.co/storage/v1/object/public/swm-cloud/profiles/';
@@ -63,7 +63,7 @@ export async function pushBoxToCloud(box, customPasskey) {
 
     // Mark box as synced
     const updatedBox = { ...box, cloudSync: { syncedAt: new Date().toISOString(), passkey, key: primaryKey } };
-    saveBox(updatedBox);
+    await saveBoxAsync(updatedBox);
 
     return {
       ok: true,
@@ -138,7 +138,9 @@ export async function pullBoxFromCloud(targetKey) {
       return { ok: false, error: 'EMPTY_UNITS', message: 'ไฟล์ข้อมูลไอดีบนคลาวด์ไม่มีมอนสเตอร์' };
     }
 
-    saveBox(parsed);
+    parsed.updatedAt = Date.now();
+    parsed.importedAt = parsed.importedAt || Date.now();
+    await saveBoxAsync(parsed);
     return {
       ok: true,
       box: parsed,

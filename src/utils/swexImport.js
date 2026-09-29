@@ -2,8 +2,8 @@
 // only what the site needs. Nothing is uploaded anywhere; the compact result is stored
 // in localStorage under STORAGE_KEY.
 
-import { STORAGE_KEY, BOX_VERSION, loadBox, loadBoxAsync, saveBox, clearBox } from './boxStorage.js';
-export { STORAGE_KEY, BOX_VERSION, loadBox, loadBoxAsync, saveBox, clearBox };
+import { STORAGE_KEY, BOX_VERSION, loadBox, loadBoxAsync, saveBox, saveBoxAsync, clearBox } from './boxStorage.js';
+export { STORAGE_KEY, BOX_VERSION, loadBox, loadBoxAsync, saveBox, saveBoxAsync, clearBox };
 
 const ELEMENTS = { 1: 'water', 2: 'fire', 3: 'wind', 4: 'light', 5: 'dark' };
 

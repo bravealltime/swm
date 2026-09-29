@@ -19,27 +19,92 @@ export function loadBox() {
   }
 }
 
+/** Asynchronous read prioritizing IndexedDB (stores full GB-scale dataset without quota limits) */
 export async function loadBoxAsync() {
-  return await loadUserBoxFromDB();
+  try {
+    const dbBox = await loadUserBoxFromDB();
+    if (dbBox && Array.isArray(dbBox.units) && dbBox.units.length > 0) {
+      return dbBox;
+    }
+  } catch {
+    // fallback to localStorage
+  }
+  return loadBox();
 }
 
+/**
+ * Saves box synchronously to localStorage mirror and initiates IndexedDB background write.
+ * Safely handles QuotaExceededError by storing a compact mirror so localStorage NEVER stays on stale data!
+ */
 export function saveBox(box) {
-  // Fire and forget to IndexedDB for large boxes; localStorage keeps a synchronous mirror
+  if (!box) return false;
+  box.updatedAt = box.updatedAt || Date.now();
+
+  // 1. Write full dataset to IndexedDB
   saveUserBoxToDB(box).catch((e) => console.warn('IndexedDB save background warning:', e));
+
+  // 2. Dispatch event to update all open views in this window immediately
+  try {
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('swm:box-updated', { detail: box }));
+    }
+  } catch {}
+
+  // 3. Mirror into localStorage with quota protection
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(box));
     return true;
   } catch {
-    // quota exceeded in localStorage — IndexedDB still holds the full dataset
-    return true;
+    // Quota exceeded: replace with compact mirror so loadBox() NEVER returns stale old profile!
+    try {
+      const compact = {
+        ...box,
+        runes: Array.isArray(box.runes) ? box.runes.slice(0, 500) : [],
+        _compactMirror: true,
+      };
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(compact));
+      return true;
+    } catch {
+      try {
+        const minimal = {
+          wizard: box.wizard,
+          wizard_info: box.wizard_info,
+          units: Array.isArray(box.units) ? box.units.map((u) => ({ ...u, runes: [] })) : [],
+          importedAt: box.importedAt,
+          updatedAt: box.updatedAt,
+          _minimalMirror: true,
+        };
+        localStorage.removeItem(STORAGE_KEY);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(minimal));
+        return true;
+      } catch {
+        return true;
+      }
+    }
   }
+}
+
+/**
+ * Fully awaited async save to IndexedDB and localStorage.
+ * Guarantees data is committed before any page navigation or modal close.
+ */
+export async function saveBoxAsync(box) {
+  if (!box) return false;
+  box.updatedAt = box.updatedAt || Date.now();
+  const dbOk = await saveUserBoxToDB(box).catch(() => false);
+  saveBox(box);
+  return dbOk;
 }
 
 export function clearBox() {
   clearUserBoxFromDB().catch(() => {});
   try {
     localStorage.removeItem(STORAGE_KEY);
-  } catch {
-    // ignore
-  }
+  } catch {}
+  try {
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('swm:box-updated', { detail: null }));
+    }
+  } catch {}
 }
