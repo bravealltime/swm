@@ -27,7 +27,7 @@ import ArenaRushHourHub from '../components/ArenaRushHourHub';
 import AiAdvisorPanel from '../components/AiAdvisorPanel';
 import { matchArenaTeams } from '../utils/arenaMatcher';
 import { findArenaCounters } from '../utils/arenaCounter';
-import { loadBox, loadBoxAsync, loadDemoBox, boxUnits } from '../utils/swexImport';
+import { loadBox, loadBoxAsync, boxUnits } from '../utils/swexImport';
 import { exportArenaTeamCard } from '../utils/cardExporter';
 import { copyText } from '../utils/clipboard';
 import { MONSTERS } from '../data/monsters';
@@ -892,14 +892,16 @@ export default function ArenaMetaView({ onNavigate, subItem, ad }) {
                   <span>ดูได้ทุกคน ไม่ต้องล็อกอิน ไม่ต้องใช้ JSON</span>
                 </div>
               </div>
-              <button
-                onClick={() => setUserBox(loadDemoBox())}
-                className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-xs flex items-center gap-1.5 cursor-pointer shadow-md shadow-blue-500/20"
-                title="คลิกเพื่อทดสอบระบบเช็คมอนสเตอร์จากกล่องตัวอย่าง"
-              >
-                <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-                <span>ลองกล่องตัวอย่าง</span>
-              </button>
+              {onNavigate && (
+                <button
+                  onClick={() => onNavigate('my-box')}
+                  className="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center gap-1.5 cursor-pointer shadow-md shadow-emerald-500/20"
+                  title="นำเข้าไฟล์ SWEX ที่หน้า My Box เพื่อเทียบตัวละคร"
+                >
+                  <span>นำเข้าไฟล์ไอดี</span>
+                  <ChevronRight className="w-3.5 h-3.5" />
+                </button>
+              )}
             </div>
           )}
         </div>
@@ -1167,20 +1169,13 @@ export default function ArenaMetaView({ onNavigate, subItem, ad }) {
                     สูตรทั้งหมด {summary.totalAo + summary.totalAd} ทีมในแท็บ <strong>"ทีมบุก (AO)"</strong> และ <strong>"ทีมรับ (AD)"</strong> สามารถเปิดดูรายละเอียด รูน และลำดับเทิร์นได้ทุกคนโดยไม่ต้องล็อกอิน
                   </p>
                   <p className="text-xs text-slate-400 leading-relaxed">
-                    หากต้องการให้ระบบวิเคราะห์ว่าไอดีของคุณมีตัวละครพร้อมจัดทีมไหนบ้าง (รวมทีมที่จัดได้ด้วยตัวแทน) สามารถทดลองกด <strong>"กล่องตัวอย่าง (Demo Box)"</strong> ได้ทันที หรือนำเข้าไฟล์ JSON จาก SWEX
+                    หากต้องการให้ระบบวิเคราะห์ว่าไอดีของคุณมีตัวละครพร้อมจัดทีมไหนบ้าง (รวมทีมที่จัดได้ด้วยตัวแทน) สามารถนำเข้าไฟล์ JSON จาก SWEX ได้ที่หน้า My Box
                   </p>
                 </div>
                 <div className="flex items-center justify-center gap-3 flex-wrap pt-2">
                   <button
-                    onClick={() => setUserBox(loadDemoBox())}
-                    className="px-4 py-2.5 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs flex items-center gap-2 cursor-pointer shadow-lg shadow-emerald-500/25"
-                  >
-                    <Sparkles className="w-4 h-4 text-amber-300" />
-                    <span>🎮 ลองใช้กล่องตัวอย่าง (Demo Box)</span>
-                  </button>
-                  <button
                     onClick={() => onNavigate && onNavigate('my-box')}
-                    className="px-4 py-2.5 rounded-2xl bg-white/10 hover:bg-white/15 text-white font-bold text-xs flex items-center gap-2 cursor-pointer border border-white/10"
+                    className="px-4 py-2.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center gap-2 cursor-pointer shadow-lg shadow-emerald-500/25"
                   >
                     <span>📁 นำเข้าไฟล์ SWEX ที่หน้า My Box</span>
                     <ChevronRight className="w-4 h-4" />

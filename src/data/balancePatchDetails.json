@@ -4793,5 +4793,92 @@
       "valueChanges": [],
       "impact": "adjustment"
     }
+  ],
+  "94": [
+    {
+      "id": "94-1",
+      "patchId": 94,
+      "monsterName": "Volcaris (Fire Cosmic Worm)",
+      "element": "Fire",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0225_1_2.png",
+      "skillName": "Squash (S3)",
+      "skillBadge": "S3",
+      "skillImg": "",
+      "changeType": "New Monster Release",
+      "changeTypeTh": "เปิดตัวมอนสเตอร์ใหม่ 5★",
+      "preview": "[New 5★ Monster Release]\r\nAttacks all enemies to stun for 1 turn and absorb ATB. Damage scales with MAX HP. Increases Total MAX HP by 20% (up to 100%) each cast. Can exceed 150k-200k HP in combat.",
+      "officialText": "[New 5★ Monster Release]\r\nAttacks all enemies to stun for 1 turn and absorb ATB. Damage scales with MAX HP. Increases Total MAX HP by 20% (up to 100%) each cast. Can exceed 150k-200k HP in combat.",
+      "valueChanges": [
+        {
+          "oldValue": "Base HP",
+          "newValue": "Max HP +100%"
+        }
+      ],
+      "impact": "buff"
+    },
+    {
+      "id": "94-2",
+      "patchId": 94,
+      "monsterName": "Maris (Water Cosmic Worm)",
+      "element": "Water",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0225_1_1.png",
+      "skillName": "Deep Inhale (S3)",
+      "skillBadge": "S3",
+      "skillImg": "",
+      "changeType": "New Monster Release",
+      "changeTypeTh": "เปิดตัวมอนสเตอร์ใหม่ 5★",
+      "preview": "[New 5★ Monster Release]\r\nAttacks all enemies to steal all beneficial effects and disturb HP recovery for 2 turns. Distributes 1 stolen buff to each other ally.",
+      "officialText": "[New 5★ Monster Release]\r\nAttacks all enemies to steal all beneficial effects and disturb HP recovery for 2 turns. Distributes 1 stolen buff to each other ally.",
+      "valueChanges": [],
+      "impact": "buff"
+    },
+    {
+      "id": "94-3",
+      "patchId": 94,
+      "monsterName": "Auraris (Wind Cosmic Worm)",
+      "element": "Wind",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0225_1_3.png",
+      "skillName": "Wormhole Dive (S3)",
+      "skillBadge": "S3",
+      "skillImg": "",
+      "changeType": "New Monster Release",
+      "changeTypeTh": "เปิดตัวมอนสเตอร์ใหม่ 5★",
+      "preview": "[New 5★ Monster Release]\r\nAttacks all enemies to increase harmful effects duration by 1 turn, cause Glancing for 2 turns, and Silence for 1-2 turns. Scales with MAX HP.",
+      "officialText": "[New 5★ Monster Release]\r\nAttacks all enemies to increase harmful effects duration by 1 turn, cause Glancing for 2 turns, and Silence for 1-2 turns. Scales with MAX HP.",
+      "valueChanges": [],
+      "impact": "buff"
+    },
+    {
+      "id": "94-4",
+      "patchId": 94,
+      "monsterName": "Luminaris (Light Cosmic Worm)",
+      "element": "Light",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0225_1_4.png",
+      "skillName": "Cosmic Breath (S3)",
+      "skillBadge": "S3",
+      "skillImg": "",
+      "changeType": "New Monster Release",
+      "changeTypeTh": "เปิดตัวมอนสเตอร์ใหม่ 5★",
+      "preview": "[New 5★ Monster Release]\r\nAttacks all enemies dealing damage that ignores death-resisting effects. Resets cooldown if an enemy is killed. Increases damage up to 100% if enemy DEF is lower than ATK.",
+      "officialText": "[New 5★ Monster Release]\r\nAttacks all enemies dealing damage that ignores death-resisting effects. Resets cooldown if an enemy is killed. Increases damage up to 100% if enemy DEF is lower than ATK.",
+      "valueChanges": [],
+      "impact": "buff"
+    },
+    {
+      "id": "94-5",
+      "patchId": 94,
+      "monsterName": "Noctaris (Dark Cosmic Worm)",
+      "element": "Dark",
+      "monsterImg": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0225_1_5.png",
+      "skillName": "Splash Splash (S3)",
+      "skillBadge": "S3",
+      "skillImg": "",
+      "changeType": "New Monster Release",
+      "changeTypeTh": "เปิดตัวมอนสเตอร์ใหม่ 5★",
+      "preview": "[New 5★ Monster Release]\r\nAttacks enemy to stun 1 turn and brand 2 turns. Follows with 2-3 random strikes with 50% stun and 50% block cleanse. Reduces cooldown when hitting stunned targets.",
+      "officialText": "[New 5★ Monster Release]\r\nAttacks enemy to stun 1 turn and brand 2 turns. Follows with 2-3 random strikes with 50% stun and 50% block cleanse. Reduces cooldown when hitting stunned targets.",
+      "valueChanges": [],
+      "impact": "buff"
+    }
   ]
 }

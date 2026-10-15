@@ -71,7 +71,7 @@ describe('buildSkillShards on a small fixture', () => {
 });
 
 describe('expandRecord restores the original shape for every real monster', () => {
-  it('round-trips all 940 records (description falls back to Thai by design)', async () => {
+  it('round-trips all records (description falls back to Thai by design)', async () => {
     buildSkillShards({ root: ROOT }); // make sure the generated files exist
     const { expandRecord } = await import('../src/data/monsterSkills.js');
     const index = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/data/monsterSkillsIndex.json'), 'utf8'));

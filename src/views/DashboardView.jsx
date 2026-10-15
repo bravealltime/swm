@@ -32,7 +32,7 @@ import { useGuildRankings } from '../hooks/useGuildRankings';
 import { SERVERS } from '../utils/guildRankings';
 import { getR2AvatarUrl } from '../services/r2Service';
 import { useLocalStorage } from '../hooks/useLocalStorage';
-import { loadBox, saveBox, parseSwexExport, getArtifactsFromBox, loadDemoBox, getMonsterCatalogInfo, isNonSummonableLd5, boxUnits, boxRunes, topSpeedRunesBySet } from '../utils/swexImport';
+import { loadBox, saveBox, parseSwexExport, getArtifactsFromBox, getMonsterCatalogInfo, isNonSummonableLd5, boxUnits, boxRunes, topSpeedRunesBySet } from '../utils/swexImport';
 import { MONSTERS } from '../data/monsters';
 
 // How many nat5 forms the encyclopedia knows — the denominator of the collection bar
@@ -320,7 +320,6 @@ export default function DashboardView({ onNavigate }) {
       ld5List,
       quadSpdCount,
       speedRuneSets,
-      isDemo: !!userBox.isDemo,
     };
   }, [userBox, boxUnitList, boxRuneList, customAvatar]);
 
@@ -547,11 +546,6 @@ export default function DashboardView({ onNavigate }) {
                     {userProfileStats.guild && (
                       <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
                         🛡️ {userProfileStats.guild}
-                      </span>
-                    )}
-                    {userProfileStats.isDemo && (
-                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
-                        ⭐ G3 Demo
                       </span>
                     )}
                   </div>
@@ -913,22 +907,12 @@ export default function DashboardView({ onNavigate }) {
                   </span>
                 </div>
                 <p className="text-xs sm:text-sm text-slate-400 max-w-2xl">
-                  นำเข้าไฟล์ SWEX JSON เพื่อแสดงโปรไฟล์ สถิติรูน ตู้สะสม Nat 5 & LD และอาร์ติแฟกต์ของคุณที่หน้าแรกทันที หรือทดลองด้วยไอดีตัวอย่าง Guardian
+                  นำเข้าไฟล์ SWEX JSON เพื่อแสดงโปรไฟล์ สถิติรูน ตู้สะสม Nat 5 & LD และอาร์ติแฟกต์ของคุณที่หน้าแรกทันที เชื่อมต่อข้อมูลจริงของคุณ 100%
                 </p>
               </div>
             </div>
 
             <div className="flex flex-wrap items-center gap-2.5 shrink-0">
-              <button
-                onClick={() => {
-                  const demo = loadDemoBox();
-                  setUserBox(demo);
-                }}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 text-xs font-black shadow-lg shadow-amber-500/20 transition-all cursor-pointer"
-              >
-                <Trophy className="w-4 h-4 text-slate-950" />
-                <span>โหลดไอดีตัวอย่าง Guardian G3</span>
-              </button>
               <label className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white text-xs font-bold shadow-lg shadow-cyan-600/20 transition-all cursor-pointer">
                 <Upload className="w-4 h-4" />
                 <span>{uploadingProfile ? 'กำลังอ่านไฟล์...' : 'นำเข้าไฟล์ SWEX JSON'}</span>

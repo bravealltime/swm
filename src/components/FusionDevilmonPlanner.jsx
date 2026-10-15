@@ -230,7 +230,7 @@ export default function FusionDevilmonPlanner({ box, onNavigate }) {
               <div className="col-span-full py-16 text-center text-slate-400 space-y-2">
                 <CheckCircle2 className="w-8 h-8 text-emerald-400 mx-auto" />
                 <div className="text-sm font-bold text-white">ไม่พบมอนสเตอร์ 5★ แท้ในกล่อง</div>
-                <p className="text-xs text-slate-500">นำเข้าไฟล์ SWEX หรือกดทดลองด้วย Demo Box เพื่อดูการจัดอันดับ</p>
+                <p className="text-xs text-slate-500">นำเข้าไฟล์ SWEX JSON เพื่อดูการจัดอันดับ</p>
               </div>
             )}
           </div>

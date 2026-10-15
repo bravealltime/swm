@@ -2,10 +2,9 @@ import React, { useState, useEffect } from 'react';
 import {
   Compass, Radio, Sparkles, Trophy, Volume2, VolumeX, CheckCircle2,
   XCircle, AlertTriangle, RefreshCw, Zap, Flame, Shield, ArrowUpRight,
-  Filter, Play, Clock, HelpCircle, Layers, Bot } from 'lucide-react';
+  Filter, Clock, HelpCircle, Layers, Bot } from 'lucide-react';
 import * as aegisLive from '../services/aegisLive';
-import { evaluateRune } from '../utils/runeEvaluator';
-import { isAudioMuted, toggleAudioMute, playLegendAlertSound, playDropSound } from '../utils/soundEffects';
+import { isAudioMuted, toggleAudioMute, playLegendAlertSound } from '../utils/soundEffects';
 import AccountSuiteHeader from '../components/AccountSuiteHeader';
 import RuneIcon from '../components/RuneIcon';
 import ArtifactIcon from '../components/ArtifactIcon';
@@ -74,43 +73,6 @@ export default function LiveFarmingMonitorView({ onNavigate }) {
 
   const handleTestChime = () => {
     playLegendAlertSound();
-  };
-
-  // Demo run simulation for testing
-  const handleSimulateDemoRun = () => {
-    const isLegend = Math.random() > 0.5;
-    const mockRune = {
-      slot_no: Math.floor(Math.random() * 6) + 1,
-      class: 6,
-      extra: isLegend ? 5 : 4,
-      set_id: [3, 13, 15, 5, 10][Math.floor(Math.random() * 5)],
-      pri_eff: [[8, 42], [2, 11], [4, 11], [6, 11]][Math.floor(Math.random() * 4)],
-      sec_eff: [
-        [8, Math.floor(Math.random() * 3) + 4],
-        [4, Math.floor(Math.random() * 4) + 5],
-        [9, Math.floor(Math.random() * 3) + 4],
-        [10, Math.floor(Math.random() * 4) + 4],
-      ],
-    };
-
-    const evaluated = evaluateRune(mockRune);
-    const demoRun = {
-      at: Date.now(),
-      dungeonId: 2001,
-      stageId: 12,
-      win: true,
-      clearTimeSec: (Math.random() * 20 + 38).toFixed(1),
-      rune: mockRune,
-      evaluated,
-    };
-
-    if (evaluated.isLegend6Star) {
-      playLegendAlertSound();
-    } else {
-      playDropSound();
-    }
-
-    setRuns((prev) => [demoRun, ...prev].slice(0, 50));
   };
 
   const filteredRuns = runs.filter((r) => {
@@ -208,12 +170,6 @@ export default function LiveFarmingMonitorView({ onNavigate }) {
               <Sparkles className="w-4 h-4" /> ทดสอบเสียงรูนตำนาน
             </button>
 
-            <button
-              onClick={handleSimulateDemoRun}
-              className="px-3.5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 text-xs font-black flex items-center gap-1.5 cursor-pointer shadow-lg shadow-emerald-500/20 transition-all"
-            >
-              <Play className="w-4 h-4 fill-slate-950" /> ทดลองจำลองรอบฟาร์ม
-            </button>
           </div>
         </div>
       </div>
@@ -306,12 +262,6 @@ export default function LiveFarmingMonitorView({ onNavigate }) {
           <p className="text-xs text-slate-400 max-w-md mx-auto leading-relaxed">
             เปิดเกม Summoners War และเริ่มลงดันเจี้ยน Abyss หรือ Cairos ได้เลย ระบบจะตรวจจับผลดรอปและคำนวณการประเมินให้แบบเรียลไทม์
           </p>
-          <button
-            onClick={handleSimulateDemoRun}
-            className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-xs font-bold text-white transition-all cursor-pointer inline-flex items-center gap-2 mt-2"
-          >
-            <Play className="w-3.5 h-3.5" /> ทดลองจำลองรอบฟาร์ม 1 รอบ
-          </button>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">

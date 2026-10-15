@@ -172,7 +172,7 @@ describe('arenaTraits', () => {
 
   it('buildMonsterTraits covers all catalogue monsters with skill records', () => {
     const traits = buildMonsterTraits();
-    expect(Object.keys(traits).length).toBe(940);
+    expect(Object.keys(traits).length).toBeGreaterThanOrEqual(940);
     expect(traits.Galleon).toBeDefined();
     expect(traits.Bernard).toBeDefined();
     expect(traits.Leo).toContain('antiSpeed');

@@ -357,22 +357,11 @@ export function parseSwexExport(json) {
   };
 }
 
-// Generate realistic artifacts if box has none
 export function getArtifactsFromBox(box) {
   if (Array.isArray(box?.artifacts) && box.artifacts.length > 0) {
     return box.artifacts;
   }
-  // Realistic fallback artifacts
-  return [
-    { id: 'art-1', slot: 1, kind: 'element', element: 'fire', archetype: null, rank: 5, lvl: 15, main: [1, 1500], subs: [[207, 105, 1, 0], [204, 3.8, 1, 0], [208, 8, 1, 0], [302, 14, 1, 0]], unit: box?.units?.[0]?.masterId || 0 },
-    { id: 'art-2', slot: 2, kind: 'archetype', element: null, archetype: 'Support', rank: 5, lvl: 15, main: [1, 1500], subs: [[207, 26, 0, 0], [306, 12, 1, 0], [400, 7, 0, 0], [206, 6, 0, 0]], unit: box?.units?.[0]?.masterId || 0 },
-    { id: 'art-3', slot: 1, kind: 'element', element: 'water', archetype: null, rank: 5, lvl: 15, main: [1, 1500], subs: [[207, 118, 1, 0], [204, 4.2, 1, 0], [403, 9, 1, 0], [215, 8, 0, 0]], unit: box?.units?.[1]?.masterId || 0 },
-    { id: 'art-4', slot: 2, kind: 'archetype', element: null, archetype: 'Attack', rank: 5, lvl: 15, main: [3, 100], subs: [[207, 42, 1, 0], [205, 16, 1, 0], [404, 14, 1, 0], [301, 12, 0, 0]], unit: box?.units?.[1]?.masterId || 0 },
-    { id: 'art-5', slot: 1, kind: 'element', element: 'wind', archetype: null, rank: 5, lvl: 15, main: [5, 100], subs: [[206, 14, 1, 0], [205, 12, 1, 0], [302, 16, 1, 0], [208, 10, 1, 0]], unit: box?.units?.[2]?.masterId || 0 },
-    { id: 'art-6', slot: 2, kind: 'archetype', element: null, archetype: 'Defense', rank: 5, lvl: 15, main: [5, 100], subs: [[206, 15, 1, 0], [400, 8, 1, 0], [300, 11, 0, 0], [221, 9, 0, 0]], unit: box?.units?.[2]?.masterId || 0 },
-    { id: 'art-7', slot: 1, kind: 'element', element: 'light', archetype: null, rank: 5, lvl: 15, main: [1, 1500], subs: [[204, 4.5, 1, 0], [306, 15, 1, 0], [208, 12, 1, 0], [401, 11, 0, 0]], unit: 0 },
-    { id: 'art-8', slot: 2, kind: 'archetype', element: null, archetype: 'HP', rank: 5, lvl: 15, main: [1, 1500], subs: [[204, 4.0, 1, 0], [207, 24, 0, 0], [400, 6, 0, 0], [304, 10, 0, 0]], unit: 0 },
-  ];
+  return [];
 }
 
 const QUALITY_NAMES = { 1: 'Normal', 2: 'Magic', 3: 'Rare', 4: 'Hero', 5: 'Legend' };
@@ -645,7 +634,12 @@ export function getDemoGuardianBox() {
       { id: 107, slot: 4, set: 3, stars: 6, ancient: 0, lvl: 15, q: 5, q0: 5, main: [2, 63], innate: [5, 22], subs: [[8, 30, 1, 0], [4, 15, 1, 0], [9, 12, 0, 0], [10, 14, 0, 0]], eff: 108.4, unit: 26114 },
       { id: 108, slot: 6, set: 3, stars: 6, ancient: 0, lvl: 15, q: 5, q0: 5, main: [4, 63], innate: [1, 300], subs: [[8, 28, 1, 0], [2, 18, 1, 0], [9, 15, 0, 0], [12, 16, 0, 0]], eff: 105.8, unit: 26114 },
     ],
-    artifacts: getArtifactsFromBox(),
+    artifacts: [
+      { id: 'art-1', slot: 1, kind: 'element', element: 'fire', archetype: null, rank: 5, lvl: 15, main: [1, 1500], subs: [[207, 105, 1, 0], [204, 3.8, 1, 0], [208, 8, 1, 0], [302, 14, 1, 0]], unit: 21214 },
+      { id: 'art-2', slot: 2, kind: 'archetype', element: null, archetype: 'Support', rank: 5, lvl: 15, main: [1, 1500], subs: [[207, 26, 0, 0], [306, 12, 1, 0], [400, 7, 0, 0], [206, 6, 0, 0]], unit: 21214 },
+      { id: 'art-3', slot: 1, kind: 'element', element: 'water', archetype: null, rank: 5, lvl: 15, main: [1, 1500], subs: [[207, 118, 1, 0], [204, 4.2, 1, 0], [403, 9, 1, 0], [215, 8, 0, 0]], unit: 26114 },
+      { id: 'art-4', slot: 2, kind: 'archetype', element: null, archetype: 'Attack', rank: 5, lvl: 15, main: [3, 100], subs: [[207, 42, 1, 0], [205, 16, 1, 0], [404, 14, 1, 0], [301, 12, 0, 0]], unit: 26114 },
+    ],
     importedAt: new Date().toISOString(),
     version: BOX_VERSION,
     isDemo: true,

@@ -41,6 +41,11 @@ jobs:
       - name: Guardian player index, match shards, replay meta
         run: node scripts/fetch_swrt_players.cjs --pages=${{ github.event.inputs.pages || '30' }} --top=100
 
+      - name: Master game data sync & skill shards rebuild
+        run: |
+          node scripts/sync_all_sw_data.mjs
+          node scripts/build_skill_shards.mjs
+
       # AI enrichment — skipped when the AI_* secrets are not set
       - name: AI — Thai patch summaries
         if: ${{ env.AI_API_KEY != '' }}

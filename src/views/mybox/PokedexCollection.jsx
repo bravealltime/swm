@@ -62,7 +62,7 @@ const TOP_LD5_HALL_OF_FAME = [
   { name: 'Pontos', com2usId: '20414', element: 'light', role: 'สปีดลีด 24% + อมตะและกันดีบัฟทั้งทีม 3 เทิร์น' },
 ];
 
-export default function PokedexCollection({ box, onNavigate, onLoadDemo }) {
+export default function PokedexCollection({ box, onNavigate }) {
   const tierList = useLiveData('rta-tierlist', swrtTierList);
   const { season: RTA_SEASON, byId: RTA_BY_ID } = useMemo(() => indexTierList(tierList.data), [tierList.data]);
   const [cardBusy, setCardBusy] = useState(false);
@@ -300,11 +300,6 @@ export default function PokedexCollection({ box, onNavigate, onLoadDemo }) {
                 <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-amber-500/20 text-amber-300 border border-amber-500/30 uppercase tracking-wider">
                   Summoners War Pokedex & Showcase
                 </span>
-                {box?.isDemo && (
-                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30">
-                    Guardian Demo Account
-                  </span>
-                )}
               </div>
               <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
                 ตู้สะสม Nat 5 & ทำเนียบ LD 5★
@@ -332,16 +327,6 @@ export default function PokedexCollection({ box, onNavigate, onLoadDemo }) {
                 />
               </div>
             </div>
-
-            {(!box || !box.units?.length) && onLoadDemo && (
-              <button
-                onClick={onLoadDemo}
-                className="px-4 py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 text-xs font-black flex items-center justify-center gap-2 shadow-lg shadow-amber-500/25 transition-all cursor-pointer"
-              >
-                <Sparkles className="w-4 h-4 text-slate-950" />
-                <span>โหลดไอดีตัวอย่าง Guardian</span>
-              </button>
-            )}
           </div>
         </div>
       </div>
@@ -580,15 +565,6 @@ export default function PokedexCollection({ box, onNavigate, onLoadDemo }) {
                       <Crown className="w-4 h-4 text-yellow-300" />
                       <span>เปิดดูทำเนียบ LD 5★ ยอดนิยม 40 ตัว (ระดับ/อัตราชนะจาก RTA Tier List)</span>
                     </button>
-                    {onLoadDemo && (
-                      <button
-                        onClick={onLoadDemo}
-                        className="px-4 py-2 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 text-slate-200 text-xs font-bold flex items-center gap-1.5 cursor-pointer"
-                      >
-                        <Sparkles className="w-4 h-4 text-amber-400" />
-                        <span>🎮 โหลดไอดีตัวอย่าง Guardian G3 เพื่อทดสอบตู้สะสม</span>
-                      </button>
-                    )}
                   </div>
                 </div>
               )}

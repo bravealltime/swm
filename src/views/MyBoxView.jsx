@@ -11,7 +11,7 @@ import { teamsFromBox } from '../utils/metaTeams';
 import { summarizeBoxForAi, keyMonstersForAi } from '../utils/boxSummary';
 import guardianMeta from '../data/swrtGuardianMeta.json';
 import { flagFromCountry } from '../data/swrtPlayerAdapter';
-import { parseSwexExport, ownedIdSet, loadBox, loadBoxAsync, saveBox, saveBoxAsync, clearBox, baseAwakenedId, BOX_VERSION, RUNE_SETS, loadDemoBox, isNonSummonableLd5 } from '../utils/swexImport';
+import { parseSwexExport, ownedIdSet, loadBox, loadBoxAsync, saveBox, saveBoxAsync, clearBox, baseAwakenedId, BOX_VERSION, RUNE_SETS, isNonSummonableLd5 } from '../utils/swexImport';
 import { supportsFolderWatch, loadDirHandle, clearDirHandle, pickSwexFolder, ensurePermission, findNewestExport } from '../utils/swexWatcher';
 import { exportAllDataAsJSON } from '../services/storageService';
 import { loadPublicSettings } from '../services/adminClient';
@@ -90,12 +90,6 @@ export default function MyBoxView({ onNavigate, tab: initialTab, subItem }) {
   const owned = useMemo(() => ownedIdSet(box), [box]);
   const [openUnit, setOpenUnit] = useState(null); // unit (with .info) shown in the rune/artifact page
   const mdc = useMdcAnalysis(owned, !!box);
-
-  const handleLoadDemo = () => {
-    const demo = loadDemoBox();
-    setBox(demo);
-    setError('');
-  };
 
   const importFile = async (file, { auto = false } = {}) => {
     setError('');
@@ -355,7 +349,7 @@ export default function MyBoxView({ onNavigate, tab: initialTab, subItem }) {
                   </span>
                 </div>
                 <p className="text-xs text-slate-400 mt-1 max-w-2xl">
-                  คุณสามารถเปิดดู "ตู้สะสม Nat 5 & ทำเนียบ LD 5★", ค้นหาอาร์ติแฟกต์ หรือทดลองทุกระบบทันทีโดยกดโหลดไอดีตัวอย่าง Guardian G3
+                  คุณสามารถเปิดดู "ตู้สะสม Nat 5 & ทำเนียบ LD 5★", ค้นหาอาร์ติแฟกต์ หรือนำเข้าไฟล์ SWEX JSON เพื่อเริ่มต้นวิเคราะห์ไอดีจริงของคุณ
                 </p>
               </div>
             </div>
@@ -368,13 +362,6 @@ export default function MyBoxView({ onNavigate, tab: initialTab, subItem }) {
               >
                 <RefreshCw className={`w-4 h-4 text-slate-950 ${syncing ? 'animate-spin' : ''}`} />
                 <span>{syncing ? 'กำลังซิงค์...' : '🔄 ซิงค์ข้อมูลไอดีจริง (1-Click)'}</span>
-              </button>
-              <button
-                onClick={handleLoadDemo}
-                className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 text-xs font-black flex items-center gap-2 cursor-pointer shadow-lg shadow-amber-500/20"
-              >
-                <Trophy className="w-4 h-4 text-slate-950" />
-                โหลดไอดีตัวอย่าง Guardian G3 (ทดลองทันที)
               </button>
               <ImportButton onFile={importFile} label="นำเข้าไฟล์ SWEX" />
             </div>
@@ -389,7 +376,7 @@ export default function MyBoxView({ onNavigate, tab: initialTab, subItem }) {
         </div>
       )}
 
-      {box && <BoxHeader box={box} onNavigate={onNavigate} onClearDemo={reset} onImport={importFile} />}
+      {box && <BoxHeader box={box} onNavigate={onNavigate} />}
       {liveAllowed && <LiveCard live={live} box={box} onStart={startLive} onStop={stopLive} onNavigate={onNavigate} />}
       {box && live.status === 'off' && <SyncCard watch={watch} box={box} onStart={startWatching} onGrant={grantAgain} onStop={stopWatching} />}
 
@@ -407,20 +394,20 @@ export default function MyBoxView({ onNavigate, tab: initialTab, subItem }) {
         })}
       </div>
 
-      {tab === 'overview' && (box ? <Overview box={box} mdc={mdc} owned={owned} onTab={setTab} onNavigate={onNavigate} onOpenUnit={setOpenUnit} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} onLive={liveAllowed ? startLive : null} />)}
-      {tab === 'box' && (box ? <BoxGrid box={box} onNavigate={onNavigate} onOpenUnit={setOpenUnit} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} onLive={liveAllowed ? startLive : null} />)}
-      {tab === 'pokedex' && <Suspense fallback={<TabLoading />}><PokedexCollection box={box} onNavigate={onNavigate} onLoadDemo={handleLoadDemo} /></Suspense>}
+      {tab === 'overview' && (box ? <Overview box={box} mdc={mdc} owned={owned} onTab={setTab} onNavigate={onNavigate} onOpenUnit={setOpenUnit} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLive={liveAllowed ? startLive : null} />)}
+      {tab === 'box' && (box ? <BoxGrid box={box} onNavigate={onNavigate} onOpenUnit={setOpenUnit} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLive={liveAllowed ? startLive : null} />)}
+      {tab === 'pokedex' && <Suspense fallback={<TabLoading />}><PokedexCollection box={box} onNavigate={onNavigate} /></Suspense>}
       {tab === 'artifacts' && <Suspense fallback={<TabLoading />}><ArtifactSearchEngine box={box} onNavigate={onNavigate} /></Suspense>}
-      {tab === 'grind-tracker' && (box ? <Suspense fallback={<TabLoading />}><RuneGrindTracker box={box} /></Suspense> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} onLive={liveAllowed ? startLive : null} />)}
+      {tab === 'grind-tracker' && (box ? <Suspense fallback={<TabLoading />}><RuneGrindTracker box={box} /></Suspense> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLive={liveAllowed ? startLive : null} />)}
       {tab === 'fusion-devilmon' && <Suspense fallback={<TabLoading />}><FusionDevilmonPlanner box={box} onNavigate={onNavigate} /></Suspense>}
-      {tab === 'efficiency' && (box ? <Suspense fallback={<TabLoading />}><RuneEfficiencyAndQuads box={box} /></Suspense> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} onLive={liveAllowed ? startLive : null} />)}
-      {tab === 'defense' && (box ? <Suspense fallback={<TabLoading />}><SiegeDefenseBuilder box={box} onNavigate={onNavigate} /></Suspense> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} onLive={liveAllowed ? startLive : null} />)}
+      {tab === 'efficiency' && (box ? <Suspense fallback={<TabLoading />}><RuneEfficiencyAndQuads box={box} /></Suspense> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLive={liveAllowed ? startLive : null} />)}
+      {tab === 'defense' && (box ? <Suspense fallback={<TabLoading />}><SiegeDefenseBuilder box={box} onNavigate={onNavigate} /></Suspense> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLive={liveAllowed ? startLive : null} />)}
       {tab === 'teams' && <Teams owned={owned} mdc={mdc} onNavigate={onNavigate} />}
       {tab === 'meta' && (box
         ? <div className="space-y-6"><MetaTeamsFromBox box={box} owned={owned} monsterOf={monsterOf} onNavigate={onNavigate} /><MetaCoverage owned={owned} /></div>
-        : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} onLive={liveAllowed ? startLive : null} />)}
-      {tab === 'speed' && (box ? <SpeedTuner box={box} onNavigate={onNavigate} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} onLive={liveAllowed ? startLive : null} />)}
-      {tab === 'runes' && (box ? <Runes box={box} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLoadDemo={handleLoadDemo} onLive={liveAllowed ? startLive : null} />)}
+        : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLive={liveAllowed ? startLive : null} />)}
+      {tab === 'speed' && (box ? <SpeedTuner box={box} onNavigate={onNavigate} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLive={liveAllowed ? startLive : null} />)}
+      {tab === 'runes' && (box ? <Runes box={box} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLive={liveAllowed ? startLive : null} />)}
 
       {openUnit && box && (
         <MonsterDetailModal unit={openUnit} box={box} onClose={() => setOpenUnit(null)} onNavigate={(view, params) => { setOpenUnit(null); onNavigate(view, params); }} />
@@ -589,7 +576,7 @@ function ImportButton({ onFile, label, icon: Icon = Upload, subtle = false }) {
   );
 }
 
-function EmptyState({ onFile, onWatch, onLoadDemo, onLive }) {
+function EmptyState({ onFile, onWatch, onLive }) {
   const [dragging, setDragging] = useState(false);
   return (
     <div
@@ -605,11 +592,6 @@ function EmptyState({ onFile, onWatch, onLoadDemo, onLive }) {
       </div>
       <div className="flex flex-wrap items-center justify-center gap-2">
         <ImportButton onFile={onFile} label="เลือกไฟล์ JSON" />
-        {onLoadDemo && (
-          <button onClick={onLoadDemo} className="px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 cursor-pointer bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-black shadow-lg shadow-amber-500/20">
-            <Trophy className="w-4 h-4 text-slate-950" /> โหลดไอดีตัวอย่าง Guardian G3 (ทดลองทันที)
-          </button>
-        )}
         {onLive && (
           <button onClick={onLive} className="px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 cursor-pointer bg-cyan-600 hover:bg-cyan-500 text-white shadow-lg shadow-cyan-500/20">
             <Radio className="w-4 h-4" /> เชื่อมต่อ SWEX แบบเรียลไทม์ (AegisLink)
@@ -654,16 +636,9 @@ function BoxHeader({ box, onNavigate }) {
             <span className="truncate">{wizard.name || 'ผู้เล่นของฉัน'}</span>
             <span className="text-[11px] sm:text-xs font-semibold px-2 py-0.5 rounded-full bg-white/[0.05] border border-white/10 text-slate-300">Lv.{wizard.level ?? '—'}</span>
             {wizard.guild && <span className="text-[11px] sm:text-xs font-semibold px-2 py-0.5 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-300 truncate max-w-[120px]">{wizard.guild}</span>}
-            {box?.isDemo && (
-              <span className="text-[10px] sm:text-xs font-bold px-2 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 flex items-center gap-1">
-                <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5" /> Demo G3
-              </span>
-            )}
           </div>
           <div className="text-[11px] sm:text-xs text-slate-400 mt-0.5 truncate">
-            {box?.isDemo
-              ? 'บัญชีตัวอย่าง Guardian G3'
-              : `นำเข้า ${box?.importedAt?.slice(0, 16).replace('T', ' ') || '-'}`}
+            {`นำเข้า ${box?.importedAt?.slice(0, 16).replace('T', ' ') || '-'}`}
           </div>
         </div>
       </div>

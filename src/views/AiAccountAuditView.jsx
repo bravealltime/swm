@@ -7,7 +7,6 @@ import {
 } from 'lucide-react';
 import { loadBox, saveBox } from '../utils/boxStorage';
 import { auditAccount } from '../utils/accountAudit';
-import { loadDemoBox } from '../utils/swexImport';
 import * as aegisLive from '../services/aegisLive';
 import AccountSuiteHeader from '../components/AccountSuiteHeader';
 import SwRatingDashboard from '../components/SwRatingDashboard';
@@ -59,11 +58,6 @@ export default function AiAccountAuditView({ onNavigate, onOpenAuth, subItem, vi
       setSyncStatus('เกิดข้อผิดพลาดในการเชื่อมต่อ AegisLink');
       setTimeout(() => setSyncStatus(null), 4000);
     }
-  };
-
-  const handleLoadDemo = () => {
-    const demo = loadDemoBox();
-    setBox(demo);
   };
 
   const handleActionToggle = (idx) => {
@@ -140,13 +134,6 @@ export default function AiAccountAuditView({ onNavigate, onOpenAuth, subItem, vi
             >
               <Radio className="w-4 h-4" />
               ดึงข้อมูลสด 1-Click (AegisLink)
-            </button>
-            <button
-              onClick={handleLoadDemo}
-              className="px-6 py-3 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/[0.1] text-white font-bold text-sm flex items-center gap-2 transition-all cursor-pointer"
-            >
-              <Sparkles className="w-4 h-4 text-amber-400" />
-              ทดลองดูตัวอย่าง (Demo Box)
             </button>
             <button
               onClick={() => onNavigate('my-box')}

@@ -1,5 +1,5 @@
 {
-  "season": "Tournament Season 17",
+  "season": "Tournament Season 21",
   "status": "Championship Concluded",
   "servers": {
     "Global": {
@@ -53,14 +53,14 @@
     },
     "Asia": {
       "champion": "悪魔 (Akuma)",
-      "runnerUp": "ผัดกะเพราไข่ดาว",
+      "runnerUp": "Freedom",
       "thirdPlace": "Braveheart",
       "bracket": [
         {
           "round": "Quarterfinals",
           "matches": [
             { "team1": "悪魔 (Akuma)", "score1": "20,000", "team2": "RedSun", "score2": "16,800", "winner": "悪魔 (Akuma)" },
-            { "team1": "ผัดกะเพราไข่ดาว", "score1": "20,000", "team2": "Dynasty", "score2": "17,900", "winner": "ผัดกะเพราไข่ดาว" },
+            { "team1": "Freedom", "score1": "20,000", "team2": "Dynasty", "score2": "17,900", "winner": "Freedom" },
             { "team1": "Braveheart", "score1": "20,000", "team2": "Zero", "score2": "15,400", "winner": "Braveheart" },
             { "team1": "Lotus", "score1": "20,000", "team2": "Valkyrie", "score2": "16,200", "winner": "Lotus" }
           ]
@@ -69,13 +69,13 @@
           "round": "Semifinals",
           "matches": [
             { "team1": "悪魔 (Akuma)", "score1": "20,000", "team2": "Braveheart", "score2": "18,900", "winner": "悪魔 (Akuma)" },
-            { "team1": "ผัดกะเพราไข่ดาว", "score1": "20,000", "team2": "Lotus", "score2": "18,200", "winner": "ผัดกะเพราไข่ดาว" }
+            { "team1": "Freedom", "score1": "20,000", "team2": "Lotus", "score2": "18,200", "winner": "Freedom" }
           ]
         },
         {
           "round": "Grand Final",
           "matches": [
-            { "team1": "悪魔 (Akuma)", "score1": "20,000", "team2": "ผัดกะเพราไข่ดาว", "score2": "19,850", "winner": "悪魔 (Akuma)" }
+            { "team1": "悪魔 (Akuma)", "score1": "20,000", "team2": "Freedom", "score2": "19,850", "winner": "悪魔 (Akuma)" }
           ]
         }
       ],

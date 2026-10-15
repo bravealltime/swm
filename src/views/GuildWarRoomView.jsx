@@ -355,9 +355,9 @@ export default function GuildWarRoomView({ onNavigate }) {
                   LIVE จาก SWEX
                 </span>
               ) : (
-                <span className="px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 flex items-center gap-1.5">
-                  <AlertTriangle className="w-3.5 h-3.5" />
-                  ข้อมูลตัวอย่าง
+                <span className="px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-full bg-slate-800 text-slate-300 border border-white/10 flex items-center gap-1.5">
+                  <Shield className="w-3.5 h-3.5 text-blue-400" />
+                  ผังวางแผนกลยุทธ์ (ออฟไลน์)
                 </span>
               )}
               <span className={`px-2.5 py-0.5 text-xs rounded-full border flex items-center gap-1.5 ${live.status === 'live' ? 'text-cyan-200 bg-cyan-500/10 border-cyan-500/30' : live.status === 'connecting' ? 'text-amber-200 bg-amber-500/10 border-amber-500/30' : live.status === 'error' ? 'text-rose-200 bg-rose-500/10 border-rose-500/30' : 'text-slate-400 bg-white/5 border-white/5'}`}>
@@ -387,7 +387,7 @@ export default function GuildWarRoomView({ onNavigate }) {
                 <span className="text-slate-500">— เปิดหน้ากิลด์ / Siege ในเกมเพื่อรับข้อมูลใหม่</span>
               </p>
             ) : (
-              <p className="text-[11px] text-amber-200/80">ป้อม คะแนน และสมาชิกด้านล่างเป็นข้อมูลตัวอย่าง — ติดตั้งปลั๊กอิน AegisLink ใน SWEX แล้วกด "เชื่อมต่อ SWEX" ระบบจะดึงกิลด์จริงของคุณทันทีที่เปิดหน้า Siege ในเกม (<button onClick={() => onNavigate?.('aegislink')} className="underline hover:text-white cursor-pointer">วิธีติดตั้ง</button>)</p>
+              <p className="text-[11px] text-slate-400">ป้อม คะแนน และสมาชิกด้านล่างเป็นผังวางแผนกลยุทธ์ — ติดตั้งปลั๊กอิน AegisLink ใน SWEX แล้วกด "เชื่อมต่อ SWEX" ระบบจะดึงกิลด์จริงของคุณทันทีที่เปิดหน้า Siege ในเกม (<button onClick={() => onNavigate?.('aegislink')} className="underline hover:text-white cursor-pointer">วิธีติดตั้ง</button>)</p>
             )}
           </div>
 

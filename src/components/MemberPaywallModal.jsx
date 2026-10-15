@@ -16,7 +16,6 @@ import {
   CheckCircle2,
   Clock,
   ExternalLink,
-  Copy,
   Smartphone,
   Ticket,
   AlertTriangle,
@@ -33,7 +32,6 @@ export default function MemberPaywallModal({ isOpen, onClose }) {
   const [qrError, setQrError] = useState('');
   const [manualChecking, setManualChecking] = useState(false);
   const [timeLeft, setTimeLeft] = useState(15 * 60); // 15 minutes
-  const [copiedPromptPay, setCopiedPromptPay] = useState(false);
 
   // VIP Promo Code Redemption State
   const [promoCode, setPromoCode] = useState('');
@@ -259,12 +257,6 @@ export default function MemberPaywallModal({ isOpen, onClose }) {
     }
   };
 
-  // Copy PromptPay phone
-  const handleCopyPromptPay = () => {
-    navigator.clipboard?.writeText('0812345678');
-    setCopiedPromptPay(true);
-    setTimeout(() => setCopiedPromptPay(false), 2500);
-  };
 
   return (
     <div
@@ -508,25 +500,6 @@ export default function MemberPaywallModal({ isOpen, onClose }) {
               )}
             </div>
 
-            {/* Quick Testing & Manual Links */}
-            <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-400">
-              <button
-                type="button"
-                onClick={triggerSuccess}
-                className="text-amber-400/90 hover:text-amber-300 underline flex items-center gap-1 cursor-pointer"
-              >
-                <span>🧪 ทดลองปลดล็อก VIP ทันที (โหมดทดสอบ)</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={handleCopyPromptPay}
-                className="text-slate-400 hover:text-slate-200 flex items-center gap-1 cursor-pointer"
-              >
-                <Copy className="w-3.5 h-3.5" />
-                <span>{copiedPromptPay ? '✓ คัดลอกเลขแล้ว!' : 'เบอร์พร้อมเพย์ตรง: 081-234-5678'}</span>
-              </button>
-            </div>
 
             {/* Direct Full-Width Close Button at Bottom */}
             <div className="pt-2 text-center">
@@ -646,13 +619,6 @@ export default function MemberPaywallModal({ isOpen, onClose }) {
                 <span>{manualChecking ? 'กำลังตรวจสอบ...' : 'ฉันสแกนจ่ายแล้ว (ตรวจสอบสถานะทันที)'}</span>
               </button>
 
-              <button
-                type="button"
-                onClick={triggerSuccess}
-                className="w-full text-center text-xs text-slate-400 hover:text-amber-300 underline cursor-pointer py-1"
-              >
-                🧪 ทดสอบปลดล็อกทันที (จำลองการจ่ายเงินสำเร็จ)
-              </button>
 
               <button
                 type="button"
