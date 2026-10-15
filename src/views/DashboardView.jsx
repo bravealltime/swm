@@ -23,9 +23,14 @@ import {
   Share2,
   Camera,
   Radio,
+  Calendar,
+  Flame,
+  BookOpen,
+  HelpCircle,
 } from 'lucide-react';
 import MonsterAvatar from '../components/MonsterAvatar';
 import { PROMO_CODES } from '../data/promoCodes';
+import gameEventsData from '../data/gameEvents.json';
 import { useLiveData } from '../hooks/useLiveData';
 import { copyText } from '../utils/clipboard';
 import { useGuildRankings } from '../hooks/useGuildRankings';
@@ -58,11 +63,130 @@ const POPULAR_PRESETS = [
   { label: 'Martina + Shaina + Triana', defKey: 'Martina,Shaina,Triana', monsters: ['Martina', 'Shaina', 'Triana'] },
 ];
 
+const WHATS_NEW_ITEMS = [
+  {
+    id: 'events-quiz',
+    isHero: true,
+    badge: 'ใหม่ล่าสุด • มีเฉลย',
+    badgeColor: 'amber',
+    category: 'events',
+    title: 'ศูนย์กิจกรรมทางการ & เฉลยคำถาม Com2uS',
+    description: 'รวมทุกกิจกรรม active ในเกม เช็คของรางวัล (เลือก 5★ แท้ / คัมภีร์แสงมืด / เดวิลม่อน), มีระบบติ๊กติดตามรางวัลที่รับแล้ว และเฉลยข้อสอบกิจกรรม 15 ข้อ คัดลอกคำตอบใน 1 คลิก',
+    icon: Calendar,
+    colorGradient: 'from-amber-500/20 via-orange-500/10 to-transparent',
+    borderColor: 'border-amber-500/40',
+    tags: ['#กิจกรรมทางการ', '#เฉลยคำถาม', '#นับถอยหลัง', '#ของรางวัล'],
+    targetView: 'events',
+    targetParams: {},
+    primaryActionLabel: 'ดูรายการกิจกรรมทั้งหมด ➔',
+  },
+  {
+    id: 'balance-patch-94',
+    badge: 'Patch v9.4.0',
+    badgeColor: 'cyan',
+    category: 'events',
+    title: 'บันทึกแพตช์ 9.4.0 & มอนใหม่ Shadow Sailor',
+    description: 'วิเคราะห์การปรับสมดุลล่าสุด Art Master, Beast Rider, Puppeteer พร้อมข้อมูลสกิลและสเตตัสมอนสเตอร์ใหม่ตระกูล Shadow Sailor ครบทั้ง 5 ธาตุ',
+    icon: BookOpen,
+    colorGradient: 'from-cyan-500/15 via-blue-500/5 to-transparent',
+    borderColor: 'border-cyan-500/30',
+    tags: ['#Patch9.4', '#ShadowSailor', '#บัฟเนิร์ฟมอน'],
+    targetView: 'balance',
+    primaryActionLabel: 'อ่านบันทึกแพตช์ ➔',
+  },
+  {
+    id: 'live-farming',
+    badge: 'ระบบสด SWEX',
+    badgeColor: 'emerald',
+    category: 'tools',
+    title: 'ระบบตรวจจับการฟาร์มสด (Live Farming Monitor)',
+    description: 'ต่อสายตรง SWEX ดักจับผลดรอปรูน/อาร์ติแฟกต์ดัน Cairos Abyss สดวินาทีต่อวินาที แนะนำ Keep/Sell ทันที พร้อมประเมิน Max Potential SPD (+30)',
+    icon: Radio,
+    colorGradient: 'from-emerald-500/15 via-teal-500/5 to-transparent',
+    borderColor: 'border-emerald-500/30',
+    tags: ['#ฟาร์มสด', '#AbyssDrops', '#KeepOrSell', '#SpeedQuad'],
+    targetView: 'live-farm-monitor',
+    primaryActionLabel: 'เปิดจอฟาร์มสด ➔',
+  },
+  {
+    id: 'ai-account-audit',
+    badge: 'AI วินิจฉัย',
+    badgeColor: 'amber',
+    category: 'tools',
+    title: 'AI วินิจฉัยสุขภาพไอดี & คะแนน SW-Rating',
+    description: 'วิเคราะห์คุณภาพรูนทั้งไอดี เทียบเกณฑ์สปีด Swift (+221), คุณภาพ Violent, เช็ค 30 มอนการ์เดียน และจัดลำดับดันเจี้ยนที่คุ้มฟาร์มที่สุด',
+    icon: Sparkles,
+    colorGradient: 'from-amber-500/15 via-yellow-500/5 to-transparent',
+    borderColor: 'border-amber-500/30',
+    tags: ['#SWRating', '#ตรวจไอดี', '#สปีดSwift221', '#RuneAudit'],
+    targetView: 'ai-account-audit',
+    primaryActionLabel: 'ตรวจสุขภาพไอดี ➔',
+  },
+  {
+    id: 'siege-tournament-21',
+    badge: 'Season 21',
+    badgeColor: 'sky',
+    category: 'meta',
+    title: 'ศูนย์สงคราม Siege & ทัวร์นาเมนต์ Season 21',
+    description: 'วิเคราะห์เมต้าตั้งรับฐาน 4★ / 5★, สายการแข่งทัวร์นาเมนต์ Season 21 ล่าสุด และคลังสูตรทีมแก้ทาง 3MDC กว่า 1,500+ สูตร',
+    icon: Shield,
+    colorGradient: 'from-sky-500/15 via-indigo-500/5 to-transparent',
+    borderColor: 'border-sky-500/30',
+    tags: ['#SiegeS21', '#3MDCCounter', '#ฐาน4ดาว', '#แชมป์กิลด์'],
+    targetView: 'siege-battles',
+    primaryActionLabel: 'เข้าศูนย์ Siege ➔',
+  },
+  {
+    id: 'arena-meta',
+    badge: 'เมต้า Arena',
+    badgeColor: 'rose',
+    category: 'meta',
+    title: 'สูตรทีมบุก & ตั้งรับ Arena (AO / AD + Rush Hour)',
+    description: 'รวมสูตรทีมบุกยอดนิยม (Cleave, Bomb, Bruiser) และสูตรตั้งรับ Rush Hour ต้าน 33% SPD Lead สถิติความเสถียรและเกณฑ์สปีดที่ต้องจูน',
+    icon: Swords,
+    colorGradient: 'from-rose-500/15 via-red-500/5 to-transparent',
+    borderColor: 'border-rose-500/30',
+    tags: ['#ArenaAO', '#RushHourAD', '#CleaveTeam', '#33SpdLead'],
+    targetView: 'arena',
+    primaryActionLabel: 'ดูสูตรทีม Arena ➔',
+  },
+  {
+    id: 'active-promo-codes',
+    badge: 'รับของฟรี',
+    badgeColor: 'purple',
+    category: 'rewards',
+    title: 'โค้ดแจกไอเทมประจำเดือนล่าสุด (Active Promo Codes)',
+    description: 'แจกคัมภีร์เวทมนตร์ คริสตัล และพลังงาน คัดลอกได้ทันทีใน 1-Click พร้อมลิงก์ตรงกรอกรับรางวัลในเกม ไม่พลาดทุกโค้ดทางการ',
+    icon: Gift,
+    colorGradient: 'from-purple-500/15 via-fuchsia-500/5 to-transparent',
+    borderColor: 'border-purple-500/30',
+    tags: ['#โค้ดเกม', '#คัมภีร์ฟรี', '#คริสตัล', '#ActiveCodes'],
+    targetView: 'codes',
+    primaryActionLabel: 'ดูโค้ดทั้งหมด ➔',
+  },
+  {
+    id: 'pokedex-ld5',
+    badge: 'ตู้สะสม',
+    badgeColor: 'amber',
+    category: 'rewards',
+    title: 'ตู้สะสม Nat 5 & ทำเนียบ LD 5★ Pokedex',
+    description: 'ตรวจสอบความครบของมอนสเตอร์ 5★ แท้ในไอดีของคุณ, ทำเนียบเกียรติยศ LD5 ที่เปิดได้จริง และบันทึกสปีดมอนสเตอร์ที่เร็วที่สุด',
+    icon: Trophy,
+    colorGradient: 'from-yellow-500/15 via-amber-500/5 to-transparent',
+    borderColor: 'border-yellow-500/30',
+    tags: ['#ตู้สะสมNat5', '#LD5Pokedex', '#สถิติไอดี'],
+    targetView: 'my-box',
+    targetParams: { tab: 'pokedex' },
+    primaryActionLabel: 'เปิดดูตู้สะสม ➔',
+  },
+];
+
 export default function DashboardView({ onNavigate }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [copiedCode, setCopiedCode] = useState(null);
   const [selectedPreset, setSelectedPreset] = useState(POPULAR_PRESETS[0]);
   const [selectedServer, setSelectedServer] = useState('asia');
+  const [whatsNewCategory, setWhatsNewCategory] = useState('all');
   const [userBox, setUserBox] = useState(() => loadBox());
   const [uploadingProfile, setUploadingProfile] = useState(false);
   const [cardBusy, setCardBusy] = useState(false);
@@ -118,6 +242,17 @@ export default function DashboardView({ onNavigate }) {
     return activeCodesLive.data.filter((c) => c.status === 'active').slice(0, 4);
   }, [activeCodesLive.data]);
   const activeCodeCount = useMemo(() => activeCodesLive.data.filter((c) => c.status === 'active').length, [activeCodesLive.data]);
+
+  const activeEventsCount = gameEventsData?.events?.length || 4;
+  const activeQuizzesCount = gameEventsData?.quizQuestions?.length || 15;
+
+  const filteredWhatsNewItems = useMemo(() => {
+    return WHATS_NEW_ITEMS.filter((item) => {
+      if (item.isHero) return false;
+      if (whatsNewCategory === 'all') return true;
+      return item.category === whatsNewCategory;
+    });
+  }, [whatsNewCategory]);
 
   // The big datasets are only needed for two preview widgets, so they are
   // fetched after first paint instead of being part of the home-page bundle.
@@ -362,12 +497,27 @@ export default function DashboardView({ onNavigate }) {
         <div className="absolute -top-24 -right-24 w-96 h-96 bg-purple-600/15 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 max-w-4xl mx-auto text-center space-y-4 sm:space-y-5">
-          {/* Badge Chips */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.05] border border-white/10 backdrop-blur-md text-xs font-semibold text-slate-300 shadow-inner whitespace-nowrap">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-emerald-400 font-mono font-bold">RTA S38</span>
-            <span className="text-slate-400 hidden sm:inline">•</span>
-            <span className="hidden sm:inline">ศูนย์ข้อมูลยุทธวิธี Summoners War ภาษาไทย</span>
+          {/* Badge Chips & Latest Feature Announcement */}
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.05] border border-white/10 backdrop-blur-md text-xs font-semibold text-slate-300 shadow-inner whitespace-nowrap">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="text-emerald-400 font-mono font-bold">RTA S38</span>
+              <span className="text-slate-400 hidden sm:inline">•</span>
+              <span className="hidden sm:inline">ศูนย์ข้อมูลยุทธวิธี Summoners War ภาษาไทย</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => onNavigate('events')}
+              className="group inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 hover:border-amber-400/60 text-xs text-amber-200 transition-all cursor-pointer shadow-lg shadow-amber-500/10 backdrop-blur-md"
+            >
+              <span className="flex h-2 w-2 relative shrink-0">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+              </span>
+              <span className="px-1.5 py-0.2 rounded bg-amber-400 text-slate-950 font-black text-[10px] uppercase">NEW</span>
+              <span>ศูนย์กิจกรรม & เฉลยคำถาม | Balance Patch 9.4.0</span>
+              <ChevronRight className="w-3.5 h-3.5 text-amber-300 group-hover:translate-x-0.5 transition-transform" />
+            </button>
           </div>
 
           {/* High-Impact Headline */}
@@ -413,6 +563,20 @@ export default function DashboardView({ onNavigate }) {
             {/* Quick Hot Suggestions */}
             <div className="flex flex-wrap items-center justify-center gap-2 pt-3 text-xs">
               <span className="text-slate-400 text-xs font-semibold">แนะนำค้นหา:</span>
+              <button
+                type="button"
+                onClick={() => onNavigate('events')}
+                className="px-2.5 py-1 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-amber-300 hover:text-amber-200 font-bold transition-colors cursor-pointer flex items-center gap-1"
+              >
+                🎉 ศูนย์กิจกรรม & เฉลยคำถาม
+              </button>
+              <button
+                type="button"
+                onClick={() => onNavigate('balance')}
+                className="px-2.5 py-1 rounded-lg bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/30 text-cyan-300 hover:text-cyan-200 font-semibold transition-colors cursor-pointer"
+              >
+                📜 Balance Patch 9.4
+              </button>
               <button
                 type="button"
                 onClick={() => onNavigate('player-tracker', { initialPlayer: 'Lest' })}
@@ -480,6 +644,191 @@ export default function DashboardView({ onNavigate }) {
               <div className="text-lg sm:text-xl font-black text-white mt-0.5">{activeCodeCount} โค้ดแอคทีฟ</div>
               <div className="text-xs text-purple-400 font-medium">รับได้ทันทีในเกม</div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 1.5 WHAT'S NEW & LATEST UPDATES HUB (ศูนย์รวมอัปเดต & ฟีเจอร์ใหม่ล่าสุด) */}
+      <section className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-b from-[#0c1527] via-[#09101d] to-[#070b14] p-5 sm:p-8 shadow-2xl">
+        {/* Ambient Glow Orbs */}
+        <div className="absolute top-0 right-1/3 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 right-0 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-1/2 left-0 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
+
+        {/* Header Row: Title, Subtitle, and Filter Pills */}
+        <div className="relative z-10 flex flex-col lg:flex-row lg:items-end justify-between gap-5 pb-6 border-b border-white/[0.08]">
+          <div className="space-y-2">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 text-xs font-bold">
+              <Flame className="w-3.5 h-3.5 text-amber-400 fill-amber-400 animate-pulse" />
+              <span>อัปเดต & ฟีเจอร์ใหม่ล่าสุด</span>
+              <span className="text-amber-400/60">•</span>
+              <span className="text-[11px] font-mono text-amber-200">What's New</span>
+            </div>
+            <h2 className="text-xl sm:text-2xl lg:text-3xl font-black text-white tracking-tight flex items-center gap-2">
+              <span>มีอะไรใหม่ในระบบบ้าง?</span>
+              <span className="text-xs sm:text-sm font-semibold px-2.5 py-0.5 rounded-full bg-white/[0.06] border border-white/10 text-slate-300">
+                {WHATS_NEW_ITEMS.length} อัปเดต
+              </span>
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-400 max-w-2xl leading-relaxed">
+              รวมทุกฟีเจอร์ กิจกรรมพร้อมเฉลยคำถาม บันทึกแพตช์ 9.4 และเครื่องมือใหม่ที่เพิ่มเข้ามา สามารถคลิกเปิดดูข้อมูลได้ทันทีในคลิกเดียว
+            </p>
+          </div>
+
+          {/* Category Filter Pills */}
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+            {[
+              { id: 'all', label: 'ทั้งหมด', count: WHATS_NEW_ITEMS.length },
+              { id: 'events', label: '🎉 กิจกรรม & แพตช์', count: 2 },
+              { id: 'tools', label: '🤖 AI & ฟาร์มสด', count: 2 },
+              { id: 'meta', label: '⚔️ เมต้า & กิลด์', count: 2 },
+              { id: 'rewards', label: '🎁 โค้ด & ตู้สะสม', count: 2 },
+            ].map((cat) => {
+              const active = whatsNewCategory === cat.id;
+              return (
+                <button
+                  key={cat.id}
+                  type="button"
+                  onClick={() => setWhatsNewCategory(cat.id)}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                    active
+                      ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 shadow-lg shadow-amber-500/20'
+                      : 'bg-white/[0.04] hover:bg-white/[0.08] text-slate-400 hover:text-white border border-white/[0.06]'
+                  }`}
+                >
+                  <span>{cat.label}</span>
+                  <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono ${
+                    active ? 'bg-black/20 text-slate-900' : 'bg-white/10 text-slate-400'
+                  }`}>
+                    {cat.count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Main Content Area */}
+        <div className="relative z-10 pt-6 space-y-5">
+          {/* 1. HERO SPOTLIGHT CARD: EVENTS & QUIZ SOLVER (Shows when 'all' or 'events' selected) */}
+          {(whatsNewCategory === 'all' || whatsNewCategory === 'events') && (
+            <div className="relative overflow-hidden rounded-2xl border border-amber-500/35 bg-gradient-to-r from-amber-950/40 via-purple-950/30 to-[#0a1120] p-5 sm:p-7 shadow-xl hover:border-amber-400/60 transition-all">
+              <div className="absolute top-0 right-0 w-80 h-80 bg-amber-500/10 rounded-full blur-2xl pointer-events-none" />
+              <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                <div className="space-y-3 max-w-3xl">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 uppercase tracking-wide flex items-center gap-1 shadow-sm">
+                      <Sparkles className="w-3 h-3 text-slate-950 fill-slate-950" />
+                      ไฮไลท์ใหม่ล่าสุด
+                    </span>
+                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                      Com2uS Events Hub
+                    </span>
+                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                      💡 มีเฉลยคำถาม 15 ข้อ
+                    </span>
+                  </div>
+
+                  <div>
+                    <h3 className="text-lg sm:text-2xl font-black text-white flex items-center gap-2">
+                      <span>🎉 ศูนย์รวมกิจกรรมในเกม & เฉลยคำถามกิจกรรม (Events & Quiz Solver)</span>
+                    </h3>
+                    <p className="text-xs sm:text-sm text-slate-300 mt-2 leading-relaxed">
+                      ติดตามกิจกรรมทางการทั้งหมด เช่น กิจกรรมเลือกซัมมอน 5★ แท้, รูนตำนาน 6★ สั่งได้, พร้อมระบบนับถอยหลัง, ติ๊กบันทึกของรางวัลที่รับแล้วในเครื่อง, และคลังเฉลยคำถามกิจกรรม 1-Click Copy ตอบถูกรับของรางวัลทันที!
+                    </p>
+                  </div>
+
+                  {/* Highlights Pill Badges */}
+                  <div className="flex flex-wrap items-center gap-2 pt-1 text-xs">
+                    <span className="px-2.5 py-1 rounded-lg bg-black/40 border border-white/10 text-amber-200 font-semibold flex items-center gap-1.5">
+                      <Calendar className="w-3.5 h-3.5 text-amber-400" />
+                      {activeEventsCount} กิจกรรมกำลังดำเนินอยู่
+                    </span>
+                    <span className="px-2.5 py-1 rounded-lg bg-black/40 border border-white/10 text-purple-200 font-semibold flex items-center gap-1.5">
+                      <HelpCircle className="w-3.5 h-3.5 text-purple-400" />
+                      {activeQuizzesCount} เฉลยข้อสอบกิจกรรมพร้อมเหตุผล
+                    </span>
+                    <span className="px-2.5 py-1 rounded-lg bg-black/40 border border-white/10 text-emerald-200 font-semibold flex items-center gap-1.5">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                      บันทึกสถานะของรางวัลอัตโนมัติ
+                    </span>
+                  </div>
+                </div>
+
+                {/* 1-Click CTA Buttons */}
+                <div className="flex flex-col sm:flex-row lg:flex-col gap-2.5 shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => onNavigate('events')}
+                    className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-black text-xs sm:text-sm shadow-lg shadow-amber-500/25 transition-all cursor-pointer group"
+                  >
+                    <span>ดูรายการกิจกรรม & ของรางวัล</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => onNavigate('events', { subItem: 'quiz' })}
+                    className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/40 text-purple-200 font-bold text-xs sm:text-sm transition-all cursor-pointer group"
+                  >
+                    <HelpCircle className="w-4 h-4 text-purple-300" />
+                    <span>เปิดดูเฉลยคำถาม (1-Click Copy)</span>
+                    <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* 2. RESPONSIVE GRID OF OTHER NEW FEATURES */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {filteredWhatsNewItems.map((item) => {
+              const IconComponent = item.icon;
+              return (
+                <div
+                  key={item.id}
+                  onClick={() => onNavigate(item.targetView, item.targetParams || {})}
+                  className={`relative overflow-hidden rounded-2xl border ${item.borderColor} bg-gradient-to-b ${item.colorGradient} bg-[#0b121e]/80 p-4 sm:p-5 flex flex-col justify-between hover:scale-[1.01] hover:border-white/30 transition-all cursor-pointer group shadow-lg`}
+                >
+                  <div className="space-y-3">
+                    {/* Top Row: Icon & Badge */}
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="p-2.5 rounded-xl bg-white/[0.06] border border-white/10 text-white group-hover:scale-110 transition-transform">
+                        <IconComponent className="w-5 h-5 text-amber-300" />
+                      </div>
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-white/[0.08] border border-white/15 text-slate-200">
+                        {item.badge}
+                      </span>
+                    </div>
+
+                    {/* Title & Description */}
+                    <div>
+                      <h4 className="text-sm sm:text-base font-bold text-white group-hover:text-amber-300 transition-colors leading-snug">
+                        {item.title}
+                      </h4>
+                      <p className="text-xs text-slate-400 mt-1.5 leading-relaxed line-clamp-3">
+                        {item.description}
+                      </p>
+                    </div>
+
+                    {/* Tags */}
+                    <div className="flex flex-wrap gap-1 pt-1">
+                      {item.tags.map((tag) => (
+                        <span key={tag} className="text-[10px] font-mono text-slate-400 bg-white/[0.03] px-1.5 py-0.5 rounded">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Footer Action Link */}
+                  <div className="mt-4 pt-3 border-t border-white/[0.06] flex items-center justify-between text-xs font-bold text-amber-300 group-hover:text-amber-200">
+                    <span>{item.primaryActionLabel}</span>
+                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -1010,7 +1359,7 @@ export default function DashboardView({ onNavigate }) {
             <span>📦 กล่องมอนสเตอร์ & ตู้สะสม</span>
           </h3>
           <p className="text-xs text-slate-400 mt-1.5 leading-relaxed">
-            คลังมอนสเตอร์ {userProfileStats?.totalUnits || 556} ตัว, ตู้สะสม Nat 5/LD5, คลังรูน {userProfileStats?.totalRunes || 1815} ชิ้น และอาร์ติแฟกต์
+            คลังมอนสเตอร์{userProfileStats?.totalUnits ? ` ${userProfileStats.totalUnits} ตัว` : ''}, ตู้สะสม Nat 5/LD5, คลังรูน{userProfileStats?.totalRunes ? ` ${userProfileStats.totalRunes} ชิ้น` : ''} และอาร์ติแฟกต์
           </p>
           <div className="mt-4 pt-3 border-t border-white/[0.06] flex items-center justify-between text-xs font-bold text-cyan-400">
             <span>เข้าสู่กล่องมอนสเตอร์</span>

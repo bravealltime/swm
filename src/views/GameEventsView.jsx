@@ -55,9 +55,11 @@ function calculateDaysLeft(endDateStr) {
   return { days, hours, isExpired: false, label: `เหลืออีก ${days} วัน ${hours} ชม.` };
 }
 
-export default function GameEventsView({ onNavigate, viewParams = {} }) {
-  const [activeTab, setActiveTab] = useState(viewParams?.subItem === 'quiz' ? 'quiz' : 'events');
-  const [searchQuery, setSearchQuery] = useState(viewParams?.search || '');
+export default function GameEventsView({ onNavigate, viewParams = {}, subItem, initialTab, search }) {
+  const [activeTab, setActiveTab] = useState(
+    (subItem || initialTab || viewParams?.subItem) === 'quiz' ? 'quiz' : 'events'
+  );
+  const [searchQuery, setSearchQuery] = useState(search || viewParams?.search || '');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedQuizEvent, setSelectedQuizEvent] = useState('all');
   const [copiedId, setCopiedId] = useState(null);
