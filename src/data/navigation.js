@@ -59,6 +59,7 @@ export const NAVIGATION_CATEGORIES = [
       { id: 'dungeon-stats', label: 'ทีมฟาร์ม Abyss Hard Speed', icon: 'Compass' },
       { id: 'monster-catalog', label: 'สารานุกรมสกิลมอนสเตอร์', icon: 'BookOpen' },
       { id: 'quiz', label: 'ทายมอนจากสกิล (เกมรายวัน)', icon: 'Sparkles', badge: 'เกม' },
+      { id: 'game-events', label: '🎉 กิจกรรม & เฉลยคำถาม (Events & Quiz)', icon: 'Gift', badge: 'ใหม่' },
       { id: 'game-codes', label: 'โค้ดแจกไอเทม (Active Codes)', icon: 'Gift', badge: 'ฟรี' },
       { id: 'balance-patch', label: 'ประวัติแพตช์ปรับสมดุล', icon: 'History' },
       { id: 'rune-calculator', label: 'คำนวณประสิทธิภาพรูน & หินขัด', icon: 'Calculator' },

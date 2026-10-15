@@ -23,6 +23,7 @@ const VIEW_ALIASES = {
   'siege-hub': 'siege-battles',
   'siege-meta': 'siege-battles',
   'siege-matchups': 'siege-battles',
+  'game-events': 'events',
 };
 
 export const VIEW_TITLES = {
@@ -64,6 +65,7 @@ export const VIEW_TITLES = {
   admin: 'หลังบ้าน SWM',
   'ai-farm-optimizer': '🤖 AI จัดทีม & รูน Abyss (Realtime)',
   rta: 'วิเคราะห์ RTA',
+  events: 'กิจกรรม & เฉลยคำถาม (Events & Quiz Solver)',
 };
 
 // viewParams key <-> short query-string key

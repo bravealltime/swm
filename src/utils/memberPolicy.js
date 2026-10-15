@@ -32,6 +32,8 @@ export const FREE_VIEW_IDS = new Set([
   'faq-guides',
   'faq',
   'quiz',
+  'events',
+  'game-events',
 ]);
 
 /**

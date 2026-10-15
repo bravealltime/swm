@@ -57,6 +57,7 @@ const TOOL_NAV_ITEMS = [
   { id: 'ai-account-audit', label: '🤖 AI วินิจฉัยสุขภาพไอดี', desc: 'ตรวจสปีด Swift/Violent & จัดเกรด', icon: Sparkles },
   { id: 'dungeons', label: 'ทีมฟาร์มดันเจี้ยน Abyss', desc: 'Golem, Dragon, Necro Hard', icon: Cpu },
   { id: 'tier-list-maker', label: 'สร้าง Tier List RTA/Siege', desc: 'Drag & Drop Builder', icon: Award },
+  { id: 'events', label: '🎉 กิจกรรม & เฉลยคำถาม', desc: 'ข้อมูลกิจกรรม & เฉลยคำถาม Web Event', icon: Gift, free: true },
   { id: 'quiz', label: 'ทายมอนจากสกิล (เกมรายวัน)', desc: 'มินิเกมทายมอนสเตอร์สะสมแต้ม', icon: Sparkles, free: true },
   { id: 'siege-calculator', label: 'คำนวณแต้มกิลด์วอร์ Siege', desc: 'Base Points & Score Calculator', icon: Calculator },
   { id: 'trending', label: 'สถิติเทรนด์ทั่วโลก', desc: 'Meta Trends & Defense Stats', icon: TrendingUp },

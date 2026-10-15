@@ -1,0 +1,387 @@
+{
+  "updatedAt": "2026-10-16T00:00:00.000Z",
+  "season": "ตุลาคม - พฤศจิกายน 2026",
+  "events": [
+    {
+      "id": "event-nat5-selection",
+      "title": "กิจกรรมพิเศษ: เลือกซัมมอน 5★ แท้ (Nat 5 Selection Summon Event)",
+      "badge": "ไฮไลท์พิเศษ",
+      "category": "special",
+      "startDate": "2026-10-01",
+      "endDate": "2026-11-15",
+      "bannerGradient": "from-amber-600 via-yellow-600 to-amber-700",
+      "description": "สะสมแต้มพลังงานและแต้มล็อกอิน เพื่อสุ่มเปิดเผยรายชื่อมอนสเตอร์ 5★ แท้ (ไฟ/น้ำ/ลม) สูงสุด 10 ตัว แล้วเลือกซัมมอนตัวที่คุณต้องการเข้าไอดีได้ทันที 1 ตัว!",
+      "missions": [
+        { "name": "ใช้พลังงาน 100 หน่วย", "points": "100 แต้ม", "limit": "วันละ 1,000 แต้ม" },
+        { "name": "เช็คอินเข้าเกมประจำวัน", "points": "200 แต้ม", "limit": "วันละ 1 ครั้ง" },
+        { "name": "ลงดันเจี้ยน Cairos Abyss / Rift Raid", "points": "แต้มโบนัส 20 แต้ม/รอบ", "limit": "ไม่จำกัด" },
+        { "name": "ชนะ World Arena หรือ Arena ธรรมดา", "points": "15 แต้ม/รอบ", "limit": "ไม่จำกัด" }
+      ],
+      "rewards": [
+        { "id": "rew-1", "name": "เลือกซัมมอนมอนสเตอร์ 5★ แท้ (ไฟ/น้ำ/ลม) 1 ตัว", "type": "monster", "amount": 1, "tier": "legendary", "cost": "10,000 แต้ม" },
+        { "id": "rew-2", "name": "คัมภีร์แสง-มืด (Light & Darkness Scroll)", "type": "scroll", "amount": 1, "tier": "legendary", "cost": "8,000 แต้ม" },
+        { "id": "rew-3", "name": "เดวิลม่อน (Devilmon)", "type": "devilmon", "amount": 3, "tier": "epic", "cost": "5,000 แต้ม" },
+        { "id": "rew-4", "name": "คัมภีร์ในตำนาน (Legendary Scroll)", "type": "scroll", "amount": 2, "tier": "epic", "cost": "4,000 แต้ม" },
+        { "id": "rew-5", "name": "คัมภีร์เวทมนตร์ (Mystical Scroll)", "type": "scroll", "amount": 30, "tier": "rare", "cost": "2,000 แต้ม" },
+        { "id": "rew-6", "name": "คริสตัล (Crystals)", "type": "crystal", "amount": 1000, "tier": "rare", "cost": "สะสมครบ 5,000 แต้ม" }
+      ],
+      "hasQuiz": false,
+      "tips": "แนะนำให้สะสมแต้มจนเปิดเผยครบ 10 ตัวก่อนกดเลือกรับ เพื่อให้มีโอกาสได้ตัวเมต้า RTA สูงสุด เช่น Oliver, Moore, Dominic, Vanessa หรือ Sonia"
+    },
+    {
+      "id": "event-daily-quiz-dungeon",
+      "title": "กิจกรรมตอบคำถามประจำวัน & สำรวจดันเจี้ยน (Daily Web Event Quiz & Expedition)",
+      "badge": "มีเฉลยคำถาม",
+      "category": "quiz",
+      "startDate": "2026-10-10",
+      "endDate": "2026-10-31",
+      "bannerGradient": "from-purple-600 via-indigo-600 to-purple-800",
+      "description": "ตอบคำถามความรู้รอบตัวเกี่ยวกับมอนสเตอร์ สกิล และประวัติศาสตร์ Summoners War วันละ 1 ข้อ เพื่อรับกล่องสมบัติทองคำ พร้อมของรางวัลคัมภีร์แสงมืดและเดวิลม่อนเมื่อตอบครบ 14 วัน!",
+      "missions": [
+        { "name": "ตอบคำถามประจำวันในหน้ากิจกรรมเว็บ", "points": "1 ครั้ง/วัน", "limit": "รีเซ็ตทุก 22:00 น. (เวลาไทย)" },
+        { "name": "เคลียร์ดันเจี้ยน Cairos Abyss 10 รอบ", "points": "กล่องพลังงาน + 100 คริสตัล", "limit": "วันละ 1 ครั้ง" }
+      ],
+      "rewards": [
+        { "id": "rew-7", "name": "คัมภีร์แสง-มืด (Light & Darkness Scroll)", "type": "scroll", "amount": 1, "tier": "legendary", "cost": "ตอบถูกสะสมครบ 14 วัน" },
+        { "id": "rew-8", "name": "เดวิลม่อน (Devilmon)", "type": "devilmon", "amount": 1, "tier": "epic", "cost": "ตอบถูกสะสมครบ 10 วัน" },
+        { "id": "rew-9", "name": "หินหลอมรูน (Reappraisal Stone)", "type": "reapp", "amount": 2, "tier": "epic", "cost": "ตอบถูกสะสมครบ 7 วัน" },
+        { "id": "rew-10", "name": "คัมภีร์เวทมนตร์ (Mystical Scroll)", "type": "scroll", "amount": 15, "tier": "rare", "cost": "ตอบถูกสะสมครบ 3 วัน" },
+        { "id": "rew-11", "name": "หินมานา 2,000,000 & พลังงาน 1,000 หน่วย", "type": "mana", "amount": 1, "tier": "common", "cost": "รางวัลกล่องรายวัน" }
+      ],
+      "hasQuiz": true,
+      "quizCategory": "daily-quiz",
+      "tips": "หากไม่มั่นใจข้อใด สามารถเปิดแท็บ 'เฉลยคำถามกิจกรรม' ในหน้านี้แล้วค้นหาคีย์เวิร์ดของโจทย์เพื่อดูคำตอบที่ถูกต้องได้ทันที ตอบถูกจะได้รับโบนัสพลังงานเพิ่มขึ้น 2 เท่า"
+    },
+    {
+      "id": "event-craft-legend-rune",
+      "title": "กิจกรรมสร้างรูน 6★ ตำนานตามใจสั่ง (Craft Your Own 6★ Legend Runes)",
+      "badge": "ยอดนิยม",
+      "category": "rune",
+      "startDate": "2026-10-05",
+      "endDate": "2026-11-20",
+      "bannerGradient": "from-emerald-600 via-teal-600 to-cyan-700",
+      "description": "คราฟต์รูนระดับ 6★ ตำนาน (Legendary) ได้ถึง 2 เม็ด โดยเลือกประเภทเซ็ต (Swift/Violent/Despair/Will), ช่อง (2/4/6), ออฟหลัก และสามารถสุ่มเปลี่ยนออฟชั่นรอง 4 แถวได้ไม่อั้นจนกว่าจะได้ค่าสูงสุด!",
+      "missions": [
+        { "name": "ดรอปรูนหรืออาร์ติแฟกต์ในดันเจี้ยน", "points": "10-30 แต้มตามระดับ", "limit": "ไม่จำกัด" },
+        { "name": "อัปเกรดรูนในเกมสำเร็จ", "points": "5 แต้ม/ครั้ง", "limit": "ไม่จำกัด" }
+      ],
+      "rewards": [
+        { "id": "rew-12", "name": "รูน 6★ ตำนานแบบปรับแต่งออฟชั่นเองได้", "type": "rune", "amount": 2, "tier": "legendary", "cost": "สร้างเม็ดที่ 1 และ 2" },
+        { "id": "rew-13", "name": "หินขัดบวกรูนระดับตำนาน (Legend Grindstone)", "type": "grind", "amount": 4, "tier": "epic", "cost": "ปรับออฟชั่นครบตามเป้า" },
+        { "id": "rew-14", "name": "หินแปลงออฟชั่นตำนาน (Legend Gem)", "type": "gem", "amount": 4, "tier": "epic", "cost": "รับรูนสำเร็จ" },
+        { "id": "rew-15", "name": "หินหลอมรูน (Reappraisal Stone)", "type": "reapp", "amount": 3, "tier": "epic", "cost": "สะสมครบ 3,000 แต้ม" }
+      ],
+      "hasQuiz": false,
+      "tips": "เม็ดที่ 1 แนะนำทำ Swift ช่อง 4 หรือ 6 (สปีดออฟรอง +6 ตั้งต้น) หรือ Violent ช่อง 4 CRI Dmg ที่มีสปีด +6 และ CRI Rate +6 เพื่อโอกาสตีบวก Quad Roll สปีดสูงสุด"
+    },
+    {
+      "id": "event-swc-trivia-puzzle",
+      "title": "กิจกรรมทายปริศนา SWC & ความรู้มอนสเตอร์ (SWC World Finals Trivia)",
+      "badge": "มีเฉลยคำถาม",
+      "category": "quiz",
+      "startDate": "2026-10-12",
+      "endDate": "2026-11-05",
+      "bannerGradient": "from-rose-600 via-pink-600 to-purple-700",
+      "description": "ร่วมฉลองรอบชิงชนะเลิศ SWC World Finals ตอบคำถามเกี่ยวกับประวัติการแข่งแชมป์เปี้ยนโลก และสกิลมอนสเตอร์ที่ใช้ในรอบไฟนอล เพื่อปลดล็อกตราสัญลักษณ์และของรางวัลระดับตำนาน",
+      "missions": [
+        { "name": "ตอบคำถาม 5 ด่านประจำสัปดาห์", "points": "ด่านละ 3 ข้อ", "limit": "สัปดาห์ละ 1 สเตจ" },
+        { "name": "แชร์ผลกิจกรรมไปยังโซเชียล", "points": "100 คริสตัล", "limit": "สัปดาห์ละ 1 ครั้ง" }
+      ],
+      "rewards": [
+        { "id": "rew-16", "name": "คัมภีร์ในตำนาน (Legendary Scroll)", "type": "scroll", "amount": 1, "tier": "legendary", "cost": "ผ่านครบทั้ง 5 สเตจ" },
+        { "id": "rew-17", "name": "รูปโปรไฟล์ SWC ลิมิเต็ด (SWC Exclusive Building & Aura)", "type": "skin", "amount": 1, "tier": "epic", "cost": "ตอบถูกมากกว่า 12 ข้อ" },
+        { "id": "rew-18", "name": "เดวิลม่อน (Devilmon)", "type": "devilmon", "amount": 1, "tier": "epic", "cost": "ผ่านสเตจ 3" },
+        { "id": "rew-19", "name": "คัมภีร์เวทมนตร์ (Mystical Scroll)", "type": "scroll", "amount": 20, "tier": "rare", "cost": "สะสมแต้มร่วมตอบคำถาม" }
+      ],
+      "hasQuiz": true,
+      "quizCategory": "swc-trivia",
+      "tips": "เฉลยทุกข้อของกิจกรรมนี้ถูกรวบรวมไว้ในแท็บ 'เฉลยคำถามกิจกรรม' ด้านบนอย่างสมบูรณ์แบบ สามารถค้นหาคำตอบได้โดยตรงไม่ต้องเดา"
+    },
+    {
+      "id": "event-guild-siege-support",
+      "title": "กิจกรรมสนับสนุนศึกกิลด์วอร์ & ป้อมปราการ Siege (Siege Battle Support Event)",
+      "badge": "กิลด์วอร์",
+      "category": "guild",
+      "startDate": "2026-10-08",
+      "endDate": "2026-10-28",
+      "bannerGradient": "from-blue-600 via-cyan-600 to-blue-800",
+      "description": "ร่วมสู้รบในสงครามกิลด์วอร์และ Siege Battle เก็บแต้มดาบชัยชนะเพื่อนำมาแลกไอเทมยกระดับทีมบุกและทีมรับกิลด์",
+      "missions": [
+        { "name": "ใช้ดาบโจมตีใน Siege Battle ชนะ", "points": "50 แต้ม/ชนะ", "limit": "30 ดาบ/สัปดาห์" },
+        { "name": "ชนะการต่อสู้ใน Guild Rival / World Guild Battle", "points": "20 แต้ม/ชนะ", "limit": "วันละ 5 ครั้ง" },
+        { "name": "เช็คอินกิลด์ประจำวัน", "points": "30 แต้ม", "limit": "วันละ 1 ครั้ง" }
+      ],
+      "rewards": [
+        { "id": "rew-20", "name": "คัมภีร์กิลด์ (Guild Summon Scroll)", "type": "scroll", "amount": 10, "tier": "rare", "cost": "3,000 แต้ม" },
+        { "id": "rew-21", "name": "หินหลอมรูน (Reappraisal Stone)", "type": "reapp", "amount": 2, "tier": "epic", "cost": "4,500 แต้ม" },
+        { "id": "rew-22", "name": "เหรียญกิลด์ (Guild Points)", "type": "currency", "amount": 2000, "tier": "common", "cost": "แลกได้เรื่อยๆ" },
+        { "id": "rew-23", "name": "เดวิลม่อน (Devilmon)", "type": "devilmon", "amount": 1, "tier": "epic", "cost": "สะสมครบ 6,000 แต้ม" }
+      ],
+      "hasQuiz": false,
+      "tips": "ใช้หน้าระบบ 'ค้นหาทีมแก้ทาง 3MDC' และ 'จัด 10 ทีมบุก Siege' ในเว็บ SWM ควบคู่กัน เพื่อเพิ่มอัตราการชนะดาบให้ได้ 100%"
+    },
+    {
+      "id": "event-monthly-checkin",
+      "title": "กิจกรรมเช็คอินรายเดือนพิเศษ (Monthly Master Attendance)",
+      "badge": "เช็คอินทุกวัน",
+      "category": "checkin",
+      "startDate": "2026-10-01",
+      "endDate": "2026-10-31",
+      "bannerGradient": "from-slate-700 via-slate-800 to-slate-900",
+      "description": "เพียงเข้าเกมและกดรับของขวัญประจำวัน รับคัมภีร์แสงมืดในวันที่ 24 และเดวิลม่อนในวันที่ 12 ฟรีทันที!",
+      "missions": [
+        { "name": "ล็อกอินเข้าสู่เกมทุกวัน", "points": "1 ครั้ง/วัน", "limit": "วันละ 1 ครั้ง" }
+      ],
+      "rewards": [
+        { "id": "rew-24", "name": "คัมภีร์แสง-มืด (LD Scroll)", "type": "scroll", "amount": 1, "tier": "legendary", "cost": "ล็อกอินวันที่ 24" },
+        { "id": "rew-25", "name": "เดวิลม่อน (Devilmon)", "type": "devilmon", "amount": 1, "tier": "epic", "cost": "ล็อกอินวันที่ 12" },
+        { "id": "rew-26", "name": "คัมภีร์ในตำนาน (Legendary Scroll)", "type": "scroll", "amount": 1, "tier": "legendary", "cost": "ล็อกอินวันที่ 28" },
+        { "id": "rew-27", "name": "คริสตัลรวมตลอดเดือน", "type": "crystal", "amount": 600, "tier": "rare", "cost": "สะสมตามวัน" }
+      ],
+      "hasQuiz": false,
+      "tips": "หากพลาดวันใด สามารถล็อกอินต่อเนื่องในช่วงวันหยุดสุดสัปดาห์เพื่อรับของย้อนหลังตามระบบของเกมได้"
+    }
+  ],
+  "quizQuestions": [
+    {
+      "id": "q-1",
+      "eventId": "event-daily-quiz-dungeon",
+      "eventTitle": "กิจกรรมตอบคำถามประจำวัน & สำรวจดันเจี้ยน",
+      "category": "monster-skills",
+      "question": "สกิลที่ 3 ของ Oliver (Wind Battle Angel) คือสกิลใด และมีผลลัพธ์อย่างไรในการต่อสู้?",
+      "options": [
+        "Mega Smash - เพิ่มพลังโจมตีและติดสตัน 1 เทิร์น",
+        "Windy Assault - ดูดเกจโจมตีของเป้าหมาย 100% พร้อมลดคูลดาวน์สกิลทั้งหมดของตัวเอง 2 เทิร์น",
+        "Apocalypse - ชุบชีวิตเพื่อนร่วมทีมและอมตะ 1 เทิร์น",
+        "Nature's Shield - ลบล้างดีบัฟและเพิ่มพลังป้องกัน 3 เทิร์น"
+      ],
+      "correctAnswer": "Windy Assault - ดูดเกจโจมตีของเป้าหมาย 100% พร้อมลดคูลดาวน์สกิลทั้งหมดของตัวเอง 2 เทิร์น",
+      "explanation": "สกิล 3 ของ Oliver มีชื่อว่า Windy Assault เมื่อดูดเกจศัตรูสำเร็จจะสามารถวนคูลดาวน์สกิลและได้เทิร์นเล่นต่อได้แทบจะทันที ทำให้เป็นราชาตัวคุมเมต้า RTA",
+      "keywords": ["oliver", "battle angel", "windy assault", "ดูดเกจ", "ลดคูลดาวน์", "โอลิเวอร์"]
+    },
+    {
+      "id": "q-2",
+      "eventId": "event-daily-quiz-dungeon",
+      "eventTitle": "กิจกรรมตอบคำถามประจำวัน & สำรวจดันเจี้ยน",
+      "category": "monster-skills",
+      "question": "สกิลติดตัว (Passive) ของ Leo (Wind Dragon Knight) มีความสามารถพิเศษอย่างไรต่อความเร็วการโจมตีในสนาม?",
+      "options": [
+        "เพิ่มความเร็วการโจมตีของเพื่อนร่วมทีม 50%",
+        "จำกัดความเร็วการโจมตีของมอนสเตอร์ทุกตัวในสนามไม่ให้เกินความเร็วของ Leo และ Leo จะได้ออกเทิร์นคนแรกเสมอ",
+        "ทำให้ศัตรูติดสถานะสโลว์ถาวรตลอดการต่อสู้",
+        "ลดความเร็วของมอนสเตอร์ฝ่ายตรงข้ามลง 33%"
+      ],
+      "correctAnswer": "จำกัดความเร็วการโจมตีของมอนสเตอร์ทุกตัวในสนามไม่ให้เกินความเร็วของ Leo และ Leo จะได้ออกเทิร์นคนแรกเสมอ",
+      "explanation": "แพสซีฟ Eye of the Storm ของ Leo ทำให้สปีดของมอนสเตอร์ทุกตัวในสนามถูกล็อคไม่ให้เกินสปีดของ Leo และผลักให้ Leo ได้สิทธิ์ออกตัวเทิร์นแรกเสมอ",
+      "keywords": ["leo", "dragon knight", "สปีด", "eye of the storm", "ลีโอ", "ความเร็ว"]
+    },
+    {
+      "id": "q-3",
+      "eventId": "event-daily-quiz-dungeon",
+      "eventTitle": "กิจกรรมตอบคำถามประจำวัน & สำรวจดันเจี้ยน",
+      "category": "game-mechanics",
+      "question": "รูนเซ็ตประเภทใดในเกม Summoners War ที่ต้องใส่ครบ 4 ชิ้น และให้โอกาส 22% ในการได้รับเทิร์นพิเศษทันที?",
+      "options": [
+        "Swift Rune (รูนว่องไว)",
+        "Despair Rune (รูนสิ้นหวัง)",
+        "Violent Rune (รูนรุนแรง)",
+        "Vampire Rune (รูนดูดเลือด)"
+      ],
+      "correctAnswer": "Violent Rune (รูนรุนแรง)",
+      "explanation": "รูนเซ็ต Violent (4 ชิ้น) มอบโอกาส 22% ในการได้เทิร์นพิเศษ (Extra Turn) ทันทีหลังจบการกระทำ",
+      "keywords": ["violent", "22%", "เทิร์นพิเศษ", "extra turn", "รูน", "ไวโอเลนต์"]
+    },
+    {
+      "id": "q-4",
+      "eventId": "event-daily-quiz-dungeon",
+      "eventTitle": "กิจกรรมตอบคำถามประจำวัน & สำรวจดันเจี้ยน",
+      "category": "monster-skills",
+      "question": "สกิลที่ 3 'Wind of Changes' ของ Tiana (Wind Polar Queen) มีความโดดเด่นอย่างไรเมื่อเทียบกับตัวลบบัฟอื่นๆ?",
+      "options": [
+        "โจมตีแรงขึ้นตามความเร็วของตัวเอง",
+        "ลบล้างเอฟเฟกต์เสริมพลังและลดทอนพลังทั้งหมดของทั้งสองฝ่าย โดยไม่สามารถถูกต้านทาน (Resist) ได้แน่นอน 100%",
+        "ทำให้ศัตรูทั้งหมดติดสตันโดยไม่สนใจความต้านทาน",
+        "ขโมยบัฟทั้งหมดของศัตรูมาเป็นของตัวเอง"
+      ],
+      "correctAnswer": "ลบล้างเอฟเฟกต์เสริมพลังและลดทอนพลังทั้งหมดของทั้งสองฝ่าย โดยไม่สามารถถูกต้านทาน (Resist) ได้แน่นอน 100%",
+      "explanation": "Wind of Changes ของ Tiana เป็นสกิลสตริปเดียวในเกมที่ไม่ผ่านการคำนวณ Accuracy/Resistance จึงลบบัฟและดีบัฟทั้งหมดบนสนามได้ 100% แน่นอน",
+      "keywords": ["tiana", "wind of changes", "สตริป", "ไม่ติดต้านทาน", "เทียน่า", "polar queen"]
+    },
+    {
+      "id": "q-5",
+      "eventId": "event-daily-quiz-dungeon",
+      "eventTitle": "กิจกรรมตอบคำถามประจำวัน & สำรวจดันเจี้ยน",
+      "category": "game-mechanics",
+      "question": "รูนชนิดพิเศษ 'Intangible Rune' (รูนไร้ตัวตน) สามารถใส่ในมอนสเตอร์ 1 ตัวได้สูงสุดกี่ชิ้น?",
+      "options": [
+        "ใส่ได้ 1 ชิ้นเท่านั้น",
+        "ใส่ได้ 2 ชิ้น",
+        "ใส่ได้ 4 ชิ้น",
+        "ใส่ได้ครบทั้ง 6 ช่อง"
+      ],
+      "correctAnswer": "ใส่ได้ 1 ชิ้นเท่านั้น",
+      "explanation": "Intangible Rune ถูกจำกัดให้ใส่ได้เพียงตัวละ 1 ชิ้นเท่านั้น โดยจะทำหน้าที่ทดแทนรูน 1 ชิ้นของเซ็ตใดก็ได้ที่ขาดอยู่เพื่อให้ครบเซ็ต",
+      "keywords": ["intangible", "รูนไร้ตัวตน", "1 ชิ้น", "abyss"]
+    },
+    {
+      "id": "q-6",
+      "eventId": "event-daily-quiz-dungeon",
+      "eventTitle": "กิจกรรมตอบคำถามประจำวัน & สำรวจดันเจี้ยน",
+      "category": "monster-skills",
+      "question": "สกิล Amputation Magic ของ Lushen (Wind Joker) มีคุณสมบัติเด่นอะไรที่ทำให้เป็นสุดยอดตัวฟาร์มและตัวบุก Arena?",
+      "options": [
+        "โจมตี 3 ครั้งโดยไม่สนใจพลังป้องกันของศัตรู (Ignore DEF)",
+        "โจมตีติดสตัน 100%",
+        "ขโมยเกจโจมตีของศัตรูทั้งหมด",
+        "วางระเบิดใส่ศัตรูทุกตัว"
+      ],
+      "correctAnswer": "โจมตี 3 ครั้งโดยไม่สนใจพลังป้องกันของศัตรู (Ignore DEF)",
+      "explanation": "Amputation Magic (สับไพ่) โจมตีหมู่ 3 ครั้งแบบเจาะเกราะทะลุ DEF 100% ทำให้เป็นแกนนำของทีมบุก Lushen AO และดันเจี้ยน Cairos Speed Team",
+      "keywords": ["lushen", "amputation magic", "ignore def", "เจาะเกราะ", "ลูเชน", "joker"]
+    },
+    {
+      "id": "q-7",
+      "eventId": "event-daily-quiz-dungeon",
+      "eventTitle": "กิจกรรมตอบคำถามประจำวัน & สำรวจดันเจี้ยน",
+      "category": "game-mechanics",
+      "question": "เอฟเฟกต์ดีบัฟ 'Oblivion' (ลืมเลือน) มีผลอย่างไรต่อมอนสเตอร์ที่โดน?",
+      "options": [
+        "ทำให้ไม่สามารถฟื้นฟูพลังชีวิตได้",
+        "ปิดการทำงานของสกิลติดตัว (Passive Skills) ของมอนสเตอร์เป้าหมาย",
+        "ทำให้ไม่สามารถใช้สกิลที่ 2 และ 3 ได้",
+        "ลดความเร็วลง 50%"
+      ],
+      "correctAnswer": "ปิดการทำงานของสกิลติดตัว (Passive Skills) ของมอนสเตอร์เป้าหมาย",
+      "explanation": "Oblivion ปิดการทำงานของสกิล Passive ทั้งหมด เช่น การคืนชีพของ Perna/Taranys หรือการลดดาเมจของ Camilla/Douglas",
+      "keywords": ["oblivion", "ลืมเลือน", "ปิด passive", "สกิลติดตัว", "isiria", "tesarion"]
+    },
+    {
+      "id": "q-8",
+      "eventId": "event-daily-quiz-dungeon",
+      "eventTitle": "กิจกรรมตอบคำถามประจำวัน & สำรวจดันเจี้ยน",
+      "category": "game-mechanics",
+      "question": "หินหลอมรูน 'Reappraisal Stone' สามารถใช้กับรูนที่มีเงื่อนไขใด?",
+      "options": [
+        "ใช้ได้กับรูนทุกระดับตั้งแต่ 1★ ถึง 6★",
+        "ใช้ได้เฉพาะรูนระดับ 6★ ที่ตีบวกถึง +12 ขึ้นไปเท่านั้น",
+        "ใช้ได้เฉพาะรูนโบราณ (Ancient Rune) เท่านั้น",
+        "ใช้ได้เฉพาะรูนช่อง 2/4/6 เท่านั้น"
+      ],
+      "correctAnswer": "ใช้ได้เฉพาะรูนระดับ 6★ ที่ตีบวกถึง +12 ขึ้นไปเท่านั้น",
+      "explanation": "Reappraisal Stone ใช้เพื่อสุ่มออฟชั่นรองทั้ง 4 แถวใหม่ของรูน 6★ ที่ตีบวกถึงขั้น +12 ขึ้นไป โดยค่าออฟรองที่สุ่มใหม่จะอิงตามเกรดตั้งต้นของรูนนั้น",
+      "keywords": ["reappraisal", "หินหลอม", "+12", "รูน 6 ดาว", "รีออฟ"]
+    },
+    {
+      "id": "q-9",
+      "eventId": "event-daily-quiz-dungeon",
+      "eventTitle": "กิจกรรมตอบคำถามประจำวัน & สำรวจดันเจี้ยน",
+      "category": "game-mechanics",
+      "question": "ในระบบอาร์ติแฟกต์ (Artifacts) ช่องฝั่งซ้ายและฝั่งขวาถูกกำหนดให้ใส่อาร์ติแฟกต์ประเภทใดตามลำดับ?",
+      "options": [
+        "ซ้าย: ประเภทร่าง (Archetype) / ขวา: ธาตุ (Attribute)",
+        "ซ้าย: ธาตุ (Attribute) / ขวา: ประเภทร่าง (Archetype)",
+        "ทั้งสองช่องสามารถใส่ชนิดใดก็ได้",
+        "ซ้าย: รูน / ขวา: หินเวทมนตร์"
+      ],
+      "correctAnswer": "ซ้าย: ธาตุ (Attribute) / ขวา: ประเภทร่าง (Archetype)",
+      "explanation": "อาร์ติแฟกต์ช่องซ้ายคือ Attribute (ธาตุ ไฟ/น้ำ/ลม/แสง/มืด) ส่วนช่องขวาคือ Archetype (สาย โจมตี/ป้องกัน/ซัพพอร์ต/HP)",
+      "keywords": ["artifact", "อาร์ติแฟกต์", "ช่องซ้าย", "ช่องขวา", "attribute", "archetype"]
+    },
+    {
+      "id": "q-10",
+      "eventId": "event-daily-quiz-dungeon",
+      "eventTitle": "กิจกรรมตอบคำถามประจำวัน & สำรวจดันเจี้ยน",
+      "category": "monster-skills",
+      "question": "มอนสเตอร์ตัวใดต่อไปนี้มีลีดเดอร์สกิลเพิ่มความเร็วการโจมตี (SPD) 24% ในทุกพื้นที่การต่อสู้ (Universal Speed Lead)?",
+      "options": [
+        "Seara (Wind Oracle)",
+        "Psamathe (Water Fairy King)",
+        "Vanessa (Fire Valkyrja)",
+        "Oliver (Wind Battle Angel)"
+      ],
+      "correctAnswer": "Seara (Wind Oracle)",
+      "explanation": "Seara มีลีดเดอร์สกิล SPD 24% ใช้ได้ทุกพื้นที่ (General) ขณะที่ Psamathe และ Vanessa เป็นสปีดลีด 33% เฉพาะใน Arena เท่านั้น ส่วน Oliver เป็นลีด 24% เฉพาะใน Arena",
+      "keywords": ["seara", "speed lead", "24%", "สปีดลีด", "เซอาร่า", "oracle"]
+    },
+    {
+      "id": "q-11",
+      "eventId": "event-swc-trivia-puzzle",
+      "eventTitle": "กิจกรรมทายปริศนา SWC & ความรู้มอนสเตอร์",
+      "category": "swc-trivia",
+      "question": "ในการแข่งขันระดับโลก SWC World Finals มอนสเตอร์แสง-มืดแท้ตัวใดที่ถูกขนานนามว่าเป็นจอมขโมยบัฟที่มีเบสสปีดสูงถึง 118?",
+      "options": [
+        "Giana (Dark Oracle)",
+        "Woonsa (Dark Pioneer)",
+        "Tian Lang (Light Panda Warrior)",
+        "Valantis (Light Art Master)"
+      ],
+      "correctAnswer": "Woonsa (Dark Pioneer)",
+      "explanation": "Woonsa มีเบสสปีดสูงถึง 118 หน่วย พร้อมสกิลลบล้างบัฟทั้งหมดของศัตรูและเปลี่ยนเป็นโล่บาเรียให้เพื่อนร่วมทีม",
+      "keywords": ["woonsa", "118", "dark pioneer", "วุนซา", "swc"]
+    },
+    {
+      "id": "q-12",
+      "eventId": "event-swc-trivia-puzzle",
+      "eventTitle": "กิจกรรมทายปริศนา SWC & ความรู้มอนสเตอร์",
+      "category": "swc-trivia",
+      "question": "มอนสเตอร์ Fusion ตัวแรกสุดในประวัติศาสตร์ของเกม Summoners War ที่ Com2uS เพิ่มเข้ามาคือตัวใด?",
+      "options": [
+        "Sigmarus (Water Phoenix)",
+        "Katarina (Wind Valkyrja)",
+        "Veromos (Dark Ifrit)",
+        "Jeanne (Light Paladin)"
+      ],
+      "correctAnswer": "Veromos (Dark Ifrit)",
+      "explanation": "Veromos (ดาร์กอิฟริต) คือมอนสเตอร์ 5★ ตระกูล Ifrit ตัวแรกที่เพิ่มเข้ามาในระบบผสมมอนสเตอร์เพื่อช่วยผู้เล่นผ่านดันเจี้ยน Giant และ Dragon B10",
+      "keywords": ["veromos", "dark ifrit", "fusion", "เวโรโมส", "ผสมมอน"]
+    },
+    {
+      "id": "q-13",
+      "eventId": "event-swc-trivia-puzzle",
+      "eventTitle": "กิจกรรมทายปริศนา SWC & ความรู้มอนสเตอร์",
+      "category": "swc-trivia",
+      "question": "ในกติกา World Arena (RTA) หากผู้เล่นทั้งสองฝ่ายต่อสู้กันยาวนานจนเข้าสู่สถานะ 'Fierce Battle' จะเกิดผลลัพธ์ใดขึ้น?",
+      "options": [
+        "พลังโจมตีจะเพิ่มขึ้นเรื่อยๆ และพลังชีวิตสูงสุด (Max HP) ของทุกตัวจะค่อยๆ ลดลง",
+        "พลังป้องกันของทุกตัวจะเพิ่มขึ้น 100%",
+        "ทั้งสองฝ่ายจะได้รับเทิร์นเร็วขึ้นเป็น 2 เท่า",
+        "ผลการแข่งขันจะถูกตัดสินว่าเสมอทันที"
+      ],
+      "correctAnswer": "พลังโจมตีจะเพิ่มขึ้นเรื่อยๆ และพลังชีวิตสูงสุด (Max HP) ของทุกตัวจะค่อยๆ ลดลง",
+      "explanation": "ระบบ Fierce Battle ถูกออกแบบมาเพื่อแก้ปัญหายื้อเกม โดยทุกๆ รอบเวลา ATK ของมอนสเตอร์จะเพิ่มขึ้นเป็นเปอร์เซ็นต์ ขณะที่ Max HP จะลดลงเรื่อยๆ",
+      "keywords": ["fierce battle", "rta", "ลดเลือด", "เพิ่มโจมตี", "world arena"]
+    },
+    {
+      "id": "q-14",
+      "eventId": "event-swc-trivia-puzzle",
+      "eventTitle": "กิจกรรมทายปริศนา SWC & ความรู้มอนสเตอร์",
+      "category": "monster-skills",
+      "question": "สกิลติดตัว 'Eye of the Storm' ของ Tian Lang (Light Panda Warrior) จะตอบสนองอย่างไรเมื่อฝ่ายตรงข้ามมีการเพิ่มเกจโจมตี (ATK Bar Boost)?",
+      "options": [
+        "ลดเกจโจมตีของฝ่ายตรงข้ามทั้งหมด 100%",
+        "ลดผลการเพิ่มเกจของศัตรูลง 50% และเพิ่มเกจโจมตีของตัวเองขึ้น 15% ทันทีที่มีการเร่งเกจ",
+        "สวนกลับศัตรูด้วยการโจมตีติดสตัน",
+        "ทำให้เพื่อนร่วมทีมทั้งหมดได้ออกเทิร์นทันที"
+      ],
+      "correctAnswer": "ลดผลการเพิ่มเกจของศัตรูลง 50% และเพิ่มเกจโจมตีของตัวเองขึ้น 15% ทันทีที่มีการเร่งเกจ",
+      "explanation": "Tian Lang เป็นฝันร้ายของทีมเร่งเกจ เพราะลดการบูสต์เกจของทั้งสองฝ่ายลงครึ่งหนึ่ง และเพิ่มเกจให้ตัวเองจนแทรกเทิร์นมาสตริป/สตันได้",
+      "keywords": ["tian lang", "panda", "เร่งเกจ", "light panda", "เทียนหลาง"]
+    },
+    {
+      "id": "q-15",
+      "eventId": "event-swc-trivia-puzzle",
+      "eventTitle": "กิจกรรมทายปริศนา SWC & ความรู้มอนสเตอร์",
+      "category": "game-mechanics",
+      "question": "ในโหมดสงครามกิลด์ 'Siege Battle' มอนสเตอร์แต่ละตัวในไอดีของผู้เล่นมีข้อจำกัดในการใช้อย่างไร?",
+      "options": [
+        "ใช้ได้ไม่จำกัดจำนวนครั้งตราบใดที่ยังมีดาบเหลือ",
+        "สามารถนำมาใช้ในการต่อสู้ได้เพียง 1 ครั้งเท่านั้นตลอดทั้งรอบสงคราม (ใช้แล้วจะไม่สามารถใช้อีกได้)",
+        "ใช้ได้ตัวละ 3 ครั้งต่อป้อม",
+        "ใช้ได้เฉพาะมอนสเตอร์ 4★ เท่านั้น"
+      ],
+      "correctAnswer": "สามารถนำมาใช้ในการต่อสู้ได้เพียง 1 ครั้งเท่านั้นตลอดทั้งรอบสงคราม (ใช้แล้วจะไม่สามารถใช้อีกได้)",
+      "explanation": "ใน Siege Battle มอนสเตอร์แต่ละตัวในกล่องของคุณจะถูกล็อคทันทีเมื่อถูกนำไปลงดาบ 1 รอบ ไม่ว่าจะชนะหรือแพ้ ทำให้ผู้เล่นต้องปั้นตัวแก้ทางหลายๆ ตัว",
+      "keywords": ["siege", "siege battle", "ใช้ได้ 1 ครั้ง", "ล็อคมอน", "ศึกยึดเกาะ"]
+    }
+  ]
+}

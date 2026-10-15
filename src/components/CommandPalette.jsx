@@ -24,6 +24,7 @@ const QUICK_TOOLS = [
   { id: 'rta', name: 'วิเคราะห์ RTA & สถิติการแข่งขัน', desc: 'Tier List เมต้า, Pick/Win/Ban, รีเพลย์แข่งสด', icon: Trophy, view: 'rta' },
   { id: '3mdc', name: 'ค้นหาตัวแก้ทาง 3MDC', desc: 'ค้นหาทีมเจาะหอ 4★ / 5★ พร้อมคะแนนความน่าเชื่อถือ', icon: Shield, view: '3mdc' },
   { id: 'codes', name: 'โค้ดแจกไอเทมล่าสุด', desc: 'คัดลอกโค้ดและกดรับของผ่าน Hive ID', icon: Gift, view: 'codes' },
+  { id: 'events', name: '🎉 ศูนย์กิจกรรม & เฉลยคำถามกิจกรรม (Events & Quiz Solver)', desc: 'รวมกิจกรรมล่าสุด ของรางวัล LD/Devilmon และเฉลย Web Event Quiz', icon: Gift, view: 'events' },
   { id: 'speed', name: 'เครื่องคำนวณ Speed Tick & จูนสปีด', desc: 'คำนวณช่วงความเร็วและป้องกันโดนแทรกเทิร์น', icon: Gauge, view: 'speed' },
   { id: 'catalog', name: 'สารานุกรมมอนสเตอร์', desc: 'ดูข้อมูลสกิล ธาตุ รูนแนะนำของทุกตัว', icon: BookOpen, view: 'catalog' },
 ];

@@ -52,6 +52,7 @@ const VIEWS = {
   'guild-war-room': lazy(() => import('./views/GuildWarRoomView')),
   'ai-farm-optimizer': lazy(() => import('./views/AiFarmOptimizerView')),
   arena: lazy(() => import('./views/ArenaMetaView')),
+  events: lazy(() => import('./views/GameEventsView')),
   admin: lazy(() => import('./views/AdminView')),
 };
 

@@ -120,6 +120,7 @@ export default function Sidebar({
     if (itemId.includes('dungeon')) return 'dungeons';
     if (itemId.includes('balance')) return 'balance';
     if (itemId.includes('faq')) return 'faq';
+    if (itemId.includes('event')) return 'events';
     if (itemId.includes('code')) return 'codes';
     if (itemId.includes('siege') || itemId.includes('wgb')) return 'leaderboards';
     if (itemId.includes('catalog')) return 'catalog';
@@ -238,6 +239,7 @@ export default function Sidebar({
                         (item.id === 'speed-calculator' && currentView === 'speed') ||
                         (item.id === 'dungeon-stats' && currentView === 'dungeons') ||
                         (item.id === 'monster-catalog' && currentView === 'catalog') ||
+                        (item.id === 'game-events' && currentView === 'events') ||
                         (item.id === 'game-codes' && currentView === 'codes') ||
                         (item.id === 'balance-patch' && currentView === 'balance') ||
                         (item.id === 'rune-calculator' && currentView === 'rune') ||
