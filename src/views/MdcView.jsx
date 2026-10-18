@@ -41,26 +41,31 @@ export default function MdcView({ search = '' }) {
   const [activeSlotIdx, setActiveSlotIdx] = useState(null);
   const [pickerElement, setPickerElement] = useState('all');
   const [pickerSearch, setPickerSearch] = useState('');
+  const [pickerStars, setPickerStars] = useState('all'); // 'all', '4', '5'
   const [selectedDefenseId, setSelectedDefenseId] = useState(ALL_MDC_DATA[0]?.id || 'def-1');
   const [counterCountLimit, setCounterCountLimit] = useState(25);
-  // On narrow screens the detail panel sits below the list, so bring it into view on pick
-  const pickDefense = (id) => {
-    setSelectedDefenseId(id);
-    setCounterCountLimit(25);
-    if (window.matchMedia('(max-width: 1023px)').matches) {
-      requestAnimationFrame(() => detailRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+
+  // Pre-calculated counts for Nat 4 vs Nat 5 towers
+  const towerCounts = useMemo(() => {
+    let nat4 = 0;
+    let nat5 = 0;
+    for (const d of ALL_MDC_DATA) {
+      if (d.towerType === 'nat4') nat4++;
+      else if (d.towerType === 'nat5') nat5++;
     }
-  };
+    return { nat4, nat5, all: ALL_MDC_DATA.length };
+  }, []);
 
   // Top preset meta defenses for instant 1-click selection
   const topPresets = [
-    { title: 'Seara + Orion + Perna', leader: 'Seara', m2: 'Orion', m3: 'Perna', count: 245 },
-    { title: 'Khmun + Vigor + Skogul', leader: 'Khmun', m2: 'Vigor', m3: 'Skogul', count: 199 },
-    { title: 'Martina + Shaina + Triana', leader: 'Martina', m2: 'Shaina', m3: 'Triana', count: 165 },
-    { title: 'Mo Long + Harmonia + Taranys', leader: 'Mo Long', m2: 'Harmonia', m3: 'Taranys', count: 96 },
-    { title: 'Aegir + Skogul + Triana', leader: 'Aegir', m2: 'Skogul', m3: 'Triana', count: 65 },
-    { title: 'Nana + Savannah + Perna', leader: 'Nana', m2: 'Savannah', m3: 'Perna', count: 38 },
-    { title: 'Morris + Rex + Shumar', leader: 'Morris', m2: 'Rex', m3: 'Shumar', count: 35 },
+    { title: 'Seara + Orion + Perna', leader: 'Seara', m2: 'Orion', m3: 'Perna', count: 245, tower: 'nat5' },
+    { title: 'Khmun + Vigor + Skogul', leader: 'Khmun', m2: 'Vigor', m3: 'Skogul', count: 199, tower: 'nat4' },
+    { title: 'Martina + Shaina + Triana', leader: 'Martina', m2: 'Shaina', m3: 'Triana', count: 165, tower: 'nat4' },
+    { title: 'Mo Long + Harmonia + Taranys', leader: 'Mo Long', m2: 'Harmonia', m3: 'Taranys', count: 96, tower: 'nat5' },
+    { title: 'Aegir + Skogul + Triana', leader: 'Aegir', m2: 'Skogul', m3: 'Triana', count: 65, tower: 'nat4' },
+    { title: 'Nana + Savannah + Perna', leader: 'Nana', m2: 'Savannah', m3: 'Perna', count: 38, tower: 'nat5' },
+    { title: 'Carcano + Vigor + Triana', leader: 'Carcano', m2: 'Vigor', m3: 'Triana', count: 52, tower: 'nat4' },
+    { title: 'Morris + Rex + Shumar', leader: 'Morris', m2: 'Rex', m3: 'Shumar', count: 35, tower: 'nat4' },
   ];
 
   // Helper to find monster from catalog
@@ -133,6 +138,8 @@ export default function MdcView({ search = '' }) {
   const pickerMonsters = useMemo(() => {
     return MONSTERS.filter(m => {
       if (pickerElement !== 'all' && m.element !== pickerElement) return false;
+      if (pickerStars === '4' && m.stars !== 4) return false;
+      if (pickerStars === '5' && m.stars !== 5) return false;
       if (!pickerSearch.trim()) return true;
       const q = pickerSearch.toLowerCase().trim();
       return (
@@ -140,7 +147,7 @@ export default function MdcView({ search = '' }) {
         (m.thaiName && m.thaiName.toLowerCase().includes(q))
       );
     }).slice(0, 72);
-  }, [pickerElement, pickerSearch]);
+  }, [pickerElement, pickerStars, pickerSearch]);
 
   // Filter defense teams
   const filteredDefenses = useMemo(() => {
@@ -277,7 +284,7 @@ export default function MdcView({ search = '' }) {
                 : 'text-slate-400 hover:text-white hover:bg-white/[0.05]'
             }`}
           >
-            <span>🏰 ทุกฐานทัพ (All)</span>
+            <span>🏰 ทุกฐานทัพ ({towerCounts.all.toLocaleString()})</span>
           </button>
           <button
             onClick={() => { setTowerFilter('nat4'); setCounterCountLimit(25); }}
@@ -287,7 +294,7 @@ export default function MdcView({ search = '' }) {
                 : 'text-slate-400 hover:text-white hover:bg-white/[0.05]'
             }`}
           >
-            <span>⭐ ฐาน 4 ดาว (Nat 4 Base)</span>
+            <span>⭐ ฐาน 4 ดาว ({towerCounts.nat4.toLocaleString()} สูตร)</span>
           </button>
           <button
             onClick={() => { setTowerFilter('nat5'); setCounterCountLimit(25); }}
@@ -297,7 +304,7 @@ export default function MdcView({ search = '' }) {
                 : 'text-slate-400 hover:text-white hover:bg-white/[0.05]'
             }`}
           >
-            <span>👑 ฐาน 5 ดาว (Nat 5 Base)</span>
+            <span>👑 ฐาน 5 ดาว ({towerCounts.nat5.toLocaleString()} สูตร)</span>
           </button>
         </div>
       </div>
@@ -329,26 +336,38 @@ export default function MdcView({ search = '' }) {
             const isActive = activeSlotIdx === slotIdx;
             const slotTitle = slotIdx === 0 ? '👑 Leader Slot' : slotIdx === 1 ? '⚔️ Member #2' : '🛡️ Member #3';
 
+            const elementGlow = monster?.element === 'fire' 
+              ? 'border-rose-500/50 shadow-rose-500/15 group-hover:border-rose-400' 
+              : monster?.element === 'water' 
+              ? 'border-sky-500/50 shadow-sky-500/15 group-hover:border-sky-400' 
+              : monster?.element === 'wind' 
+              ? 'border-amber-500/50 shadow-amber-500/15 group-hover:border-amber-400' 
+              : monster?.element === 'light' 
+              ? 'border-yellow-400/50 shadow-yellow-400/15 group-hover:border-yellow-300' 
+              : monster?.element === 'dark' 
+              ? 'border-purple-500/50 shadow-purple-500/15 group-hover:border-purple-400' 
+              : 'border-white/20';
+
             return (
               <div
                 key={slotIdx}
                 onClick={() => handleSlotClick(slotIdx)}
-                className={`relative rounded-2xl border transition-all duration-300 p-2.5 sm:p-4 text-center cursor-pointer flex flex-col items-center justify-center min-h-[120px] sm:min-h-[155px] shadow-xl select-none group ${
+                className={`relative rounded-2xl border transition-all duration-300 p-2.5 sm:p-4 text-center cursor-pointer flex flex-col items-center justify-center min-h-[125px] sm:min-h-[160px] shadow-xl select-none group transform-gpu ${
                   isActive
                     ? 'border-cyan-400 bg-gradient-to-b from-cyan-950/40 via-blue-950/30 to-[#070b12] shadow-cyan-500/30 ring-2 ring-cyan-400 scale-[1.04]'
                     : monster
-                      ? 'border-white/20 bg-gradient-to-b from-[#141e30] to-[#0a101d] hover:border-cyan-400/60 hover:-translate-y-1 hover:shadow-cyan-500/10'
+                      ? `bg-gradient-to-b from-[#141e30] via-[#0d1624] to-[#070b12] hover:-translate-y-1 hover:shadow-2xl ${elementGlow}`
                       : 'border-dashed border-white/15 bg-white/[0.02] hover:border-cyan-400/50 hover:bg-white/[0.04] hover:-translate-y-0.5'
                 }`}
               >
-                {/* 3D Sheen */}
-                <div className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/[0.04] to-transparent rounded-t-2xl pointer-events-none" />
+                {/* 3D Depth Card Sheen */}
+                <div className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/[0.06] to-transparent rounded-t-2xl pointer-events-none" />
 
                 {monster ? (
                   <>
                     <button
                       onClick={(e) => handleClearSlot(slotIdx, e)}
-                      className="absolute -top-2.5 -right-2.5 w-7 h-7 rounded-full bg-rose-600 hover:bg-rose-500 text-white flex items-center justify-center text-xs font-bold shadow-lg z-20 cursor-pointer transition-transform hover:scale-110"
+                      className="absolute -top-2.5 -right-2.5 w-7 h-7 rounded-full bg-rose-600 hover:bg-rose-500 text-white flex items-center justify-center text-xs font-bold shadow-lg z-20 cursor-pointer transition-transform hover:scale-110 ring-2 ring-slate-950"
                       title="ลบตัวนี้"
                     >
                       ✕
@@ -359,7 +378,7 @@ export default function MdcView({ search = '' }) {
                     <span className="mt-2 text-xs font-extrabold text-white truncate max-w-full drop-shadow relative z-10">
                       {monster.thaiName || monster.name}
                     </span>
-                    <span className="text-[10px] sm:text-[11px] text-cyan-300 font-mono font-black mt-0.5 px-2 py-0.5 rounded-full bg-cyan-950/50 border border-cyan-800/50 relative z-10">
+                    <span className="text-[10px] sm:text-[11px] text-cyan-300 font-mono font-black mt-0.5 px-2 py-0.5 rounded-full bg-cyan-950/60 border border-cyan-800/60 relative z-10">
                       {slotTitle}
                     </span>
                   </>
@@ -371,7 +390,7 @@ export default function MdcView({ search = '' }) {
                     <span className="text-xs font-bold text-slate-200 mt-1">
                       {slotTitle}
                     </span>
-                    <span className="text-[10px] text-slate-400">กดเพื่อเลือก</span>
+                    <span className="text-[10px] text-slate-400">กดเพื่อเลือก 3D</span>
                   </div>
                 )}
               </div>
@@ -399,29 +418,53 @@ export default function MdcView({ search = '' }) {
               </button>
             </div>
 
-            {/* Elements & Search */}
-            <div className="flex flex-col sm:flex-row gap-3">
-              <div className="flex items-center gap-1 overflow-x-auto pb-1">
-                {[
-                  { id: 'all', label: 'ทุกธาตุ' },
-                  { id: 'fire', label: '🔥 ไฟ' },
-                  { id: 'water', label: '💧 น้ำ' },
-                  { id: 'wind', label: '🌪️ ลม' },
-                  { id: 'light', label: '✨ แสง' },
-                  { id: 'dark', label: '🌑 มืด' }
-                ].map((el) => (
-                  <button
-                    key={el.id}
-                    onClick={() => setPickerElement(el.id)}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-colors cursor-pointer ${
-                      pickerElement === el.id
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-white/[0.04] text-slate-400 hover:text-white'
-                    }`}
-                  >
-                    {el.label}
-                  </button>
-                ))}
+            {/* Elements & Star Filters & Search */}
+            <div className="flex flex-col gap-3">
+              <div className="flex flex-wrap items-center gap-2">
+                {/* Element Buttons */}
+                <div className="flex items-center gap-1 overflow-x-auto pb-1">
+                  {[
+                    { id: 'all', label: 'ทุกธาตุ' },
+                    { id: 'fire', label: '🔥 ไฟ' },
+                    { id: 'water', label: '💧 น้ำ' },
+                    { id: 'wind', label: '🌪️ ลม' },
+                    { id: 'light', label: '✨ แสง' },
+                    { id: 'dark', label: '🌑 มืด' }
+                  ].map((el) => (
+                    <button
+                      key={el.id}
+                      onClick={() => setPickerElement(el.id)}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-colors cursor-pointer ${
+                        pickerElement === el.id
+                          ? 'bg-blue-600 text-white'
+                          : 'bg-white/[0.04] text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      {el.label}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Star Filter Pill Bar */}
+                <div className="flex items-center gap-1">
+                  {[
+                    { id: 'all', label: '⭐ ทุกดาว' },
+                    { id: '4', label: '⭐ 4★ แท้' },
+                    { id: '5', label: '👑 5★ แท้' },
+                  ].map((s) => (
+                    <button
+                      key={s.id}
+                      onClick={() => setPickerStars(s.id)}
+                      className={`px-2.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-colors cursor-pointer ${
+                        pickerStars === s.id
+                          ? 'bg-amber-500 text-slate-950 font-black shadow-md shadow-amber-500/20'
+                          : 'bg-white/[0.04] text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      {s.label}
+                    </button>
+                  ))}
+                </div>
               </div>
 
               <div className="relative flex-1">

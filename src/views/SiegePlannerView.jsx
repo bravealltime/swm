@@ -309,21 +309,22 @@ export default function SiegePlannerView() {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2.5">
           <button
-            onClick={handleCopyLineup}
-            className="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition shadow-sm cursor-pointer"
+            onClick={handleAutoGenerateFromBox}
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-black bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 shadow-xl shadow-emerald-500/30 transition-all cursor-pointer transform hover:-translate-y-0.5 active:translate-y-0 ring-1 ring-white/30"
+            title="ดึงมอนสเตอร์จาก My Box ที่ปั้นเสร็จแล้ว มาคำนวณและจัดเป็น 10 ทีมบุกที่ดีที่สุดโดยอัตโนมัติ"
           >
-            {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4 text-blue-400" />}
-            {copied ? 'คัดลอกแล้ว!' : 'คัดลอก 10 ทีม'}
+            <Zap className="w-4 h-4 text-slate-950 fill-current" />
+            <span>⚡ AI 1-Click จัด 10 ทีมจาก My Box (3MDC)</span>
           </button>
 
           <button
-            onClick={handleAutoGenerateFromBox}
-            className="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white shadow-lg shadow-emerald-500/20 transition cursor-pointer"
+            onClick={handleCopyLineup}
+            className="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-800/80 hover:bg-slate-700 text-slate-200 border border-slate-700 transition shadow-sm cursor-pointer"
           >
-            <Zap className="w-4 h-4 text-amber-300" />
-            ⚡ AI จัด 10 ทีมจากกล่อง (3MDC)
+            {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4 text-blue-400" />}
+            {copied ? 'คัดลอกแล้ว!' : 'คัดลอก 10 ทีม'}
           </button>
 
           <button
@@ -345,16 +346,36 @@ export default function SiegePlannerView() {
       </div>
 
       {autoGenSummary && (
-        <div className="rounded-2xl bg-emerald-950/40 border border-emerald-500/30 p-4 text-xs sm:text-sm text-emerald-200 flex items-center justify-between gap-3 shadow-lg">
-          <div className="flex items-center gap-2.5">
-            <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
+        <div className="rounded-2xl bg-gradient-to-r from-emerald-950/60 via-[#0a1818] to-slate-950 border border-emerald-500/40 p-4 sm:p-5 text-xs sm:text-sm text-emerald-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xl backdrop-blur-md animate-in fade-in">
+          <div className="flex items-start sm:items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center shrink-0">
+              <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+            </div>
             <div>
-              <span className="font-bold text-white">จัด 10 ทีมบุกสำเร็จ:</span> ใช้มอนสเตอร์ไม่ซ้ำกัน {autoGenSummary.usedMonstersCount} ตัว{autoGenSummary.avgWinRate ? <> • อัตราชนะเฉลี่ยใน 3MDC <strong className="text-emerald-300 font-mono text-base">{autoGenSummary.avgWinRate}</strong> <span className="text-emerald-400/70">(จาก {autoGenSummary.measuredDecks} ทีมที่มีสถิติ)</span></> : ' • ไม่มีทีมที่มีสถิติ 3MDC'}
-              {!autoGenSummary.hasBox && <div className="text-amber-300 mt-1">ไม่พบกล่องมอนสเตอร์ในเครื่องนี้ — ทีมที่ได้มาจากสูตรเมต้าล้วน นำเข้าไฟล์ SWEX ที่หน้ากล่องของฉันเพื่อให้จัดจากมอนสเตอร์ที่คุณมีจริง</div>}
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="font-extrabold text-white text-sm">จัด 10 ทีมบุกจากไอดีคุณสำเร็จ (3MDC Auto Builder)!</span>
+                <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-mono text-xs font-black border border-emerald-500/30">
+                  30 มอนสเตอร์ไม่ซ้ำ
+                </span>
+              </div>
+              <p className="text-xs text-slate-300 mt-1">
+                ใช้มอนสเตอร์ในกล่อง {autoGenSummary.usedMonstersCount} ตัว
+                {autoGenSummary.avgWinRate ? (
+                  <> • อัตราชนะเฉลี่ยใน 3MDC <strong className="text-emerald-300 font-mono font-bold text-sm">{autoGenSummary.avgWinRate}</strong> <span className="text-slate-400">({autoGenSummary.measuredDecks} ทีมที่มีสถิติชนะ)</span></>
+                ) : ' • จัดตามสถิติเมต้าของเกม'}
+              </p>
+              {!autoGenSummary.hasBox && (
+                <div className="text-amber-300 text-xs mt-1 bg-amber-500/10 border border-amber-500/20 px-2 py-1 rounded-lg">
+                  ⚠️ ยังไม่พบข้อมูลมอนสเตอร์ใน My Box — ระบบดึงมอนสเตอร์จากสูตรเมต้ามาตรฐานมาจัดให้ นำเข้าไฟล์ SWEX ได้ที่หน้ากล่องของฉัน
+                </div>
+              )}
             </div>
           </div>
-          <button onClick={() => setAutoGenSummary(null)} className="text-emerald-400 hover:text-white text-xs cursor-pointer">
-            ปิด
+          <button 
+            onClick={() => setAutoGenSummary(null)} 
+            className="px-3 py-1.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-bold cursor-pointer self-end sm:self-auto"
+          >
+            ปิดการแจ้งเตือน
           </button>
         </div>
       )}

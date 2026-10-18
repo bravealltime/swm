@@ -27,6 +27,171 @@ import { fetchLiveCutoffs } from '../services/swrtLive';
 import replaysData from '../data/swrtRecentReplays.json';
 import highdataMap from '../data/swrtMonsterHighdata.json';
 
+// Interactive 3D Esports Tier Matrix Scatter Plot (Pick Rate vs Win Rate)
+function RtaTierMatrixScatterPlot({ metaList, onSelectMonster }) {
+  const [hoveredMonster, setHoveredMonster] = useState(null);
+
+  // Take top meta monsters with valid pick & win rates
+  const validMonsters = useMemo(() => {
+    return (metaList || [])
+      .filter((m) => (m.pickRate || 0) > 0 && (m.winRate || 0) > 0)
+      .slice(0, 38);
+  }, [metaList]);
+
+  // X range: Pick rate (1% to 35%)
+  // Y range: Win rate (46% to 55%)
+  const minPick = 1.0;
+  const maxPick = 34.0;
+  const minWin = 46.0;
+  const maxWin = 55.0;
+
+  return (
+    <div className="bg-[#0b101d] border border-purple-500/30 rounded-3xl p-4 sm:p-6 shadow-2xl space-y-4 relative overflow-hidden animate-in fade-in">
+      <div className="absolute top-0 right-0 w-80 h-80 bg-purple-600/10 rounded-full blur-3xl pointer-events-none" />
+
+      {/* Matrix Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/[0.08] pb-3 relative z-10">
+        <div>
+          <h3 className="text-base sm:text-lg font-black text-white flex items-center gap-2">
+            <span>📊 3D RTA Tier Matrix (Pick Rate vs Win Rate)</span>
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-purple-500/20 text-purple-300 border border-purple-500/30">
+              Season 39 Live
+            </span>
+          </h3>
+          <p className="text-xs text-slate-400 mt-0.5">
+            แกนแนวนอน = อัตราการเลือก (Pick Rate) • แกนแนวตั้ง = อัตราการชนะ (Win Rate) • คลิกหรือนำเมาส์ชี้เพื่อดูสถิติ
+          </p>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2 text-[11px] font-bold">
+          <span className="px-2.5 py-1 rounded-lg bg-amber-500/15 text-amber-300 border border-amber-500/30">
+            👑 God Tier (หยิบเยอะ & ชนะสูง)
+          </span>
+          <span className="px-2.5 py-1 rounded-lg bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">
+            🎯 Niche Kings (แก้ทางเฉพาะ)
+          </span>
+        </div>
+      </div>
+
+      {/* 2D Esports Scatter Arena */}
+      <div className="relative w-full h-[450px] sm:h-[500px] bg-gradient-to-b from-[#090d18] to-[#060911] rounded-2xl border border-white/10 p-4 shadow-inner overflow-hidden select-none">
+        {/* Quadrant Background Overlays */}
+        {/* Top-Right: God Tier */}
+        <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-amber-500/[0.03] border-l border-b border-dashed border-white/10 flex items-start justify-end p-3 pointer-events-none">
+          <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-amber-400/70 bg-amber-950/40 px-2 py-0.5 rounded border border-amber-500/20">
+            👑 God Tier (High Pick • High Win)
+          </span>
+        </div>
+
+        {/* Top-Left: Niche Counters */}
+        <div className="absolute top-0 left-0 w-1/2 h-1/2 bg-cyan-500/[0.02] border-b border-dashed border-white/10 flex items-start justify-start p-3 pointer-events-none">
+          <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-cyan-400/70 bg-cyan-950/40 px-2 py-0.5 rounded border border-cyan-500/20">
+            🎯 Niche Kings (High Win • Counter Pick)
+          </span>
+        </div>
+
+        {/* Bottom-Right: Solid Meta */}
+        <div className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-indigo-500/[0.02] border-l border-dashed border-white/10 flex items-end justify-end p-3 pointer-events-none">
+          <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-indigo-400/70 bg-indigo-950/40 px-2 py-0.5 rounded border border-indigo-500/20">
+            ⚔️ Solid Meta (High Pick • Balanced Win)
+          </span>
+        </div>
+
+        {/* Bottom-Left: Situational */}
+        <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-slate-500/[0.02] flex items-end justify-start p-3 pointer-events-none">
+          <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-slate-500 bg-slate-900/60 px-2 py-0.5 rounded border border-white/5">
+            📉 Situational / Off-Meta
+          </span>
+        </div>
+
+        {/* Center 50% Win Rate Line */}
+        <div className="absolute inset-x-0 top-1/2 h-[1px] bg-white/15 pointer-events-none flex items-center justify-between px-3">
+          <span className="text-[10px] font-mono text-slate-400 bg-[#060911] px-1.5 py-0.5 rounded border border-white/10">50.0% Winrate Line</span>
+          <span className="text-[10px] font-mono text-slate-400 bg-[#060911] px-1.5 py-0.5 rounded border border-white/10">50.0%</span>
+        </div>
+
+        {/* Monster Floating Nodes */}
+        {validMonsters.map((m) => {
+          const rawX = ((m.pickRate - minPick) / (maxPick - minPick)) * 100;
+          const rawY = ((m.winRate - minWin) / (maxWin - minWin)) * 100;
+          const posX = Math.max(5, Math.min(92, rawX));
+          const posY = Math.max(7, Math.min(90, 100 - rawY));
+
+          const isGod = (m.winRate || 0) >= 50.5 && (m.pickRate || 0) >= 14;
+          const isNiche = (m.winRate || 0) >= 50.5 && (m.pickRate || 0) < 14;
+          const isHovered = hoveredMonster?.monsterId === m.monsterId;
+
+          return (
+            <div
+              key={m.monsterId}
+              onMouseEnter={() => setHoveredMonster(m)}
+              onClick={() => onSelectMonster && onSelectMonster(m)}
+              style={{ left: `${posX}%`, top: `${posY}%` }}
+              className={`absolute -translate-x-1/2 -translate-y-1/2 transition-all duration-300 cursor-pointer group/node ${
+                isHovered ? 'z-40 scale-125' : 'z-20 hover:scale-115'
+              }`}
+            >
+              <div className={`relative p-0.5 rounded-xl border shadow-lg transition-transform ${
+                isGod 
+                  ? 'border-amber-400 bg-amber-950/90 shadow-amber-500/30 ring-2 ring-amber-400/50' 
+                  : isNiche 
+                  ? 'border-cyan-400 bg-cyan-950/90 shadow-cyan-500/30 ring-1 ring-cyan-400/50' 
+                  : 'border-white/20 bg-slate-900/90'
+              }`}>
+                <MonsterAvatar monster={m} size="sm" showStars={false} />
+              </div>
+
+              {/* Hover Popover */}
+              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 pointer-events-none opacity-0 group-hover/node:opacity-100 transition-opacity whitespace-nowrap z-50">
+                <div className="px-2 py-1 rounded-lg bg-black/95 border border-white/20 shadow-2xl text-[10px] text-white font-bold flex flex-col items-center">
+                  <span>{m.thaiName || m.name}</span>
+                  <div className="text-[9px] font-mono flex items-center gap-1 text-cyan-300">
+                    <span>Pick {m.pickRate}%</span>
+                    <span>•</span>
+                    <span className="text-emerald-400">Win {m.winRate}%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Selected/Hovered Monster Stat Card */}
+      {hoveredMonster && (
+        <div className="p-3.5 rounded-2xl bg-[#090e18] border border-cyan-500/30 flex items-center justify-between gap-3 text-xs animate-in fade-in">
+          <div className="flex items-center gap-3">
+            <MonsterAvatar monster={hoveredMonster} size="md" />
+            <div>
+              <div className="flex items-center gap-1.5">
+                <span className="font-extrabold text-white text-sm">
+                  {hoveredMonster.thaiName || hoveredMonster.name}
+                </span>
+                <span className="text-slate-400 text-xs">({hoveredMonster.name})</span>
+              </div>
+              <div className="flex items-center gap-2 mt-1 text-[11px] font-mono">
+                <span className="text-blue-300">Pick Rate: <strong>{hoveredMonster.pickRate}%</strong></span>
+                <span className="text-slate-500">•</span>
+                <span className="text-emerald-400">Win Rate: <strong>{hoveredMonster.winRate}%</strong></span>
+                <span className="text-slate-500">•</span>
+                <span className="text-rose-400">Ban Rate: <strong>{hoveredMonster.banRate}%</strong></span>
+                <span className="text-slate-500">•</span>
+                <span className="text-amber-400">First Pick: <strong>{hoveredMonster.firstPickRate || 0}%</strong></span>
+              </div>
+            </div>
+          </div>
+          <button
+            onClick={() => onSelectMonster && onSelectMonster(hoveredMonster)}
+            className="px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs cursor-pointer shrink-0"
+          >
+            ดูการแก้ทาง & คู่หู ➔
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function RtaAnalyticsView({ onNavigate, subItem }) {
   const getInitialTab = () => {
     if (subItem === 'rta-meta') return 'stats';
@@ -37,6 +202,7 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
 
   const [activeTab, setActiveTab] = useState(getInitialTab());
   const [selectedRank, setSelectedRank] = useState('guardian'); // 'guardian' | 'conqueror' | 'all'
+  const [tierViewMode, setTierViewMode] = useState('grid'); // 'grid' | 'matrix'
   const [selectedTier, setSelectedTier] = useState('SS');
   const [selectedElement, setSelectedElement] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -275,34 +441,62 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
               </div>
             </div>
 
-            {/* Tier Buttons */}
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="text-xs text-slate-400 font-bold mr-1">ระดับเทียร์:</span>
-              {['SS', 'S', 'A', 'B', 'C', 'D', 'all'].map((t) => {
-                const isSelected = selectedTier === t;
-                const count = t === 'all' 
-                  ? Object.values(currentRankTiers).reduce((a, b) => a + b.length, 0)
-                  : (currentRankTiers[t] || []).length;
-                return (
-                  <button
-                    key={t}
-                    onClick={() => setSelectedTier(t)}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-extrabold transition-all cursor-pointer flex items-center gap-1.5 ${
-                      isSelected
-                        ? t === 'SS' ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-500/30' :
-                          t === 'S' ? 'bg-purple-600 text-white shadow-md shadow-purple-600/30' :
-                          t === 'A' ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30' :
-                          'bg-cyan-600 text-white shadow-md shadow-cyan-600/30'
-                        : 'bg-[#0c121c] border border-[#1d2b3f] text-slate-300 hover:text-white hover:bg-[#152030]'
-                    }`}
-                  >
-                    <span>{t === 'all' ? 'ทุกเทียร์' : `${t} Tier`}</span>
-                    <span className={`px-1.5 py-0.2 rounded text-[11px] font-mono ${isSelected ? 'bg-black/30' : 'bg-[#182333]'}`}>
-                      {count}
-                    </span>
-                  </button>
-                );
-              })}
+            {/* Tier Buttons & View Switcher */}
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-xs text-slate-400 font-bold mr-1">ระดับเทียร์:</span>
+                {['SS', 'S', 'A', 'B', 'C', 'D', 'all'].map((t) => {
+                  const isSelected = selectedTier === t;
+                  const count = t === 'all' 
+                    ? Object.values(currentRankTiers).reduce((a, b) => a + b.length, 0)
+                    : (currentRankTiers[t] || []).length;
+                  return (
+                    <button
+                      key={t}
+                      onClick={() => { setSelectedTier(t); setTierViewMode('grid'); }}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-extrabold transition-all cursor-pointer flex items-center gap-1.5 ${
+                        isSelected && tierViewMode === 'grid'
+                          ? t === 'SS' ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-500/30' :
+                            t === 'S' ? 'bg-purple-600 text-white shadow-md shadow-purple-600/30' :
+                            t === 'A' ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30' :
+                            'bg-cyan-600 text-white shadow-md shadow-cyan-600/30'
+                          : 'bg-[#0c121c] border border-[#1d2b3f] text-slate-300 hover:text-white hover:bg-[#152030]'
+                      }`}
+                    >
+                      <span>{t === 'all' ? 'ทุกเทียร์' : `${t} Tier`}</span>
+                      <span className={`px-1.5 py-0.2 rounded text-[11px] font-mono ${isSelected && tierViewMode === 'grid' ? 'bg-black/30' : 'bg-[#182333]'}`}>
+                        {count}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* View Switcher: Grid vs 3D Tier Matrix */}
+              <div className="flex items-center gap-1 bg-[#0c121c] p-1 rounded-xl border border-[#1d2b3f] self-start lg:self-auto shrink-0 shadow-inner">
+                <button
+                  onClick={() => setTierViewMode('grid')}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                    tierViewMode === 'grid'
+                      ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30 ring-1 ring-blue-400/40'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  <BarChart3 className="w-3.5 h-3.5" />
+                  <span>ตารางการ์ด (Grid)</span>
+                </button>
+                <button
+                  onClick={() => setTierViewMode('matrix')}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                    tierViewMode === 'matrix'
+                      ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md shadow-purple-600/30 ring-1 ring-purple-400/40'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  <Target className="w-3.5 h-3.5" />
+                  <span>📊 3D Tier Matrix</span>
+                </button>
+              </div>
             </div>
 
             {/* Filter Row: Search & Element */}
@@ -349,8 +543,17 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
             </div>
           )}
 
-          {/* Tier Monsters Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3.5">
+          {/* Tier Content: 3D Matrix vs Grid */}
+          {tierViewMode === 'matrix' ? (
+            <RtaTierMatrixScatterPlot 
+              metaList={displayedMeta} 
+              onSelectMonster={(m) => {
+                setSearchQuery(m.name);
+                setTierViewMode('grid');
+              }}
+            />
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3.5">
             {displayedTierMonsters.map((monster) => {
               const highdata = highdataMap[monster.monsterId];
               const isExpanded = expandedMonster === monster.monsterId;
@@ -485,6 +688,7 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
               );
             })}
           </div>
+          )}
         </div>
       )}
 

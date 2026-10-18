@@ -54,21 +54,21 @@ const TABS = [
 const TAB_CATEGORIES = [
   {
     id: 'collection',
-    name: 'คลังสะสม',
+    name: '📦 คลังสะสม',
     icon: Package,
     color: 'from-emerald-600 to-teal-600',
     tabIds: ['overview', 'box', 'pokedex']
   },
   {
     id: 'gear',
-    name: 'รูน & อาร์ติแฟกต์',
+    name: '⚡ รูน & อาร์ติแฟกต์',
     icon: Sparkles,
     color: 'from-violet-600 to-purple-600',
     tabIds: ['efficiency', 'artifacts', 'grind-tracker', 'fusion-devilmon', 'runes']
   },
   {
     id: 'strategy',
-    name: 'ทีม & เมต้า',
+    name: '🏰 ทีม & เมต้า',
     icon: Shield,
     color: 'from-blue-600 to-indigo-600',
     tabIds: ['defense', 'teams', 'meta', 'speed']

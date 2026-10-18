@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
-import { BookOpen, Search, Swords, X, Filter, Info, Sparkles } from 'lucide-react';
+import { BookOpen, Search, Swords, X, Filter, Info, Sparkles, RotateCcw, Trophy } from 'lucide-react';
 import MonsterAvatar from '../components/MonsterAvatar';
 import SkillTooltip from '../components/SkillTooltip';
 import MonsterSkillsCard from '../components/MonsterSkillsCard';
@@ -7,6 +7,7 @@ import MonsterLivingData from '../components/MonsterLivingData';
 import { MONSTERS } from '../data/monsters';
 import { getSkillTags } from '../data/monsterSkills';
 import { useMonsterSkills } from '../hooks/useMonsterSkills';
+import { getMonsterLivingData } from '../utils/monsterLivingData';
 import { monsterSlug } from '../router';
 
 /** Monster for a /monster/<slug> address (also accepts a plain name or catalog id). */
@@ -137,6 +138,203 @@ function MonsterCard({ monster, onSelect }) {
         <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border truncate block ${roleBadgeStyle}`}>
           {role || (monster.archetype ? `สาย ${monster.archetype}` : 'สายต่อสู้')}
         </span>
+      </div>
+    </div>
+  );
+}
+
+// 3D Collectible Flip Card: Front shows high-res artwork & awakened stats, Back shows Guardian runes & 2/4/6 stats
+function Monster3DFlipCard({ monster, livingData }) {
+  const [isFlipped, setIsFlipped] = useState(false);
+
+  const builds = livingData?.builds;
+  const guardianStats = livingData?.guardianStats;
+  const sets = builds?.sets || ['Violent', 'Will'];
+  const slot2 = builds?.slot2 || 'SPD';
+  const slot4 = builds?.slot4 || (monster.archetype === 'Attack' ? 'CD%' : 'HP%');
+  const slot6 = builds?.slot6 || (monster.archetype === 'Attack' ? 'ATK%' : 'HP%');
+  const subs = builds?.subs || ['SPD', 'HP%', 'DEF%', 'ACC%'];
+
+  const elementColor = monster.element === 'fire' ? 'from-rose-500/20 via-[#181119] to-[#0a0e1a] border-rose-500/40 shadow-rose-500/10'
+    : monster.element === 'water' ? 'from-sky-500/20 via-[#0e1626] to-[#090d18] border-sky-500/40 shadow-sky-500/10'
+    : monster.element === 'wind' ? 'from-amber-500/20 via-[#161a15] to-[#090e18] border-amber-500/40 shadow-amber-500/10'
+    : monster.element === 'light' ? 'from-yellow-400/20 via-[#1a1912] to-[#0a0d18] border-yellow-400/40 shadow-yellow-400/10'
+    : 'from-purple-500/20 via-[#160f22] to-[#090d18] border-purple-500/40 shadow-purple-500/10';
+
+  return (
+    <div className="w-full select-none" style={{ perspective: '1200px' }}>
+      <div
+        onClick={() => setIsFlipped(!isFlipped)}
+        className="relative w-full min-h-[250px] sm:min-h-[270px] rounded-2xl cursor-pointer group"
+        style={{
+          transformStyle: 'preserve-3d',
+          transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
+          transition: 'transform 0.65s cubic-bezier(0.34, 1.56, 0.64, 1)'
+        }}
+      >
+        {/* FRONT: High-res artwork & Awakened stats */}
+        <div
+          className={`absolute inset-0 rounded-2xl p-4 sm:p-5 bg-gradient-to-r ${elementColor} border shadow-2xl flex flex-col justify-between overflow-hidden`}
+          style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
+        >
+          {/* 3D Depth card shine overlay */}
+          <div className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/[0.08] to-transparent pointer-events-none" />
+
+          <div className="flex items-start justify-between gap-4 relative z-10">
+            <div className="flex items-center gap-3.5">
+              <div className="relative group-hover:scale-105 transition-transform duration-300">
+                <MonsterAvatar monster={monster} size="xl" />
+                <span className="absolute -bottom-1 -right-1 px-1.5 py-0.5 rounded text-[10px] font-black bg-amber-400 text-slate-950 shadow">
+                  6★
+                </span>
+              </div>
+              <div>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-amber-400 text-xs">{'★'.repeat(Math.min(6, monster.stars || 5))}</span>
+                  <span className="text-[11px] font-bold text-slate-300 uppercase px-2 py-0.5 rounded-full bg-white/10">
+                    {monster.element} • {monster.archetype || 'Combat'}
+                  </span>
+                </div>
+                <h3 className="text-base sm:text-lg font-black text-white mt-1 drop-shadow">
+                  {monster.thaiName || monster.name}
+                </h3>
+                <p className="text-xs text-slate-400">
+                  {monster.name} ({monster.thaiFamily || monster.family})
+                </p>
+              </div>
+            </div>
+
+            <div className="shrink-0 px-2.5 py-1 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-[11px] font-bold flex items-center gap-1 shadow-sm">
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">แตะเพื่อดูรูน Guardian</span>
+              <span className="sm:hidden">ดูรูน</span>
+            </div>
+          </div>
+
+          {/* Awakened Base Stats */}
+          <div className="grid grid-cols-4 gap-2 mt-3 relative z-10">
+            <div className="p-2 sm:p-2.5 rounded-xl bg-black/40 border border-white/5 text-center">
+              <span className="text-[10px] text-slate-400 block font-semibold">❤️ HP พื้นฐาน</span>
+              <span className="text-xs sm:text-sm font-black text-rose-300 font-mono">
+                {Number(monster.base_hp || monster.hp || 10000).toLocaleString()}
+              </span>
+            </div>
+            <div className="p-2 sm:p-2.5 rounded-xl bg-black/40 border border-white/5 text-center">
+              <span className="text-[10px] text-slate-400 block font-semibold">⚔️ ATK</span>
+              <span className="text-xs sm:text-sm font-black text-amber-300 font-mono">
+                {Number(monster.base_attack || monster.attack || 700).toLocaleString()}
+              </span>
+            </div>
+            <div className="p-2 sm:p-2.5 rounded-xl bg-black/40 border border-white/5 text-center">
+              <span className="text-[10px] text-slate-400 block font-semibold">🛡️ DEF</span>
+              <span className="text-xs sm:text-sm font-black text-sky-300 font-mono">
+                {Number(monster.base_defense || monster.defense || 600).toLocaleString()}
+              </span>
+            </div>
+            <div className="p-2 sm:p-2.5 rounded-xl bg-black/40 border border-white/5 text-center">
+              <span className="text-[10px] text-slate-400 block font-semibold">⚡ SPD</span>
+              <span className="text-xs sm:text-sm font-black text-cyan-300 font-mono">
+                {monster.base_speed || monster.baseSpeed || 100}
+              </span>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between text-[11px] text-slate-400 pt-2 border-t border-white/10 relative z-10">
+            <span className="flex items-center gap-1.5 text-cyan-400 font-medium">
+              <Sparkles className="w-3.5 h-3.5" /> 3D Collectible Hologram Card
+            </span>
+            <span className="text-slate-400 font-bold group-hover:text-white transition-colors">
+              🔄 คลิกเพื่อพลิกการ์ด ➔
+            </span>
+          </div>
+        </div>
+
+        {/* BACK: Guardian Runes, 2/4/6 Main Stats & Priority Substats */}
+        <div
+          className="absolute inset-0 rounded-2xl p-4 sm:p-5 bg-gradient-to-r from-purple-950/50 via-[#101424] to-[#080c16] border border-purple-500/40 shadow-2xl flex flex-col justify-between overflow-hidden"
+          style={{
+            backfaceVisibility: 'hidden',
+            WebkitBackfaceVisibility: 'hidden',
+            transform: 'rotateY(180deg)'
+          }}
+        >
+          {/* Header */}
+          <div className="flex items-center justify-between relative z-10">
+            <div className="flex items-center gap-2">
+              <div className="p-1.5 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/40">
+                <Trophy className="w-4 h-4 text-purple-300" />
+              </div>
+              <div>
+                <h4 className="text-xs sm:text-sm font-black text-white">
+                  รูนยอดนิยมระดับ Guardian (S39 Live Meta)
+                </h4>
+                <p className="text-[10px] text-slate-400">สถิติจริงจากผู้เล่นท็อป 1,000 ของโลก</p>
+              </div>
+            </div>
+
+            <span className="px-2 py-0.5 rounded-lg bg-purple-500/20 text-purple-300 text-[10px] font-mono font-bold border border-purple-500/30">
+              G3 Meta Build
+            </span>
+          </div>
+
+          {/* Rune Sets & Slots 2/4/6 */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 my-2 relative z-10">
+            {/* Rune Sets */}
+            <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1.5">
+              <span className="text-[10px] text-slate-400 font-bold block uppercase tracking-wider">
+                ⚡ เซ็ตรูนยอดนิยม (Recommended Sets)
+              </span>
+              <div className="flex items-center gap-1.5 flex-wrap">
+                {sets.map((set, sidx) => (
+                  <span
+                    key={sidx}
+                    className="px-2.5 py-1 rounded-lg text-xs font-black bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-sm"
+                  >
+                    {set}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Slots 2 / 4 / 6 */}
+            <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-1.5">
+              <span className="text-[10px] text-slate-400 font-bold block uppercase tracking-wider">
+                🎯 ออปหลักช่อง 2 / 4 / 6
+              </span>
+              <div className="flex items-center gap-2 text-xs font-mono font-bold text-cyan-300">
+                <span className="px-2 py-0.5 rounded bg-cyan-950/60 border border-cyan-800/50">
+                  ช่อง 2: {slot2}
+                </span>
+                <span className="px-2 py-0.5 rounded bg-cyan-950/60 border border-cyan-800/50">
+                  ช่อง 4: {slot4}
+                </span>
+                <span className="px-2 py-0.5 rounded bg-cyan-950/60 border border-cyan-800/50">
+                  ช่อง 6: {slot6}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Substats & Meta Stat */}
+          <div className="flex items-center justify-between text-xs pt-2 border-t border-white/10 relative z-10">
+            <div className="flex items-center gap-1.5">
+              <span className="text-[11px] text-slate-400 font-semibold">ออปชั่นรองเน้น:</span>
+              <span className="text-amber-300 font-mono font-bold text-[11px]">
+                {subs.join(' > ')}
+              </span>
+            </div>
+
+            {guardianStats?.winRate ? (
+              <span className="text-emerald-400 font-mono font-extrabold text-xs">
+                Winrate {guardianStats.winRate}
+              </span>
+            ) : (
+              <span className="text-cyan-400 text-xs font-bold">
+                🔄 คลิกเพื่อพลิกกลับ
+              </span>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -569,6 +767,12 @@ export default function MonsterCatalogView({ initialSearch = '', initialMonster 
 
             {/* Modal Scrollable Body */}
             <div className="p-4 sm:p-5 overflow-y-auto flex-1 space-y-5">
+              {/* 3D Collectible Flip Card (Artwork & Awakened Stats vs Guardian Runes) */}
+              <Monster3DFlipCard 
+                monster={selectedMonster} 
+                livingData={getMonsterLivingData(selectedMonster)} 
+              />
+
               <MonsterSkillsCard 
                 monsterData={selectedMonsterSkills || selectedMonster} 
                 enableTooltip={false}
