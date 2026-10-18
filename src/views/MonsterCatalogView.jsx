@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
-import { BookOpen, Search, Swords, X, Filter, Info } from 'lucide-react';
+import { BookOpen, Search, Swords, X, Filter, Info, Sparkles } from 'lucide-react';
 import MonsterAvatar from '../components/MonsterAvatar';
 import SkillTooltip from '../components/SkillTooltip';
 import MonsterSkillsCard from '../components/MonsterSkillsCard';
@@ -35,12 +35,21 @@ function MonsterCard({ monster, onSelect }) {
   const family = monster.thaiFamily || monster.family || '';
   const role = monster.role || monster.roleTh || '';
   const skillsData = useMonsterSkills(monster);
+  const isNew = monster.source === 'patch_9.3.6' || monster.family === 'Cosmic Worm';
 
   return (
     <div
       onClick={() => onSelect(monster)}
-      className="bg-[#101724] p-3 rounded-xl border border-[#1d2b3f] hover:border-blue-500 cursor-pointer transition-all flex flex-col items-center text-center justify-between group shadow-md hover:shadow-blue-500/10 hover:-translate-y-0.5 relative"
+      className={`bg-[#101724] p-3 rounded-xl border hover:border-blue-500 cursor-pointer transition-all flex flex-col items-center text-center justify-between group shadow-md hover:shadow-blue-500/10 hover:-translate-y-0.5 relative ${
+        isNew ? 'border-amber-500/60 shadow-amber-500/10' : 'border-[#1d2b3f]'
+      }`}
     >
+      {/* NEW Badge if monster is from recent release */}
+      {isNew && (
+        <span className="absolute top-2 left-2 px-1.5 py-0.5 rounded text-[9px] font-black bg-gradient-to-r from-amber-500 to-rose-500 text-slate-950 shadow-md z-10 uppercase tracking-wider">
+          NEW
+        </span>
+      )}
       {/* Monster Portrait & Name */}
       <div className="w-full flex flex-col items-center">
         <MonsterAvatar monster={monster} size="lg" />
@@ -119,6 +128,7 @@ export default function MonsterCatalogView({ initialSearch = '', initialMonster 
   const [selectedElement, setSelectedElement] = useState('all');
   const [selectedStars, setSelectedStars] = useState('all');
   const [selectedEffect, setSelectedEffect] = useState('all');
+  const [showNewOnly, setShowNewOnly] = useState(false);
   const [selectedMonster, setSelectedMonster] = useState(initial);
   const [visibleCount, setVisibleCount] = useState(48);
   const inspectorOpenRef = useRef(false);
@@ -192,6 +202,7 @@ export default function MonsterCatalogView({ initialSearch = '', initialMonster 
 
   const filteredMonsters = useMemo(() => {
     return MONSTERS.filter(m => {
+      if (showNewOnly && m.source !== 'patch_9.3.6' && m.family !== 'Cosmic Worm') return false;
       if (selectedElement !== 'all' && m.element !== selectedElement) return false;
       if (selectedStars !== 'all' && m.stars?.toString() !== selectedStars) return false;
 
@@ -212,21 +223,30 @@ export default function MonsterCatalogView({ initialSearch = '', initialMonster 
       if (!searchQuery) return true;
 
       const q = searchQuery.toLowerCase().trim();
+      const isNewQuery = ['ใหม่', 'มอนใหม่', 'ม่อนใหม่', 'new', 'มอนสเตอร์ใหม่', 'ตัวใหม่'].includes(q);
+      if (isNewQuery) {
+        return m.source === 'patch_9.3.6' || m.family === 'Cosmic Worm';
+      }
+
       const nameEn = (m.name || m.nameEn || '').toLowerCase();
       const nameTh = (m.thaiName || m.nameTh || '').toLowerCase();
       const fam = (m.family || '').toLowerCase();
+      const famTh = (m.thaiFamily || '').toLowerCase();
       const arch = (m.archetype || '').toLowerCase();
       const role = (m.role || m.roleTh || '').toLowerCase();
+      const source = (m.source || '').toLowerCase();
 
       return (
         nameEn.includes(q) ||
         nameTh.includes(q) ||
         fam.includes(q) ||
+        famTh.includes(q) ||
         arch.includes(q) ||
-        role.includes(q)
+        role.includes(q) ||
+        source.includes(q)
       );
     });
-  }, [searchQuery, selectedElement, selectedStars, selectedEffect]);
+  }, [searchQuery, selectedElement, selectedStars, selectedEffect, showNewOnly]);
 
   const displayedMonsters = useMemo(() => {
     return filteredMonsters.slice(0, visibleCount);
@@ -278,6 +298,40 @@ export default function MonsterCatalogView({ initialSearch = '', initialMonster 
               ✕ ล้างค้นหา
             </button>
           )}
+        </div>
+
+        {/* Quick Filter: New Monsters Spotlight Chip */}
+        <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                setShowNewOnly(!showNewOnly);
+                setVisibleCount(48);
+              }}
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                showNewOnly
+                  ? 'bg-gradient-to-r from-amber-500 to-rose-500 text-slate-950 shadow-lg shadow-amber-500/25 ring-2 ring-amber-400'
+                  : 'bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30'
+              }`}
+            >
+              <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+              <span>✨ มอนสเตอร์ใหม่ล่าสุด (Cosmic Worm)</span>
+              <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-black/40 font-mono text-amber-200">5 ตัว</span>
+            </button>
+            {showNewOnly && (
+              <button
+                type="button"
+                onClick={() => setShowNewOnly(false)}
+                className="text-xs text-slate-400 hover:text-white px-2 py-1 underline cursor-pointer"
+              >
+                ✕ แสดงมอนสเตอร์ทั้งหมด ({MONSTERS.length})
+              </button>
+            )}
+          </div>
+          <span className="text-xs text-slate-400 font-mono hidden sm:inline">
+            พบมอนสเตอร์ {filteredMonsters.length} ตัว
+          </span>
         </div>
 
         {/* Filter Pills — one wrapping block on desktop; on phones each row is a horizontal chip strip

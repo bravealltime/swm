@@ -19,7 +19,12 @@ describe('DashboardView What\'s New Hub', () => {
 
     // Check New Feature Cards
     expect(html).toContain('บันทึกแพตช์ 9.4.0');
-    expect(html).toContain('Shadow Sailor');
+    expect(html).toContain('หนอนอวกาศ (Cosmic Worm)');
+    expect(html).toContain('Volcaris');
+    expect(html).toContain('Maris');
+    expect(html).toContain('Auraris');
+    expect(html).toContain('Luminaris');
+    expect(html).toContain('Noctaris');
     expect(html).toContain('ระบบตรวจจับการฟาร์มสด');
     expect(html).toContain('AI วินิจฉัยสุขภาพไอดี');
     expect(html).toContain('ศูนย์สงคราม Siege &amp; ทัวร์นาเมนต์ Season 21');
@@ -28,6 +33,6 @@ describe('DashboardView What\'s New Hub', () => {
     expect(html).toContain('ตู้สะสม Nat 5 &amp; ทำเนียบ LD 5★ Pokedex');
 
     // Check Top Hero Announcement Pill
-    expect(html).toContain('ศูนย์กิจกรรม &amp; เฉลยคำถาม | Balance Patch 9.4.0');
+    expect(html).toContain('หนอนอวกาศ (Cosmic Worm)');
   });
 });

@@ -1127,8 +1127,8 @@
     "leaderSkill": "เพิ่มพลังชีวิต (HP) ของมอนสเตอร์ฝ่ายเรา 33% ในทุกคอนเทนต์",
     "role": "ตัวควบคุมต่อเนื่อง เพิ่มระยะเวลาดีบัฟ และใบ้ศัตรู (Debuff Extender/CC)",
     "suggestedRunes": "Violent/Will หรือ Despair/Will (SPD/HP%/HP% หรือ SPD/HP%/ACC)",
-    "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0225_1_3.png",
-    "imageUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0225_1_3.png",
+    "avatarUrl": "/images/monsters/auraris.svg",
+    "imageUrl": "/images/monsters/auraris.svg",
     "source": "patch_9.3.6"
   },
   {
@@ -11486,8 +11486,8 @@
     "leaderSkill": "เพิ่มพลังโจมตี (ATK) ของมอนสเตอร์ฝ่ายเรา 33% ในทุกคอนเทนต์",
     "role": "ตัวเคลียร์หมู่ทะลุต้านตาย รีเซ็ตคูลดาวน์เมื่อฆ่าศัตรู (AOE Cleave Nuker)",
     "suggestedRunes": "Rage/Blade หรือ Fatal/Will (ATK%/CRIT DMG/ATK%)",
-    "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0225_1_4.png",
-    "imageUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0225_1_4.png",
+    "avatarUrl": "/images/monsters/luminaris.svg",
+    "imageUrl": "/images/monsters/luminaris.svg",
     "source": "patch_9.3.6"
   },
   {
@@ -12042,8 +12042,8 @@
     "leaderSkill": "เพิ่มความต้านทาน (RES) ของมอนสเตอร์ฝ่ายเรา 44% ในทุกคอนเทนต์",
     "role": "ตัวลบบัฟหมู่ ขโมยบัฟ และแจกบัฟเพื่อน (Stripper/Buffer Support)",
     "suggestedRunes": "Swift/Will หรือ Violent/Will (SPD/HP%/HP%)",
-    "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0225_1_1.png",
-    "imageUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0225_1_1.png",
+    "avatarUrl": "/images/monsters/maris.svg",
+    "imageUrl": "/images/monsters/maris.svg",
     "source": "patch_9.3.6"
   },
   {
@@ -13516,8 +13516,8 @@
     "leaderSkill": "เพิ่มอัตราคริติคอล (CRIT Rate) ของมอนสเตอร์ฝ่ายเรา 24% ในทุกคอนเทนต์",
     "role": "ตัวล็อกสตัน แปะสัญลักษณ์ และห้ามล้างดีบัฟ (Lockdown Bruiser/Disrupter)",
     "suggestedRunes": "Violent/Will หรือ Despair/Revenge (SPD/HP%/HP% หรือ HP%/CRIT DMG/HP%)",
-    "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0225_1_5.png",
-    "imageUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0225_1_5.png",
+    "avatarUrl": "/images/monsters/noctaris.svg",
+    "imageUrl": "/images/monsters/noctaris.svg",
     "source": "patch_9.3.6"
   },
   {
@@ -18442,8 +18442,8 @@
     "leaderSkill": "เพิ่มพลังป้องกัน (DEF) ของมอนสเตอร์ฝ่ายเรา 33% ในทุกคอนเทนต์",
     "role": "ตัวแทงก์สายควบคุม/เพิ่มเลือดสูงสุด (HP Bruiser/Crowd Control)",
     "suggestedRunes": "Violent/Will หรือ Despair/Nemesis (HP%/HP%/HP% หรือ SPD/HP%/HP%)",
-    "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0225_1_2.png",
-    "imageUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0225_1_2.png",
+    "avatarUrl": "/images/monsters/volcaris.svg",
+    "imageUrl": "/images/monsters/volcaris.svg",
     "source": "patch_9.3.6"
   },
   {

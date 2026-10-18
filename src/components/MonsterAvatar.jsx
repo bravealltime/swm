@@ -161,9 +161,12 @@ export default function MonsterAvatar({
             onError={() => setImgError(true)}
           />
         ) : (
-          <div className="w-full h-full flex flex-col items-center justify-center bg-slate-900 text-white font-black p-1 text-center select-none">
-            <span className="text-xs font-mono text-cyan-300 truncate w-full">
-              {engName ? engName.slice(0, 3).toUpperCase() : 'SW'}
+          <div className={`w-full h-full flex flex-col items-center justify-center ${elem.bg} text-white font-black p-1 text-center select-none bg-gradient-to-br from-slate-900 to-black`}>
+            <span className="text-[11px] font-bold text-slate-200 tracking-wider truncate w-full">
+              {engName ? engName.slice(0, 4).toUpperCase() : 'SW'}
+            </span>
+            <span className="text-[9px] font-mono text-slate-400 uppercase">
+              {elem.name}
             </span>
           </div>
         )}

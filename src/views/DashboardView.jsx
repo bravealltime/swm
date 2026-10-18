@@ -63,6 +63,79 @@ const POPULAR_PRESETS = [
   { label: 'Martina + Shaina + Triana', defKey: 'Martina,Shaina,Triana', monsters: ['Martina', 'Shaina', 'Triana'] },
 ];
 
+const NEW_MONSTERS_SHOWCASE = [
+  {
+    name: 'Volcaris',
+    thaiName: 'โวลคาริส',
+    element: 'fire',
+    elementName: 'ไฟ',
+    archetype: 'HP Bruiser',
+    stars: 5,
+    avatarUrl: '/images/monsters/volcaris.svg',
+    highlightSkill: 'S3: Squash',
+    highlightDesc: 'โจมตีหมู่ตาม MAX HP สตัน 1 เทิร์น ดูดเกจ และเพิ่ม MAX HP รวมครั้งละ +20% (ซ้อนได้สูงสุด +100% เลือดพุ่งทะลุ 150k-200k HP!)',
+    leaderSkill: 'DEF +33% (ทุกคอนเทนต์)',
+    badgeColor: 'border-rose-500/50 bg-rose-950/40 text-rose-300',
+    btnGradient: 'from-rose-600 to-amber-600 hover:from-rose-500 hover:to-amber-500',
+  },
+  {
+    name: 'Maris',
+    thaiName: 'มาริส',
+    element: 'water',
+    elementName: 'น้ำ',
+    archetype: 'Stripper / Support',
+    stars: 5,
+    avatarUrl: '/images/monsters/maris.svg',
+    highlightSkill: 'S3: Deep Inhale',
+    highlightDesc: 'ลบบัฟศัตรูทั้งหมด ขโมยบัฟทั้งหมดมาแจกจ่ายให้เพื่อนร่วมทีมคนละ 1 บัฟ พร้อมติดสถานะห้ามฟื้นฟู HP นาน 2 เทิร์น',
+    leaderSkill: 'RES +44% (ทุกคอนเทนต์)',
+    badgeColor: 'border-sky-500/50 bg-sky-950/40 text-sky-300',
+    btnGradient: 'from-sky-600 to-blue-600 hover:from-sky-500 hover:to-blue-500',
+  },
+  {
+    name: 'Auraris',
+    thaiName: 'ออราลิส',
+    element: 'wind',
+    elementName: 'ลม',
+    archetype: 'CC / Debuff Extender',
+    stars: 5,
+    avatarUrl: '/images/monsters/auraris.svg',
+    highlightSkill: 'S3: Wormhole Dive',
+    highlightDesc: 'ยืดระยะเวลาดีบัฟศัตรูทั้งหมดขึ้น 1 เทิร์น แปะ Glancing Hit 2 เทิร์น และใบ้สกิล (Silence) 1-2 เทิร์น ดาเมจตาม MAX HP',
+    leaderSkill: 'HP +33% (ทุกคอนเทนต์)',
+    badgeColor: 'border-emerald-500/50 bg-emerald-950/40 text-emerald-300',
+    btnGradient: 'from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500',
+  },
+  {
+    name: 'Luminaris',
+    thaiName: 'ลูมินาริส',
+    element: 'light',
+    elementName: 'แสง',
+    archetype: 'AOE Cleave Nuker',
+    stars: 5,
+    avatarUrl: '/images/monsters/luminaris.svg',
+    highlightSkill: 'S3: Cosmic Breath',
+    highlightDesc: 'ยิงลำแสงกวาดหมู่ ทะลุต้านความตายทุกรูปแบบ (ต้านอมตะ ทนตาย ชุบ) รีเซ็ตคูลดาวน์ทันทีเมื่อฆ่าศัตรูได้ และแรงขึ้นสูงสุด +100%',
+    leaderSkill: 'ATK +33% (ทุกคอนเทนต์)',
+    badgeColor: 'border-amber-400/50 bg-amber-950/40 text-amber-200',
+    btnGradient: 'from-amber-500 to-yellow-500 text-slate-950 hover:from-amber-400 hover:to-yellow-400',
+  },
+  {
+    name: 'Noctaris',
+    thaiName: 'น็อคทาริส',
+    element: 'dark',
+    elementName: 'มืด',
+    archetype: 'Lockdown Bruiser',
+    stars: 5,
+    avatarUrl: '/images/monsters/noctaris.svg',
+    highlightSkill: 'S3: Splash Splash',
+    highlightDesc: 'สตันเดี่ยว + แปะ Brand 2 เทิร์น จากนั้นสุ่มฟาดอีก 2-3 ครั้ง มีโอกาสสตันและห้ามล้างดีบัฟ พร้อมเร่งลดคูลดาวน์เมื่อตีตัวสตัน',
+    leaderSkill: 'CRIT Rate +24% (ทุกคอนเทนต์)',
+    badgeColor: 'border-purple-500/50 bg-purple-950/40 text-purple-300',
+    btnGradient: 'from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500',
+  },
+];
+
 const WHATS_NEW_ITEMS = [
   {
     id: 'events-quiz',
@@ -81,16 +154,31 @@ const WHATS_NEW_ITEMS = [
     primaryActionLabel: 'ดูรายการกิจกรรมทั้งหมด ➔',
   },
   {
+    id: 'new-monsters-cosmic-worm',
+    badge: '5★ แท้ใหม่ล่าสุด',
+    badgeColor: 'purple',
+    category: 'monsters',
+    title: 'มอนสเตอร์ใหม่ 5★ แท้ [หนอนอวกาศ (Cosmic Worm)] ครบ 5 ธาตุ',
+    description: 'เปิดตัว 5★ แท้ตระกูลใหม่ล่าสุด Volcaris (หนอนไฟ เลือดทะลุ 150k+), Maris (หนอนน้ำ ขโมยบัฟหมู่แจกทีม), Auraris (หนอนลม ยืดดีบัฟ), Luminaris (หนอนแสง คลีฟทะลุต้านตาย), Noctaris (หนอนมืด สตันห้ามล้างดีบัฟ)',
+    icon: Sparkles,
+    colorGradient: 'from-purple-500/20 via-pink-500/10 to-transparent',
+    borderColor: 'border-purple-500/40',
+    tags: ['#มอนสเตอร์ใหม่', '#CosmicWorm', '#หนอนอวกาศ', '#5ดาวแท้', '#วิเคราะห์สกิล'],
+    targetView: 'catalog',
+    targetParams: { search: 'Cosmic Worm' },
+    primaryActionLabel: 'ส่องสกิลมอนใหม่ทั้งหมด ➔',
+  },
+  {
     id: 'balance-patch-94',
     badge: 'Patch v9.4.0',
     badgeColor: 'cyan',
     category: 'events',
-    title: 'บันทึกแพตช์ 9.4.0 & มอนใหม่ Shadow Sailor',
-    description: 'วิเคราะห์การปรับสมดุลล่าสุด Art Master, Beast Rider, Puppeteer พร้อมข้อมูลสกิลและสเตตัสมอนสเตอร์ใหม่ตระกูล Shadow Sailor ครบทั้ง 5 ธาตุ',
+    title: 'บันทึกแพตช์ 9.4.0 & วิเคราะห์สมดุลมอนสเตอร์',
+    description: 'วิเคราะห์การปรับสมดุลล่าสุด Art Master, Beast Rider, Puppeteer พร้อมข้อมูลสกิลและสเตตัสฉบับภาษาไทย ตารางบัฟ/เนิร์ฟ และผลกระทบต่อเมต้า RTA S38',
     icon: BookOpen,
     colorGradient: 'from-cyan-500/15 via-blue-500/5 to-transparent',
     borderColor: 'border-cyan-500/30',
-    tags: ['#Patch9.4', '#ShadowSailor', '#บัฟเนิร์ฟมอน'],
+    tags: ['#Patch9.4', '#วิเคราะห์แพตช์', '#บัฟเนิร์ฟมอน'],
     targetView: 'balance',
     primaryActionLabel: 'อ่านบันทึกแพตช์ ➔',
   },
@@ -507,16 +595,16 @@ export default function DashboardView({ onNavigate }) {
             </div>
             <button
               type="button"
-              onClick={() => onNavigate('events')}
-              className="group inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 hover:border-amber-400/60 text-xs text-amber-200 transition-all cursor-pointer shadow-lg shadow-amber-500/10 backdrop-blur-md"
+              onClick={() => onNavigate('catalog', { search: 'Cosmic Worm' })}
+              className="group inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-500/15 hover:bg-purple-500/25 border border-purple-500/30 hover:border-purple-400/60 text-xs text-purple-200 transition-all cursor-pointer shadow-lg shadow-purple-500/10 backdrop-blur-md"
             >
               <span className="flex h-2 w-2 relative shrink-0">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-purple-500"></span>
               </span>
-              <span className="px-1.5 py-0.2 rounded bg-amber-400 text-slate-950 font-black text-[10px] uppercase">NEW</span>
-              <span>ศูนย์กิจกรรม & เฉลยคำถาม | Balance Patch 9.4.0</span>
-              <ChevronRight className="w-3.5 h-3.5 text-amber-300 group-hover:translate-x-0.5 transition-transform" />
+              <span className="px-1.5 py-0.2 rounded bg-purple-400 text-slate-950 font-black text-[10px] uppercase">NEW</span>
+              <span>มอนใหม่ 5★ แท้ [หนอนอวกาศ (Cosmic Worm)] & บันทึกแพตช์ 9.4</span>
+              <ChevronRight className="w-3.5 h-3.5 text-purple-300 group-hover:translate-x-0.5 transition-transform" />
             </button>
           </div>
 
@@ -563,6 +651,13 @@ export default function DashboardView({ onNavigate }) {
             {/* Quick Hot Suggestions */}
             <div className="flex flex-wrap items-center justify-center gap-2 pt-3 text-xs">
               <span className="text-slate-400 text-xs font-semibold">แนะนำค้นหา:</span>
+              <button
+                type="button"
+                onClick={() => onNavigate('catalog', { search: 'Cosmic Worm' })}
+                className="px-2.5 py-1 rounded-lg bg-purple-500/15 hover:bg-purple-500/25 border border-purple-500/30 text-purple-300 hover:text-purple-200 font-bold transition-colors cursor-pointer flex items-center gap-1"
+              >
+                ✨ มอนใหม่ หนอนอวกาศ (5★)
+              </button>
               <button
                 type="button"
                 onClick={() => onNavigate('events')}
@@ -678,13 +773,19 @@ export default function DashboardView({ onNavigate }) {
           {/* Category Filter Pills */}
           <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
             {[
-              { id: 'all', label: 'ทั้งหมด', count: WHATS_NEW_ITEMS.length },
-              { id: 'events', label: '🎉 กิจกรรม & แพตช์', count: 2 },
-              { id: 'tools', label: '🤖 AI & ฟาร์มสด', count: 2 },
-              { id: 'meta', label: '⚔️ เมต้า & กิลด์', count: 2 },
-              { id: 'rewards', label: '🎁 โค้ด & ตู้สะสม', count: 2 },
+              { id: 'all', label: 'ทั้งหมด' },
+              { id: 'monsters', label: '🐛 มอนใหม่ (5★)' },
+              { id: 'events', label: '🎉 กิจกรรม & แพตช์' },
+              { id: 'tools', label: '🤖 AI & ฟาร์มสด' },
+              { id: 'meta', label: '⚔️ เมต้า & กิลด์' },
+              { id: 'rewards', label: '🎁 โค้ด & ตู้สะสม' },
             ].map((cat) => {
               const active = whatsNewCategory === cat.id;
+              const count = cat.id === 'all'
+                ? WHATS_NEW_ITEMS.length
+                : cat.id === 'monsters'
+                ? NEW_MONSTERS_SHOWCASE.length
+                : WHATS_NEW_ITEMS.filter((it) => it.category === cat.id).length;
               return (
                 <button
                   key={cat.id}
@@ -700,7 +801,7 @@ export default function DashboardView({ onNavigate }) {
                   <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono ${
                     active ? 'bg-black/20 text-slate-900' : 'bg-white/10 text-slate-400'
                   }`}>
-                    {cat.count}
+                    {count}
                   </span>
                 </button>
               );
@@ -776,6 +877,98 @@ export default function DashboardView({ onNavigate }) {
                     <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                   </button>
                 </div>
+              </div>
+            </div>
+          )}
+
+          {/* 1.6 DEDICATED NEW MONSTERS SHOWCASE: COSMIC WORM (หนอนอวกาศ 5★ แท้) */}
+          {(whatsNewCategory === 'all' || whatsNewCategory === 'monsters') && (
+            <div className="relative overflow-hidden rounded-2xl border border-purple-500/35 bg-gradient-to-r from-purple-950/40 via-indigo-950/30 to-[#0c1424] p-5 sm:p-7 shadow-xl">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-white/[0.08]">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-gradient-to-r from-purple-500 to-pink-500 text-white uppercase tracking-wider flex items-center gap-1 shadow-sm">
+                      <Sparkles className="w-3 h-3 text-white fill-white" />
+                      เปิดตัวมอนสเตอร์ใหม่ (Default 5★)
+                    </span>
+                    <span className="text-xs text-purple-300 font-mono font-semibold">
+                      Patch v9.3.6 • ตระกูลหนอนอวกาศ
+                    </span>
+                  </div>
+                  <h3 className="text-lg sm:text-2xl font-black text-white flex items-center gap-2">
+                    <span>🌌 หนอนอวกาศ (Cosmic Worm) ครบทั้ง 5 ธาตุ</span>
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                    พบกับมอนสเตอร์ใหม่ระดับ 5 ดาวแท้ จุดเด่นดาเมจตาม MAX HP และลูกเล่นควบคุมสุดล้ำ คลิกดูสกิล สเตตัส และแนวทางการใส่รูนได้ทันที
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => onNavigate('catalog', { search: 'Cosmic Worm' })}
+                  className="shrink-0 px-4 py-2 rounded-xl bg-purple-600/30 hover:bg-purple-600/50 border border-purple-500/40 text-purple-200 text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer self-start sm:self-center"
+                >
+                  <span>ดูทั้งหมดในสารานุกรม ➔</span>
+                </button>
+              </div>
+
+              {/* 5-Monster Responsive Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5 pt-5">
+                {NEW_MONSTERS_SHOWCASE.map((mon) => (
+                  <div
+                    key={mon.name}
+                    className="relative rounded-xl border border-white/10 bg-[#0c1322]/90 p-4 flex flex-col justify-between hover:border-purple-400/50 hover:bg-[#101b30] transition-all group shadow-md"
+                  >
+                    <div>
+                      {/* Top Header: Avatar + Names */}
+                      <div className="flex items-center gap-3">
+                        <MonsterAvatar monster={mon} size="sm" showStars={false} />
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-1">
+                            <span className="font-black text-sm text-white group-hover:text-purple-300 transition-colors truncate">
+                              {mon.thaiName}
+                            </span>
+                            <span className="text-[10px] text-amber-400 font-mono">★★★★★</span>
+                          </div>
+                          <p className="text-xs text-slate-400 truncate">
+                            {mon.name} ({mon.elementName})
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Archetype & Leader Skill */}
+                      <div className="mt-3 space-y-1.5 text-xs">
+                        <div className="flex items-center justify-between">
+                          <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${mon.badgeColor}`}>
+                            {mon.archetype}
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-amber-300/90 font-medium">
+                          👑 {mon.leaderSkill}
+                        </p>
+                      </div>
+
+                      {/* Highlight Skill */}
+                      <div className="mt-2.5 pt-2 border-t border-white/[0.06] space-y-1">
+                        <span className="text-[11px] font-bold text-white flex items-center gap-1">
+                          ⚡ {mon.highlightSkill}
+                        </span>
+                        <p className="text-[11px] text-slate-400 leading-relaxed line-clamp-3">
+                          {mon.highlightDesc}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Inspect Button */}
+                    <button
+                      type="button"
+                      onClick={() => onNavigate('catalog', { initialMonster: mon.name })}
+                      className={`mt-4 w-full py-2 rounded-lg bg-gradient-to-r ${mon.btnGradient} text-white font-bold text-xs shadow-md transition-all cursor-pointer flex items-center justify-center gap-1 group-hover:scale-102`}
+                    >
+                      <span>ดูสกิล & สเตตัส</span>
+                      <ArrowRight className="w-3 h-3" />
+                    </button>
+                  </div>
+                ))}
               </div>
             </div>
           )}
