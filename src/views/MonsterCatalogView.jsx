@@ -36,27 +36,47 @@ function MonsterCard({ monster, onSelect }) {
   const role = monster.role || monster.roleTh || '';
   const skillsData = useMonsterSkills(monster);
   const isNew = monster.source === 'patch_9.3.6' || monster.family === 'Cosmic Worm';
+  const arch = (monster.archetype || '').toLowerCase();
+
+  // 3D Role tag styling
+  const roleBadgeStyle = arch === 'attack'
+    ? 'bg-rose-500/10 text-rose-300 border-rose-500/30'
+    : arch === 'support'
+    ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30'
+    : arch === 'defense'
+    ? 'bg-blue-500/10 text-blue-300 border-blue-500/30'
+    : arch === 'hp'
+    ? 'bg-amber-500/10 text-amber-300 border-amber-500/30'
+    : 'bg-purple-500/10 text-purple-300 border-purple-500/30';
 
   return (
     <div
       onClick={() => onSelect(monster)}
-      className={`bg-[#101724] p-3 rounded-xl border hover:border-blue-500 cursor-pointer transition-all flex flex-col items-center text-center justify-between group shadow-md hover:shadow-blue-500/10 hover:-translate-y-0.5 relative ${
-        isNew ? 'border-amber-500/60 shadow-amber-500/10' : 'border-[#1d2b3f]'
+      className={`bg-gradient-to-b from-[#121c2d] via-[#0d1522] to-[#090e18] p-3 sm:p-3.5 rounded-2xl border transition-all duration-300 flex flex-col items-center text-center justify-between group cursor-pointer relative shadow-lg hover:shadow-2xl hover:-translate-y-1.5 hover:scale-[1.02] backdrop-blur-sm select-none ${
+        isNew 
+          ? 'border-amber-500/60 shadow-amber-500/20 ring-1 ring-amber-400/40' 
+          : 'border-white/[0.08] hover:border-cyan-400/80 hover:shadow-cyan-500/15'
       }`}
     >
+      {/* 3D Depth Card Glare/Sheen */}
+      <div className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/[0.05] to-transparent rounded-t-2xl pointer-events-none" />
+
       {/* NEW Badge if monster is from recent release */}
       {isNew && (
-        <span className="absolute top-2 left-2 px-1.5 py-0.5 rounded text-[9px] font-black bg-gradient-to-r from-amber-500 to-rose-500 text-slate-950 shadow-md z-10 uppercase tracking-wider">
+        <span className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-full text-[9px] font-black bg-gradient-to-r from-amber-400 via-orange-500 to-rose-500 text-slate-950 shadow-md shadow-amber-500/30 z-10 uppercase tracking-widest ring-1 ring-white/30 animate-pulse">
           NEW
         </span>
       )}
+
       {/* Monster Portrait & Name */}
-      <div className="w-full flex flex-col items-center">
-        <MonsterAvatar monster={monster} size="lg" />
-        <h3 className="font-bold text-xs sm:text-sm text-white group-hover:text-blue-400 transition-colors mt-2 truncate max-w-full">
+      <div className="w-full flex flex-col items-center relative z-10">
+        <div className="group-hover:scale-105 transition-transform duration-300 ease-out">
+          <MonsterAvatar monster={monster} size="lg" />
+        </div>
+        <h3 className="font-extrabold text-xs sm:text-sm text-white group-hover:text-cyan-300 transition-colors mt-2.5 truncate max-w-full drop-shadow-sm">
           {displayName}
         </h3>
-        <p className="text-xs text-slate-400 truncate max-w-full mt-0.5">
+        <p className="text-[11px] text-slate-400 truncate max-w-full mt-0.5">
           {engName !== displayName ? engName : family}
         </p>
       </div>
@@ -64,7 +84,7 @@ function MonsterCard({ monster, onSelect }) {
       {/* Interactive Skill Hover Strip */}
       {skillsData && (
         <div
-          className="w-full mt-2 pt-2 border-t border-[#182333] flex items-center justify-center gap-1.5 flex-wrap"
+          className="w-full mt-2.5 pt-2 border-t border-white/[0.06] flex items-center justify-center gap-1.5 flex-wrap relative z-10"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Leader Skill Icon */}
@@ -74,10 +94,10 @@ function MonsterCard({ monster, onSelect }) {
                 <img
                   src={skillsData.leaderSkill.iconUrl}
                   alt="Leader"
-                  className="w-7 h-7 rounded border border-amber-500/60 bg-black/50 p-0.5 group-hover/sk:border-amber-400 group-hover/sk:scale-110 transition-transform"
+                  className="w-7 h-7 rounded-lg border border-amber-500/60 bg-black/60 p-0.5 group-hover/sk:border-amber-300 group-hover/sk:scale-110 shadow-sm transition-transform"
                   onError={(e) => { e.target.style.display = 'none'; }}
                 />
-                <span className="absolute -bottom-1 -right-1 text-[9px] font-bold bg-amber-600 text-white px-0.5 rounded leading-none">
+                <span className="absolute -bottom-1 -right-1 text-[9px] font-black bg-amber-500 text-slate-950 px-1 rounded-sm leading-none shadow">
                   L
                 </span>
               </div>
@@ -91,10 +111,10 @@ function MonsterCard({ monster, onSelect }) {
                 <img
                   src={sk.iconUrl}
                   alt={sk.name}
-                  className={`w-7 h-7 rounded bg-black/50 p-0.5 border group-hover/sk:scale-110 transition-transform ${
+                  className={`w-7 h-7 rounded-lg bg-black/60 p-0.5 border shadow-sm group-hover/sk:scale-110 transition-transform ${
                     sk.isPassive
-                      ? 'border-purple-500/70 group-hover/sk:border-purple-400'
-                      : 'border-blue-500/60 group-hover/sk:border-blue-400'
+                      ? 'border-purple-500/70 group-hover/sk:border-purple-400 shadow-purple-500/20'
+                      : 'border-blue-500/60 group-hover/sk:border-cyan-400 shadow-blue-500/20'
                   }`}
                   onError={(e) => {
                     e.target.onerror = null;
@@ -112,9 +132,9 @@ function MonsterCard({ monster, onSelect }) {
         </div>
       )}
 
-      {/* Role label */}
-      <div className="w-full mt-2 pt-1.5 border-t border-[#141d2a]">
-        <span className="text-[11px] text-slate-400 line-clamp-1">
+      {/* Role label pill */}
+      <div className="w-full mt-2 pt-1.5 border-t border-white/[0.04] relative z-10">
+        <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border truncate block ${roleBadgeStyle}`}>
           {role || (monster.archetype ? `สาย ${monster.archetype}` : 'สายต่อสู้')}
         </span>
       </div>
@@ -127,6 +147,7 @@ export default function MonsterCatalogView({ initialSearch = '', initialMonster 
   const [searchQuery, setSearchQuery] = useState(initialSearch || initial?.name || '');
   const [selectedElement, setSelectedElement] = useState('all');
   const [selectedStars, setSelectedStars] = useState('all');
+  const [selectedRole, setSelectedRole] = useState('all');
   const [selectedEffect, setSelectedEffect] = useState('all');
   const [showNewOnly, setShowNewOnly] = useState(false);
   const [selectedMonster, setSelectedMonster] = useState(initial);
@@ -200,11 +221,41 @@ export default function MonsterCatalogView({ initialSearch = '', initialMonster 
     { id: 'Continuous DMG', name: '🩸 ดอท (Continuous DMG)' },
   ];
 
+  const teamRoles = [
+    { id: 'all', name: 'ทุกบทบาททีม' },
+    { id: 'Stripper', name: '🌪️ ปลดบัฟ (Stripper)' },
+    { id: 'DefBreaker', name: '🛡️ เจาะ/ลดเกราะ (Def Break)' },
+    { id: 'Booster', name: '⚡ เร่งเทิร์น/บัฟ (ATB Booster)' },
+    { id: 'Nuker', name: '🗡️ ดาเมจหลัก (DPS / Nuker)' },
+    { id: 'Healer', name: '💚 ซัพพอร์ต/ฮีล (Heal & Support)' },
+    { id: 'Disrupter', name: '💫 ควบคุม/สตั๊น (CC & Disrupter)' },
+  ];
+
   const filteredMonsters = useMemo(() => {
     return MONSTERS.filter(m => {
       if (showNewOnly && m.source !== 'patch_9.3.6' && m.family !== 'Cosmic Worm') return false;
       if (selectedElement !== 'all' && m.element !== selectedElement) return false;
       if (selectedStars !== 'all' && m.stars?.toString() !== selectedStars) return false;
+
+      // Team Role Filter
+      if (selectedRole !== 'all') {
+        const tags = getSkillTags(m);
+        const arch = (m.archetype || '').toLowerCase();
+        const rStr = ((m.role || '') + ' ' + (m.roleTh || '')).toLowerCase();
+        if (selectedRole === 'Stripper') {
+          if (!tags?.effects?.includes('Strip') && !rStr.includes('strip') && !rStr.includes('ล้างบัฟ')) return false;
+        } else if (selectedRole === 'DefBreaker') {
+          if (!tags?.effects?.includes('Decrease DEF') && !tags?.effects?.includes('Ignore DEF') && !rStr.includes('เกราะ')) return false;
+        } else if (selectedRole === 'Booster') {
+          if (!tags?.effects?.includes('Increase ATB') && !tags?.effects?.includes('Increase ATK') && !tags?.effects?.includes('Increase SPD') && !rStr.includes('เร่ง') && !rStr.includes('boost')) return false;
+        } else if (selectedRole === 'Nuker') {
+          if (arch !== 'attack' && !tags?.effects?.includes('Ignore DEF') && !tags?.isAoe && !rStr.includes('ดาเมจ') && !rStr.includes('dps')) return false;
+        } else if (selectedRole === 'Healer') {
+          if (arch !== 'support' && !tags?.effects?.includes('Recovery') && !tags?.effects?.includes('Immunity') && !tags?.effects?.includes('Shield') && !rStr.includes('ซัพ') && !rStr.includes('ฮีล')) return false;
+        } else if (selectedRole === 'Disrupter') {
+          if (!tags?.effects?.includes('Stun') && !tags?.effects?.includes('Freeze') && !tags?.effects?.includes('Sleep') && !tags?.effects?.includes('Provoke') && !tags?.effects?.includes('Silence') && !rStr.includes('ป่วน') && !rStr.includes('สตั๊น')) return false;
+        }
+      }
 
       // Skill Effect Filter — answered from the bundled index, no shard needed
       if (selectedEffect !== 'all') {
@@ -246,7 +297,7 @@ export default function MonsterCatalogView({ initialSearch = '', initialMonster 
         source.includes(q)
       );
     });
-  }, [searchQuery, selectedElement, selectedStars, selectedEffect, showNewOnly]);
+  }, [searchQuery, selectedElement, selectedStars, selectedRole, selectedEffect, showNewOnly]);
 
   const displayedMonsters = useMemo(() => {
     return filteredMonsters.slice(0, visibleCount);
@@ -334,8 +385,7 @@ export default function MonsterCatalogView({ initialSearch = '', initialMonster 
           </span>
         </div>
 
-        {/* Filter Pills — one wrapping block on desktop; on phones each row is a horizontal chip strip
-            so the three groups take three lines instead of ten */}
+        {/* Filter Pills */}
         <div className="flex flex-col gap-3 pt-1 border-t border-[#182333]">
           {/* Element & Star Buttons */}
           <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center sm:justify-between gap-3">
@@ -376,6 +426,27 @@ export default function MonsterCatalogView({ initialSearch = '', initialMonster 
             </div>
           </div>
 
+          {/* Team Roles Filter Strip */}
+          <div className={`${chipStrip} pt-2 border-t border-[#182333]/60`}>
+            <span className="text-xs text-cyan-400 font-bold mr-1 flex items-center gap-1 shrink-0">
+              <Swords className="w-3.5 h-3.5 text-cyan-400" />
+              บทบาททีม:
+            </span>
+            {teamRoles.map((r) => (
+              <button
+                key={r.id}
+                onClick={() => { setSelectedRole(r.id); setVisibleCount(48); }}
+                className={`${chip} px-2.5 py-1 text-xs font-semibold ${
+                  selectedRole === r.id
+                    ? 'bg-cyan-600 text-white shadow-md shadow-cyan-600/30 font-bold'
+                    : 'bg-[#0c121c] border border-[#1d2b3f] text-slate-300 hover:text-white hover:bg-[#152030]'
+                }`}
+              >
+                {r.name}
+              </button>
+            ))}
+          </div>
+
           {/* Skill Effects Filter */}
           <div className={`${chipStrip} pt-2 border-t border-[#182333]/60`}>
             <span className="text-xs text-slate-400 font-bold mr-1 flex items-center gap-1 shrink-0">
@@ -407,11 +478,11 @@ export default function MonsterCatalogView({ initialSearch = '', initialMonster 
         </span>
         <span className="hidden sm:flex text-blue-400 items-center gap-1 bg-blue-950/30 px-2.5 py-1 rounded-lg border border-blue-900/40">
           <Info className="w-3.5 h-3.5" />
-          <span>เอาเมาส์ชี้ที่ไอคอนสกิลด้านล่างรูปเพื่อดูรายละเอียด หรือคลิกเพื่อดูหน้าต่างเจาะลึก</span>
+          <span>เอาเมาส์ชี้ที่ไอคอนสกิลด้านล่างรูปเพื่อดูรายละเอียด หรือคลิกเพื่อดูหน้าต่างเจาะลึก 3D</span>
         </span>
       </div>
 
-      {/* Monster Grid with Skill Strips */}
+      {/* Monster Grid with 3D Collectible Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3.5 sm:gap-4">
         {displayedMonsters.map((monster) => (
           <MonsterCard key={monster.id} monster={monster} onSelect={setSelectedMonster} />
@@ -424,10 +495,10 @@ export default function MonsterCatalogView({ initialSearch = '', initialMonster 
           <div className="text-4xl">🔍</div>
           <div className="text-sm font-bold text-white">ไม่พบมอนสเตอร์ที่ตรงกับเงื่อนไข</div>
           <p className="text-xs text-slate-400">
-            ลองตรวจสอบการสะกดชื่อ หรือคลายตัวกรองธาตุ/ดาว/เอฟเฟกต์แล้วค้นใหม่อีกครั้ง
+            ลองตรวจสอบการสะกดชื่อ หรือคลายตัวกรองธาตุ/ดาว/บทบาท/เอฟเฟกต์แล้วค้นใหม่อีกครั้ง
           </p>
           <button
-            onClick={() => { setSearchQuery(''); setSelectedElement('all'); setSelectedStars('all'); setSelectedEffect('all'); }}
+            onClick={() => { setSearchQuery(''); setSelectedElement('all'); setSelectedStars('all'); setSelectedRole('all'); setSelectedEffect('all'); }}
             className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold cursor-pointer"
           >
             ล้างการค้นหาและตัวกรองทั้งหมด

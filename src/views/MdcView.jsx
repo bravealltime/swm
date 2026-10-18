@@ -267,37 +267,37 @@ export default function MdcView({ search = '' }) {
           </p>
         </div>
 
-        {/* Tower Filters */}
-        <div className="relative z-10 flex items-center gap-1.5 p-1.5 rounded-2xl bg-white/[0.04] border border-white/10 backdrop-blur-xl self-start md:self-auto">
+        {/* 3D Segmented Tower Filters */}
+        <div className="relative z-10 flex items-center gap-1.5 p-1.5 rounded-2xl bg-white/[0.04] border border-white/10 backdrop-blur-xl self-start md:self-auto shadow-inner">
           <button
             onClick={() => { setTowerFilter('all'); setCounterCountLimit(25); }}
-            className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+            className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
               towerFilter === 'all' 
-                ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/25' 
-                : 'text-slate-400 hover:text-white'
+                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-600/30 ring-1 ring-blue-400/40' 
+                : 'text-slate-400 hover:text-white hover:bg-white/[0.05]'
             }`}
           >
-            หอทั้งหมด
+            <span>🏰 ทุกฐานทัพ (All)</span>
           </button>
           <button
             onClick={() => { setTowerFilter('nat4'); setCounterCountLimit(25); }}
-            className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+            className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
               towerFilter === 'nat4' 
-                ? 'bg-amber-500 text-slate-950 font-black shadow-lg shadow-amber-500/25' 
-                : 'text-slate-400 hover:text-white'
+                ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 font-black shadow-lg shadow-amber-500/30 ring-1 ring-amber-300' 
+                : 'text-slate-400 hover:text-white hover:bg-white/[0.05]'
             }`}
           >
-            หอ 4 ดาว (Nat 4)
+            <span>⭐ ฐาน 4 ดาว (Nat 4 Base)</span>
           </button>
           <button
             onClick={() => { setTowerFilter('nat5'); setCounterCountLimit(25); }}
-            className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+            className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
               towerFilter === 'nat5' 
-                ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/25' 
-                : 'text-slate-400 hover:text-white'
+                ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg shadow-purple-600/30 ring-1 ring-purple-400/40' 
+                : 'text-slate-400 hover:text-white hover:bg-white/[0.05]'
             }`}
           >
-            หอ 5 ดาว (Nat 5)
+            <span>👑 ฐาน 5 ดาว (Nat 5 Base)</span>
           </button>
         </div>
       </div>
@@ -306,15 +306,15 @@ export default function MdcView({ search = '' }) {
       <div className="rounded-2xl sm:rounded-3xl border border-white/[0.08] bg-[#0a0f19]/80 backdrop-blur-xl p-3.5 sm:p-6 shadow-xl space-y-4 sm:space-y-5">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-xs font-bold text-slate-300 uppercase tracking-wider">
-            <span className="w-2.5 h-2.5 rounded-full bg-blue-400 animate-pulse" />
-            <span className="hidden sm:inline">คลิกช่องเพื่อเลือก 3 มอนสเตอร์ทีมป้องกัน (Tap to Pick Monsters):</span>
+            <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse" />
+            <span className="hidden sm:inline">คลิกช่องเพื่อเลือก 3 มอนสเตอร์ทีมป้องกัน (3D Interactive Slots):</span>
             <span className="sm:hidden">เลือก 3 มอนสเตอร์ทีมป้องกัน:</span>
           </div>
 
           {(selectedSlots.some(Boolean) || searchQuery) && (
             <button
               onClick={handleResetAll}
-              className="px-2.5 py-1 sm:px-3 sm:py-1.5 bg-rose-500/10 hover:bg-rose-500 text-rose-300 hover:text-white rounded-xl text-[11px] sm:text-xs font-bold transition-all flex items-center gap-1.5 border border-rose-500/20 cursor-pointer"
+              className="px-2.5 py-1 sm:px-3 sm:py-1.5 bg-rose-500/10 hover:bg-rose-500 text-rose-300 hover:text-white rounded-xl text-[11px] sm:text-xs font-bold transition-all flex items-center gap-1.5 border border-rose-500/20 cursor-pointer shadow-sm"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               <span>ล้างตัวเลือก</span>
@@ -322,50 +322,56 @@ export default function MdcView({ search = '' }) {
           )}
         </div>
 
-        {/* 3 Interactive Slots */}
-        <div className="grid grid-cols-3 gap-2 sm:gap-5 max-w-2xl mx-auto">
+        {/* 3 Interactive 3D Card Slots */}
+        <div className="grid grid-cols-3 gap-3 sm:gap-6 max-w-2xl mx-auto">
           {[0, 1, 2].map((slotIdx) => {
             const monster = selectedSlots[slotIdx];
             const isActive = activeSlotIdx === slotIdx;
+            const slotTitle = slotIdx === 0 ? '👑 Leader Slot' : slotIdx === 1 ? '⚔️ Member #2' : '🛡️ Member #3';
 
             return (
               <div
                 key={slotIdx}
                 onClick={() => handleSlotClick(slotIdx)}
-                className={`relative rounded-xl sm:rounded-2xl border transition-all p-2 sm:p-4 text-center cursor-pointer flex flex-col items-center justify-center min-h-[110px] sm:min-h-[145px] shadow-lg select-none ${
+                className={`relative rounded-2xl border transition-all duration-300 p-2.5 sm:p-4 text-center cursor-pointer flex flex-col items-center justify-center min-h-[120px] sm:min-h-[155px] shadow-xl select-none group ${
                   isActive
-                    ? 'border-blue-400 bg-blue-600/20 shadow-blue-500/25 ring-2 ring-blue-400 scale-[1.02]'
+                    ? 'border-cyan-400 bg-gradient-to-b from-cyan-950/40 via-blue-950/30 to-[#070b12] shadow-cyan-500/30 ring-2 ring-cyan-400 scale-[1.04]'
                     : monster
-                      ? 'border-white/15 bg-white/[0.04] hover:border-white/30'
-                      : 'border-dashed border-white/10 bg-white/[0.02] hover:border-blue-400/50 hover:bg-white/[0.04]'
+                      ? 'border-white/20 bg-gradient-to-b from-[#141e30] to-[#0a101d] hover:border-cyan-400/60 hover:-translate-y-1 hover:shadow-cyan-500/10'
+                      : 'border-dashed border-white/15 bg-white/[0.02] hover:border-cyan-400/50 hover:bg-white/[0.04] hover:-translate-y-0.5'
                 }`}
               >
+                {/* 3D Sheen */}
+                <div className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/[0.04] to-transparent rounded-t-2xl pointer-events-none" />
+
                 {monster ? (
                   <>
                     <button
                       onClick={(e) => handleClearSlot(slotIdx, e)}
-                      className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-rose-600 hover:bg-rose-500 text-white flex items-center justify-center text-xs font-bold shadow-md z-20 cursor-pointer"
+                      className="absolute -top-2.5 -right-2.5 w-7 h-7 rounded-full bg-rose-600 hover:bg-rose-500 text-white flex items-center justify-center text-xs font-bold shadow-lg z-20 cursor-pointer transition-transform hover:scale-110"
                       title="ลบตัวนี้"
                     >
                       ✕
                     </button>
-                    <MonsterAvatar monster={monster} size="md" showStars={false} />
-                    <span className="mt-2 text-xs font-bold text-white truncate max-w-full">
+                    <div className="relative z-10 group-hover:scale-105 transition-transform duration-200">
+                      <MonsterAvatar monster={monster} size="md" showStars={false} />
+                    </div>
+                    <span className="mt-2 text-xs font-extrabold text-white truncate max-w-full drop-shadow relative z-10">
                       {monster.thaiName || monster.name}
                     </span>
-                    <span className="text-[11px] text-cyan-400 font-mono font-bold">
-                      {slotIdx === 0 ? '👑 Leader' : `มอน #${slotIdx + 1}`}
+                    <span className="text-[10px] sm:text-[11px] text-cyan-300 font-mono font-black mt-0.5 px-2 py-0.5 rounded-full bg-cyan-950/50 border border-cyan-800/50 relative z-10">
+                      {slotTitle}
                     </span>
                   </>
                 ) : (
-                  <div className="flex flex-col items-center gap-1.5 text-slate-400">
-                    <div className="w-11 h-11 rounded-2xl bg-white/[0.05] border border-white/10 flex items-center justify-center text-blue-400 text-xl font-bold group-hover:scale-110 transition-transform">
+                  <div className="flex flex-col items-center gap-1.5 text-slate-400 relative z-10">
+                    <div className="w-12 h-12 rounded-2xl bg-white/[0.05] border border-white/10 flex items-center justify-center text-cyan-400 text-xl font-black group-hover:scale-110 group-hover:border-cyan-400/50 transition-all shadow-inner">
                       +
                     </div>
-                    <span className="text-xs font-bold text-slate-300">
-                      {slotIdx === 0 ? 'เลือก Leader' : `เลือกตัวที่ #${slotIdx + 1}`}
+                    <span className="text-xs font-bold text-slate-200 mt-1">
+                      {slotTitle}
                     </span>
-                    <span className="text-[11px] text-slate-400">กดเพื่อเลือก</span>
+                    <span className="text-[10px] text-slate-400">กดเพื่อเลือก</span>
                   </div>
                 )}
               </div>
@@ -689,15 +695,18 @@ export default function MdcView({ search = '' }) {
                   {displayedCounters.map((counter, idx) => (
                     <div
                       key={counter.id}
-                      className={`rounded-2xl border transition-all space-y-3 p-4 sm:p-5 shadow-lg ${
+                      className={`rounded-2xl border transition-all duration-300 space-y-3.5 p-4 sm:p-5 shadow-lg hover:-translate-y-1 hover:shadow-xl relative overflow-hidden group ${
                         counter.canBuild
-                          ? 'bg-emerald-950/15 border-emerald-500/40 hover:border-emerald-400'
-                          : 'bg-[#0a0f19]/80 border-white/[0.08] hover:border-blue-500/40'
+                          ? 'bg-gradient-to-b from-emerald-950/20 via-[#0a1418] to-[#060c10] border-emerald-500/40 hover:border-emerald-400 hover:shadow-emerald-500/10'
+                          : 'bg-gradient-to-b from-[#0e1726] via-[#090f19] to-[#070a12] border-white/[0.08] hover:border-cyan-400/50 hover:shadow-cyan-500/10'
                       }`}
                     >
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/[0.06]">
+                      {/* Subtle 3D Card Top Sheen */}
+                      <div className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/[0.03] to-transparent pointer-events-none" />
+
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/[0.06] relative z-10">
                         <div className="flex items-center gap-3">
-                          <span className="w-6 h-6 rounded-lg bg-white/[0.04] border border-white/10 font-mono text-xs font-bold text-slate-300 flex items-center justify-center shrink-0">
+                          <span className="w-7 h-7 rounded-xl bg-white/[0.04] border border-white/10 font-mono text-xs font-black text-cyan-300 flex items-center justify-center shrink-0 shadow-inner">
                             #{idx + 1}
                           </span>
                           <div className="flex items-center gap-2">
@@ -705,10 +714,12 @@ export default function MdcView({ search = '' }) {
                               const owned = counter.matchedUnits?.[mIdx];
                               return (
                                 <div key={mIdx} className="flex flex-col items-center">
-                                  <div className="relative">
-                                    <MonsterAvatar monster={m} size="sm" showStars={false} />
+                                  <div className="relative group/m">
+                                    <div className="group-hover/m:scale-105 transition-transform">
+                                      <MonsterAvatar monster={m} size="sm" showStars={false} />
+                                    </div>
                                     {owned ? (
-                                      <span className="absolute -top-1 -right-1 p-0.5 rounded-full bg-emerald-500 text-white shadow" title={`ในไอดีมี: ${owned.name || m.name}`}>
+                                      <span className="absolute -top-1 -right-1 p-0.5 rounded-full bg-emerald-500 text-white shadow-md ring-1 ring-emerald-300" title={`ในไอดีมี: ${owned.name || m.name}`}>
                                         <Check className="w-2.5 h-2.5 stroke-[3]" />
                                       </span>
                                     ) : (
@@ -751,21 +762,21 @@ export default function MdcView({ search = '' }) {
                         </div>
 
                         <div className="flex items-center gap-3 self-end sm:self-auto shrink-0">
-                          <div className="flex items-center gap-1 bg-amber-500/10 border border-amber-500/30 px-2 py-1 rounded-xl">
+                          <div className="flex items-center gap-1 bg-amber-500/10 border border-amber-500/30 px-2.5 py-1 rounded-xl shadow-sm">
                             <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
                             <span className="text-xs font-mono font-bold text-amber-300">{counter.rating.toFixed(1)}</span>
                           </div>
 
-                          <div className="bg-emerald-500/10 border border-emerald-500/30 px-3 py-1 rounded-xl text-right">
+                          <div className="bg-emerald-500/10 border border-emerald-500/30 px-3 py-1 rounded-xl text-right shadow-sm">
                             <div className="text-[10px] text-emerald-400 font-medium">ความน่าเชื่อถือ</div>
-                            <div className="text-xs font-mono font-bold text-emerald-300">{counter.winRate}</div>
+                            <div className="text-xs font-mono font-black text-emerald-300">{counter.winRate}</div>
                           </div>
                         </div>
                       </div>
 
                       {/* Strategy Details */}
-                      <div className="space-y-2 text-xs">
-                        <div className="p-2.5 rounded-xl bg-white/[0.02] border border-white/[0.06] flex items-center gap-2">
+                      <div className="space-y-2 text-xs relative z-10">
+                        <div className="p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.06] flex items-center gap-2">
                           <Zap className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
                           <span className="text-slate-300 font-sans">
                             <strong className="text-cyan-400">ลำดับออกสกิล:</strong> {counter.turnOrder}
@@ -781,13 +792,13 @@ export default function MdcView({ search = '' }) {
                       <button
                         type="button"
                         onClick={() => setActiveBattlePlanCounter(counter)}
-                        className="w-full py-2.5 px-3 rounded-xl bg-cyan-600/10 hover:bg-cyan-600/20 border border-cyan-500/30 hover:border-cyan-400/50 text-cyan-300 hover:text-white text-xs font-bold transition-all cursor-pointer flex items-center justify-between shadow-sm group"
+                        className="w-full py-2.5 px-3.5 rounded-xl bg-gradient-to-r from-cyan-600/15 via-blue-600/15 to-indigo-600/15 hover:from-cyan-600/30 hover:to-indigo-600/30 border border-cyan-500/30 hover:border-cyan-400/60 text-cyan-300 hover:text-white text-xs font-bold transition-all cursor-pointer flex items-center justify-between shadow-sm relative z-10"
                       >
                         <span className="flex items-center gap-2">
                           <Zap className="w-3.5 h-3.5 text-cyan-400 group-hover:scale-110 transition-transform" />
-                          <span>แผนรบ & สปีดจริง (AI Tactical Battle Plan)</span>
+                          <span>เปิดแผนรบ 3D & วิเคราะห์สปีดจริง (AI Tactical Battle Plan)</span>
                         </span>
-                        <ChevronRight className="w-3.5 h-3.5 text-cyan-400 group-hover:translate-x-0.5 transition-transform" />
+                        <ChevronRight className="w-3.5 h-3.5 text-cyan-400 group-hover:translate-x-1 transition-transform" />
                       </button>
                     </div>
                   ))}

@@ -364,6 +364,145 @@ export default function SpeedCalculatorView() {
           </div>
         </div>
       </div>
+
+      {/* 3. Interactive Turn Order Timeline (0-100% ATB Speed Bar) */}
+      <div className="bg-[#101724] border border-cyan-500/30 rounded-3xl p-5 sm:p-7 shadow-2xl space-y-6 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/[0.08] pb-4 relative z-10">
+          <div>
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 text-xs font-mono font-bold uppercase mb-1">
+              <Gauge className="w-3.5 h-3.5 text-cyan-400" />
+              <span>Visual ATB & Combat Speed Track (0-100% Turn Gauge)</span>
+            </div>
+            <h2 className="text-lg sm:text-xl font-black text-white">
+              เส้นแสดงตำแหน่งความเร็วจริงในสนาม (Turn Order Timeline)
+            </h2>
+          </div>
+
+          <div className="flex items-center gap-3 text-xs font-mono">
+            <span className="flex items-center gap-1 text-emerald-400">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-sm shadow-emerald-400" />
+              Safe Zone (ไม่โดนแซง)
+            </span>
+            <span className="flex items-center gap-1 text-rose-400">
+              <span className="w-2.5 h-2.5 rounded-full bg-rose-500 shadow-sm shadow-rose-500" />
+              Cut-in Risk (เสี่ยงโดนแทรก)
+            </span>
+          </div>
+        </div>
+
+        {/* 3D Visual Speed Gauge Track */}
+        <div className="space-y-4 relative z-10 pt-4 pb-2">
+          {/* Main Track Bar */}
+          <div className="relative h-7 rounded-2xl bg-[#090e18] border border-white/10 p-1 shadow-inner flex items-center">
+            {/* Tick zones */}
+            <div className="absolute inset-y-0 left-0 w-[35%] bg-slate-800/30 rounded-l-xl border-r border-slate-700/50" title="Tick 4: ช้า/แทงก์" />
+            <div className="absolute inset-y-0 left-[35%] w-[25%] bg-blue-900/20 border-r border-blue-700/50" title="Tick 3: ตัวทำเกม" />
+            <div className="absolute inset-y-0 left-[60%] w-[20%] bg-indigo-900/25 border-r border-indigo-700/50" title="Tick 2: มาตรฐานแข่งขัน" />
+            <div className="absolute inset-y-0 left-[80%] right-0 bg-amber-500/15 rounded-r-xl" title="Tick 1: การ์เดียน" />
+
+            {/* Anti-cut safe zone gradient highlight */}
+            {(() => {
+              const minSpd = 120;
+              const maxSpd = 340;
+              const safeStartPct = Math.max(0, Math.min(100, ((requiredFollowerCombatSpd - minSpd) / (maxSpd - minSpd)) * 100));
+              const safeEndPct = Math.max(0, Math.min(100, ((combatSpdBeforeBuff - minSpd) / (maxSpd - minSpd)) * 100));
+              const widthPct = Math.max(0, safeEndPct - safeStartPct);
+              return (
+                <div 
+                  style={{ left: `${safeStartPct}%`, width: `${widthPct}%` }}
+                  className="absolute inset-y-1 bg-gradient-to-r from-emerald-500/30 via-emerald-400/40 to-cyan-400/30 rounded border border-emerald-400/60 shadow-sm pointer-events-none"
+                />
+              );
+            })()}
+
+            {/* Follow-up Pin */}
+            {(() => {
+              const minSpd = 120;
+              const maxSpd = 340;
+              const posPct = Math.max(5, Math.min(95, ((requiredFollowerCombatSpd - minSpd) / (maxSpd - minSpd)) * 100));
+              return (
+                <div 
+                  style={{ left: `${posPct}%` }}
+                  className="absolute -top-3 -translate-x-1/2 flex flex-col items-center pointer-events-none transition-all duration-300"
+                >
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500 text-slate-950 shadow-md">
+                    ≥ {requiredFollowerCombatSpd} Follower
+                  </span>
+                  <div className="w-0.5 h-9 bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
+                </div>
+              );
+            })()}
+
+            {/* Active Booster Pin */}
+            {(() => {
+              const minSpd = 120;
+              const maxSpd = 340;
+              const posPct = Math.max(5, Math.min(95, ((totalCombatSpd - minSpd) / (maxSpd - minSpd)) * 100));
+              return (
+                <div 
+                  style={{ left: `${posPct}%` }}
+                  className="absolute -bottom-3 -translate-x-1/2 flex flex-col items-center pointer-events-none transition-all duration-300 z-20"
+                >
+                  <div className="w-0.5 h-9 bg-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.9)]" />
+                  <span className="px-2.5 py-0.5 rounded-full text-[11px] font-mono font-black bg-cyan-400 text-slate-950 shadow-lg ring-2 ring-cyan-200">
+                    {totalCombatSpd} SPD (Booster)
+                  </span>
+                </div>
+              );
+            })()}
+          </div>
+
+          {/* Scale Labels */}
+          <div className="flex justify-between text-[11px] font-mono text-slate-400 pt-3 px-1">
+            <span>120 SPD</span>
+            <span className="text-blue-300">Tick 3 (205 SPD)</span>
+            <span className="text-indigo-300">Tick 2 (239 SPD)</span>
+            <span className="text-amber-300 font-bold">Tick 1 (286+ SPD)</span>
+            <span>340+ SPD</span>
+          </div>
+        </div>
+
+        {/* 4-Slot Team Speed Sync Preview */}
+        <div className="pt-4 border-t border-white/[0.08] relative z-10 space-y-3">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+              <Zap className="w-3.5 h-3.5 text-cyan-400" />
+              <span>ลำดับเทิร์นทีม 4 ตัวในอารีน่า / Siege (Turn Order Combo Sync)</span>
+            </span>
+            <span className="text-xs text-slate-400 font-mono">
+              ระยะห่างสปีด (Speed Gap)
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            {[
+              { role: '👑 ตัวเปิดเทิร์นแรก (Booster)', name: selectedMonsterName || 'Booster', spd: totalCombatSpd, note: `ดึงเกจ +${atbBoostPercent}%`, tone: 'border-cyan-500/50 bg-cyan-950/20 text-cyan-300' },
+              { role: '🌪️ ตัวลบล้างบัฟ (Stripper)', name: 'Stripper (เช่น Tiana, Triton, Clara)', spd: Math.max(requiredFollowerCombatSpd, totalCombatSpd - 8), note: 'ออกเทิร์นปลอดภัย ไม่โดนแทรก', tone: 'border-emerald-500/50 bg-emerald-950/20 text-emerald-300' },
+              { role: '🛡️ ตัวลดเกราะ/บัฟ (Def Break)', name: 'Galleon, Savannah, Luer', spd: Math.max(requiredFollowerCombatSpd - 4, totalCombatSpd - 14), note: 'เตรียมดาเมจปิดฉาก', tone: 'border-blue-500/50 bg-blue-950/20 text-blue-300' },
+              { role: '🗡️ ตัวดาเมจหลัก (Nuker / DPS)', name: 'Lushen, Kaki, Leah', spd: Math.max(requiredFollowerCombatSpd - 8, totalCombatSpd - 20), note: 'คลีฟดาเมจกวาดล้าง', tone: 'border-purple-500/50 bg-purple-950/20 text-purple-300' },
+            ].map((slot, sIdx) => (
+              <div key={sIdx} className={`p-3.5 rounded-2xl border ${slot.tone} space-y-1.5 shadow-lg`}>
+                <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
+                  เทิร์น #{sIdx + 1} • {slot.role}
+                </div>
+                <div className="text-xs font-extrabold text-white truncate">
+                  {slot.name}
+                </div>
+                <div className="flex items-baseline justify-between pt-1">
+                  <span className="text-base font-mono font-black text-white">
+                    {slot.spd} <span className="text-[10px] text-slate-400">SPD</span>
+                  </span>
+                  <span className="text-[10px] text-slate-400">
+                    {slot.note}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

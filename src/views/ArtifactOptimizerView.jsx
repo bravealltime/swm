@@ -256,6 +256,14 @@ export default function ArtifactOptimizerView({ onNavigate }) {
     towersEnabled: true // Max Glory Towers (SPD +15%, ATK +20%, HP +20%, DEF +20%)
   });
 
+  // Custom Real-Time Additional Damage Sliders
+  const [customAddl, setCustomAddl] = useState({
+    spd: 120, // 120% of SPD
+    hp: 4.0,  // 4.0% of HP
+    atk: 15,  // 15% of ATK
+    def: 10,  // 10% of DEF
+  });
+
   const currentMonster = useMemo(() => {
     return POPULAR_OPTIMIZER_MONSTERS.find(m => m.id === selectedMonsterId) || POPULAR_OPTIMIZER_MONSTERS[0];
   }, [selectedMonsterId]);
@@ -368,6 +376,24 @@ export default function ArtifactOptimizerView({ onNavigate }) {
       deltaPercent
     };
   }, [combatStats, currentMonster, currentAddlDmg]);
+
+  // Dynamic slider calculation for custom tuning
+  const customSliderDmg = useMemo(() => {
+    const spd = combatStats.inSpd;
+    const hp = combatStats.inHp;
+    const def = combatStats.inDef;
+    const atk = combatStats.inAtk;
+
+    const fromSpd = Math.round(spd * (customAddl.spd / 100));
+    const fromHp = Math.round(hp * (customAddl.hp / 1000));
+    const fromAtk = Math.round(atk * (customAddl.atk / 100));
+    const fromDef = Math.round(def * (customAddl.def / 100));
+
+    const totalPerHit = fromSpd + fromHp + fromAtk + fromDef;
+    const totalCombo = totalPerHit * currentMonster.hitsPerAttack;
+
+    return { fromSpd, fromHp, fromAtk, fromDef, totalPerHit, totalCombo };
+  }, [combatStats, customAddl, currentMonster]);
 
   return (
     <div className="space-y-6 max-w-[1780px] 2xl:max-w-[1880px] mx-auto pb-16 animate-in fade-in duration-300">
@@ -873,6 +899,161 @@ export default function ArtifactOptimizerView({ onNavigate }) {
                   {val === 0 ? 'None' : `+${val}%`}
                 </button>
               ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Row 4: Real-Time Interactive Additional Damage Tuning Lab (Sliders) */}
+        <div className="bg-[#111927] border border-orange-500/30 rounded-2xl p-5 sm:p-6 space-y-5 shadow-2xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-orange-500/10 rounded-full blur-2xl pointer-events-none" />
+
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#1c2738] pb-4 relative z-10">
+            <div>
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-orange-500/15 border border-orange-500/30 text-orange-400 text-xs font-mono font-bold uppercase mb-1">
+                <Sliders className="w-3.5 h-3.5 text-orange-400" />
+                <span>Interactive Tuning Sliders • ปรับแต่งดาเมจเสริมแบบเรียลไทม์</span>
+              </div>
+              <h3 className="text-base sm:text-lg font-black text-white">
+                ห้องทดลองปรับสเตตัสอาร์ติแฟกต์แบบไดนามิก (Dynamic True Damage Lab)
+              </h3>
+              <p className="text-xs text-slate-400 mt-0.5">
+                ลากแถบสไลเดอร์เพื่อทดลองสเตตัสออปชั่นอาร์ติแฟกต์รวม (ธาตุ + สาย) และดูผลลัพธ์ True Damage ทะลุเกราะทันที
+              </p>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setCustomAddl({ spd: 120, hp: 4.0, atk: 15, def: 10 })}
+                className="px-3 py-1.5 rounded-xl bg-[#0c121c] border border-white/10 text-xs text-slate-300 hover:text-white flex items-center gap-1 cursor-pointer transition-colors shadow-sm"
+              >
+                <RotateCcw className="w-3.5 h-3.5" /> รีเซ็ต
+              </button>
+            </div>
+          </div>
+
+          {/* Quick Presets Strip */}
+          <div className="flex flex-wrap items-center gap-2 relative z-10">
+            <span className="text-xs font-bold text-slate-400">สูตรยอดนิยม:</span>
+            {[
+              { label: '⚡ สปีดสูงสุด (170% SPD)', values: { spd: 170, hp: 2.0, atk: 5, def: 5 } },
+              { label: '❤️ แทงก์เลือดหนา (8% HP)', values: { spd: 60, hp: 8.0, atk: 5, def: 15 } },
+              { label: '🗡️ สายบุกพลังโจมตี (30% ATK)', values: { spd: 80, hp: 2.0, atk: 30, def: 5 } },
+              { label: '🛡️ สายถึกป้องกัน (25% DEF)', values: { spd: 50, hp: 3.0, atk: 5, def: 25 } },
+              { label: '⚖️ สายสมดุล All-Rounder', values: { spd: 110, hp: 4.5, atk: 14, def: 10 } },
+            ].map((p, pIdx) => (
+              <button
+                key={pIdx}
+                type="button"
+                onClick={() => setCustomAddl(p.values)}
+                className="px-2.5 py-1 rounded-lg bg-white/[0.04] hover:bg-orange-500/20 border border-white/10 hover:border-orange-500/40 text-[11px] text-slate-300 hover:text-orange-300 font-semibold cursor-pointer transition-all"
+              >
+                {p.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center relative z-10">
+            {/* 4 Interactive Sliders (7 cols) */}
+            <div className="lg:col-span-7 space-y-4 bg-[#0a101d] border border-white/[0.06] p-4 rounded-xl">
+              {/* SPD Slider */}
+              <div>
+                <div className="flex justify-between items-center text-xs font-mono mb-1">
+                  <span className="text-cyan-400 font-bold flex items-center gap-1.5">
+                    <Gauge className="w-3.5 h-3.5" /> ดาเมจตาม SPD:
+                  </span>
+                  <span className="text-white font-bold">{customAddl.spd}% of SPD <span className="text-cyan-400">(+{customSliderDmg.fromSpd} DMG)</span></span>
+                </div>
+                <input
+                  type="range"
+                  min="0"
+                  max="220"
+                  step="5"
+                  value={customAddl.spd}
+                  onChange={(e) => setCustomAddl(prev => ({ ...prev, spd: Number(e.target.value) }))}
+                  className="w-full accent-cyan-400 cursor-pointer"
+                />
+              </div>
+
+              {/* HP Slider */}
+              <div>
+                <div className="flex justify-between items-center text-xs font-mono mb-1">
+                  <span className="text-emerald-400 font-bold flex items-center gap-1.5">
+                    <Heart className="w-3.5 h-3.5" /> ดาเมจตาม HP:
+                  </span>
+                  <span className="text-white font-bold">{customAddl.hp.toFixed(1)}% of HP <span className="text-emerald-400">(+{customSliderDmg.fromHp} DMG)</span></span>
+                </div>
+                <input
+                  type="range"
+                  min="0"
+                  max="12.0"
+                  step="0.5"
+                  value={customAddl.hp}
+                  onChange={(e) => setCustomAddl(prev => ({ ...prev, hp: Number(e.target.value) }))}
+                  className="w-full accent-emerald-400 cursor-pointer"
+                />
+              </div>
+
+              {/* ATK Slider */}
+              <div>
+                <div className="flex justify-between items-center text-xs font-mono mb-1">
+                  <span className="text-rose-400 font-bold flex items-center gap-1.5">
+                    <Sword className="w-3.5 h-3.5" /> ดาเมจตาม ATK:
+                  </span>
+                  <span className="text-white font-bold">{customAddl.atk}% of ATK <span className="text-rose-400">(+{customSliderDmg.fromAtk} DMG)</span></span>
+                </div>
+                <input
+                  type="range"
+                  min="0"
+                  max="40"
+                  step="2"
+                  value={customAddl.atk}
+                  onChange={(e) => setCustomAddl(prev => ({ ...prev, atk: Number(e.target.value) }))}
+                  className="w-full accent-rose-400 cursor-pointer"
+                />
+              </div>
+
+              {/* DEF Slider */}
+              <div>
+                <div className="flex justify-between items-center text-xs font-mono mb-1">
+                  <span className="text-blue-400 font-bold flex items-center gap-1.5">
+                    <Shield className="w-3.5 h-3.5" /> ดาเมจตาม DEF:
+                  </span>
+                  <span className="text-white font-bold">{customAddl.def}% of DEF <span className="text-blue-400">(+{customSliderDmg.fromDef} DMG)</span></span>
+                </div>
+                <input
+                  type="range"
+                  min="0"
+                  max="40"
+                  step="2"
+                  value={customAddl.def}
+                  onChange={(e) => setCustomAddl(prev => ({ ...prev, def: Number(e.target.value) }))}
+                  className="w-full accent-blue-400 cursor-pointer"
+                />
+              </div>
+            </div>
+
+            {/* Output Display Card (5 cols) */}
+            <div className="lg:col-span-5 bg-gradient-to-b from-[#182638] via-[#101928] to-[#0a101b] border-2 border-orange-500/50 p-5 rounded-xl shadow-xl text-center space-y-3">
+              <div className="text-[11px] font-mono uppercase text-orange-400 font-bold tracking-wider">
+                ผลลัพธ์ TRUE DAMAGE แท้ทะลุเกราะ
+              </div>
+
+              <div className="flex items-baseline justify-center gap-2">
+                <span className="text-4xl sm:text-5xl font-mono font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-amber-300 to-yellow-200">
+                  +{customSliderDmg.totalPerHit}
+                </span>
+                <span className="text-xs text-slate-400 font-mono">/ ฮิต</span>
+              </div>
+
+              <div className="p-3 bg-black/40 rounded-xl border border-white/[0.08] text-xs font-mono space-y-1">
+                <div className="text-slate-300">
+                  โจมตี {currentMonster.hitsPerAttack} ฮิต = <strong className="text-amber-300 text-sm">+{customSliderDmg.totalCombo.toLocaleString()} DMG</strong>
+                </div>
+                <div className="text-[11px] text-emerald-400">
+                  ✨ ดาเมจเสริมแท้ 100% ไม่ถูกหักลบด้วยพลังป้องกันของศัตรู
+                </div>
+              </div>
             </div>
           </div>
         </div>

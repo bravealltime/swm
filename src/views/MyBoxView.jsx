@@ -51,6 +51,30 @@ const TABS = [
   { id: 'runes', label: 'วิเคราะห์รูน', icon: Gem, color: 'bg-purple-600 shadow-purple-600/25' },
 ];
 
+const TAB_CATEGORIES = [
+  {
+    id: 'collection',
+    name: 'คลังสะสม',
+    icon: Package,
+    color: 'from-emerald-600 to-teal-600',
+    tabIds: ['overview', 'box', 'pokedex']
+  },
+  {
+    id: 'gear',
+    name: 'รูน & อาร์ติแฟกต์',
+    icon: Sparkles,
+    color: 'from-violet-600 to-purple-600',
+    tabIds: ['efficiency', 'artifacts', 'grind-tracker', 'fusion-devilmon', 'runes']
+  },
+  {
+    id: 'strategy',
+    name: 'ทีม & เมต้า',
+    icon: Shield,
+    color: 'from-blue-600 to-indigo-600',
+    tabIds: ['defense', 'teams', 'meta', 'speed']
+  }
+];
+
 export default function MyBoxView({ onNavigate, tab: initialTab, subItem }) {
   const [box, setBox] = useState(() => loadBox());
   const [error, setError] = useState('');
@@ -380,19 +404,69 @@ export default function MyBoxView({ onNavigate, tab: initialTab, subItem }) {
       {liveAllowed && <LiveCard live={live} box={box} onStart={startLive} onStop={stopLive} onNavigate={onNavigate} />}
       {box && live.status === 'off' && <SyncCard watch={watch} box={box} onStart={startWatching} onGrant={grantAgain} onStop={stopWatching} />}
 
-      {/* one scrollable row instead of wrapping: on phones the wrapped rows stayed pinned under the navbar and ate a third of the screen */}
-      <div role="tablist" className="flex items-center gap-1 sm:gap-1.5 p-1 sm:p-1.5 rounded-2xl bg-[#0a0f19]/90 border border-white/[0.08] shadow-lg sticky top-[58px] sm:top-[68px] z-30 backdrop-blur-xl overflow-x-auto no-scrollbar scroll-smooth">
-        {TABS.map((t) => {
-          const Icon = t.icon;
-          const active = tab === t.id;
-          return (
-            <button key={t.id} role="tab" aria-selected={active} onClick={() => { setTab(t.id); window.scrollTo({ top: 0 }); }}
-              className={`px-2.5 py-1.5 sm:px-3.5 sm:py-2.5 rounded-xl text-[11px] sm:text-sm font-bold flex items-center gap-1.5 sm:gap-2 transition-all cursor-pointer shrink-0 whitespace-nowrap ${active ? `${t.color} text-white shadow-lg` : 'text-slate-300 hover:text-white hover:bg-white/[0.04]'}`}>
-              <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> {t.label}
-            </button>
-          );
-        })}
-      </div>
+      {/* 2-Tier Segmented Group Navigation */}
+      {(() => {
+        const activeCategory = TAB_CATEGORIES.find((c) => c.tabIds.includes(tab)) || TAB_CATEGORIES[0];
+        const activeTabs = TABS.filter((t) => activeCategory.tabIds.includes(t.id));
+        return (
+          <div className="sticky top-[58px] sm:top-[68px] z-30 space-y-1.5 backdrop-blur-xl">
+            {/* Tier 1: 3-Category Segmented Switcher */}
+            <div className="flex items-center gap-1 sm:gap-2 p-1 sm:p-1.5 rounded-2xl bg-[#080d17]/95 border border-white/[0.08] shadow-xl">
+              {TAB_CATEGORIES.map((cat) => {
+                const CatIcon = cat.icon;
+                const isCatActive = activeCategory.id === cat.id;
+                return (
+                  <button
+                    key={cat.id}
+                    type="button"
+                    onClick={() => {
+                      if (activeCategory.id !== cat.id) {
+                        setTab(cat.tabIds[0]);
+                        window.scrollTo({ top: 0 });
+                      }
+                    }}
+                    className={`flex-1 py-2 sm:py-2.5 px-2 sm:px-4 rounded-xl text-xs sm:text-sm font-black flex items-center justify-center gap-1.5 sm:gap-2 transition-all cursor-pointer ${
+                      isCatActive
+                        ? `bg-gradient-to-r ${cat.color} text-white shadow-lg ring-1 ring-white/20 scale-[1.01]`
+                        : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
+                    }`}
+                  >
+                    <CatIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+                    <span className="truncate">{cat.name}</span>
+                    <span className={`hidden md:inline text-[10px] px-1.5 py-0.2 rounded-full font-mono ${isCatActive ? 'bg-black/30 text-white' : 'bg-white/5 text-slate-500'}`}>
+                      {cat.tabIds.length}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Tier 2: Sub-tabs within Active Category */}
+            <div role="tablist" className="flex items-center gap-1 sm:gap-1.5 p-1 sm:p-1.5 rounded-xl bg-[#0a0f19]/90 border border-white/[0.06] shadow-md overflow-x-auto no-scrollbar scroll-smooth">
+              {activeTabs.map((t) => {
+                const Icon = t.icon;
+                const active = tab === t.id;
+                return (
+                  <button
+                    key={t.id}
+                    role="tab"
+                    aria-selected={active}
+                    onClick={() => { setTab(t.id); window.scrollTo({ top: 0 }); }}
+                    className={`px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-lg text-xs sm:text-xs font-bold flex items-center gap-1.5 sm:gap-2 transition-all cursor-pointer shrink-0 whitespace-nowrap ${
+                      active 
+                        ? `${t.color} text-white shadow-md ring-1 ring-white/20` 
+                        : 'text-slate-300 hover:text-white hover:bg-white/[0.04]'
+                    }`}
+                  >
+                    <Icon className="w-3.5 h-3.5" />
+                    <span>{t.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })()}
 
       {tab === 'overview' && (box ? <Overview box={box} mdc={mdc} owned={owned} onTab={setTab} onNavigate={onNavigate} onOpenUnit={setOpenUnit} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLive={liveAllowed ? startLive : null} />)}
       {tab === 'box' && (box ? <BoxGrid box={box} onNavigate={onNavigate} onOpenUnit={setOpenUnit} /> : <EmptyState onFile={importFile} onWatch={supportsFolderWatch() ? startWatching : null} onLive={liveAllowed ? startLive : null} />)}
