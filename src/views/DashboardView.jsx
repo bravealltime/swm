@@ -69,13 +69,15 @@ const NEW_MONSTERS_SHOWCASE = [
     thaiName: 'โวลคาริส',
     element: 'fire',
     elementName: 'ไฟ',
+    elementIcon: '🔥',
     archetype: 'HP Bruiser',
     stars: 5,
     avatarUrl: '/images/monsters/volcaris.svg',
-    highlightSkill: 'S3: Squash',
-    highlightDesc: 'โจมตีหมู่ตาม MAX HP สตัน 1 เทิร์น ดูดเกจ และเพิ่ม MAX HP รวมครั้งละ +20% (ซ้อนได้สูงสุด +100% เลือดพุ่งทะลุ 150k-200k HP!)',
-    leaderSkill: 'DEF +33% (ทุกคอนเทนต์)',
-    badgeColor: 'border-rose-500/50 bg-rose-950/40 text-rose-300',
+    cardBorder: 'border-rose-500/30 hover:border-rose-400/80',
+    cardBg: 'from-rose-950/40 via-[#120a14] to-[#070b14]',
+    ambientGlow: 'bg-rose-500/20',
+    glowShadow: 'hover:shadow-[0_20px_40px_-10px_rgba(244,63,94,0.35)]',
+    badgeColor: 'border-rose-500/50 bg-rose-950/60 text-rose-300',
     btnGradient: 'from-rose-600 to-amber-600 hover:from-rose-500 hover:to-amber-500',
   },
   {
@@ -83,13 +85,15 @@ const NEW_MONSTERS_SHOWCASE = [
     thaiName: 'มาริส',
     element: 'water',
     elementName: 'น้ำ',
+    elementIcon: '💧',
     archetype: 'Stripper / Support',
     stars: 5,
     avatarUrl: '/images/monsters/maris.svg',
-    highlightSkill: 'S3: Deep Inhale',
-    highlightDesc: 'ลบบัฟศัตรูทั้งหมด ขโมยบัฟทั้งหมดมาแจกจ่ายให้เพื่อนร่วมทีมคนละ 1 บัฟ พร้อมติดสถานะห้ามฟื้นฟู HP นาน 2 เทิร์น',
-    leaderSkill: 'RES +44% (ทุกคอนเทนต์)',
-    badgeColor: 'border-sky-500/50 bg-sky-950/40 text-sky-300',
+    cardBorder: 'border-sky-500/30 hover:border-sky-400/80',
+    cardBg: 'from-sky-950/40 via-[#0a1420] to-[#070b14]',
+    ambientGlow: 'bg-sky-500/20',
+    glowShadow: 'hover:shadow-[0_20px_40px_-10px_rgba(56,189,248,0.35)]',
+    badgeColor: 'border-sky-500/50 bg-sky-950/60 text-sky-300',
     btnGradient: 'from-sky-600 to-blue-600 hover:from-sky-500 hover:to-blue-500',
   },
   {
@@ -97,13 +101,15 @@ const NEW_MONSTERS_SHOWCASE = [
     thaiName: 'ออราลิส',
     element: 'wind',
     elementName: 'ลม',
+    elementIcon: '🌿',
     archetype: 'CC / Debuff Extender',
     stars: 5,
     avatarUrl: '/images/monsters/auraris.svg',
-    highlightSkill: 'S3: Wormhole Dive',
-    highlightDesc: 'ยืดระยะเวลาดีบัฟศัตรูทั้งหมดขึ้น 1 เทิร์น แปะ Glancing Hit 2 เทิร์น และใบ้สกิล (Silence) 1-2 เทิร์น ดาเมจตาม MAX HP',
-    leaderSkill: 'HP +33% (ทุกคอนเทนต์)',
-    badgeColor: 'border-emerald-500/50 bg-emerald-950/40 text-emerald-300',
+    cardBorder: 'border-emerald-500/30 hover:border-emerald-400/80',
+    cardBg: 'from-emerald-950/40 via-[#0a1616] to-[#070b14]',
+    ambientGlow: 'bg-emerald-500/20',
+    glowShadow: 'hover:shadow-[0_20px_40px_-10px_rgba(52,211,153,0.35)]',
+    badgeColor: 'border-emerald-500/50 bg-emerald-950/60 text-emerald-300',
     btnGradient: 'from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500',
   },
   {
@@ -111,13 +117,15 @@ const NEW_MONSTERS_SHOWCASE = [
     thaiName: 'ลูมินาริส',
     element: 'light',
     elementName: 'แสง',
+    elementIcon: '✨',
     archetype: 'AOE Cleave Nuker',
     stars: 5,
     avatarUrl: '/images/monsters/luminaris.svg',
-    highlightSkill: 'S3: Cosmic Breath',
-    highlightDesc: 'ยิงลำแสงกวาดหมู่ ทะลุต้านความตายทุกรูปแบบ (ต้านอมตะ ทนตาย ชุบ) รีเซ็ตคูลดาวน์ทันทีเมื่อฆ่าศัตรูได้ และแรงขึ้นสูงสุด +100%',
-    leaderSkill: 'ATK +33% (ทุกคอนเทนต์)',
-    badgeColor: 'border-amber-400/50 bg-amber-950/40 text-amber-200',
+    cardBorder: 'border-amber-400/35 hover:border-amber-300/80',
+    cardBg: 'from-amber-950/35 via-[#15120e] to-[#070b14]',
+    ambientGlow: 'bg-amber-400/20',
+    glowShadow: 'hover:shadow-[0_20px_40px_-10px_rgba(251,191,36,0.35)]',
+    badgeColor: 'border-amber-400/50 bg-amber-950/60 text-amber-200',
     btnGradient: 'from-amber-500 to-yellow-500 text-slate-950 hover:from-amber-400 hover:to-yellow-400',
   },
   {
@@ -125,13 +133,15 @@ const NEW_MONSTERS_SHOWCASE = [
     thaiName: 'น็อคทาริส',
     element: 'dark',
     elementName: 'มืด',
+    elementIcon: '🌑',
     archetype: 'Lockdown Bruiser',
     stars: 5,
     avatarUrl: '/images/monsters/noctaris.svg',
-    highlightSkill: 'S3: Splash Splash',
-    highlightDesc: 'สตันเดี่ยว + แปะ Brand 2 เทิร์น จากนั้นสุ่มฟาดอีก 2-3 ครั้ง มีโอกาสสตันและห้ามล้างดีบัฟ พร้อมเร่งลดคูลดาวน์เมื่อตีตัวสตัน',
-    leaderSkill: 'CRIT Rate +24% (ทุกคอนเทนต์)',
-    badgeColor: 'border-purple-500/50 bg-purple-950/40 text-purple-300',
+    cardBorder: 'border-purple-500/30 hover:border-purple-400/80',
+    cardBg: 'from-purple-950/40 via-[#130b1c] to-[#070b14]',
+    ambientGlow: 'bg-purple-500/20',
+    glowShadow: 'hover:shadow-[0_20px_40px_-10px_rgba(168,85,247,0.35)]',
+    badgeColor: 'border-purple-500/50 bg-purple-950/60 text-purple-300',
     btnGradient: 'from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500',
   },
 ];
@@ -880,90 +890,91 @@ export default function DashboardView({ onNavigate }) {
 
           {/* 1.6 DEDICATED NEW MONSTERS SHOWCASE: COSMIC WORM (หนอนอวกาศ 5★ แท้) */}
           {(whatsNewCategory === 'all' || whatsNewCategory === 'monsters') && (
-            <div className="relative overflow-hidden rounded-2xl border border-purple-500/30 bg-gradient-to-r from-purple-950/30 via-[#0e1628] to-[#0a1120] p-4 sm:p-6 shadow-xl">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-3.5 border-b border-white/[0.08]">
+            <div className="relative overflow-hidden rounded-3xl border border-purple-500/25 bg-gradient-to-b from-[#0e1628]/90 via-[#0a101d]/90 to-[#070b14] p-5 sm:p-7 shadow-2xl backdrop-blur-xl">
+              {/* Nebula ambient orbs */}
+              <div className="absolute top-0 right-1/4 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl pointer-events-none" />
+              <div className="absolute bottom-0 left-10 w-80 h-80 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
+
+              {/* Header: Title and Quick Navigation */}
+              <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-5 border-b border-white/[0.08]">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-gradient-to-r from-purple-500 to-pink-500 text-white uppercase tracking-wider flex items-center gap-1 shadow-sm">
-                      <Sparkles className="w-3 h-3 text-white fill-white" />
-                      เปิดตัวมอนสเตอร์ใหม่ (Default 5★)
+                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-gradient-to-r from-purple-500 via-pink-500 to-amber-400 text-slate-950 uppercase tracking-wider flex items-center gap-1 shadow-md">
+                      <Sparkles className="w-3 h-3 text-slate-950 fill-slate-950" />
+                      เปิดตัว 5★ แท้ใหม่ล่าสุด
                     </span>
-                    <span className="text-xs text-purple-300 font-mono font-semibold">
+                    <span className="text-xs text-purple-300/80 font-mono font-semibold">
                       Patch v9.3.6 • ตระกูลหนอนอวกาศ
                     </span>
                   </div>
-                  <h3 className="text-base sm:text-xl font-black text-white flex items-center gap-2">
+                  <h3 className="text-lg sm:text-2xl font-black text-white flex items-center gap-2">
                     <span>🌌 หนอนอวกาศ (Cosmic Worm) ครบทั้ง 5 ธาตุ</span>
                   </h3>
-                  <p className="text-xs text-slate-300 leading-relaxed">
-                    พบกับมอนสเตอร์ใหม่ระดับ 5 ดาวแท้ จุดเด่นดาเมจตาม MAX HP และลูกเล่นควบคุมสุดล้ำ คลิกดูสกิล สเตตัส และแนวทางการใส่รูนได้ทันที
+                  <p className="text-xs sm:text-sm text-slate-400">
+                    คลิกที่การ์ดมอนสเตอร์เพื่อส่องสกิล สเตตัส และแนวทางใส่รูน 3D แบบเจาะลึกในคลิกเดียว
                   </p>
                 </div>
                 <button
                   type="button"
                   onClick={() => onNavigate('catalog', { search: 'Cosmic Worm' })}
-                  className="shrink-0 px-3.5 py-1.5 rounded-xl bg-purple-600/25 hover:bg-purple-600/40 border border-purple-500/40 text-purple-200 text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer self-start sm:self-center"
+                  className="shrink-0 px-4 py-2 rounded-xl bg-purple-600/20 hover:bg-purple-600/35 border border-purple-500/40 text-purple-200 text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-lg shadow-purple-950/40 self-start sm:self-center group"
                 >
-                  <span>ดูทั้งหมดในสารานุกรม ➔</span>
+                  <span>เปิดสารานุกรมมอนสเตอร์</span>
+                  <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </button>
               </div>
 
-              {/* 5-Monster Responsive Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 pt-4">
+              {/* 5-Monster 3D Holographic Card Showcase */}
+              <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 pt-6">
                 {NEW_MONSTERS_SHOWCASE.map((mon) => (
                   <div
                     key={mon.name}
-                    className="relative rounded-xl border border-white/10 bg-[#090f1c]/90 p-3.5 flex flex-col justify-between hover:border-purple-400/50 hover:bg-[#0d1629] transition-all group shadow-md"
+                    onClick={() => onNavigate('catalog', { initialMonster: mon.name })}
+                    className={`relative overflow-hidden rounded-2xl border ${mon.cardBorder} bg-gradient-to-b ${mon.cardBg} p-5 flex flex-col items-center text-center cursor-pointer group transition-all duration-300 ease-out hover:-translate-y-3 hover:scale-[1.02] shadow-xl ${mon.glowShadow} transform-gpu backdrop-blur-md`}
                   >
-                    <div>
-                      {/* Top Header: Avatar + Names */}
-                      <div className="flex items-center gap-2.5">
-                        <MonsterAvatar monster={mon} size="sm" showStars={false} />
-                        <div className="min-w-0 flex-1">
-                          <div className="flex items-center gap-1">
-                            <span className="font-black text-sm text-white group-hover:text-purple-300 transition-colors truncate">
-                              {mon.thaiName}
-                            </span>
-                            <span className="text-[10px] text-amber-400 font-mono">★★★★★</span>
-                          </div>
-                          <p className="text-[11px] text-slate-400 truncate">
-                            {mon.name} ({mon.elementName})
-                          </p>
-                        </div>
-                      </div>
+                    {/* Radial Ambient Glow */}
+                    <div className={`absolute -top-12 left-1/2 -translate-x-1/2 w-36 h-36 ${mon.ambientGlow} rounded-full blur-2xl pointer-events-none group-hover:scale-150 transition-all duration-500`} />
 
-                      {/* Archetype & Leader Skill */}
-                      <div className="mt-2.5 space-y-1 text-xs">
-                        <div className="flex items-center justify-between">
-                          <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${mon.badgeColor}`}>
-                            {mon.archetype}
-                          </span>
-                        </div>
-                        <p className="text-[11px] text-amber-300/90 font-medium truncate">
-                          👑 {mon.leaderSkill}
-                        </p>
-                      </div>
-
-                      {/* Highlight Skill */}
-                      <div className="mt-2 pt-2 border-t border-white/[0.06] space-y-1">
-                        <span className="text-[11px] font-bold text-white flex items-center gap-1">
-                          ⚡ {mon.highlightSkill}
-                        </span>
-                        <p className="text-[11px] text-slate-400 leading-relaxed line-clamp-2">
-                          {mon.highlightDesc}
-                        </p>
-                      </div>
+                    {/* 3D Monster Artwork Container (Large & Prominent) */}
+                    <div className="relative z-10 w-28 h-28 sm:w-32 sm:h-32 rounded-2xl p-1 bg-gradient-to-tr from-white/10 via-white/5 to-transparent border border-white/15 shadow-2xl group-hover:scale-110 group-hover:-translate-y-1.5 transition-all duration-300 ease-out flex items-center justify-center">
+                      <img
+                        src={mon.avatarUrl}
+                        alt={mon.name}
+                        className="w-full h-full object-cover rounded-xl drop-shadow-[0_10px_20px_rgba(0,0,0,0.6)]"
+                        loading="lazy"
+                      />
+                      {/* Floating Element Badge */}
+                      <span className={`absolute -bottom-2 -right-2 px-2.5 py-0.5 rounded-full text-[11px] font-black border shadow-lg ${mon.badgeColor} flex items-center gap-1`}>
+                        <span>{mon.elementIcon}</span>
+                        <span>{mon.elementName}</span>
+                      </span>
                     </div>
 
-                    {/* Inspect Button */}
-                    <button
-                      type="button"
-                      onClick={() => onNavigate('catalog', { initialMonster: mon.name })}
-                      className={`mt-3 w-full py-1.5 rounded-lg bg-gradient-to-r ${mon.btnGradient} text-white font-bold text-xs shadow-md transition-all cursor-pointer flex items-center justify-center gap-1 group-hover:scale-102`}
-                    >
-                      <span>ดูสกิล & สเตตัส</span>
-                      <ArrowRight className="w-3 h-3" />
-                    </button>
+                    {/* Monster Identity */}
+                    <div className="relative z-10 mt-5 space-y-1 w-full">
+                      <div className="text-amber-400 text-xs font-mono tracking-widest drop-shadow-sm">
+                        ★★★★★
+                      </div>
+                      <h4 className="font-black text-base sm:text-lg text-white group-hover:text-amber-300 transition-colors truncate">
+                        {mon.thaiName}
+                      </h4>
+                      <p className="text-xs text-slate-400 font-medium">
+                        {mon.name}
+                      </p>
+                    </div>
+
+                    {/* Archetype Role Pill */}
+                    <div className="relative z-10 mt-2.5">
+                      <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${mon.badgeColor}`}>
+                        {mon.archetype}
+                      </span>
+                    </div>
+
+                    {/* Seamless 3D Action Prompt */}
+                    <div className="relative z-10 mt-4 pt-3 border-t border-white/[0.08] w-full flex items-center justify-center gap-1.5 text-xs font-bold text-slate-300 group-hover:text-amber-300 transition-colors">
+                      <span>ส่องสกิล & รูน</span>
+                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1.5 transition-transform" />
+                    </div>
                   </div>
                 ))}
               </div>
