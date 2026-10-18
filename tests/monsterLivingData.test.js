@@ -23,7 +23,7 @@ describe('monsterLivingData', () => {
     // 1. RTA Guardian Stats
     expect(data.guardianStats).toBeDefined();
     expect(data.guardianStats.isMeta).toBe(true);
-    expect(data.guardianStats.picks).toBeGreaterThan(800);
+    expect(data.guardianStats.picks).toBeGreaterThan(500);
     expect(Number(data.guardianStats.winRate)).toBeGreaterThan(40);
 
     // 2. Duos

@@ -8,60 +8,62 @@ import { Home, Shield, Trophy, Search, Menu, Loader2, CheckCircle2, Sparkles, Bo
 import { buildUrl, parseLocation, normalizeView, titleFor, descriptionFor } from './router';
 import { saveBox } from './utils/boxStorage';
 import { isViewLocked } from './utils/memberPolicy';
+import { lazyWithRetry } from './utils/lazyWithRetry';
 
 import LiveAlertBanner from './components/LiveAlertBanner';
 import InstallAppBanner from './components/InstallAppBanner';
 
 // Every view (and the JSON it imports) is its own chunk, so the first paint
 // only downloads the shell + the page that was actually requested.
+// Wrapped in lazyWithRetry so any chunk hash invalidation automatically recovers.
 const VIEWS = {
-  dashboard: lazy(() => import('./views/DashboardView')),
-  '3mdc': lazy(() => import('./views/MdcView')),
-  where2use: lazy(() => import('./views/WhereToUseView')),
-  '3mdc-stats': lazy(() => import('./views/MdcStatsView')),
-  'game-guides': lazy(() => import('./views/GameGuidesView')),
-  'siege-calculator': lazy(() => import('./views/SiegeCalculatorView')),
-  'siege-tournament': lazy(() => import('./views/SiegeTournamentView')),
-  'player-tracker': lazy(() => import('./views/PlayerTrackerView')),
-  'draft-explorer': lazy(() => import('./views/DraftExplorerView')),
-  'rta-synergies': lazy(() => import('./views/RtaSynergiesView')),
-  'meta-dashboard': lazy(() => import('./views/MetaDashboardView')),
-  guardian: lazy(() => import('./views/GuardianView')),
-  'tier-list-maker': lazy(() => import('./views/TierListMakerView')),
-  trending: lazy(() => import('./views/TrendingAnalyticsView')),
-  dungeons: lazy(() => import('./views/DungeonStatsView')),
-  balance: lazy(() => import('./views/BalancePatchesView')),
-  faq: lazy(() => import('./views/FaqView')),
-  codes: lazy(() => import('./views/PromoCodesView')),
-  leaderboards: lazy(() => import('./views/LeaderboardsView')),
-  catalog: lazy(() => import('./views/MonsterCatalogView')),
-  quiz: lazy(() => import('./views/QuizView')),
-  speed: lazy(() => import('./views/SpeedCalculatorView')),
-  rune: lazy(() => import('./views/RuneCalculatorView')),
-  artifact: lazy(() => import('./views/ArtifactOptimizerView')),
-  recruit: lazy(() => import('./views/GuildRecruitView')),
-  aegislink: lazy(() => import('./views/PluginCompanionView')),
-  'my-box': lazy(() => import('./views/MyBoxView')),
-  'live-farm-monitor': lazy(() => import('./views/LiveFarmingMonitorView')),
-  'ai-account-audit': lazy(() => import('./views/AiAccountAuditView')),
-  rta: lazy(() => import('./views/RtaAnalyticsView')),
-  'rta-replays': lazy(() => import('./views/RtaReplayTheaterView')),
-  'siege-battles': lazy(() => import('./views/SiegeBattlesView')),
-  'summon-simulator': lazy(() => import('./views/SummonSimulatorView')),
-  'siege-planner': lazy(() => import('./views/SiegePlannerView')),
-  'guild-war-room': lazy(() => import('./views/GuildWarRoomView')),
-  'ai-farm-optimizer': lazy(() => import('./views/AiFarmOptimizerView')),
-  arena: lazy(() => import('./views/ArenaMetaView')),
-  events: lazy(() => import('./views/GameEventsView')),
-  admin: lazy(() => import('./views/AdminView')),
+  dashboard: lazyWithRetry(() => import('./views/DashboardView'), 'dashboard'),
+  '3mdc': lazyWithRetry(() => import('./views/MdcView'), '3mdc'),
+  where2use: lazyWithRetry(() => import('./views/WhereToUseView'), 'where2use'),
+  '3mdc-stats': lazyWithRetry(() => import('./views/MdcStatsView'), '3mdc-stats'),
+  'game-guides': lazyWithRetry(() => import('./views/GameGuidesView'), 'game-guides'),
+  'siege-calculator': lazyWithRetry(() => import('./views/SiegeCalculatorView'), 'siege-calculator'),
+  'siege-tournament': lazyWithRetry(() => import('./views/SiegeTournamentView'), 'siege-tournament'),
+  'player-tracker': lazyWithRetry(() => import('./views/PlayerTrackerView'), 'player-tracker'),
+  'draft-explorer': lazyWithRetry(() => import('./views/DraftExplorerView'), 'draft-explorer'),
+  'rta-synergies': lazyWithRetry(() => import('./views/RtaSynergiesView'), 'rta-synergies'),
+  'meta-dashboard': lazyWithRetry(() => import('./views/MetaDashboardView'), 'meta-dashboard'),
+  guardian: lazyWithRetry(() => import('./views/GuardianView'), 'guardian'),
+  'tier-list-maker': lazyWithRetry(() => import('./views/TierListMakerView'), 'tier-list-maker'),
+  trending: lazyWithRetry(() => import('./views/TrendingAnalyticsView'), 'trending'),
+  dungeons: lazyWithRetry(() => import('./views/DungeonStatsView'), 'dungeons'),
+  balance: lazyWithRetry(() => import('./views/BalancePatchesView'), 'balance'),
+  faq: lazyWithRetry(() => import('./views/FaqView'), 'faq'),
+  codes: lazyWithRetry(() => import('./views/PromoCodesView'), 'codes'),
+  leaderboards: lazyWithRetry(() => import('./views/LeaderboardsView'), 'leaderboards'),
+  catalog: lazyWithRetry(() => import('./views/MonsterCatalogView'), 'catalog'),
+  quiz: lazyWithRetry(() => import('./views/QuizView'), 'quiz'),
+  speed: lazyWithRetry(() => import('./views/SpeedCalculatorView'), 'speed'),
+  rune: lazyWithRetry(() => import('./views/RuneCalculatorView'), 'rune'),
+  artifact: lazyWithRetry(() => import('./views/ArtifactOptimizerView'), 'artifact'),
+  recruit: lazyWithRetry(() => import('./views/GuildRecruitView'), 'recruit'),
+  aegislink: lazyWithRetry(() => import('./views/PluginCompanionView'), 'aegislink'),
+  'my-box': lazyWithRetry(() => import('./views/MyBoxView'), 'my-box'),
+  'live-farm-monitor': lazyWithRetry(() => import('./views/LiveFarmingMonitorView'), 'live-farm-monitor'),
+  'ai-account-audit': lazyWithRetry(() => import('./views/AiAccountAuditView'), 'ai-account-audit'),
+  rta: lazyWithRetry(() => import('./views/RtaAnalyticsView'), 'rta'),
+  'rta-replays': lazyWithRetry(() => import('./views/RtaReplayTheaterView'), 'rta-replays'),
+  'siege-battles': lazyWithRetry(() => import('./views/SiegeBattlesView'), 'siege-battles'),
+  'summon-simulator': lazyWithRetry(() => import('./views/SummonSimulatorView'), 'summon-simulator'),
+  'siege-planner': lazyWithRetry(() => import('./views/SiegePlannerView'), 'siege-planner'),
+  'guild-war-room': lazyWithRetry(() => import('./views/GuildWarRoomView'), 'guild-war-room'),
+  'ai-farm-optimizer': lazyWithRetry(() => import('./views/AiFarmOptimizerView'), 'ai-farm-optimizer'),
+  arena: lazyWithRetry(() => import('./views/ArenaMetaView'), 'arena'),
+  events: lazyWithRetry(() => import('./views/GameEventsView'), 'events'),
+  admin: lazyWithRetry(() => import('./views/AdminView'), 'admin'),
 };
 
-const CommandPalette = lazy(() => import('./components/CommandPalette'));
-const CloudSyncModal = lazy(() => import('./components/CloudSyncModal'));
-const AuthModal = lazy(() => import('./components/AuthModal'));
-const CardPreviewModal = lazy(() => import('./components/CardPreviewModal'));
-const MemberPaywallModal = lazy(() => import('./components/MemberPaywallModal'));
-const MemberGate = lazy(() => import('./components/MemberGate'));
+const CommandPalette = lazyWithRetry(() => import('./components/CommandPalette'), 'command-palette');
+const CloudSyncModal = lazyWithRetry(() => import('./components/CloudSyncModal'), 'cloud-sync-modal');
+const AuthModal = lazyWithRetry(() => import('./components/AuthModal'), 'auth-modal');
+const CardPreviewModal = lazyWithRetry(() => import('./components/CardPreviewModal'), 'card-preview-modal');
+const MemberPaywallModal = lazyWithRetry(() => import('./components/MemberPaywallModal'), 'paywall-modal');
+const MemberGate = lazyWithRetry(() => import('./components/MemberGate'), 'member-gate');
 
 function ViewLoading() {
   return (

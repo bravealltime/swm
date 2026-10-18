@@ -1,5 +1,5 @@
 // SWM Tactical Service Worker (PWA)
-const CACHE_VERSION = 'swm-v1.0.0';
+const CACHE_VERSION = 'swm-v1.0.1';
 const STATIC_CACHE = `swm-static-${CACHE_VERSION}`;
 const DATA_CACHE = `swm-data-${CACHE_VERSION}`;
 
@@ -72,7 +72,8 @@ self.addEventListener('fetch', (event) => {
       caches.match(req).then((cached) => {
         if (cached) return cached;
         return fetch(req).then((res) => {
-          if (res.ok) {
+          const contentType = res.headers.get('content-type') || '';
+          if (res.ok && !contentType.includes('text/html')) {
             const clone = res.clone();
             caches.open(STATIC_CACHE).then((cache) => cache.put(req, clone));
           }
