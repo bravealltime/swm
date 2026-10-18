@@ -744,38 +744,38 @@ export default function DashboardView({ onNavigate }) {
       </section>
 
       {/* 1.5 WHAT'S NEW & LATEST UPDATES HUB (ศูนย์รวมอัปเดต & ฟีเจอร์ใหม่ล่าสุด) */}
-      <section className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-b from-[#0c1527] via-[#09101d] to-[#070b14] p-5 sm:p-8 shadow-2xl">
+      <section className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-b from-[#0c1527] via-[#09101d] to-[#070b14] p-4 sm:p-7 shadow-2xl">
         {/* Ambient Glow Orbs */}
-        <div className="absolute top-0 right-1/3 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-0 right-1/4 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 right-0 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute top-1/2 left-0 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
 
-        {/* Header Row: Title, Subtitle, and Filter Pills */}
-        <div className="relative z-10 flex flex-col lg:flex-row lg:items-end justify-between gap-5 pb-6 border-b border-white/[0.08]">
-          <div className="space-y-2">
+        {/* Header Row: Title, Subtitle, and Filter Switcher */}
+        <div className="relative z-10 flex flex-col lg:flex-row lg:items-end justify-between gap-4 pb-5 border-b border-white/[0.08]">
+          <div className="space-y-1.5">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 text-xs font-bold">
               <Flame className="w-3.5 h-3.5 text-amber-400 fill-amber-400 animate-pulse" />
               <span>อัปเดต & ฟีเจอร์ใหม่ล่าสุด</span>
               <span className="text-amber-400/60">•</span>
               <span className="text-[11px] font-mono text-amber-200">What's New</span>
             </div>
-            <h2 className="text-xl sm:text-2xl lg:text-3xl font-black text-white tracking-tight flex items-center gap-2">
+            <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center gap-2">
               <span>มีอะไรใหม่ในระบบบ้าง?</span>
-              <span className="text-xs sm:text-sm font-semibold px-2.5 py-0.5 rounded-full bg-white/[0.06] border border-white/10 text-slate-300">
+              <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-white/[0.06] border border-white/10 text-slate-300">
                 {WHATS_NEW_ITEMS.length} อัปเดต
               </span>
             </h2>
             <p className="text-xs sm:text-sm text-slate-400 max-w-2xl leading-relaxed">
-              รวมทุกฟีเจอร์ กิจกรรมพร้อมเฉลยคำถาม บันทึกแพตช์ 9.4 และเครื่องมือใหม่ที่เพิ่มเข้ามา สามารถคลิกเปิดดูข้อมูลได้ทันทีในคลิกเดียว
+              รวมทุกฟีเจอร์ มอนสเตอร์ใหม่ 5★ แท้ กิจกรรมพร้อมเฉลยข้อสอบ บันทึกแพตช์ 9.4 และเครื่องมือวิเคราะห์ไอดี
             </p>
           </div>
 
-          {/* Category Filter Pills */}
-          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+          {/* Category Filter Switcher Tabs */}
+          <div className="flex flex-wrap items-center gap-1.5">
             {[
               { id: 'all', label: 'ทั้งหมด' },
               { id: 'monsters', label: '🐛 มอนใหม่ (5★)' },
-              { id: 'events', label: '🎉 กิจกรรม & แพตช์' },
+              { id: 'events', label: '🎉 กิจกรรม & เฉลย' },
               { id: 'tools', label: '🤖 AI & ฟาร์มสด' },
               { id: 'meta', label: '⚔️ เมต้า & กิลด์' },
               { id: 'rewards', label: '🎁 โค้ด & ตู้สะสม' },
@@ -793,7 +793,7 @@ export default function DashboardView({ onNavigate }) {
                   onClick={() => setWhatsNewCategory(cat.id)}
                   className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
                     active
-                      ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 shadow-lg shadow-amber-500/20'
+                      ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 shadow-md shadow-amber-500/20'
                       : 'bg-white/[0.04] hover:bg-white/[0.08] text-slate-400 hover:text-white border border-white/[0.06]'
                   }`}
                 >
@@ -810,13 +810,12 @@ export default function DashboardView({ onNavigate }) {
         </div>
 
         {/* Main Content Area */}
-        <div className="relative z-10 pt-6 space-y-5">
-          {/* 1. HERO SPOTLIGHT CARD: EVENTS & QUIZ SOLVER (Shows when 'all' or 'events' selected) */}
+        <div className="relative z-10 pt-5 space-y-4">
+          {/* 1. HERO SPOTLIGHT CARD: EVENTS & QUIZ SOLVER */}
           {(whatsNewCategory === 'all' || whatsNewCategory === 'events') && (
-            <div className="relative overflow-hidden rounded-2xl border border-amber-500/35 bg-gradient-to-r from-amber-950/40 via-purple-950/30 to-[#0a1120] p-5 sm:p-7 shadow-xl hover:border-amber-400/60 transition-all">
-              <div className="absolute top-0 right-0 w-80 h-80 bg-amber-500/10 rounded-full blur-2xl pointer-events-none" />
-              <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-                <div className="space-y-3 max-w-3xl">
+            <div className="relative overflow-hidden rounded-2xl border border-amber-500/35 bg-gradient-to-r from-amber-950/40 via-purple-950/25 to-[#09101d] p-4 sm:p-6 shadow-xl hover:border-amber-400/50 transition-all">
+              <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+                <div className="space-y-2.5 max-w-3xl">
                   <div className="flex flex-wrap items-center gap-2">
                     <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 uppercase tracking-wide flex items-center gap-1 shadow-sm">
                       <Sparkles className="w-3 h-3 text-slate-950 fill-slate-950" />
@@ -831,16 +830,15 @@ export default function DashboardView({ onNavigate }) {
                   </div>
 
                   <div>
-                    <h3 className="text-lg sm:text-2xl font-black text-white flex items-center gap-2">
+                    <h3 className="text-base sm:text-xl font-black text-white flex items-center gap-2">
                       <span>🎉 ศูนย์รวมกิจกรรมในเกม & เฉลยคำถามกิจกรรม (Events & Quiz Solver)</span>
                     </h3>
-                    <p className="text-xs sm:text-sm text-slate-300 mt-2 leading-relaxed">
+                    <p className="text-xs sm:text-sm text-slate-300 mt-1 leading-relaxed">
                       ติดตามกิจกรรมทางการทั้งหมด เช่น กิจกรรมเลือกซัมมอน 5★ แท้, รูนตำนาน 6★ สั่งได้, พร้อมระบบนับถอยหลัง, ติ๊กบันทึกของรางวัลที่รับแล้วในเครื่อง, และคลังเฉลยคำถามกิจกรรม 1-Click Copy ตอบถูกรับของรางวัลทันที!
                     </p>
                   </div>
 
-                  {/* Highlights Pill Badges */}
-                  <div className="flex flex-wrap items-center gap-2 pt-1 text-xs">
+                  <div className="flex flex-wrap items-center gap-2 pt-0.5 text-xs">
                     <span className="px-2.5 py-1 rounded-lg bg-black/40 border border-white/10 text-amber-200 font-semibold flex items-center gap-1.5">
                       <Calendar className="w-3.5 h-3.5 text-amber-400" />
                       {activeEventsCount} กิจกรรมกำลังดำเนินอยู่
@@ -856,12 +854,11 @@ export default function DashboardView({ onNavigate }) {
                   </div>
                 </div>
 
-                {/* 1-Click CTA Buttons */}
-                <div className="flex flex-col sm:flex-row lg:flex-col gap-2.5 shrink-0">
+                <div className="flex flex-col sm:flex-row lg:flex-col gap-2 shrink-0">
                   <button
                     type="button"
                     onClick={() => onNavigate('events')}
-                    className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-black text-xs sm:text-sm shadow-lg shadow-amber-500/25 transition-all cursor-pointer group"
+                    className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-black text-xs sm:text-sm shadow-md shadow-amber-500/20 transition-all cursor-pointer group"
                   >
                     <span>ดูรายการกิจกรรม & ของรางวัล</span>
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -883,11 +880,11 @@ export default function DashboardView({ onNavigate }) {
 
           {/* 1.6 DEDICATED NEW MONSTERS SHOWCASE: COSMIC WORM (หนอนอวกาศ 5★ แท้) */}
           {(whatsNewCategory === 'all' || whatsNewCategory === 'monsters') && (
-            <div className="relative overflow-hidden rounded-2xl border border-purple-500/35 bg-gradient-to-r from-purple-950/40 via-indigo-950/30 to-[#0c1424] p-5 sm:p-7 shadow-xl">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-white/[0.08]">
+            <div className="relative overflow-hidden rounded-2xl border border-purple-500/30 bg-gradient-to-r from-purple-950/30 via-[#0e1628] to-[#0a1120] p-4 sm:p-6 shadow-xl">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-3.5 border-b border-white/[0.08]">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-gradient-to-r from-purple-500 to-pink-500 text-white uppercase tracking-wider flex items-center gap-1 shadow-sm">
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-gradient-to-r from-purple-500 to-pink-500 text-white uppercase tracking-wider flex items-center gap-1 shadow-sm">
                       <Sparkles className="w-3 h-3 text-white fill-white" />
                       เปิดตัวมอนสเตอร์ใหม่ (Default 5★)
                     </span>
@@ -895,32 +892,32 @@ export default function DashboardView({ onNavigate }) {
                       Patch v9.3.6 • ตระกูลหนอนอวกาศ
                     </span>
                   </div>
-                  <h3 className="text-lg sm:text-2xl font-black text-white flex items-center gap-2">
+                  <h3 className="text-base sm:text-xl font-black text-white flex items-center gap-2">
                     <span>🌌 หนอนอวกาศ (Cosmic Worm) ครบทั้ง 5 ธาตุ</span>
                   </h3>
-                  <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                  <p className="text-xs text-slate-300 leading-relaxed">
                     พบกับมอนสเตอร์ใหม่ระดับ 5 ดาวแท้ จุดเด่นดาเมจตาม MAX HP และลูกเล่นควบคุมสุดล้ำ คลิกดูสกิล สเตตัส และแนวทางการใส่รูนได้ทันที
                   </p>
                 </div>
                 <button
                   type="button"
                   onClick={() => onNavigate('catalog', { search: 'Cosmic Worm' })}
-                  className="shrink-0 px-4 py-2 rounded-xl bg-purple-600/30 hover:bg-purple-600/50 border border-purple-500/40 text-purple-200 text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer self-start sm:self-center"
+                  className="shrink-0 px-3.5 py-1.5 rounded-xl bg-purple-600/25 hover:bg-purple-600/40 border border-purple-500/40 text-purple-200 text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer self-start sm:self-center"
                 >
                   <span>ดูทั้งหมดในสารานุกรม ➔</span>
                 </button>
               </div>
 
               {/* 5-Monster Responsive Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5 pt-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 pt-4">
                 {NEW_MONSTERS_SHOWCASE.map((mon) => (
                   <div
                     key={mon.name}
-                    className="relative rounded-xl border border-white/10 bg-[#0c1322]/90 p-4 flex flex-col justify-between hover:border-purple-400/50 hover:bg-[#101b30] transition-all group shadow-md"
+                    className="relative rounded-xl border border-white/10 bg-[#090f1c]/90 p-3.5 flex flex-col justify-between hover:border-purple-400/50 hover:bg-[#0d1629] transition-all group shadow-md"
                   >
                     <div>
                       {/* Top Header: Avatar + Names */}
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-2.5">
                         <MonsterAvatar monster={mon} size="sm" showStars={false} />
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center gap-1">
@@ -929,30 +926,30 @@ export default function DashboardView({ onNavigate }) {
                             </span>
                             <span className="text-[10px] text-amber-400 font-mono">★★★★★</span>
                           </div>
-                          <p className="text-xs text-slate-400 truncate">
+                          <p className="text-[11px] text-slate-400 truncate">
                             {mon.name} ({mon.elementName})
                           </p>
                         </div>
                       </div>
 
                       {/* Archetype & Leader Skill */}
-                      <div className="mt-3 space-y-1.5 text-xs">
+                      <div className="mt-2.5 space-y-1 text-xs">
                         <div className="flex items-center justify-between">
                           <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${mon.badgeColor}`}>
                             {mon.archetype}
                           </span>
                         </div>
-                        <p className="text-[11px] text-amber-300/90 font-medium">
+                        <p className="text-[11px] text-amber-300/90 font-medium truncate">
                           👑 {mon.leaderSkill}
                         </p>
                       </div>
 
                       {/* Highlight Skill */}
-                      <div className="mt-2.5 pt-2 border-t border-white/[0.06] space-y-1">
+                      <div className="mt-2 pt-2 border-t border-white/[0.06] space-y-1">
                         <span className="text-[11px] font-bold text-white flex items-center gap-1">
                           ⚡ {mon.highlightSkill}
                         </span>
-                        <p className="text-[11px] text-slate-400 leading-relaxed line-clamp-3">
+                        <p className="text-[11px] text-slate-400 leading-relaxed line-clamp-2">
                           {mon.highlightDesc}
                         </p>
                       </div>
@@ -962,7 +959,7 @@ export default function DashboardView({ onNavigate }) {
                     <button
                       type="button"
                       onClick={() => onNavigate('catalog', { initialMonster: mon.name })}
-                      className={`mt-4 w-full py-2 rounded-lg bg-gradient-to-r ${mon.btnGradient} text-white font-bold text-xs shadow-md transition-all cursor-pointer flex items-center justify-center gap-1 group-hover:scale-102`}
+                      className={`mt-3 w-full py-1.5 rounded-lg bg-gradient-to-r ${mon.btnGradient} text-white font-bold text-xs shadow-md transition-all cursor-pointer flex items-center justify-center gap-1 group-hover:scale-102`}
                     >
                       <span>ดูสกิล & สเตตัส</span>
                       <ArrowRight className="w-3 h-3" />
@@ -974,20 +971,20 @@ export default function DashboardView({ onNavigate }) {
           )}
 
           {/* 2. RESPONSIVE GRID OF OTHER NEW FEATURES */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3.5">
             {filteredWhatsNewItems.map((item) => {
               const IconComponent = item.icon;
               return (
                 <div
                   key={item.id}
                   onClick={() => onNavigate(item.targetView, item.targetParams || {})}
-                  className={`relative overflow-hidden rounded-2xl border ${item.borderColor} bg-gradient-to-b ${item.colorGradient} bg-[#0b121e]/80 p-4 sm:p-5 flex flex-col justify-between hover:scale-[1.01] hover:border-white/30 transition-all cursor-pointer group shadow-lg`}
+                  className={`relative overflow-hidden rounded-xl border ${item.borderColor} bg-gradient-to-b ${item.colorGradient} bg-[#090f1d]/85 p-4 flex flex-col justify-between hover:scale-[1.01] hover:border-white/30 transition-all cursor-pointer group shadow-md`}
                 >
-                  <div className="space-y-3">
+                  <div className="space-y-2.5">
                     {/* Top Row: Icon & Badge */}
                     <div className="flex items-center justify-between gap-2">
-                      <div className="p-2.5 rounded-xl bg-white/[0.06] border border-white/10 text-white group-hover:scale-110 transition-transform">
-                        <IconComponent className="w-5 h-5 text-amber-300" />
+                      <div className="p-2 rounded-lg bg-white/[0.06] border border-white/10 text-white group-hover:scale-110 transition-transform">
+                        <IconComponent className="w-4 h-4 text-amber-300" />
                       </div>
                       <span className="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-white/[0.08] border border-white/15 text-slate-200">
                         {item.badge}
@@ -996,17 +993,17 @@ export default function DashboardView({ onNavigate }) {
 
                     {/* Title & Description */}
                     <div>
-                      <h4 className="text-sm sm:text-base font-bold text-white group-hover:text-amber-300 transition-colors leading-snug">
+                      <h4 className="text-sm font-bold text-white group-hover:text-amber-300 transition-colors leading-snug">
                         {item.title}
                       </h4>
-                      <p className="text-xs text-slate-400 mt-1.5 leading-relaxed line-clamp-3">
+                      <p className="text-xs text-slate-400 mt-1 leading-relaxed line-clamp-2">
                         {item.description}
                       </p>
                     </div>
 
                     {/* Tags */}
-                    <div className="flex flex-wrap gap-1 pt-1">
-                      {item.tags.map((tag) => (
+                    <div className="flex flex-wrap gap-1 pt-0.5">
+                      {item.tags.slice(0, 3).map((tag) => (
                         <span key={tag} className="text-[10px] font-mono text-slate-400 bg-white/[0.03] px-1.5 py-0.5 rounded">
                           {tag}
                         </span>
@@ -1015,7 +1012,7 @@ export default function DashboardView({ onNavigate }) {
                   </div>
 
                   {/* Footer Action Link */}
-                  <div className="mt-4 pt-3 border-t border-white/[0.06] flex items-center justify-between text-xs font-bold text-amber-300 group-hover:text-amber-200">
+                  <div className="mt-3 pt-2.5 border-t border-white/[0.06] flex items-center justify-between text-xs font-bold text-amber-300 group-hover:text-amber-200">
                     <span>{item.primaryActionLabel}</span>
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </div>
@@ -1330,93 +1327,29 @@ export default function DashboardView({ onNavigate }) {
               </div>
             </div>
 
-            {/* Bottom Row: Quick Navigation Ribbon */}
-            <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-white/[0.05]">
+            {/* Bottom Row: Passport Quick Action Bar */}
+            <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-white/[0.06]">
               <div className="flex flex-wrap items-center gap-2">
                 <button
                   type="button"
-                  onClick={() => onNavigate('ai-account-audit')}
-                  className="px-3 py-1.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-amber-300 text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
+                  onClick={() => onNavigate('my-box')}
+                  className="px-4 py-2 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/30 text-cyan-300 text-xs font-bold transition-all cursor-pointer flex items-center gap-2"
                 >
-                  <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                  <span>🤖 AI ตรวจไอดี</span>
+                  <Package className="w-4 h-4 text-cyan-400" />
+                  <span>เข้าสู่กล่อง My Box เต็มรูปแบบ (ดูรูน & อาร์ติแฟกต์) ➔</span>
                 </button>
-
-                <button
-                  type="button"
-                  onClick={() => onNavigate('live-farm-monitor')}
-                  className="px-3 py-1.5 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/30 text-emerald-300 text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
-                >
-                  <Radio className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>📡 จอฟาร์มสด</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => onNavigate('my-box', { tab: 'grind-tracker' })}
-                  className="px-3 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/25 text-amber-300 text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5"
-                >
-                  <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                  <span>✨ สแกนหินขัด/แปลง</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => onNavigate('my-box', { tab: 'fusion-devilmon' })}
-                  className="px-3 py-1.5 rounded-xl bg-teal-500/10 hover:bg-teal-500/20 border border-teal-500/25 text-teal-300 text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5"
-                >
-                  <Zap className="w-3.5 h-3.5 text-teal-400" />
-                  <span>🧬 ผสมมอน & เดวิลม่อน</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => onNavigate('rta-replays')}
-                  className="px-3 py-1.5 rounded-xl bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/25 text-purple-300 text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5"
-                >
-                  <Trophy className="w-3.5 h-3.5 text-purple-400" />
-                  <span>🎬 รีเพลย์ RTA G3</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => onNavigate('siege-battles')}
-                  className="px-3 py-1.5 rounded-xl bg-sky-500/10 hover:bg-sky-500/20 border border-sky-500/25 text-sky-300 text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5"
-                >
-                  <Shield className="w-3.5 h-3.5 text-sky-400" />
-                  <span>🏰 เมต้า Siege สด</span>
-                </button>
-
                 <button
                   type="button"
                   onClick={() => onNavigate('my-box', { tab: 'pokedex' })}
-                  className="px-3 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/25 text-amber-300 text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5"
+                  className="px-3 py-2 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/25 text-amber-300 text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5"
                 >
                   <Trophy className="w-3.5 h-3.5 text-amber-400" />
                   <span>ตู้สะสม Nat 5 & LD5</span>
                 </button>
-
-                <button
-                  type="button"
-                  onClick={() => onNavigate('guild-war-room')}
-                  className="px-3 py-1.5 rounded-xl bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/25 text-indigo-300 text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5"
-                >
-                  <Shield className="w-3.5 h-3.5 text-indigo-400" />
-                  <span>ห้องบัญชาการกิลด์</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => onNavigate('arena')}
-                  className="px-3 py-1.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/25 text-rose-300 text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5"
-                >
-                  <Swords className="w-3.5 h-3.5 text-rose-400" />
-                  <span>ค้นหาทีมเจาะ Arena</span>
-                </button>
               </div>
 
               {/* Upload SWEX quick update button */}
-              <label className="px-3 py-1.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-slate-300 hover:text-white text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5">
+              <label className="px-3.5 py-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-slate-300 hover:text-white text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5">
                 <Upload className="w-3.5 h-3.5 text-slate-400" />
                 <span>{uploadingProfile ? 'กำลังอัปเดต...' : 'อัปเดตไฟล์ SWEX'}</span>
                 <input
@@ -1474,91 +1407,6 @@ export default function DashboardView({ onNavigate }) {
             )}
           </div>
         )}
-      </section>
-
-      {/* 2.5 REAL-TIME & ACCOUNT SUITE COMMAND HUB */}
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-4 animate-in fade-in duration-300">
-        {/* Card 1: AI Account Audit */}
-        <div
-          onClick={() => onNavigate('ai-account-audit')}
-          className="relative overflow-hidden rounded-2xl border border-amber-500/25 bg-gradient-to-br from-amber-950/30 via-[#14120f] to-[#0c0f18] p-5 shadow-xl hover:border-amber-500/50 hover:shadow-amber-500/10 transition-all cursor-pointer group"
-        >
-          <div className="absolute top-0 right-0 w-48 h-48 bg-amber-500/10 rounded-full blur-2xl pointer-events-none group-hover:bg-amber-500/15 transition-all" />
-          <div className="flex items-start justify-between gap-3 mb-3">
-            <div className="p-2.5 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-400">
-              <Sparkles className="w-5 h-5" />
-            </div>
-            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-amber-500/20 text-amber-300 border border-amber-500/30 uppercase tracking-wide">
-              G2-G3 Ready
-            </span>
-          </div>
-          <h3 className="text-base font-black text-white group-hover:text-amber-300 transition-colors flex items-center gap-1.5">
-            <span>🤖 AI วินิจฉัยสุขภาพไอดี</span>
-          </h3>
-          <p className="text-xs text-slate-400 mt-1.5 leading-relaxed">
-            วัดเกณฑ์สปีด Swift (+221 SPD), คุณภาพ Violent, เช็ค 30 ตัวเมต้าการ์เดียน และจัดลำดับการฟาร์มที่คุ้มค่าที่สุด
-          </p>
-          <div className="mt-4 pt-3 border-t border-white/[0.06] flex items-center justify-between text-xs font-bold text-amber-400">
-            <span>เปิดรายงานวิเคราะห์ไอดี</span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </div>
-        </div>
-
-        {/* Card 2: Live Farming Monitor */}
-        <div
-          onClick={() => onNavigate('live-farm-monitor')}
-          className="relative overflow-hidden rounded-2xl border border-emerald-500/25 bg-gradient-to-br from-emerald-950/30 via-[#0c1616] to-[#080f14] p-5 shadow-xl hover:border-emerald-500/50 hover:shadow-emerald-500/10 transition-all cursor-pointer group"
-        >
-          <div className="absolute top-0 right-0 w-48 h-48 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none group-hover:bg-emerald-500/15 transition-all" />
-          <div className="flex items-start justify-between gap-3 mb-3">
-            <div className="p-2.5 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400">
-              <Radio className="w-5 h-5" />
-            </div>
-            <span className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 uppercase tracking-wide">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-              </span>
-              สดจากเกม (SWEX)
-            </span>
-          </div>
-          <h3 className="text-base font-black text-white group-hover:text-emerald-300 transition-colors flex items-center gap-1.5">
-            <span>📡 จอตรวจจับการฟาร์มสด</span>
-          </h3>
-          <p className="text-xs text-slate-400 mt-1.5 leading-relaxed">
-            จับผลดรอปรูนดันเจี้ยน Abyss วินาทีต่อวินาที คำนวณ Max Potential SPD (+30) พร้อม Keep/Sell Advisor ภาษาไทย
-          </p>
-          <div className="mt-4 pt-3 border-t border-white/[0.06] flex items-center justify-between text-xs font-bold text-emerald-400">
-            <span>เปิดหน้าจอฟาร์มสด</span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </div>
-        </div>
-
-        {/* Card 3: My Box */}
-        <div
-          onClick={() => onNavigate('my-box')}
-          className="relative overflow-hidden rounded-2xl border border-cyan-500/25 bg-gradient-to-br from-cyan-950/30 via-[#0a1420] to-[#080d18] p-5 shadow-xl hover:border-cyan-500/50 hover:shadow-cyan-500/10 transition-all cursor-pointer group"
-        >
-          <div className="absolute top-0 right-0 w-48 h-48 bg-cyan-500/10 rounded-full blur-2xl pointer-events-none group-hover:bg-cyan-500/15 transition-all" />
-          <div className="flex items-start justify-between gap-3 mb-3">
-            <div className="p-2.5 rounded-xl bg-cyan-500/15 border border-cyan-500/30 text-cyan-400">
-              <Package className="w-5 h-5" />
-            </div>
-            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 uppercase tracking-wide">
-              1-Click Sync
-            </span>
-          </div>
-          <h3 className="text-base font-black text-white group-hover:text-cyan-300 transition-colors flex items-center gap-1.5">
-            <span>📦 กล่องมอนสเตอร์ & ตู้สะสม</span>
-          </h3>
-          <p className="text-xs text-slate-400 mt-1.5 leading-relaxed">
-            คลังมอนสเตอร์{userProfileStats?.totalUnits ? ` ${userProfileStats.totalUnits} ตัว` : ''}, ตู้สะสม Nat 5/LD5, คลังรูน{userProfileStats?.totalRunes ? ` ${userProfileStats.totalRunes} ชิ้น` : ''} และอาร์ติแฟกต์
-          </p>
-          <div className="mt-4 pt-3 border-t border-white/[0.06] flex items-center justify-between text-xs font-bold text-cyan-400">
-            <span>เข้าสู่กล่องมอนสเตอร์</span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </div>
-        </div>
       </section>
 
       {/* 3. INSTANT PROMO CODES BANNER (1-Click Copy) */}
