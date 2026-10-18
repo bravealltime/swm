@@ -57,13 +57,13 @@ export default function MetaDashboardView({ onNavigate }) {
           <div>
             <div className="flex items-center gap-2 text-xs font-mono text-cyan-400 uppercase tracking-wider mb-1">
               <BarChart3 className="w-4 h-4 text-cyan-400" />
-              <span>RTA Meta Dashboard • Season 38 Analytics</span>
+              <span>RTA Meta Dashboard • Season 39 Analytics</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
               เมต้าแดชบอร์ด & การกระจายแรงค์ (Meta Dashboard)
             </h1>
             <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-3xl leading-relaxed">
-              ภาพรวมสถิติซีซั่น 38 ครบวงจร: กราฟการกระจายผู้เล่นในแต่ละแรงค์ (Rank Distribution), ความได้เปรียบของฝ่าย First Pick, และมอนสเตอร์ที่ถูกแย่งพิก/แบนสูงสุด (Contested Rate)
+              ภาพรวมสถิติซีซั่น 39 ครบวงจร: กราฟการกระจายผู้เล่นในแต่ละแรงค์ (Rank Distribution), ความได้เปรียบของฝ่าย First Pick, และมอนสเตอร์ที่ถูกแย่งพิก/แบนสูงสุด (Contested Rate)
             </p>
           </div>
 
@@ -95,7 +95,7 @@ export default function MetaDashboardView({ onNavigate }) {
           <div className="p-4 rounded-xl bg-[#080d16] border border-[#1b283d] space-y-1">
             <div className="text-xs text-slate-400 font-medium">จำนวนแมตช์ที่เก็บรวบรวม</div>
             <div className="text-xl font-mono font-black text-amber-400">6,842,100 แมตช์</div>
-            <div className="text-xs text-slate-400">วิเคราะห์สดผ่านระบบสถิติการแข่งขัน RTA Season 38</div>
+            <div className="text-xs text-slate-400">วิเคราะห์สดผ่านระบบสถิติการแข่งขัน RTA Season 39</div>
           </div>
         </div>
       </div>
@@ -109,7 +109,7 @@ export default function MetaDashboardView({ onNavigate }) {
               การกระจายตัวของผู้เล่นและเกณฑ์คะแนนตัดเกรด (Rank Cutoffs & Player Distribution)
             </h2>
           </div>
-          <span className="text-xs text-slate-400 font-mono">Season 38 Official</span>
+          <span className="text-xs text-slate-400 font-mono">Season 39 Official</span>
         </div>
 
         {/* Stacked Percentage Bar */}
@@ -162,7 +162,7 @@ export default function MetaDashboardView({ onNavigate }) {
           <div className="flex items-center gap-2">
             <Flame className="w-5 h-5 text-rose-400" />
             <h2 className="text-base sm:text-lg font-bold text-white">
-              มอนสเตอร์ที่ถูกแย่งชิงสูงสุดในซีซั่น 38 (Top Contested Units)
+              มอนสเตอร์ที่ถูกแย่งชิงสูงสุดในซีซั่น 39 (Top Contested Units)
             </h2>
           </div>
           <span className="text-xs text-slate-400">คำนวณจาก Pick Rate + Ban Rate</span>

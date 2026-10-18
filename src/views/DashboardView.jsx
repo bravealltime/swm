@@ -184,7 +184,7 @@ const WHATS_NEW_ITEMS = [
     badgeColor: 'cyan',
     category: 'events',
     title: 'บันทึกแพตช์ 9.4.0 & วิเคราะห์สมดุลมอนสเตอร์',
-    description: 'วิเคราะห์การปรับสมดุลล่าสุด Art Master, Beast Rider, Puppeteer พร้อมข้อมูลสกิลและสเตตัสฉบับภาษาไทย ตารางบัฟ/เนิร์ฟ และผลกระทบต่อเมต้า RTA S38',
+    description: 'วิเคราะห์การปรับสมดุลล่าสุด Art Master, Beast Rider, Puppeteer พร้อมข้อมูลสกิลและสเตตัสฉบับภาษาไทย ตารางบัฟ/เนิร์ฟ และผลกระทบต่อเมต้า RTA S39',
     icon: BookOpen,
     colorGradient: 'from-cyan-500/15 via-blue-500/5 to-transparent',
     borderColor: 'border-cyan-500/30',
@@ -599,7 +599,7 @@ export default function DashboardView({ onNavigate }) {
           <div className="flex flex-wrap items-center justify-center gap-2">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.05] border border-white/10 backdrop-blur-md text-xs font-semibold text-slate-300 shadow-inner whitespace-nowrap">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="text-emerald-400 font-mono font-bold">RTA S38</span>
+              <span className="text-emerald-400 font-mono font-bold">RTA S39</span>
               <span className="text-slate-400 hidden sm:inline">•</span>
               <span className="hidden sm:inline">ศูนย์ข้อมูลยุทธวิธี Summoners War ภาษาไทย</span>
             </div>
@@ -626,7 +626,7 @@ export default function DashboardView({ onNavigate }) {
             </span>
           </h1>
           <p className="text-sm sm:text-base text-slate-400 max-w-2xl mx-auto leading-relaxed">
-            วิเคราะห์เมต้า RTA Season 38, สถิติผู้เล่นระดับโลก, ทีมแก้ทาง Siege 3MDC กว่า 1,500+ สูตร, และสารานุกรมมอนสเตอร์ 940 ตัว
+            วิเคราะห์เมต้า RTA Season 39, สถิติผู้เล่นระดับโลก, ทีมแก้ทาง Siege 3MDC กว่า 1,500+ สูตร, และสารานุกรมมอนสเตอร์ 940 ตัว
           </p>
 
           {/* Central Spotlight Search Input */}
@@ -687,7 +687,7 @@ export default function DashboardView({ onNavigate }) {
                 onClick={() => onNavigate('rta')}
                 className="px-3 py-1.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 text-slate-300 hover:text-white font-medium transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
               >
-                🏆 เมต้า RTA S38
+                🏆 เมต้า RTA S39
               </button>
             </div>
           </form>
@@ -1509,8 +1509,8 @@ export default function DashboardView({ onNavigate }) {
                   <Trophy className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="text-base font-black text-white">World Arena (RTA) S38</h3>
-                  <p className="text-xs text-slate-400">สถิติผู้เล่นระดับโลกและทำเนียบ Guardian ไทย</p>
+                  <h3 className="text-base font-black text-white">World Arena (RTA) S39</h3>
+                  <p className="text-xs text-slate-400">สถิติผู้เล่นระดับโลกและทำเนียบ Guardian ไทย (Season 39)</p>
                 </div>
               </div>
               <button
@@ -1608,7 +1608,7 @@ export default function DashboardView({ onNavigate }) {
               onClick={() => onNavigate('rta')}
               className="px-4 py-2.5 rounded-xl bg-white/[0.06] hover:bg-white/[0.1] border border-white/10 text-white font-bold text-xs transition-all cursor-pointer"
             >
-              <span>สรุปเมต้า S38</span>
+              <span>สรุปเมต้า S39</span>
             </button>
           </div>
         </section>

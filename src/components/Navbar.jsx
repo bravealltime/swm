@@ -41,7 +41,7 @@ const CORE_NAV_ITEMS = [
 // PVP & Guild Siege grouped dropdown
 const PVP_NAV_ITEMS = [
   { id: '3mdc', label: '3MDC Siege (ทีมแก้ทาง)', desc: 'สูตรทีมแก้ทางยึดเกาะ 1,500+ สูตร', icon: Shield, free: true },
-  { id: 'rta', label: 'RTA Analytics & สถิติสด', desc: 'Pick / Win / Ban ซีซั่น 38 ระดับโลก', icon: Trophy },
+  { id: 'rta', label: 'RTA Analytics & สถิติสด', desc: 'Pick / Win / Ban ซีซั่น 39 ระดับโลก', icon: Trophy },
   { id: 'draft-explorer', label: 'จำลองดราฟต์ 5v5', desc: 'ฝึกซ้อม Pick & Counter Draft', icon: Swords },
   { id: 'player-tracker', label: 'ค้นหาสถิติผู้เล่น (Tracker)', desc: 'สถิติ RTA สด & มอนสเตอร์หลัก', icon: Search },
   { id: 'balance', label: 'Balance Patch ภาษาไทย', desc: 'สรุปปรับสมดุลมอนสเตอร์ล่าสุด', icon: History, free: true },

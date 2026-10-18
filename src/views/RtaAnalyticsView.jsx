@@ -155,11 +155,11 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
           <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight flex items-center gap-2.5">
             <span>วิเคราะห์ RTA อารีน่าโลก & สถิติการแข่งขันจริง</span>
             <span className="px-2.5 py-0.5 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 text-xs font-mono font-black">
-              S38 LIVE
+              S39 LIVE
             </span>
           </h1>
           <p className="text-xs sm:text-sm text-slate-400 max-w-3xl leading-relaxed">
-            ฐานข้อมูลจัดอันดับ RTA ฉบับสมบูรณ์: Tier List เมต้าซีซั่น 38, อัตรา Pick / Ban / Win จาก 6.8 ล้านแมตช์, คะแนนตัดแรงค์ G1-G3 เรียลไทม์ และรีเพลย์สดระดับ Guardian
+            ฐานข้อมูลจัดอันดับ RTA ฉบับสมบูรณ์: Tier List เมต้าซีซั่น 39, อัตรา Pick / Ban / Win จาก 6.8 ล้านแมตช์, คะแนนตัดแรงค์ G1-G3 เรียลไทม์ และรีเพลย์สดระดับ Guardian
           </p>
         </div>
 
@@ -167,7 +167,7 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
         <div className="relative z-10 rounded-2xl bg-white/[0.04] border border-white/10 backdrop-blur-xl p-3.5 flex items-center gap-4 self-start lg:self-auto text-xs font-mono shadow-xl">
           <div>
             <div className="text-slate-400 text-[11px]">ซีซั่นปัจจุบัน</div>
-            <div className="text-cyan-400 font-bold text-sm">Season {tierData.season}</div>
+            <div className="text-cyan-400 font-bold text-sm">Season {tierData.season || 39}</div>
           </div>
           <div className="w-px h-8 bg-white/10"></div>
           <div>
@@ -193,7 +193,7 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
           }`}
         >
           <Trophy className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400 shrink-0" />
-          <span><span className="hidden sm:inline">🏆 Tier List มอนสเตอร์ RTA (Season 38)</span><span className="sm:hidden">🏆 Tier List RTA</span></span>
+          <span><span className="hidden sm:inline">🏆 Tier List มอนสเตอร์ RTA (Season 39)</span><span className="sm:hidden">🏆 Tier List RTA</span></span>
         </button>
 
         <button

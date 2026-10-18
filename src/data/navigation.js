@@ -39,7 +39,7 @@ export const NAVIGATION_CATEGORIES = [
       { id: 'draft-explorer', label: 'จำลองดราฟต์ 5v5', icon: 'Swords' },
       { id: 'rta-synergies', label: 'คอมโบดูโอ้ & ทริโอ้ (Synergies)', icon: 'Users', badge: 'ใหม่' },
       { id: 'meta-dashboard', label: 'เมต้าแดชบอร์ด & การกระจายแรงค์', icon: 'BarChart3' },
-      { id: 'rta-tierlist', label: 'RTA Tier List ซีซั่นล่าสุด', icon: 'Trophy', badge: 'S38' },
+      { id: 'rta-tierlist', label: 'RTA Tier List ซีซั่นล่าสุด', icon: 'Trophy', badge: 'S39' },
       { id: 'rta-meta', label: 'สถิติ Pick / Win / Ban', icon: 'BarChart3' },
       { id: 'rta-replays', label: 'รีเพลย์แข่งสดการ์เดียน', icon: 'Flame' },
       { id: 'rta-cutoffs', label: 'คะแนนตัดเกรด G1-G3', icon: 'Gauge' },

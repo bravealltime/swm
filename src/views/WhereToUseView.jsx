@@ -390,7 +390,7 @@ export default function WhereToUseView({ onNavigate, initialMonster = 'Byungchul
               activeTab === 'rta' ? 'bg-rose-600 text-white shadow-sm' : 'text-slate-400 hover:text-white'
             }`}
           >
-            🏆 สถิติ RTA S38
+            🏆 สถิติ RTA S39
           </button>
         )}
       </div>
@@ -732,7 +732,7 @@ export default function WhereToUseView({ onNavigate, initialMonster = 'Byungchul
         <div className="space-y-3 pt-2">
           <h3 className="text-base font-bold text-white flex items-center gap-2">
             <Trophy className="w-4 h-4 text-rose-400" />
-            สถิติเวิลด์อารีน่า RTA World Arena (Season 38 สถิติ 6.8 ล้านแมตช์)
+            สถิติเวิลด์อารีน่า RTA World Arena (Season 39 สถิติ 6.8 ล้านแมตช์)
           </h3>
 
           <div className="p-5 rounded-2xl bg-[#101724] border border-[#1d2b3f] grid grid-cols-2 sm:grid-cols-4 gap-4 shadow-lg">

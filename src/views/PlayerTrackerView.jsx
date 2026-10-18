@@ -233,7 +233,7 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
                 </span>
               </h1>
               <p className="text-xs sm:text-sm text-slate-400 mt-1">
-                สถิติผู้เล่นระดับสูงและบันทึกดราฟต์ RTA Season 38 ({(DATASET_META.replaysScanned || 0).toLocaleString()} แมตช์
+                สถิติผู้เล่นระดับสูงและบันทึกดราฟต์ RTA Season 39 ({(DATASET_META.replaysScanned || 0).toLocaleString()} แมตช์
                 {DATASET_META.fetchedAt ? `, ข้อมูลล่าสุด ${DATASET_META.fetchedAt.slice(0, 10)}` : ''}) — สถิติดราฟต์ 5v5 และมอนสเตอร์คู่ใจ
               </p>
             </div>
@@ -533,7 +533,7 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
                 </span>
                 <span className="text-xs text-slate-400">•</span>
                 <span className="text-xs font-semibold text-emerald-300/90">
-                  {activePlayer.source === 'hof' ? 'ทำเนียบแชมป์โลก (Hall of Fame)' : 'สถิติการแข่งขันจริง Season 38'}
+                  {activePlayer.source === 'hof' ? 'ทำเนียบแชมป์โลก (Hall of Fame)' : 'สถิติการแข่งขันจริง Season 39'}
                 </span>
               </div>
             </div>

@@ -187,7 +187,7 @@ export default function DraftExplorerView({ onNavigate }) {
               <Sparkles className="w-4 h-4 text-purple-400" />
               <span>SWM Draft Engine • Pro Tournament Simulator</span>
               <span className="px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30 text-[11px] font-black">
-                RTA S38 LIVE
+                RTA S39 LIVE
               </span>
             </div>
             <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
@@ -211,7 +211,7 @@ export default function DraftExplorerView({ onNavigate }) {
               className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-lg shadow-blue-600/25"
             >
               <Trophy className="w-3.5 h-3.5 text-amber-400" />
-              <span>ดูสถิติ RTA S38</span>
+              <span>ดูสถิติ RTA S39</span>
             </button>
           </div>
         </div>
