@@ -26,6 +26,8 @@ import cutoffData from '../data/swrtRankCutoffs.json';
 import { fetchLiveCutoffs } from '../services/swrtLive';
 import replaysData from '../data/swrtRecentReplays.json';
 import highdataMap from '../data/swrtMonsterHighdata.json';
+import guardianMeta from '../data/swrtGuardianMeta.json';
+import RtaCoreFinder from '../components/RtaCoreFinder';
 
 // Interactive 3D Esports Tier Matrix Scatter Plot (Pick Rate vs Win Rate)
 function RtaTierMatrixScatterPlot({ metaList, onSelectMonster }) {

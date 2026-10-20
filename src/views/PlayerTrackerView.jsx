@@ -81,6 +81,7 @@ export default function PlayerTrackerView({ onNavigate, initialPlayer }) {
   const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'matches'
   const [rankCategoryFilter, setRankCategoryFilter] = useState('all'); // 'all' | 'legend' | 'guardian' | 'conqueror' | 'fighter'
   const [copiedLink, setCopiedLink] = useState(false);
+  const [isQuickScoutOpen, setIsQuickScoutOpen] = useState(false);
 
   // Look up active player by id or exact name. Unknown names get an honest "not found"
   // panel instead of an invented profile.

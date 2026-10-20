@@ -24,6 +24,8 @@ const VIEW_ALIASES = {
   'siege-meta': 'siege-battles',
   'siege-matchups': 'siege-battles',
   'game-events': 'events',
+  'core-finder': 'rta',
+  'rta-core-finder': 'rta',
 };
 
 export const VIEW_TITLES = {
