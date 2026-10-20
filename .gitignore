@@ -37,3 +37,5 @@ public/data/my_profile.json
 # Generated from src/data/monsterSkillsData.json at dev/build start (scripts/build_skill_shards.mjs)
 public/data/skills/
 src/data/monsterSkillsIndex.json
+
+*.bak

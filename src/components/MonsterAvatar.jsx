@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MONSTERS } from '../data/monsters';
 
 const ELEMENT_STYLES = {
@@ -137,7 +137,18 @@ export default function MonsterAvatar({
   const elemKey = (mon.element || 'fire').toLowerCase();
   const elem = ELEMENT_STYLES[elemKey] || ELEMENT_STYLES.fire;
   const elemIcon = ELEMENT_ICONS[elemKey] || mon.elementIcon;
-  const imgSrc = mon.avatarUrl || mon.imageUrl || mon.image;
+  const rawSrc = mon.avatarUrl || mon.imageUrl || mon.image || '';
+  const iconMatch = rawSrc.match(/(unit_icon_\d+_\d+_\d+)\.(png|jpg)/i);
+  const localHdSrc = iconMatch ? `/images/monsters/${iconMatch[1]}.png` : null;
+
+  const [activeSrc, setActiveSrc] = useState(localHdSrc || rawSrc);
+
+  useEffect(() => {
+    const nextRaw = mon.avatarUrl || mon.imageUrl || mon.image || '';
+    const nextMatch = nextRaw.match(/(unit_icon_\d+_\d+_\d+)\.(png|jpg)/i);
+    setActiveSrc(nextMatch ? `/images/monsters/${nextMatch[1]}.png` : nextRaw);
+    setImgError(false);
+  }, [mon.avatarUrl, mon.imageUrl, mon.image]);
   const displayName = mon.thaiName || mon.nameTh || mon.name || '';
   const engName = mon.name || mon.nameEn || '';
 
@@ -152,13 +163,19 @@ export default function MonsterAvatar({
         }`}
       >
         {/* Official In-Game Monster Portrait or Styled Element Fallback */}
-        {imgSrc && !imgError ? (
+        {activeSrc && !imgError ? (
           <img 
-            src={imgSrc} 
+            src={activeSrc} 
             alt={engName}
             className="w-full h-full object-cover rounded-lg bg-black"
             loading="lazy"
-            onError={() => setImgError(true)}
+            onError={() => {
+              if (activeSrc !== rawSrc && rawSrc) {
+                setActiveSrc(rawSrc);
+              } else {
+                setImgError(true);
+              }
+            }}
           />
         ) : (
           <div className={`w-full h-full flex flex-col items-center justify-center ${elem.bg} text-white font-black p-1 text-center select-none bg-gradient-to-br from-slate-900 to-black`}>

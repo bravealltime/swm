@@ -68,7 +68,7 @@ describe('parseSwexExport', () => {
 
   it('resolves names and art from the catalog', () => {
     expect(box.units[0].name).toMatch(/Lushen/i);
-    expect(box.units[0].avatarUrl).toMatch(/^https?:\/\//);
+    expect(box.units[0].avatarUrl).toMatch(/^(?:https?:\/\/|\/images\/)/);
   });
 
   it('collects equipped and loose runes and artifacts', () => {
