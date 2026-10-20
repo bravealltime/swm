@@ -55,6 +55,7 @@ const VIEWS = {
   'ai-farm-optimizer': lazyWithRetry(() => import('./views/AiFarmOptimizerView'), 'ai-farm-optimizer'),
   arena: lazyWithRetry(() => import('./views/ArenaMetaView'), 'arena'),
   events: lazyWithRetry(() => import('./views/GameEventsView'), 'events'),
+  community: lazyWithRetry(() => import('./views/CommunityForumView'), 'community'),
   admin: lazyWithRetry(() => import('./views/AdminView'), 'admin'),
 };
 

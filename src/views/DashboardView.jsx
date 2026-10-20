@@ -27,6 +27,7 @@ import {
   Flame,
   BookOpen,
   HelpCircle,
+  MessageSquare,
 } from 'lucide-react';
 import MonsterAvatar from '../components/MonsterAvatar';
 import { PROMO_CODES } from '../data/promoCodes';
@@ -191,6 +192,20 @@ const WHATS_NEW_ITEMS = [
     tags: ['#Patch9.4', '#วิเคราะห์แพตช์', '#บัฟเนิร์ฟมอน'],
     targetView: 'balance',
     primaryActionLabel: 'อ่านบันทึกแพตช์ ➔',
+  },
+  {
+    id: 'community-forum',
+    badge: 'เว็บบอร์ดใหม่',
+    badgeColor: 'cyan',
+    category: 'community',
+    title: 'เว็บบอร์ด & ชุมชนผู้เล่น (SWM Community Forum)',
+    description: 'พูดคุย แลกเปลี่ยนยุทธวิธี RTA ซีซั่น 39, สูตรเจาะหอ Siege 3MDC, ปรึกษารูน และพื้นที่สำหรับกิลด์รับสมัครสมาชิก',
+    icon: MessageSquare,
+    colorGradient: 'from-cyan-500/15 via-blue-500/5 to-transparent',
+    borderColor: 'border-cyan-500/30',
+    tags: ['#เว็บบอร์ด', '#ชุมชนผู้เล่น', '#แลกเปลี่ยนทีม', '#กิลด์รับสมัคร'],
+    targetView: 'community',
+    primaryActionLabel: 'เข้าสู่เว็บบอร์ด ➔',
   },
   {
     id: 'live-farming',

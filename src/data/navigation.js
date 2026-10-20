@@ -69,6 +69,7 @@ export const NAVIGATION_CATEGORIES = [
     id: 'community-account',
     title: 'ชุมชน & ช่วยเหลือผู้เล่น',
     items: [
+      { id: 'community', label: '💬 เว็บบอร์ด & ชุมชนผู้เล่น', icon: 'MessageSquare', badge: 'ฮิต' },
       { id: 'guild-recruiting', label: 'ประกาศรับสมัครกิลด์', icon: 'UserPlus' },
       { id: 'faq-guides', label: 'คู่มือ & คำถามพบบ่อย (FAQ)', icon: 'HelpCircle' },
     ]

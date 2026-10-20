@@ -26,6 +26,9 @@ const VIEW_ALIASES = {
   'game-events': 'events',
   'core-finder': 'rta',
   'rta-core-finder': 'rta',
+  webboard: 'community',
+  forum: 'community',
+  board: 'community',
 };
 
 export const VIEW_TITLES = {
@@ -68,6 +71,7 @@ export const VIEW_TITLES = {
   'ai-farm-optimizer': '🤖 AI จัดทีม & รูน Abyss (Realtime)',
   rta: 'วิเคราะห์ RTA',
   events: 'กิจกรรม & เฉลยคำถาม (Events & Quiz Solver)',
+  community: 'เว็บบอร์ด & ชุมชนผู้เล่น',
 };
 
 // viewParams key <-> short query-string key
@@ -76,6 +80,7 @@ const PARAM_KEYS = {
   subItem: 'tab',
   initialPlayer: 'player',
   initialMonster: 'monster',
+  initialPostId: 'post',
 };
 const QUERY_KEYS = Object.fromEntries(Object.entries(PARAM_KEYS).map(([k, v]) => [v, k]));
 

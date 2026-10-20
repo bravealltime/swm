@@ -39,6 +39,7 @@ import {
   Radio,
   Smartphone,
   Crown,
+  MessageSquare,
   X
 } from 'lucide-react';
 import { NAVIGATION_CATEGORIES } from '../data/navigation';
@@ -50,7 +51,7 @@ const ICON_MAP = {
   UserCheck, Award, Layers, BookOpen, History, ShieldAlert, Sparkles, TrendingUp,
   Cpu, Gem, Shield, Swords, Users, Search, Activity, UserPlus, FileText, Crosshair,
   Star, HelpCircle, BarChart3, Trophy, Map, Calendar, Globe, Gift, Book, Gauge,
-  Calculator, Sliders, Flame, Compass, Home, Radio, Crown
+  Calculator, Sliders, Flame, Compass, Home, Radio, Crown, MessageSquare
 };
 
 export default function Sidebar({
@@ -93,6 +94,7 @@ export default function Sidebar({
   }, [isOpen, onClose]);
 
   const resolveView = (itemId) => {
+    if (itemId === 'community' || itemId.includes('community') || itemId.includes('board') || itemId.includes('forum')) return 'community';
     if (itemId === 'admin') return 'admin';
     if (itemId === 'quiz') return 'quiz';
     if (itemId === 'arena') return 'arena';

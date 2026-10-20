@@ -1,0 +1,329 @@
+[
+  {
+    "id": "post-pin-1",
+    "title": "📌 [ประกาศ] ยินดีต้อนรับสู่ SWM Community Forum • แลกเปลี่ยนยุทธวิธี & ศูนย์รวมข้อมูลผู้เล่นไทย",
+    "content": "ยินดีต้อนรับชาว Summoners War ทุกท่านสู่เว็บบอร์ดทางการของ Summoners War Master (SWM)!\n\nที่นี่เปิดให้ทุกคนสามารถตั้งกระทู้ พูดคุยแลกเปลี่ยนเทคนิค ปรึกษาแนวทางการจัดทีม RTA, สูตรเจาะหอ 3MDC ใน Siege, ปรึกษาสเตตัสรูน/อาร์ติแฟกต์ รวมถึงการประกาศรับสมัครสมาชิกกิลด์ได้อย่างอิสระ\n\n🔹 กฎกติกาเบื้องต้น:\n1. ใช้ถ้อยคำสุภาพ ไม่ดูหมิ่นหรือใช้คำหยาบคายรุนแรง\n2. โพสต์ให้ตรงกับหมวดหมู่ (RTA, Siege, รูน, รับสมัครกิลด์, ไกด์)\n3. ห้ามโพสต์ซื้อ-ขายไอดีเกม หรือโฆษณาเว็บพนันทุกชนิด\n\nขอให้สนุกกับการเล่นเกมและพัฒนาไอดีไปด้วยกันครับ!",
+    "category": "guides",
+    "isPinned": true,
+    "author": {
+      "name": "ทีมงาน SWM • Admin",
+      "role": "admin",
+      "badge": "🛡️ ผู้ดูแลระบบ",
+      "color": "from-cyan-500 to-blue-600"
+    },
+    "createdAt": "2026-10-20T10:00:00.000Z",
+    "relativeTime": "ปักหมุด",
+    "likes": 48,
+    "views": 1520,
+    "tags": ["#Official", "#Community", "#Rules"],
+    "commentsCount": 3,
+    "comments": [
+      {
+        "id": "c-pin-1",
+        "author": {
+          "name": "CaptainNut",
+          "role": "vip",
+          "badge": "⭐ VIP Member"
+        },
+        "content": "เว็บบอร์ดสวยมากครับ ใช้งานง่ายและดูข้อมูลได้ไวเลย เป็นกำลังใจให้ทีมงานพัฒนาต่อไปครับ!",
+        "createdAt": "2026-10-20T11:20:00.000Z",
+        "relativeTime": "เมื่อวานนี้",
+        "likes": 12
+      },
+      {
+        "id": "c-pin-2",
+        "author": {
+          "name": "SiegePro_TH",
+          "role": "pro_drafter",
+          "badge": "⚡ Pro Drafter"
+        },
+        "content": "ชอบที่มีแท็กมอนสเตอร์ติดในการ์ดกระทู้ด้วย ช่วยให้ค้นหาคอมโบง่ายขึ้นเยอะเลยครับ",
+        "createdAt": "2026-10-20T12:05:00.000Z",
+        "relativeTime": "เมื่อวานนี้",
+        "likes": 8
+      },
+      {
+        "id": "c-pin-3",
+        "author": {
+          "name": "RTA_Rookie",
+          "role": "member",
+          "badge": "🌱 สมาชิกใหม่"
+        },
+        "content": "ฝากเนื้อฝากตัวกับพี่ๆ ทุกคนด้วยครับ กำลังหัดไต่แรงค์ C3-G1 อยู่พอดี",
+        "createdAt": "2026-10-20T14:30:00.000Z",
+        "relativeTime": "เมื่อวานนี้",
+        "likes": 5
+      }
+    ]
+  },
+  {
+    "id": "post-2",
+    "title": "🔥 แนะนำตัวแก้ทาง Oliver ใน RTA Season 39 สำหรับคนที่ไม่มี L&D 5 ดาว",
+    "content": "ในซีซั่น 39 นี้ โอลิเวอร์ (Oliver) ยังคงมี Pick Rate อยู่ในระดับ Top Meta มากกว่า 20% และมี Win Rate ทะลุ 52% หลายคนเจอปัญหาโดนตัดคูลดาวน์และป่วนเทิร์นจนเล่นไม่ออก\n\nจากการทดสอบในระดับ Guardian 1-2 ขอแนะนำตัวแก้ทางสายองค์ประกอบปกติ (Elemental) ที่หยิบมาสวนแล้วได้ผลดีมาก:\n\n1. Giou (กิโอ - ลม): ตัวเคาน์เตอร์ยอดเยี่ยมด้วยสกิลคาร์ม่า เมื่อโอลิเวอร์ใช้สกิลคูลดาวน์จะโดนยิงสวนและลดเกจทันที\n2. Douglas (ดักลาส - ไฟ): สกิลติดตัว Glancing Hit + เคาน์เตอร์แอทแทค ทำให้โอลิเวอร์ตีโดนยากมาก และมีโอกาสโดนสวนแรงจนตายในเทิร์นเดียว\n3. Leo (ลีโอ) + Verdehile (แวมไฟ): คอมโบจำกัดสปีดทำให้โอลิเวอร์ไม่สามารถกดสปีดแซงรัวเทิร์นได้\n4. Fire Monkey (ลิงไฟ): ต้านทานสตัน และสะสมพลังโจมตีทุกครั้งที่โดนตอด\n\nใครมีตัวไหนแนะนำเพิ่มเติมแชร์กันได้ครับ!",
+    "category": "rta",
+    "isPinned": false,
+    "monster": {
+      "monsterId": 21001,
+      "name": "Oliver",
+      "thaiName": "โอลิเวอร์",
+      "element": "wind",
+      "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0045_2_4.png"
+    },
+    "author": {
+      "name": "KuroG3",
+      "role": "guardian",
+      "badge": "🏆 Guardian 3",
+      "color": "from-amber-500 to-red-600"
+    },
+    "createdAt": "2026-10-20T16:15:00.000Z",
+    "relativeTime": "5 ชั่วโมงที่แล้ว",
+    "likes": 34,
+    "views": 840,
+    "tags": ["#RTA_S39", "#Oliver", "#CounterPick", "#DraftTips"],
+    "commentsCount": 4,
+    "comments": [
+      {
+        "id": "c-2-1",
+        "author": {
+          "name": "Poom_SWM",
+          "role": "vip",
+          "badge": "⭐ VIP Member"
+        },
+        "content": "เห็นด้วยเรื่อง Giou ครับ ซีซั่นนี้พกรูน Despair / Revenge สปีด +140 ยืนคู่กับตัวล้างบัฟ หยิบสวนโอลิเวอร์ได้แต้มตลอด",
+        "createdAt": "2026-10-20T17:00:00.000Z",
+        "relativeTime": "4 ชั่วโมงที่แล้ว",
+        "likes": 9
+      },
+      {
+        "id": "c-2-2",
+        "author": {
+          "name": "LeoEnjoyer",
+          "role": "member",
+          "badge": "⚔️ RTA Fighter"
+        },
+        "content": "ถ้าเล่นสาย Leo แนะนำให้ดราฟต์ Ragdoll หรือ Feng Yan ประกบไปด้วยเลยครับ จะบีบให้ฝั่งตรงข้ามต้องแบนลีโอทันที",
+        "createdAt": "2026-10-20T17:45:00.000Z",
+        "relativeTime": "3 ชั่วโมงที่แล้ว",
+        "likes": 6
+      },
+      {
+        "id": "c-2-3",
+        "author": {
+          "name": "ArtamielFan",
+          "role": "member",
+          "badge": "🛡️ Tank & Turn2"
+        },
+        "content": "แล้วถ้าฝั่งนู้นหยิบ Oliver คู่กับ Moore หล่ะครับ แก้ยังไงดี?",
+        "createdAt": "2026-10-20T18:10:00.000Z",
+        "relativeTime": "2 ชั่วโมงที่แล้ว",
+        "likes": 4
+      },
+      {
+        "id": "c-2-4",
+        "author": {
+          "name": "KuroG3",
+          "role": "guardian",
+          "badge": "🏆 Guardian 3"
+        },
+        "content": "@ArtamielFan ถ้าเจอ Oliver + Moore คู่กัน แนะนำดราฟต์ Josephine (พาลาดินน้ำ) + Douglas หรือ Haegang (ลุงน้ำ) จะแก้เกจออโต้เมื่อโดนสตริปครับ",
+        "createdAt": "2026-10-20T18:30:00.000Z",
+        "relativeTime": "1 ชั่วโมงที่แล้ว",
+        "likes": 11
+      }
+    ]
+  },
+  {
+    "id": "post-3",
+    "title": "💎 รูนช่อง 4 Swift สปีดซับ +24 มีใครใส่ตัวไหนคุ้มสุดในเมต้าปัจจุบันบ้างครับ?",
+    "content": "เพิ่งฟาร์ม Giants Abyss Hard ได้รูน Swift 6★ ช่อง 4 เป็น HP% แล้วอัปตีบวก 4 ครั้งลง Speed ล้วน รวมเป็น +24 (ยังไม่ได้กริ้นท์ ถ้ากริ้นท์ Hero +4 จะได้ถึง +28)\n\nในคลังมีตัวสปีดที่ยังไม่ได้บิลด์แน่นๆ อยู่ 3 ตัว:\n1. Moore (สไตรเกอร์น้ำ) - รูนปัจจุบัน Swift/Despair\n2. Eshir (มนุษย์หมาป่าแสง 2A) - เอาไว้ใช้เปิดเทิร์นคู่ Galleon ใน Siege\n3. Sagar (จอมเวทพืชลม) - รูนปัจจุบัน Vio/Will\n\nอยากขอคำแนะนำจากเพื่อนๆ ว่าใส่ตัวไหนจะมีอิมแพ็คกับไอดีมากที่สุดครับ?",
+    "category": "runes",
+    "isPinned": false,
+    "monster": {
+      "monsterId": 23412,
+      "name": "Moore",
+      "thaiName": "มัวร์ (สไตรเกอร์น้ำ)",
+      "element": "water",
+      "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0055_0_3.png"
+    },
+    "author": {
+      "name": "RuneMaster99",
+      "role": "vip",
+      "badge": "⭐ VIP Member",
+      "color": "from-purple-500 to-indigo-600"
+    },
+    "createdAt": "2026-10-20T18:00:00.000Z",
+    "relativeTime": "3 ชั่วโมงที่แล้ว",
+    "likes": 21,
+    "views": 490,
+    "tags": ["#Runes", "#Swift", "#SpeedTuning", "#AbyssDrops"],
+    "commentsCount": 3,
+    "comments": [
+      {
+        "id": "c-3-1",
+        "author": {
+          "name": "SpeedTuner_TH",
+          "role": "guardian",
+          "badge": "🏆 Guardian 2"
+        },
+        "content": "ช่อง 4 HP% ลงสปีด 24 นี่ของแรร์เลยครับ! ถ้าเล่น RTA เป็นหลัก แนะนำใส่ Moore โหดสุดครับ สปีดรวมทะลุ +190-200 แล้วออกเทิร์นแรกสตริปทีม สบายเลย",
+        "createdAt": "2026-10-20T18:35:00.000Z",
+        "relativeTime": "2 ชั่วโมงที่แล้ว",
+        "likes": 7
+      },
+      {
+        "id": "c-3-2",
+        "author": {
+          "name": "SiegeKing",
+          "role": "pro_drafter",
+          "badge": "⚡ Pro Drafter"
+        },
+        "content": "ถ้าเน้น Siege แนะนำ Eshir จะได้ Base Speed 115 กดดันหอ 4 ดาวได้ชัวร์ แต่ถ้าเล่นรอบด้าน Moore คุ้มค่าที่สุดแน่นอนครับ",
+        "createdAt": "2026-10-20T19:00:00.000Z",
+        "relativeTime": "1 ชั่วโมงที่แล้ว",
+        "likes": 5
+      },
+      {
+        "id": "c-3-3",
+        "author": {
+          "name": "RuneMaster99",
+          "role": "vip",
+          "badge": "⭐ VIP Member"
+        },
+        "content": "ขอบคุณทุกความเห็นครับ เดี๋ยวจัดให้ Moore ใส่กริ้นท์สปีด +4 ไปเลย!",
+        "createdAt": "2026-10-20T19:25:00.000Z",
+        "relativeTime": "45 นาทีที่แล้ว",
+        "likes": 3
+      }
+    ]
+  },
+  {
+    "id": "post-4",
+    "title": "🏰 [กิลด์รับสมัคร] กิลด์ SirenSong (G1 Siege / World Guild) เปิดรับ 2 ตำแหน่ง คนเล่นทุกรอบวอร์",
+    "content": "กิลด์ SirenSong (Server: Global) เปิดรับเพื่อนร่วมกิลด์สายขยัน 2 ที่นั่งครับ!\n\n👑 จุดเด่นและผลงานกิลด์:\n• Siege Battle จบ G1 สม่ำเสมอ ไม่กดดันจนเกินไป\n• มีคลังสูตรเจาะหอ 3MDC อัปเดตในกลุ่ม Discord กิลด์ตลอด\n• สมาชิกในกิลด์ใจดี มีห้องซ้อมเทสต์ทีม และช่วยดูรูนมอนสเตอร์ให้\n\n📌 คุณสมบัติที่ต้องการ:\n• มีทีมบุก Siege พร้อมลงตีอย่างน้อย 8-10 ทีม\n• ตีครบ 30 กล่องใน Siege และช่วยตี World Guild Battle สม่ำเสมอ\n• สื่อสารกันได้ผ่าน Discord หรือ LINE กิลด์\n\nสนใจคอมเมนต์ในกระทู้นี้ หรือแอด Discord: SirenSong_Admin ได้เลยครับ ยินดีต้อนรับทุกคนครับ!",
+    "category": "guild",
+    "isPinned": false,
+    "author": {
+      "name": "GuildLeader_Ohm",
+      "role": "guild_master",
+      "badge": "👑 Guild Master",
+      "color": "from-emerald-500 to-teal-600"
+    },
+    "createdAt": "2026-10-20T14:00:00.000Z",
+    "relativeTime": "7 ชั่วโมงที่แล้ว",
+    "likes": 18,
+    "views": 620,
+    "tags": ["#GuildRecruiting", "#GlobalServer", "#G1Siege", "#SirenSong"],
+    "commentsCount": 2,
+    "comments": [
+      {
+        "id": "c-4-1",
+        "author": {
+          "name": "NongNew_SW",
+          "role": "member",
+          "badge": "🌱 สมาชิกใหม่"
+        },
+        "content": "ไอดีเพิ่งกลับมาเล่น ทีมบุกพร้อม 10 ทีม แรงค์ Arena ปัจจุบัน C2 รับไหมครับ แอดดิสไปแล้วครับ",
+        "createdAt": "2026-10-20T15:20:00.000Z",
+        "relativeTime": "5 ชั่วโมงที่แล้ว",
+        "likes": 2
+      },
+      {
+        "id": "c-4-2",
+        "author": {
+          "name": "GuildLeader_Ohm",
+          "role": "guild_master",
+          "badge": "👑 Guild Master"
+        },
+        "content": "@NongNew_SW รับครับผม ทักดิสคอร์ดมาได้เลย ยินดีต้อนรับครับ!",
+        "createdAt": "2026-10-20T15:40:00.000Z",
+        "relativeTime": "5 ชั่วโมงที่แล้ว",
+        "likes": 3
+      }
+    ]
+  },
+  {
+    "id": "post-5",
+    "title": "⚔️ แชร์สูตรบุก 3MDC รับมือหอ Clara + Savannah + Kaki ชนะชัวร์ 100% ไม่พึ่งดวง",
+    "content": "หอยอดฮิต Clara + Savannah + Kaki ในการแข่งขัน Siege Battle หลายคนมักจะโดน Clara สตริปสตันแล้วโดน Kaki สับกวาดหายยกตี้\n\nขอนำเสนอสูตรที่เซฟและมี Win Rate 100% ใน G1-G2:\n\nสูตร 1: Veromos (L) + Leo + Feng Yan\n• รูน: Veromos (Vio/Nem), Leo (Vio/Blade), Feng Yan (Vio/Will DEF แน่นๆ)\n• กลยุทธ์: Leo จะล็อกสปีดทำให้ Clara ไม่สามารถปล่อยสปีดหนีไปได้ Veromos จะล้างบัฟลดเกจ/ดีบัฟทุกเทิร์น และ Feng Yan จะเป็นตัวเคาน์เตอร์และเก็บ Kaki ทีละตัว\n\nสูตร 2: Galleon (L) + Tiana + Kaki (สายบุกเร็ว)\n• ถ้ามั่นใจสปีด Tiana แซงได้ หรือใส่ Will ล้วนทนเทิร์นแรก แล้วกด Tiana ล้างบัฟ -> Galleon บัฟโจมตี/เกราะแตก -> Kaki สกิล 2 กวาดปิดเกมใน 10 วินาที\n\nลองนำไปปรับใช้ในศึก Siege รอบนี้กันดูนะครับ!",
+    "category": "siege",
+    "isPinned": false,
+    "monster": {
+      "monsterId": 16901,
+      "name": "Clara",
+      "thaiName": "คลาร่า (เพียเร็ตไฟ)",
+      "element": "fire",
+      "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0018_0_1.png"
+    },
+    "author": {
+      "name": "SiegeTactician",
+      "role": "pro_drafter",
+      "badge": "⚡ Pro Drafter",
+      "color": "from-rose-500 to-orange-600"
+    },
+    "createdAt": "2026-10-20T12:30:00.000Z",
+    "relativeTime": "8 ชั่วโมงที่แล้ว",
+    "likes": 29,
+    "views": 750,
+    "tags": ["#3MDC", "#SiegeStrategy", "#ClaraCounter", "#SafeOffense"],
+    "commentsCount": 2,
+    "comments": [
+      {
+        "id": "c-5-1",
+        "author": {
+          "name": "VeroKing",
+          "role": "vip",
+          "badge": "⭐ VIP Member"
+        },
+        "content": "สูตร Vero + Leo + Feng Yan เซฟจริงครับ ยืนยัน ใช้ตีผ่านตลอด ไม่ต้องลุ้นเลย",
+        "createdAt": "2026-10-20T13:10:00.000Z",
+        "relativeTime": "7 ชั่วโมงที่แล้ว",
+        "likes": 4
+      },
+      {
+        "id": "c-5-2",
+        "author": {
+          "name": "SiegeTactician",
+          "role": "pro_drafter",
+          "badge": "⚡ Pro Drafter"
+        },
+        "content": "สำคัญคืออย่าลืมใส่ Will ให้ Feng Yan เพื่อป้องกัน Savannah โบกดีบัฟในเทิร์นแรกด้วยนะครับ",
+        "createdAt": "2026-10-20T13:40:00.000Z",
+        "relativeTime": "7 ชั่วโมงที่แล้ว",
+        "likes": 6
+      }
+    ]
+  },
+  {
+    "id": "post-6",
+    "title": "📖 เทคนิคการฟาร์ม Necro Abyss Hard 28-32 วินาที สม่ำเสมอ ไม่หลุดเฟล",
+    "content": "สำหรับใครที่กำลังทำทีมฟาร์ม Rage / Vampire ใน Necro Abyss Hard ให้ได้เวลาต่ำกว่า 30 วินาทีแบบ 100% Win Rate:\n\nจัดเรียงลำดับเทิร์น (Turn Order):\n1. Astar (ไฟ) - ออกเทิร์นแรกเพื่อเคลียร์เวฟและเปิดเกราะบอส\n2. Shaina (บูมเมอแรงไฟ) - ตีลดเกราะและลดแถบแอคชั่น\n3. Sabrina (จักระน้ำ) - ตีคู่ดาเมจเสริม\n4. Abigail (แคนนอนเกิร์ลน้ำ) - ล้างชิลด์และบัฟสปีด\n5. Teshar (ไก่ลม) หรือ Liam - ปิดฉากเวฟและบอส\n\nเกณฑ์สเตตัสแนะนำ:\n• ทุกตัวควรมีค่าแม่นยำ (ACC) อย่างน้อย 35% สำหรับดีบัฟเกราะแตก\n• ตัวดาเมจหลักควรมี Atk +1,500 และ C.Dmg 160% ขึ้นไป\n• หากบอสยังออกสกิลทัน แนะนำให้อัปสปีดเพิ่มหรือใส่อาร์ติแฟกต์ Damage Reduction vs Dark เพิ่มเติมครับ",
+    "category": "guides",
+    "isPinned": false,
+    "author": {
+      "name": "DungeonGrinder",
+      "role": "vip",
+      "badge": "⭐ VIP Member",
+      "color": "from-blue-500 to-cyan-600"
+    },
+    "createdAt": "2026-10-20T09:15:00.000Z",
+    "relativeTime": "12 ชั่วโมงที่แล้ว",
+    "likes": 26,
+    "views": 610,
+    "tags": ["#AbyssHard", "#NecroDungeon", "#SpeedFarm", "#RageRunes"],
+    "commentsCount": 1,
+    "comments": [
+      {
+        "id": "c-6-1",
+        "author": {
+          "name": "FarmerBoy",
+          "role": "member",
+          "badge": "⚔️ RTA Fighter"
+        },
+        "content": "ขอบคุณสำหรับไกด์ครับ ปรับตามแล้วเวลาลดลงเหลือ 31 วินาที ฟาร์มสบายขึ้นเยอะเลยครับ!",
+        "createdAt": "2026-10-20T10:00:00.000Z",
+        "relativeTime": "11 ชั่วโมงที่แล้ว",
+        "likes": 3
+      }
+    ]
+  }
+]

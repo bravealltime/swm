@@ -24,6 +24,7 @@ import {
   Radio,
   Smartphone,
   Crown,
+  MessageSquare,
 } from 'lucide-react';
 import SwmLogo from './SwmLogo';
 import { buildUrl } from '../router';
@@ -51,6 +52,7 @@ const PVP_NAV_ITEMS = [
 
 // Tools grouped dropdown
 const TOOL_NAV_ITEMS = [
+  { id: 'community', label: '💬 เว็บบอร์ด & ชุมชนผู้เล่น', desc: 'พูดคุย แลกเปลี่ยนกลยุทธ์ RTA, Siege และรูน', icon: MessageSquare, free: true },
   { id: 'speed', label: 'จูนสปีดเทิร์น (Speed Tuner)', desc: 'Tick & Speed Tuning ป้องกันแซง', icon: Gauge },
   { id: 'artifact', label: 'ดาเมจเสริมอาร์ติแฟกต์', desc: 'True Damage Optimizer', icon: Sparkles },
   { id: 'live-farm-monitor', label: '📡 จอตรวจจับการฟาร์มสด', desc: 'เช็คดรอปรูน Abyss สด พร้อม Keep/Sell', icon: Radio },

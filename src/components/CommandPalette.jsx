@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { Search, X, Gift, Shield, Gauge, BookOpen, ArrowRight, Trophy, SearchX, User, Radio, Sparkles } from 'lucide-react';
+import { Search, X, Gift, Shield, Gauge, BookOpen, ArrowRight, Trophy, SearchX, User, Radio, Sparkles, MessageSquare } from 'lucide-react';
 import { MONSTERS } from '../data/monsters';
 import { PROMO_CODES } from '../data/promoCodes';
 import playersIndex from '../data/swrtPlayersIndex.json';
@@ -15,6 +15,7 @@ const PLAYERS = [
 ];
 
 const QUICK_TOOLS = [
+  { id: 'community', name: '💬 เว็บบอร์ด & ชุมชนผู้เล่น (Community Forum)', desc: 'พูดคุย แลกเปลี่ยนกลยุทธ์ RTA, Siege, รูน และกิลด์รับสมัคร', icon: MessageSquare, view: 'community' },
   { id: 'live-farm', name: 'ระบบตรวจจับการฟาร์มสด (Live Farming Monitor)', desc: 'ตรวจจับผลดรอปรูนดันเจี้ยน Abyss วินาทีต่อวินาที พร้อม Keep/Sell Advisor', icon: Radio, view: 'live-farm-monitor' },
   { id: 'account-audit', name: '🤖 AI วินิจฉัยสุขภาพไอดี (AI Account Audit)', desc: 'วัดเกณฑ์ Swift (+220+), Violent, เช็ค 30 เมต้า Guardian และแนะนำดันเจี้ยน', icon: Sparkles, view: 'ai-account-audit' },
   { id: 'where2use', name: 'ใช้มอนสเตอร์ตัวนี้ที่ไหนดี? (Where to Use)', desc: 'ตรวจสอบการใช้งานในทีมรับ, ทีมบุก, ดันเจี้ยน และ RTA', icon: Shield, view: 'where2use' },
