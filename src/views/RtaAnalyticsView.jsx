@@ -558,18 +558,11 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3.5">
             {displayedTierMonsters.map((monster) => {
-              const highdata = highdataMap[monster.monsterId];
-              const isExpanded = expandedMonster === monster.monsterId;
-
               return (
                 <div
                   key={`${selectedRank}-${monster.monsterId}`}
-                  onClick={() => setExpandedMonster(isExpanded ? null : monster.monsterId)}
-                  className={`bg-[#101724] border rounded-2xl p-4 transition-all cursor-pointer shadow-md flex flex-col justify-between group ${
-                    isExpanded 
-                      ? 'border-cyan-500 ring-2 ring-cyan-500/20 bg-[#121c2c]' 
-                      : 'border-[#1d2b3f] hover:border-blue-500/60 hover:-translate-y-0.5'
-                  }`}
+                  onClick={() => setSelectedDetailMonster(monster)}
+                  className="bg-[#101724] border border-[#1d2b3f] hover:border-cyan-500/60 hover:bg-[#121c2c] rounded-2xl p-4 transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-cyan-500/10 cursor-pointer flex flex-col justify-between group"
                 >
                   <div>
                     {/* Top Row: Avatar, Name, AI Score */}
@@ -606,7 +599,7 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
                         <div className="flex flex-col items-end">
                           <span className="text-[10px] text-slate-400 font-mono">AI RATING</span>
                           <span className="text-xs font-mono font-black text-amber-400 bg-amber-950/60 px-2 py-0.5 rounded border border-amber-800/40">
-                            ★ {monster.aiScore.toFixed(1)}
+                            ★ {Number(monster.aiScore).toFixed(1)}
                           </span>
                         </div>
                       )}
@@ -638,54 +631,12 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
                     </div>
                   </div>
 
-                  {/* Expanded Highdata (Hard Counters & Synergies) */}
-                  {isExpanded && highdata && (
-                    <div className="mt-3 pt-3 border-t border-[#1d2b3f] space-y-3 text-xs animate-in fade-in duration-150">
-                      {/* Synergies */}
-                      <div>
-                        <div className="text-xs font-bold text-emerald-400 flex items-center gap-1 mb-1.5">
-                          <Users className="w-3.5 h-3.5" />
-                          <span>คู่หูที่ดีที่สุด (Best Synergies):</span>
-                        </div>
-                        <div className="space-y-1">
-                          {(highdata.synergies || []).map((syn, sIdx) => (
-                            <div key={sIdx} className="flex items-center justify-between p-1.5 rounded-lg bg-[#090e17] border border-[#162132]">
-                              <div className="flex items-center gap-2">
-                                <img src={syn.avatarUrl} alt={syn.name} className="w-6 h-6 rounded border border-emerald-500/40" />
-                                <span className="text-xs text-slate-200 font-semibold">{syn.thaiName || syn.name}</span>
-                              </div>
-                              <span className="text-xs font-mono font-bold text-emerald-400">{syn.winRate}% WR</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Hard Counters */}
-                      <div>
-                        <div className="text-xs font-bold text-rose-400 flex items-center gap-1 mb-1.5">
-                          <XCircle className="w-3.5 h-3.5" />
-                          <span>ตัวแก้ทางที่แพ้บ่อยสุด (Hard Counters):</span>
-                        </div>
-                        <div className="space-y-1">
-                          {(highdata.counters || []).map((cnt, cIdx) => (
-                            <div key={cIdx} className="flex items-center justify-between p-1.5 rounded-lg bg-[#090e17] border border-[#162132]">
-                              <div className="flex items-center gap-2">
-                                <img src={cnt.avatarUrl} alt={cnt.name} className="w-6 h-6 rounded border border-rose-500/40" />
-                                <span className="text-xs text-slate-200 font-semibold">{cnt.thaiName || cnt.name}</span>
-                              </div>
-                              <span className="text-xs font-mono font-bold text-rose-400">{cnt.winRate}% WR</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
                   {/* Footer hint */}
-                  <div className="mt-2 text-right">
-                    <span className="text-[11px] text-slate-400 group-hover:text-cyan-400 transition-colors">
-                      {isExpanded ? '▲ ย่อข้อมูล' : '▼ ดูตัวแก้ทาง & คู่หู'}
+                  <div className="mt-3 pt-2.5 border-t border-[#182333] flex items-center justify-between text-xs text-slate-400 group-hover:text-cyan-300 transition-colors">
+                    <span className="text-[11px] flex items-center gap-1 font-semibold">
+                      <Sparkles className="w-3 h-3 text-cyan-400" /> สถิติเชิงลึก & คู่หู
                     </span>
+                    <span className="text-[11px] font-bold">ดูข้อมูล ➔</span>
                   </div>
                 </div>
               );
