@@ -195,8 +195,9 @@ function RtaTierMatrixScatterPlot({ metaList, onSelectMonster }) {
   );
 }
 
-export default function RtaAnalyticsView({ onNavigate, subItem }) {
+export default function RtaAnalyticsView({ onNavigate, subItem, initialTab, targetCoreMonsterId }) {
   const getInitialTab = () => {
+    if (subItem === 'rta-core' || subItem === 'core-finder' || subItem === 'rta-core-finder' || initialTab === 'core') return 'core';
     if (subItem === 'rta-meta') return 'stats';
     if (subItem === 'rta-replays') return 'replays';
     if (subItem === 'rta-cutoffs') return 'cutoffs';
@@ -211,10 +212,12 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortField, setSortField] = useState('pickRate'); // 'pickRate' | 'winRate' | 'banRate' | 'firstPickRate'
   const [selectedDetailMonster, setSelectedDetailMonster] = useState(null);
+  const [coreMonsterId, setCoreMonsterId] = useState(targetCoreMonsterId || null);
   const [replaySearch, setReplaySearch] = useState('');
 
   React.useEffect(() => {
-    if (subItem === 'rta-meta') setActiveTab('stats');
+    if (subItem === 'rta-core' || subItem === 'core-finder' || subItem === 'rta-core-finder') setActiveTab('core');
+    else if (subItem === 'rta-meta') setActiveTab('stats');
     else if (subItem === 'rta-replays') setActiveTab('replays');
     else if (subItem === 'rta-cutoffs') setActiveTab('cutoffs');
     else if (subItem === 'rta-tierlist') setActiveTab('tierlist');
@@ -366,6 +369,18 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
         </button>
 
         <button
+          onClick={() => setActiveTab('core')}
+          className={`px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-1.5 sm:gap-2 transition-all cursor-pointer whitespace-nowrap shrink-0 ${
+            activeTab === 'core'
+              ? 'bg-cyan-600 text-white shadow-lg shadow-cyan-600/25'
+              : 'text-slate-300 hover:text-white hover:bg-white/[0.04]'
+          }`}
+        >
+          <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-cyan-400 shrink-0" />
+          <span><span className="hidden sm:inline">🧩 Core Finder Pro (วิเคราะห์คอมโบทีม)</span><span className="sm:hidden">🧩 Core Finder Pro</span></span>
+        </button>
+
+        <button
           onClick={() => setActiveTab('stats')}
           className={`px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-1.5 sm:gap-2 transition-all cursor-pointer whitespace-nowrap shrink-0 ${
             activeTab === 'stats'
@@ -401,6 +416,16 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
           <span><span className="hidden sm:inline">🎯 คะแนนตัดแรงค์ RTA (Rank Cutoffs)</span><span className="sm:hidden">🎯 คะแนนตัดแรงค์</span></span>
         </button>
       </div>
+
+      {/* ======================================================== */}
+      {/* TAB: CORE FINDER PRO */}
+      {/* ======================================================== */}
+      {activeTab === 'core' && (
+        <RtaCoreFinder 
+          onNavigate={onNavigate}
+          initialMonsterId={coreMonsterId}
+        />
+      )}
 
       {/* ======================================================== */}
       {/* TAB 1: TIER LIST */}
@@ -551,8 +576,7 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
             <RtaTierMatrixScatterPlot 
               metaList={displayedMeta} 
               onSelectMonster={(m) => {
-                setSearchQuery(m.name);
-                setTierViewMode('grid');
+                setSelectedDetailMonster(m);
               }}
             />
           ) : (
@@ -636,7 +660,17 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
                     <span className="text-[11px] flex items-center gap-1 font-semibold">
                       <Sparkles className="w-3 h-3 text-cyan-400" /> สถิติเชิงลึก & คู่หู
                     </span>
-                    <span className="text-[11px] font-bold">ดูข้อมูล ➔</span>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedDetailMonster(monster);
+                      }}
+                      className="text-[11px] font-bold text-cyan-400 hover:text-cyan-200 bg-cyan-950/60 hover:bg-cyan-900/70 px-2.5 py-1 rounded-lg border border-cyan-500/30 hover:border-cyan-400 transition-all cursor-pointer flex items-center gap-1"
+                    >
+                      <span>ดูข้อมูล</span>
+                      <span>➔</span>
+                    </button>
                   </div>
                 </div>
               );
@@ -836,7 +870,12 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
                       {/* 5 Monsters Drafted */}
                       <div className="flex items-center gap-2">
                         {(p1?.monsters || []).map((m, mIdx) => (
-                          <div key={mIdx} className="relative group">
+                          <div 
+                            key={mIdx} 
+                            onClick={() => setSelectedDetailMonster(m)}
+                            className="relative group cursor-pointer hover:scale-110 transition-transform"
+                            title={`คลิกเพื่อดูสถิติ ${m.thaiName || m.name}`}
+                          >
                             <img 
                               src={m.avatarUrl} 
                               alt={m.name} 
@@ -893,7 +932,12 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
                       {/* 5 Monsters Drafted */}
                       <div className="flex items-center gap-2">
                         {(p2?.monsters || []).map((m, mIdx) => (
-                          <div key={mIdx} className="relative group">
+                          <div 
+                            key={mIdx} 
+                            onClick={() => setSelectedDetailMonster(m)}
+                            className="relative group cursor-pointer hover:scale-110 transition-transform"
+                            title={`คลิกเพื่อดูสถิติ ${m.thaiName || m.name}`}
+                          >
                             <img 
                               src={m.avatarUrl} 
                               alt={m.name} 
@@ -1004,6 +1048,19 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
             </div>
           )}
         </div>
+      )}
+      {/* Esports Monster Detail Intelligence Modal (Lucksack Deep Analytics) */}
+      {selectedDetailMonster && (
+        <RtaMonsterDetailModal
+          monster={selectedDetailMonster}
+          onClose={() => setSelectedDetailMonster(null)}
+          onNavigate={onNavigate}
+          onSelectForCore={(mId) => {
+            setCoreMonsterId(mId);
+            setActiveTab('core');
+            setSelectedDetailMonster(null);
+          }}
+        />
       )}
     </div>
   );

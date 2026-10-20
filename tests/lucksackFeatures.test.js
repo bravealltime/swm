@@ -1,5 +1,9 @@
 import { describe, it, expect } from 'vitest';
+import React from 'react';
+import { renderToString } from 'react-dom/server';
 import guardianMeta from '../src/data/swrtGuardianMeta.json';
+import RtaMonsterDetailModal from '../src/components/RtaMonsterDetailModal';
+import RtaCoreFinder from '../src/components/RtaCoreFinder';
 
 describe('Lucksack-inspired Features & Guardian Meta Dataset', () => {
   it('guardianMeta contains valid duos and trios for Core Finder', () => {
@@ -40,5 +44,43 @@ describe('Lucksack-inspired Features & Guardian Meta Dataset', () => {
     expect(matchingDuo).toBeDefined();
     const duoWinRate = (matchingDuo.w / matchingDuo.n) * 100;
     expect(duoWinRate).toBeGreaterThan(0);
+  });
+
+  it('renders RtaMonsterDetailModal without crashing', () => {
+    const testMonster = {
+      monsterId: 21001,
+      name: 'Oliver',
+      thaiName: 'โอลิเวอร์',
+      element: 'wind',
+      aiScore: 9.8,
+      pickRate: 25.4,
+      winRate: 52.8,
+      banRate: 18.5,
+      firstPickRate: 14.2
+    };
+
+    const html = renderToString(
+      React.createElement(RtaMonsterDetailModal, {
+        monster: testMonster,
+        onClose: () => {},
+        onNavigate: () => {},
+        onSelectForCore: () => {}
+      })
+    );
+    expect(html).toContain('Oliver');
+    expect(html).toContain('คู่หูที่ดีที่สุด');
+    expect(html).toContain('ตัวแก้ทางที่แพ้บ่อยสุด');
+    expect(html).toContain('เปิดใน Core Finder');
+  });
+
+  it('renders RtaCoreFinder without crashing', () => {
+    const html = renderToString(
+      React.createElement(RtaCoreFinder, {
+        onNavigate: () => {},
+        initialMonsterId: 21001
+      })
+    );
+    expect(html).toContain('Core Finder Pro');
+    expect(html).toContain('มอนสเตอร์ Core ตัวที่ 1');
   });
 });

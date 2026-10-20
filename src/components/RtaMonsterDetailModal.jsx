@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   X, 
   Trophy, 
@@ -13,12 +13,14 @@ import {
   XCircle,
   CheckCircle2, 
   ArrowRight, 
+  ArrowLeft,
   Flame,
   Award
 } from 'lucide-react';
 import MonsterAvatar from './MonsterAvatar';
 import allMonstersData from '../data/allMonsters.json';
 import guardianMeta from '../data/swrtGuardianMeta.json';
+import metaData from '../data/swrtMetaMonsters.json';
 import highdataMap from '../data/swrtMonsterHighdata.json';
 import { buildMonsterIndex } from '../data/swrtPlayerAdapter';
 
@@ -34,24 +36,62 @@ const monsterOf = (id) => MONSTER_INDEX.get(Number(id)) || {
 };
 
 export default function RtaMonsterDetailModal({ monster, onClose, onNavigate, onSelectForCore }) {
-  if (!monster) return null;
+  const [currentMonster, setCurrentMonster] = useState(monster);
+  const [history, setHistory] = useState([]);
 
-  const mId = monster.monsterId || monster.id;
-  const highdata = highdataMap[mId] || null;
+  useEffect(() => {
+    setCurrentMonster(monster);
+    setHistory([]);
+  }, [monster]);
+
+  // Handle escape key
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && onClose) {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
+
+  if (!currentMonster) return null;
+
+  const rawId = currentMonster.monsterId || currentMonster.com2usId || (typeof currentMonster.id === 'string' && currentMonster.id.startsWith('m-') ? currentMonster.id.slice(2) : currentMonster.id);
+  const mId = Number(rawId);
+  const highdata = highdataMap[mId] || highdataMap[String(mId)] || null;
   const realInfo = monsterOf(mId);
+
+  // Meta stats fallback
+  const metaEntry = (metaData || []).find(m => m.monsterId === mId) || {};
+
+  const effectiveMonster = {
+    ...realInfo,
+    ...metaEntry,
+    ...currentMonster,
+    monsterId: mId,
+    name: currentMonster.name || metaEntry.name || realInfo.name,
+    thaiName: currentMonster.thaiName || metaEntry.thaiName || realInfo.thaiName,
+    element: currentMonster.element || metaEntry.element || realInfo.element,
+    pickRate: currentMonster.pickRate !== undefined ? currentMonster.pickRate : (metaEntry.pickRate || 0),
+    winRate: currentMonster.winRate !== undefined ? currentMonster.winRate : (metaEntry.winRate || 50),
+    banRate: currentMonster.banRate !== undefined ? currentMonster.banRate : (metaEntry.banRate || 0),
+    firstPickRate: currentMonster.firstPickRate !== undefined ? currentMonster.firstPickRate : (metaEntry.firstPickRate || 0),
+    aiScore: currentMonster.aiScore !== undefined ? currentMonster.aiScore : (metaEntry.aiScore || 0),
+  };
 
   // Tactical FP / SP calculation from guardianMeta
   const guardianEntry = (guardianMeta.monsters || []).find(m => m.id === mId);
   const fpPicks = guardianEntry?.fpPicks || 0;
   const fpWins = guardianEntry?.fpWins || 0;
-  const picks = guardianEntry?.picks || monster.pickTotal || 1;
+  const picks = guardianEntry?.picks || effectiveMonster.pickTotal || 1;
   const wins = guardianEntry?.wins || 0;
   const spPicks = Math.max(0, picks - fpPicks);
   const spWins = Math.max(0, wins - fpWins);
 
-  const fpWinRate = fpPicks > 0 ? +((fpWins / fpPicks) * 100).toFixed(1) : +(monster.winRate || 50).toFixed(1);
-  const spWinRate = spPicks > 0 ? +((spWins / spPicks) * 100).toFixed(1) : +(monster.winRate || 50).toFixed(1);
-  const fpRate = +(monster.firstPickRate || (fpPicks / picks * 100) || 0).toFixed(1);
+  const fpWinRate = fpPicks > 0 ? +((fpWins / fpPicks) * 100).toFixed(1) : +(effectiveMonster.winRate || 50);
+  const spWinRate = spPicks > 0 ? +((spWins / spPicks) * 100).toFixed(1) : +(effectiveMonster.winRate || 50);
+  const fpRate = +(effectiveMonster.firstPickRate || (fpPicks / picks * 100) || 0).toFixed(1);
 
   let strategy = 'flexible';
   if (fpWinRate >= 50.5 && fpRate >= 8 && fpWinRate >= spWinRate + 1.2) {
@@ -63,6 +103,18 @@ export default function RtaMonsterDetailModal({ monster, onClose, onNavigate, on
   // Recommended runes from monster catalog
   const runeSuggestion = realInfo.suggestedRunes || 'Violent / Will (SPD / HP% / HP%)';
   const roleText = realInfo.role || 'ตัวควบคุมและป่วนเทิร์นใน RTA (CC / Utility)';
+
+  const navigateToMonster = (nextMon) => {
+    setHistory(prev => [...prev, currentMonster]);
+    setCurrentMonster(nextMon);
+  };
+
+  const goBack = () => {
+    if (history.length === 0) return;
+    const prev = history[history.length - 1];
+    setHistory(history.slice(0, -1));
+    setCurrentMonster(prev);
+  };
 
   return (
     <div 
@@ -80,9 +132,20 @@ export default function RtaMonsterDetailModal({ monster, onClose, onNavigate, on
         {/* Top Header Bar */}
         <div className="relative z-10 p-5 sm:p-7 border-b border-white/10 bg-white/[0.02] flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-center gap-4">
+            {history.length > 0 && (
+              <button
+                onClick={goBack}
+                className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white transition-all cursor-pointer flex items-center gap-1 text-xs"
+                title="ย้อนกลับ"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                <span className="hidden sm:inline">ย้อนกลับ</span>
+              </button>
+            )}
+
             <div className="relative shrink-0">
               <div className="p-1 rounded-2xl bg-[#090e18] border-2 border-cyan-400 shadow-xl shadow-cyan-500/20">
-                <MonsterAvatar monster={monster} size="lg" />
+                <MonsterAvatar monster={effectiveMonster} size="lg" />
               </div>
               <div className="absolute -bottom-2 -right-1 px-2 py-0.5 rounded-md text-[10px] font-mono font-black bg-black border border-white/20 text-white shadow">
                 ★ {realInfo.stars || 5}
@@ -92,30 +155,30 @@ export default function RtaMonsterDetailModal({ monster, onClose, onNavigate, on
             <div className="space-y-1">
               <div className="flex items-center gap-2 flex-wrap">
                 <span className={`px-2 py-0.5 rounded text-[11px] font-black uppercase tracking-wider ${
-                  monster.element === 'fire' ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30' :
-                  monster.element === 'water' ? 'bg-sky-500/20 text-sky-400 border border-sky-500/30' :
-                  monster.element === 'wind' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' :
-                  monster.element === 'light' ? 'bg-yellow-400/20 text-yellow-300 border border-yellow-400/30' :
+                  effectiveMonster.element === 'fire' ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30' :
+                  effectiveMonster.element === 'water' ? 'bg-sky-500/20 text-sky-400 border border-sky-500/30' :
+                  effectiveMonster.element === 'wind' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' :
+                  effectiveMonster.element === 'light' ? 'bg-yellow-400/20 text-yellow-300 border border-yellow-400/30' :
                   'bg-purple-500/20 text-purple-400 border border-purple-500/30'
                 }`}>
-                  {monster.element}
+                  {effectiveMonster.element}
                 </span>
 
                 <span className="px-2 py-0.5 rounded text-[11px] font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30">
-                  {monster.tier ? `${monster.tier} Tier` : 'S Tier'}
+                  {effectiveMonster.tier ? `${effectiveMonster.tier} Tier` : 'S Tier'}
                 </span>
 
-                {monster.aiScore > 0 && (
+                {Number(effectiveMonster.aiScore) > 0 && (
                   <span className="px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30 flex items-center gap-1">
                     <Sparkles className="w-3 h-3 text-purple-400" />
-                    <span>AI RATING ★ {Number(monster.aiScore).toFixed(1)}</span>
+                    <span>AI RATING ★ {Number(effectiveMonster.aiScore).toFixed(1)}</span>
                   </span>
                 )}
               </div>
 
               <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center gap-2">
-                <span>{monster.thaiName || monster.name}</span>
-                <span className="text-xs sm:text-sm font-normal text-slate-400">({monster.name})</span>
+                <span>{effectiveMonster.thaiName || effectiveMonster.name}</span>
+                <span className="text-xs sm:text-sm font-normal text-slate-400">({effectiveMonster.name})</span>
               </h2>
 
               <p className="text-xs text-slate-400">
@@ -168,12 +231,12 @@ export default function RtaMonsterDetailModal({ monster, onClose, onNavigate, on
             <div className="p-3.5 rounded-2xl bg-[#0a0f1a] border border-white/10 flex flex-col justify-between">
               <div className="text-xs text-slate-400 font-medium">อัตราการเลือก (Pick Rate)</div>
               <div className="text-2xl font-black text-white font-mono my-1">
-                {monster.pickRate}%
+                {effectiveMonster.pickRate}%
               </div>
               <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
                 <div 
                   className="bg-blue-500 h-full rounded-full" 
-                  style={{ width: `${Math.min(100, (Number(monster.pickRate) || 0) * 3)}%` }} 
+                  style={{ width: `${Math.min(100, (Number(effectiveMonster.pickRate) || 0) * 3)}%` }} 
                 />
               </div>
             </div>
@@ -182,13 +245,13 @@ export default function RtaMonsterDetailModal({ monster, onClose, onNavigate, on
             <div className="p-3.5 rounded-2xl bg-[#0a0f1a] border border-white/10 flex flex-col justify-between">
               <div className="text-xs text-slate-400 font-medium">อัตราการชนะ (Win Rate)</div>
               <div className={`text-2xl font-black font-mono my-1 ${
-                (Number(monster.winRate) || 50) >= 50 ? 'text-emerald-400' : 'text-rose-400'
+                (Number(effectiveMonster.winRate) || 50) >= 50 ? 'text-emerald-400' : 'text-rose-400'
               }`}>
-                {monster.winRate}%
+                {effectiveMonster.winRate}%
               </div>
               <div className="text-[11px] font-mono text-slate-400">
-                {(Number(monster.winRate) || 50) >= 50 ? '+ ' : ''}
-                {((Number(monster.winRate) || 50) - 50).toFixed(1)}% เทียบกับค่าเฉลี่ย
+                {(Number(effectiveMonster.winRate) || 50) >= 50 ? '+ ' : ''}
+                {((Number(effectiveMonster.winRate) || 50) - 50).toFixed(1)}% เทียบกับค่าเฉลี่ย
               </div>
             </div>
 
@@ -196,10 +259,10 @@ export default function RtaMonsterDetailModal({ monster, onClose, onNavigate, on
             <div className="p-3.5 rounded-2xl bg-[#0a0f1a] border border-white/10 flex flex-col justify-between">
               <div className="text-xs text-slate-400 font-medium">อัตราการแบน (Ban Rate)</div>
               <div className="text-2xl font-black text-amber-400 font-mono my-1">
-                {monster.banRate}%
+                {effectiveMonster.banRate}%
               </div>
               <div className="text-[11px] font-mono text-slate-400">
-                {Number(monster.banRate) >= 15 ? '🔥 โดนแบนบ่อยมาก' : '🛡️ ไม่ค่อยถูกแบน'}
+                {Number(effectiveMonster.banRate) >= 15 ? '🔥 โดนแบนบ่อยมาก' : '🛡️ ไม่ค่อยถูกแบน'}
               </div>
             </div>
 
@@ -239,26 +302,36 @@ export default function RtaMonsterDetailModal({ monster, onClose, onNavigate, on
                   <span>คู่หูที่ดีที่สุด (Best Synergies)</span>
                 </h3>
                 <span className="text-[11px] text-slate-400 font-mono">
-                  {highdata?.synergies?.length || 0} ตัวเลือก
+                  {highdata?.synergies?.length || 0} ตัวเลือก (คลิกเพื่อดูสถิติ)
                 </span>
               </div>
 
               <div className="space-y-2">
                 {(highdata?.synergies || []).map((syn, idx) => {
                   const partner = monsterOf(syn.monsterId);
+                  const partnerInfo = {
+                    ...partner,
+                    ...syn,
+                    monsterId: syn.monsterId,
+                    name: partner.name && !partner.name.startsWith('#') ? partner.name : (syn.name || partner.name),
+                    thaiName: partner.thaiName && !partner.thaiName.startsWith('#') ? partner.thaiName : (syn.thaiName || syn.name || partner.name),
+                    element: partner.element || syn.element || 'fire',
+                    avatarUrl: syn.avatarUrl || partner.avatarUrl
+                  };
                   return (
                     <div 
                       key={idx}
-                      className="p-2.5 rounded-xl bg-[#0c1322] border border-white/5 hover:border-emerald-500/30 flex items-center justify-between gap-3 transition-colors"
+                      onClick={() => navigateToMonster(partnerInfo)}
+                      className="p-2.5 rounded-xl bg-[#0c1322] border border-white/5 hover:border-emerald-500/40 hover:bg-[#101b30] flex items-center justify-between gap-3 transition-all cursor-pointer group"
                     >
                       <div className="flex items-center gap-2.5 min-w-0">
-                        <MonsterAvatar monster={partner} size="sm" />
+                        <MonsterAvatar monster={partnerInfo} size="sm" />
                         <div className="min-w-0">
-                          <div className="text-xs font-bold text-white truncate">
-                            {partner.thaiName || partner.name}
+                          <div className="text-xs font-bold text-white group-hover:text-emerald-300 transition-colors truncate">
+                            {partnerInfo.thaiName || partnerInfo.name}
                           </div>
                           <div className="text-[10px] text-slate-400 truncate">
-                            {partner.name} ({partner.element})
+                            {partnerInfo.name} ({partnerInfo.element})
                           </div>
                         </div>
                       </div>
@@ -291,26 +364,36 @@ export default function RtaMonsterDetailModal({ monster, onClose, onNavigate, on
                   <span>ตัวแก้ทางที่แพ้บ่อยสุด (Hard Counters)</span>
                 </h3>
                 <span className="text-[11px] text-slate-400 font-mono">
-                  {highdata?.counters?.length || 0} ตัวแก้
+                  {highdata?.counters?.length || 0} ตัวแก้ (คลิกเพื่อดูสถิติ)
                 </span>
               </div>
 
               <div className="space-y-2">
                 {(highdata?.counters || []).map((cnt, idx) => {
                   const counterMon = monsterOf(cnt.monsterId);
+                  const counterInfo = {
+                    ...counterMon,
+                    ...cnt,
+                    monsterId: cnt.monsterId,
+                    name: counterMon.name && !counterMon.name.startsWith('#') ? counterMon.name : (cnt.name || counterMon.name),
+                    thaiName: counterMon.thaiName && !counterMon.thaiName.startsWith('#') ? counterMon.thaiName : (cnt.thaiName || cnt.name || counterMon.name),
+                    element: counterMon.element || cnt.element || 'fire',
+                    avatarUrl: cnt.avatarUrl || counterMon.avatarUrl
+                  };
                   return (
                     <div 
                       key={idx}
-                      className="p-2.5 rounded-xl bg-[#0c1322] border border-white/5 hover:border-rose-500/30 flex items-center justify-between gap-3 transition-colors"
+                      onClick={() => navigateToMonster(counterInfo)}
+                      className="p-2.5 rounded-xl bg-[#0c1322] border border-white/5 hover:border-rose-500/40 hover:bg-[#1a121d] flex items-center justify-between gap-3 transition-all cursor-pointer group"
                     >
                       <div className="flex items-center gap-2.5 min-w-0">
-                        <MonsterAvatar monster={counterMon} size="sm" />
+                        <MonsterAvatar monster={counterInfo} size="sm" />
                         <div className="min-w-0">
-                          <div className="text-xs font-bold text-white truncate">
-                            {counterMon.thaiName || counterMon.name}
+                          <div className="text-xs font-bold text-white group-hover:text-rose-300 transition-colors truncate">
+                            {counterInfo.thaiName || counterInfo.name}
                           </div>
                           <div className="text-[10px] text-slate-400 truncate">
-                            {counterMon.name} ({counterMon.element})
+                            {counterInfo.name} ({counterInfo.element})
                           </div>
                         </div>
                       </div>

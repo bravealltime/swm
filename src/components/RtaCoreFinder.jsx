@@ -34,10 +34,16 @@ const monsterOf = (id) => MONSTER_INDEX.get(Number(id)) || {
   avatarUrl: 'https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0001_0_0.png'
 };
 
-export default function RtaCoreFinder({ onNavigate }) {
+export default function RtaCoreFinder({ onNavigate, initialMonsterId, onSelectMonster }) {
   // Selected monsters for core (Slot 1 and Slot 2)
-  const [slot1, setSlot1] = useState(null); // monsterId
-  const [slot2, setSlot2] = useState(null); // monsterId
+  const [slot1, setSlot1] = useState(initialMonsterId || null);
+  const [slot2, setSlot2] = useState(null);
+
+  React.useEffect(() => {
+    if (initialMonsterId) {
+      setSlot1(Number(initialMonsterId));
+    }
+  }, [initialMonsterId]);
   const [searchPickerSlot, setSearchPickerSlot] = useState(null); // 1 or 2 when picker modal/tray is open
   const [pickerSearch, setPickerSearch] = useState('');
   const [minMatches, setMinMatches] = useState(10);
