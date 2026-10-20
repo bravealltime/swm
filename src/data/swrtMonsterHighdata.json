@@ -22,19 +22,21 @@
       },
       {
         "monsterId": 27715,
-        "name": "Monster",
-        "element": "fire",
+        "name": "Eivor",
+        "element": "dark",
         "winRate": 55.3,
         "matches": 30979,
-        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0107_1_5.png"
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0107_1_5.png",
+        "thaiName": "Eivor"
       },
       {
         "monsterId": 31915,
-        "name": "Monster",
-        "element": "fire",
+        "name": "Nezuko Kamado",
+        "element": "dark",
         "winRate": 55.1,
         "matches": 4113,
-        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0168_1_5.png"
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0168_1_5.png",
+        "thaiName": "Nezuko Kamado"
       },
       {
         "monsterId": 25115,
@@ -126,11 +128,12 @@
       },
       {
         "monsterId": 32215,
-        "name": "Monster",
-        "element": "fire",
+        "name": "Zenitsu Agatsuma",
+        "element": "dark",
         "winRate": 54.1,
         "matches": 114333,
-        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0169_1_5.png"
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0169_1_5.png",
+        "thaiName": "Zenitsu Agatsuma"
       },
       {
         "monsterId": 16614,
@@ -310,11 +313,12 @@
       },
       {
         "monsterId": 34615,
-        "name": "Monster",
-        "element": "fire",
+        "name": "Aragorn",
+        "element": "dark",
         "winRate": 56.9,
         "matches": 18375,
-        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0206_1_5.png"
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0206_1_5.png",
+        "thaiName": "Aragorn"
       },
       {
         "monsterId": 22611,
@@ -424,11 +428,12 @@
       },
       {
         "monsterId": 34615,
-        "name": "Monster",
-        "element": "fire",
+        "name": "Aragorn",
+        "element": "dark",
         "winRate": 54.7,
         "matches": 21624,
-        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0206_1_5.png"
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0206_1_5.png",
+        "thaiName": "Aragorn"
       }
     ],
     "counters": [
@@ -502,11 +507,12 @@
       },
       {
         "monsterId": 34615,
-        "name": "Monster",
-        "element": "fire",
+        "name": "Aragorn",
+        "element": "dark",
         "winRate": 54.3,
         "matches": 27363,
-        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0206_1_5.png"
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0206_1_5.png",
+        "thaiName": "Aragorn"
       },
       {
         "monsterId": 15714,
@@ -616,21 +622,23 @@
       },
       {
         "monsterId": 33214,
-        "name": "Monster",
-        "element": "fire",
+        "name": "Hwoarang",
+        "element": "light",
         "winRate": 55.3,
         "matches": 16971,
-        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0185_1_4.png"
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0185_1_4.png",
+        "thaiName": "Hwoarang"
       }
     ],
     "counters": [
       {
         "monsterId": 30415,
-        "name": "Monster",
-        "element": "fire",
+        "name": "Yuji Itadori",
+        "element": "dark",
         "winRate": 45.3,
         "matches": 7804,
-        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0155_1_5.png"
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0155_1_5.png",
+        "thaiName": "Yuji Itadori"
       },
       {
         "monsterId": 23514,
@@ -661,11 +669,12 @@
       },
       {
         "monsterId": 27615,
-        "name": "Monster",
-        "element": "fire",
+        "name": "Kassandra",
+        "element": "dark",
         "winRate": 46.3,
         "matches": 11947,
-        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0108_1_5.png"
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0108_1_5.png",
+        "thaiName": "Kassandra"
       }
     ]
   },
@@ -730,11 +739,12 @@
       },
       {
         "monsterId": 33214,
-        "name": "Monster",
-        "element": "fire",
+        "name": "Hwoarang",
+        "element": "light",
         "winRate": 41.2,
         "matches": 28980,
-        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0185_1_4.png"
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0185_1_4.png",
+        "thaiName": "Hwoarang"
       },
       {
         "monsterId": 25414,
@@ -903,11 +913,12 @@
       },
       {
         "monsterId": 30515,
-        "name": "Monster",
-        "element": "fire",
+        "name": "Megumi Fushiguro",
+        "element": "dark",
         "winRate": 52.9,
         "matches": 39448,
-        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0157_1_5.png"
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0157_1_5.png",
+        "thaiName": "Megumi Fushiguro"
       }
     ],
     "counters": [
@@ -990,11 +1001,12 @@
       },
       {
         "monsterId": 30614,
-        "name": "Monster",
-        "element": "fire",
+        "name": "Nobara Kugisaki",
+        "element": "light",
         "winRate": 56.5,
         "matches": 19930,
-        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0156_1_4.png"
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0156_1_4.png",
+        "thaiName": "Nobara Kugisaki"
       },
       {
         "monsterId": 16615,
@@ -1018,27 +1030,30 @@
       },
       {
         "monsterId": 29311,
-        "name": "Monster",
-        "element": "fire",
+        "name": "Ciri",
+        "element": "water",
         "winRate": 41.1,
         "matches": 12543,
-        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0142_1_1.png"
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0142_1_1.png",
+        "thaiName": "Ciri"
       },
       {
         "monsterId": 27615,
-        "name": "Monster",
-        "element": "fire",
+        "name": "Kassandra",
+        "element": "dark",
         "winRate": 41.2,
         "matches": 18486,
-        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0108_1_5.png"
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0108_1_5.png",
+        "thaiName": "Kassandra"
       },
       {
         "monsterId": 30415,
-        "name": "Monster",
-        "element": "fire",
+        "name": "Yuji Itadori",
+        "element": "dark",
         "winRate": 41.5,
         "matches": 13914,
-        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0155_1_5.png"
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0155_1_5.png",
+        "thaiName": "Yuji Itadori"
       },
       {
         "monsterId": 24513,
@@ -1083,11 +1098,12 @@
       },
       {
         "monsterId": 27615,
-        "name": "Monster",
-        "element": "fire",
+        "name": "Kassandra",
+        "element": "dark",
         "winRate": 56.7,
         "matches": 12753,
-        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0108_1_5.png"
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0108_1_5.png",
+        "thaiName": "Kassandra"
       },
       {
         "monsterId": 20714,
@@ -1258,11 +1274,12 @@
       },
       {
         "monsterId": 34615,
-        "name": "Monster",
-        "element": "fire",
+        "name": "Aragorn",
+        "element": "dark",
         "winRate": 54.2,
         "matches": 38238,
-        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0206_1_5.png"
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0206_1_5.png",
+        "thaiName": "Aragorn"
       },
       {
         "monsterId": 22211,
@@ -1295,11 +1312,12 @@
     "counters": [
       {
         "monsterId": 33214,
-        "name": "Monster",
-        "element": "fire",
+        "name": "Hwoarang",
+        "element": "light",
         "winRate": 40,
         "matches": 28131,
-        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0185_1_4.png"
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0185_1_4.png",
+        "thaiName": "Hwoarang"
       },
       {
         "monsterId": 16614,
@@ -1362,11 +1380,12 @@
       },
       {
         "monsterId": 30515,
-        "name": "Monster",
-        "element": "fire",
+        "name": "Megumi Fushiguro",
+        "element": "dark",
         "winRate": 56.7,
         "matches": 11506,
-        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0157_1_5.png"
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0157_1_5.png",
+        "thaiName": "Megumi Fushiguro"
       },
       {
         "monsterId": 35814,
@@ -1408,11 +1427,12 @@
       },
       {
         "monsterId": 34411,
-        "name": "Monster",
-        "element": "fire",
+        "name": "Gandalf",
+        "element": "water",
         "winRate": 43.5,
         "matches": 70945,
-        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0204_1_1.png"
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0204_1_1.png",
+        "thaiName": "Gandalf"
       },
       {
         "monsterId": 22611,
@@ -1554,11 +1574,12 @@
       },
       {
         "monsterId": 27715,
-        "name": "Monster",
-        "element": "fire",
+        "name": "Eivor",
+        "element": "dark",
         "winRate": 58.9,
         "matches": 6073,
-        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0107_1_5.png"
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0107_1_5.png",
+        "thaiName": "Eivor"
       },
       {
         "monsterId": 15714,
@@ -1571,11 +1592,12 @@
       },
       {
         "monsterId": 33214,
-        "name": "Monster",
-        "element": "fire",
+        "name": "Hwoarang",
+        "element": "light",
         "winRate": 58.5,
         "matches": 5659,
-        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0185_1_4.png"
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0185_1_4.png",
+        "thaiName": "Hwoarang"
       }
     ],
     "counters": [
@@ -1667,11 +1689,12 @@
       },
       {
         "monsterId": 32215,
-        "name": "Monster",
-        "element": "fire",
+        "name": "Zenitsu Agatsuma",
+        "element": "dark",
         "winRate": 55.7,
         "matches": 37325,
-        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0169_1_5.png"
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0169_1_5.png",
+        "thaiName": "Zenitsu Agatsuma"
       }
     ],
     "counters": [
@@ -1801,11 +1824,12 @@
       },
       {
         "monsterId": 34411,
-        "name": "Monster",
-        "element": "fire",
+        "name": "Gandalf",
+        "element": "water",
         "winRate": 44.1,
         "matches": 21310,
-        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0204_1_1.png"
+        "avatarUrl": "https://do9d4mpqk497d.cloudfront.net/common/images/monsters36/unit_icon_0204_1_1.png",
+        "thaiName": "Gandalf"
       },
       {
         "monsterId": 28311,

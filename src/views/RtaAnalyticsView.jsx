@@ -28,6 +28,7 @@ import replaysData from '../data/swrtRecentReplays.json';
 import highdataMap from '../data/swrtMonsterHighdata.json';
 import guardianMeta from '../data/swrtGuardianMeta.json';
 import RtaCoreFinder from '../components/RtaCoreFinder';
+import RtaMonsterDetailModal from '../components/RtaMonsterDetailModal';
 
 // Interactive 3D Esports Tier Matrix Scatter Plot (Pick Rate vs Win Rate)
 function RtaTierMatrixScatterPlot({ metaList, onSelectMonster }) {
@@ -209,7 +210,7 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
   const [selectedElement, setSelectedElement] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [sortField, setSortField] = useState('pickRate'); // 'pickRate' | 'winRate' | 'banRate' | 'firstPickRate'
-  const [expandedMonster, setExpandedMonster] = useState(null);
+  const [selectedDetailMonster, setSelectedDetailMonster] = useState(null);
   const [replaySearch, setReplaySearch] = useState('');
 
   React.useEffect(() => {
@@ -422,7 +423,7 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
                       key={r.id}
                       onClick={() => {
                         setSelectedRank(r.id);
-                        setExpandedMonster(null);
+                        setSelectedDetailMonster(null);
                       }}
                       className={`px-3 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                         selectedRank === r.id
@@ -753,7 +754,7 @@ export default function RtaAnalyticsView({ onNavigate, subItem }) {
                 </thead>
                 <tbody className="divide-y divide-[#182333]">
                   {displayedMeta.map((m, idx) => (
-                    <tr key={m.monsterId} className="hover:bg-[#131c2c] transition-colors">
+                    <tr key={m.monsterId} onClick={() => setSelectedDetailMonster(m)} className="hover:bg-[#131c2c] transition-colors cursor-pointer">
                       <td className="py-3 px-4 font-mono text-slate-400 font-bold">{idx + 1}</td>
                       <td className="py-3 px-4">
                         <div className="flex items-center gap-3">
